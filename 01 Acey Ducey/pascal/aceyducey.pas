@@ -1,10 +1,13 @@
 program aceyducey;
 
+{$IFDEF FPC}
+{$mode objfpc}{$H+}
+{$ENDIF}
+
 uses
  Crt;
 
 var
-  //N: Integer;
   Stash: Integer;
   CardA: Integer;
   CardB: Integer;
@@ -73,7 +76,6 @@ begin
     CardB:= CardA;
     CardA:= tmp;
   end;
-  // Debug
   PrintCard(CardA);
   Write(' ');
   PrintCard(CardB);
@@ -117,8 +119,8 @@ end;
 
 begin
   Randomize;
+  ClrScr;
   PrintGreeting;
-  //N:= 100;
   Stash:= 100;
   repeat
     repeat
