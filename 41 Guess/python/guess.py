@@ -1,3 +1,31 @@
+########################################################
+#
+# Guess
+#
+# From: Basic Computer Games (1978)
+#
+#  "In program Guess, the computer  chooses a random
+#   integer between 0 and any limit and any limit you
+#   set. You must then try to guess the number the
+#   computer has choosen using the clues provideed by
+#   the computer.
+#    You should be able to guess the number in one less
+#   than the number of digits needed to  represent the
+#   number in binary notation - i.e. in base 2. This ought
+#   to give you a clue as to the optimum search technique.
+#    Guess converted from the original program in FOCAL
+#   which appeared in the book "Computers in the Classroom"
+#   by Walt Koetke of Lexington High School, Lexington,
+#   Massaschusetts.
+#
+########################################################
+
+# Altough the introduction says that the computer chooses
+# a number between 0 and any limit, it actually chooses
+# a number between 1 and any limit. This due to the fact that
+# for computing the number of digits the limit has in binary
+# representation, it has to use log.
+
 from math import log
 from random import random
 
