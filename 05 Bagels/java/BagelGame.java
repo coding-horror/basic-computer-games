@@ -1,6 +1,10 @@
 /******************************************************************************
 *
-* Encapsulates all the state and rules for one single game of Bagels
+* Encapsulates all the state and game logic for one single game of Bagels
+*
+* Used by Bagels.java
+*
+* Jeff Jetton, 2020
 *
 ******************************************************************************/
 
