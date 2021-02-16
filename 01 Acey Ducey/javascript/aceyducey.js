@@ -78,8 +78,8 @@ async function main()
         do {
             print("HERE ARE YOUR NEXT TWO CARDS: \n");
             do {
-                a = Math.floor(Math.random() * 12 + 2);
-                b = Math.floor(Math.random() * 12 + 2);
+                a = Math.floor(Math.random() * 13 + 2);
+                b = Math.floor(Math.random() * 13 + 2);
             } while (a >= b) ;
             show_card(a);
             show_card(b);
@@ -102,7 +102,7 @@ async function main()
                 break;
             }
         } while (m == 0) ;
-        c = Math.floor(Math.random() * 12 + 2);
+        c = Math.floor(Math.random() * 13 + 2);
         show_card(c);
         if (c > a && c < b) {
             print("YOU WIN!!!\n");
