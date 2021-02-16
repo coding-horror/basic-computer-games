@@ -24,6 +24,7 @@ cards = {
 
 
 def play_game():
+    """Play the game"""
     cash = 100
     while cash > 0:
         print(f"You now have {cash} dollars\n")
@@ -63,6 +64,7 @@ def play_game():
 
 
 def main():
+    """Main"""
     keep_playing = True
 
     while keep_playing:
@@ -75,7 +77,7 @@ if __name__ == "__main__":
     print(
         """
 Acey-Ducey is played in the following manner
-The dealer (computer) deals two cards face up 
+The dealer (computer) deals two cards face up
 You have an option to be or not bet depending
 on whether or not you feel the card will have
 a value between the first two.
