@@ -1,3 +1,4 @@
+"""aceyducey.py contains game code"""
 ########################################################
 #
 # Acey Ducey
@@ -31,18 +32,34 @@ DEFAULT_BANKROLL = 100
 
 # functions
 def deal_card_num():
+    """Get card number"""
     return random.randint(0, 12)
 
-def get_card_name(n):
-    cardNames = (" 2", " 3", " 4", " 5", " 6", \
-                 " 7", " 8", " 9", " 10", "Jack", \
-                 "Queen", "King", "Ace")
-    return(cardNames[n])
 
-def display_bankroll(b):
-    if bankroll > 0:
-        print("You now have %s dollars\n"%b)
-    
+def get_card_name(number):
+    """Get card name"""
+    card_names = (
+        " 2",
+        " 3",
+        " 4",
+        " 5",
+        " 6",
+        " 7",
+        " 8",
+        " 9",
+        " 10",
+        "Jack",
+        "Queen",
+        "King",
+        "Ace",
+    )
+    return card_names[number]
+
+
+def display_bankroll(bank_roll):
+    """Print current bankroll"""
+    if BANK_ROLL > 0:
+        print("You now have %s dollars\n" % bank_roll)
 
 
 # Display initial title and instructions
@@ -58,15 +75,15 @@ print("If you do not want to bet, input a 0")
 
 
 # Loop for series of multiple games
-keep_playing = True
-while keep_playing:
-    
+KEEP_PLAYING = True
+while KEEP_PLAYING:
+
     # Initialize bankroll at start of each game
-    bankroll = DEFAULT_BANKROLL
-    display_bankroll(bankroll)
+    BANK_ROLL = DEFAULT_BANKROLL
+    display_bankroll(BANK_ROLL)
 
     # Loop for a single round.  Repeat until out of money.
-    while bankroll > 0:
+    while BANK_ROLL > 0:
 
         # Deal out dealer cards
         print("Here are your next two cards")
@@ -76,46 +93,46 @@ while keep_playing:
         while dealer1 == dealer2:
             dealer2 = deal_card_num()
         # Organize the cards in order if they're not already
-        if (dealer1 >= dealer2):
-            (dealer1, dealer2) = (dealer2, dealer1) # Ya gotta love Python!
+        if dealer1 >= dealer2:
+            (dealer1, dealer2) = (dealer2, dealer1)  # Ya gotta love Python!
         # Show dealer cards to the player
         # (use card name rather than internal number)
         print(get_card_name(dealer1))
         print(get_card_name(dealer2) + "\n")
 
         # Get and handle player bet choice
-        bet_is_valid = False
-        while not bet_is_valid:
+        BET_IS_VALID = False
+        while not BET_IS_VALID:
             curr_bet = input("What is your bet? ")
             try:
                 curr_bet = int(curr_bet)
-            except:
+            except ValueError:
                 # Bad input? Just loop back up and ask again...
                 pass
             else:
                 if curr_bet == 0:
-                    bet_is_valid = True
+                    BET_IS_VALID = True
                     print("Chicken!!\n")
-                elif curr_bet > bankroll:
+                elif curr_bet > BANK_ROLL:
                     print("Sorry, my friend but you bet too much")
-                    print("You have only %s dollars to bet\n" % bankroll)
+                    print("You have only %s dollars to bet\n" % BANK_ROLL)
                 else:
                     # Deal player card
-                    bet_is_valid = True
+                    BET_IS_VALID = True
                     player = deal_card_num()
                     print(get_card_name(player))
-        
+
                     # Did we win?
-                    if player > dealer1 and player < dealer2:
+                    if dealer1 < player < dealer2:
                         print("You win!!!")
-                        bankroll += curr_bet
+                        BANK_ROLL += curr_bet
                     else:
                         print("Sorry, you lose")
-                        bankroll -= curr_bet
+                        BANK_ROLL -= curr_bet
 
                     # Update player on new bankroll level
-                    display_bankroll(bankroll)
-            
+                    display_bankroll(BANK_ROLL)
+
     # End of loop for a single round
 
     print("\n\nSorry, friend but you blew your wad")
@@ -123,7 +140,7 @@ while keep_playing:
     if player_response.lower() == "yes":
         print()
     else:
-        keep_playing = False
+        KEEP_PLAYING = False
 
 # End of multiple game loop
 
@@ -187,10 +204,3 @@ print("OK Hope you had fun\n")
 #   get their own player card dealt).
 #
 ########################################################
-
-
-            
-        
-    
-
-    
