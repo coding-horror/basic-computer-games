@@ -49,7 +49,11 @@ public class Bagels {
     String s = scan.nextLine();
     if (s.length() == 0 || s.toUpperCase().charAt(0) != 'N') {
       System.out.println();
-      BagelInstructions.printInstructions();
+      System.out.println("I am thinking of a three-digit number.  Try to guess");
+      System.out.println("my number and I will give you clues as follows:");
+      System.out.println("   PICO   - One digit correct but in the wrong position");
+      System.out.println("   FERMI  - One digit correct and in the right position");
+      System.out.println("   BAGELS - No digits correct");
     }
     
     // Loop for playing multiple games
