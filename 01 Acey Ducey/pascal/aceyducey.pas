@@ -144,6 +144,8 @@ begin
       end;
     until Stash = 0;
     WriteLN('SORRY, FRIEND, BUT YOU BLEW YOUR WAD.');
+    WriteLN;
   until not TryAgain;
+  WriteLN('O.K., HOPE YOU HAD FUN!');
 end.
 
