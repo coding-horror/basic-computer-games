@@ -130,6 +130,7 @@ begin
       if Bet = 0 then
       begin
         WriteLN('CHICKEN!!');
+        continue;
       end;
       DrawPlayerCard;
       if (CardC > CardA) and (CardC < CardB) then
