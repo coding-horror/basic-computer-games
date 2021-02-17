@@ -1,18 +1,18 @@
 ﻿using System;
 
-WL(Tab(34) + "HI LO");
-WL(Tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-WL();
-WL();
-WL();
-WL("THIS IS THE GAME OF HI LO.");
-WL();
-WL("YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE");
-WL("HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU");
-WL("GUESS THE AMOUNT, YOU WIN ALL THE MONEY IN THE JACKPOT!");
-WL("THEN YOU GET ANOTHER CHANCE TO WIN MORE MONEY.  HOWEVER,");
-WL("IF YOU DO NOT GUESS THE AMOUNT, THE GAME ENDS.");
-WL();
+Console.WriteLine(Tab(34) +                 "HI LO");
+Console.WriteLine(Tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine("THIS IS THE GAME OF HI LO.");
+Console.WriteLine();
+Console.WriteLine("YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE");
+Console.WriteLine("HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU");
+Console.WriteLine("GUESS THE AMOUNT, YOU WIN ALL THE MONEY IN THE JACKPOT!");
+Console.WriteLine("THEN YOU GET ANOTHER CHANCE TO WIN MORE MONEY.  HOWEVER,");
+Console.WriteLine("IF YOU DO NOT GUESS THE AMOUNT, THE GAME ENDS.");
+Console.WriteLine();
 
 // rnd is our random number generator
 Random rnd = new();
@@ -20,49 +20,64 @@ Random rnd = new();
 bool playAgain = false;
 int totalWinnings = 0;
 
-do
+do // Our game loop
 {
     int jackpot = rnd.Next(100) + 1; // [0..99] + 1 -> [1..100]
     int guess = 1;
 
-    while (true)
+    while (true) // Our guessing loop
     {
-        W("YOUR GUESS ");
-        int amount = int.Parse(Console.ReadLine().Trim());
+        Console.WriteLine();
+        int amount = ReadInt("YOUR GUESS ");
 
         if (amount == jackpot)
         {
-            WL($"GOT IT!!!!!!!!!!   YOU WIN {jackpot} DOLLARS.");
+            Console.WriteLine($"GOT IT!!!!!!!!!!   YOU WIN {jackpot} DOLLARS.");
             totalWinnings += jackpot;
-            WL($"YOUR TOTAL WINNINGS ARE NOW {totalWinnings} DOLLARS.");
+            Console.WriteLine($"YOUR TOTAL WINNINGS ARE NOW {totalWinnings} DOLLARS.");
             break;
         }
         else if (amount > jackpot)
         {
-            WL("YOUR GUESS IS TOO HIGH.");
+            Console.WriteLine("YOUR GUESS IS TOO HIGH.");
         }
         else
         {
-            WL("YOUR GUESS IS TOO LOW.");
+            Console.WriteLine("YOUR GUESS IS TOO LOW.");
         }
 
         guess++;
         if (guess > 6)
         {
-            WL($"YOU BLEW IT...TOO BAD...THE NUMBER WAS {jackpot}");
+            Console.WriteLine($"YOU BLEW IT...TOO BAD...THE NUMBER WAS {jackpot}");
             break;
         }
     }
 
-    WL(); W("PLAY AGAIN (YES OR NO) ");
+    Console.WriteLine();
+    Console.Write("PLAY AGAIN (YES OR NO) ");
     playAgain = Console.ReadLine().ToUpper().StartsWith("Y");
 
 } while (playAgain);
 
-// Tab(n) returns n white spaces
+Console.WriteLine();
+Console.WriteLine("SO LONG.  HOPE YOU ENJOYED YOURSELF!!!");
+
+// Tab(n) returns n spaces
 static string Tab(int n) => new String(' ', n);
-// W is an alias for Console.Write
-static void W(string text) => Console.Write(text);
-// WL is an alias for Console.WriteLine
-static void WL(string text = "") => Console.WriteLine(text);
+
+// ReadInt asks the user to enter a number
+static int ReadInt(string question)
+{
+    while (true)
+    {
+        Console.Write(question);
+        var input = Console.ReadLine().Trim();
+        if (int.TryParse(input, out int value))
+        {
+            return value;
+        }
+        Console.WriteLine("!Invalid Number Entered.");
+    }
+}
 
