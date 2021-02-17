@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import random
 
+MAX_ATTEMPTS = 6
 QUESTION_PROMPT='? '
 
 def play():
@@ -14,6 +16,30 @@ def play():
 
     total_winnings = 0
     while True:
+        print()
+        secret = random.randint(1, 100)
+        guessed_correctly = False
+
+        for attempt in range(MAX_ATTEMPTS):
+            print('YOUR GUESS', end=QUESTION_PROMPT)
+            guess = int(input())
+
+            if guess == secret:
+                print('GOT IT!!!!!!!!!!   YOU WIN {} DOLLARS.'.format(secret))
+                guessed_correctly = True
+                break
+            elif guess > secret:
+                print('YOUR GUESS IS TOO HIGH.')
+            else:
+                print('YOUR GUESS IS TOO LOW.')
+
+        if guessed_correctly:
+            total_winnings += secret
+            print('YOUR TOTAL WINNINGS ARE NOW {} DOLLARS.'.format(total_winnings))
+        else:
+            print('YOU BLEW IT...TOO BAD...THE NUMBER WAS {}'.format(secret))
+
+        print('\n')
         print('PLAY AGAIN (YES OR NO)', end=QUESTION_PROMPT)
         answer = input().upper()
         if answer != 'YES':
