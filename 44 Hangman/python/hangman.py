@@ -19,11 +19,13 @@ class Canvas:
             for x in range(len(row)):
                 row[x] = fill
 
-    def draw(self):
+    def render(self):
+        lines = []
         for line  in self._buffer:
             # Joining by the empty string ('') smooshes all of the
             # individual characters together as one line.
-            print(''.join(line))
+            lines.append(''.join(line))
+        return '\n'.join(lines)
 
     def put(self, s, x, y):
         # In an effort to avoid distorting the drawn image, only write the
@@ -133,48 +135,76 @@ def play():
     print('HANGMAN')
     print('CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n')
 
-    canvas = Canvas()
-    draw_gallows(canvas)
-
-    word = random.choice(WORDS)
-    letters_used = set()
-    guesses_count = 0
-
+    words_available = set(WORDS)
     while True:
-        print('HERE ARE THE LETTERS YOU USED:')
-        print(', '.join(sorted(letters_used)))
-        print('\n')
 
-        print(revealed_word(word, letters_used))
+        if len(words_available) == 0:
+            print('YOU DID ALL THE WORDS!!')
+            break
 
-        print('WHAT IS YOUR GUESS', end=QUESTION_PROMPT)
-        guess = input().upper()
+        # Initize game state for this round
+        canvas = Canvas()
+        draw_gallows(canvas)
 
-        if guess in letters_used:
-            print('YOU GUESSED THAT LETTER BEFORE!')
-            continue
+        word = random.choice(list(words_available))
+        letters_used = set()
+        guesses_count = 0
+        fail_count = 0
 
-        if guess not in word:
-            comment, draw_function = PHASES[guesses_count]
-            print('\n\nSORRY, THAT LETTER ISN\'T IN THE WORD.')
-            print(comment)
-            draw_function(canvas)
-            canvas.draw()
+        while True:
+            print('HERE ARE THE LETTERS YOU USED:')
+            print(', '.join(sorted(letters_used)))
+            print('\n')
+
+            print(revealed_word(word, letters_used))
+            print('\n')
+
+            print('WHAT IS YOUR GUESS', end=QUESTION_PROMPT)
+            guess = input().upper()
+
+            if guess in letters_used:
+                print('YOU GUESSED THAT LETTER BEFORE!')
+                continue
 
             guesses_count += 1
-            if guesses_count == len(PHASES):
-               print('SORRY, YOU LOSE.  THE WORD WAS', word)
-               break
 
-        letters_used.add(guess)
-        print('\n' + revealed_word(word, letters_used))
+            if guess not in word:
+                comment, draw_function = PHASES[fail_count]
+                print('\n\nSORRY, THAT LETTER ISN\'T IN THE WORD.')
+                print(comment)
+                draw_function(canvas)
+                print(canvas.render())
 
-        print('\nWHAT IS YOUR GUESS FOR THE WORD', end=QUESTION_PROMPT)
-        guessed_word = input().upper()
+                fail_count += 1
+                if fail_count == len(PHASES):
+                   print('SORRY, YOU LOSE.  THE WORD WAS', word)
+                   print('YOU MISSED THAT ONE.  DO YOU', end=' ')
+                   break
 
-        if guessed_word != word:
-            print('WRONG.  TRY ANOTHER LETTER.')
-            continue
+            letters_used.add(guess)
+            if '-' not in revealed_word(word, letters_used):
+                print("YOU FOUND THE WORD!")
+                words_available.remove(word)
+                break
+            else:
+                print('\n' + revealed_word(word, letters_used))
+                print('\n\nWHAT IS YOUR GUESS FOR THE WORD', end=QUESTION_PROMPT)
+                guessed_word = input().upper()
+
+                if guessed_word != word:
+                    print('WRONG.  TRY ANOTHER LETTER.\n')
+                    continue
+
+                print('RIGHT!!  IT TOOK YOU {} GUESSES!'.format(guesses_count))
+                words_available.remove(word)
+                break
+
+        print('WANT ANOTHER WORD', end=QUESTION_PROMPT)
+        reply = input().upper()
+        if reply != 'YES':
+            break
+
+    print('\nIT\'S BEEN FUN!  BYE FOR NOW.')
 
 
 if __name__ == '__main__':
