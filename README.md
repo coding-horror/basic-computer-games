@@ -18,6 +18,7 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 - Java
 - JavaScript
 - Python
+- Raku
 - Ruby
 - VB.NET
 
