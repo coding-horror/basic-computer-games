@@ -134,7 +134,7 @@ words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
 
 def play_game(guess_target):
     """Play the game"""
-    guess_wrong = 0
+    wrong_guesses = 0
     guess_progress = ["-"] * len(guess_target)
     guess_list = []
 
@@ -149,6 +149,7 @@ def play_game(guess_target):
         guess_letter = ""
         guess_word = ""
         while guess_letter == "":
+
             guess_letter = input("What is your guess? ").upper()[0]
             if not guess_letter.isalpha():
                 guess_letter = ""
@@ -156,8 +157,9 @@ def play_game(guess_target):
             elif guess_letter in guess_list:
                 guess_letter = ""
                 print("You guessed that letter before!")
+
         guess_list.append(guess_letter)
-        guess_count = guess_count + 1
+        guess_count += 1
         if guess_letter in guess_target:
             indices = [i for i, letter in enumerate(guess_target) if letter == guess_letter]
             for i in indices:
@@ -176,36 +178,38 @@ def play_game(guess_target):
                     print("Right!! It took you", guess_count, "guesses!")
                     break
         else:
-            comment, draw_bodypart = PHASES[guess_wrong]
+            comment, draw_bodypart = PHASES[wrong_guesses]
 
             print(comment)
             draw_bodypart(gallows)
             print(gallows.render())
 
-            guess_wrong = guess_wrong + 1
+            wrong_guesses += 1
             print("Sorry, that letter isn't in the word.")
 
-            if guess_wrong == 10:
+            if wrong_guesses == 10:
                 print("Sorry, you lose. The word was " + guess_target)
                 break
 
 
 def main():
-    """Main"""
 
     random.shuffle(words)
-    word_current = 0
-    word_count = 49
+    current_word = 0
+    word_count = len(words)
 
     keep_playing = True
     while keep_playing:
-        play_game(words[word_current])
-        word_current = word_current + 1
-        if word_current >= word_count:
+
+        play_game(words[current_word])
+        current_word += 1
+
+        if current_word == word_count:
             print("You did all the words!!")
             keep_playing = False
         else:
             keep_playing = input("Want another word? (yes or no) ").lower().startswith("y")
+
     print("It's been fun! Bye for now.")
 
 
