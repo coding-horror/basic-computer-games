@@ -38,7 +38,7 @@ class Canvas:
         self._buffer[y][x] = s[0]
 
 
-def draw_gallows(canvas):
+def init_gallows(canvas):
     for i in range(12):
         canvas.put("X", 0, i)
     for i in range(7):
@@ -136,7 +136,7 @@ def play_game(guess_target):
     guess_list = []
 
     gallows = Canvas()
-    draw_gallows(gallows)
+    init_gallows(gallows)
 
     guess_count = 0
     while True:
