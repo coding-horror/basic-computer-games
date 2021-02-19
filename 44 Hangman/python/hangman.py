@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+# HANGMAN
+#
+# Converted from BASIC to Python by Trevor Hobson and Daniel Piron
+
 import random
+
 
 class Canvas:
     ''' For drawing text-based figures '''
@@ -33,6 +38,14 @@ class Canvas:
         self._buffer[y][x] = s[0]
 
 
+def draw_gallows(canvas):
+    for i in range(12):
+        canvas.put('X', 0, i)
+    for i in range(7):
+        canvas.put('X', i, 0)
+    canvas.put('X', 6, 1)
+
+
 def draw_head(canvas):
     canvas.put('-', 5, 2)
     canvas.put('-', 6, 2)
@@ -44,14 +57,6 @@ def draw_head(canvas):
     canvas.put('-', 5, 4)
     canvas.put('-', 6, 4)
     canvas.put('-', 7, 4)
-
-
-def draw_gallows(canvas):
-    for i in range(12):
-        canvas.put('X', 0, i)
-    for i in range(7):
-        canvas.put('X', i, 0)
-    canvas.put('X', 6, 1)
 
 
 def draw_body(canvas):
@@ -100,112 +105,109 @@ def draw_right_foot(canvas):
 
 
 PHASES = (
-    ("FIRST, WE DRAW A HEAD", draw_head),
-    ("NOW WE DRAW A BODY.", draw_body),
-    ("NEXT WE DRAW AN ARM.", draw_right_arm),
-    ("THIS TIME IT'S THE OTHER ARM.", draw_left_arm),
-    ("NOW, LET'S DRAW THE RIGHT LEG.", draw_right_leg),
-    ("THIS TIME WE DRAW THE LEFT LEG.", draw_left_leg),
-    ("NOW WE PUT UP A HAND.", draw_left_hand),
-    ("NEXT THE OTHER HAND.", draw_right_hand),
-    ("NOW WE DRAW ONE FOOT", draw_left_foot),
-    ("HERE'S THE OTHER FOOT -- YOU'RE HUNG!!", draw_right_foot)
+    ("First, we draw a head", draw_head),
+    ("Now we draw a body.", draw_body),
+    ("Next we draw an arm.", draw_right_arm),
+    ("this time it's the other arm.", draw_left_arm),
+    ("Now, let's draw the right leg.", draw_right_leg),
+    ("This time we draw the left leg.", draw_left_leg),
+    ("Now we put up a hand.", draw_left_hand),
+    ("Next the other hand.", draw_right_hand),
+    ("Now we draw one foot", draw_left_foot),
+    ("Here's the other foot -- you're hung!!", draw_right_foot)
 )
 
-WORDS = ('GUM','SIN','FOR','CRY','LUG','BYE','FLY',
-         'UGLY','EACH','FROM','WORK','TALK','WITH','SELF',
-         'PIZZA','THING','FEIGN','FIEND','ELBOW','FAULT','DIRTY',
-         'BUDGET','SPIRIT','QUAINT','MAIDEN','ESCORT','PICKAX',
-         'EXAMPLE','TENSION','QUININE','KIDNEY','REPLICA','SLEEPER',
-         'TRIANGLE','KANGAROO','MAHOGANY','SERGEANT','SEQUENCE',
-         'MOUSTACHE','DANGEROUS','SCIENTIST','DIFFERENT','QUIESCENT',
-         'MAGISTRATE','ERRONEOUSLY','LOUDSPEAKER','PHYTOTOXIC',
-         'MATRIMONIAL','PARASYMPATHOMIMETIC','THIGMOTROPISM')
 
-QUESTION_PROMPT = '? '
+print(" " * 32 + "HANGMAN")
+print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
 
-
-def revealed_word(word, letters_used):
-    return ''.join(letter if letter in letters_used else '-'
-                  for letter in word)
+words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
+         "UGLY", "EACH", "FROM", "WORK", "TALK", "WITH", "SELF",
+         "PIZZA", "THING", "FEIGN", "FIEND", "ELBOW", "FAULT", "DIRTY",
+         "BUDGET", "SPIRIT", "QUAINT", "MAIDEN", "ESCORT", "PICKAX",
+         "EXAMPLE", "TENSION", "QUININE", "KIDNEY", "REPLICA", "SLEEPER",
+         "TRIANGLE", "KANGAROO", "MAHOGANY", "SERGEANT", "SEQUENCE",
+         "MOUSTACHE", "DANGEROUS", "SCIENTIST", "DIFFERENT", "QUIESCENT",
+         "MAGISTRATE", "ERRONEOUSLY", "LOUDSPEAKER", "PHYTOTOXIC",
+         "MATRIMONIAL", "PARASYMPATHOMIMETIC", "THIGMOTROPISM"]
 
 
-def play():
+def play_game(guessTarget):
+    """Play the game"""
+    guessWrong = 0
+    guessProgress = ["-"] * len(guessTarget)
+    guessList = []
 
-    print('HANGMAN')
-    print('CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n')
+    gallows = Canvas()
+    draw_gallows(gallows)
 
-    words_available = set(WORDS)
+    guessCount = 0
     while True:
-
-        if len(words_available) == 0:
-            print('YOU DID ALL THE WORDS!!')
-            break
-
-        # Initize game state for this round
-        canvas = Canvas()
-        draw_gallows(canvas)
-
-        word = random.choice(list(words_available))
-        letters_used = set()
-        guesses_count = 0
-        fail_count = 0
-
-        while True:
-            print('HERE ARE THE LETTERS YOU USED:')
-            print(', '.join(sorted(letters_used)))
-            print('\n')
-
-            print(revealed_word(word, letters_used))
-            print('\n')
-
-            print('WHAT IS YOUR GUESS', end=QUESTION_PROMPT)
-            guess = input().upper()
-
-            if guess in letters_used:
-                print('YOU GUESSED THAT LETTER BEFORE!')
-                continue
-
-            guesses_count += 1
-
-            if guess not in word:
-                comment, draw_function = PHASES[fail_count]
-                print('\n\nSORRY, THAT LETTER ISN\'T IN THE WORD.')
-                print(comment)
-                draw_function(canvas)
-                print(canvas.render())
-
-                fail_count += 1
-                if fail_count == len(PHASES):
-                   print('SORRY, YOU LOSE.  THE WORD WAS', word)
-                   print('YOU MISSED THAT ONE.  DO YOU', end=' ')
-                   break
-
-            letters_used.add(guess)
-            if '-' not in revealed_word(word, letters_used):
-                print("YOU FOUND THE WORD!")
-                words_available.remove(word)
+        print("Here are the letters you used:")
+        print(",".join(guessList) + "\n")
+        print("".join(guessProgress) + "\n")
+        guessLetter = ""
+        guessWord = ""
+        while guessLetter == "":
+            guessLetter = input("What is your guess? ").upper()[0]
+            if not guessLetter.isalpha():
+                guessLetter = ""
+                print("Only letters are allowed!")
+            elif guessLetter in guessList:
+                guessLetter = ""
+                print("You guessed that letter before!")
+        guessList.append(guessLetter)
+        guessCount = guessCount + 1
+        if guessLetter in guessTarget:
+            indices = [i for i, letter in enumerate(guessTarget) if letter == guessLetter]
+            for i in indices:
+                guessProgress[i] = guessLetter
+            if guessProgress == guessTarget:
+                print("You found the word!")
                 break
             else:
-                print('\n' + revealed_word(word, letters_used))
-                print('\n\nWHAT IS YOUR GUESS FOR THE WORD', end=QUESTION_PROMPT)
-                guessed_word = input().upper()
+                print("\n" + "".join(guessProgress) + "\n")
+                while guessWord == "":
+                    guessWord = input("What is your guess for the word? ").upper()
+                    if not guessWord.isalpha():
+                        guessWord = ""
+                        print("Only words are allowed!")
+                if guessWord == guessTarget:
+                    print("Right!! It took you", guessCount, "guesses!")
+                    break
+        else:
+            comment, drawingBodyPart = PHASES[guessWrong]
 
-                if guessed_word != word:
-                    print('WRONG.  TRY ANOTHER LETTER.\n')
-                    continue
+            print(comment)
+            drawingBodyPart(gallows)
+            print(gallows.render())
 
-                print('RIGHT!!  IT TOOK YOU {} GUESSES!'.format(guesses_count))
-                words_available.remove(word)
+            guessWrong = guessWrong + 1
+            print("Sorry, that letter isn't in the word.")
+
+            if guessWrong == 10:
+                print("Sorry, you lose. The word was " + guessTarget)
                 break
 
-        print('WANT ANOTHER WORD', end=QUESTION_PROMPT)
-        reply = input().upper()
-        if reply != 'YES':
-            break
 
-    print('\nIT\'S BEEN FUN!  BYE FOR NOW.')
+def main():
+    """Main"""
+
+    random.shuffle(words)
+    wordCurrent = 0
+    wordCount = 49
+
+    keep_playing = True
+    while keep_playing:
+        play_game(words[wordCurrent])
+        wordCurrent = wordCurrent + 1
+        if wordCurrent >= wordCount:
+            print("You did all the words!!")
+            keep_playing = False
+        else:
+            keep_playing = input("Want another word? (yes or no) ").lower().startswith("y")
+    print("It's been fun! Bye for now.")
 
 
-if __name__ == '__main__':
-    play()
+if __name__ == "__main__":
+    main()
