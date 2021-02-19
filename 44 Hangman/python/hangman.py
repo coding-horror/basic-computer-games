@@ -118,9 +118,6 @@ PHASES = (
 )
 
 
-print(" " * 32 + "HANGMAN")
-print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
-
 words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
          "UGLY", "EACH", "FROM", "WORK", "TALK", "WITH", "SELF",
          "PIZZA", "THING", "FEIGN", "FIEND", "ELBOW", "FAULT", "DIRTY",
@@ -133,7 +130,7 @@ words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
 
 
 def play_game(guess_target):
-    """Play the game"""
+    """Play one round of the game"""
     wrong_guesses = 0
     guess_progress = ["-"] * len(guess_target)
     guess_list = []
@@ -193,6 +190,8 @@ def play_game(guess_target):
 
 
 def main():
+    print(" " * 32 + "HANGMAN")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
 
     random.shuffle(words)
     current_word = 0
