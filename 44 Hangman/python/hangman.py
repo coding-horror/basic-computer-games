@@ -132,61 +132,61 @@ words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
          "MATRIMONIAL", "PARASYMPATHOMIMETIC", "THIGMOTROPISM"]
 
 
-def play_game(guessTarget):
+def play_game(guess_target):
     """Play the game"""
-    guessWrong = 0
-    guessProgress = ["-"] * len(guessTarget)
-    guessList = []
+    guess_wrong = 0
+    guess_progress = ["-"] * len(guess_target)
+    guess_list = []
 
     gallows = Canvas()
     draw_gallows(gallows)
 
-    guessCount = 0
+    guess_count = 0
     while True:
         print("Here are the letters you used:")
-        print(",".join(guessList) + "\n")
-        print("".join(guessProgress) + "\n")
-        guessLetter = ""
-        guessWord = ""
-        while guessLetter == "":
-            guessLetter = input("What is your guess? ").upper()[0]
-            if not guessLetter.isalpha():
-                guessLetter = ""
+        print(",".join(guess_list) + "\n")
+        print("".join(guess_progress) + "\n")
+        guess_letter = ""
+        guess_word = ""
+        while guess_letter == "":
+            guess_letter = input("What is your guess? ").upper()[0]
+            if not guess_letter.isalpha():
+                guess_letter = ""
                 print("Only letters are allowed!")
-            elif guessLetter in guessList:
-                guessLetter = ""
+            elif guess_letter in guess_list:
+                guess_letter = ""
                 print("You guessed that letter before!")
-        guessList.append(guessLetter)
-        guessCount = guessCount + 1
-        if guessLetter in guessTarget:
-            indices = [i for i, letter in enumerate(guessTarget) if letter == guessLetter]
+        guess_list.append(guess_letter)
+        guess_count = guess_count + 1
+        if guess_letter in guess_target:
+            indices = [i for i, letter in enumerate(guess_target) if letter == guess_letter]
             for i in indices:
-                guessProgress[i] = guessLetter
-            if guessProgress == guessTarget:
+                guess_progress[i] = guess_letter
+            if guess_progress == guess_target:
                 print("You found the word!")
                 break
             else:
-                print("\n" + "".join(guessProgress) + "\n")
-                while guessWord == "":
-                    guessWord = input("What is your guess for the word? ").upper()
-                    if not guessWord.isalpha():
-                        guessWord = ""
+                print("\n" + "".join(guess_progress) + "\n")
+                while guess_word == "":
+                    guess_word = input("What is your guess for the word? ").upper()
+                    if not guess_word.isalpha():
+                        guess_word = ""
                         print("Only words are allowed!")
-                if guessWord == guessTarget:
-                    print("Right!! It took you", guessCount, "guesses!")
+                if guess_word == guess_target:
+                    print("Right!! It took you", guess_count, "guesses!")
                     break
         else:
-            comment, drawingBodyPart = PHASES[guessWrong]
+            comment, draw_bodypart = PHASES[guess_wrong]
 
             print(comment)
-            drawingBodyPart(gallows)
+            draw_bodypart(gallows)
             print(gallows.render())
 
-            guessWrong = guessWrong + 1
+            guess_wrong = guess_wrong + 1
             print("Sorry, that letter isn't in the word.")
 
-            if guessWrong == 10:
-                print("Sorry, you lose. The word was " + guessTarget)
+            if guess_wrong == 10:
+                print("Sorry, you lose. The word was " + guess_target)
                 break
 
 
@@ -194,14 +194,14 @@ def main():
     """Main"""
 
     random.shuffle(words)
-    wordCurrent = 0
-    wordCount = 49
+    word_current = 0
+    word_count = 49
 
     keep_playing = True
     while keep_playing:
-        play_game(words[wordCurrent])
-        wordCurrent = wordCurrent + 1
-        if wordCurrent >= wordCount:
+        play_game(words[word_current])
+        word_current = word_current + 1
+        if word_current >= word_count:
             print("You did all the words!!")
             keep_playing = False
         else:
