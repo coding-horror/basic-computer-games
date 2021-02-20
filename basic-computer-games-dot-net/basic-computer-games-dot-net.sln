@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31004.235
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Acey Ducey", "01 Acey Ducey", "{63FEF89A-DAF1-42C6-B86B-AAD51E885553}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp", "csharp", "{9ADA338C-DAB6-4EE8-8F53-F3F711BEA985}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceyDucey", "..\01 Acey Ducey\csharp\AceyDucey.csproj", "{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "33 Dice", "33 Dice", "{3C6771F4-513C-4B8D-A042-15E18EB27740}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "csharp", "csharp", "{AC302ACD-C3B2-460D-BA1A-0A511C36A848}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dice", "..\33 Dice\csharp\Dice.csproj", "{26D086DE-0BBD-4A18-AC63-2476A7DB52D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26D086DE-0BBD-4A18-AC63-2476A7DB52D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26D086DE-0BBD-4A18-AC63-2476A7DB52D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26D086DE-0BBD-4A18-AC63-2476A7DB52D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26D086DE-0BBD-4A18-AC63-2476A7DB52D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9ADA338C-DAB6-4EE8-8F53-F3F711BEA985} = {63FEF89A-DAF1-42C6-B86B-AAD51E885553}
+		{DA16CAAE-A3BE-42D0-9525-623AA6B0EDC3} = {9ADA338C-DAB6-4EE8-8F53-F3F711BEA985}
+		{AC302ACD-C3B2-460D-BA1A-0A511C36A848} = {3C6771F4-513C-4B8D-A042-15E18EB27740}
+		{26D086DE-0BBD-4A18-AC63-2476A7DB52D3} = {AC302ACD-C3B2-460D-BA1A-0A511C36A848}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {703D538E-7F20-4DD0-A3DD-7BBE36AC82AF}
+	EndGlobalSection
+EndGlobal
