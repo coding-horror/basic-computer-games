@@ -30,15 +30,19 @@ def display_field():
     print("\n" * 9)
 
 
+def positions_list():
+    return list(range(1, 26, 1))
+
+
 def generate_enemy_positions():
     """ Randomly choose 4 'positions' out of a range of 1 to 25 """
-    positions = list(range(1, 26, 1))
+    positions = positions_list()
     random.shuffle(positions)
     return set(positions[:4])
 
 
 def is_valid_position(pos):
-    return pos in range(1, 26, 1) 
+    return pos in positions_list()
 
 
 def prompt_for_player_positions():
@@ -59,6 +63,7 @@ def prompt_for_player_positions():
 
 
 def prompt_player_for_target():
+
     while True:
         target = int(input("WHERE DO YOU WISH TO FIRE YOUR MISSLE? "))
         if not is_valid_position(target):
@@ -69,15 +74,31 @@ def prompt_player_for_target():
 
 
 def attack(target, positions, hit_message, miss_message, progress_messages):
+    """ Performs attack procedure returning True if we are to continue. """
 
     if target in positions:
         print(hit_message.format(target))
         positions.remove(target)
         print(progress_messages[len(positions)].format(target))
+    else:
+        print(miss_message.format(target))
 
-    print(miss_message.format(target))
+    return len(positions) > 0
 
-    return len(positions) == 0
+
+def init_enemy():
+    """ Returns a closure analogous to prompt_player_for_target. Will
+        choose from a unique sequence of positions to avoid picking the
+        same position twice. """
+
+    position_sequence = positions_list()
+    random.shuffle(position_sequence)
+    position = iter(position_sequence)
+
+    def choose():
+        return next(position)
+
+    return choose
 
 
 # Messages correspond to outposts remaining (3, 2, 1, 0)
@@ -119,15 +140,11 @@ def play():
                             miss_message="I MISSED YOU, YOU DIRTY RAT. I PICKED {}. YOUR TURN:\n\n",
                             progress_messages=ENEMY_PROGRESS_MESSAGES)
 
+    enemy_position_choice = init_enemy()
 
-    while True:
-        target = prompt_player_for_target()
-        if (player_attacks(target)):
-            break
-        else:
-            target = random.randint(1, 25)
-            if (enemy_attacks(target)):
-                break
+    # Play as long as both player_attacks and enemy_attacks allow to continue
+    while player_attacks(prompt_player_for_target()) and enemy_attacks(enemy_position_choice()):
+        pass
 
 
 if __name__ == "__main__":
