@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import random
+from functools import partial
 
 def display_intro():
     print("" * 33 + "BOMBARDMENT")
@@ -67,6 +68,18 @@ def prompt_player_for_target():
         return target
 
 
+def attack(target, positions, hit_message, miss_message, progress_messages):
+
+    if target in positions:
+        print(hit_message.format(target))
+        positions.remove(target)
+        print(progress_messages[len(positions)].format(target))
+
+    print(miss_message.format(target))
+
+    return len(positions) == 0
+
+
 # Messages correspond to outposts remaining (3, 2, 1, 0)
 PLAYER_PROGRESS_MESSAGES = (
     "YOU GOT ME, I'M GOING FAST. BUT I'LL GET YOU WHEN\n"
@@ -93,33 +106,28 @@ def play():
     enemy_positions = generate_enemy_positions()
     player_positions = prompt_for_player_positions()
 
-    print(enemy_positions)
+    # Build partial functions only requiring the target as input
+    player_attacks = partial(attack,
+                             positions=enemy_positions,
+                             hit_message="YOU GOT ONE OF MY OUTPOSTS!",
+                             miss_message="HA, HA YOU MISSED. MY TURN NOW:\n\n",
+                             progress_messages=PLAYER_PROGRESS_MESSAGES)
+
+    enemy_attacks = partial(attack,
+                            positions=player_positions,
+                            hit_message="I GOT YOU. IT WON'T BE LONG NOW. POST {} WAS HIT.",
+                            miss_message="I MISSED YOU, YOU DIRTY RAT. I PICKED {}. YOUR TURN:\n\n",
+                            progress_messages=ENEMY_PROGRESS_MESSAGES)
+
 
     while True:
         target = prompt_player_for_target()
-
-        if target in enemy_positions:
-            print("YOU GOT ONE OF MY OUTPOSTS!")
-            enemy_positions.remove(target)
-
-            outposts_left = len(enemy_positions)
-            print(PLAYER_PROGRESS_MESSAGES[outposts_left])
-            if outposts_left == 0:
-                break
+        if (player_attacks(target)):
+            break
         else:
-            print("HA, HA YOU MISSED. MY TURN NOW:\n\n")
-
-        target = random.randint(1, 25)
-        if target in player_positions:
-            print("I GOT YOU. IT WON'T BE LONG NOW. POST", target, "WAS HIT.")
-            player_positions.remove(target)
-
-            outposts_left = len(player_positions)
-            print(ENEMY_PROGRESS_MESSAGES[len(player_positions)].format(target))
-            if outposts_left == 0:
+            target = random.randint(1, 25)
+            if (enemy_attacks(target)):
                 break
-        else:
-            print("I MISSED YOU, YOU DIRTY RAT. I PICKED", target, ". YOUR TURN:\n\n")
 
 
 if __name__ == "__main__":
