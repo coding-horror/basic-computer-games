@@ -36,22 +36,35 @@ def generate_enemy_positions():
     return set(positions[:4])
 
 
+def is_valid_position(pos):
+    return pos in range(1, 26, 1) 
+
+
 def prompt_for_player_positions():
 
     while True:
         raw_positions = input("WHAT ARE YOUR FOUR POSITIONS? ")
         positions = set(int(pos) for pos in raw_positions.split())
-
         # Verify user inputs (for example, if the player gives a
         # a position for 26, the enemy can never hit it)
         if (len(positions) != 4):
             print("PLEASE ENTER 4 UNIQUE POSITIONS\n")
             continue
-        elif (any(pos not in range(1, 26, 1) for pos in positions)):
+        elif (any(not is_valid_position(pos) for pos in positions)):
             print("ALL POSITIONS MUST RANGE (1-25)\n")
             continue
         else:
             return positions
+
+
+def prompt_player_for_target():
+    while True:
+        target = int(input("WHERE DO YOU WISH TO FIRE YOUR MISSLE? "))
+        if not is_valid_position(target):
+            print("POSITIONS MUST RANGE (1-25)\n")
+            continue
+
+        return target
 
 
 # Messages correspond to outposts remaining (3, 2, 1, 0)
@@ -83,7 +96,7 @@ def play():
     print(enemy_positions)
 
     while True:
-        target = int(input("WHERE DO YOU WISH TO FIRE YOUR MISSLE? "))
+        target = prompt_player_for_target()
 
         if target in enemy_positions:
             print("YOU GOT ONE OF MY OUTPOSTS!")
