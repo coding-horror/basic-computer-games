@@ -27,9 +27,9 @@ def main
   intro
 
   loop do
-    car_speed = (Random.rand * 25 + 40).to_i
-    car_time = (Random.rand * 15 + 5).to_i
-    train_speed = (Random.rand * 19 + 20).to_i
+    car_speed = rand(25) + 40
+    car_time = rand(15) + 5
+    train_speed = rand(19) + 20
 
     print " A CAR TRAVELING #{car_speed} MPH CAN MAKE A CERTAIN TRIP IN
  #{car_time} HOURS LESS THAN A TRAIN TRAVELING AT #{train_speed} MPH.
