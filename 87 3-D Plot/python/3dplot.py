@@ -9,8 +9,8 @@ import math
 def equation(input):
 	return 30 * math.exp(-input * input / 100)
 
-print(" " * 32 + "3D PLOT\n")
-print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
+print(" " * 32 + "3D PLOT")
+print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n\n")
 
 for x in range (-300, 315, 15):
 	x1 = x / 10
@@ -23,4 +23,4 @@ for x in range (-300, 315, 15):
 		if z > l:
 			l = z
 			yPlot[z] = "*"
-	print("".join(yPlot) + "\n")
+	print("".join(yPlot))
