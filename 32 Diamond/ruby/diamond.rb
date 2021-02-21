@@ -11,9 +11,7 @@ end
 def get_facets
   while true
     number = gets.chomp
-    if /^\d+$/.match(number)
-      return number.to_i
-    end
+    return number.to_i if /^\d+$/.match(number)
     puts "!NUMBER EXPECTED - RETRY INPUT LINE"
     print "? "
   end
@@ -41,5 +39,7 @@ def main
   lines = get_diamond_lines(facets)
   draw_diamonds(lines)
 end
+
+trap "SIGINT" do puts; exit 130 end
 
 main
