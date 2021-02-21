@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Based on the Basic game of Hurkle here
  * https://github.com/coding-horror/basic-computer-games/blob/main/25%20Chief/chief.bas
  * <p>
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
  */
 public class Chief {
@@ -67,17 +67,17 @@ public class Chief {
                             displayTextAndGetInput(" WHAT DO YOU HAVE? "));
 
                     // Exact same formula used in the original game to calculate the players original number
-                    this.calculatedNumber = (playerNumber + 1 - 5) * 5 / 8 * 5 - 3;
+                    calculatedNumber = (playerNumber + 1 - 5) * 5 / 8 * 5 - 3;
 
-                    this.gameState = GAME_STATE.CALCULATE_AND_SHOW;
+                    gameState = GAME_STATE.CALCULATE_AND_SHOW;
                     break;
 
                 // Enter the number to be used to calculate
                 case CALCULATE_AND_SHOW:
                     if (yesEntered(
-                            displayTextAndGetInput("I BET YOUR NUMBER WAS " + this.calculatedNumber
+                            displayTextAndGetInput("I BET YOUR NUMBER WAS " + calculatedNumber
                                     + ". AM I RIGHT? "))) {
-                        this.gameState = GAME_STATE.END_GAME;
+                        gameState = GAME_STATE.END_GAME;
 
                     } else {
                         // Player did not agree, so show the breakdown
@@ -90,11 +90,11 @@ public class Chief {
                         double j = i - 1;
                         System.out.println("SO YOU THINK YOU'RE SO SMART, EH?");
                         System.out.println("NOW WATCH.");
-                        System.out.println(number + " PLUS 3 EQUALS " + f + ". THIS DIVIDED BY 5 EQUALS " + g);
-                        System.out.println("THIS TIMES 8 EQUALS " + h + ". IF WE DIVIDE BY 5 AND ADD 5,");
+                        System.out.println(number + " PLUS 3 EQUALS " + f + ". DIVIDED BY 5 EQUALS " + g);
+                        System.out.println("TIMES 8 EQUALS " + h + ". IF WE DIVIDE BY 5 AND ADD 5,");
                         System.out.println("WE GET " + i + ", WHICH, MINUS 1, EQUALS " + j + ".");
                         if (yesEntered(displayTextAndGetInput("NOW DO YOU BELIEVE ME? "))) {
-                            this.gameState = GAME_STATE.END_GAME;
+                            gameState = GAME_STATE.END_GAME;
                         } else {
                             // Time for a lightning bolt.
                             System.out.println("YOU HAVE MADE ME MAD!!!");
@@ -116,7 +116,7 @@ public class Chief {
                             System.out.println("#########################");
                             System.out.println();
                             System.out.println("I HOPE YOU BELIEVE ME NOW, FOR YOUR SAKE!!");
-                            this.gameState = GAME_STATE.GAME_OVER;
+                            gameState = GAME_STATE.GAME_OVER;
                         }
 
                     }
@@ -125,7 +125,7 @@ public class Chief {
                 // Sign off message for cases where the Chief is not upset
                 case END_GAME:
                     System.out.println("BYE!!!");
-                    this.gameState = GAME_STATE.GAME_OVER;
+                    gameState = GAME_STATE.GAME_OVER;
                     break;
 
                 // GAME_OVER State does not specifically have a case
@@ -146,7 +146,7 @@ public class Chief {
     }
 
     private void instructions() {
-        System.out.println(" TAKE A NUMBER AND ADD 3. DIVIDE THIS NUMBER BY 5 AND");
+        System.out.println(" TAKE A NUMBER AND ADD 3. DIVIDE NUMBER BY 5 AND");
         System.out.println("MULTIPLY BY 8. DIVIDE BY 5 AND ADD THE SAME. SUBTRACT 1.");
     }
 

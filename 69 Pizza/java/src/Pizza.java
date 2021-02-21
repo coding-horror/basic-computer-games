@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Based on the Basic game of Hurkle here
  * https://github.com/coding-horror/basic-computer-games/blob/main/69%20Pizza/pizza.bas
  * <p>
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
  */
 public class Pizza {
@@ -47,7 +47,7 @@ public class Pizza {
 
     public Pizza() {
 
-        this.gameState = GAME_STATE.STARTING;
+        gameState = GAME_STATE.STARTING;
 
         // Initialise kb scanner
         kbScanner = new Scanner(System.in);
@@ -59,29 +59,29 @@ public class Pizza {
     public void play() {
 
         do {
-            switch (this.gameState) {
+            switch (gameState) {
 
                 // Show an introduction the first time the game is played.
                 case STARTING:
                     init();
                     intro();
-                    this.gameState = GAME_STATE.ENTER_NAME;
+                    gameState = GAME_STATE.ENTER_NAME;
                     break;
 
                 // Enter the players name
                 case ENTER_NAME:
-                    this.playerName = displayTextAndGetInput("WHAT IS YOUR FIRST NAME? ");
-                    System.out.println("HI " + this.playerName + ". IN THIS GAME YOU ARE TO TAKE ORDERS");
+                    playerName = displayTextAndGetInput("WHAT IS YOUR FIRST NAME? ");
+                    System.out.println("HI " + playerName + ". IN GAME YOU ARE TO TAKE ORDERS");
                     System.out.println("FOR PIZZAS.  THEN YOU ARE TO TELL A DELIVERY BOY");
                     System.out.println("WHERE TO DELIVER THE ORDERED PIZZAS.");
                     System.out.println();
-                    this.gameState = GAME_STATE.DRAW_MAP;
+                    gameState = GAME_STATE.DRAW_MAP;
                     break;
 
                 // Draw the map
                 case DRAW_MAP:
                     drawMap();
-                    this.gameState = GAME_STATE.MORE_DIRECTIONS;
+                    gameState = GAME_STATE.MORE_DIRECTIONS;
                     break;
 
                 // need more directions (how to play) ?
@@ -100,14 +100,14 @@ public class Pizza {
                                 System.out.println();
                                 System.out.println("GOOD LUCK!!");
                                 System.out.println();
-                                this.gameState = GAME_STATE.START_DELIVER;
+                                gameState = GAME_STATE.START_DELIVER;
                             } else {
                                 // Not understood, essentially game over
-                                this.gameState = GAME_STATE.TOO_DIFFICULT;
+                                gameState = GAME_STATE.TOO_DIFFICULT;
                             }
                         } else {
                             // no more directions were needed, start delivering pizza
-                            this.gameState = GAME_STATE.START_DELIVER;
+                            gameState = GAME_STATE.START_DELIVER;
                         }
                     }
 
@@ -115,27 +115,27 @@ public class Pizza {
 
                 // Too difficult to understand, game over!
                 case TOO_DIFFICULT:
-                    System.out.println("THIS JOB IS DEFINITELY TOO DIFFICULT FOR YOU. THANKS ANYWAY");
-                    this.gameState = GAME_STATE.GAME_OVER;
+                    System.out.println("JOB IS DEFINITELY TOO DIFFICULT FOR YOU. THANKS ANYWAY");
+                    gameState = GAME_STATE.GAME_OVER;
                     break;
 
                 // Delivering pizza
                 case START_DELIVER:
                     // select a random house and "order" a pizza for them.
-                    this.currentHouseDelivery = (int) (Math.random()
-                            * (this.houses.length) + 1) - 1; // Deduct 1 for 0-based array
+                    currentHouseDelivery = (int) (Math.random()
+                            * (houses.length) + 1) - 1; // Deduct 1 for 0-based array
 
-                    System.out.println("HELLO " + this.playerName + "'S PIZZA.  THIS IS "
-                            + this.houses[this.currentHouseDelivery] + ".");
+                    System.out.println("HELLO " + playerName + "'S PIZZA.  IS "
+                            + houses[currentHouseDelivery] + ".");
                     System.out.println("  PLEASE SEND A PIZZA.");
-                    this.gameState = GAME_STATE.DELIVER_PIZZA;
+                    gameState = GAME_STATE.DELIVER_PIZZA;
                     break;
 
                 // Try and deliver the pizza
                 case DELIVER_PIZZA:
 
-                    String question = "  DRIVER TO " + this.playerName + ":  WHERE DOES "
-                            + this.houses[this.currentHouseDelivery] + " LIVE ? ";
+                    String question = "  DRIVER TO " + playerName + ":  WHERE DOES "
+                            + houses[currentHouseDelivery] + " LIVE ? ";
                     String answer = displayTextAndGetInput(question);
 
                     // Convert x,y entered by player to grid position of a house
@@ -144,22 +144,22 @@ public class Pizza {
                     int calculatedPos = (x + (y - 1) * 4) - 1;
 
                     // Did the player select the right house to deliver?
-                    if (calculatedPos == this.currentHouseDelivery) {
-                        System.out.println("HELLO " + this.playerName + ".  THIS IS " + this.houses[this.currentHouseDelivery]
+                    if (calculatedPos == currentHouseDelivery) {
+                        System.out.println("HELLO " + playerName + ".  IS " + houses[currentHouseDelivery]
                                 + ", THANKS FOR THE PIZZA.");
-                        this.pizzaDeliveryCount++;
+                        pizzaDeliveryCount++;
 
                         // Delivered enough pizza?
 
-                        if (this.pizzaDeliveryCount > MAX_DELIVERIES) {
-                            this.gameState = GAME_STATE.END_GAME;
+                        if (pizzaDeliveryCount > MAX_DELIVERIES) {
+                            gameState = GAME_STATE.END_GAME;
                         } else {
-                            this.gameState = GAME_STATE.START_DELIVER;
+                            gameState = GAME_STATE.START_DELIVER;
                         }
                     } else {
-                        System.out.println("THIS IS " + houses[calculatedPos] + ".  I DID NOT ORDER A PIZZA.");
+                        System.out.println("IS " + houses[calculatedPos] + ".  I DID NOT ORDER A PIZZA.");
                         System.out.println("I LIVE AT " + x + "," + y);
-                        // Don't change gameState so this state is executed again
+                        // Don't change gameState so state is executed again
                     }
 
                     break;
@@ -168,18 +168,18 @@ public class Pizza {
                 case END_GAME:
                     if (yesEntered(displayTextAndGetInput("DO YOU WANT TO DELIVER MORE PIZZAS? "))) {
                         init();
-                        this.gameState = GAME_STATE.START_DELIVER;
+                        gameState = GAME_STATE.START_DELIVER;
                     } else {
                         System.out.println();
-                        System.out.println("O.K. " + this.playerName + ", SEE YOU LATER!");
+                        System.out.println("O.K. " + playerName + ", SEE YOU LATER!");
                         System.out.println();
-                        this.gameState = GAME_STATE.GAME_OVER;
+                        gameState = GAME_STATE.GAME_OVER;
                     }
                     break;
 
                 // GAME_OVER State does not specifically have a case
             }
-        } while (this.gameState != GAME_STATE.GAME_OVER);
+        } while (gameState != GAME_STATE.GAME_OVER);
     }
 
     private void drawMap() {
@@ -194,13 +194,13 @@ public class Pizza {
             System.out.println("-");
             System.out.println("-");
 
-            System.out.print(this.gridPos[k]);
+            System.out.print(gridPos[k]);
             int pos = 16 - 4 * i;
-            System.out.print("     " + this.houses[pos]);
-            System.out.print("     " + this.houses[pos + 1]);
-            System.out.print("     " + this.houses[pos + 2]);
-            System.out.print("     " + this.houses[pos + 3]);
-            System.out.println("     " + this.gridPos[k]);
+            System.out.print("     " + houses[pos]);
+            System.out.print("     " + houses[pos + 1]);
+            System.out.print("     " + houses[pos + 2]);
+            System.out.print("     " + houses[pos + 3]);
+            System.out.println("     " + gridPos[k]);
             k = k - 1;
         }
         System.out.println("-");
@@ -238,14 +238,14 @@ public class Pizza {
         System.out.println("DELIVERED.  THEN A DELIVERY BOY WILL");
         System.out.println("ASK YOU FOR THE LOCATION.");
         System.out.println("     EXAMPLE:");
-        System.out.println("THIS IS J.  PLEASE SEND A PIZZA.");
-        System.out.println("DRIVER TO " + this.playerName + ".  WHERE DOES J LIVE?");
+        System.out.println("IS J.  PLEASE SEND A PIZZA.");
+        System.out.println("DRIVER TO " + playerName + ".  WHERE DOES J LIVE?");
         System.out.println("YOUR ANSWER WOULD BE 2,3");
         System.out.println();
     }
 
     private void init() {
-        this.pizzaDeliveryCount = 1;
+        pizzaDeliveryCount = 1;
     }
 
     /**
