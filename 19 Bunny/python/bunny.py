@@ -50,21 +50,29 @@ def play():
     # Interpretting a stream of data is a very common software task. We've already intepretted
     # the first 5 numbers as letters of the alphabet (with A being 1). Now, we are going to
     # combine this with a different interpretation of the following data to draw on the screen.
+    # The drawing data is essentially a series of horizontal line segments given as begin and end
+    # offsets.
     while True:
-        x = next(data)
+        command = next(data)
 
-        if x < 0:
+        if command < 0:
             print()
             continue
 
-        if x > 128:
+        if command > 128:
             break
 
-        # Skip x spaces
-        print(tab(x), end="")
-        y = next(data)
+        # If we've reached this portion of the code, 'command' indicates the 'start'
+        # position of a line segment.
+        start = command
+        # Position cursor at start
+        print(tab(start), end="")
+
+        # The following number, indicates the end of the segment.
+        end = next(data)
         # Unlike FOR I=X TO Y, the 'stop' argument of 'range' is non-inclusive, so we must add 1
-        for i in range(x, y+1, 1):
+        for i in range(start, end+1, 1):
+            # Cycle through the letters in "BUNNY" as we draw this line
             j = i - 5 * int(i / 5)
             print(chr(L + bunny[j]), end="")
 
