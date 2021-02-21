@@ -1,5 +1,14 @@
 import java.util.Scanner;
 
+/**
+ * Game of Pizza
+ * <p>
+ * Based on the Basic game of Hurkle here
+ * https://github.com/coding-horror/basic-computer-games/blob/main/69%20Pizza/pizza.bas
+ * <p>
+ * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
+ */
 public class Pizza {
 
     private final int MAX_DELIVERIES = 5;
@@ -17,11 +26,11 @@ public class Pizza {
     }
 
     // houses that can order pizza
-    private final char[] houses = new char[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+    private final char[] houses = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
             'J', 'K', 'L', 'M', 'N', 'O', 'P'};
 
     // size of grid
-    private final int[] gridPos = new int[] { 1, 2, 3, 4};
+    private final int[] gridPos = new int[]{1, 2, 3, 4};
 
     private GAME_STATE gameState;
 
@@ -79,11 +88,11 @@ public class Pizza {
                 case MORE_DIRECTIONS:
                     extendedIntro();
                     String moreInfo = displayTextAndGetInput("DO YOU NEED MORE DIRECTIONS? ");
-                    if(!yesOrNoEntered(moreInfo)) {
+                    if (!yesOrNoEntered(moreInfo)) {
                         System.out.println("'YES' OR 'NO' PLEASE, NOW THEN,");
                     } else {
                         // More instructions selected
-                        if(yesEntered(moreInfo)) {
+                        if (yesEntered(moreInfo)) {
                             displayMoreDirections();
                             // Player understand now?
                             if (yesEntered(displayTextAndGetInput("UNDERSTAND? "))) {
@@ -102,7 +111,7 @@ public class Pizza {
                         }
                     }
 
-                   break;
+                    break;
 
                 // Too difficult to understand, game over!
                 case TOO_DIFFICULT:
@@ -114,7 +123,7 @@ public class Pizza {
                 case START_DELIVER:
                     // select a random house and "order" a pizza for them.
                     this.currentHouseDelivery = (int) (Math.random()
-                            * (this.houses.length) + 1) -1; // Deduct 1 for 0-based array
+                            * (this.houses.length) + 1) - 1; // Deduct 1 for 0-based array
 
                     System.out.println("HELLO " + this.playerName + "'S PIZZA.  THIS IS "
                             + this.houses[this.currentHouseDelivery] + ".");
@@ -132,17 +141,17 @@ public class Pizza {
                     // Convert x,y entered by player to grid position of a house
                     int x = getDelimitedValue(answer, 0);
                     int y = getDelimitedValue(answer, 1);
-                    int calculatedPos = (x + (y -1) * 4) -1;
+                    int calculatedPos = (x + (y - 1) * 4) - 1;
 
                     // Did the player select the right house to deliver?
-                    if(calculatedPos == this.currentHouseDelivery) {
+                    if (calculatedPos == this.currentHouseDelivery) {
                         System.out.println("HELLO " + this.playerName + ".  THIS IS " + this.houses[this.currentHouseDelivery]
                                 + ", THANKS FOR THE PIZZA.");
                         this.pizzaDeliveryCount++;
 
                         // Delivered enough pizza?
 
-                        if(this.pizzaDeliveryCount > MAX_DELIVERIES) {
+                        if (this.pizzaDeliveryCount > MAX_DELIVERIES) {
                             this.gameState = GAME_STATE.END_GAME;
                         } else {
                             this.gameState = GAME_STATE.START_DELIVER;
@@ -157,7 +166,7 @@ public class Pizza {
 
                 // Sign off message for cases where the Chief is not upset
                 case END_GAME:
-                    if(yesEntered(displayTextAndGetInput("DO YOU WANT TO DELIVER MORE PIZZAS? "))) {
+                    if (yesEntered(displayTextAndGetInput("DO YOU WANT TO DELIVER MORE PIZZAS? "))) {
                         init();
                         this.gameState = GAME_STATE.START_DELIVER;
                     } else {
@@ -179,7 +188,7 @@ public class Pizza {
         System.out.println();
         System.out.println(" -----1-----2-----3-----4-----");
         int k = 3;
-        for(int i=1; i<5; i++) {
+        for (int i = 1; i < 5; i++) {
             System.out.println("-");
             System.out.println("-");
             System.out.println("-");
@@ -199,10 +208,10 @@ public class Pizza {
         System.out.println("-");
         System.out.println("-");
         System.out.println(" -----1-----2-----3-----4-----");
-}
+    }
+
     /**
      * Basic information about the game
-     *
      */
     private void intro() {
         System.out.println("PIZZA");
@@ -273,19 +282,20 @@ public class Pizza {
     private boolean yesOrNoEntered(String text) {
         return stringIsAnyValue(text, "Y", "YES", "N", "NO");
     }
+
     /**
      * Returns true if a given string contains at least one of the varargs (2nd parameter).
      * Note: Case insensitive comparison.
      *
-     * @param text string to search
+     * @param text   string to search
      * @param values varargs of type string containing values to compare
      * @return true if one of the varargs arguments was found in text
      */
     private boolean stringIsAnyValue(String text, String... values) {
 
         // Cycle through the variable number of values and test each
-        for(String val:values) {
-            if(text.equalsIgnoreCase(val)) {
+        for (String val : values) {
+            if (text.equalsIgnoreCase(val)) {
                 return true;
             }
         }
