@@ -1,6 +1,14 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Game of Hiurkle
+ * <p>
+ * Based on the Basic game of Hurkle here
+ * https://github.com/coding-horror/basic-computer-games/blob/main/51%20Hurkle/hurkle.bas
+ * <p>
+ * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
+ */
 public class Hurkle {
 
     public static final int GRID_SIZE = 10;
@@ -17,7 +25,7 @@ public class Hurkle {
     private GAME_STATE gameState;
 
     // Used for keyboard input
-    private Scanner kbScanner;
+    private final Scanner kbScanner;
 
     private int guesses;
 
@@ -73,7 +81,7 @@ public class Hurkle {
                     } else {
                         showDirectionOfHurkle();
                         this.guesses++;
-                        if(this.guesses > MAX_GUESSES) {
+                        if (this.guesses > MAX_GUESSES) {
                             System.out.println("SORRY, THAT'S "
                                     + MAX_GUESSES + " GUESSES.");
                             System.out.println("THE HURKLE IS AT "
@@ -98,25 +106,24 @@ public class Hurkle {
 
     private void showDirectionOfHurkle() {
         System.out.print("GO ");
-        if(this.playerGuessYPos == this.hurkleYPos) {
+        if (this.playerGuessYPos == this.hurkleYPos) {
             // don't print North or South because the player has chosen the
             // same y grid pos as the hurkle
         } else if (this.playerGuessYPos < this.hurkleYPos) {
             System.out.print("NORTH");
-        } else if(this.playerGuessYPos > this.hurkleYPos) {
+        } else if (this.playerGuessYPos > this.hurkleYPos) {
             System.out.print("SOUTH");
         }
 
-        if(this.playerGuessXPos == this.hurkleXPos) {
+        if (this.playerGuessXPos == this.hurkleXPos) {
             // don't print East or West because the player has chosen the
             // same x grid pos as the hurkle
-        } else if(this.playerGuessXPos < this.hurkleXPos) {
+        } else if (this.playerGuessXPos < this.hurkleXPos) {
             System.out.print("EAST");
-        } else if(this.playerGuessXPos > this.hurkleXPos) {
+        } else if (this.playerGuessXPos > this.hurkleXPos) {
             System.out.print("WEST");
         }
         System.out.println();
-        return;
     }
 
     private boolean foundHurkle() {
