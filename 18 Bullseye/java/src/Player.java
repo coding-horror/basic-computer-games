@@ -4,7 +4,8 @@
  */
 public class Player {
 
-    private String name;
+    private final String name;
+
     private int score;
 
     Player(String name) {

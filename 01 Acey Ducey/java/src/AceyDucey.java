@@ -2,12 +2,11 @@ import java.util.Scanner;
 
 /**
  * Game of AceyDucey
- *
+ * <p>
  * Based on the Basic game of AceyDucey here
  * https://github.com/coding-horror/basic-computer-games/blob/main/01%20Acey%20Ducey/aceyducey.bas
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
- *        new features - no additional text, error checking, etc has been added.
- *
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
  */
 public class AceyDucey {
 
@@ -33,7 +32,7 @@ public class AceyDucey {
     private final Scanner kbScanner;
 
     // Constant value for cards from a deck - 2 lowest, 14 (Ace) highest
-    public static final int LOW_CARD_RANGE =2;
+    public static final int LOW_CARD_RANGE = 2;
     public static final int HIGH_CARD_RANGE = 14;
 
     public AceyDucey() {
@@ -56,7 +55,7 @@ public class AceyDucey {
         String playAgain = kbScanner.next().toUpperCase();
         System.out.println();
         System.out.println();
-        if(playAgain.equals("YES")) {
+        if (playAgain.equals("YES")) {
             return true;
         } else {
             System.out.println("O.K., HOPE YOU HAD FUN!");
@@ -70,7 +69,7 @@ public class AceyDucey {
 
         // Keep playing hands until player runs out of cash
         do {
-            if(firstTimePlaying) {
+            if (firstTimePlaying) {
                 intro();
                 firstTimePlaying = false;
             }
@@ -80,14 +79,14 @@ public class AceyDucey {
             int betAmount = getBet();
             playersCard = randomCard();
             displayPlayerCard();
-            if(playerWon()) {
+            if (playerWon()) {
                 System.out.println("YOU WIN!!");
                 playerAmount += betAmount;
             } else {
                 System.out.println("SORRY, YOU LOSE");
                 playerAmount -= betAmount;
                 // Player run out of money?
-                if(playerAmount <=0) {
+                if (playerAmount <= 0) {
                     gameOver = true;
                 }
             }
@@ -118,10 +117,10 @@ public class AceyDucey {
         do {
             System.out.print("WHAT IS YOUR BET ");
             amount = kbScanner.nextInt();
-            if(amount == 0) {
+            if (amount == 0) {
                 System.out.println("CHICKEN!!");
                 validBet = true;
-            } else if(amount > playerAmount) {
+            } else if (amount > playerAmount) {
                 System.out.println("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.");
                 System.out.println("YOU HAVE ONLY " + playerAmount + " DOLLARS TO BET.");
             } else {
@@ -149,7 +148,7 @@ public class AceyDucey {
         do {
             firstCard = randomCard();
             secondCard = randomCard();
-        } while(firstCard.getValue() >= secondCard.getValue());
+        } while (firstCard.getValue() >= secondCard.getValue());
     }
 
     // Creates a random card

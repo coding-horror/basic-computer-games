@@ -12,7 +12,7 @@ public class Card {
 
     private void init(int value) {
         this.value = value;
-        if(value <11) {
+        if (value < 11) {
             this.name = String.valueOf(value);
         } else {
             switch (value) {

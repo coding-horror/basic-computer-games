@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Based on the Basic game of Hi-Lo here
  * https://github.com/coding-horror/basic-computer-games/blob/main/47%20Hi-Lo/hi-lo.bas
  *
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  *        new features - no additional text, error checking, etc has been added.
  */
 public class HiLo {

@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Based on the Basic game of Hurkle here
  * https://github.com/coding-horror/basic-computer-games/blob/main/51%20Hurkle/hurkle.bas
  * <p>
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
  */
 public class Hurkle {
@@ -62,32 +62,32 @@ public class Hurkle {
                 // Start the game, set the number of players, names and round
                 case START_GAME:
 
-                    this.hurkleXPos = randomNumber();
-                    this.hurkleYPos = randomNumber();
-                    System.out.println("HURKLE AT : " + this.hurkleXPos + "," + this.hurkleYPos);
+                    hurkleXPos = randomNumber();
+                    hurkleYPos = randomNumber();
+                    System.out.println("HURKLE AT : " + hurkleXPos + "," + hurkleYPos);
 
-                    this.guesses = 1;
+                    guesses = 1;
                     gameState = GAME_STATE.GUESSING;
 
                     break;
 
                 // Guess an x,y position of the hurkle
                 case GUESSING:
-                    String guess = displayTextAndGetInput("GUESS #" + this.guesses + "? ");
-                    this.playerGuessXPos = getDelimitedValue(guess, 0);
-                    this.playerGuessYPos = getDelimitedValue(guess, 1);
+                    String guess = displayTextAndGetInput("GUESS #" + guesses + "? ");
+                    playerGuessXPos = getDelimitedValue(guess, 0);
+                    playerGuessYPos = getDelimitedValue(guess, 1);
                     if (foundHurkle()) {
-                        this.gameState = GAME_STATE.PLAY_AGAIN;
+                        gameState = GAME_STATE.PLAY_AGAIN;
                     } else {
                         showDirectionOfHurkle();
-                        this.guesses++;
-                        if (this.guesses > MAX_GUESSES) {
+                        guesses++;
+                        if (guesses > MAX_GUESSES) {
                             System.out.println("SORRY, THAT'S "
                                     + MAX_GUESSES + " GUESSES.");
                             System.out.println("THE HURKLE IS AT "
-                                    + this.hurkleXPos + "," + this.hurkleYPos);
+                                    + hurkleXPos + "," + hurkleYPos);
                             System.out.println();
-                            this.gameState = GAME_STATE.PLAY_AGAIN;
+                            gameState = GAME_STATE.PLAY_AGAIN;
                         }
                     }
 
@@ -96,7 +96,7 @@ public class Hurkle {
                 case PLAY_AGAIN:
                     System.out.println("LET'S PLAY AGAIN, HURKLE IS HIDING.");
                     System.out.println();
-                    this.gameState = GAME_STATE.START_GAME;
+                    gameState = GAME_STATE.START_GAME;
                     break;
             }
             // Effectively an endless loop because the game never quits as per
@@ -106,30 +106,30 @@ public class Hurkle {
 
     private void showDirectionOfHurkle() {
         System.out.print("GO ");
-        if (this.playerGuessYPos == this.hurkleYPos) {
+        if (playerGuessYPos == hurkleYPos) {
             // don't print North or South because the player has chosen the
             // same y grid pos as the hurkle
-        } else if (this.playerGuessYPos < this.hurkleYPos) {
+        } else if (playerGuessYPos < hurkleYPos) {
             System.out.print("NORTH");
-        } else if (this.playerGuessYPos > this.hurkleYPos) {
+        } else if (playerGuessYPos > hurkleYPos) {
             System.out.print("SOUTH");
         }
 
-        if (this.playerGuessXPos == this.hurkleXPos) {
+        if (playerGuessXPos == hurkleXPos) {
             // don't print East or West because the player has chosen the
             // same x grid pos as the hurkle
-        } else if (this.playerGuessXPos < this.hurkleXPos) {
+        } else if (playerGuessXPos < hurkleXPos) {
             System.out.print("EAST");
-        } else if (this.playerGuessXPos > this.hurkleXPos) {
+        } else if (playerGuessXPos > hurkleXPos) {
             System.out.print("WEST");
         }
         System.out.println();
     }
 
     private boolean foundHurkle() {
-        if ((this.playerGuessXPos - this.hurkleXPos)
-                - (this.playerGuessYPos - this.hurkleYPos) == 0) {
-            System.out.println("YOU FOUND HIM IN " + this.guesses + " GUESSES.");
+        if ((playerGuessXPos - hurkleXPos)
+                - (playerGuessYPos - hurkleYPos) == 0) {
+            System.out.println("YOU FOUND HIM IN " + guesses + " GUESSES.");
             return true;
         }
 
