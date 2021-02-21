@@ -1,5 +1,3 @@
-package aceyducey;
-
 /**
  * A card from a deck - the value is between 2-14 to cover
  * cards with a face value of 2-9 and then a Jack, Queen, King, and Ace
