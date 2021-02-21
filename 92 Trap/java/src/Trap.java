@@ -3,12 +3,12 @@ import java.util.Scanner;
 
 /**
  * Game of Trap
- *
+ * <p>
  * Based on the Basic game of Trap here
  * https://github.com/coding-horror/basic-computer-games/blob/main/92%20Trap/trap.bas
- *
- * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
- *        new features - no additional text, error checking, etc has been added.
+ * <p>
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
  */
 public class Trap {
 
@@ -45,7 +45,6 @@ public class Trap {
 
     /**
      * Main game loop
-     *
      */
     public void play() {
 
@@ -55,7 +54,7 @@ public class Trap {
                 // Show an introduction and optional instructions the first time the game is played.
                 case STARTING:
                     intro();
-                    if(yesEntered(displayTextAndGetInput("INSTRUCTIONS? "))) {
+                    if (yesEntered(displayTextAndGetInput("INSTRUCTIONS? "))) {
                         instructions();
                     }
                     gameState = GAME_STATE.START_GAME;
@@ -72,11 +71,11 @@ public class Trap {
                 case GUESSING:
                     System.out.println();
                     String playerRangeGuess = displayTextAndGetInput("GUESS # " + currentPlayersGuess + "? ");
-                    int startRange = getDelimitedValue(playerRangeGuess,0);
-                    int endRange = getDelimitedValue(playerRangeGuess,1);
+                    int startRange = getDelimitedValue(playerRangeGuess, 0);
+                    int endRange = getDelimitedValue(playerRangeGuess, 1);
 
                     // Has the player won?
-                    if(startRange == computersNumber && endRange == computersNumber) {
+                    if (startRange == computersNumber && endRange == computersNumber) {
                         System.out.println("YOU GOT IT!!!");
                         System.out.println();
                         gameState = GAME_STATE.PLAY_AGAIN;
@@ -84,7 +83,7 @@ public class Trap {
                         // show where the guess is at
                         System.out.println(showGuessResult(startRange, endRange));
                         currentPlayersGuess++;
-                        if(currentPlayersGuess > MAX_GUESSES) {
+                        if (currentPlayersGuess > MAX_GUESSES) {
                             System.out.println("SORRY, THAT'S " + MAX_GUESSES + " GUESSES. THE NUMBER WAS "
                                     + computersNumber);
                             gameState = GAME_STATE.PLAY_AGAIN;
@@ -104,15 +103,15 @@ public class Trap {
      * Show the players guess result
      *
      * @param start start range entered by player
-     * @param end end range
+     * @param end   end range
      * @return text to indicate their progress.
      */
     private String showGuessResult(int start, int end) {
 
         String status;
-        if(start <= computersNumber && computersNumber <= end) {
+        if (start <= computersNumber && computersNumber <= end) {
             status = "YOU HAVE TRAPPED MY NUMBER.";
-        } else if(computersNumber < start) {
+        } else if (computersNumber < start) {
             status = "MY NUMBER IS SMALLER THAN YOUR TRAP NUMBERS.";
         } else {
             status = "MY NUMBER IS LARGER THAN YOUR TRAP NUMBERS.";
@@ -157,7 +156,7 @@ public class Trap {
     /**
      * Checks whether player entered Y or YES to a question.
      *
-     * @param text  player string from kb
+     * @param text player string from kb
      * @return true of Y or YES was entered, otherwise false
      */
     private boolean yesEntered(String text) {
@@ -169,7 +168,7 @@ public class Trap {
      * Useful to check for Y or YES for example
      * Comparison is case insensitive.
      *
-     * @param text source string
+     * @param text   source string
      * @param values a range of values to compare against the source string
      * @return true if a comparison was found in one of the variable number of strings passed
      */
