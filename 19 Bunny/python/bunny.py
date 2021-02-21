@@ -26,8 +26,8 @@ def display_intro():
 
 
 def tab(column):
-    """ Analogous to TAB(X) in basic. Returns a string with ASCII codes for
-        setting the cursor to the specified column. """
+    """ Emulates the TAB command in BASIC. Returns a string with ASCII
+        codes for setting the cursor to the specified column. """
     return "\r\33[{}C".format(column)
 
 
@@ -72,7 +72,7 @@ def play():
         end = next(data)
         # Unlike FOR I=X TO Y, the 'stop' argument of 'range' is non-inclusive, so we must add 1
         for i in range(start, end+1, 1):
-            # Cycle through the letters in "BUNNY" as we draw this line
+            # Cycle through the letters in "BUNNY" as we draw line
             j = i - 5 * int(i / 5)
             print(chr(L + bunny[j]), end="")
 
