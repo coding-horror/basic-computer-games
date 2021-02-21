@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * Game of Hiurkle
+ * Game of Hurkle
  * <p>
  * Based on the Basic game of Hurkle here
  * https://github.com/coding-horror/basic-computer-games/blob/main/51%20Hurkle/hurkle.bas
