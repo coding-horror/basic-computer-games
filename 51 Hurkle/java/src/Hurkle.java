@@ -64,7 +64,6 @@ public class Hurkle {
 
                     hurkleXPos = randomNumber();
                     hurkleYPos = randomNumber();
-                    System.out.println("HURKLE AT : " + hurkleXPos + "," + hurkleYPos);
 
                     guesses = 1;
                     gameState = GAME_STATE.GUESSING;
