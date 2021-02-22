@@ -3,12 +3,12 @@ import java.util.Scanner;
 
 /**
  * Game of Bombardment
- *
+ * <p>
  * Based on the Basic game of Bombardment here
  * https://github.com/coding-horror/basic-computer-games/blob/main/11%20Bombardment/bombardment.bas
- *
- * Note:  The idea was to create a version of this 1970's Basic game in Java, without introducing
- *        new features - no additional text, error checking, etc has been added.
+ * <p>
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
  */
 public class Bombardment {
 
@@ -28,11 +28,11 @@ public class Bombardment {
 
     private GAME_STATE gameState;
 
-    public static final String[] PLAYER_HIT_MESSAGES = { "ONE DOWN, THREE TO GO.",
-            "TWO DOWN, TWO TO GO.", "THREE DOWN, ONE TO GO." };
+    public static final String[] PLAYER_HIT_MESSAGES = {"ONE DOWN, THREE TO GO.",
+            "TWO DOWN, TWO TO GO.", "THREE DOWN, ONE TO GO."};
 
     public static final String[] COMPUTER_HIT_MESSAGES = {"YOU HAVE ONLY THREE OUTPOSTS LEFT.",
-            "YOU HAVE ONLY TWO OUTPOSTS LEFT.", "YOU HAVE ONLY ONE OUTPOST LEFT." };
+            "YOU HAVE ONLY TWO OUTPOSTS LEFT.", "YOU HAVE ONLY ONE OUTPOST LEFT."};
 
     private HashSet<Integer> computersPlatoons;
     private HashSet<Integer> playersPlatoons;
@@ -44,7 +44,7 @@ public class Bombardment {
 
     public Bombardment() {
 
-        this.gameState = GAME_STATE.STARTING;
+        gameState = GAME_STATE.STARTING;
 
         // Initialise kb scanner
         kbScanner = new Scanner(System.in);
@@ -56,19 +56,19 @@ public class Bombardment {
     public void play() {
 
         do {
-            switch (this.gameState) {
+            switch (gameState) {
 
                 // Show an introduction the first time the game is played.
                 case STARTING:
                     init();
                     intro();
-                    this.gameState = GAME_STATE.DRAW_BATTLEFIELD;
+                    gameState = GAME_STATE.DRAW_BATTLEFIELD;
                     break;
 
                 // Enter the players name
                 case DRAW_BATTLEFIELD:
                     drawBattlefield();
-                    this.gameState = GAME_STATE.GET_PLAYER_CHOICES;
+                    gameState = GAME_STATE.GET_PLAYER_CHOICES;
                     break;
 
                 // Get the players 4 locations for their platoons
@@ -76,35 +76,35 @@ public class Bombardment {
                     String playerChoices = displayTextAndGetInput("WHAT ARE YOUR FOUR POSITIONS? ");
 
                     // Store the 4 player choices that were entered separated with commas
-                    for(int i=0; i<PLATOONS; i++) {
-                        playersPlatoons.add(getDelimitedValue(playerChoices,i));
+                    for (int i = 0; i < PLATOONS; i++) {
+                        playersPlatoons.add(getDelimitedValue(playerChoices, i));
                     }
 
-                    this.gameState = GAME_STATE.PLAYERS_TURN;
+                    gameState = GAME_STATE.PLAYERS_TURN;
                     break;
 
                 // Players turn to pick a location
                 case PLAYERS_TURN:
 
                     int firePosition = getDelimitedValue(
-                            displayTextAndGetInput("WHERE DO YOU WISH TO FIRE YOUR MISSILE? "),0);
+                            displayTextAndGetInput("WHERE DO YOU WISH TO FIRE YOUR MISSILE? "), 0);
 
-                    if(didPlayerHitComputerPlatoon(firePosition)) {
+                    if (didPlayerHitComputerPlatoon(firePosition)) {
                         // Player hit a player platoon
                         int hits = updatePlayerHits(firePosition);
                         // How many hits has the player made?
-                        if(hits != PLATOONS) {
+                        if (hits != PLATOONS) {
                             showPlayerProgress(hits);
-                            this.gameState = GAME_STATE.COMPUTER_TURN;
+                            gameState = GAME_STATE.COMPUTER_TURN;
                         } else {
                             // Player has obtained 4 hits, they win
-                            this.gameState = GAME_STATE.PLAYER_WON;
+                            gameState = GAME_STATE.PLAYER_WON;
                         }
                     } else {
                         // Player missed
                         System.out.println("HA, HA YOU MISSED. MY TURN NOW:");
                         System.out.println();
-                        this.gameState = GAME_STATE.COMPUTER_TURN;
+                        gameState = GAME_STATE.COMPUTER_TURN;
                     }
 
                     break;
@@ -114,25 +114,25 @@ public class Bombardment {
 
                     // Computer takes a guess of a location
                     int computerFirePosition = uniqueComputerGuess();
-                    if(didComputerHitPlayerPlatoon(computerFirePosition)) {
+                    if (didComputerHitPlayerPlatoon(computerFirePosition)) {
                         // Computer hit a player platoon
                         int hits = updateComputerHits(computerFirePosition);
                         // How many hits has the computer made?
-                        if(hits != PLATOONS) {
+                        if (hits != PLATOONS) {
                             showComputerProgress(hits, computerFirePosition);
-                            this.gameState = GAME_STATE.PLAYERS_TURN;
+                            gameState = GAME_STATE.PLAYERS_TURN;
                         } else {
                             // Computer has obtained 4 hits, they win
                             System.out.println("YOU'RE DEAD. YOUR LAST OUTPOST WAS AT " + computerFirePosition
                                     + ". HA, HA, HA.");
-                            this.gameState = GAME_STATE.PLAYER_LOST;
+                            gameState = GAME_STATE.PLAYER_LOST;
                         }
                     } else {
                         // Computer missed
                         System.out.println("I MISSED YOU, YOU DIRTY RAT. I PICKED " + computerFirePosition
                                 + ". YOUR TURN:");
                         System.out.println();
-                        this.gameState = GAME_STATE.PLAYERS_TURN;
+                        gameState = GAME_STATE.PLAYERS_TURN;
                     }
 
                     break;
@@ -141,37 +141,36 @@ public class Bombardment {
                 case PLAYER_WON:
                     System.out.println("YOU GOT ME, I'M GOING FAST. BUT I'LL GET YOU WHEN");
                     System.out.println("MY TRANSISTO&S RECUP%RA*E!");
-                    this.gameState = GAME_STATE.GAME_OVER;
+                    gameState = GAME_STATE.GAME_OVER;
                     break;
 
                 case PLAYER_LOST:
                     System.out.println("BETTER LUCK NEXT TIME.");
-                    this.gameState = GAME_STATE.GAME_OVER;
+                    gameState = GAME_STATE.GAME_OVER;
                     break;
 
                 // GAME_OVER State does not specifically have a case
             }
-        } while (this.gameState != GAME_STATE.GAME_OVER);
+        } while (gameState != GAME_STATE.GAME_OVER);
     }
 
     /**
      * Calculate computer guess.  Make that the computer does not guess the same
      * location twice
      *
-     * @return  location of the computers guess that has not been guessed previously
+     * @return location of the computers guess that has not been guessed previously
      */
     private int uniqueComputerGuess() {
 
         boolean validGuess = false;
         int computerGuess;
-        do
-        {
+        do {
             computerGuess = randomNumber();
 
-            if(!computersGuesses.contains(computerGuess)) {
+            if (!computersGuesses.contains(computerGuess)) {
                 validGuess = true;
             }
-        } while(!validGuess);
+        } while (!validGuess);
 
         computersGuesses.add(computerGuess);
 
@@ -185,7 +184,6 @@ public class Bombardment {
      * until all four are in the hashset
      *
      * @return 4 locations of computers platoons
-     *
      */
     private HashSet<Integer> computersChosenPlatoons() {
 
@@ -198,19 +196,20 @@ public class Bombardment {
             tempPlatoons.add(randomNumber());
 
             // All four created?
-            if(tempPlatoons.size() == PLATOONS) {
+            if (tempPlatoons.size() == PLATOONS) {
                 // Exit when we have created four
                 allPlatoonsAdded = true;
             }
 
-        } while(!allPlatoonsAdded);
+        } while (!allPlatoonsAdded);
 
         return tempPlatoons;
     }
+
     /**
      * Shows a different message for each number of hits
      *
-     * @param hits  total number of hits by player on computer
+     * @param hits total number of hits by player on computer
      */
     private void showPlayerProgress(int hits) {
 
@@ -221,7 +220,7 @@ public class Bombardment {
     /**
      * Shows a different message for each number of hits
      *
-     * @param hits  total number of hits by computer on player
+     * @param hits total number of hits by computer on player
      */
     private void showComputerProgress(int hits, int lastGuess) {
 
@@ -231,42 +230,42 @@ public class Bombardment {
 
     /**
      * Prints a message from the passed array based on the value of hits
-
-     * @param hits - number of hits the player or computer has made
+     *
+     * @param hits     - number of hits the player or computer has made
      * @param messages - an array of string with messages
      */
     private void showProgress(int hits, String[] messages) {
-        System.out.println(messages[hits-1]);
+        System.out.println(messages[hits - 1]);
     }
 
     /**
-     *
      * Update a player hit - adds a hit the player made on the computers platoon.
+     *
      * @param fireLocation - computer location that got hit
      * @return number of hits the player has inflicted on the computer in total
      */
     private int updatePlayerHits(int fireLocation) {
 
         // N.B. only removes if present, so its redundant to check if it exists first
-        this.computersPlatoons.remove(fireLocation);
+        computersPlatoons.remove(fireLocation);
 
         // return number of hits in total
-        return PLATOONS - this.computersPlatoons.size();
+        return PLATOONS - computersPlatoons.size();
     }
 
     /**
-     *
      * Update a computer hit - adds a hit the computer made on the players platoon.
+     *
      * @param fireLocation - player location that got hit
      * @return number of hits the player has inflicted on the computer in total
      */
     private int updateComputerHits(int fireLocation) {
 
         // N.B. only removes if present, so its redundant to check if it exists first
-        this.playersPlatoons.remove(fireLocation);
+        playersPlatoons.remove(fireLocation);
 
         // return number of hits in total
-        return PLATOONS - this.playersPlatoons.size();
+        return PLATOONS - playersPlatoons.size();
     }
 
     /**
@@ -276,7 +275,7 @@ public class Bombardment {
      * @return true if a computer platoon was at that position
      */
     private boolean didPlayerHitComputerPlatoon(int fireLocation) {
-        return this.computersPlatoons.contains(fireLocation);
+        return computersPlatoons.contains(fireLocation);
     }
 
     /**
@@ -286,22 +285,20 @@ public class Bombardment {
      * @return true if a players platoon was at that position
      */
     private boolean didComputerHitPlayerPlatoon(int fireLocation) {
-        return this.playersPlatoons.contains(fireLocation);
+        return playersPlatoons.contains(fireLocation);
     }
 
     /**
      * Draw the battlefield grid
-     *
      */
     private void drawBattlefield() {
-        for(int i=1; i<MAX_GRID_SIZE+1; i+= 5) {
-            System.out.printf("%-2s %-2s %-2s %-2s %-2s %n", i, i+1, i+2, i+3, i+4);
+        for (int i = 1; i < MAX_GRID_SIZE + 1; i += 5) {
+            System.out.printf("%-2s %-2s %-2s %-2s %-2s %n", i, i + 1, i + 2, i + 3, i + 4);
         }
     }
 
     /**
      * Basic information about the game
-     *
      */
     private void intro() {
         System.out.println("BOMBARDMENT");
@@ -327,12 +324,12 @@ public class Bombardment {
     private void init() {
 
         // Create four locations for the computers platoons.
-        this.computersPlatoons = computersChosenPlatoons();
+        computersPlatoons = computersChosenPlatoons();
 
         // Players platoons.
-        this.playersPlatoons = new HashSet<>();
+        playersPlatoons = new HashSet<>();
 
-        this.computersGuesses = new HashSet<>();
+        computersGuesses = new HashSet<>();
     }
 
     /**

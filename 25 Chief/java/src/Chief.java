@@ -1,6 +1,15 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * Game of Chief
+ * <p>
+ * Based on the Basic game of Hurkle here
+ * https://github.com/coding-horror/basic-computer-games/blob/main/25%20Chief/chief.bas
+ * <p>
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
+ */
 public class Chief {
 
     private enum GAME_STATE {
@@ -14,6 +23,7 @@ public class Chief {
 
     private GAME_STATE gameState;
 
+    // The number the computer determines to be the players starting number
     private double calculatedNumber;
 
     // Used for keyboard input
@@ -43,7 +53,7 @@ public class Chief {
 
                 // show an message to start
                 case READY_TO_START:
-                    if(!yesEntered(displayTextAndGetInput("ARE YOU READY TO TAKE THE TEST YOU CALLED ME OUT FOR? "))) {
+                    if (!yesEntered(displayTextAndGetInput("ARE YOU READY TO TAKE THE TEST YOU CALLED ME OUT FOR? "))) {
                         System.out.println("SHUT UP, PALE FACE WITH WISE TONGUE.");
                     }
 
@@ -57,17 +67,17 @@ public class Chief {
                             displayTextAndGetInput(" WHAT DO YOU HAVE? "));
 
                     // Exact same formula used in the original game to calculate the players original number
-                    this.calculatedNumber = (playerNumber +1-5)*5/8*5-3;
+                    calculatedNumber = (playerNumber + 1 - 5) * 5 / 8 * 5 - 3;
 
-                    this.gameState = GAME_STATE.CALCULATE_AND_SHOW;
+                    gameState = GAME_STATE.CALCULATE_AND_SHOW;
                     break;
 
                 // Enter the number to be used to calculate
                 case CALCULATE_AND_SHOW:
-                    if(yesEntered(
-                            displayTextAndGetInput("I BET YOUR NUMBER WAS " + this.calculatedNumber
-                            + ". AM I RIGHT? "))) {
-                        this.gameState = GAME_STATE.END_GAME;
+                    if (yesEntered(
+                            displayTextAndGetInput("I BET YOUR NUMBER WAS " + calculatedNumber
+                                    + ". AM I RIGHT? "))) {
+                        gameState = GAME_STATE.END_GAME;
 
                     } else {
                         // Player did not agree, so show the breakdown
@@ -76,27 +86,27 @@ public class Chief {
                         double f = number + 3;
                         double g = f / 5;
                         double h = g * 8;
-                        double i = h/5 + 5;
-                        double j = i -1;
+                        double i = h / 5 + 5;
+                        double j = i - 1;
                         System.out.println("SO YOU THINK YOU'RE SO SMART, EH?");
                         System.out.println("NOW WATCH.");
-                        System.out.println(number +" PLUS 3 EQUALS " + f +  ". THIS DIVIDED BY 5 EQUALS " + g);
-                        System.out.println("THIS TIMES 8 EQUALS " + h + ". IF WE DIVIDE BY 5 AND ADD 5,");
+                        System.out.println(number + " PLUS 3 EQUALS " + f + ". DIVIDED BY 5 EQUALS " + g);
+                        System.out.println("TIMES 8 EQUALS " + h + ". IF WE DIVIDE BY 5 AND ADD 5,");
                         System.out.println("WE GET " + i + ", WHICH, MINUS 1, EQUALS " + j + ".");
-                        if(yesEntered(displayTextAndGetInput("NOW DO YOU BELIEVE ME? "))) {
-                            this.gameState = GAME_STATE.END_GAME;
+                        if (yesEntered(displayTextAndGetInput("NOW DO YOU BELIEVE ME? "))) {
+                            gameState = GAME_STATE.END_GAME;
                         } else {
                             // Time for a lightning bolt.
                             System.out.println("YOU HAVE MADE ME MAD!!!");
                             System.out.println("THERE MUST BE A GREAT LIGHTNING BOLT!");
                             System.out.println();
-                            for(int x=30; x>=22; x--) {
+                            for (int x = 30; x >= 22; x--) {
                                 System.out.println(tabbedSpaces(x) + "X X");
                             }
                             System.out.println(tabbedSpaces(21) + "X XXX");
                             System.out.println(tabbedSpaces(20) + "X   X");
                             System.out.println(tabbedSpaces(19) + "XX X");
-                            for(int y=20; y>=13; y--) {
+                            for (int y = 20; y >= 13; y--) {
                                 System.out.println(tabbedSpaces(y) + "X X");
                             }
                             System.out.println(tabbedSpaces(12) + "XX");
@@ -106,7 +116,7 @@ public class Chief {
                             System.out.println("#########################");
                             System.out.println();
                             System.out.println("I HOPE YOU BELIEVE ME NOW, FOR YOUR SAKE!!");
-                            this.gameState = GAME_STATE.GAME_OVER;
+                            gameState = GAME_STATE.GAME_OVER;
                         }
 
                     }
@@ -115,7 +125,7 @@ public class Chief {
                 // Sign off message for cases where the Chief is not upset
                 case END_GAME:
                     System.out.println("BYE!!!");
-                    this.gameState = GAME_STATE.GAME_OVER;
+                    gameState = GAME_STATE.GAME_OVER;
                     break;
 
                 // GAME_OVER State does not specifically have a case
@@ -134,14 +144,14 @@ public class Chief {
         Arrays.fill(repeat, ' ');
         return new String(repeat);
     }
+
     private void instructions() {
-        System.out.println(" TAKE A NUMBER AND ADD 3. DIVIDE THIS NUMBER BY 5 AND");
+        System.out.println(" TAKE A NUMBER AND ADD 3. DIVIDE NUMBER BY 5 AND");
         System.out.println("MULTIPLY BY 8. DIVIDE BY 5 AND ADD THE SAME. SUBTRACT 1.");
     }
 
     /**
      * Basic information about the game
-     *
      */
     private void intro() {
         System.out.println("CHIEF");
@@ -165,15 +175,15 @@ public class Chief {
      * Returns true if a given string contains at least one of the varargs (2nd parameter).
      * Note: Case insensitive comparison.
      *
-     * @param text string to search
+     * @param text   string to search
      * @param values varargs of type string containing values to compare
      * @return true if one of the varargs arguments was found in text
      */
     private boolean stringIsAnyValue(String text, String... values) {
 
         // Cycle through the variable number of values and test each
-        for(String val:values) {
-            if(text.equalsIgnoreCase(val)) {
+        for (String val : values) {
+            if (text.equalsIgnoreCase(val)) {
                 return true;
             }
         }

@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Based on the Sine Wave program here
  * https://github.com/coding-horror/basic-computer-games/blob/main/78%20Sine%20Wave/sinewave.bas
  *
- * Note:  The idea was to create a version of this 1970's Basic program in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic program in Java, without introducing
  *        new features - no additional text, error checking, etc has been added.
  */
 public class SineWave {
