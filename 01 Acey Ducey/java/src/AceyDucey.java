@@ -1,15 +1,12 @@
-package aceyducey;
-
 import java.util.Scanner;
 
 /**
  * Game of AceyDucey
- *
+ * <p>
  * Based on the Basic game of AceyDucey here
  * https://github.com/coding-horror/basic-computer-games/blob/main/01%20Acey%20Ducey/aceyducey.bas
- * Note:  The idea was to create a version of this 1970's Basic game in Java, without introducing
- *        new features - no additional text, error checking, etc has been added.
- *
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
  */
 public class AceyDucey {
 
@@ -32,10 +29,10 @@ public class AceyDucey {
     private boolean gameOver = false;
 
     // Used for keyboard input
-    private Scanner kbScanner;
+    private final Scanner kbScanner;
 
     // Constant value for cards from a deck - 2 lowest, 14 (Ace) highest
-    public static final int LOW_CARD_RANGE =2;
+    public static final int LOW_CARD_RANGE = 2;
     public static final int HIGH_CARD_RANGE = 14;
 
     public AceyDucey() {
@@ -58,7 +55,7 @@ public class AceyDucey {
         String playAgain = kbScanner.next().toUpperCase();
         System.out.println();
         System.out.println();
-        if(playAgain.equals("YES")) {
+        if (playAgain.equals("YES")) {
             return true;
         } else {
             System.out.println("O.K., HOPE YOU HAD FUN!");
@@ -71,9 +68,8 @@ public class AceyDucey {
     public void play() {
 
         // Keep playing hands until player runs out of cash
-        // which sets gameover to true
         do {
-            if(firstTimePlaying) {
+            if (firstTimePlaying) {
                 intro();
                 firstTimePlaying = false;
             }
@@ -81,17 +77,17 @@ public class AceyDucey {
             drawCards();
             displayCards();
             int betAmount = getBet();
-            this.playersCard = randomCard();
+            playersCard = randomCard();
             displayPlayerCard();
-            if(playerWon()) {
+            if (playerWon()) {
                 System.out.println("YOU WIN!!");
-                this.playerAmount += betAmount;
+                playerAmount += betAmount;
             } else {
                 System.out.println("SORRY, YOU LOSE");
-                this.playerAmount -= betAmount;
+                playerAmount -= betAmount;
                 // Player run out of money?
-                if(this.playerAmount <=0) {
-                    this.gameOver = true;
+                if (playerAmount <= 0) {
+                    gameOver = true;
                 }
             }
 
@@ -102,18 +98,14 @@ public class AceyDucey {
     // to win a players card has to be in the range of the first and second dealer
     // drawn cards inclusive of first and second cards.
     private boolean playerWon() {
-        if((this.playersCard.getValue() >= this.firstCard.getValue())
-                && this.playersCard.getValue() <= this.secondCard.getValue()) {
-            // winner
-            return true;
-        }
-
-        return false;
+        // winner
+        return (playersCard.getValue() >= firstCard.getValue())
+                && playersCard.getValue() <= secondCard.getValue();
 
     }
 
     private void displayPlayerCard() {
-        System.out.println(this.playersCard.getName());
+        System.out.println(playersCard.getName());
     }
 
     // Get the players bet, and return the amount
@@ -121,16 +113,16 @@ public class AceyDucey {
     // method will loop until a valid bet is entered.
     private int getBet() {
         boolean validBet = false;
-        int amount = 0;
+        int amount;
         do {
             System.out.print("WHAT IS YOUR BET ");
             amount = kbScanner.nextInt();
-            if(amount == 0) {
+            if (amount == 0) {
                 System.out.println("CHICKEN!!");
                 validBet = true;
-            } else if(amount > this.playerAmount) {
+            } else if (amount > playerAmount) {
                 System.out.println("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.");
-                System.out.println("YOU HAVE ONLY " + this.playerAmount + " DOLLARS TO BET.");
+                System.out.println("YOU HAVE ONLY " + playerAmount + " DOLLARS TO BET.");
             } else {
                 validBet = true;
             }
@@ -140,13 +132,13 @@ public class AceyDucey {
     }
 
     private void displayBalance() {
-        System.out.println("YOU NOW HAVE " + this.playerAmount + " DOLLARS.");
+        System.out.println("YOU NOW HAVE " + playerAmount + " DOLLARS.");
     }
 
     private void displayCards() {
         System.out.println("HERE ARE YOUR NEXT TWO CARDS: ");
-        System.out.println(this.firstCard.getName());
-        System.out.println(this.secondCard.getName());
+        System.out.println(firstCard.getName());
+        System.out.println(secondCard.getName());
     }
 
     // Draw two dealer cards, and save them for later use.
@@ -154,9 +146,9 @@ public class AceyDucey {
     private void drawCards() {
 
         do {
-            this.firstCard = randomCard();
-            this.secondCard = randomCard();
-        } while(this.firstCard.getValue() >= this.secondCard.getValue());
+            firstCard = randomCard();
+            secondCard = randomCard();
+        } while (firstCard.getValue() >= secondCard.getValue());
     }
 
     // Creates a random card
