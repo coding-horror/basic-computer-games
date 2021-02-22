@@ -1,15 +1,26 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Game of Bullseye
+ * <p>
+ * Based on the Basic game of Bullseye here
+ * https://github.com/coding-horror/basic-computer-games/blob/main/18%20Bullseye/bullseye.bas
+ * <p>
+ * Note:  The idea was to create a version of 1970's Basic game in Java, without introducing
+ * new features - no additional text, error checking, etc has been added.
+ */
 public class Bullseye {
 
+    // Used for formatting output
     public static final int FIRST_IDENT = 10;
     public static final int SECOND_IDENT = 30;
     public static final int THIRD_INDENT = 30;
 
-    public static final double[] SHOT_ONE = new double[] { .65, .55, .5, .5};
-    public static final double[] SHOT_TWO = new double[] { .99, .77, .43,.01};
-    public static final double[] SHOT_THREE = new double[] { .95, .75, .45, .05 };
+    // Used to decide throw result
+    public static final double[] SHOT_ONE = new double[]{.65, .55, .5, .5};
+    public static final double[] SHOT_TWO = new double[]{.99, .77, .43, .01};
+    public static final double[] SHOT_THREE = new double[]{.95, .75, .45, .05};
 
     private enum GAME_STATE {
         STARTING,
@@ -20,14 +31,12 @@ public class Bullseye {
 
     private GAME_STATE gameState;
 
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
 
-    private Shot[] shots;
+    private final Shot[] shots;
 
     // Used for keyboard input
-    private Scanner kbScanner;
-
-    private int numberOfPlayers;
+    private final Scanner kbScanner;
 
     private int round;
 
@@ -49,7 +58,6 @@ public class Bullseye {
 
     /**
      * Main game loop
-     *
      */
     public void play() {
 
@@ -65,10 +73,10 @@ public class Bullseye {
                 // Start the game, set the number of players, names and round
                 case START_GAME:
 
-                    this.numberOfPlayers = chooseNumberOfPlayers();
+                    int numberOfPlayers = chooseNumberOfPlayers();
 
-                    for(int i=0; i<this.numberOfPlayers; i++) {
-                        String name = displayTextAndGetInput("NAME OF PLAYER #" + (i+1) + "? ");
+                    for (int i = 0; i < numberOfPlayers; i++) {
+                        String name = displayTextAndGetInput("NAME OF PLAYER #" + (i + 1) + "? ");
                         Player player = new Player(name);
                         this.players.add(player);
                     }
@@ -85,8 +93,7 @@ public class Bullseye {
                     System.out.println("=======");
 
                     // Each player takes their turn
-                    for(int i=0; i<players.size(); i++) {
-                        Player player = players.get(i);
+                    for (Player player : players) {
                         int playerThrow = getPlayersThrow(player);
                         int points = calculatePlayerPoints(playerThrow);
                         player.addScore(points);
@@ -96,11 +103,10 @@ public class Bullseye {
                     boolean foundWinner = false;
 
                     // Check if any player won
-                    for(int i=0; i<players.size(); i++) {
-                        Player thePlayer = players.get(i);
+                    for (Player thePlayer : players) {
                         int score = thePlayer.getScore();
-                        if(score >=200) {
-                            if(!foundWinner) {
+                        if (score >= 200) {
+                            if (!foundWinner) {
                                 System.out.println("WE HAVE A WINNER!!");
                                 System.out.println();
                                 foundWinner = true;
@@ -110,7 +116,7 @@ public class Bullseye {
                         }
                     }
 
-                    if(foundWinner) {
+                    if (foundWinner) {
                         System.out.println("THANKS FOR THE GAME.");
                         gameState = GAME_STATE.GAME_OVER;
                     } else {
@@ -120,12 +126,11 @@ public class Bullseye {
 
                     break;
             }
-        } while(gameState != GAME_STATE.GAME_OVER);
+        } while (gameState != GAME_STATE.GAME_OVER);
     }
 
     /**
      * Display info about the game
-     *
      */
     private void intro() {
         System.out.println("BULLSEYE");
@@ -136,7 +141,7 @@ public class Bullseye {
         System.out.println("TO GET 200 POINTS.");
         System.out.println();
         System.out.println(paddedString("THROW", "DESCRIPTION", "PROBABLE SCORE"));
-        System.out.println(paddedString("1", "FAST OVERARM","BULLSEYE OR COMPLETE MISS"));
+        System.out.println(paddedString("1", "FAST OVERARM", "BULLSEYE OR COMPLETE MISS"));
         System.out.println(paddedString("2", "CONTROLLED OVERARM", "10, 20 OR 30 POINTS"));
         System.out.println(paddedString("3", "UNDERARM", "ANYTHING"));
     }
@@ -151,16 +156,16 @@ public class Bullseye {
     private int calculatePlayerPoints(int playerThrow) {
 
         // -1 is because of 0 base Java array
-        double p1 = this.shots[playerThrow-1].getShot(0);
-        double p2 = this.shots[playerThrow-1].getShot(1);
-        double p3 = this.shots[playerThrow-1].getShot(2);
-        double p4 = this.shots[playerThrow-1].getShot(3);
+        double p1 = this.shots[playerThrow - 1].getShot(0);
+        double p2 = this.shots[playerThrow - 1].getShot(1);
+        double p3 = this.shots[playerThrow - 1].getShot(2);
+        double p4 = this.shots[playerThrow - 1].getShot(3);
 
         double random = Math.random();
 
         int points;
 
-        if(random >= p1) {
+        if (random >= p1) {
             System.out.println("BULLSEYE!!  40 POINTS!");
             points = 40;
             // If the throw was 1 (bullseye or missed, then make it missed
@@ -170,13 +175,13 @@ public class Bullseye {
         } else if (playerThrow == 1) {
             System.out.println("MISSED THE TARGET!  TOO BAD.");
             points = 0;
-        } else if(random >= p2) {
+        } else if (random >= p2) {
             System.out.println("30-POINT ZONE!");
             points = 30;
-        } else if(random >= p3) {
+        } else if (random >= p3) {
             System.out.println("20-POINT ZONE");
             points = 20;
-        } else if(random >= p4) {
+        } else if (random >= p4) {
             System.out.println("WHEW!  10 POINTS.");
             points = 10;
         } else {
@@ -190,23 +195,23 @@ public class Bullseye {
     /**
      * Get players shot 1,2, or 3 - ask again if invalid input
      *
-     * @param player
-     * @return 1,2, or 3 indicating the players shot
+     * @param player the player we are calculating the throw on
+     * @return 1, 2, or 3 indicating the players shot
      */
     private int getPlayersThrow(Player player) {
         boolean inputCorrect = false;
         String theThrow;
         do {
             theThrow = displayTextAndGetInput(player.getName() + "'S THROW ");
-            if(theThrow.equals("1") || theThrow.equals("2") || theThrow.equals("3")) {
+            if (theThrow.equals("1") || theThrow.equals("2") || theThrow.equals("3")) {
                 inputCorrect = true;
             } else {
                 System.out.println("INPUT 1, 2, OR 3!");
             }
 
-        } while(!inputCorrect);
+        } while (!inputCorrect);
 
-        return Integer.valueOf(theThrow);
+        return Integer.parseInt(theThrow);
     }
 
 
@@ -217,8 +222,9 @@ public class Bullseye {
      */
     private int chooseNumberOfPlayers() {
 
-        return Integer.valueOf((displayTextAndGetInput("HOW MANY PLAYERS? ")));
+        return Integer.parseInt((displayTextAndGetInput("HOW MANY PLAYERS? ")));
     }
+
     /*
      * Print a message on the screen, then accept input from Keyboard.
      *
@@ -234,9 +240,9 @@ public class Bullseye {
      * Format three strings to a given number of spaces
      * Replacing the original basic code which used tabs
      *
-     * @param first String to print in pos 1
+     * @param first  String to print in pos 1
      * @param second String to print in pos 2
-     * @param third String to print in pos 3
+     * @param third  String to print in pos 3
      * @return formatted string
      */
     private String paddedString(String first, String second, String third) {

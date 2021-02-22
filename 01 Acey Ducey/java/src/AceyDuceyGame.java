@@ -1,20 +1,16 @@
-package aceyducey;
-
 /**
  * This class is used to invoke the game.
  *
  */
-public class Game {
-
-    private static AceyDucey game;
+public class AceyDuceyGame {
 
     public static void main(String[] args) {
 
-        boolean keepPlaying = true;
+        boolean keepPlaying;
+        AceyDucey game = new AceyDucey();
 
         // Keep playing game until infinity or the player loses
         do {
-            game = new AceyDucey();
             game.play();
             System.out.println();
             System.out.println();
