@@ -16,7 +16,10 @@ def input_betting():
     print("\n")
     b = -1
     while b < 1 or b > 100:
-        b = int(input("Your bet:"))
+        try:
+            b = int(input("Your bet:"))
+        except ValueError:
+            b = -1
         if b > 100:
             print("House limits are $100")
         elif b < 1:
@@ -27,7 +30,7 @@ def input_betting():
 
 def beeping():
     # Function to produce a beep sound.
-    # In the original program is the subroutine at 1270
+    # In the original program is the subroutine at line 1270
     for _ in range(5):
         sys.stdout.write('\a')
         sys.stdout.flush()
@@ -102,8 +105,10 @@ while keep_betting:
     print("Your standings are ${}".format(profits))
     answer = input("Again?")
 
-    if not answer[0].lower() == "y":
+    try:
+        if not answer[0].lower() == "y":
+            keep_betting = False
+    except IndexError:
         keep_betting = False
-
 
 final_message(profits)
