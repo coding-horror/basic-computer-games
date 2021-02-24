@@ -144,11 +144,10 @@ public class Bug {
                         System.out.println();
                         draw(computersBug);
                         gameState = GAME_STATE.PLAYER_TURN;
-
-                        if (gameOver) {
-                            System.out.println("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!");
-                            gameState = GAME_STATE.GAME_OVER;
-                        }
+                    }
+                    if (gameOver) {
+                        System.out.println("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!");
+                        gameState = GAME_STATE.GAME_OVER;
                     }
             }
         } while (gameState != GAME_STATE.GAME_OVER);
