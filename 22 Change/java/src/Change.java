@@ -153,7 +153,7 @@ public class Change {
 
     /*
      * Print a message on the screen, then accept input from Keyboard.
-     * Converts input to Integer
+     * Converts input to a Double
      *
      * @param text message to be displayed on screen.
      * @return what was typed by the player.
