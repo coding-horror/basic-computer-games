@@ -4,7 +4,7 @@ import java.util.Scanner;
 /**
  * Game of Guess
  * <p>
- * Based on the Basic game of Dice here
+ * Based on the Basic game of Guess here
  * https://github.com/coding-horror/basic-computer-games/blob/main/41%20Guess/guess.bas
  * <p>
  * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
