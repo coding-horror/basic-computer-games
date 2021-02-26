@@ -39,7 +39,7 @@ public class Letter {
 
     public Letter() {
 
-        gameState = GAME_STATE.INIT;
+        gameState = GAME_STATE.STARTUP;
 
         // Initialise kb scanner
         kbScanner = new Scanner(System.in);
