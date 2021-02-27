@@ -12,14 +12,16 @@ I have moved all [the original BASIC source code](http://www.vintage-basic.net/g
 
 > I've included all the games here for your tinkering pleasure. I've tested and tweaked each one of them to make sure they'll run with Vintage BASIC, though you may see a few oddities. That's part of the fun of playing with BASIC: it never works quite the same on two machines. The games will play better if you keep CAPS LOCK on, as they were designed to be used with capital-letter input.
 
-Each project has subfolders corresponding to the languages we'd like to see the games ported to:
+Each project has subfolders corresponding to the languages we'd like to see the games ported to. This is based on the [February 2021 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _memory safe_ and _general purpose scripting language_ per [this post](https://discourse.codinghorror.com/t/updating-101-basic-computer-games-for-2021/7927/34)
 
-- C#
 - Java
-- JavaScript
 - Python
-- Ruby
+- C#
 - VB.NET
+- JavaScript
+- Ruby
+- Delphi / Object Pascal
+- Perl
 
 ### Project goals
 
@@ -31,8 +33,10 @@ Feel free to begin converting these classic games into the above list of modern,
 
 - **Please DO update for modern coding conventions**. Support uppercase and lowercase. Use structured programming. Use subroutines. Try to be an example of good, modern coding practices!
 
+- **Use lots of comments to explain what is going on**. Comment liberally! If there were clever tricks in the original code, decompose those tricks into simpler (even if more verbose) code, and use comments to explain what's happening and why.
+
 - **Don't get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable -- the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks.
 
 ### Have fun!
 
-Thank you for taking part in this project to update a classic programming book -- maybe the most influential programming book in computing history -- for 2021!
+Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2021!
