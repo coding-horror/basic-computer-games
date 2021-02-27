@@ -23,31 +23,20 @@
 // ****  CONVERTED TO MICROSOFT C# 2/20/21 BY ANDREW COOPER
 // ****
 
-using System;
-
-using static System.StringComparison;
-
 namespace SuperStarTrek
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine(Strings.Title);
+            var game = new Game();
 
-            Console.Write("Do you need instructions (Y/N)? ");
-            var response = Console.ReadLine();
-            Console.WriteLine();
+            game.DoIntroduction();
 
-            if (!response.Equals("N", InvariantCultureIgnoreCase))
+            do
             {
-                Console.WriteLine(Strings.Instructions);
-
-                Console.WriteLine("Press <Enter> to continue...");
-                Console.ReadLine();
-            }
-
-            Console.WriteLine(Strings.Enterprise);
+                game.Play();
+            } while (game.Replay());
         }
     }
 }

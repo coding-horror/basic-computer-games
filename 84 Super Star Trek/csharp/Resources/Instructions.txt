@@ -53,7 +53,7 @@ LRS command = Long Range Sensor Scan
      The scan is coded in the form ###, where the units digit
      is the number of stars, the tens digit is the number of
      starbases, and the hundreds digit is the number of
-     Kilngons.
+     Klingons.
 
      Example - 207 = 2 Klingons, No starbases, & 7 stars.
 
@@ -103,3 +103,4 @@ COM command = Library-Computer
      Option 5 = Galactic Region Name Map
         This option prints the names of the sixteen major
         galactic regions referred to in the game.
+
