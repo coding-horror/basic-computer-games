@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="COMPTURN" xml:space="preserve">
-    <value>COMPUTER TAKES {0} AND  LEAVES {1}</value>
+    <value>COMPUTER TAKES {0} AND LEAVES {1}</value>
   </data>
   <data name="END_COMPLOSE" xml:space="preserve">
     <value>COMPUTER TAKES {0} AND LOSES</value>
