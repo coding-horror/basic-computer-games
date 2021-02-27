@@ -10,9 +10,7 @@ public class Shot {
     // Array of doubles are passed for a specific type of shot
     Shot(double[] shots) {
         chances = new double[shots.length];
-        for(int i=0; i<shots.length; i++) {
-            chances[i] = shots[i];
-        }
+        System.arraycopy(shots, 0, chances, 0, shots.length);
     }
 
     public double getShot(int index) {
