@@ -61,7 +61,7 @@ namespace Batnum.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to COMPUTER TAKES {0} AND  LEAVES {1}.
+        ///   Looks up a localized string similar to COMPUTER TAKES {0} AND LEAVES {1}.
         /// </summary>
         internal static string COMPTURN {
             get {
