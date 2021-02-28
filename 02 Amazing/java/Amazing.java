@@ -56,6 +56,11 @@ public class Amazing {
         int EXIT_DOWN = 1;
         int EXIT_RIGHT = 2;
 
+        int FIRST_COL = 0;
+        int LAST_COL = width - 1;
+        int FIRST_ROW = 0;
+        int LAST_ROW = length - 1;
+
         int enterCol = random(0, width);
         int col = enterCol;
         int row = 0;
@@ -69,33 +74,33 @@ public class Amazing {
         while (count != totalWalls) {
             ArrayList<Direction> possibleDirs = new ArrayList<>(Arrays.asList(Direction.values()));
 
-            if (col == 0 || used[row][col - 1] != 0) {
+            if (col == FIRST_COL || 0 != used[row][col - 1]) {
                 possibleDirs.remove(Direction.GO_LEFT);
             }
-            if (row == 0 || used[row - 1][col] != 0) {
+            if (row == FIRST_ROW || 0 != used[row - 1][col]) {
                 possibleDirs.remove(Direction.GO_UP);
             }
-            if (col == width - 1 || used[row][col + 1] != 0) {
+            if (col == LAST_COL || 0 != used[row][col + 1]) {
                 possibleDirs.remove(Direction.GO_RIGHT);
             }
-            if (row == length - 1 || used[row + 1][col] != 0) {
+            if (row == LAST_ROW || 0 != used[row + 1][col]) {
                 possibleDirs.remove(Direction.GO_DOWN);
             }
 
             if (possibleDirs.size() != 0) {
                 Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
                 if (direction == Direction.GO_LEFT) {
-                    col = col - 1;
+                    col--;
                     walls[row][col] = EXIT_RIGHT;
                 } else if (direction == Direction.GO_UP) {
-                    row = row - 1;
+                    row--;
                     walls[row][col] = EXIT_DOWN;
                 } else if (direction == Direction.GO_RIGHT) {
                     walls[row][col] = walls[row][col] + EXIT_RIGHT;
-                    col = col + 1;
+                    col++;
                 } else if (direction == Direction.GO_DOWN) {
                     walls[row][col] = walls[row][col] + EXIT_DOWN;
-                    row = row + 1;
+                    row++;
                 }
                 used[row][col] = count;
                 count++;
