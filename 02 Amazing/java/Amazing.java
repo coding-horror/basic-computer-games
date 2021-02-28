@@ -44,54 +44,48 @@ public class Amazing {
         } while (width < 1 || length < 1);
 
         Grid grid = new Grid(length, width);
-        int enterCol = grid.setup();
+        int enterCol = grid.setupEntrance();
 
         int totalWalls = width * length + 1;
-        int col = enterCol;
-        int row = 0;
         int count = 2;
+        Cell cell = grid.startingCell();
 
         while (count != totalWalls) {
-            Cell cell = grid.cells[row][col];
             ArrayList<Direction> possibleDirs = getPossibleDirs(grid, cell);
 
             if (possibleDirs.size() != 0) {
-                Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
-                if (direction == Direction.GO_LEFT) {
-                    cell = grid.cells[row][--col];
-                    cell.exitType = EXIT_RIGHT;
-                } else if (direction == Direction.GO_UP) {
-                    cell = grid.cells[--row][col];
-                    cell.exitType = EXIT_DOWN;
-                } else if (direction == Direction.GO_RIGHT) {
-                    cell.exitType = cell.exitType + EXIT_RIGHT;
-                    cell = grid.cells[row][++col];
-                } else if (direction == Direction.GO_DOWN) {
-                    cell.exitType = cell.exitType + EXIT_DOWN;
-                    cell = grid.cells[++row][col];
-                }
+                cell = setCellExit(grid, cell, possibleDirs);
                 cell.count = count++;
             } else {
-                do {
-                    if (col != grid.lastCol) {
-                        col++;
-                    } else if (row != grid.lastRow) {
-                        row++;
-                        col = 0;
-                    } else {
-                        row = 0;
-                        col = 0;
-                    }
-                } while (grid.cells[row][col].count == 0);
+                cell = grid.getFirstUnset(cell);
             }
         }
+        grid.setupExit();
 
-        col = random(0, width - 1);
-        row = length - 1;
-        grid.cells[row][col].exitType += 1;
+        writeMaze(width, grid, enterCol);
+    }
 
+    private Cell setCellExit(Grid grid, Cell cell, ArrayList<Direction> possibleDirs) {
+        Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
+        if (direction == Direction.GO_LEFT) {
+            cell = grid.getPrevCol(cell);
+            cell.exitType = EXIT_RIGHT;
+        } else if (direction == Direction.GO_UP) {
+            cell = grid.getPrevRow(cell);
+            cell.exitType = EXIT_DOWN;
+        } else if (direction == Direction.GO_RIGHT) {
+            cell.exitType = cell.exitType + EXIT_RIGHT;
+            cell = grid.getNextCol(cell);
+        } else if (direction == Direction.GO_DOWN) {
+            cell.exitType = cell.exitType + EXIT_DOWN;
+            cell = grid.getNextRow(cell);
+        }
+        return cell;
+    }
+
+    private void writeMaze(int width, Grid grid, int enterCol) {
         // top line
-        for (int i=0; i < width; i++) {
+        for (int i = 0; i < width; i++) {
             if (i == enterCol) {
                 out.print(".  ");
             } else {
@@ -100,18 +94,18 @@ public class Amazing {
         }
         out.println('.');
 
-        for (int i=0; i < length; i++) {
+        for (Cell[] rows : grid.cells) {
             out.print("I");
-            for (int j = 0; j < width; j++) {
-                if (grid.cells[i][j].exitType == EXIT_UNSET || grid.cells[i][j].exitType == EXIT_DOWN) {
+            for (Cell cell : rows) {
+                if (cell.exitType == EXIT_UNSET || cell.exitType == EXIT_DOWN) {
                     out.print("  I");
                 } else {
                     out.print("   ");
                 }
             }
             out.println();
-            for (int j = 0; j < width; j++) {
-                if (grid.cells[i][j].exitType == EXIT_UNSET || grid.cells[i][j].exitType == EXIT_RIGHT) {
+            for (Cell cell : rows) {
+                if (cell.exitType == EXIT_UNSET || cell.exitType == EXIT_RIGHT) {
                     out.print(":--");
                 } else {
                     out.print(":  ");
@@ -159,11 +153,6 @@ public class Amazing {
         return new String(spacesTemp);
     }
 
-    public static boolean random() {
-        Random random = new Random();
-        return random.nextBoolean();
-    }
-
     public static int random(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min) + min;
@@ -180,16 +169,6 @@ public class Amazing {
             this.row = row;
             this.col = col;
         }
-
-        @Override
-        public String toString() {
-            return "Cell{" +
-                    "exitType=" + exitType +
-                    ", count=" + count +
-                    ", col=" + col +
-                    ", row=" + row +
-                    '}';
-        }
     }
 
     public static class Grid {
@@ -199,6 +178,7 @@ public class Amazing {
         int lastRow;
 
         int width;
+        int enterCol;
 
         public Grid(int length, int width) {
             this.lastCol = width - 1;
@@ -214,10 +194,19 @@ public class Amazing {
             }
         }
 
-        public int setup() {
-            int enterCol = random(0, this.width);
-            cells[0][enterCol].count = 1;
-            return enterCol;
+        public int setupEntrance() {
+            this.enterCol = random(0, this.width);
+            cells[0][this.enterCol].count = 1;
+            return this.enterCol;
+        }
+
+        public void setupExit() {
+            int exit = random(0, width - 1);
+            cells[lastRow][exit].exitType += 1;
+        }
+
+        public Cell startingCell() {
+            return cells[0][enterCol];
         }
 
         public boolean isPrevColSet(Cell cell) {
@@ -236,12 +225,18 @@ public class Amazing {
             return 0 != cells[cell.row + 1][cell.col].count;
         }
 
-        public Cell getPrevCol(Cell cell) { return cells[cell.row][--cell.col]; }
-        public Cell getPrevRow(Cell cell) { return cells[--cell.row][cell.col]; }
-        public Cell getNextCol(Cell cell) { return cells[cell.row][++cell.col]; }
-        public Cell getNextRow(Cell cell) { return cells[++cell.row][cell.col]; }
-
-        public Cell get(int row, int col) { return cells[row][col]; }
+        public Cell getPrevCol(Cell cell) {
+            return cells[cell.row][cell.col - 1];
+        }
+        public Cell getPrevRow(Cell cell) {
+            return cells[cell.row - 1][cell.col];
+        }
+        public Cell getNextCol(Cell cell) {
+            return cells[cell.row][cell.col + 1];
+        }
+        public Cell getNextRow(Cell cell) {
+            return cells[cell.row + 1][cell.col];
+        }
 
         public Cell getFirstUnset(Cell cell) {
             int col = cell.col;
