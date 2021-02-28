@@ -19,8 +19,10 @@ namespace hurkle
             // BASIC program was generating a float between 0 and 1
             // then multiplying by the size of the grid to to a number
             // between 1 and 10. C# allows you to do that directly.
-            var A = _random.Next(0,gridSize);
-            var B = _random.Next(0,gridSize);
+            var hurklePoint = new GamePoint{
+                X = _random.Next(0, gridSize),
+                Y = _random.Next(0, gridSize)
+            };
             
             /*
             310 FOR K=1 TO N
@@ -37,9 +39,11 @@ namespace hurkle
                 Console.WriteLine($"GUESS #{K}");
                 var inputLine = Console.ReadLine();
                 var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
-                var X = int.Parse(seperateStrings[0]);
-                var Y = int.Parse(seperateStrings[1]);
-                if(Math.Abs(X-A) + Math.Abs(Y-B) == 0)
+                var guessPoint = new GamePoint{
+                    X = int.Parse(seperateStrings[0]),
+                    Y = int.Parse(seperateStrings[1])
+                };
+                if(Math.Abs(guessPoint.X-hurklePoint.X) + Math.Abs(guessPoint.Y-hurklePoint.Y) == 0)
                 {
                     /*
                     500 REM
@@ -52,7 +56,7 @@ namespace hurkle
                     return;
                 }
 
-                PrintInfo(X,Y,A,B);
+                PrintInfo(guessPoint,hurklePoint);
             }
             
             /*
@@ -62,10 +66,10 @@ namespace hurkle
             */
             Console.WriteLine();
             Console.WriteLine($"SORRY, THAT'S {guesses} GUESSES");
-            Console.WriteLine($"THE HURKLE IS AT {A},{B}");
+            Console.WriteLine($"THE HURKLE IS AT {hurklePoint.X},{hurklePoint.Y}");
         }
 
-        private static void PrintInfo(int X, int Y, int A, int B)
+        private static void PrintInfo(GamePoint guess, GamePoint target)
         {
             
             /*
@@ -79,10 +83,10 @@ namespace hurkle
             650 GO TO 670
             660 PRINT "NORTH";
             */
-            if(Y>B)
+            if(guess.Y>target.Y)
             {
                 Console.Write("SOUTH");
-            }else if(Y<B)
+            }else if(guess.Y<target.Y)
             {
                 Console.Write("NORTH");
             }
@@ -93,10 +97,10 @@ namespace hurkle
             700 GO TO 720
             710 PRINT "EAST";
             */
-            if(X<A)
+            if(guess.X<target.X)
             {
                 Console.Write("EAST");
-            }else if(X>A)
+            }else if(guess.X>target.X)
             {
                 Console.Write("WEST");
             }
@@ -106,6 +110,12 @@ namespace hurkle
             720 PRINT
             730 RETURN
             */
+        }
+
+        private class GamePoint
+        {
+            public int X {get;init;}
+            public int Y {get;init;}
         }
     }
 }
