@@ -51,27 +51,26 @@ public class Amazing {
         int row = 0;
         int count = 2;
 
-        Cell cell = grid.cells[row][col];
         while (count != totalWalls) {
-            ArrayList<Direction> possibleDirs = getPossibleDirs(grid, new Cell(row, col));
+            Cell cell = grid.cells[row][col];
+            ArrayList<Direction> possibleDirs = getPossibleDirs(grid, cell);
 
             if (possibleDirs.size() != 0) {
                 Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
                 if (direction == Direction.GO_LEFT) {
-                    col--;
-                    grid.cells[row][col].exitType = EXIT_RIGHT;
+                    cell = grid.cells[row][--col];
+                    cell.exitType = EXIT_RIGHT;
                 } else if (direction == Direction.GO_UP) {
-                    row--;
-                    grid.cells[row][col].exitType = EXIT_DOWN;
+                    cell = grid.cells[--row][col];
+                    cell.exitType = EXIT_DOWN;
                 } else if (direction == Direction.GO_RIGHT) {
-                    grid.cells[row][col].exitType = grid.cells[row][col].exitType + EXIT_RIGHT;
-                    col++;
+                    cell.exitType = cell.exitType + EXIT_RIGHT;
+                    cell = grid.cells[row][++col];
                 } else if (direction == Direction.GO_DOWN) {
-                    grid.cells[row][col].exitType = grid.cells[row][col].exitType + EXIT_DOWN;
-                    row++;
+                    cell.exitType = cell.exitType + EXIT_DOWN;
+                    cell = grid.cells[++row][col];
                 }
-                grid.cells[row][col].count = count;
-                count++;
+                cell.count = count++;
             } else {
                 do {
                     if (col != grid.lastCol) {
