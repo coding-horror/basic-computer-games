@@ -43,7 +43,6 @@ public class Amazing {
             }
         } while (width < 1 || length < 1);
 
-
         Grid grid = new Grid(length, width);
 
         int enterCol = random(0, width);
@@ -57,7 +56,7 @@ public class Amazing {
         count++;
 
         while (count != totalWalls) {
-            ArrayList<Direction> possibleDirs = getPossibleDirs(grid, col, row);
+            ArrayList<Direction> possibleDirs = getPossibleDirs(grid, new Cell(row, col));
 
             if (possibleDirs.size() != 0) {
                 Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
@@ -126,19 +125,19 @@ public class Amazing {
         }
     }
 
-    private ArrayList<Direction> getPossibleDirs(Grid grid, int col, int row) {
+    private ArrayList<Direction> getPossibleDirs(Grid grid, Cell cell) {
         ArrayList<Direction> possibleDirs = new ArrayList<>(Arrays.asList(Direction.values()));
 
-        if (col == FIRST_COL || 0 != grid.cells[row][col - 1].count) {
+        if (cell.col == FIRST_COL || grid.isPrevColSet(cell)) {
             possibleDirs.remove(Direction.GO_LEFT);
         }
-        if (row == FIRST_ROW || 0 != grid.cells[row - 1][col].count) {
+        if (cell.row == FIRST_ROW || grid.isPrevRowSet(cell)) {
             possibleDirs.remove(Direction.GO_UP);
         }
-        if (col == grid.lastCol || 0 != grid.cells[row][col + 1].count) {
+        if (cell.col == grid.lastCol || grid.isNextColSet(cell)) {
             possibleDirs.remove(Direction.GO_RIGHT);
         }
-        if (row == grid.lastRow || 0 != grid.cells[row + 1][col].count) {
+        if (cell.row == grid.lastRow || grid.isNextRowSet(cell)) {
             possibleDirs.remove(Direction.GO_DOWN);
         }
         return possibleDirs;
@@ -177,6 +176,14 @@ public class Amazing {
     public class Cell {
         int exitType = EXIT_UNSET;
         int count = 0;
+
+        int col;
+        int row;
+
+        public Cell(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
     }
 
     public class Grid {
@@ -193,10 +200,27 @@ public class Amazing {
             for (int i=0; i < length; i++) {
                 cells[i] = new Cell[width];
                 for (int j = 0; j < width; j++) {
-                    cells[i][j] = new Cell();
+                    cells[i][j] = new Cell(i, j);
                 }
             }
         }
+
+        public boolean isPrevColSet(Cell cell) {
+            return 0 != cells[cell.row][cell.col - 1].count;
+        }
+
+        public boolean isPrevRowSet(Cell cell) {
+            return 0 != cells[cell.row - 1][cell.col].count;
+        }
+
+        public boolean isNextColSet(Cell cell) {
+            return 0 != cells[cell.row][cell.col + 1].count;
+        }
+
+        public boolean isNextRowSet(Cell cell) {
+            return 0 != cells[cell.row + 1][cell.col].count;
+        }
+
     }
 }
 
