@@ -40,7 +40,8 @@ namespace hurkle
             Console.WriteLine(@"DIRECTION TO GO TO LOOK FOR THE HURKLE.");
             Console.WriteLine();
 
-            var hurkle = new HurkleGame(N,G);
+            var view = new ConsoleHurkleView();
+            var hurkle = new HurkleGame(N,G, view);
             while(true)
             {
                 hurkle.PlayGame();
