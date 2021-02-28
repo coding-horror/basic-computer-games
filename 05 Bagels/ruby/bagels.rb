@@ -12,13 +12,15 @@ def print_instructions
   puts '   BAGELS - no digits correct'
 end
 
-def generate_number_array
-  target = 0
+def generate_target
   target = rand(100..999) while target.to_s.split('').uniq.size < 3
-  target.to_s.split('')
+  target
 end
 
-def puts_clue_for(guess_array, target_array)
+def puts_clue_for(guess_number, target_number)
+  guess_array = guess_number.to_s.split("")
+  target_array = target_number.to_s.split("")
+
   clues = [].tap do |clue|
     guess_array.each_with_index do |n, i|
       if target_array[i] == n
@@ -48,45 +50,47 @@ instructions_request = gets.chomp.downcase
 print_instructions if %w[yes y].include?(instructions_request)
 
 while desire_to_play
-  target_number_array = generate_number_array
+  target = generate_target
 
   2.times { puts }
   puts 'OK. I have a number in mind.'
 
-  guess_count = 0
-  guess_array = []
+  puts target
 
-  while (guess_array != target_number_array) && guess_count < 20
+  guess_count = 0
+  guess = 0
+
+  while (guess != target) && guess_count < 20
     guess_count += 1
 
     puts "Guess ##{guess_count}:"
 
-    guess = gets.chomp
+    raw_guess = gets.chomp
 
-    if guess =~ /[^1-9]/
+    if raw_guess =~ /[^0-9]/
       puts 'What?'
       next
     end
 
-    if guess.length != 3
+    if raw_guess.length != 3
       puts 'Try guessing a three digit number'
       next
     end
 
-    guess_array = guess.split('')
-
-    if guess_array.uniq.size < 3
+    if raw_guess.split('').uniq.size < 3
       puts 'Oh, I forgot to tell you: the number I have in mind has no two digits the same.'
       next
     end
 
-    if guess_array != target_number_array
-      puts_clue_for(guess_array, target_number_array)
+    guess = raw_guess.to_i
+
+    if guess != target
+      puts_clue_for(guess, target)
       puts
     end
   end
 
-  if guess_array == target_number_array
+  if guess == target
     player_points += 1
 
     puts 'You got it!!!'
