@@ -5,27 +5,40 @@ import java.util.Scanner;
 import static java.lang.System.in;
 import static java.lang.System.out;
 
+/**
+ * Core algorithm copied from amazing.py
+ */
 public class Amazing {
 
+    final static int FIRST_COL = 0;
+    final static int FIRST_ROW = 0;
+    final static int EXIT_UNSET = 0;
+    final static int EXIT_DOWN = 1;
+    final static int EXIT_RIGHT = 2;
     private final Scanner kbScanner;
-
     public Amazing() {
         kbScanner = new Scanner(in);
     }
 
-    enum Direction {
-        GO_LEFT,
-        GO_UP,
-        GO_RIGHT,
-        GO_DOWN,
+    private static int getDelimitedValue(String text, int pos) {
+        String[] tokens = text.split(",");
+        try {
+            return Integer.parseInt(tokens[pos]);
+        } catch (Exception ex) {
+            return 0;
+        }
     }
 
-    final static int FIRST_COL = 0;
-    final static int FIRST_ROW = 0;
+    private static String tab(int spaces) {
+        char[] spacesTemp = new char[spaces];
+        Arrays.fill(spacesTemp, ' ');
+        return new String(spacesTemp);
+    }
 
-    final static int EXIT_UNSET = 0;
-    final static int EXIT_DOWN = 1;
-    final static int EXIT_RIGHT = 2;
+    public static int random(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
 
     public void play() {
         out.println(tab(28) + "AMAZING PROGRAM");
@@ -138,24 +151,11 @@ public class Amazing {
         return kbScanner.next();
     }
 
-    private static int getDelimitedValue(String text, int pos) {
-        String[] tokens = text.split(",");
-        try {
-            return Integer.parseInt(tokens[pos]);
-        } catch (Exception ex) {
-            return 0;
-        }
-    }
-
-    private static String tab(int spaces) {
-        char[] spacesTemp = new char[spaces];
-        Arrays.fill(spacesTemp, ' ');
-        return new String(spacesTemp);
-    }
-
-    public static int random(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min) + min;
+    enum Direction {
+        GO_LEFT,
+        GO_UP,
+        GO_RIGHT,
+        GO_DOWN,
     }
 
     public static class Cell {
@@ -186,7 +186,7 @@ public class Amazing {
             this.width = width;
 
             this.cells = new Cell[length][width];
-            for (int i=0; i < length; i++) {
+            for (int i = 0; i < length; i++) {
                 this.cells[i] = new Cell[width];
                 for (int j = 0; j < width; j++) {
                     this.cells[i][j] = new Cell(i, j);
@@ -228,12 +228,15 @@ public class Amazing {
         public Cell getPrevCol(Cell cell) {
             return cells[cell.row][cell.col - 1];
         }
+
         public Cell getPrevRow(Cell cell) {
             return cells[cell.row - 1][cell.col];
         }
+
         public Cell getNextCol(Cell cell) {
             return cells[cell.row][cell.col + 1];
         }
+
         public Cell getNextRow(Cell cell) {
             return cells[cell.row + 1][cell.col];
         }
@@ -257,4 +260,3 @@ public class Amazing {
         }
     }
 }
-
