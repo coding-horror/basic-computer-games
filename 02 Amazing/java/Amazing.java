@@ -20,6 +20,13 @@ public class Amazing {
         GO_DOWN,
     }
 
+    final static int FIRST_COL = 0;
+    final static int FIRST_ROW = 0;
+
+    final static int EXIT_UNSET = 0;
+    final static int EXIT_DOWN = 1;
+    final static int EXIT_RIGHT = 2;
+
     public void play() {
         out.println(tab(28) + "AMAZING PROGRAM");
         out.println(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
@@ -37,29 +44,11 @@ public class Amazing {
         } while (width < 1 || length < 1);
 
 
-        Integer[][] used = new Integer[length][width];
-        for (int i=0; i < length; i++) {
-            used[i] = new Integer[width];
-            for (int j = 0; j < width; j++) {
-                used[i][j] = 0;
-            }
-        }
+        Integer[][] walls = buildGrid(width, length);
+        Integer[][] used = buildGrid(width, length);
 
-        Integer[][] walls = new Integer[length][width];
-        for (int i=0; i < length; i++) {
-            walls[i] = new Integer[width];
-            for (int j = 0; j < width; j++) {
-                walls[i][j] = 0;
-            }
-        }
-
-        int EXIT_DOWN = 1;
-        int EXIT_RIGHT = 2;
-
-        int FIRST_COL = 0;
-        int LAST_COL = width - 1;
-        int FIRST_ROW = 0;
-        int LAST_ROW = length - 1;
+        int lastCol = width - 1;
+        int lastRow = length - 1;
 
         int enterCol = random(0, width);
         int col = enterCol;
@@ -72,20 +61,7 @@ public class Amazing {
         count++;
 
         while (count != totalWalls) {
-            ArrayList<Direction> possibleDirs = new ArrayList<>(Arrays.asList(Direction.values()));
-
-            if (col == FIRST_COL || 0 != used[row][col - 1]) {
-                possibleDirs.remove(Direction.GO_LEFT);
-            }
-            if (row == FIRST_ROW || 0 != used[row - 1][col]) {
-                possibleDirs.remove(Direction.GO_UP);
-            }
-            if (col == LAST_COL || 0 != used[row][col + 1]) {
-                possibleDirs.remove(Direction.GO_RIGHT);
-            }
-            if (row == LAST_ROW || 0 != used[row + 1][col]) {
-                possibleDirs.remove(Direction.GO_DOWN);
-            }
+            ArrayList<Direction> possibleDirs = getPossibleDirs(used, lastCol, lastRow, col, row);
 
             if (possibleDirs.size() != 0) {
                 Direction direction = possibleDirs.get(random(0, possibleDirs.size()));
@@ -106,9 +82,9 @@ public class Amazing {
                 count++;
             } else {
                 do {
-                    if (col != width - 1) {
+                    if (col != lastCol) {
                         col++;
-                    } else if (row != length - 1) {
+                    } else if (row != lastRow) {
                         row++;
                         col = 0;
                     } else {
@@ -123,6 +99,7 @@ public class Amazing {
         row = length - 1;
         walls[row][col] = walls[row][col] + 1;
 
+        // top line
         for (int i=0; i < width; i++) {
             if (i == enterCol) {
                 out.print(".  ");
@@ -135,7 +112,7 @@ public class Amazing {
         for (int i=0; i < length; i++) {
             out.print("I");
             for (int j = 0; j < width; j++) {
-                if (walls[i][j] < 2) {
+                if (walls[i][j] == EXIT_UNSET || walls[i][j] == EXIT_DOWN) {
                     out.print("  I");
                 } else {
                     out.print("   ");
@@ -143,7 +120,7 @@ public class Amazing {
             }
             out.println();
             for (int j = 0; j < width; j++) {
-                if (walls[i][j] == 0 || walls[i][j] == 2) {
+                if (walls[i][j] == EXIT_UNSET || walls[i][j] == EXIT_RIGHT) {
                     out.print(":--");
                 } else {
                     out.print(":  ");
@@ -151,6 +128,35 @@ public class Amazing {
             }
             out.println(".");
         }
+    }
+
+    private Integer[][] buildGrid(int width, int length) {
+        Integer[][] grid = new Integer[length][width];
+        for (int i=0; i < length; i++) {
+            grid[i] = new Integer[width];
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = EXIT_UNSET;
+            }
+        }
+        return grid;
+    }
+
+    private ArrayList<Direction> getPossibleDirs(Integer[][] used, int lastCol, int lastRow, int col, int row) {
+        ArrayList<Direction> possibleDirs = new ArrayList<>(Arrays.asList(Direction.values()));
+
+        if (col == FIRST_COL || 0 != used[row][col - 1]) {
+            possibleDirs.remove(Direction.GO_LEFT);
+        }
+        if (row == FIRST_ROW || 0 != used[row - 1][col]) {
+            possibleDirs.remove(Direction.GO_UP);
+        }
+        if (col == lastCol || 0 != used[row][col + 1]) {
+            possibleDirs.remove(Direction.GO_RIGHT);
+        }
+        if (row == lastRow || 0 != used[row + 1][col]) {
+            possibleDirs.remove(Direction.GO_DOWN);
+        }
+        return possibleDirs;
     }
 
     private String displayTextAndGetInput(String text) {
