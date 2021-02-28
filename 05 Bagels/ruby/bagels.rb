@@ -47,7 +47,6 @@ desire_to_play = true
 
 puts 'Bagels'.center(72)
 puts 'Creative Computing  Morristown, New Jersey'.center(72)
-
 5.times { puts }
 
 puts 'Would you like to the rules? [Y]es or [N]o.'
@@ -71,16 +70,19 @@ while desire_to_play
 
     raw_guess = gets.chomp
 
+    ## if the guess isn't numerical, sound confused
     if raw_guess =~ /[^0-9]/
       puts 'What?'
       next
     end
 
+    ## if the guess is more ore less than three digits, prompt player
     if raw_guess.length != 3
       puts 'Try guessing a three digit number'
       next
     end
 
+    ## if the guess contains duplicate numbers, give player a clue
     if raw_guess.split('').uniq.size < 3
       puts 'Oh, I forgot to tell you: the number I have in mind has no two digits the same.'
       next
@@ -106,6 +108,7 @@ while desire_to_play
 
   puts
   puts 'Would you like to play again? [Y]es or [N]o'
+
   play_again_request = gets.chomp
   desire_to_play = %w[yes y].include?(play_again_request)
 end
