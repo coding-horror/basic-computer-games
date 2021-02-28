@@ -1,7 +1,7 @@
 # Bagels
 # Number guessing game.
 # Original source unknown but suspected to be
-# Lawrence Hall of Science, U.C. Berkely
+# Lawrence Hall of Science, U.C. Berkeley
 
 def print_instructions
   puts
