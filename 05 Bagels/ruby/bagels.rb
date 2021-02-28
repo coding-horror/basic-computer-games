@@ -13,7 +13,6 @@ def print_instructions
 end
 
 def generate_target
-
   # pick a three digit number with no repeating numbers.
   # gien that, 102-987 is a reasonable starting point!
   target = rand(102..987) while target.to_s.split('').uniq.size < 3
