@@ -62,8 +62,6 @@ while desire_to_play
   2.times { puts }
   puts 'OK. I have a number in mind.'
 
-  puts target
-
   guess_count = 0
   guess = 0
 
