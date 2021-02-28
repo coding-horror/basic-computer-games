@@ -13,7 +13,10 @@ def print_instructions
 end
 
 def generate_target
-  target = rand(100..999) while target.to_s.split('').uniq.size < 3
+
+  # pick a three digit number with no repeating numbers.
+  # gien that, 102-987 is a reasonable starting point!
+  target = rand(102..987) while target.to_s.split('').uniq.size < 3
   target
 end
 
@@ -33,7 +36,11 @@ def puts_clue_for(guess_number, target_number)
 
   # sort clues so that FERMIs come before PICOs, but
   # you don't know which response responds to which number
-  puts clues.length > 0 ? clues.sort.join(' ') : 'BAGELS'
+  if clues.length > 0
+    puts clues.sort.join
+  else
+    puts 'BAGELS'
+  end
 end
 
 player_points = 0
