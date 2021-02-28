@@ -2,7 +2,7 @@ using System;
 
 namespace hurkle
 {
-    public class HurkleGame
+    public partial class HurkleGame
     {
         private readonly Random _random = new Random();
         private readonly int guesses;
@@ -24,68 +24,36 @@ namespace hurkle
                 Y = _random.Next(0, gridSize)
             };
             
-            /*
-            310 FOR K=1 TO N
-            320 PRINT "GUESS #";K;
-            330 INPUT X,Y
-            340 IF ABS(X-A)+ABS(Y-B)=0 THEN 500
-            350 REM PRINT INFO
-            360 GOSUB 610
-            370 PRINT
-            380 NEXT K
-            */
             for(var K=1;K<=guesses;K++)
             {
                 var guessPoint = GetGuess(new GuessViewModel{CurrentGuessNumber = K});
-                
-                if(guessPoint.GetDirectionTo(hurklePoint) == CardinalDirection.None)
-                {
-                    /*
-                    500 REM
-                    510 PRINT
-                    520 PRINT "YOU FOUND HIM IN";K;GUESSES!"
-                    540 GOTO 440
-                    */
-                    Console.WriteLine();
-                    Console.WriteLine($"YOU FOUND HIM IN {K} GUESSES!");
-                    return;
-                }
 
-                PrintInfo(guessPoint,hurklePoint);
+                var direction = guessPoint.GetDirectionTo(hurklePoint);
+                switch(direction)
+                {
+                    case CardinalDirection.None:
+                        ShowVictory(new VictoryViewModel{CurrentGuessNumber = K});
+                        return;
+                    default:
+                        ShowDirection(new FailedGuessViewModel{Direction = direction});
+                        continue;
+                }
             }
             
-            /*
-            410 PRINT
-            420 PRINT "SORRY, THAT'S;N;"GUESSES."
-            430 PRINT "THE HURKLE IS AT ";A;",";B
-            */
+            ShowLoss(new LossViewModel{MaxGuesses = guesses, HurkleLocation = hurklePoint } );
+        }
+
+        private void ShowLoss(LossViewModel lossViewModel)
+        {
             Console.WriteLine();
-            Console.WriteLine($"SORRY, THAT'S {guesses} GUESSES");
-            Console.WriteLine($"THE HURKLE IS AT {hurklePoint.X},{hurklePoint.Y}");
+            Console.WriteLine($"SORRY, THAT'S {lossViewModel.MaxGuesses} GUESSES");
+            Console.WriteLine($"THE HURKLE IS AT {lossViewModel.HurkleLocation.X},{lossViewModel.HurkleLocation.Y}");
         }
 
-        private class GuessViewModel
-        {
-            public int CurrentGuessNumber {get;init;}
-        }
-
-        private static GamePoint GetGuess(GuessViewModel model)
-        {
-            Console.WriteLine($"GUESS #{model.CurrentGuessNumber}");
-            var inputLine = Console.ReadLine();
-            var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
-            var guessPoint = new GamePoint{
-                X = int.Parse(seperateStrings[0]),
-                Y = int.Parse(seperateStrings[1])
-            };
-
-            return guessPoint;
-        }
-
-        private static void PrintInfo(GamePoint guess, GamePoint target)
+        private void ShowDirection(FailedGuessViewModel failedGuessViewModel)
         {
             Console.Write("GO ");
-            switch(guess.GetDirectionTo(target))
+            switch(failedGuessViewModel.Direction)
             {
                 case CardinalDirection.East:
                     Console.WriteLine("EAST");
@@ -116,71 +84,33 @@ namespace hurkle
             Console.WriteLine();
         }
 
-        private enum CardinalDirection
+        private void ShowVictory(VictoryViewModel victoryViewModel)
         {
-            None,
-            North,
-            NorthEast,
-            East,
-            SouthEast,
-            South,
-            SouthWest,
-            West,
-            NorthWest
+            Console.WriteLine();
+            Console.WriteLine($"YOU FOUND HIM IN {victoryViewModel.CurrentGuessNumber} GUESSES!");
         }
 
-        private class GamePoint
+        private class GuessViewModel
         {
-            public int X {get;init;}
-            public int Y {get;init;}
+            public int CurrentGuessNumber {get;init;}
+        }
 
-            public CardinalDirection GetDirectionTo(GamePoint target)
-            {   
-                if(X == target.X)
-                {
-                    if(Y > target.Y)
-                    {
-                        return CardinalDirection.South;
-                    }
-                    else if(Y < target.Y)
-                    {
-                        return CardinalDirection.North;
-                    }
-                    else
-                    {
-                        return CardinalDirection.None;
-                    }
-                }
-                else if(X > target.X)
-                {
-                    if(Y == target.Y)
-                    {
-                        return CardinalDirection.West;
-                    }
-                    else if(Y > target.Y)
-                    {
-                        return CardinalDirection.SouthWest;
-                    }
-                    else
-                    {
-                        return CardinalDirection.NorthWest;
-                    }
-                }
-                else
-                {
-                    if(Y == target.Y)
-                    {
-                        return CardinalDirection.East;
-                    }
-                    else if(Y > target.Y)
-                    {
-                        return CardinalDirection.SouthEast;
-                    }
-                    else{
-                        return CardinalDirection.NorthEast;
-                    }
-                }
-            }
+        private static GamePoint GetGuess(GuessViewModel model)
+        {
+            Console.WriteLine($"GUESS #{model.CurrentGuessNumber}");
+            var inputLine = Console.ReadLine();
+            var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
+            var guessPoint = new GamePoint{
+                X = int.Parse(seperateStrings[0]),
+                Y = int.Parse(seperateStrings[1])
+            };
+
+            return guessPoint;
+        }
+
+        private static void PrintInfo(GamePoint guess, GamePoint target)
+        {
+            
         }
     }
 }
