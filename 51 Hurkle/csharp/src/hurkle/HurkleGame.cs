@@ -43,7 +43,8 @@ namespace hurkle
                     X = int.Parse(seperateStrings[0]),
                     Y = int.Parse(seperateStrings[1])
                 };
-                if(Math.Abs(guessPoint.X-hurklePoint.X) + Math.Abs(guessPoint.Y-hurklePoint.Y) == 0)
+
+                if(guessPoint.GetDirectionTo(hurklePoint) == CardinalDirection.None)
                 {
                     /*
                     500 REM
@@ -71,51 +72,103 @@ namespace hurkle
 
         private static void PrintInfo(GamePoint guess, GamePoint target)
         {
-            
-            /*
-            610 PRINT "GO ";
-            */
             Console.Write("GO ");
-            /*
-            620 IF Y=B THEN 670
-            630 IF Y<B THEN 660
-            640 PRINT "SOUTH";
-            650 GO TO 670
-            660 PRINT "NORTH";
-            */
-            if(guess.Y>target.Y)
+            switch(guess.GetDirectionTo(target))
             {
-                Console.Write("SOUTH");
-            }else if(guess.Y<target.Y)
-            {
-                Console.Write("NORTH");
-            }
-            /*
-            670 IF X=A THEN 720
-            680 IF X<A THEN 710
-            690 PRINT "WEST";
-            700 GO TO 720
-            710 PRINT "EAST";
-            */
-            if(guess.X<target.X)
-            {
-                Console.Write("EAST");
-            }else if(guess.X>target.X)
-            {
-                Console.Write("WEST");
+                case CardinalDirection.East:
+                    Console.WriteLine("EAST");
+                    break;
+                case CardinalDirection.North:
+                    Console.WriteLine("NORTH");
+                    break;
+                case CardinalDirection.South:
+                    Console.WriteLine("SOUTH");
+                    break;
+                case CardinalDirection.West:
+                    Console.WriteLine("WEST");
+                    break;
+                case CardinalDirection.NorthEast:
+                    Console.WriteLine("NORTHEAST");
+                    break;
+                case CardinalDirection.NorthWest:
+                    Console.WriteLine("NORTHWEST");
+                    break;
+                case CardinalDirection.SouthEast:
+                    Console.WriteLine("SOUTHEAST");
+                    break;
+                case CardinalDirection.SouthWest:
+                    Console.WriteLine("SOUTHWEST");
+                    break;
             }
 
             Console.WriteLine();
-            /*
-            720 PRINT
-            730 RETURN
-            */
+        }
+
+        private enum CardinalDirection
+        {
+            None,
+            North,
+            NorthEast,
+            East,
+            SouthEast,
+            South,
+            SouthWest,
+            West,
+            NorthWest
         }
 
         private class GamePoint
         {
             public int X {get;init;}
             public int Y {get;init;}
+
+            public CardinalDirection GetDirectionTo(GamePoint target)
+            {   
+                if(X == target.X)
+                {
+                    if(Y > target.Y)
+                    {
+                        return CardinalDirection.South;
+                    }
+                    else if(Y < target.Y)
+                    {
+                        return CardinalDirection.North;
+                    }
+                    else
+                    {
+                        return CardinalDirection.None;
+                    }
+                }
+                else if(X > target.X)
+                {
+                    if(Y == target.Y)
+                    {
+                        return CardinalDirection.West;
+                    }
+                    else if(Y > target.Y)
+                    {
+                        return CardinalDirection.SouthWest;
+                    }
+                    else
+                    {
+                        return CardinalDirection.NorthWest;
+                    }
+                }
+                else
+                {
+                    if(Y == target.Y)
+                    {
+                        return CardinalDirection.East;
+                    }
+                    else if(Y > target.Y)
+                    {
+                        return CardinalDirection.SouthEast;
+                    }
+                    else{
+                        return CardinalDirection.NorthEast;
+                    }
+                }
+            }
         }
     }
 }
