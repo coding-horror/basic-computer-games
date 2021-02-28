@@ -44,15 +44,14 @@ public class Amazing {
         } while (width < 1 || length < 1);
 
         Grid grid = new Grid(length, width);
-
-
-        int row = 0;
-        int totalWalls = width * length + 1;
-
         int enterCol = grid.setup();
+
+        int totalWalls = width * length + 1;
         int col = enterCol;
+        int row = 0;
         int count = 2;
 
+        Cell cell = grid.cells[row][col];
         while (count != totalWalls) {
             ArrayList<Direction> possibleDirs = getPossibleDirs(grid, new Cell(row, col));
 
@@ -90,7 +89,7 @@ public class Amazing {
 
         col = random(0, width - 1);
         row = length - 1;
-        grid.cells[row][col].exitType = grid.cells[row][col].exitType + 1;
+        grid.cells[row][col].exitType += 1;
 
         // top line
         for (int i=0; i < width; i++) {
@@ -171,7 +170,7 @@ public class Amazing {
         return random.nextInt(max - min) + min;
     }
 
-    public class Cell {
+    public static class Cell {
         int exitType = EXIT_UNSET;
         int count = 0;
 
@@ -182,9 +181,19 @@ public class Amazing {
             this.row = row;
             this.col = col;
         }
+
+        @Override
+        public String toString() {
+            return "Cell{" +
+                    "exitType=" + exitType +
+                    ", count=" + count +
+                    ", col=" + col +
+                    ", row=" + row +
+                    '}';
+        }
     }
 
-    public class Grid {
+    public static class Grid {
         Cell[][] cells;
 
         int lastCol;
@@ -228,6 +237,30 @@ public class Amazing {
             return 0 != cells[cell.row + 1][cell.col].count;
         }
 
+        public Cell getPrevCol(Cell cell) { return cells[cell.row][--cell.col]; }
+        public Cell getPrevRow(Cell cell) { return cells[--cell.row][cell.col]; }
+        public Cell getNextCol(Cell cell) { return cells[cell.row][++cell.col]; }
+        public Cell getNextRow(Cell cell) { return cells[++cell.row][cell.col]; }
+
+        public Cell get(int row, int col) { return cells[row][col]; }
+
+        public Cell getFirstUnset(Cell cell) {
+            int col = cell.col;
+            int row = cell.row;
+            Cell newCell;
+            do {
+                if (col != this.lastCol) {
+                    col++;
+                } else if (row != this.lastRow) {
+                    row++;
+                    col = 0;
+                } else {
+                    row = 0;
+                    col = 0;
+                }
+            } while ((newCell = cells[row][col]).count == 0);
+            return newCell;
+        }
     }
 }
 
