@@ -130,3 +130,19 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+############################################################################################
+#
+# This is a fairly straight conversion to python with some exceptions.
+# I have kept most of the upper case text that the program prints.
+# I have added the feature of giving names to players.
+# I have added a Player class to store player data in.
+# This last change works around the problems in the original storing data in a matrix.
+# The original had bugs in calculating indexes which meant that the program
+# would overwrite data in the matrix, so the results printed out contained errors.
+# The last change is to do with the strict rules which allow extra rolls if the player
+# scores a spare or strike in the last frame.
+# This program allows these extra rolls and also calculates the proper score.
+#
+############################################################################################
