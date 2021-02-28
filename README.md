@@ -22,6 +22,7 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 - Ruby
 - Delphi / Object Pascal
 - Perl
+- Golang
 
 ### Project goals
 
