@@ -14,6 +14,11 @@ import random
 
 g = 10
 
+# We only expect the student to get within this percentage of the
+# correct answer. This isn't rocket science.
+
+EXPECTED_ACCURACY_PERCENT = 15
+
 
 def print_with_tab(spaces_count, msg):
     if spaces_count > 0:
@@ -56,7 +61,9 @@ def do_quiz():
 def ask_player(question, answer):
     print(question)
     player_answer = float(input())
-    if abs((player_answer - answer) / answer) < 0.15:
+
+    accuracy_frac = EXPECTED_ACCURACY_PERCENT / 100.0
+    if abs((player_answer - answer) / answer) < accuracy_frac:
         print("CLOSE ENOUGH.")
         score = 1
     else:
