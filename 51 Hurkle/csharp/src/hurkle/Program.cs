@@ -45,9 +45,18 @@ namespace hurkle
             {
                 hurkle.PlayGame();
 
-                Console.WriteLine();
-                Console.WriteLine("LET'S PLAY AGAIN. HURKLE IS HIDING");
-                Console.WriteLine();
+                Console.WriteLine("PLAY AGAIN? (Y)ES/(N)O");
+                var playAgainResponse = Console.ReadLine();
+                if(playAgainResponse.Trim().StartsWith("y", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("LET'S PLAY AGAIN. HURKLE IS HIDING");
+                    Console.WriteLine();
+                }else{
+                    Console.WriteLine("THANKS FOR PLAYING!");
+                    break;
+                }
+                
             }
         }
     }
