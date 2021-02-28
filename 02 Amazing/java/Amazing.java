@@ -45,15 +45,13 @@ public class Amazing {
 
         Grid grid = new Grid(length, width);
 
-        int enterCol = random(0, width);
-        int col = enterCol;
+
         int row = 0;
-        int count = 1;
         int totalWalls = width * length + 1;
 
-        // set up entrance
-        grid.cells[row][col].count = count;
-        count++;
+        int enterCol = grid.setup();
+        int col = enterCol;
+        int count = 2;
 
         while (count != totalWalls) {
             ArrayList<Direction> possibleDirs = getPossibleDirs(grid, new Cell(row, col));
@@ -192,17 +190,26 @@ public class Amazing {
         int lastCol;
         int lastRow;
 
-        public Grid(int length, int width) {
-            lastCol = width - 1;
-            lastRow = length - 1;
+        int width;
 
-            cells = new Cell[length][width];
+        public Grid(int length, int width) {
+            this.lastCol = width - 1;
+            this.lastRow = length - 1;
+            this.width = width;
+
+            this.cells = new Cell[length][width];
             for (int i=0; i < length; i++) {
-                cells[i] = new Cell[width];
+                this.cells[i] = new Cell[width];
                 for (int j = 0; j < width; j++) {
-                    cells[i][j] = new Cell(i, j);
+                    this.cells[i][j] = new Cell(i, j);
                 }
             }
+        }
+
+        public int setup() {
+            int enterCol = random(0, this.width);
+            cells[0][enterCol].count = 1;
+            return enterCol;
         }
 
         public boolean isPrevColSet(Cell cell) {
