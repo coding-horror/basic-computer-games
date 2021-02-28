@@ -10,3 +10,8 @@
 */csharp/bin
 */csharp/obj
 
+.idea
+*.iws
+*.iml
+*.ipr
+out/
