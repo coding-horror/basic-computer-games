@@ -36,14 +36,8 @@ namespace hurkle
             */
             for(var K=1;K<=guesses;K++)
             {
-                Console.WriteLine($"GUESS #{K}");
-                var inputLine = Console.ReadLine();
-                var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
-                var guessPoint = new GamePoint{
-                    X = int.Parse(seperateStrings[0]),
-                    Y = int.Parse(seperateStrings[1])
-                };
-
+                var guessPoint = GetGuess(new GuessViewModel{CurrentGuessNumber = K});
+                
                 if(guessPoint.GetDirectionTo(hurklePoint) == CardinalDirection.None)
                 {
                     /*
@@ -68,6 +62,24 @@ namespace hurkle
             Console.WriteLine();
             Console.WriteLine($"SORRY, THAT'S {guesses} GUESSES");
             Console.WriteLine($"THE HURKLE IS AT {hurklePoint.X},{hurklePoint.Y}");
+        }
+
+        private class GuessViewModel
+        {
+            public int CurrentGuessNumber {get;init;}
+        }
+
+        private static GamePoint GetGuess(GuessViewModel model)
+        {
+            Console.WriteLine($"GUESS #{model.CurrentGuessNumber}");
+            var inputLine = Console.ReadLine();
+            var seperateStrings = inputLine.Split(',', 2, StringSplitOptions.TrimEntries);
+            var guessPoint = new GamePoint{
+                X = int.Parse(seperateStrings[0]),
+                Y = int.Parse(seperateStrings[1])
+            };
+
+            return guessPoint;
         }
 
         private static void PrintInfo(GamePoint guess, GamePoint target)
