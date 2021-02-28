@@ -18,8 +18,8 @@ def generate_target
 end
 
 def puts_clue_for(guess_number, target_number)
-  guess_array = guess_number.to_s.split("")
-  target_array = target_number.to_s.split("")
+  guess_array = guess_number.to_s.split('')
+  target_array = target_number.to_s.split('')
 
   clues = [].tap do |clue|
     guess_array.each_with_index do |n, i|
