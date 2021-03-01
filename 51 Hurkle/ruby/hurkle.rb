@@ -1,26 +1,49 @@
 MAX_GUESSES = 5
 GRID_SIZE = 10
 
+class Point < Object
+  attr_accessor :x
+  attr_accessor :y
+
+  def initialize(text="")
+    x, y = text.split(",").map(&:strip)
+    @x = (x || rand(GRID_SIZE).floor).to_i
+    @y = (y || rand(GRID_SIZE).floor).to_i
+  end
+
+  def to_s
+    "#{@x}, #{@y}"
+  end
+
+  def ==(other_point)
+    @x == other_point.x && @y == other_point.y
+  end
+
+  def direction_to(other_point)
+    (  @y < other_point.y ? "NORTH" : "SOUTH" unless @y == other_point.y ).to_s +
+      (@x < other_point.x ? "EAST"  : "WEST"  unless @x == other_point.x ).to_s
+  end
+end
+
 def main
   say_introduction
 
   loop do
-    $a = rand(GRID_SIZE).floor
-    $b = rand(GRID_SIZE).floor
+    hurkle_point = Point.new
     found = false
     (1..MAX_GUESSES).each do |k|
       print "GUESS # " + k.to_s + " "
       print "? "
-      x, y = gets.chomp.split(",").map(&:to_i)
-      if (x-$a).abs + (y-$b).abs == 0
+      guess_point = Point.new(gets.chomp)
+      if guess_point == hurkle_point
         say_success(k)
         found = true
         break
       end
-      say_where_to_go(x, y)
+      say_where_to_go(hurkle_point, guess_point)
       puts
     end
-    say_failure if not found
+    say_failure(hurkle_point) if not found
     say_play_again
   end
 end
@@ -47,17 +70,14 @@ def say_success(k)
   puts "YOU FOUND IT IN " + k.to_s + " GUESSES!"
 end
 
-def say_where_to_go(x, y)
-  print "GO "
-  print y < $b ? "NORTH" : "SOUTH" unless y == $b
-  print x < $a ? "EAST"  : "WEST" unless x == $a
-  puts
+def say_where_to_go(hurkle_point, guess_point)
+  puts "GO #{guess_point.direction_to(hurkle_point)}"
 end
 
-def say_failure
+def say_failure(hurkle_point)
   puts
   puts "SORRY, THAT'S " + MAX_GUESSES.to_s + " GUESSES."
-  puts "THE HURKLE IS AT " + $a.to_s + "," + $b.to_s
+  puts "THE HURKLE IS AT #{hurkle_point}"
 end
 
 def say_play_again
