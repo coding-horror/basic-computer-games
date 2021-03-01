@@ -2,14 +2,15 @@
 # ****        **** STAR TREK ****        ****
 # **** SIMULATION OF A MISSION OF THE STARSHIP ENTERPRISE,
 # **** AS SEEN ON THE STAR TREK TV SHOW.
-# **** ORIGIONAL PROGRAM BY MIKE MAYFIELD, MODIFIED VERSION
+# **** ORIGINAL PROGRAM BY MIKE MAYFIELD, MODIFIED VERSION
 # **** PUBLISHED IN DEC'S "101 BASIC GAMES", BY DAVE AHL.
 # **** MODIFICATIONS TO THE LATTER (PLUS DEBUGGING) BY BOB
 # **** LEEDOM - APRIL & DECEMBER 1974,
 # **** WITH A LITTLE HELP FROM HIS FRIENDS . . .
 #
 # Python translation by Jack Boyce - 2/2021
-# Output is identical to BASIC version except for minor cleanup
+#   Output is identical to BASIC version except for a few
+#   fixes (as noted, search `bug`) and minor cleanup.
 
 
 import random
@@ -19,13 +20,6 @@ from math import sqrt
 # -------------------------------------------------------------------------
 #  Utility functions
 # -------------------------------------------------------------------------
-
-
-def fnd(i):
-    # Find distance between Enterprise and i'th Klingon warship.
-    global k, s1, s2
-
-    return sqrt((k[i][0] - s1)**2 + (k[i][1] - s2)**2)
 
 
 def fnr():
@@ -206,7 +200,8 @@ def navigation():
                 print(f"  AT SECTOR {s1 + 1} , {s2 + 1} OF QUADRANT "
                       f"{q1 + 1} , {q2 + 1}.'")
                 if t > t0 + t9:
-                    end_game()
+                    end_game(won=False, quit=False)
+                    return
             if 8 * q1 + q2 == 8 * q4 + q5:
                 break
             t += 1
@@ -232,7 +227,8 @@ def navigation():
         t8 = 0.1 * int(10 * w1)
     t += t8
     if t > t0 + t9:
-        end_game()
+        end_game(won=False, quit=False)
+        return
 
     short_range_scan()
 
@@ -254,7 +250,7 @@ def maneuver_energy(n):
 
 def short_range_scan():
     # Print a short range scan.
-    global docked, e, e0, p, p0, s
+    global docked, e, p, s
 
     docked = False
     for i in (s1 - 1, s1, s1 + 1):
@@ -314,7 +310,7 @@ def short_range_scan():
 
 def long_range_scan():
     # Print a long range scan.
-    global n, z
+    global z
 
     if d[2] < 0:
         print("LONG RANGE SENSORS ARE INOPERABLE")
@@ -343,7 +339,7 @@ def long_range_scan():
 
 def phaser_control():
     # Take phaser control input and fire phasers.
-    global d, e, k, k3, k9, qs, g, z, q1, q2
+    global e, k, g, z, k3, k9
 
     if d[3] < 0:
         print("PHASERS INOPERATIVE")
@@ -372,7 +368,7 @@ def phaser_control():
         print(f"ENERGY AVAILABLE = {e} UNITS")
 
     e -= x
-    if d[7] < 0:  # typo in original, was d[6]
+    if d[7] < 0:  # bug in original, was d[6]
         x *= random.random()
 
     h1 = int(x / k3)
@@ -397,7 +393,8 @@ def phaser_control():
                 g[q1][q2] -= 100
                 z[q1][q2] = g[q1][q2]
                 if k9 <= 0:
-                    end_game(won=True)
+                    end_game(won=True, quit=False)
+                    return
             else:
                 print(f"   (SENSORS SHOW {round(k[i][2],6)} UNITS REMAINING)")
 
@@ -406,7 +403,7 @@ def phaser_control():
 
 def photon_torpedoes():
     # Take photon torpedo input and process firing of torpedoes.
-    global p, d, c, e, s1, s2, k3, k9, b3, b9, t, t0, t9, docked, g, z
+    global e, p, k3, k9, k, b3, b9, docked, g, z
 
     if p <= 0:
         print("ALL PHOTON TORPEDOES EXPENDED")
@@ -452,7 +449,8 @@ def photon_torpedoes():
         k3 -= 1
         k9 -= 1
         if k9 <= 0:
-            end_game(won=True)
+            end_game(won=True, quit=False)
+            return
         for i in range(3):
             if x3 == k[i][0] and y3 == k[i][1]:
                 k[i][2] = 0
@@ -467,7 +465,8 @@ def photon_torpedoes():
         if b9 == 0 and k9 <= t - t0 - t9:
             print("THAT DOES IT, CAPTAIN!! YOU ARE HEREBY RELIEVED OF COMMAND")
             print("AND SENTENCED TO 99 STARDATES AT HARD LABOR ON CYGNUS 12!!")
-            end_game(quit=True)
+            end_game(won=False)
+            return
         else:
             print("STARFLEET COMMAND REVIEWING YOUR RECORD TO CONSIDER")
             print("COURT MARTIAL!")
@@ -479,9 +478,14 @@ def photon_torpedoes():
     klingons_fire()
 
 
+def fnd(i):
+    # Find distance between Enterprise and i'th Klingon warship.
+    return sqrt((k[i][0] - s1)**2 + (k[i][1] - s2)**2)
+
+
 def klingons_fire():
     # Process nearby Klingons firing on Enterprise.
-    global k3, s, k, docked, d
+    global s, k, d
 
     if k3 <= 0:
         return
@@ -499,7 +503,8 @@ def klingons_fire():
         print(f" {h} UNIT HIT ON ENTERPRISE FROM SECTOR "
               f"{k[i][0] + 1} , {k[i][1] + 1}")
         if s <= 0:
-            end_game(enterprise_killed=True)
+            end_game(won=False, quit=False, enterprise_killed=True)
+            return
         print(f"      <SHIELDS DOWN TO {s} UNITS>")
         if h >= 20 and random.random() < 0.60 and h / s > 0.02:
             r1 = fnr()
@@ -540,7 +545,7 @@ def shield_control():
 
 def damage_control():
     # Print a damage control report.
-    global d, docked, d4, t
+    global d, t
 
     if d[5] < 0:
         print('DAMAGE CONTROL REPORT NOT AVAILABLE')
@@ -737,8 +742,8 @@ def print_direction(from1, from2, to1, to2):
 
 def startup():
     # Initialize the game variables and map, and print startup messages.
-    global g, c, k, n, z, d, t, t0, t9, docked, e, e0, p, p0, s9
-    global s, b9, k7, k9, devices, q1, q2, s1, s2
+    global g, z, k, d, t, t0, t9, docked, e, e0, p, p0, s, k9, b9, s9, c
+    global devices, q1, q2, s1, s2, k7, restart
 
     print("\n\n\n\n\n\n\n\n\n\n\n"
           "                                    ,------*------,\n"
@@ -750,29 +755,30 @@ def startup():
           "\n\n\n\n")
 
     # set up global game variables
-    g = [[0] * 8 for _ in range(8)]
-    z = [[0] * 8 for _ in range(8)]
-    k = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-    n = [0, 0, 0]
-    d = [0] * 8
-    t = t0 = 100 * random.randint(20, 39)
-    t9 = random.randint(25, 34)
-    docked = False
-    e = e0 = 3000
-    p = p0 = 10
-    s = 0
-    k9, b9 = 0, 0  # typo in original, was b9 = 2
-    s9 = 200
+    g = [[0] * 8 for _ in range(8)]         # galaxy map
+    z = [[0] * 8 for _ in range(8)]         # charted galaxy map
+    k = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   # Klingons in current quadrant
+    d = [0] * 8                             # damage stats for devices
+    t = t0 = 100 * random.randint(20, 39)   # stardate (current, initial)
+    t9 = random.randint(25, 34)             # mission duration (stardates)
+    docked = False                          # docking flag
+    e = e0 = 3000                           # energy (current, initial)
+    p = p0 = 10                             # torpedoes (current, initial)
+    s = 0                                   # shields
+    k9, b9 = 0, 0                           # total Klingons, bases in galaxy
+    # ^ bug in original, was b9 = 2
+    s9 = 200                                # avg. Klingon shield strength
 
     c = [[0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1],
-         [1, 0], [1, 1], [0, 1]]
+         [1, 0], [1, 1], [0, 1]]            # vectors in cardinal directions
+
     devices = ['WARP ENGINES', 'SHORT RANGE SENSORS', 'LONG RANGE SENSORS',
                'PHASER CONTROL', 'PHOTON TUBES', 'DAMAGE CONTROL',
                'SHIELD CONTROL', 'LIBRARY-COMPUTER']
 
     # initialize Enterprise's position
-    q1, q2 = fnr(), fnr()
-    s1, s2 = fnr(), fnr()
+    q1, q2 = fnr(), fnr()                   # Enterprise's quadrant
+    s1, s2 = fnr(), fnr()                   # ...and sector
 
     # initialize contents of galaxy
     for i in range(8):
@@ -797,7 +803,7 @@ def startup():
     if k9 > t9:
         t9 = k9 + 1
 
-    if b9 == 0:
+    if b9 == 0:  # original has buggy extra code here
         b9 = 1
         g[q1][q2] += 10
         q1, q2 = fnr(), fnr()
@@ -815,7 +821,8 @@ def startup():
 
 def new_quadrant():
     # Enter a new quadrant: populate map and print a short range scan.
-    global k3, b3, s3, d4, b4, b5, z, g, q1, q2, t, t0, k, qs, s1, s2, s9
+    global g, z, k, t, t0, s9, q1, q2, s1, s2
+    global k3, b3, s3, d4, qs, b4, b5
 
     k3 = b3 = s3 = 0
     d4 = 0.5 * random.random()
@@ -851,9 +858,8 @@ def new_quadrant():
             insert_marker(r1, r2, '+K+')
             k[i] = [r1, r2, s9 * (0.5 + random.random())]
     if b3 > 0:
-        r1, r2 = find_empty_place()
-        insert_marker(r1, r2, '>!<')
-        b4, b5 = r1, r2
+        b4, b5 = find_empty_place()
+        insert_marker(b4, b5, '>!<')
     for i in range(s3):
         r1, r2 = find_empty_place()
         insert_marker(r1, r2, ' * ')
@@ -861,9 +867,9 @@ def new_quadrant():
     short_range_scan()
 
 
-def end_game(won=False, quit=False, enterprise_killed=False):
+def end_game(won=False, quit=True, enterprise_killed=False):
     # Handle end-of-game situations.
-    global k7, t, t0, b9
+    global t, t0, b9, k7, restart
 
     if won:
         print("CONGRATULATIONS, CAPTAIN! THE LAST KLINGON BATTLE CRUISER")
@@ -887,6 +893,7 @@ def end_game(won=False, quit=False, enterprise_killed=False):
     print("FOR A SIMILAR MISSION -- IF THERE IS A VOLUNTEER,")
     if input("LET HIM STEP FORWARD AND ENTER 'AYE'? ").upper() != 'AYE':
         exit()
+    restart = True
 
 
 # -------------------------------------------------------------------------
@@ -894,11 +901,16 @@ def end_game(won=False, quit=False, enterprise_killed=False):
 # -------------------------------------------------------------------------
 
 
+f = {'NAV': navigation, 'SRS': short_range_scan, 'LRS': long_range_scan,
+     'PHA': phaser_control, 'TOR': photon_torpedoes, 'SHE': shield_control,
+     'DAM': damage_control, 'COM': computer, 'XXX': end_game}
+
 while True:
     startup()
     new_quadrant()
+    restart = False
 
-    while True:
+    while not restart:
         if s + e <= 10 or (e <= 10 and d[6] != 0):
             print("\n** FATAL ERROR **   YOU'VE JUST STRANDED YOUR SHIP IN "
                   "SPACE\nYOU HAVE INSUFFICIENT MANEUVERING ENERGY, AND "
@@ -907,25 +919,8 @@ while True:
 
         command = input('COMMAND? ').upper()
 
-        if command == 'NAV':
-            navigation()
-        elif command == 'SRS':
-            short_range_scan()
-        elif command == 'LRS':
-            long_range_scan()
-        elif command == 'PHA':
-            phaser_control()
-        elif command == 'TOR':
-            photon_torpedoes()
-        elif command == 'SHE':
-            shield_control()
-        elif command == 'DAM':
-            damage_control()
-        elif command == 'COM':
-            computer()
-        elif command == 'XXX':
-            end_game(quit=True)
-            break
+        if command in f:
+            f[command]()
         else:
             print("ENTER ONE OF THE FOLLOWING:\n"
                   "  NAV  (TO SET COURSE)\n"
