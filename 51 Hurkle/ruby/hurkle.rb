@@ -63,10 +63,11 @@ def guess(hurkle_point, guess_num)
   guess_point = Point.new(gets.chomp)
   if guess_point == hurkle_point
     say_success(guess_num)
-    return true
+    true
+  else
+    say_where_to_go(hurkle_point, guess_point)
+    false
   end
-  say_where_to_go(hurkle_point, guess_point)
-  false
 end
 
 def say_success(guess_num)
