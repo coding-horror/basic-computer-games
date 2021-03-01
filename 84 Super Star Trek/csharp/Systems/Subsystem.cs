@@ -12,9 +12,14 @@ namespace SuperStarTrek.Systems
         }
 
         public string Name { get; }
-        public double Condition { get; }
+        public double Condition { get; private set; }
+        public bool IsDamaged => Condition < 0;
         public Command Command { get; }
 
         public abstract void ExecuteCommand(Quadrant quadrant);
+        public void Repair()
+        {
+            if (Condition < 0) { Condition = 0; }
+        }
     }
 }

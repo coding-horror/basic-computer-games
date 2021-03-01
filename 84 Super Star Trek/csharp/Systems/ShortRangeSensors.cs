@@ -51,8 +51,8 @@ namespace SuperStarTrek.Systems
             yield return $"Quadrant           {_enterprise.Quadrant}";
             yield return $"Sector             {_enterprise.Sector}";
             yield return $"Photon torpedoes   {_enterprise.TorpedoCount}";
-            yield return $"Total energy       {Math.Ceiling(_enterprise.Energy)}";
-            yield return $"Shields            {(int)_enterprise.Shields}";
+            yield return $"Total energy       {Math.Ceiling(_enterprise.TotalEnergy)}";
+            yield return $"Shields            {(int)_enterprise.Shields.Energy}";
             yield return $"Klingons remaining {_galaxy.KlingonCount}";
         }
     }

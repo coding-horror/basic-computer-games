@@ -23,7 +23,7 @@ namespace SuperStarTrek.Space
             PositionObject(() => new Klingon(), _info.KlingonCount);
             if (_info.HasStarbase)
             {
-                _starbaseSector = PositionObject(() => new Starbase());
+                _starbaseSector = PositionObject(() => new Starbase(_random, new Input(new Output())));
             }
             PositionObject(() => new Star(), _info.StarCount);
         }
@@ -31,6 +31,7 @@ namespace SuperStarTrek.Space
         public Coordinates Coordinates => _info.Coordinates;
         public bool HasKlingons => _info.KlingonCount > 0;
         public bool HasStarbase => _info.HasStarbase;
+        public Starbase Starbase => HasStarbase ? (Starbase)_sectors[_starbaseSector] : null;
         public bool EnterpriseIsNextToStarbase =>
             _info.HasStarbase &&
             Math.Abs(_enterpriseSector.X - _starbaseSector.X) <= 1 &&

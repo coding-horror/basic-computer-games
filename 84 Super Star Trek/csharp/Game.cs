@@ -33,11 +33,7 @@ namespace SuperStarTrek
         {
             _output.Write(Strings.Title);
 
-            _output.Write("Do you need instructions (Y/N)? ");
-            var response = Console.ReadLine();
-            _output.WriteLine();
-
-            if (!response.Equals("N", InvariantCultureIgnoreCase))
+            if (_input.GetYesNo("Do you need instructions", Input.YesNoMode.FalseOnN))
             {
                 _output.Write(Strings.Instructions);
 
@@ -68,7 +64,16 @@ namespace SuperStarTrek
             {
                 var command = _input.GetCommand();
 
-                gameOver = command == Command.XXX || _enterprise.Execute(command);
+                gameOver = command == Command.XXX || _enterprise.Execute(command) || CheckIfStranded();
+            }
+
+            if (_galaxy.KlingonCount > 0)
+            {
+                _output.Write(Strings.EndOfMission, _currentStardate, _galaxy.KlingonCount);
+            }
+            else
+            {
+                _output.Write(Strings.Congratulations, GetEfficiency());
             }
         }
 
@@ -86,12 +91,29 @@ namespace SuperStarTrek
             _initialKlingonCount = _galaxy.KlingonCount;
 
             _enterprise = new Enterprise(3000, random.GetCoordinate());
-            _enterprise.Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
-                .Add(new ShieldControl(_enterprise, _output, _input));
+            _enterprise
+                .Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
+                .Add(new ShieldControl(_enterprise, _output, _input))
+                .Add(new DamageControl(_enterprise, _output));
 
             return new Quadrant(_galaxy[_currentQuadrant], _enterprise);
         }
 
         public bool Replay() => _galaxy.StarbaseCount > 0 && _input.GetString(Strings.ReplayPrompt, "Aye");
+
+        private bool CheckIfStranded()
+        {
+            if (_enterprise.TotalEnergy < 10 ||
+                _enterprise.Energy < 10 && _enterprise.Shields.IsDamaged)
+            {
+                _output.Write(Strings.Stranded);
+                return true;
+            }
+
+            return false;
+        }
+
+        private double GetEfficiency() =>
+            1000 * Math.Pow(_initialKlingonCount / (_currentStardate - _initialStardate), 2);
     }
 }
