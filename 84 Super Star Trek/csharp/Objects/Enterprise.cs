@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
@@ -13,7 +14,6 @@ namespace SuperStarTrek.Objects
         private readonly List<Subsystem> _systems;
         private readonly Dictionary<Command, Subsystem> _commandExecutors;
         private Quadrant _quadrant;
-        private ShieldControl _shieldControl;
 
         public Enterprise(int maxEnergy, Coordinates sector)
         {
@@ -27,11 +27,12 @@ namespace SuperStarTrek.Objects
         public Coordinates Quadrant => _quadrant.Coordinates;
         public Coordinates Sector { get; }
         public string Condition => GetCondition();
-        public double Shields => _shieldControl.Energy;
-        public double Energy => TotalEnergy - Shields;
+        public ShieldControl Shields => (ShieldControl)_commandExecutors[Command.SHE];
+        public double Energy => TotalEnergy - Shields.Energy;
         public double TotalEnergy { get; private set; }
+        public int DamagedSystemCount => _systems.Count(s => s.IsDamaged);
+        public IEnumerable<Subsystem> Systems => _systems;
         public int TorpedoCount { get; }
-
         public bool IsDocked { get; private set; }
 
         public Enterprise Add(Subsystem system)
@@ -39,21 +40,7 @@ namespace SuperStarTrek.Objects
             _systems.Add(system);
             _commandExecutors[system.Command] = system;
 
-            if (system is ShieldControl shieldControl) { _shieldControl = shieldControl; }
-
             return this;
-        }
-
-        public string GetDamageReport()
-        {
-            var report = new StringBuilder();
-            report.AppendLine().AppendLine().AppendLine("Device             State of Repair");
-            foreach (var system in _systems)
-            {
-                report.Append(system.Name.PadRight(25)).AppendLine(system.Condition.ToString(" 0.00;-0.00"));
-            }
-            report.AppendLine();
-            return report.ToString();
         }
 
         public void Enter(Quadrant quadrant, string entryTextFormat)
@@ -66,7 +53,7 @@ namespace SuperStarTrek.Objects
             if (quadrant.HasKlingons)
             {
                 _output.Write(Strings.CombatArea);
-                if (Shields <= 200) { _output.Write(Strings.LowShields); }
+                if (Shields.Energy <= 200) { _output.Write(Strings.LowShields); }
             }
 
             IsDocked = quadrant.EnterpriseIsNextToStarbase;

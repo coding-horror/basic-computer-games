@@ -72,5 +72,26 @@ namespace SuperStarTrek
                 _output.WriteLine();
             }
         }
+
+        public bool GetYesNo(string prompt, YesNoMode mode)
+        {
+            _output.Prompt($"{prompt} (Y/N)");
+            var response = Console.ReadLine().ToUpperInvariant();
+
+            return (mode, response) switch
+            {
+                (YesNoMode.FalseOnN, "N") => false,
+                (YesNoMode.FalseOnN, _) => true,
+                (YesNoMode.TrueOnY, "Y") => true,
+                (YesNoMode.TrueOnY, _) => false,
+                _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, "Invalid value")
+            };
+        }
+
+        public enum YesNoMode
+        {
+            TrueOnY,
+            FalseOnN
+        }
     }
 }
