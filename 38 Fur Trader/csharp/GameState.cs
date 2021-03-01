@@ -17,9 +17,9 @@ namespace FurTrader
         internal int[] Pelts { get; private set; }
 
         internal int MinkPelts { get { return this.Pelts[0]; } set { this.Pelts[0] = value; } }
-        internal int BeaverPelts { get { return this.Pelts[0]; } set { this.Pelts[0] = value; } }
-        internal int ErminePelts { get { return this.Pelts[0]; } set { this.Pelts[0] = value; } }
-        internal int FoxPelts { get { return this.Pelts[0]; } set { this.Pelts[0] = value; } }
+        internal int BeaverPelts { get { return this.Pelts[1]; } set { this.Pelts[1] = value; } }
+        internal int ErminePelts { get { return this.Pelts[2]; } set { this.Pelts[2] = value; } }
+        internal int FoxPelts { get { return this.Pelts[3]; } set { this.Pelts[3] = value; } }
 
         internal int SelectedFort { get; set; }
 
