@@ -30,7 +30,7 @@ def fnd(i):
 
 def fnr():
     # Generate a random number from 0 to 7 inclusive.
-    return int(random.random() * 7.98 + 0.01)
+    return random.randint(0, 7)
 
 
 def quadrant_name(row, col, region_only=False):
@@ -245,14 +245,14 @@ def maneuver_energy(n):
 
 def short_range_scan():
     # Print a short range scan.
-    global d0, e, e0, p, p0, s
+    global docked, e, e0, p, p0, s
 
-    d0 = 0
+    docked = False
     for i in (s1 - 1, s1, s1 + 1):
         for j in (s2 - 1, s2, s2 + 1):
             if 0 <= i <= 7 and 0 <= j <= 7:
                 if compare_marker(i, j, '>!<'):
-                    d0 = 1
+                    docked = True
                     cs = 'DOCKED'
                     e = e0
                     p = p0
@@ -393,7 +393,7 @@ def phaser_control():
 
 def photon_torpedoes():
     # Take photon torpedo input and process firing of torpedoes.
-    global p, d, c, e, s1, s2, k3, k9, b3, b9, t, t0, t9, d0, g, z
+    global p, d, c, e, s1, s2, k3, k9, b3, b9, t, t0, t9, docked, g, z
 
     if p <= 0:
         print("ALL PHOTON TORPEDOES EXPENDED")
@@ -454,7 +454,7 @@ def photon_torpedoes():
         else:
             print("STARFLEET COMMAND REVIEWING YOUR RECORD TO CONSIDER")
             print("COURT MARTIAL!")
-            d0 = 0
+            docked = False
 
     insert_marker(x3, y3, '   ')
     g[q1][q2] = k3 * 100 + b3 * 10 + s3
@@ -464,11 +464,11 @@ def photon_torpedoes():
 
 def klingons_fire():
     # Process nearby Klingons firing on Enterprise.
-    global k3, s, k, d0, d
+    global k3, s, k, docked, d
 
     if k3 <= 0:
         return
-    if d0 != 0:
+    if docked:
         print("STARBASE SHIELDS PROTECT THE ENTERPRISE")
         return
 
@@ -520,7 +520,7 @@ def shield_control():
 
 def damage_control():
     # Print a damage control report.
-    global d, d0, d4, t
+    global d, docked, d4, t
 
     if d[5] < 0:
         print('DAMAGE CONTROL REPORT NOT AVAILABLE')
@@ -530,7 +530,7 @@ def damage_control():
             print(f"{devices[r1].ljust(26, ' ')}{int(d[r1] * 100) * 0.01:g}")
         print()
 
-    if d0 == 0:
+    if not docked:
         return
 
     d3 = sum(0.1 for i in range(8) if d[i] < 0)
@@ -541,9 +541,9 @@ def damage_control():
     if d3 >= 1:
         d3 = 0.9
     print("\nTECHNICIANS STANDING BY TO EFFECT REPAIRS TO YOUR SHIP;")
-    print(f"ESTIMATED TIME TO REPAIR: {0.01 * int(100 * d3)} STARDATES")
-    astr = input("WILL YOU AUTHORIZE THE REPAIR ORDER (Y/N)? ").upper()
-    if astr != 'Y':
+    print("ESTIMATED TIME TO REPAIR: "
+          f"{round(0.01 * int(100 * d3), 2)} STARDATES")
+    if input("WILL YOU AUTHORIZE THE REPAIR ORDER (Y/N)? ").upper() != 'Y':
         return
 
     for i in range(8):
@@ -554,7 +554,7 @@ def damage_control():
 
 def computer():
     # Perform the various functions of the library computer.
-    global d, g5, z, k9, t0, t9, t, b9, s1, s2, b4, b5
+    global d, z, k9, t0, t9, t, b9, s1, s2, b4, b5
 
     if d[7] < 0:
         print("COMPUTER DISABLED")
@@ -573,11 +573,8 @@ def computer():
 
         if com == 0 or com == 5:
             if com == 5:
-                is_map = True
-                g5 = 1
                 print("                        THE GALAXY")
             else:
-                is_map = False
                 print("\n        COMPUTER RECORD OF GALAXY FOR "
                       f"QUADRANT {q1 + 1} , {q2 + 1}\n")
 
@@ -588,7 +585,7 @@ def computer():
             for i in range(8):
                 line = ' ' + str(i + 1) + ' '
 
-                if is_map:
+                if com == 5:
                     g2s = quadrant_name(i, 0, True)
                     line += (' ' * int(12 - 0.5 * len(g2s))) + g2s
                     g2s = quadrant_name(i, 4, True)
@@ -717,7 +714,7 @@ def print_direction(from1, from2, to1, to2):
 
 def startup():
     # Initialize the game variables and map, and print startup messages.
-    global g, c, k, n, z, d, t, t0, t9, d0, e, e0, p, p0, s9
+    global g, c, k, n, z, d, t, t0, t9, docked, e, e0, p, p0, s9
     global s, b9, k7, k9, devices, q1, q2, s1, s2
 
     print("\n\n\n\n\n\n\n\n\n\n\n"
@@ -737,11 +734,11 @@ def startup():
     d = [0] * 8
     t = t0 = 100 * random.randint(20, 39)
     t9 = random.randint(25, 34)
-    d0 = 0
+    docked = False
     e = e0 = 3000
     p = p0 = 10
     s = 0
-    k9, b9 = 0, 0
+    k9, b9 = 0, 0  # typo in original, was b9 = 2
     s9 = 200
 
     c = [[0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1],
@@ -795,10 +792,9 @@ def startup():
 
 def new_quadrant():
     # Enter a new quadrant: populate map and print a short range scan.
-    global k3, b3, s3, g5, d4, b4, b5, z, g, q1, q2, t, t0, k, qs, s1, s2, s9
+    global k3, b3, s3, d4, b4, b5, z, g, q1, q2, t, t0, k, qs, s1, s2, s9
 
     k3 = b3 = s3 = 0
-    g5 = 0
     d4 = 0.5 * random.random()
     z[q1][q2] = g[q1][q2]
 
