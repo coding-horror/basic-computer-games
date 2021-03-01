@@ -50,16 +50,20 @@ end
 
 def say_where_to_go(x, y)
   print "GO "
-  #620 IF Y=B THEN 670
-  #630 IF Y<B THEN 660
-  print "SOUTH"
-  #650 GOTO 670
-  print "NORTH"
-  #670 IF X=A THEN 720
-  #680 IF X<A THEN 710
-  print "WEST"
-  #700 GOTO 720
-  print "EAST"
+  if not y == $b
+    if not y < $b
+      print "SOUTH"
+    else
+      print "NORTH"
+    end
+  end
+  if not x == $a
+    if not x < $a
+      print "WEST"
+    else
+      print "EAST"
+    end
+  end
   puts
 end
 
