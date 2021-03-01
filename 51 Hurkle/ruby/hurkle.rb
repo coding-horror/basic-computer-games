@@ -45,7 +45,7 @@ end
 
 def you_found_him(k)
   puts
-  puts "YOU FOUND HIM IN " + k.to_s + " GUESSES!"
+  puts "YOU FOUND IT IN " + k.to_s + " GUESSES!"
 end
 
 def say_where_to_go(x, y)
