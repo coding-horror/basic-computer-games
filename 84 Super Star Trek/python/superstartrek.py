@@ -88,14 +88,23 @@ def navigation():
     # Take navigation input and move the Enterprise.
     global d, s, e, k, s1, s2, qs, t8, t9, t, w1, c, q1, q2
 
-    c1 = float(input("COURSE (1-9)? "))
+    while True:
+        c1s = input("COURSE (1-9)? ")
+        if len(c1s) > 0:
+            c1 = float(c1s)
+            break
     if c1 == 9:
         c1 = 1
     if c1 < 1 or c1 >= 9:
         print("   LT. SULU REPORTS, 'INCORRECT COURSE DATA, SIR!'")
         return
+
     xs = '0.2' if d[0] < 0 else '8'
-    w1 = float(input(f"WARP FACTOR (0-{xs})? "))
+    while True:
+        w1s = input(f"WARP FACTOR (0-{xs})? ")
+        if len(w1s) > 0:
+            w1 = float(w1s)
+            break
     if d[0] < 0 and w1 > 0.2:
         print("WARP ENGINES ARE DAMAGED. MAXIMUM SPEED = WARP 0.2")
         return
@@ -351,10 +360,14 @@ def phaser_control():
     print(f"PHASERS LOCKED ON TARGET;  ENERGY AVAILABLE = {e} UNITS")
     x = 0
     while True:
-        x = int(input("NUMBER OF UNITS TO FIRE? "))
+        while True:
+            xs = input("NUMBER OF UNITS TO FIRE? ")
+            if len(xs) > 0:
+                x = int(xs)
+                break
         if x <= 0:
             return
-        if e - x >= 0:
+        if e >= x:
             break
         print(f"ENERGY AVAILABLE = {e} UNITS")
 
@@ -402,7 +415,11 @@ def photon_torpedoes():
         print("PHOTON TUBES ARE NOT OPERATIONAL")
         return
 
-    c1 = float(input("PHOTON TORPEDO COURSE (1-9)? "))
+    while True:
+        c1s = input("PHOTON TORPEDO COURSE (1-9)? ")
+        if len(c1s) > 0:
+            c1 = float(c1s)
+            break
     if c1 == 9:
         c1 = 1
     if c1 < 1 or c1 >= 9:
@@ -499,8 +516,11 @@ def shield_control():
         print("SHIELD CONTROL INOPERABLE")
         return
 
-    x = input(f"ENERGY AVAILABLE = {e + s} NUMBER OF UNITS TO SHIELDS? ")
-    x = int(x)
+    while True:
+        xs = input(f"ENERGY AVAILABLE = {e + s} NUMBER OF UNITS TO SHIELDS? ")
+        if len(xs) > 0:
+            x = int(xs)
+            break
 
     if x < 0 or s == x:
         print("<SHIELDS UNCHANGED>")
@@ -643,18 +663,21 @@ def computer():
             return
         elif com == 4:
             print("DIRECTION/DISTANCE CALCULATOR:")
-            print(f"YOU ARE AT QUADRANT {q1} , {q2} SECTOR {s1} , {s2}")
+            print(f"YOU ARE AT QUADRANT {q1+1} , {q2+1} SECTOR "
+                  f"{s1+1} , {s2+1}")
             print("PLEASE ENTER")
             while True:
                 ins = input("  INITIAL COORDINATES (X,Y)? ").split(',')
                 if len(ins) == 2:
-                    from1, from2 = int(ins[0]), int(ins[1])
-                    break
+                    from1, from2 = int(ins[0]) - 1, int(ins[1]) - 1
+                    if 0 <= from1 <= 7 and 0 <= from2 <= 7:
+                        break
             while True:
                 ins = input("  FINAL COORDINATES (X,Y)? ").split(',')
                 if len(ins) == 2:
-                    to1, to2 = int(ins[0]), int(ins[1])
-                    break
+                    to1, to2 = int(ins[0]) - 1, int(ins[1]) - 1
+                    if 0 <= to1 <= 7 and 0 <= to2 <= 7:
+                        break
             print_direction(from1, from2, to1, to2)
             return
         else:
