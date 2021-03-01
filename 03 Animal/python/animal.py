@@ -45,7 +45,7 @@ def list_known_animals(root_node):
 
 
 def parse_input(message, check_list, root_node):
-    # only accepts yes or no inputs
+    # only accepts yes or no inputs and recognizes list operation
     correct_input = False
     while not correct_input:
         try:
@@ -72,13 +72,21 @@ def avoid_void_input(message):
     return answer
 
 
+def initial_message():
+    print(' '*32 + 'Animal')
+    print(' '*15 + 'Creative Computing Morristown, New Jersey\n')
+    print('Play ´Guess the Animal´')
+    print('Think of an animal and the computer will try to guess it.\n')
+
+
 # Initial tree
 yes_child = Node('Fish', None, None)
 no_child = Node('Bird', None, None)
 root = Node('Does it swim?', yes_child, no_child)
 
 # Main loop of game
-keep_playing = parse_input('Are you thinking of an animal?', True, root) == 'y'
+initial_message()
+keep_playing = parse_input('Are you thinking of an animal? ', True, root) == 'y'
 while keep_playing:
     keep_asking = True
     # Start traversing the tree by the root
@@ -96,16 +104,16 @@ while keep_playing:
                 actual_node = actual_node.no_node
         else:
             # we have reached a possible answer
-            answer = parse_input('Is it a {}?'.format(
+            answer = parse_input('Is it a {}? '.format(
                 actual_node.text), False, None)
             if answer == 'n':
                 # add the new animal to the tree
                 new_animal = avoid_void_input(
-                    'The animal you were thinking of was a ?')
+                    'The animal you were thinking of was a ? ')
                 new_question = avoid_void_input(
-                    'Please type in a question that would distinguish a {} from a {}:'.format(new_animal, actual_node.text))
+                    'Please type in a question that would distinguish a {} from a {}: '.format(new_animal, actual_node.text))
                 answer_new_question = parse_input(
-                    'for a {} the answer would be:'.format(new_animal), False, None)
+                    'for a {} the answer would be: '.format(new_animal), False, None)
 
                 actual_node.update_node(
                     new_question+'?', answer_new_question, new_animal)
@@ -116,4 +124,4 @@ while keep_playing:
             keep_asking = False
 
     keep_playing = parse_input(
-        'Are you thinking of an animal?', True, root) == 'y'
+        'Are you thinking of an animal? ', True, root) == 'y'
