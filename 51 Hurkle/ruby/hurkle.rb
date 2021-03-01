@@ -1,4 +1,4 @@
-def print_introduction
+def say_introduction
   puts " " * 33 + "HURKLE"
   puts " " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
   3.times { puts }
@@ -18,7 +18,7 @@ def print_introduction
 end
 
 def main
-  print_introduction
+  say_introduction
 
   loop do
     $a = rand($g).floor
@@ -29,25 +29,19 @@ def main
       print "? "
       x, y = gets.chomp.split(",").map(&:to_i)
       if (x-$a).abs + (y-$b).abs == 0
-        you_found_him(k)
+        say_success(k)
         found = true
         break
       end
       say_where_to_go(x, y)
       puts
     end
-    if not found
-      puts
-      puts "SORRY, THAT'S " + $n.to_s + " GUESSES."
-      puts "THE HURKLE IS AT " + $a.to_s + "," + $b.to_s
-    end
-    puts
-    puts "LET'S PLAY AGAIN, HURKLE IS HIDING."
-    puts
+    say_failure if not found
+    say_play_again
   end
 end
 
-def you_found_him(k)
+def say_success(k)
   puts
   puts "YOU FOUND IT IN " + k.to_s + " GUESSES!"
 end
@@ -56,6 +50,18 @@ def say_where_to_go(x, y)
   print "GO "
   print y < $b ? "NORTH" : "SOUTH" unless y == $b
   print x < $a ? "EAST"  : "WEST" unless x == $a
+  puts
+end
+
+def say_failure
+  puts
+  puts "SORRY, THAT'S " + $n.to_s + " GUESSES."
+  puts "THE HURKLE IS AT " + $a.to_s + "," + $b.to_s
+end
+
+def say_play_again
+  puts
+  puts "LET'S PLAY AGAIN, HURKLE IS HIDING."
   puts
 end
 
