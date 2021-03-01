@@ -3,27 +3,29 @@ class Node:
     Nodes of the binary tree of questions.
     """
 
-    def __init__(self, text, yes_node, no_node, is_leaf):
+    def __init__(self, text, yes_node, no_node):
+        # the nodes that are leafs have as text the animal's name, otherwise
+        # a yes/no question
         self.text = text
         self.yes_node = yes_node
         self.no_node = no_node
-        # the nodes that are leafs have as text the animal's name
-        self.is_leaf = is_leaf
 
     def update_node(self, new_question, answer_new_ques, new_animal):
-        # update the yes or no leaf with a question
+        # update the leaf with a question
         old_animal = self.text
         # we replace the animal with a new question
         self.text = new_question
 
         if answer_new_ques == 'y':
-            self.yes_node = Node(new_animal, None, None, True)
-            self.no_node = Node(old_animal, None, None, True)
+            self.yes_node = Node(new_animal, None, None)
+            self.no_node = Node(old_animal, None, None)
         else:
-            self.yes_node = Node(old_animal, None, None, True)
-            self.no_node = Node(new_animal, None, None, True)
+            self.yes_node = Node(old_animal, None, None)
+            self.no_node = Node(new_animal, None, None)
 
-        self.is_leaf = False
+    # the leafs have as children None
+    def is_leaf(self):
+        return self.yes_node == None and self.no_node == None
 
 
 def parse_input(message):
@@ -49,9 +51,9 @@ def avoid_void_input(message):
 
 
 # Initial tree
-yes_child = Node('Fish', None, None, True)
-no_child = Node('Bird', None, None, True)
-root = Node('Does it swim?', yes_child, no_child, False)
+yes_child = Node('Fish', None, None)
+no_child = Node('Bird', None, None)
+root = Node('Does it swim?', yes_child, no_child)
 
 # Main loop of game
 keep_playing = parse_input('Are you thinking of an animal?') == 'y'
@@ -62,7 +64,7 @@ while keep_playing:
 
     while keep_asking:
 
-        if not actual_node.is_leaf:
+        if not actual_node.is_leaf():
             # we have to keep asking i.e. traversing nodes
             answer = parse_input(actual_node.text)
 
@@ -74,12 +76,11 @@ while keep_playing:
             # we have reached a possible answer
             answer = parse_input('Is it a {}?'.format(actual_node.text))
             if answer == 'n':
-                # add the animal to the tree
+                # add the new animal to the tree
                 new_animal = avoid_void_input(
                     'The animal you were thinking of was a ?')
                 new_question = avoid_void_input(
                     'Please type in a question that would distinguish a {} from a {}:'.format(new_animal, actual_node.text))
-                print("new_animal:" + new_animal)
                 answer_new_question = parse_input(
                     'for a {} the answer would be:'.format(new_animal))
 
