@@ -165,7 +165,7 @@ namespace Amazing
 
         private String DisplayTextAndGetInput(String text)
         {
-            Console.Write(text);
+            Console.WriteLine(text);
             return Console.ReadLine();
         }
 
