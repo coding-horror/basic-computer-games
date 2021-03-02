@@ -60,7 +60,7 @@ namespace SuperStarTrek
             {
                 var response = GetString("Command");
 
-                if (response != "" &&
+                if (response.Length >= 3 &&
                     Enum.TryParse(response.Substring(0, 3), ignoreCase: true, out Command parsedCommand))
                 {
                     return parsedCommand;
