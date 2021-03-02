@@ -9,9 +9,13 @@ async function input(prompt = "") {
 
     return new Promise((resolve, _) => {
         rl.setPrompt(prompt)
+        // show use the question
         rl.prompt()
+        // listen for user answer, 
+        // callback is triggered as soon as user hits enter key
         rl.on('line', answer => {
             rl.close()
+            // resolve the promise, with the input the user entered
             resolve(answer)
         })
     })
@@ -20,6 +24,8 @@ async function input(prompt = "") {
 function println(message = "", align = "left"){
     let padColCount = 0
     if(align === "center"){
+        // calculate the amount of spaces required to center the message
+        // process.stdout.columns is the number of spaces per line in the terminal
         padColCount = Math.round(process.stdout.columns / 2 + message.length / 2)
     }
     console.log(message.padStart(padColCount, " "))
@@ -32,6 +38,8 @@ function equalIgnoreCase(correct, provided){
 }
 
 async function evaluateQuestion(question, answerOptions, correctAnswer, correctMessage, wrongMessage){
+    // ask the user to answer the given question
+    // this is a blocking wait
     const answer = await input(question + "\n" + answerOptions + "\n")
     const isCorrect = equalIgnoreCase(correctAnswer, answer)
     println(isCorrect ? correctMessage : wrongMessage)
