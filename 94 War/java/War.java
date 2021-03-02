@@ -52,20 +52,34 @@ public class War {
 
     private static void playGame() {
 
+        boolean endedEarly = false;
+
+        // Shuffle the deck of cards
         Collections.shuffle(cards);
 
-        // Since the cards are already suffled, pull each card from the deck starting
-        // until it is empty or until the user quits.
+        // Since the cards are already suffled, pull each card from the deck
+        // until the deck is empty or until the user quits.
         for (int i = 1; i <= CARD_DECK_SIZE; i += 2) {
             System.out.println("YOU: " + cards.get(i - 1) + "\t " + "COMPUTER: " + cards.get(i));
             getWinner(cards.get(i - 1), cards.get(i));
-            // if(endGame) {
-            // break;
+            System.out.print("DO YOU WANT TO CONTINUE? ");
+            // while (isInvalidInput) {
+            if (isGameEnded()) {
+                endedEarly = true;
+                break;
+            }
             // }
         }
-        System.out.println("WE HAVE RUN OUT OF CARDS. FINAL SCORE:  YOU: " + getPlayerScore() + " COMPUTER: "
-                + getComputerScore());
-        System.out.println("THANKS FOR PLAYING.  IT WAS FUN.");
+
+        if (endedEarly) {
+            System.out.println("YOU HAVE ENDED THE GAME. FINAL SCORE:  YOU: " + getPlayerScore() + " COMPUTER: "
+                    + getComputerScore());
+            System.out.println("THANKS FOR PLAYING.  IT WAS FUN.");
+        } else {
+            System.out.println("WE HAVE RUN OUT OF CARDS. FINAL SCORE:  YOU: " + getPlayerScore() + " COMPUTER: "
+                    + getComputerScore());
+            System.out.println("THANKS FOR PLAYING.  IT WAS FUN.");
+        }
     }
 
     private static void getWinner(String playerCard, String computerCard) {
@@ -83,8 +97,6 @@ public class War {
         } else {
             System.out.println("TIE.  NO SCORE CHANGE");
         }
-
-        System.out.println("DO YOU WANT TO CONTINUE? ");
     }
 
     private static String checkCourtCards(String score) {
@@ -99,6 +111,18 @@ public class War {
                 return "14";
             default:
                 return score;
+        }
+    }
+
+    private static boolean isGameEnded() {
+        switch (input.nextLine().toLowerCase()) {
+            case "yes":
+                return false;
+            case "no":
+                return true;
+            default:
+                System.out.print("YES OR NO, PLEASE.   ");
+                return false;
         }
     }
 
