@@ -37,6 +37,10 @@ Feel free to begin converting these classic games into the above list of modern,
 
 - **Don't get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable -- the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks.
 
+### External Ports
+
+Lisp coder koalahedron has created a [repository](https://www.github.com/koalahedron/lisp-computer-games) which welcomes ports for any Lisp-style language (having a free software implementation to test with), including Common Lisp, Scheme, Clojure, and even Julia or Dylan.
+
 ### Have fun!
 
 Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2021!
