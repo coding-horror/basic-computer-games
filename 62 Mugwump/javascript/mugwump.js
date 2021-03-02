@@ -1,4 +1,4 @@
-// MATH DICE
+// MUGWUMP
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
 //
