@@ -63,7 +63,7 @@ def main():
     if input("Do you want directions ").lower().startswith("y"):
         print("The computer gives you and it a 'card'. The higher card")
         print("(numerically) wins. The game ends when you choose not to")
-        print("contine or when you have finished the pack.")
+        print("continue or when you have finished the pack.")
 
     keep_playing = True
     while keep_playing:
