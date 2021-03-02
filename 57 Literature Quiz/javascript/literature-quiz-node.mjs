@@ -9,7 +9,7 @@ async function input(prompt = "") {
 
     return new Promise((resolve, _) => {
         rl.setPrompt(prompt)
-        // show use the question
+        // show user the question
         rl.prompt()
         // listen for user answer, 
         // callback is triggered as soon as user hits enter key
