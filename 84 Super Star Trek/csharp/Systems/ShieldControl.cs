@@ -1,3 +1,4 @@
+using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
@@ -17,26 +18,35 @@ namespace SuperStarTrek.Systems
             _input = input;
         }
 
-        public double Energy { get; private set; }
+        public double ShieldEnergy { get; private set; }
 
-        public override void ExecuteCommand(Quadrant quadrant)
+        public override CommandResult ExecuteCommand(Quadrant quadrant)
         {
             if (Condition < 0)
             {
                 _output.WriteLine("Shield Control inoperable");
-                return;
+            }
+            else
+            {
+                UpdateShields();
             }
 
+            return CommandResult.Ok;
+        }
+
+        private void UpdateShields()
+        {
             _output.WriteLine($"Energy available = {_enterprise.TotalEnergy}");
             var requested = _input.GetNumber($"Number of units to shields");
 
             if (Validate(requested))
             {
-                Energy = requested;
-                return;
+                ShieldEnergy = requested;
             }
-
-            _output.WriteLine("<SHIELDS UNCHANGED>");
+            else
+            {
+                _output.WriteLine("<SHIELDS UNCHANGED>");
+            }
         }
 
         private bool Validate(double requested)
@@ -47,7 +57,7 @@ namespace SuperStarTrek.Systems
                 return false;
             }
 
-            return requested >= 0 && requested != Energy;
+            return requested >= 0 && requested != ShieldEnergy;
         }
     }
 }
