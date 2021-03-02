@@ -23,7 +23,7 @@ from math import sqrt
 
 
 def fnr():
-    # Generate a random number from 0 to 7 inclusive.
+    # Generate a random integer from 0 to 7 inclusive.
     return random.randint(0, 7)
 
 
@@ -80,7 +80,7 @@ def find_empty_place():
 
 def navigation():
     # Take navigation input and move the Enterprise.
-    global d, s, e, k, s1, s2, qs, t8, t9, t, w1, c, q1, q2
+    global d, s, e, k, qs, t, q1, q2, s1, s2
 
     while True:
         c1s = input("COURSE (1-9)? ")
@@ -93,26 +93,25 @@ def navigation():
         print("   LT. SULU REPORTS, 'INCORRECT COURSE DATA, SIR!'")
         return
 
-    xs = '0.2' if d[0] < 0 else '8'
     while True:
-        w1s = input(f"WARP FACTOR (0-{xs})? ")
-        if len(w1s) > 0:
-            w1 = float(w1s)
+        warps = input(f"WARP FACTOR (0-{'0.2' if d[0] < 0 else '8'})? ")
+        if len(warps) > 0:
+            warp = float(warps)
             break
-    if d[0] < 0 and w1 > 0.2:
+    if d[0] < 0 and warp > 0.2:
         print("WARP ENGINES ARE DAMAGED. MAXIMUM SPEED = WARP 0.2")
         return
-    if w1 == 0:
+    if warp == 0:
         return
-    if w1 < 0 or w1 > 8:
+    if warp < 0 or warp > 8:
         print("   CHIEF ENGINEER SCOTT REPORTS 'THE ENGINES WON'T TAKE "
-              f"WARP {w1}!'")
+              f"WARP {warp}!'")
         return
 
-    n = int(w1 * 8 + 0.5)
+    n = round(warp * 8)
     if e < n:
         print("ENGINEERING REPORTS   'INSUFFICIENT ENERGY AVAILABLE")
-        print(f"                       FOR MANEUVERING AT WARP {w1}!'")
+        print(f"                       FOR MANEUVERING AT WARP {warp}!'")
         if s >= n - e and d[6] >= 0:
             print(f"DEFLECTOR CONTROL ROOM ACKNOWLEDGES {s} UNITS OF ENERGY")
             print("                         PRESENTLY DEPLOYED TO SHIELDS.")
@@ -127,18 +126,15 @@ def navigation():
 
     klingons_fire()
 
-    # print damage control report
-    d1 = 0
+    # repair damaged devices and print damage report
     line = ''
-    d6 = 1 if w1 >= 1 else w1
     for i in range(8):
         if d[i] < 0:
-            d[i] += d6
-            if d[i] > -0.1 and d[i] < 0:
+            d[i] += min(warp, 1)
+            if -0.1 < d[i] < 0:
                 d[i] = -0.1
             elif d[i] >= 0:
-                if d1 != 1:
-                    d1 = 1
+                if len(line) == 0:
                     line = "DAMAGE CONTROL REPORT:"
                 line += '   ' + devices[i] + ' REPAIR COMPLETED\n'
     if len(line) > 0:
@@ -157,41 +153,41 @@ def navigation():
     insert_marker(int(s1), int(s2), '   ')
     ic1 = int(c1)
     x1 = c[ic1 - 1][0] + (c[ic1][0] - c[ic1 - 1][0]) * (c1 - ic1)
-    x, y = s1, s2
     x2 = c[ic1 - 1][1] + (c[ic1][1] - c[ic1 - 1][1]) * (c1 - ic1)
-    q4, q5 = q1, q2
-    for i in range(1, n + 1):
+    q1_start, q2_start = q1, q2
+    x, y = s1, s2
+
+    for _ in range(n):
         s1 += x1
         s2 += x2
 
         if s1 < 0 or s1 > 7 or s2 < 0 or s2 > 7:
-            # exceeded quadrant limits
+            # exceeded quadrant limits; calculate final position
             x += 8 * q1 + n * x1
             y += 8 * q2 + n * x2
-            q1 = int(x / 8)
-            q2 = int(y / 8)
-            s1 = int(x - q1 * 8)
-            s2 = int(y - q2 * 8)
+            q1, q2 = int(x / 8), int(y / 8)
+            s1, s2 = int(x - q1 * 8), int(y - q2 * 8)
             if s1 < 0:
                 q1 -= 1
                 s1 = 7
             if s2 < 0:
                 q2 -= 1
                 s2 = 7
-            x5 = 0
+
+            hit_edge = False
             if q1 < 0:
-                x5 = 1
+                hit_edge = True
                 q1 = s1 = 0
             if q1 > 7:
-                x5 = 1
+                hit_edge = True
                 q1 = s1 = 7
             if q2 < 0:
-                x5 = 1
+                hit_edge = True
                 q2 = s2 = 0
             if q2 > 7:
-                x5 = 1
+                hit_edge = True
                 q2 = s2 = 7
-            if x5 == 1:
+            if hit_edge:
                 print("LT. UHURA REPORTS MESSAGE FROM STARFLEET COMMAND:")
                 print("  'PERMISSION TO ATTEMPT CROSSING OF GALACTIC "
                       "PERIMETER")
@@ -202,17 +198,17 @@ def navigation():
                 if t > t0 + t9:
                     end_game(won=False, quit=False)
                     return
-            if 8 * q1 + q2 == 8 * q4 + q5:
+
+            if q1 == q1_start and q2 == q2_start:
                 break
             t += 1
             maneuver_energy(n)
             new_quadrant()
             return
         else:
-            s8 = int(s1) * 24 + int(s2) * 3
-            if qs[s8:(s8 + 2)] != '  ':
-                s1 = int(s1 - x1)
-                s2 = int(s2 - x2)
+            pos = int(s1) * 24 + int(s2) * 3
+            if qs[pos:(pos + 2)] != '  ':
+                s1, s2 = int(s1 - x1), int(s2 - x2)
                 print("WARP ENGINES SHUT DOWN AT SECTOR "
                       f"{s1 + 1} , {s2 + 1} DUE TO BAD NAVAGATION")
                 break
@@ -222,10 +218,7 @@ def navigation():
     insert_marker(int(s1), int(s2), '<*>')
     maneuver_energy(n)
 
-    t8 = 1
-    if w1 < 1:
-        t8 = 0.1 * int(10 * w1)
-    t += t8
+    t += 0.1 * int(10 * warp) if warp < 1 else 1
     if t > t0 + t9:
         end_game(won=False, quit=False)
         return
@@ -742,8 +735,8 @@ def print_direction(from1, from2, to1, to2):
 
 def startup():
     # Initialize the game variables and map, and print startup messages.
-    global g, z, k, d, t, t0, t9, docked, e, e0, p, p0, s, k9, b9, s9, c
-    global devices, q1, q2, s1, s2, k7, restart
+    global g, z, d, t, t0, t9, docked, e, e0, p, p0, s, k9, b9, s9, c
+    global devices, q1, q2, s1, s2, k7
 
     print("\n\n\n\n\n\n\n\n\n\n\n"
           "                                    ,------*------,\n"
@@ -757,11 +750,10 @@ def startup():
     # set up global game variables
     g = [[0] * 8 for _ in range(8)]         # galaxy map
     z = [[0] * 8 for _ in range(8)]         # charted galaxy map
-    k = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   # Klingons in current quadrant
     d = [0] * 8                             # damage stats for devices
     t = t0 = 100 * random.randint(20, 39)   # stardate (current, initial)
     t9 = random.randint(25, 34)             # mission duration (stardates)
-    docked = False                          # docking flag
+    docked = False                          # true when docked at starbase
     e = e0 = 3000                           # energy (current, initial)
     p = p0 = 10                             # torpedoes (current, initial)
     s = 0                                   # shields
@@ -821,20 +813,20 @@ def startup():
 
 def new_quadrant():
     # Enter a new quadrant: populate map and print a short range scan.
-    global g, z, k, t, t0, s9, q1, q2, s1, s2
-    global k3, b3, s3, d4, qs, b4, b5
+    global g, z, t, t0, s9, q1, q2, s1, s2
+    global k3, b3, s3, d4, k, qs, b4, b5
 
     k3 = b3 = s3 = 0
     d4 = 0.5 * random.random()
     z[q1][q2] = g[q1][q2]
 
-    if 0 <= q1 < 8 and 0 <= q2 < 8:
-        g2s = quadrant_name(q1, q2, False)
+    if 0 <= q1 <= 7 and 0 <= q2 <= 7:
+        quad = quadrant_name(q1, q2, False)
         if t == t0:
             print("\nYOUR MISSION BEGINS WITH YOUR STARSHIP LOCATED")
-            print(f"IN THE GALACTIC QUADRANT, '{g2s}'.\n")
+            print(f"IN THE GALACTIC QUADRANT, '{quad}'.\n")
         else:
-            print(f"\nNOW ENTERING {g2s} QUADRANT . . .\n")
+            print(f"\nNOW ENTERING {quad} QUADRANT . . .\n")
 
         k3 = g[q1][q2] // 100
         b3 = g[q1][q2] // 10 - 10 * k3
@@ -845,18 +837,15 @@ def new_quadrant():
             if s <= 200:
                 print("   SHIELDS DANGEROUSLY LOW")
 
-    for i in range(3):
-        k[i] = [0, 0, 0]
-
-    qs = ' ' * 192
+    k = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]   # Klingons in current quadrant
+    qs = ' ' * 192                          # quadrant string
 
     # build quadrant string
     insert_marker(s1, s2, '<*>')
-    if k3 > 0:
-        for i in range(k3):
-            r1, r2 = find_empty_place()
-            insert_marker(r1, r2, '+K+')
-            k[i] = [r1, r2, s9 * (0.5 + random.random())]
+    for i in range(k3):
+        r1, r2 = find_empty_place()
+        insert_marker(r1, r2, '+K+')
+        k[i] = [r1, r2, s9 * (0.5 + random.random())]
     if b3 > 0:
         b4, b5 = find_empty_place()
         insert_marker(b4, b5, '>!<')
@@ -913,7 +902,7 @@ while True:
     while not restart:
         if s + e <= 10 or (e <= 10 and d[6] != 0):
             print("\n** FATAL ERROR **   YOU'VE JUST STRANDED YOUR SHIP IN "
-                  "SPACE\nYOU HAVE INSUFFICIENT MANEUVERING ENERGY, AND "
+                  "SPACE.\nYOU HAVE INSUFFICIENT MANEUVERING ENERGY, AND "
                   "SHIELD CONTROL\nIS PRESENTLY INCAPABLE OF CROSS-CIRCUITING "
                   "TO ENGINE ROOM!!")
 
