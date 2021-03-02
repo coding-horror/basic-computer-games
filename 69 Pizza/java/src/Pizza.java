@@ -125,7 +125,7 @@ public class Pizza {
                     currentHouseDelivery = (int) (Math.random()
                             * (houses.length) + 1) - 1; // Deduct 1 for 0-based array
 
-                    System.out.println("HELLO " + playerName + "'S PIZZA.  IS "
+                    System.out.println("HELLO " + playerName + "'S PIZZA.  THIS IS "
                             + houses[currentHouseDelivery] + ".");
                     System.out.println("  PLEASE SEND A PIZZA.");
                     gameState = GAME_STATE.DELIVER_PIZZA;
@@ -145,7 +145,7 @@ public class Pizza {
 
                     // Did the player select the right house to deliver?
                     if (calculatedPos == currentHouseDelivery) {
-                        System.out.println("HELLO " + playerName + ".  IS " + houses[currentHouseDelivery]
+                        System.out.println("HELLO " + playerName + ".  THIS IS " + houses[currentHouseDelivery]
                                 + ", THANKS FOR THE PIZZA.");
                         pizzaDeliveryCount++;
 
@@ -157,7 +157,7 @@ public class Pizza {
                             gameState = GAME_STATE.START_DELIVER;
                         }
                     } else {
-                        System.out.println("IS " + houses[calculatedPos] + ".  I DID NOT ORDER A PIZZA.");
+                        System.out.println("THIS IS " + houses[calculatedPos] + ".  I DID NOT ORDER A PIZZA.");
                         System.out.println("I LIVE AT " + x + "," + y);
                         // Don't change gameState so state is executed again
                     }
@@ -238,7 +238,7 @@ public class Pizza {
         System.out.println("DELIVERED.  THEN A DELIVERY BOY WILL");
         System.out.println("ASK YOU FOR THE LOCATION.");
         System.out.println("     EXAMPLE:");
-        System.out.println("IS J.  PLEASE SEND A PIZZA.");
+        System.out.println("THIS IS J.  PLEASE SEND A PIZZA.");
         System.out.println("DRIVER TO " + playerName + ".  WHERE DOES J LIVE?");
         System.out.println("YOUR ANSWER WOULD BE 2,3");
         System.out.println();
