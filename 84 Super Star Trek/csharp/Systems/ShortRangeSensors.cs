@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
@@ -24,7 +25,7 @@ namespace SuperStarTrek.Systems
             _output = output;
         }
 
-        public override void ExecuteCommand(Quadrant quadrant)
+        public override CommandResult ExecuteCommand(Quadrant quadrant)
         {
             if (_enterprise.IsDocked)
             {
@@ -42,6 +43,8 @@ namespace SuperStarTrek.Systems
                 .ToList()
                 .ForEach(l => _output.WriteLine(l));
             _output.WriteLine("---------------------------------");
+
+            return CommandResult.Ok;
         }
 
         public IEnumerable<string> GetStatusLines()
@@ -52,7 +55,7 @@ namespace SuperStarTrek.Systems
             yield return $"Sector             {_enterprise.Sector}";
             yield return $"Photon torpedoes   {_enterprise.TorpedoCount}";
             yield return $"Total energy       {Math.Ceiling(_enterprise.TotalEnergy)}";
-            yield return $"Shields            {(int)_enterprise.Shields.Energy}";
+            yield return $"Shields            {(int)_enterprise.ShieldControl.ShieldEnergy}";
             yield return $"Klingons remaining {_galaxy.KlingonCount}";
         }
     }

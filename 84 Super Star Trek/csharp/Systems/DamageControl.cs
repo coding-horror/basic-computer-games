@@ -1,3 +1,4 @@
+using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
@@ -15,7 +16,7 @@ namespace SuperStarTrek.Systems
             _output = output;
         }
 
-        public override void ExecuteCommand(Quadrant quadrant)
+        public override CommandResult ExecuteCommand(Quadrant quadrant)
         {
             if (IsDamaged)
             {
@@ -31,8 +32,11 @@ namespace SuperStarTrek.Systems
                 if (quadrant.Starbase.TryRepair(_enterprise, out var repairTime))
                 {
                     WriteDamageReport();
+                    return CommandResult.Elapsed(repairTime);
                 }
             }
+
+            return CommandResult.Ok;
         }
 
         public void WriteDamageReport()

@@ -1,3 +1,4 @@
+using SuperStarTrek.Commands;
 using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Systems
@@ -16,7 +17,7 @@ namespace SuperStarTrek.Systems
         public bool IsDamaged => Condition < 0;
         public Command Command { get; }
 
-        public abstract void ExecuteCommand(Quadrant quadrant);
+        public abstract CommandResult ExecuteCommand(Quadrant quadrant);
         public void Repair()
         {
             if (Condition < 0) { Condition = 0; }

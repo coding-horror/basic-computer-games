@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using SuperStarTrek.Commands;
+
 using static System.StringComparison;
 
 namespace SuperStarTrek
