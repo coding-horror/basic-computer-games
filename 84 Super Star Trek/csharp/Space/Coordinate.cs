@@ -14,6 +14,8 @@ namespace SuperStarTrek.Space
 
         public int X { get; }
         public int Y { get; }
+        public int RegionIndex => ((X - 1) << 1) + ((Y - 1) >> 2);
+        public int SubRegionIndex => (Y - 1) % 4;
 
         private int Validated(int value, string argumentName)
         {

@@ -14,6 +14,7 @@ namespace SuperStarTrek.Resources
         public static string Instructions => GetResource();
         public static string LowShields => GetResource();
         public static string Orders => GetResource();
+        public static string RegionNames => GetResource();
         public static string RepairEstimate => GetResource();
         public static string RepairPrompt => GetResource();
         public static string ReplayPrompt => GetResource();
