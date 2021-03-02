@@ -137,16 +137,16 @@ namespace litquiz
                 Console.WriteLine("LITERATURE (HA, HA, HA)");
                 return;
             }
-            else if(Score == 3)
+            else if(Score < 2)
             {
-                Console.WriteLine("NOT BAD, BUT YOU MIGHT SPEND A LITTLE MORE TIME");
-                Console.WriteLine("READING THE NURSERY GREATS.");
+                Console.WriteLine("UGH.  THAT WAS DEFINITELY NOT TOO SWIFT.  BACK TO");
+                Console.WriteLine("NURSERY SCHOOL FOR YOU, MY FRIEND.");
                 return;
             }
             else
             {
-                Console.WriteLine("UGH.  THAT WAS DEFINITELY NOT TOO SWIFT.  BACK TO");
-                Console.WriteLine("NURSERY SCHOOL FOR YOU, MY FRIEND.");
+                Console.WriteLine("NOT BAD, BUT YOU MIGHT SPEND A LITTLE MORE TIME");
+                Console.WriteLine("READING THE NURSERY GREATS.");
                 return;
             }
         }
