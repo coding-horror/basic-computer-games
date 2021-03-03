@@ -14,16 +14,16 @@ namespace SuperStarTrek.Space
 
         public int X { get; }
         public int Y { get; }
-        public int RegionIndex => ((X - 1) << 1) + ((Y - 1) >> 2);
-        public int SubRegionIndex => (Y - 1) % 4;
+        public int RegionIndex => (X << 1) + (Y >> 2);
+        public int SubRegionIndex => Y % 4;
 
         private int Validated(int value, string argumentName)
         {
-            if (value >= 1 && value <= 8) { return value; }
+            if (value >= 0 && value <= 7) { return value; }
 
-            throw new ArgumentOutOfRangeException(argumentName, value, "Must be 1 to 8 inclusive");
+            throw new ArgumentOutOfRangeException(argumentName, value, "Must be 0 to 7 inclusive");
         }
 
-        public override string ToString() => $"{X} , {Y}";
+        public override string ToString() => $"{X+1} , {Y+1}";
     }
 }
