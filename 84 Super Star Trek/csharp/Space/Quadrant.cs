@@ -66,13 +66,13 @@ namespace SuperStarTrek.Space
             }
         }
 
-        public IEnumerable<string> GetDisplayLines() => Enumerable.Range(1, 8).Select(x => GetDisplayLine(x));
+        public IEnumerable<string> GetDisplayLines() => Enumerable.Range(0, 8).Select(x => GetDisplayLine(x));
 
         private string GetDisplayLine(int x)
             => string.Join(
                 " ",
                 Enumerable
-                    .Range(1, 8)
+                    .Range(0, 8)
                     .Select(y => new Coordinates(x, y))
                     .Select(c => _sectors.GetValueOrDefault(c))
                     .Select(o => o?.ToString() ?? "   "));

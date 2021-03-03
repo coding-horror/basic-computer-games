@@ -6,7 +6,7 @@ namespace SuperStarTrek
     {
         private static readonly System.Random _random = new();
 
-        public Coordinates GetCoordinate() => new Coordinates(Get1To8Inclusive(), Get1To8Inclusive());
+        public Coordinates GetCoordinate() => new Coordinates(Get1To8Inclusive() - 1, Get1To8Inclusive() - 1);
 
         // Duplicates the algorithm used in the original code to get an integer value from 1 to 8, inclusive:
         //     475 DEF FNR(R)=INT(RND(R)*7.98+1.01)

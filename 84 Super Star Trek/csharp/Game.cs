@@ -82,6 +82,7 @@ namespace SuperStarTrek
             _enterprise = new Enterprise(3000, random.GetCoordinate(), _output);
             _enterprise
                 .Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
+                .Add(new LongRangeSensors(_galaxy, _output))
                 .Add(new ShieldControl(_enterprise, _output, _input))
                 .Add(new DamageControl(_enterprise, _output));
 

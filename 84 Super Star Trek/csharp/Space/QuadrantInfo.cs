@@ -2,6 +2,8 @@ namespace SuperStarTrek.Space
 {
     internal class QuadrantInfo
     {
+        private bool _isKnown;
+
         private QuadrantInfo(Coordinates coordinates, string name, int klingonCount, int starCount, bool hasStarbase)
         {
             Coordinates = coordinates;
@@ -36,5 +38,13 @@ namespace SuperStarTrek.Space
         internal void AddKlingon() => KlingonCount += 1;
 
         internal void AddStarbase() => HasStarbase = true;
+
+        public string Scan()
+        {
+            _isKnown = true;
+            return ToString();
+        }
+
+        public override string ToString() => _isKnown ? $"{KlingonCount}{(HasStarbase ? 1 : 0)}{StarCount}" : "***";
     }
 }
