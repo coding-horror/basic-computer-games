@@ -205,7 +205,6 @@ def play():
                 print("THANKS FOR THE GAME.")
                 break
             board[move - 1] = current_player
-            print(render_board(board, space_mapping))
 
         elif current_player is OccupiedBy.COMPUTER:
             print("\nTHE COMPUTER MOVES TO...")
