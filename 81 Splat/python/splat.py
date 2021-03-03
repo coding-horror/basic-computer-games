@@ -44,6 +44,44 @@ def yes_no_input(question, default="YES"):
     return answer.lower() in ["y", "yes"]
 
 
+def get_terminal_velocity():
+    """Terminal velocity by user or picked by computer."""
+    if yes_no_input("SELECT YOUR OWN TERMINAL VELOCITY", default="NO"):
+        v1 = numeric_input("WHAT TERMINAL VELOCITY (MI/HR)", default=100)
+    else:
+        # Computer picks 0-1000 terminal velocity.
+        v1 = int(1000 * random())
+        print(f"OK.  TERMINAL VELOCITY = {v1} MI/HR")
+
+    # Convert miles/h to feet/s.
+    return v1 * (5280 / 3600)
+
+
+def get_acceleration():
+    """Acceleration due to gravity by user or picked by computer."""
+    if yes_no_input("WANT TO SELECT ACCELERATION DUE TO GRAVITY", default="NO"):
+        a2 = numeric_input("WHAT ACCELERATION (FT/SEC/SEC)", default=32.16)
+    else:
+        body, a2 = pick_random_celestial_body()
+        print(f"FINE. YOU'RE ON {body}. ACCELERATION={a2} FT/SEC/SEC.")
+    return a2
+
+
+def get_freefall_time():
+    """User-guessed freefall time.
+
+    The idea of the game is to pick a freefall time, given initial
+    altitude, terminal velocity and acceleration, so the parachute
+    as close to the ground as possible without going splat.
+    """
+    t_freefall = 0
+    # A zero or negative freefall time is not handled by the motion
+    # equations during the jump.
+    while t_freefall <= 0:
+        t_freefall = numeric_input("HOW MANY SECONDS", default=10)
+    return t_freefall
+
+
 def jump():
     """Simulate a jump and returns the altitude where the chute opened.
 
@@ -53,26 +91,14 @@ def jump():
     a = 0  # Acceleration.
     initial_altitude = int(9001 * random() + 1000)
 
-    if yes_no_input("SELECT YOUR OWN TERMINAL VELOCITY", default="NO"):
-        v1 = numeric_input("WHAT TERMINAL VELOCITY (MI/HR)", default=100)
-    else:
-        # Computer picks 0-1000 terminal velocity.
-        v1 = int(1000 * random())
-        print(f"OK.  TERMINAL VELOCITY = {v1} MI/HR")
-
-    # Convert miles/h to feet/s.
-    v1 = v1 * (5280 / 3600)
+    v1 = get_terminal_velocity()
     # Actual terminal velocity is +/-5% of v1.
     v = v1 * uniform(0.95, 1.05)
 
-    if yes_no_input("WANT TO SELECT ACCELERATION DUE TO GRAVITY", default="NO"):
-        a2 = numeric_input("WHAT ACCELERATION (FT/SEC/SEC)", default=32.16)
-    else:
-        body, a2 = pick_random_celestial_body()
-        print(f"FINE. YOU'RE ON {body}. ACCELERATION={a2} FT/SEC/SEC.")
-
+    a2 = get_acceleration()
     # Actual acceleration is +/-5% of a2.
     a = a2 * uniform(0.95, 1.05)
+
     print(
         "\n"
         f"    ALTITUDE         = {initial_altitude} FT\n"
@@ -80,7 +106,7 @@ def jump():
         f"    ACCELERATION     = {a2:.2f} FT/SEC/SEC +/-5%\n"
         "SET THE TIMER FOR YOUR FREEFALL."
     )
-    t_freefall = numeric_input("HOW MANY SECONDS", default=10)
+    t_freefall = get_freefall_time()
     print(
         "HERE WE GO.\n\n"
         "TIME (SEC)\tDIST TO FALL (FT)\n"
