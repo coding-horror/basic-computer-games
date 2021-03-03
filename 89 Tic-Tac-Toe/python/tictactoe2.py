@@ -127,7 +127,7 @@ def determine_winner(board, g):
             return Winner.PLAYER
 
     # Check for matching vertical lines
-    for i in range(Space.TOP_LEFT.value, Space.TOP_LEFT.value + 1, 1):  # Second third of Line 1115
+    for i in range(Space.TOP_LEFT.value, Space.TOP_RIGHT.value + 1, 1):  # Second third of Line 1115
         if board[i] != board[i+3] or board[i] != board[i+6]: # Last third of Line 1115
             continue # First third of 1150
         elif board[i] == OccupiedBy.COMPUTER: # Line 1135
