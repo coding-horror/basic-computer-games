@@ -1,3 +1,21 @@
+########################################################
+#
+# Russian Roulette
+#
+# From Basic Computer Games (1978)
+#
+#    In this game, you are given by the computer a
+#   revolver loaded with one bullet and five empty
+#   chambers. You spin the chamber and pull the trigger
+#   by inputting a "1", or, if you want to quit, input
+#   a "2". You win if you play ten times and are still
+#   alive.
+#    Tom Adametx wrote this program while a student at
+#   Curtis Jr. High School in Sudbury, Massachusetts.
+#
+########################################################
+
+
 from random import random
 
 NUMBER_OF_ROUNDS = 9
@@ -14,7 +32,7 @@ def parse_input():
     correct_input = False
     while not correct_input:
         try:
-            i = int(input('?'))
+            i = int(input('? '))
             correct_input = True
         except ValueError:
             print('Number expected...')
@@ -53,3 +71,22 @@ while True:
         else:
             print("     Chicken!!!!!\n\n\n")
             print("...Next victim....")
+
+
+########################################################
+# Porting Notes
+#
+#    Altough the description says that accepts "1" or "2",
+#   the original game accepts any number as input, and
+#   if it's different of "2" the program considers
+#   as if the user had passed "1". That feature was
+#   kept in this port.
+#    Also, in the original game you must "pull the trigger"
+#   11 times instead of 10 in orden to win,
+#   given that N=0 at the beginning and the condition to
+#   win is "IF N > 10 THEN  80". That was fixed in this
+#   port, asking the user to pull the trigger only ten
+#   times, tough the number of round can be set changing
+#   the constant NUMBER_OF_ROUNDS.
+#
+########################################################
