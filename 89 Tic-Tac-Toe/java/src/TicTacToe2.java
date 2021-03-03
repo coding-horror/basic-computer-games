@@ -57,7 +57,6 @@ public class TicTacToe2 {
                             break;
                         } else {
                             System.out.println("INVALID INPUT, TRY AGAIN");
-                            //in.nextLine();
                         }
                         in.nextLine();
                     } catch (Exception e) {
