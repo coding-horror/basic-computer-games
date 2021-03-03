@@ -1,2 +1,0 @@
-javac -d ../bin *.java
-
