@@ -31,7 +31,7 @@ public class Bunny {
     }
 
     /**
-     * Show an intro, accept a message, then draw the picture.
+     * Show an intro, then draw the picture.
      */
     public void process() {
 
