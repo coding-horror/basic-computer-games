@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.Scanner;
 
 /**
- * Converted FROM BASIC to Java by Nahid Mondol
+ * Converted FROM BASIC to Java by Nahid Mondol.
  * 
- * Based on Trevor Hobsons approach
+ * Based on Trevor Hobsons approach.
  */
 public class War {
 
@@ -16,7 +16,7 @@ public class War {
     private static boolean invalidInput;
     private static Scanner userInput = new Scanner(System.in);
 
-    // Simple approach for storing a deck of cards
+    // Simple approach for storing a deck of cards.
     // Suit-Value, ex: 2 of Spades = S-2, King of Diamonds = D-K, etc...
     private static ArrayList<String> deckOfCards = new ArrayList<String>(
             Arrays.asList("S-2", "H-2", "C-2", "D-2", "S-3", "H-3", "C-3", "D-3", "S-4", "H-4", "C-4", "D-4", "S-5",
@@ -64,7 +64,7 @@ public class War {
         // Ending early will cause a different output to appear.
         boolean gameEndedEarly = false;
 
-        // Shuffle the deck of cards
+        // Shuffle the deck of cards.
         Collections.shuffle(deckOfCards);
 
         // Since the deck is already suffled, pull each card until the deck is empty or
