@@ -25,6 +25,8 @@ Ported in 2021 by Jonas Nockert / @lemonad
 from math import sqrt
 from random import choice, random, uniform
 
+PAGE_WIDTH = 72
+
 
 def numeric_input(question, default=0):
     """Ask user for a numeric value."""
@@ -274,15 +276,28 @@ def print_results(n_previous_jumps, n_better):
         )
 
 
-# Main program.
+def print_centered(msg):
+    """Print centered text."""
+    spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
+    print(spaces + msg)
 
-print(
-    "SPLAT\n"
-    "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n\n"
-    "WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE\n"
-    "JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE\n"
-    "MOMENT WITHOUT GOING SPLAT.\n\n"
-)
+
+def print_header():
+    print_centered("SPLAT")
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print(
+        "\n\n\n"
+        "WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE\n"
+        "JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE\n"
+        "MOMENT WITHOUT GOING SPLAT.\n\n"
+    )
+
+
+#
+# Main program.
+#
+
+print_header()
 
 successful_jumps = []
 while True:
