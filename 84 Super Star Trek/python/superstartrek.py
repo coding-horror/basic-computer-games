@@ -50,7 +50,7 @@ def insert_marker(row, col, marker):
 
     if len(marker) != 3:
         print('ERROR')
-        quit()
+        exit()
 
     pos = round(col) * 3 + round(row) * 24
     qs = qs[0:pos] + marker + qs[(pos + 3):192]
@@ -231,14 +231,12 @@ def maneuver_energy(n):
     global e, s
 
     e -= n + 10
-    if e > 0:
-        return
 
-    print("SHIELD CONTROL SUPPLIES ENERGY TO COMPLETE THE MANEUVER.")
-    s += e
-    e = 0
-    if s <= 0:
-        s = 0
+    if e <= 0:
+        print("SHIELD CONTROL SUPPLIES ENERGY TO COMPLETE THE MANEUVER.")
+        s += e
+        e = 0
+        s = max(0, s)
 
 
 def short_range_scan():
@@ -252,8 +250,7 @@ def short_range_scan():
                 if compare_marker(i, j, '>!<'):
                     docked = True
                     cs = 'DOCKED'
-                    e = e0
-                    p = p0
+                    e, p = e0, p0
                     print("SHIELDS DROPPED FOR DOCKING PURPOSES")
                     s = 0
                     break
@@ -310,8 +307,8 @@ def long_range_scan():
         return
 
     print(f"LONG RANGE SCAN FOR QUADRANT {q1 + 1} , {q2 + 1}")
-    o1s = '-------------------'
-    print(o1s)
+    sep = '-------------------'
+    print(sep)
     for i in (q1 - 1, q1, q1 + 1):
         n = [-1, -2, -3]
 
@@ -327,7 +324,7 @@ def long_range_scan():
             else:
                 line += str(n[l] + 1000).rjust(4, ' ')[-3:] + ' : '
         print(line)
-        print(o1s)
+        print(sep)
 
 
 def phaser_control():
@@ -427,8 +424,7 @@ def photon_torpedoes():
     while True:
         x += x1
         y += x2
-        x3 = round(x)
-        y3 = round(y)
+        x3, y3 = round(x), round(y)
         if x3 < 0 or x3 > 7 or y3 < 0 or y3 > 7:
             print("TORPEDO MISSED")
             klingons_fire()
@@ -816,8 +812,8 @@ def new_quadrant():
     global g, z, t, t0, s9, q1, q2, s1, s2
     global k3, b3, s3, d4, k, qs, b4, b5
 
-    k3 = b3 = s3 = 0
-    d4 = 0.5 * random.random()
+    k3 = b3 = s3 = 0                        # Klingons, bases, stars in quad.
+    d4 = 0.5 * random.random()              # extra delay in repairs at base
     z[q1][q2] = g[q1][q2]
 
     if 0 <= q1 <= 7 and 0 <= q2 <= 7:
@@ -847,7 +843,7 @@ def new_quadrant():
         insert_marker(r1, r2, '+K+')
         k[i] = [r1, r2, s9 * (0.5 + random.random())]
     if b3 > 0:
-        b4, b5 = find_empty_place()
+        b4, b5 = find_empty_place()         # position of starbase (sector)
         insert_marker(b4, b5, '>!<')
     for i in range(s3):
         r1, r2 = find_empty_place()
@@ -886,7 +882,7 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 
 
 # -------------------------------------------------------------------------
-#  Game loop
+#  Entry point and main game loop
 # -------------------------------------------------------------------------
 
 
