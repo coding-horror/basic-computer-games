@@ -67,7 +67,7 @@ while True:
     else:
         if n > NUMBER_OF_ROUNDS:
             print("You win!!!!!")
-            print("Let someone else blow his brain out.")
+            print("Let someone else blow his brain out.\n")
         else:
             print("     Chicken!!!!!\n\n\n")
             print("...Next victim....")
