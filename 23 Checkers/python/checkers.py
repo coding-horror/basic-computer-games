@@ -128,11 +128,13 @@ class Board:
             for delta_x, delta_y in self.get_legal_deltas_for_space(start_x, start_y):
                 new_move_record = self.check_move(start_x, start_y, delta_x, delta_y)
 
-            if new_move_record is None:
-                continue
+                if new_move_record is None:
+                    continue
 
-            if (move_record is None) or (new_move_record.quality > move_record.quality):
-                move_record = new_move_record
+                if (move_record is None) or (
+                    new_move_record.quality > move_record.quality
+                ):
+                    move_record = new_move_record
 
         return move_record
 
