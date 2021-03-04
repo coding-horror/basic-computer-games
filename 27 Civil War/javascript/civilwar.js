@@ -416,7 +416,7 @@ async function main()
             }
             // Simulated losses - North
             c6 = (2 * c2 / 5) * (1 + 1 / (2 * (Math.abs(y2 - y) + 1)));
-            c6 = c6 * (1.28 + (5 * m2 / 6) / (b[2] + 1));
+            c6 = c6 * (1.28 + (5 * m2 / 6) / (ba[2] + 1));
             c6 = Math.floor(c6 * (1 + 1 / o2) + 0.5);
             // If loss > men present, rescale losses
             e2 = 100 / o2;
@@ -483,12 +483,12 @@ async function main()
             s = 3;
             s0 = 0;
             for (i = 1; i <= 4; i++) {
-                if (s[i] <= 5)
+                if (sa[i] <= 5)
                     continue;
-                s[i] -= 5;
+                sa[i] -= 5;
                 s0 += s;
             }
-            s[y] += s0;
+            sa[y] += s0;
         }
         u = 0;
         u2 = 0;
