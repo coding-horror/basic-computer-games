@@ -4,73 +4,159 @@ import java.util.Collections;
 import java.util.Scanner;
 
 /**
- * Converted FROM BASIC to Java by Nahid Mondol
+ * Converted FROM BASIC to Java by Nahid Mondol.
  * 
- * Based on Trevor Hobsons approach
+ * Based on Trevor Hobsons approach.
  */
 public class War {
 
     private static final int CARD_DECK_SIZE = 52;
-    private static int totalPlayerScore = 0;
-    private static int totalComputerScore = 0;
-    private static boolean directionPhase;
-    static Scanner input = new Scanner(System.in);
-    static ArrayList<String> cards = new ArrayList<String>(
+    private static int playerTotalScore = 0;
+    private static int computerTotalScore = 0;
+    private static boolean invalidInput;
+    private static Scanner userInput = new Scanner(System.in);
+
+    // Simple approach for storing a deck of cards.
+    // Suit-Value, ex: 2 of Spades = S-2, King of Diamonds = D-K, etc...
+    private static ArrayList<String> deckOfCards = new ArrayList<String>(
             Arrays.asList("S-2", "H-2", "C-2", "D-2", "S-3", "H-3", "C-3", "D-3", "S-4", "H-4", "C-4", "D-4", "S-5",
                     "H-5", "C-5", "D-5", "S-6", "H-6", "C-6", "D-6", "S-7", "H-7", "C-7", "D-7", "S-8", "H-8", "C-8",
                     "D-8", "S-9", "H-9", "C-9", "D-9", "S-10", "H-10", "C-10", "D-10", "S-J", "H-J", "C-J", "D-J",
                     "S-Q", "H-Q", "C-Q", "D-Q", "S-K", "H-K", "C-K", "D-K", "S-A", "H-A", "C-A", "D-A"));
 
     public static void main(String[] args) {
+        introMessage();
+        showDirectionsBasedOnInput();
+        playGame();
+    }
+
+    private static void introMessage() {
         System.out.println("\t         WAR");
         System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
         System.out.println("THIS IS THE CARD GAME OF WAR. EACH CARD IS GIVEN BY SUIT-#");
         System.out.print("AS S-7 FOR SPADE 7. DO YOU WANT DIRECTIONS? ");
-
-        while (!directionPhase) {
-            getDirections(input);
-        }
-        System.out.println();
-        playGame();
     }
 
-    private static void getDirections(Scanner userInput) {
-        switch (userInput.nextLine().toLowerCase()) {
-            case "yes":
-                System.out.println("THE COMPUTER GIVES YOU AND IT A 'CARD'. THE HIGHER CARD");
-                System.out.println("(NUMERICALLY) WINS. THE GAME ENDS WHEN YOU CHOOSE NOT TO ");
-                System.out.println("CONTINUE OR WHEN YOU HAVE FINISHED THE PACK.");
-                directionPhase = true;
-                break;
-            case "no":
-                directionPhase = true;
-                break;
-            default:
-                System.out.print("YES OR NO, PLEASE.   ");
+    private static void showDirectionsBasedOnInput() {
+        // Stay in loop until player chooses an option.
+        invalidInput = true;
+        while (invalidInput) {
+            switch (userInput.nextLine().toLowerCase()) {
+                case "yes":
+                    System.out.println("THE COMPUTER GIVES YOU AND IT A 'CARD'. THE HIGHER CARD");
+                    System.out.println("(NUMERICALLY) WINS. THE GAME ENDS WHEN YOU CHOOSE NOT TO ");
+                    System.out.println("CONTINUE OR WHEN YOU HAVE FINISHED THE PACK.\n");
+                    invalidInput = false;
+                    break;
+                case "no":
+                    System.out.println();
+                    invalidInput = false;
+                    break;
+                default:
+                    System.out.print("YES OR NO, PLEASE.   ");
+            }
         }
     }
 
     private static void playGame() {
 
-        boolean endedEarly = false;
+        // Checks to see if the player ends the game early.
+        // Ending early will cause a different output to appear.
+        boolean gameEndedEarly = false;
 
-        // Shuffle the deck of cards
-        Collections.shuffle(cards);
+        // Shuffle the deck of cards.
+        Collections.shuffle(deckOfCards);
 
-        // Since the cards are already suffled, pull each card from the deck
-        // until the deck is empty or until the user quits.
+        // Since the deck is already suffled, pull each card until the deck is empty or
+        // until the user quits.
+        outerloop:
         for (int i = 1; i <= CARD_DECK_SIZE; i += 2) {
-            System.out.println("YOU: " + cards.get(i - 1) + "\t " + "COMPUTER: " + cards.get(i));
-            getWinner(cards.get(i - 1), cards.get(i));
-            System.out.print("DO YOU WANT TO CONTINUE? ");
-            // while (isInvalidInput) {
-            if (isGameEnded()) {
-                endedEarly = true;
-                break;
+            System.out.println("YOU: " + deckOfCards.get(i - 1) + "\t " + "COMPUTER: " + deckOfCards.get(i));
+            getWinner(deckOfCards.get(i - 1), deckOfCards.get(i));
+
+            invalidInput = true;
+            while (invalidInput) {
+                if (endedEarly()) {
+                    // Player ended game early. 
+                    // Break out of game loop and show end game output.
+                    gameEndedEarly = true;
+                    break outerloop;
+                }
             }
-            // }
         }
 
+        endGameOutput(gameEndedEarly);
+    }
+
+    /**
+     * Outputs the winner of the current round.
+     * 
+     * @param playerCard   Players card.
+     * @param computerCard Computers card.
+     */
+    private static void getWinner(String playerCard, String computerCard) {
+
+        // Return the number value of the card pulled.
+        String playerCardScore = (playerCard.length() == 3) ? Character.toString(playerCard.charAt(2))
+                : playerCard.substring(2, 4);
+        String computerCardScore = (computerCard.length() == 3) ? Character.toString(computerCard.charAt(2))
+                : computerCard.substring(2, 4);
+
+        if (checkCourtCards(playerCardScore) > checkCourtCards(computerCardScore)) {
+            System.out.println("YOU WIN.   YOU HAVE " + playerWonRound() + "   COMPUTER HAS " + getComputerScore());
+        } else if (checkCourtCards(playerCardScore) < checkCourtCards(computerCardScore)) {
+            System.out.println(
+                    "COMPUTER WINS!!!   YOU HAVE " + getPlayerScore() + "   COMPUTER HAS " + computerWonRound());
+        } else {
+            System.out.println("TIE.  NO SCORE CHANGE");
+        }
+
+        System.out.print("DO YOU WANT TO CONTINUE? ");
+    }
+
+    /**
+     * @param cardScore Score of the card being pulled.
+     * @return an integer value of the current card's score.
+     */
+    private static int checkCourtCards(String cardScore) {
+        switch (cardScore) {
+            case "J":
+                return Integer.parseInt("11");
+            case "Q":
+                return Integer.parseInt("12");
+            case "K":
+                return Integer.parseInt("13");
+            case "A":
+                return Integer.parseInt("14");
+            default:
+                return Integer.parseInt(cardScore);
+        }
+    }
+
+    /**
+     * @return true if the player ended the game early. false otherwise.
+     */
+    private static boolean endedEarly() {
+        switch (userInput.nextLine().toLowerCase()) {
+            case "yes":
+                invalidInput = false;
+                return false;
+            case "no":
+                invalidInput = false;
+                return true;
+            default:
+                invalidInput = true;
+                System.out.print("YES OR NO, PLEASE.   ");
+                return false;
+        }
+    }
+
+    /**
+     * Show output based on if the game was ended early or not.
+     * 
+     * @param endedEarly true if the game was ended early, false otherwise.
+     */
+    private static void endGameOutput(boolean endedEarly) {
         if (endedEarly) {
             System.out.println("YOU HAVE ENDED THE GAME. FINAL SCORE:  YOU: " + getPlayerScore() + " COMPUTER: "
                     + getComputerScore());
@@ -82,63 +168,31 @@ public class War {
         }
     }
 
-    private static void getWinner(String playerCard, String computerCard) {
-
-        String playerScore = (playerCard.length() == 3) ? Character.toString(playerCard.charAt(2))
-                : playerCard.substring(2, 4);
-        String computerScore = (computerCard.length() == 3) ? Character.toString(computerCard.charAt(2))
-                : computerCard.substring(2, 4);
-
-        if (Integer.parseInt(checkCourtCards(playerScore)) > Integer.parseInt(checkCourtCards(computerScore))) {
-            System.out.println("YOU WIN.   YOU HAVE " + playerWonRound() + "   COMPUTER HAS " + getComputerScore());
-        } else if (Integer.parseInt(checkCourtCards(playerScore)) < Integer.parseInt(checkCourtCards(computerScore))) {
-            System.out.println(
-                    "COMPUTER WINS!!!   YOU HAVE " + getPlayerScore() + "   COMPUTER HAS " + computerWonRound());
-        } else {
-            System.out.println("TIE.  NO SCORE CHANGE");
-        }
-    }
-
-    private static String checkCourtCards(String score) {
-        switch (score) {
-            case "J":
-                return "11";
-            case "Q":
-                return "12";
-            case "K":
-                return "13";
-            case "A":
-                return "14";
-            default:
-                return score;
-        }
-    }
-
-    private static boolean isGameEnded() {
-        switch (input.nextLine().toLowerCase()) {
-            case "yes":
-                return false;
-            case "no":
-                return true;
-            default:
-                System.out.print("YES OR NO, PLEASE.   ");
-                return false;
-        }
-    }
-
+    /**
+     * Increment the player's total score if they have won the round.
+     */
     private static int playerWonRound() {
-        return totalPlayerScore += 1;
+        return playerTotalScore += 1;
     }
 
+    /**
+     * Get the player's total score.
+     */
     private static int getPlayerScore() {
-        return totalPlayerScore;
+        return playerTotalScore;
     }
 
+    /**
+     * Increment the computer's total score if they have won the round.
+     */
     private static int computerWonRound() {
-        return totalComputerScore += 1;
+        return computerTotalScore += 1;
     }
 
+    /**
+     * Get the computer's total score.
+     */
     private static int getComputerScore() {
-        return totalComputerScore;
+        return computerTotalScore;
     }
 }
