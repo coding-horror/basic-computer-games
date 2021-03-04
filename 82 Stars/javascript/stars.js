@@ -52,6 +52,7 @@ async function main()
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
     print("\n\n\n");
 
+    // Instructions
     print("DO YOU WANT INSTRUCTIONS? (Y/N)");
     var instructions = await input();
     if(instructions.toLowerCase()[0] == "y") {
@@ -62,33 +63,44 @@ async function main()
         print("ONE STAR (*) MEANS FAR AWAY, SEVEN STARS (*******)\n");
         print(`MEANS REALLY CLOSE!  YOU GET ${guesses} GUESSES.\n\n\n`);
     }
+
+    // Game loop
     while (true) {
-        var randomNum = Math.floor(Math.random() * 150) + 1;
-        console.log(randomNum);
 
-        print("OK, I AM THINKING OF A NUMBER, START GUESSING.\n\n");
-
+        var randomNum = Math.floor(Math.random() * limit) + 1;
         var loss = true;
 
+        print("\nOK, I AM THINKING OF A NUMBER, START GUESSING.\n\n");
+        
         for(var guessNum=1; guessNum <= guesses; guessNum++) {
-            print("YOUR GUESS");
 
+            // Input guess
+            print("YOUR GUESS");
             var guess = parseInt(await input());
 
+            // Check if guess is correct
             if(guess == randomNum) {
                 loss = false;
-                print("*".repeat(79) + "!!!\n");
-                print(`YOU GOT IT IN ${guessNum} GUESSES!!! LET'S PLAY AGAIN...\n\n`);
+                print("\n\n" + "*".repeat(50) + "!!!\n");
+                print(`YOU GOT IT IN ${guessNum} GUESSES!!! LET'S PLAY AGAIN...\n`);
                 break;
             }
 
+            // Output distance in stars
             var dist = Math.abs(guess - randomNum);
-              
-            //IMPLEMENT CHECK HERE
+            if(isNaN(dist)) print("*");
+            else if(dist >= 64) print("*");
+            else if(dist >= 32) print("**");
+            else if(dist >= 16) print("***");
+            else if(dist >= 8) print("****");
+            else if(dist >= 4) print("*****");
+            else if(dist >= 2) print("******");
+            else print("*******")
+            print("\n\n")
         }
 
         if(loss) {
-            print(`SORRY, THAT'S ${guesses} GUESSES. THE NUMBER WAS ${randomNum}\n\n`);
+            print(`SORRY, THAT'S ${guesses} GUESSES. THE NUMBER WAS ${randomNum}\n`);
         }
     }
 }
