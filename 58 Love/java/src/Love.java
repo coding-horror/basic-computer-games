@@ -158,7 +158,6 @@ public class Love {
         theData.addAll(Arrays.asList(8, 6, 5, 3, 14, 6, 7, 1, 10, 9, 6, 3, 3, 15, 6, 16, 1, 1));
         theData.addAll(Arrays.asList(9, 6, 3, 3, 15, 6, 15, 2, 1, 10, 6, 1, 3, 16, 6, 14, 3, 1, 10, 10, 16, 6, 12, 5, 1));
         theData.addAll(Arrays.asList(11, 8, 13, 27, 1, 11, 8, 13, 27, 1, 60));
-        System.out.println(theData.size());
 
         return theData;
     }
