@@ -2,15 +2,15 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Game of Hammurabi
+ * Game of Hamurabi
  * <p>
- * Based on the Basic game of Hammurabi here
+ * Based on the Basic game of Hamurabi here
  * https://github.com/coding-horror/basic-computer-games/blob/main/43%20Hammurabi/hammurabi.bas
  * <p>
  * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
  */
-public class Hammurabi {
+public class Hamurabi {
 
     private int year;
     private int population;
@@ -48,7 +48,7 @@ public class Hammurabi {
     // Current game state
     private GAME_STATE gameState;
 
-    public Hammurabi() {
+    public Hamurabi() {
         kbScanner = new Scanner(System.in);
         gameState = GAME_STATE.STARTUP;
     }
@@ -246,8 +246,11 @@ public class Hammurabi {
     }
 
     private void intro() {
-        System.out.println(simulateTabs(33) + "KINEMA");
+        System.out.println(simulateTabs(32) + "HAMURABI");
         System.out.println(simulateTabs(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+        System.out.println();
+        System.out.println("TRY YOUR HAND AT GOVERNING ANCIENT SUMERIA");
+        System.out.println("FOR A TEN-YEAR TERM OF OFFICE.");
         System.out.println();
     }
 
