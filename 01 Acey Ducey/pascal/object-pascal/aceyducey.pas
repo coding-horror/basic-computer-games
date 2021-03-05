@@ -5,7 +5,8 @@ program aceyducey;
 {$ENDIF}
 
 uses
-  Game, Deck
+  Game
+, Deck
 ;
 
 var
