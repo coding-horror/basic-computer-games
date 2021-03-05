@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathDice", "MathDice.csproj", "{4F28D7EB-3CD6-434F-B643-0CEA5F09F96D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F28D7EB-3CD6-434F-B643-0CEA5F09F96D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F28D7EB-3CD6-434F-B643-0CEA5F09F96D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F28D7EB-3CD6-434F-B643-0CEA5F09F96D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F28D7EB-3CD6-434F-B643-0CEA5F09F96D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A1337DCA-4EFA-45EE-A1A9-22E37E74F362}
+	EndGlobalSection
+EndGlobal
