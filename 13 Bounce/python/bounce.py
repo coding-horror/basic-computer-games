@@ -51,7 +51,7 @@ def print_at_tab(line, tab, s):
 
 
 def run_simulation(delta_t, v0, coeff_rest):
-    t = [0] * 20  # time of each bounce?
+    t = [0] * 20  # time of each bounce
 
     print("FEET")
     print()
