@@ -12,6 +12,14 @@ import java.util.Scanner;
  */
 public class Hamurabi {
 
+    public static final int INITIAL_POPULATION = 95;
+    public static final int INITIAL_BUSHELS = 2800;
+    public static final int INITIAL_HARVEST = 3000;
+    public static final int INITIAL_LAND_TRADING_AT = 3;
+    public static final int INITIAL_CAME_TO_CITY = 5;
+    public static final int MAX_GAME_YEARS = 10;
+    public static final double MAX_STARVATION_IN_A_YEAR = .45d;
+
     private int year;
     private int population;
     private int acres;
@@ -19,11 +27,11 @@ public class Hamurabi {
     private int harvest;
     private int landTradingAt;
     private int cameToCity;
-    private int died;
-    private int q;
+    private int starvedInAYear;
+    private int starvedOverall;
+    private boolean chanceOfPlague;
     private int ratsAte;
     private double peopleFed;
-    private double totalPlanted;
     private double percentageStarved;
     private int acresToPlant;
     private int bushelsToFeedPeople;
@@ -42,6 +50,7 @@ public class Hamurabi {
         CALCULATE_HARVEST,
         CALCULATE_BABIES,
         RESULTS,
+        FINISH_GAME,
         GAME_OVER
     }
 
@@ -70,17 +79,17 @@ public class Hamurabi {
 
                     // These are hard coded startup figures from the basic program
                     year = 0;
-                    population = 95;
-                    bushels = 2800;
-                    harvest = 3000;
-                    landTradingAt = 3;
-                    acres = harvest / landTradingAt;
-                    cameToCity = 5;
-                    died = 0;
-                    q = 1;
-                    ratsAte = harvest - bushels;
+                    population = INITIAL_POPULATION;
+                    bushels = INITIAL_BUSHELS;
+                    harvest = INITIAL_HARVEST;
+                    landTradingAt = INITIAL_LAND_TRADING_AT;
+                    acres = INITIAL_HARVEST / INITIAL_LAND_TRADING_AT;
+                    cameToCity = INITIAL_CAME_TO_CITY;
+                    starvedInAYear = 0;
+                    starvedOverall = 0;
+                    chanceOfPlague = false;
+                    ratsAte = INITIAL_HARVEST - INITIAL_BUSHELS;
                     peopleFed = 0;
-                    totalPlanted = 0;
                     percentageStarved = 0;
                     acresToPlant = 0;
                     bushelsToFeedPeople = 0;
@@ -91,10 +100,16 @@ public class Hamurabi {
                 case YEAR_CYCLE:
                     System.out.println();
                     year += 1;
+                    // End of game?
+                    if (year > MAX_GAME_YEARS) {
+                        gameState = GAME_STATE.RESULTS;
+                        break;
+
+                    }
                     System.out.println("HAMURABI:  I BEG TO REPORT TO YOU,");
-                    System.out.println("IN YEAR " + year + "," + died + " PEOPLE STARVED," + cameToCity + " CAME TO THE CITY,");
+                    System.out.println("IN YEAR " + year + "," + starvedInAYear + " PEOPLE STARVED," + cameToCity + " CAME TO THE CITY,");
                     population += cameToCity;
-                    if (q == 0) {
+                    if (chanceOfPlague) {
                         population /= 2;
                         System.out.println("A HORRIBLE PLAGUE STRUCK!  HALF THE PEOPLE DIED.");
                     }
@@ -105,103 +120,95 @@ public class Hamurabi {
                     System.out.println("YOU NOW HAVE " + bushels + " BUSHELS IN STORE.");
                     System.out.println();
 
-                    peopleFed = (int) (Math.random() * 10);
-                    landTradingAt = (int) peopleFed + 17;
+                    landTradingAt = (int) (Math.random() * 10) + 17;  // Original formula unchanged
                     System.out.println("LAND IS TRADING AT " + landTradingAt + " BUSHELS PER ACRE.");
 
                     gameState = GAME_STATE.BUY_ACRES;
                     break;
 
                 case BUY_ACRES:
-                        int acresToBuy = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO BUY? ");
-                        if (acresToBuy < 0) {
-                            gameState = GAME_STATE.GAME_OVER;
-                        }
+                    int acresToBuy = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO BUY? ");
+                    if (acresToBuy < 0) {
+                        gameState = GAME_STATE.FINISH_GAME;
+                    }
 
-                        if(acresToBuy >0) {
-                            if ((landTradingAt * acresToBuy) > bushels) {
-                                System.out.println("HAMURABI:  THINK AGAIN.  YOU HAVE ONLY");
-                                System.out.println(bushels + " BUSHELS OF GRAIN.  NOW THEN,");
-                            } else {
-                                if (q == 0) {
-                                    gameState = GAME_STATE.SELL_ACRES;
-                                } else {
-                                    acres += acresToBuy;
-                                    bushels -= (landTradingAt * acresToBuy);
-                                    peopleFed = 0;
-                                    gameState = GAME_STATE.FEED_PEOPLE;
-                                }
-                            }
+                    if (acresToBuy > 0) {
+                        if ((landTradingAt * acresToBuy) > bushels) {
+                            notEnoughBushelsMessage();
                         } else {
-                            // 0 entered as buy so try to sell
-                            gameState = GAME_STATE.SELL_ACRES;
+                            acres += acresToBuy;
+                            bushels -= (landTradingAt * acresToBuy);
+                            peopleFed = 0;
+                            gameState = GAME_STATE.FEED_PEOPLE;
                         }
-                        break;
+                    } else {
+                        // 0 entered as buy so try to sell
+                        gameState = GAME_STATE.SELL_ACRES;
+                    }
+                    break;
 
                 case SELL_ACRES:
-                        int acresToSell = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO SELL? ");
-                        if (acresToSell < 0) {
-                            gameState = GAME_STATE.GAME_OVER;
-                        }
-                        if (acresToSell < acres) {
-                            acres -= acresToSell;
-                            bushels += (landTradingAt * acresToSell);
-                            gameState = GAME_STATE.FEED_PEOPLE;
-                        } else {
-                            System.out.println("HAMURABI:  THINK AGAIN.  YOU OWN ONLY " + acres + " ACRES.  NOW THEN,");
-                        }
-                        break;
+                    int acresToSell = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO SELL? ");
+                    if (acresToSell < 0) {
+                        gameState = GAME_STATE.FINISH_GAME;
+                    }
+                    if (acresToSell < acres) {
+                        acres -= acresToSell;
+                        bushels += (landTradingAt * acresToSell);
+                        gameState = GAME_STATE.FEED_PEOPLE;
+                    } else {
+                        notEnoughLandMessage();
+                    }
+                    break;
 
                 case FEED_PEOPLE:
 
-                        bushelsToFeedPeople = displayTextAndGetNumber("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE ? ");
-                        if (bushelsToFeedPeople < 0) {
-                            gameState = GAME_STATE.GAME_OVER;
-                        }
+                    bushelsToFeedPeople = displayTextAndGetNumber("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE ? ");
+                    if (bushelsToFeedPeople < 0) {
+                        gameState = GAME_STATE.FINISH_GAME;
+                    }
 
-                        if (bushelsToFeedPeople <= bushels) {
-                            bushels -= bushelsToFeedPeople;
-                            peopleFed = 1;
-                            gameState = GAME_STATE.PLANT_SEED;
-                        } else {
-                            System.out.println("HAMURABI:  THINK AGAIN.  YOU HAVE ONLY");
-                            System.out.println(bushels + " BUSHELS OF GRAIN.  NOW THEN,");
-                        }
-                        break;
+                    if (bushelsToFeedPeople <= bushels) {
+                        bushels -= bushelsToFeedPeople;
+                        peopleFed = 1;
+                        gameState = GAME_STATE.PLANT_SEED;
+                    } else {
+                        notEnoughBushelsMessage();
+                    }
+                    break;
 
                 case PLANT_SEED:
 
                     acresToPlant = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED ? ");
                     if (acresToPlant < 0) {
-                        gameState = GAME_STATE.GAME_OVER;
+                        gameState = GAME_STATE.FINISH_GAME;
                     }
 
                     if (acresToPlant <= acres) {
-                        if(acresToPlant/2 <= bushels) {
-                            if(acresToPlant < 10*population) {
-                                bushels -= acresToPlant/2;
-                                peopleFed = (int) (Math.random()*5)+1;
+                        if (acresToPlant / 2 <= bushels) {
+                            if (acresToPlant < 10 * population) {
+                                bushels -= acresToPlant / 2;
+                                peopleFed = (int) (Math.random() * 5) + 1;
                                 landTradingAt = (int) peopleFed;
                                 harvest = acresToPlant * landTradingAt;
                                 ratsAte = 0;
                                 gameState = GAME_STATE.CALCULATE_HARVEST;
                             } else {
-                                System.out.println("BUT YOU HAVE ONLY " + population + " PEOPLE TO TEND THE FIELDS!  NOW THEN,");
+                                notEnoughPeopleMessage();
                             }
                         } else {
-                            System.out.println("HAMURABI:  THINK AGAIN.  YOU HAVE ONLY");
-                            System.out.println("BUSHELS OF GRAIN.  NOW THEN,");
+                            notEnoughBushelsMessage();
                         }
                     } else {
-                        System.out.println("HAMURABI:  THINK AGAIN.  YOU OWN ONLY " + acres + " ACRES.  NOW THEN,");
+                        notEnoughLandMessage();
                     }
                     break;
 
                 case CALCULATE_HARVEST:
 
-                    if( (int) (peopleFed/2) == peopleFed/2) {
+                    if ((int) (peopleFed / 2) == peopleFed / 2) {
                         // Rats are running wild
-                            ratsAte = (int) (bushels / peopleFed);
+                        ratsAte = (int) (bushels / peopleFed);
                     }
                     bushels = bushels - ratsAte;
                     bushels += harvest;
@@ -210,40 +217,111 @@ public class Hamurabi {
 
                 case CALCULATE_BABIES:
 
-                    cameToCity = (int) (peopleFed*(20*acres+bushels)/population/100+1);
-                    peopleFed = (int) (bushelsToFeedPeople/20);
-                    q = (int) ((10*(Math.random()*2)-.3));
-                    if(population <peopleFed) {
+                    cameToCity = (int) (peopleFed * (20 * acres + bushels) / population / 100 + 1);
+                    peopleFed = (bushelsToFeedPeople / 20.0d);
+                    // Simplify chance of plague to a true/false
+                    chanceOfPlague = (int) ((10 * (Math.random() * 2) - .3)) == 0;
+                    if (population < peopleFed) {
                         gameState = GAME_STATE.YEAR_CYCLE;
                     }
 
                     double starved = population - peopleFed;
-                    if(starved>.45*population) {
-                        System.out.println();
-                        System.out.println("YOU STARVED " + (int) starved + " PEOPLE IN ONE YEAR!!!");
-                        System.out.println("DUE TO THIS EXTREME MISMANAGEMENT YOU HAVE NOT ONLY");
-                        System.out.println("BEEN IMPEACHED AND THROWN OUT OF OFFICE BUT YOU HAVE");
-                        System.out.println("ALSO BEEN DECLARED NATIONAL FINK!!!!");
-                        gameState = GAME_STATE.GAME_OVER;
-                    } else {
-                        percentageStarved = ((year-1)*percentageStarved+(double) (acresToPlant*100/population))/year;
-                        population = (int) peopleFed;
-                        totalPlanted  += acresToPlant;
+                    if (starved < 0.0d) {
+                        starvedInAYear = 0;
                         gameState = GAME_STATE.YEAR_CYCLE;
+                    } else {
+                        System.out.println("STARVED = " + starved);
+                        starvedInAYear = (int) starved;
+                        starvedOverall += starvedInAYear;
+                        if (starved > MAX_STARVATION_IN_A_YEAR * population) {
+                            starvedTooManyPeopleMessage((int) starved);
+                            gameState = GAME_STATE.FINISH_GAME;
+                        } else {
+                            percentageStarved = ((year - 1) * percentageStarved + starved * 100 / population) / year;
+                            System.out.println("PERCENTAGE STARVED = " + percentageStarved);
+                            population = (int) peopleFed;
+                            gameState = GAME_STATE.YEAR_CYCLE;
+                        }
+
                     }
 
                     break;
 
 
+                case RESULTS:
+
+                    int acresPerPerson = acres / population;
+
+                    System.out.println("IN YOUR 10-YEAR TERM OF OFFICE," + percentageStarved + " PERCENT OF THE");
+                    System.out.println("POPULATION STARVED PER YEAR ON THE AVERAGE, I.E. A TOTAL OF");
+                    System.out.println(starvedOverall + " PEOPLE DIED!!");
+                    System.out.println("YOU STARTED WITH 10 ACRES PER PERSON AND ENDED WITH");
+                    System.out.println(acresPerPerson + " ACRES PER PERSON.");
+                    System.out.println();
+
+                    if (percentageStarved > 33.0d || acresPerPerson < 7) {
+                        starvedTooManyPeopleMessage(starvedOverall);
+                    } else if (percentageStarved > 10.0d || acresPerPerson < 9) {
+                        heavyHandedMessage();
+                    } else if (percentageStarved > 3.0d || acresPerPerson < 10) {
+                        couldHaveBeenBetterMessage();
+                    } else {
+                        fantasticPerformanceMessage();
+                    }
 
 
+                    gameState = GAME_STATE.FINISH_GAME;
 
-
+                case FINISH_GAME:
+                    System.out.println("SO LONG FOR NOW.");
+                    gameState = GAME_STATE.GAME_OVER;
 
             }
 
         } while (gameState != GAME_STATE.GAME_OVER);
     }
+
+    private void starvedTooManyPeopleMessage(int starved) {
+        System.out.println();
+        System.out.println("YOU STARVED " + starved + " PEOPLE IN ONE YEAR!!!");
+        System.out.println("DUE TO THIS EXTREME MISMANAGEMENT YOU HAVE NOT ONLY");
+        System.out.println("BEEN IMPEACHED AND THROWN OUT OF OFFICE BUT YOU HAVE");
+        System.out.println("ALSO BEEN DECLARED NATIONAL FINK!!!!");
+
+    }
+
+    private void heavyHandedMessage() {
+        System.out.println("DUE TO THIS EXTREME MISMANAGEMENT YOU HAVE NOT ONLY");
+        System.out.println("BEEN IMPEACHED AND THROWN OUT OF OFFICE BUT YOU HAVE");
+        System.out.println("ALSO BEEN DECLARED NATIONAL FINK!!!!");
+    }
+
+    private void couldHaveBeenBetterMessage() {
+        System.out.println("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT");
+        System.out.println("REALLY WASN'T TOO BAD AT ALL. " + (int) (Math.random() * (population * .8)) + "PEOPLE");
+        System.out.println("WOULD DEARLY LIKE TO SEE YOU ASSASSINATED BUT WE ALL HAVE OUR");
+        System.out.println("TRIVIAL PROBLEMS.");
+    }
+
+    private void fantasticPerformanceMessage() {
+        System.out.println("A FANTASTIC PERFORMANCE!!!  CHARLEMANGE, DISRAELI, AND");
+        System.out.println("JEFFERSON COMBINED COULD NOT HAVE DONE BETTER!");
+    }
+
+    private void notEnoughPeopleMessage() {
+        System.out.println("BUT YOU HAVE ONLY " + population + " PEOPLE TO TEND THE FIELDS!  NOW THEN,");
+
+    }
+
+    private void notEnoughBushelsMessage() {
+        System.out.println("HAMURABI:  THINK AGAIN.  YOU HAVE ONLY");
+        System.out.println(bushels + " BUSHELS OF GRAIN.  NOW THEN,");
+    }
+
+    private void notEnoughLandMessage() {
+        System.out.println("HAMURABI:  THINK AGAIN.  YOU OWN ONLY " + acres + " ACRES.  NOW THEN,");
+    }
+
 
     private void intro() {
         System.out.println(simulateTabs(32) + "HAMURABI");
@@ -254,21 +332,6 @@ public class Hamurabi {
         System.out.println();
     }
 
-    private boolean calculate(double playerAnswer, double correctAnswer) {
-
-        boolean gotItRight = false;
-
-        if (Math.abs((playerAnswer - correctAnswer) / correctAnswer) < 0.15) {
-            System.out.println("CLOSE ENOUGH");
-            gotItRight = true;
-        } else {
-            System.out.println("NOT EVEN CLOSE");
-        }
-        System.out.println("CORRECT ANSWER IS " + correctAnswer);
-        System.out.println();
-
-        return gotItRight;
-    }
 
     /*
      * Print a message on the screen, then accept input from Keyboard.
