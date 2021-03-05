@@ -33,7 +33,6 @@ public class Hamurabi {
     private int ratsAte;
     private double peopleFed;
     private double percentageStarved;
-    private int acresToPlant;
     private int bushelsToFeedPeople;
 
     // Used for keyboard input
@@ -91,7 +90,6 @@ public class Hamurabi {
                     ratsAte = INITIAL_HARVEST - INITIAL_BUSHELS;
                     peopleFed = 0;
                     percentageStarved = 0;
-                    acresToPlant = 0;
                     bushelsToFeedPeople = 0;
 
                     gameState = GAME_STATE.YEAR_CYCLE;
@@ -179,7 +177,7 @@ public class Hamurabi {
 
                 case PLANT_SEED:
 
-                    acresToPlant = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED ? ");
+                    int acresToPlant = displayTextAndGetNumber("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED ? ");
                     if (acresToPlant < 0) {
                         gameState = GAME_STATE.FINISH_GAME;
                     }
@@ -230,7 +228,6 @@ public class Hamurabi {
                         starvedInAYear = 0;
                         gameState = GAME_STATE.YEAR_CYCLE;
                     } else {
-                        System.out.println("STARVED = " + starved);
                         starvedInAYear = (int) starved;
                         starvedOverall += starvedInAYear;
                         if (starved > MAX_STARVATION_IN_A_YEAR * population) {
@@ -238,7 +235,6 @@ public class Hamurabi {
                             gameState = GAME_STATE.FINISH_GAME;
                         } else {
                             percentageStarved = ((year - 1) * percentageStarved + starved * 100 / population) / year;
-                            System.out.println("PERCENTAGE STARVED = " + percentageStarved);
                             population = (int) peopleFed;
                             gameState = GAME_STATE.YEAR_CYCLE;
                         }
@@ -252,7 +248,7 @@ public class Hamurabi {
 
                     int acresPerPerson = acres / population;
 
-                    System.out.println("IN YOUR 10-YEAR TERM OF OFFICE," + percentageStarved + " PERCENT OF THE");
+                    System.out.println("IN YOUR 10-YEAR TERM OF OFFICE," + String.format("%.2f", percentageStarved) + "% PERCENT OF THE");
                     System.out.println("POPULATION STARVED PER YEAR ON THE AVERAGE, I.E. A TOTAL OF");
                     System.out.println(starvedOverall + " PEOPLE DIED!!");
                     System.out.println("YOU STARTED WITH 10 ACRES PER PERSON AND ENDED WITH");
@@ -298,7 +294,7 @@ public class Hamurabi {
 
     private void couldHaveBeenBetterMessage() {
         System.out.println("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT");
-        System.out.println("REALLY WASN'T TOO BAD AT ALL. " + (int) (Math.random() * (population * .8)) + "PEOPLE");
+        System.out.println("REALLY WASN'T TOO BAD AT ALL. " + (int) (Math.random() * (population * .8)) + " PEOPLE");
         System.out.println("WOULD DEARLY LIKE TO SEE YOU ASSASSINATED BUT WE ALL HAVE OUR");
         System.out.println("TRIVIAL PROBLEMS.");
     }
