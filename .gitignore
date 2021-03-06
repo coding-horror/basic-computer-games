@@ -1,11 +1,4 @@
-/01 Acey Ducey/csharp/obj
-/47 Hi-Lo/csharp/obj
-/.vs
-/33 Dice/csharp/obj
-/01 Acey Ducey/csharp/.vs/AceyDucey
-/01 Acey Ducey/csharp/bin/Debug/netcoreapp3.1
-/33 Dice/csharp/bin/Debug/net5.0
-/basic-computer-games-dot-net/.vs/basic-computer-games-dot-net/v16
+*/.vs
 
 */csharp/bin
 */csharp/obj
@@ -15,3 +8,6 @@
 *.iml
 *.ipr
 out/
+
+*.py[co]
+Pipfile
