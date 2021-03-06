@@ -48,6 +48,7 @@ public class Awari{
 	}
 
 	private void playerMove(boolean val){
+		System.out.println("\nComputerSum PlayerSum"+sumComputer+" "+sumPlayer);
 		if(val == true)
 			System.out.print("YOUR MOVE? ");
 		else
@@ -63,21 +64,32 @@ public class Awari{
 		int last_pos = distribute(seeds,move);
 		if(last_pos == playerHome){
 			printBoard();
+			if(isGameOver(true)){
+				System.exit(0);
+			}
 			playerMove(false);
 		}
 		else if(board[last_pos] == 1&&last_pos != computerHome){
 			int opp = calculateOpposite(last_pos);
+			if(last_pos<6){
+				sumPlayer+=board[opp];
+				sumComputer-=board[opp];
+			}
+			else{
+				sumComputer+=board[opp];
+				sumPlayer-=board[opp];
+			}
 			board[last_pos]+=board[opp];
 			board[opp] = 0;
 			printBoard();
-			if(isGameOver()){
+			if(isGameOver(false)){
 				System.exit(0);
 			}
 			computerMove(true);
 		}
 		else{
 			printBoard();
-			if(isGameOver()){
+			if(isGameOver(false)){
 				System.exit(0);
 			}
 			computerMove(true);
@@ -86,6 +98,7 @@ public class Awari{
 
 	private void computerMove(boolean value){
 		int val=-1;
+		System.out.println("\nComputerSum PlayerSum"+sumComputer+" "+sumPlayer);
 		for(int i=0;i<6;i++){
 			if(6-i == board[computerPits+i])
 				val = i;
@@ -108,16 +121,24 @@ public class Awari{
 			int last_pos = distribute(seeds,move+1);
 			if(board[last_pos] == 1&&last_pos != playerHome){
                 	        int opp = calculateOpposite(last_pos);
+				 if(last_pos<6){
+	                                sumPlayer+=board[opp];
+        	                        sumComputer-=board[opp];
+                	        }
+                        	else{
+	                                sumComputer+=board[opp];
+        	                        sumPlayer-=board[opp];
+                	        }
         	                board[last_pos]+=board[opp];
 	                        board[opp] = 0;
                         	printBoard();
-                	        if(isGameOver()){
+                	        if(isGameOver(false)){
         	                        System.exit(0);
 	                        }
                 	}
 			else{
 				printBoard();
-	                        if(isGameOver()){
+	                        if(isGameOver(false)){
         	                        System.exit(0);
                 	        }
 			}
@@ -134,7 +155,7 @@ public class Awari{
                         sumComputer-=seeds;
                         int last_pos = distribute(seeds,move+1);
 			if(last_pos == computerHome){
-				if(isGameOver() ){
+				if(isGameOver(true) ){
 					System.exit(0);
 				}
 				computerMove(false);
@@ -162,8 +183,10 @@ public class Awari{
 		return 12-pos;
 	}
 
-	private boolean isGameOver(){
+	private boolean isGameOver(boolean show){
 		if(sumPlayer == 0 || sumComputer == 0){
+			if(show)
+				printBoard();
 			System.out.println("GAME OVER");
 			if(board[playerHome]>board[computerHome]){
 				System.out.println(String.format("YOU WIN BY %d POINTS",board[playerHome]-board[computerHome]));
