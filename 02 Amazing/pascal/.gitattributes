@@ -1,0 +1,36 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.inc  text
+*.pas  text
+*.pp   text
+*.lpk  text
+*.lpi  text
+*.lps  text
+*.lpr  text
+*.def  text
+*.css  text
+*.html text
+*.xml  text
+*.sql  text
+
+# Declare files that will always have CRLF line endings on checkout.
+*.dpk   text eol=crlf
+*.dproj text eol=crlf
+
+# Declare files that will always have LF line endings on checkout.
+
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.exe binary
+*.res binary
+*.ico binary
+*.dll binary
+
+# Keep these files from archive/exports, mainly from production.
+.gitignore      export-ignore
+.gitattributes  export-ignore
