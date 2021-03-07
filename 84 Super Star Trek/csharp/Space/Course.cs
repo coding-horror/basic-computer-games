@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SuperStarTrek.Space
 {
@@ -24,7 +25,7 @@ namespace SuperStarTrek.Space
             (0, 1)
         };
 
-        public Course(double direction)
+        public Course(float direction)
         {
             if (direction < 1 || direction > 9)
             {
@@ -44,7 +45,25 @@ namespace SuperStarTrek.Space
             DeltaY = baseCardinal.DeltaY + (nextCardinal.DeltaY - baseCardinal.DeltaY) * fractionalDirection;
         }
 
-        public double DeltaX { get; }
-        public double DeltaY { get; }
+        public float DeltaX { get; }
+        public float DeltaY { get; }
+
+        public IEnumerable<Coordinates> GetSectorsFrom(Coordinates start)
+        {
+            (double x, double y) = start;
+
+            while(true)
+            {
+                x += DeltaX;
+                y += DeltaY;
+
+                if (!Coordinates.TryCreate(x, y, out var coordinates))
+                {
+                    yield break;
+                }
+
+                yield return coordinates;
+            }
+        }
     }
 }

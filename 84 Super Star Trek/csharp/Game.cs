@@ -79,14 +79,13 @@ namespace SuperStarTrek
             _galaxy = new Galaxy();
             _initialKlingonCount = _galaxy.KlingonCount;
 
-            _enterprise = new Enterprise(3000, random.GetCoordinate(), _output);
+            _enterprise = new Enterprise(3000, random.GetCoordinate(), _output, random);
             _enterprise
                 .Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
                 .Add(new LongRangeSensors(_galaxy, _output))
+                .Add(new PhotonTubes(10, _enterprise, _output, _input))
                 .Add(new ShieldControl(_enterprise, _output, _input))
                 .Add(new DamageControl(_enterprise, _output));
-
-            var quadrant = new Quadrant(_galaxy[_currentQuadrant], _enterprise);
 
             _output.Write(Strings.Enterprise);
             _output.Write(
@@ -100,6 +99,7 @@ namespace SuperStarTrek
 
             _input.WaitForAnyKeyButEnter("when ready to accept command");
 
+            var quadrant = _galaxy[_currentQuadrant].BuildQuadrant(_enterprise, random, _galaxy);
             _enterprise.Enter(quadrant, Strings.StartText);
         }
 

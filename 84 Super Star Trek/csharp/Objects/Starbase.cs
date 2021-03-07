@@ -8,10 +8,11 @@ namespace SuperStarTrek.Objects
         private readonly Output _output;
         private readonly double _repairDelay;
 
-        public Starbase(Random random, Input input)
+        public Starbase(Random random, Input input, Output output)
         {
             _repairDelay = random.GetDouble() * 0.5;
             _input = input;
+            _output = output;
         }
 
         public override string ToString() => ">!<";
@@ -34,5 +35,7 @@ namespace SuperStarTrek.Objects
             repairTime = 0;
             return false;
         }
+
+        internal void ProtectEnterprise() => _output.WriteLine(Strings.Protected);
     }
 }

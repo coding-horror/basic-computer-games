@@ -17,7 +17,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
 
         public ShortRangeSensors(Enterprise enterprise, Galaxy galaxy, Game game, Output output)
-            : base("Short Range Sensors", Command.SRS)
+            : base("Short Range Sensors", Command.SRS, output)
         {
             _enterprise = enterprise;
             _galaxy = galaxy;
@@ -25,7 +25,7 @@ namespace SuperStarTrek.Systems
             _output = output;
         }
 
-        public override CommandResult ExecuteCommand(Quadrant quadrant)
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
             if (_enterprise.IsDocked)
             {

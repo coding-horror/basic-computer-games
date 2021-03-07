@@ -11,7 +11,7 @@ namespace SuperStarTrek.Systems
         private readonly Input _input;
 
         public ShieldControl(Enterprise enterprise, Output output, Input input)
-            : base("Shield Control", Command.SHE)
+            : base("Shield Control", Command.SHE, output)
         {
             _enterprise = enterprise;
             _output = output;
@@ -20,21 +20,9 @@ namespace SuperStarTrek.Systems
 
         public double ShieldEnergy { get; private set; }
 
-        public override CommandResult ExecuteCommand(Quadrant quadrant)
-        {
-            if (Condition < 0)
-            {
-                _output.WriteLine("Shield Control inoperable");
-            }
-            else
-            {
-                UpdateShields();
-            }
+        protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
 
-            return CommandResult.Ok;
-        }
-
-        private void UpdateShields()
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
             _output.WriteLine($"Energy available = {_enterprise.TotalEnergy}");
             var requested = _input.GetNumber($"Number of units to shields");
@@ -47,6 +35,8 @@ namespace SuperStarTrek.Systems
             {
                 _output.WriteLine("<SHIELDS UNCHANGED>");
             }
+
+            return CommandResult.Ok;
         }
 
         private bool Validate(double requested)
@@ -59,5 +49,7 @@ namespace SuperStarTrek.Systems
 
             return requested >= 0 && requested != ShieldEnergy;
         }
+
+        internal void AbsorbHit(int hitStrength) => ShieldEnergy -= hitStrength;
     }
 }

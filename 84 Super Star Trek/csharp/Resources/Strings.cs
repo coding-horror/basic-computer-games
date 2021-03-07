@@ -8,13 +8,16 @@ namespace SuperStarTrek.Resources
     {
         public static string CombatArea => GetResource();
         public static string Congratulations => GetResource();
+        public static string CourtMartial => GetResource();
         public static string Destroyed => GetResource();
         public static string EndOfMission => GetResource();
         public static string Enterprise => GetResource();
         public static string Instructions => GetResource();
         public static string LowShields => GetResource();
         public static string Orders => GetResource();
+        public static string Protected => GetResource();
         public static string RegionNames => GetResource();
+        public static string RelievedOfCommand => GetResource();
         public static string RepairEstimate => GetResource();
         public static string RepairPrompt => GetResource();
         public static string ReplayPrompt => GetResource();
