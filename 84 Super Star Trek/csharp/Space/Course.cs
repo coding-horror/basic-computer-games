@@ -50,7 +50,7 @@ namespace SuperStarTrek.Space
 
         public IEnumerable<Coordinates> GetSectorsFrom(Coordinates start)
         {
-            (double x, double y) = start;
+            (float x, float y) = start;
 
             while(true)
             {

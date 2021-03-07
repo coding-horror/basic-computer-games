@@ -24,14 +24,14 @@ namespace SuperStarTrek.Space
         public static QuadrantInfo Create(Coordinates coordinates, string name)
         {
             var random = new Random();
-            var klingonCount = random.GetDouble() switch
+            var klingonCount = random.GetFloat() switch
             {
-                > 0.98 => 3,
-                > 0.95 => 2,
-                > 0.80 => 1,
+                > 0.98f => 3,
+                > 0.95f => 2,
+                > 0.80f => 1,
                 _ => 0
             };
-            var hasStarbase = random.GetDouble() > 0.96;
+            var hasStarbase = random.GetFloat() > 0.96f;
             var starCount = random.Get1To8Inclusive();
 
             return new QuadrantInfo(coordinates, name, klingonCount, starCount, hasStarbase);

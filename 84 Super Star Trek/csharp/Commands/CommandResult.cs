@@ -10,14 +10,14 @@ namespace SuperStarTrek.Commands
             IsGameOver = isGameOver;
         }
 
-        private CommandResult(double timeElapsed)
+        private CommandResult(float timeElapsed)
         {
             TimeElapsed = timeElapsed;
         }
 
         public bool IsGameOver { get; }
-        public double TimeElapsed { get; }
+        public float TimeElapsed { get; }
 
-        public static CommandResult Elapsed(double timeElapsed) => new(timeElapsed);
+        public static CommandResult Elapsed(float timeElapsed) => new(timeElapsed);
     }
 }

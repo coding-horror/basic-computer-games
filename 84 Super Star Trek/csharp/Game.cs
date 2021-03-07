@@ -14,7 +14,7 @@ namespace SuperStarTrek
 
         private int _initialStardate;
         private int _finalStarDate;
-        private double _currentStardate;
+        private float _currentStardate;
         private Coordinates _currentQuadrant;
         private Coordinates _currentSector;
         private Galaxy _galaxy;
@@ -27,7 +27,7 @@ namespace SuperStarTrek
             _input = new Input(_output);
         }
 
-        public double Stardate => _currentStardate;
+        public float Stardate => _currentStardate;
 
         public void DoIntroduction()
         {
@@ -111,7 +111,7 @@ namespace SuperStarTrek
             return _enterprise.IsStranded;
         }
 
-        private double GetEfficiency() =>
-            1000 * Math.Pow(_initialKlingonCount / (_currentStardate - _initialStardate), 2);
+        private float GetEfficiency() =>
+            1000 * (float)Math.Pow(_initialKlingonCount / (_currentStardate - _initialStardate), 2);
     }
 }
