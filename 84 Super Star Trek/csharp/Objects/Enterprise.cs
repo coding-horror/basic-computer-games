@@ -15,9 +15,10 @@ namespace SuperStarTrek.Objects
         private readonly Output _output;
         private readonly List<Subsystem> _systems;
         private readonly Dictionary<Command, Subsystem> _commandExecutors;
+        private readonly Random _random;
         private Quadrant _quadrant;
 
-        public Enterprise(int maxEnergy, Coordinates sector, Output output)
+        public Enterprise(int maxEnergy, Coordinates sector, Output output, Random random)
         {
             Sector = sector;
             TotalEnergy = _maxEnergy = maxEnergy;
@@ -25,6 +26,7 @@ namespace SuperStarTrek.Objects
             _systems = new List<Subsystem>();
             _commandExecutors = new Dictionary<Command, Subsystem>();
             _output = output;
+            _random = random;
         }
 
         public Coordinates Quadrant => _quadrant.Coordinates;
@@ -88,5 +90,37 @@ namespace SuperStarTrek.Objects
         }
 
         public override string ToString() => "<*>";
+
+        internal CommandResult TakeHit(Coordinates sector, int hitStrength)
+        {
+            _output.WriteLine($"{hitStrength} unit hit on Enterprise from sector {sector}");
+            ShieldControl.AbsorbHit(hitStrength);
+
+            if (ShieldControl.ShieldEnergy <= 0)
+            {
+                _output.WriteLine(Strings.Destroyed);
+                return CommandResult.GameOver;
+            }
+
+            _output.WriteLine($"      <Shields down to {ShieldControl.ShieldEnergy} units>");
+
+            if (hitStrength >= 20)
+            {
+                TakeDamage(hitStrength);
+            }
+
+            return CommandResult.Ok;
+        }
+
+        private void TakeDamage(double hitStrength)
+        {
+            var hitShieldRatio = hitStrength / ShieldControl.ShieldEnergy;
+            if (_random.GetDouble() > 0.6 || hitShieldRatio <= 0.02)
+            {
+                return;
+            }
+
+            _systems[_random.Get1To8Inclusive() - 1].TakeDamage(hitShieldRatio + 0.5 * _random.GetDouble());
+        }
     }
 }

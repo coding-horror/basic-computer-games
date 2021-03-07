@@ -1,3 +1,5 @@
+using SuperStarTrek.Objects;
+
 namespace SuperStarTrek.Space
 {
     internal class QuadrantInfo
@@ -39,12 +41,25 @@ namespace SuperStarTrek.Space
 
         internal void AddStarbase() => HasStarbase = true;
 
-        public string Scan()
+        internal Quadrant BuildQuadrant(Enterprise enterprise, Random random, Galaxy galaxy) =>
+            new(this, enterprise, random, galaxy);
+
+        internal string Scan()
         {
             _isKnown = true;
             return ToString();
         }
 
         public override string ToString() => _isKnown ? $"{KlingonCount}{(HasStarbase ? 1 : 0)}{StarCount}" : "***";
+
+        internal void RemoveKlingon()
+        {
+            if (KlingonCount > 0)
+            {
+                KlingonCount -= 1;
+            }
+        }
+
+        internal void RemoveStarbase() => HasStarbase = false;
     }
 }

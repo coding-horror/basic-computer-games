@@ -24,6 +24,34 @@ namespace SuperStarTrek.Space
             throw new ArgumentOutOfRangeException(argumentName, value, "Must be 0 to 7 inclusive");
         }
 
+        private static bool IsValid(int value) => value >= 0 && value <= 7;
+
         public override string ToString() => $"{X+1} , {Y+1}";
+
+        internal void Deconstruct(out int x, out int y)
+        {
+            x = X;
+            y = Y;
+        }
+
+        internal static bool TryCreate(float x, float y, out Coordinates coordinates)
+        {
+            var roundedX = Round(x);
+            var roundedY = Round(y);
+
+            if (IsValid(roundedX) && IsValid(roundedY))
+            {
+                coordinates = new Coordinates(roundedX, roundedY);
+                return true;
+            }
+
+            coordinates = default;
+            return false;
+
+            int Round(float value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
+        }
+
+        internal float GetDistanceTo(Coordinates destination) =>
+            (float)Math.Sqrt(Math.Pow(X - destination.X, 2) + Math.Pow(Y - destination.Y, 2));
     }
 }

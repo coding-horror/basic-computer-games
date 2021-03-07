@@ -10,13 +10,13 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
 
         public DamageControl(Enterprise enterprise, Output output)
-            : base("Damage Control", Command.DAM)
+            : base("Damage Control", Command.DAM, output)
         {
             _enterprise = enterprise;
             _output = output;
         }
 
-        public override CommandResult ExecuteCommand(Quadrant quadrant)
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
             if (IsDamaged)
             {

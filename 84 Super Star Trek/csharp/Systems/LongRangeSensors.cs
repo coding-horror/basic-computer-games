@@ -15,27 +15,22 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
 
         public LongRangeSensors(Galaxy galaxy, Output output)
-            : base("Long Range Sensors", Command.LRS)
+            : base("Long Range Sensors", Command.LRS, output)
         {
             _galaxy = galaxy;
             _output = output;
         }
 
-        public override CommandResult ExecuteCommand(Quadrant quadrant)
+        protected override bool CanExecuteCommand() => IsOperational("{name} are inoperable");
+
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
-            if (Condition < 0)
+            _output.WriteLine($"Long range scan for quadrant {quadrant.Coordinates}");
+            _output.WriteLine("-------------------");
+            foreach (var quadrants in _galaxy.GetNeighborhood(quadrant))
             {
-                _output.WriteLine("Long Range Sensors are inoperable");
-            }
-            else
-            {
-                _output.WriteLine($"Long range scan for quadrant {quadrant.Coordinates}");
+                _output.WriteLine(": " + string.Join(" : ", quadrants.Select(q => q?.Scan() ?? "***")) + " :");
                 _output.WriteLine("-------------------");
-                foreach (var quadrants in _galaxy.GetNeighborhood(quadrant))
-                {
-                    _output.WriteLine(": " + string.Join(" : ", quadrants.Select(q => q?.Scan() ?? "***")) + " :");
-                    _output.WriteLine("-------------------");
-                }
             }
 
             return CommandResult.Ok;

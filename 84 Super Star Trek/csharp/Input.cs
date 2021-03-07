@@ -27,14 +27,14 @@ namespace SuperStarTrek
             return Console.ReadLine();
         }
 
-        public double GetNumber(string prompt)
+        public float GetNumber(string prompt)
         {
             _output.Prompt(prompt);
 
             while (true)
             {
                 var response = Console.ReadLine();
-                if (double.TryParse(response, out var value))
+                if (float.TryParse(response, out var value))
                 {
                     return value;
                 }
@@ -44,7 +44,7 @@ namespace SuperStarTrek
             }
         }
 
-        public bool TryGetNumber(string prompt, double minValue, double maxValue, out double value)
+        public bool TryGetNumber(string prompt, float minValue, float maxValue, out float value)
         {
             value = GetNumber($"{prompt} ({minValue}-{maxValue})");
 
