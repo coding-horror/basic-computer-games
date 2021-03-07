@@ -18,7 +18,7 @@ namespace SuperStarTrek.Systems
             _input = input;
         }
 
-        public double ShieldEnergy { get; private set; }
+        public float ShieldEnergy { get; private set; }
 
         protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
 
@@ -39,7 +39,7 @@ namespace SuperStarTrek.Systems
             return CommandResult.Ok;
         }
 
-        private bool Validate(double requested)
+        private bool Validate(float requested)
         {
             if (requested > _enterprise.TotalEnergy)
             {

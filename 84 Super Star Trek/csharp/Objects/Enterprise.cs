@@ -33,8 +33,8 @@ namespace SuperStarTrek.Objects
         public Coordinates Sector { get; }
         public string Condition => GetCondition();
         public ShieldControl ShieldControl => (ShieldControl)_commandExecutors[Command.SHE];
-        public double Energy => TotalEnergy - ShieldControl.ShieldEnergy;
-        public double TotalEnergy { get; private set; }
+        public float Energy => TotalEnergy - ShieldControl.ShieldEnergy;
+        public float TotalEnergy { get; private set; }
         public int DamagedSystemCount => _systems.Count(s => s.IsDamaged);
         public IEnumerable<Subsystem> Systems => _systems;
         public int TorpedoCount { get; }
@@ -68,7 +68,7 @@ namespace SuperStarTrek.Objects
             (_quadrant.HasKlingons, Energy / _maxEnergy) switch
             {
                 (true, _) => "*Red*",
-                (_, < 0.1) => "Yellow",
+                (_, < 0.1f) => "Yellow",
                 _ => "Green"
             };
 
@@ -112,15 +112,15 @@ namespace SuperStarTrek.Objects
             return CommandResult.Ok;
         }
 
-        private void TakeDamage(double hitStrength)
+        private void TakeDamage(float hitStrength)
         {
             var hitShieldRatio = hitStrength / ShieldControl.ShieldEnergy;
-            if (_random.GetDouble() > 0.6 || hitShieldRatio <= 0.02)
+            if (_random.GetFloat() > 0.6 || hitShieldRatio <= 0.02f)
             {
                 return;
             }
 
-            _systems[_random.Get1To8Inclusive() - 1].TakeDamage(hitShieldRatio + 0.5 * _random.GetDouble());
+            _systems[_random.Get1To8Inclusive() - 1].TakeDamage(hitShieldRatio + 0.5f * _random.GetFloat());
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SuperStarTrek.Systems
         }
 
         public string Name { get; }
-        public double Condition { get; private set; }
+        public float Condition { get; private set; }
         public bool IsDamaged => Condition < 0;
         public Command Command { get; }
 
@@ -44,7 +44,7 @@ namespace SuperStarTrek.Systems
             if (IsDamaged) { Condition = 0; }
         }
 
-        internal void TakeDamage(double damage)
+        internal void TakeDamage(float damage)
         {
             Condition -= damage;
             _output.WriteLine($"Damage Control reports, '{Name} damaged by the hit.'");
