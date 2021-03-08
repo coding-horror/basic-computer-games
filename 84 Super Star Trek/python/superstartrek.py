@@ -8,7 +8,7 @@
 # **** LEEDOM - APRIL & DECEMBER 1974,
 # **** WITH A LITTLE HELP FROM HIS FRIENDS . . .
 #
-# Python translation by Jack Boyce - 2/2021
+# Python translation by Jack Boyce - February 2021
 #   Output is identical to BASIC version except for a few
 #   fixes (as noted, search `bug`) and minor cleanup.
 
@@ -59,8 +59,6 @@ def insert_marker(row, col, marker):
 def compare_marker(row, col, test_marker):
     # Check whether the position in the current quadrant is occupied with a
     # given marker.
-    global qs
-
     pos = round(col) * 3 + round(row) * 24
     return qs[pos:(pos + 3)] == test_marker
 
@@ -504,7 +502,7 @@ def klingons_fire():
 
 def shield_control():
     # Raise or lower the shields.
-    global e, s, d
+    global e, s
 
     if d[6] < 0:
         print("SHIELD CONTROL INOPERABLE")
@@ -557,7 +555,8 @@ def damage_control():
     print("\nTECHNICIANS STANDING BY TO EFFECT REPAIRS TO YOUR SHIP;")
     print("ESTIMATED TIME TO REPAIR: "
           f"{round(0.01 * int(100 * d3), 2)} STARDATES")
-    if input("WILL YOU AUTHORIZE THE REPAIR ORDER (Y/N)? ").upper() != 'Y':
+    if input("WILL YOU AUTHORIZE THE "
+             "REPAIR ORDER (Y/N)? ").upper().strip() != 'Y':
         return
 
     for i in range(8):
@@ -685,43 +684,32 @@ def computer():
 
 
 def print_direction(from1, from2, to1, to2):
-    # Print a direction and distance between two locations in the quadrant
-    # grid.
-    to2 -= from2
-    from2 = from1 - to1
+    # Print a direction and distance between two locations in the grid.
+    delta1 = -(to1 - from1)  # flip so positive is up (heading = 3)
+    delta2 = to2 - from2
 
-    def f1(c1, a, x):
-        if abs(a) >= abs(x):
-            print(f"DIRECTION = {round(c1 + (abs(x)/abs(a)), 6)}")
+    if delta2 > 0:
+        if delta1 < 0:
+            base = 7
         else:
-            print("DIRECTION = "
-                  f"{round(c1 + (((abs(x)-abs(a))+abs(x))/abs(x)), 6)}")
-
-    def f2(c1, a, x):
-        if abs(a) <= abs(x):
-            print(f"DIRECTION = {round(c1 + (abs(a)/abs(x)), 6)}")
-        else:
-            print("DIRECTION = "
-                  f"{round(c1 + (((abs(a)-abs(x))+abs(a))/abs(a)), 6)}")
-
-    if to2 < 0:
-        if from2 > 0:
-            f1(3, from2, to2)
-        elif to2 != 0:
-            f2(5, from2, to2)
-        else:
-            f1(7, from2, to2)
+            base = 1
+            delta1, delta2 = delta2, delta1
     else:
-        if from2 < 0:
-            f1(7, from2, to2)
-        elif to2 > 0:
-            f2(1, from2, to2)
-        elif from2 == 0:
-            f2(5, from2, to2)
+        if delta1 > 0:
+            base = 3
         else:
-            f2(1, from2, to2)
+            base = 5
+            delta1, delta2 = delta2, delta1
 
-    print(f"DISTANCE = {round(sqrt(to2 ** 2 + from2 ** 2), 6)}")
+    delta1, delta2 = abs(delta1), abs(delta2)
+
+    if delta1 > 0 or delta2 > 0:  # bug in original; no check for divide by 0
+        if delta1 >= delta2:
+            print(f"DIRECTION = {round(base + delta2 / delta1, 6)}")
+        else:
+            print(f"DIRECTION = {round(base + 2 - delta1 / delta2, 6)}")
+
+    print(f"DISTANCE = {round(sqrt(delta1 ** 2 + delta2 ** 2), 6)}")
 
 
 # -------------------------------------------------------------------------
@@ -796,7 +784,7 @@ def startup():
         g[q1][q2] += 10
         q1, q2 = fnr(), fnr()
 
-    k7 = k9
+    k7 = k9                                 # Klingons at start of game
 
     print("YOUR ORDERS ARE AS FOLLOWS:\n"
           f"     DESTROY THE {k9} KLINGON WARSHIPS WHICH HAVE INVADED\n"
@@ -809,8 +797,7 @@ def startup():
 
 def new_quadrant():
     # Enter a new quadrant: populate map and print a short range scan.
-    global g, z, t, t0, s9, q1, q2, s1, s2
-    global k3, b3, s3, d4, k, qs, b4, b5
+    global z, k3, b3, s3, d4, k, qs, b4, b5
 
     k3 = b3 = s3 = 0                        # Klingons, bases, stars in quad.
     d4 = 0.5 * random.random()              # extra delay in repairs at base
@@ -854,7 +841,7 @@ def new_quadrant():
 
 def end_game(won=False, quit=True, enterprise_killed=False):
     # Handle end-of-game situations.
-    global t, t0, b9, k7, restart
+    global restart
 
     if won:
         print("CONGRATULATIONS, CAPTAIN! THE LAST KLINGON BATTLE CRUISER")
@@ -876,7 +863,8 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 
     print("THE FEDERATION IS IN NEED OF A NEW STARSHIP COMMANDER")
     print("FOR A SIMILAR MISSION -- IF THERE IS A VOLUNTEER,")
-    if input("LET HIM STEP FORWARD AND ENTER 'AYE'? ").upper() != 'AYE':
+    if input("LET HIM STEP FORWARD AND "
+             "ENTER 'AYE'? ").upper().strip() != 'AYE':
         exit()
     restart = True
 
@@ -902,7 +890,7 @@ while True:
                   "SHIELD CONTROL\nIS PRESENTLY INCAPABLE OF CROSS-CIRCUITING "
                   "TO ENGINE ROOM!!")
 
-        command = input('COMMAND? ').upper()
+        command = input('COMMAND? ').upper().strip()
 
         if command in f:
             f[command]()
