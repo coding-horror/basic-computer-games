@@ -126,7 +126,30 @@ public class TicTacToe2 {
                         }
                     }
                     break;
-                }
+                } else if (gameBoard.checkDraw()) {
+                    System.out.println("DRAW, PLAY AGAIN? (Y/N)");
+                    gameBoard.clear();
+                    while (true) {
+                        try {
+                            char input;
+                            input = in.next().charAt(0);
+
+                            if (input == 'Y' || input == 'y') {
+                                break;
+                            } else if (input == 'N' || input == 'n') {
+                                System.exit(0);
+                            } else {
+                                System.out.println("THATS NOT 'Y' OR 'N', TRY AGAIN");
+                                in.nextLine();
+                            }
+
+                        } catch (Exception e) {
+                            System.out.println("THATS NOT 'Y' OR 'N', TRY AGAIN");
+                            in.nextLine();
+                        }
+                    } 
+                    break;
+                } 
 
             }
         }
