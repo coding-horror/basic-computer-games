@@ -75,7 +75,15 @@ public class Board {
 
         return false;
     }
-
+    public boolean checkDraw() {
+        if(this.checkWin('X') == false && this.checkWin('O') == false) {
+            if(this.getBoardValue(1) != ' ' && this.getBoardValue(2) != ' ' && this.getBoardValue(3) != ' ' && this.getBoardValue(4) != ' ' && this.getBoardValue(5) != ' ' && this.getBoardValue(6) != ' ' && this.getBoardValue(7) != ' ' && this.getBoardValue(8) != ' ' && this.getBoardValue(9) != ' ' ) {
+                return true;
+            }
+        } 
+        
+        return false; 
+    }
     /**
      * Reset the board
      */
