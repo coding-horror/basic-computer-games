@@ -684,7 +684,7 @@ def computer():
 
 
 def print_direction(from1, from2, to1, to2):
-    # Print a direction and distance between two locations in the grid.
+    # Print direction and distance between two locations in the grid.
     delta1 = -(to1 - from1)  # flip so positive is up (heading = 3)
     delta2 = to2 - from2
 
@@ -873,35 +873,39 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 #  Entry point and main game loop
 # -------------------------------------------------------------------------
 
+def main():
+    f = {'NAV': navigation, 'SRS': short_range_scan, 'LRS': long_range_scan,
+         'PHA': phaser_control, 'TOR': photon_torpedoes, 'SHE': shield_control,
+         'DAM': damage_control, 'COM': computer, 'XXX': end_game}
 
-f = {'NAV': navigation, 'SRS': short_range_scan, 'LRS': long_range_scan,
-     'PHA': phaser_control, 'TOR': photon_torpedoes, 'SHE': shield_control,
-     'DAM': damage_control, 'COM': computer, 'XXX': end_game}
+    while True:
+        startup()
+        new_quadrant()
+        restart = False
 
-while True:
-    startup()
-    new_quadrant()
-    restart = False
+        while not restart:
+            if s + e <= 10 or (e <= 10 and d[6] != 0):
+                print("\n** FATAL ERROR **   YOU'VE JUST STRANDED YOUR SHIP "
+                      "IN SPACE.\nYOU HAVE INSUFFICIENT MANEUVERING ENERGY, "
+                      "AND SHIELD CONTROL\nIS PRESENTLY INCAPABLE OF CROSS-"
+                      "CIRCUITING TO ENGINE ROOM!!")
 
-    while not restart:
-        if s + e <= 10 or (e <= 10 and d[6] != 0):
-            print("\n** FATAL ERROR **   YOU'VE JUST STRANDED YOUR SHIP IN "
-                  "SPACE.\nYOU HAVE INSUFFICIENT MANEUVERING ENERGY, AND "
-                  "SHIELD CONTROL\nIS PRESENTLY INCAPABLE OF CROSS-CIRCUITING "
-                  "TO ENGINE ROOM!!")
+            command = input('COMMAND? ').upper().strip()
 
-        command = input('COMMAND? ').upper().strip()
+            if command in f:
+                f[command]()
+            else:
+                print("ENTER ONE OF THE FOLLOWING:\n"
+                      "  NAV  (TO SET COURSE)\n"
+                      "  SRS  (FOR SHORT RANGE SENSOR SCAN)\n"
+                      "  LRS  (FOR LONG RANGE SENSOR SCAN)\n"
+                      "  PHA  (TO FIRE PHASERS)\n"
+                      "  TOR  (TO FIRE PHOTON TORPEDOES)\n"
+                      "  SHE  (TO RAISE OR LOWER SHIELDS)\n"
+                      "  DAM  (FOR DAMAGE CONTROL REPORTS)\n"
+                      "  COM  (TO CALL ON LIBRARY-COMPUTER)\n"
+                      "  XXX  (TO RESIGN YOUR COMMAND)\n")
 
-        if command in f:
-            f[command]()
-        else:
-            print("ENTER ONE OF THE FOLLOWING:\n"
-                  "  NAV  (TO SET COURSE)\n"
-                  "  SRS  (FOR SHORT RANGE SENSOR SCAN)\n"
-                  "  LRS  (FOR LONG RANGE SENSOR SCAN)\n"
-                  "  PHA  (TO FIRE PHASERS)\n"
-                  "  TOR  (TO FIRE PHOTON TORPEDOES)\n"
-                  "  SHE  (TO RAISE OR LOWER SHIELDS)\n"
-                  "  DAM  (FOR DAMAGE CONTROL REPORTS)\n"
-                  "  COM  (TO CALL ON LIBRARY-COMPUTER)\n"
-                  "  XXX  (TO RESIGN YOUR COMMAND)\n")
+
+if __name__ == "__main__":
+    main()
