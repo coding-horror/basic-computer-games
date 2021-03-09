@@ -873,7 +873,10 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 #  Entry point and main game loop
 # -------------------------------------------------------------------------
 
+
 def main():
+    global restart
+
     f = {'NAV': navigation, 'SRS': short_range_scan, 'LRS': long_range_scan,
          'PHA': phaser_control, 'TOR': photon_torpedoes, 'SHE': shield_control,
          'DAM': damage_control, 'COM': computer, 'XXX': end_game}
