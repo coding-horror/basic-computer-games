@@ -24,6 +24,7 @@ namespace SuperStarTrek.Systems
             }
             else
             {
+                _output.NextLine();
                 WriteDamageReport();
             }
 
@@ -41,7 +42,7 @@ namespace SuperStarTrek.Systems
 
         public void WriteDamageReport()
         {
-            _output.NextLine().NextLine().WriteLine("Device             State of Repair");
+            _output.NextLine().WriteLine("Device             State of Repair");
             foreach (var system in _enterprise.Systems)
             {
                 _output.Write(system.Name.PadRight(25))

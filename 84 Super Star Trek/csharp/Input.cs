@@ -44,6 +44,13 @@ namespace SuperStarTrek
             }
         }
 
+        public (float X, float Y) GetCoordinates(string prompt)
+        {
+            _output.Prompt($"{prompt} (X,Y)");
+            var responses = ReadNumbers(2);
+            return (responses[0], responses[1]);
+        }
+
         public bool TryGetNumber(string prompt, float minValue, float maxValue, out float value)
         {
             value = GetNumber($"{prompt} ({minValue}-{maxValue})");
@@ -88,6 +95,46 @@ namespace SuperStarTrek
                 (YesNoMode.TrueOnY, _) => false,
                 _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, "Invalid value")
             };
+        }
+
+        private float[] ReadNumbers(int quantity)
+        {
+            var numbers = new float[quantity];
+            var index = 0;
+            bool tryAgain;
+
+            do
+            {
+                tryAgain = false;
+                var responses = Console.ReadLine().Split(',');
+                if (responses.Length > quantity)
+                {
+                    _output.WriteLine("!Extra input ingored");
+                }
+
+                for (; index < responses.Length; index++)
+                {
+                    if (!float.TryParse(responses[index], out numbers[index]))
+                    {
+                        _output.WriteLine("!Number expected - retry input line");
+                        _output.Prompt();
+                        tryAgain = true;
+                        break;
+                    }
+                }
+            } while (tryAgain);
+
+            if (index < quantity)
+            {
+                _output.Prompt("?");
+                var responses = ReadNumbers(quantity - index);
+                for (int i = 0; i < responses.Length; i++, index++)
+                {
+                    numbers[index] = responses[i];
+                }
+            }
+
+            return numbers;
         }
 
         public enum YesNoMode

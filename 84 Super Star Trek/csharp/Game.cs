@@ -3,6 +3,7 @@ using SuperStarTrek.Objects;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 using SuperStarTrek.Systems;
+using SuperStarTrek.Systems.ComputerFunctions;
 using static System.StringComparison;
 
 namespace SuperStarTrek
@@ -16,7 +17,6 @@ namespace SuperStarTrek
         private int _finalStarDate;
         private float _currentStardate;
         private Coordinates _currentQuadrant;
-        private Coordinates _currentSector;
         private Galaxy _galaxy;
         private int _initialKlingonCount;
         private Enterprise _enterprise;
@@ -28,6 +28,7 @@ namespace SuperStarTrek
         }
 
         public float Stardate => _currentStardate;
+        public float StardatesRemaining => _finalStarDate - _currentStardate;
 
         public void DoIntroduction()
         {
@@ -74,7 +75,6 @@ namespace SuperStarTrek
             _finalStarDate = _initialStardate + random.GetInt(25, 35);
 
             _currentQuadrant = random.GetCoordinate();
-            _currentSector = random.GetCoordinate();
 
             _galaxy = new Galaxy();
             _initialKlingonCount = _galaxy.KlingonCount;
@@ -85,7 +85,16 @@ namespace SuperStarTrek
                 .Add(new LongRangeSensors(_galaxy, _output))
                 .Add(new PhotonTubes(10, _enterprise, _output, _input))
                 .Add(new ShieldControl(_enterprise, _output, _input))
-                .Add(new DamageControl(_enterprise, _output));
+                .Add(new DamageControl(_enterprise, _output))
+                .Add(new LibraryComputer(
+                    _output,
+                    _input,
+                    new CumulativeGalacticRecord(_output, _galaxy),
+                    new StatusReport(this, _galaxy, _enterprise, _output),
+                    new TorpedoDataCalculator(_enterprise, _output),
+                    new StarbaseDataCalculator(_enterprise, _output),
+                    new DirectionDistanceCalculator(_enterprise, _output, _input),
+                    new GalaxyRegionMap(_output, _galaxy)));
 
             _output.Write(Strings.Enterprise);
             _output.Write(
@@ -99,7 +108,7 @@ namespace SuperStarTrek
 
             _input.WaitForAnyKeyButEnter("when ready to accept command");
 
-            var quadrant = _galaxy[_currentQuadrant].BuildQuadrant(_enterprise, random, _galaxy);
+            var quadrant = _galaxy[_currentQuadrant].BuildQuadrant(_enterprise, random, _galaxy, _input, _output);
             _enterprise.Enter(quadrant, Strings.StartText);
         }
 

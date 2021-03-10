@@ -13,10 +13,15 @@ namespace SuperStarTrek.Space
         private readonly Random _random;
         private readonly Dictionary<Coordinates, object> _sectors;
         private readonly Enterprise _enterprise;
-        private readonly Coordinates _starbaseSector;
         private readonly Galaxy _galaxy;
 
-        public Quadrant(QuadrantInfo info, Enterprise enterprise, Random random, Galaxy galaxy)
+        public Quadrant(
+            QuadrantInfo info,
+            Enterprise enterprise,
+            Random random,
+            Galaxy galaxy,
+            Input input,
+            Output output)
         {
             _info = info;
             _random = random;
@@ -26,30 +31,30 @@ namespace SuperStarTrek.Space
             PositionObject(sector => new Klingon(sector, _random), _info.KlingonCount);
             if (_info.HasStarbase)
             {
-                _starbaseSector = PositionObject(_ => new Starbase(_random, new Input(new Output()), new Output()));
+                Starbase = PositionObject(sector => new Starbase(sector, _random, input, output));
             }
             PositionObject(_ => new Star(), _info.StarCount);
         }
 
-        public object this[Coordinates coordinates] => _sectors.GetValueOrDefault(coordinates);
         public Coordinates Coordinates => _info.Coordinates;
         public bool HasKlingons => _info.KlingonCount > 0;
+        public int KlingonCount => _info.KlingonCount;
         public bool HasStarbase => _info.HasStarbase;
-        public Starbase Starbase => HasStarbase ? (Starbase)_sectors[_starbaseSector] : null;
+        public Starbase Starbase { get; }
         public bool EnterpriseIsNextToStarbase =>
             _info.HasStarbase &&
-            Math.Abs(_enterprise.Sector.X - _starbaseSector.X) <= 1 &&
-            Math.Abs(_enterprise.Sector.Y - _starbaseSector.Y) <= 1;
+            Math.Abs(_enterprise.Sector.X - Starbase.Sector.X) <= 1 &&
+            Math.Abs(_enterprise.Sector.Y - Starbase.Sector.Y) <= 1;
 
-        private IEnumerable<Klingon> Klingons => _sectors.Values.OfType<Klingon>();
+        internal IEnumerable<Klingon> Klingons => _sectors.Values.OfType<Klingon>();
 
         public override string ToString() => _info.Name;
 
-        private Coordinates PositionObject(Func<Coordinates, object> objectFactory)
+        private T PositionObject<T>(Func<Coordinates, T> objectFactory)
         {
             var sector = GetRandomEmptySector();
             _sectors[sector] = objectFactory.Invoke(sector);
-            return sector;
+            return (T)_sectors[sector];
         }
 
         private void PositionObject(Func<Coordinates, object> objectFactory, int count)

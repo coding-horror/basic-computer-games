@@ -48,6 +48,7 @@ namespace SuperStarTrek.Space
 
         public int KlingonCount => _quadrants.SelectMany(q => q).Sum(q => q.KlingonCount);
         public int StarbaseCount => _quadrants.SelectMany(q => q).Count(q => q.HasStarbase);
+        public IEnumerable<IEnumerable<QuadrantInfo>> Quadrants => _quadrants;
 
         private static string GetQuadrantName(Coordinates coordinates) =>
             $"{_regionNames[coordinates.RegionIndex]} {_subRegionIdentifiers[coordinates.SubRegionIndex]}";
