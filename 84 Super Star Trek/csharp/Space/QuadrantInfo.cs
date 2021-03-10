@@ -41,8 +41,11 @@ namespace SuperStarTrek.Space
 
         internal void AddStarbase() => HasStarbase = true;
 
-        internal Quadrant BuildQuadrant(Enterprise enterprise, Random random, Galaxy galaxy) =>
-            new(this, enterprise, random, galaxy);
+        internal Quadrant BuildQuadrant(Enterprise enterprise, Random random, Galaxy galaxy, Input input, Output output)
+        {
+            _isKnown = true;
+            return new(this, enterprise, random, galaxy, input, output);
+        }
 
         internal string Scan()
         {

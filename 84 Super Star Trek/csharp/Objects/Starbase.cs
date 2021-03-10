@@ -1,4 +1,5 @@
 using SuperStarTrek.Resources;
+using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Objects
 {
@@ -8,13 +9,15 @@ namespace SuperStarTrek.Objects
         private readonly Output _output;
         private readonly float _repairDelay;
 
-        public Starbase(Random random, Input input, Output output)
+        public Starbase(Coordinates sector, Random random, Input input, Output output)
         {
+            Sector = sector;
             _repairDelay = random.GetFloat() * 0.5f;
             _input = input;
             _output = output;
         }
 
+        internal Coordinates Sector { get; }
         public override string ToString() => ">!<";
 
         internal bool TryRepair(Enterprise enterprise, out float repairTime)

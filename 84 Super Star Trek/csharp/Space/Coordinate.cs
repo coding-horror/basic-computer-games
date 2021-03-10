@@ -1,4 +1,5 @@
 using System;
+using SuperStarTrek.Utils;
 
 namespace SuperStarTrek.Space
 {
@@ -10,12 +11,15 @@ namespace SuperStarTrek.Space
         {
             X = Validated(x, nameof(x));
             Y = Validated(y, nameof(y));
+
+            RegionIndex = (X << 1) + (Y >> 2);
+            SubRegionIndex = Y % 4;
         }
 
         public int X { get; }
         public int Y { get; }
-        public int RegionIndex => (X << 1) + (Y >> 2);
-        public int SubRegionIndex => Y % 4;
+        public int RegionIndex { get; }
+        public int SubRegionIndex { get; }
 
         private int Validated(int value, string argumentName)
         {
@@ -51,7 +55,7 @@ namespace SuperStarTrek.Space
             int Round(float value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
         }
 
-        internal float GetDistanceTo(Coordinates destination) =>
-            (float)Math.Sqrt(Math.Pow(X - destination.X, 2) + Math.Pow(Y - destination.Y, 2));
+        internal (float Direction, float Distance) GetDirectionAndDistanceTo(Coordinates destination) =>
+            DirectionAndDistance.From(this).To(destination);
     }
 }

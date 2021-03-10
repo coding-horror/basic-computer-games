@@ -1,8 +1,8 @@
-Antares     Sirius
-Rigel       Deneb
-Procyon     Capella
-Vega        Betelgeuse
-Canopus     Aldebaran
-Altair      Regulus
-Sagittarius Arcturus
-Pollux      Spica
+      Antares                  Sirius
+       Rigel                   Deneb
+      Procyon                 Capella
+        Vega                 Betelgeuse
+      Canopus                Aldebaran
+       Altair                 Regulus
+    Sagittarius               Arcturus
+       Pollux                  Spica
