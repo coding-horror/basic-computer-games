@@ -6,7 +6,7 @@ import java.util.Scanner;
  * Based on the Basic game of Hi-Lo here
  * https://github.com/coding-horror/basic-computer-games/blob/main/47%20Hi-Lo/hi-lo.bas
  *
- * Note:  The idea was to create a version of this 1970's Basic game in Java, without introducing
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
  *        new features - no additional text, error checking, etc has been added.
  */
 public class HiLo {
@@ -24,7 +24,7 @@ public class HiLo {
     }
 
     // Used for keyboard input
-    private Scanner kbScanner;
+    private final Scanner kbScanner;
 
     // Current game state
     private GAME_STATE gameState;
@@ -40,8 +40,8 @@ public class HiLo {
 
     public HiLo() {
 
-        this.gameState = GAME_STATE.STARTING;
-        this.playerAmountWon = 0;
+        gameState = GAME_STATE.STARTING;
+        playerAmountWon = 0;
 
         // Initialise kb scanner
         kbScanner = new Scanner(System.in);
@@ -66,7 +66,7 @@ public class HiLo {
                 case START_GAME:
                     init();
                     System.out.println("O.K.  I HAVE A NUMBER IN MIND.");
-                    this.gameState = GAME_STATE.GUESSING;
+                    gameState = GAME_STATE.GUESSING;
                     break;
 
                 // Player guesses the number until they get it or run out of guesses
@@ -75,21 +75,21 @@ public class HiLo {
 
                     // Check if the player guessed the number
                     if(validateGuess(guess)) {
-                        System.out.println("GOT IT!!!!!!!!!!   YOU WIN " + this.computersNumber
+                        System.out.println("GOT IT!!!!!!!!!!   YOU WIN " + computersNumber
                                 + " DOLLARS.");
-                        this.playerAmountWon += this.computersNumber;
+                        playerAmountWon += computersNumber;
                         System.out.println("YOUR TOTAL WINNINGS ARE NOW "
-                                + this.playerAmountWon + " DOLLARS.");
-                        this.gameState = GAME_STATE.PLAY_AGAIN;
+                                + playerAmountWon + " DOLLARS.");
+                        gameState = GAME_STATE.PLAY_AGAIN;
                     } else {
                         // incorrect guess
-                        this.playersGuesses++;
+                        playersGuesses++;
                         // Ran out of guesses?
-                        if (this.playersGuesses == MAX_GUESSES) {
+                        if (playersGuesses == MAX_GUESSES) {
                             System.out.println("YOU BLEW IT...TOO BAD...THE NUMBER WAS "
-                                    + this.computersNumber);
-                            this.playerAmountWon = 0;
-                            this.gameState = GAME_STATE.PLAY_AGAIN;
+                                    + computersNumber);
+                            playerAmountWon = 0;
+                            gameState = GAME_STATE.PLAY_AGAIN;
                         }
                     }
                     break;
@@ -98,11 +98,11 @@ public class HiLo {
                 case PLAY_AGAIN:
                     System.out.println();
                     if(yesEntered(displayTextAndGetInput("PLAY AGAIN (YES OR NO) "))) {
-                        this.gameState = GAME_STATE.START_GAME;
+                        gameState = GAME_STATE.START_GAME;
                     } else {
                         // Chose not to play again
                         System.out.println("SO LONG.  HOPE YOU ENJOYED YOURSELF!!!");
-                        this.gameState = GAME_STATE.GAME_OVER;
+                        gameState = GAME_STATE.GAME_OVER;
                     }
             }
         } while (gameState != GAME_STATE.GAME_OVER);
@@ -111,17 +111,17 @@ public class HiLo {
     /**
      * Checks the players guess against the computers randomly generated number
      *
-     * @param theGuess
+     * @param theGuess the players guess
      * @return true if the player guessed correctly, false otherwise
      */
     private boolean validateGuess(int theGuess) {
 
         // Correct guess?
-        if(theGuess == this.computersNumber) {
+        if(theGuess == computersNumber) {
             return true;
         }
 
-        if(theGuess > this.computersNumber) {
+        if(theGuess > computersNumber) {
             System.out.println("YOUR GUESS IS TOO HIGH.");
         } else {
             System.out.println("YOUR GUESS IS TOO LOW.");
@@ -131,8 +131,8 @@ public class HiLo {
     }
 
     private void init() {
-        this.playersGuesses = 0;
-        this.computersNumber = randomNumber();
+        playersGuesses = 0;
+        computersNumber = randomNumber();
     }
 
     public void intro() {
@@ -140,7 +140,7 @@ public class HiLo {
         System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
         System.out.println();
         System.out.println();
-        System.out.println("THIS IS THE GAME OF HI LO.");
+        System.out.println("IS THE GAME OF HI LO.");
         System.out.println();
         System.out.println("YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE");
         System.out.println("HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU");
@@ -155,7 +155,7 @@ public class HiLo {
      * @return players guess as an int
      */
     private int playerGuess() {
-        return Integer.valueOf((displayTextAndGetInput("YOUR GUESS? ")));
+        return Integer.parseInt((displayTextAndGetInput("YOUR GUESS? ")));
     }
 
     /**
@@ -165,7 +165,7 @@ public class HiLo {
      * @return true of Y or YES was entered, otherwise false
      */
     private boolean yesEntered(String text) {
-        return stringIsAnyValue(text, new String[] {"Y", "YES"});
+        return stringIsAnyValue(text, "Y", "YES");
     }
 
     /**

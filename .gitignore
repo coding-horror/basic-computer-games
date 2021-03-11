@@ -1,7 +1,3 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
 /01 Acey Ducey/csharp/obj
 /47 Hi-Lo/csharp/obj
 /.vs
@@ -13,3 +9,4 @@
 
 */csharp/bin
 */csharp/obj
+
