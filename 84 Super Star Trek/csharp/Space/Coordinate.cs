@@ -57,5 +57,11 @@ namespace SuperStarTrek.Space
 
         internal (float Direction, float Distance) GetDirectionAndDistanceTo(Coordinates destination) =>
             DirectionAndDistance.From(this).To(destination);
+
+        internal float GetDistanceTo(Coordinates destination)
+        {
+            var (_, distance) = GetDirectionAndDistanceTo(destination);
+            return distance;
+        }
     }
 }

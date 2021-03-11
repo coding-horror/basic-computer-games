@@ -5,16 +5,16 @@ namespace SuperStarTrek.Objects
 {
     internal class Klingon
     {
-        private float _energy;
         private readonly Random _random;
 
         public Klingon(Coordinates sector, Random random)
         {
             Sector = sector;
             _random = random;
-            _energy = _random.GetFloat(100, 300);
+            Energy = _random.GetFloat(100, 300);
         }
 
+        public float Energy { get; private set; }
         public Coordinates Sector { get; private set; }
 
         public override string ToString() => "+K+";
@@ -22,11 +22,19 @@ namespace SuperStarTrek.Objects
         public CommandResult FireOn(Enterprise enterprise)
         {
             var attackStrength = _random.GetFloat();
-            var (_, distanceToEnterprise) = Sector.GetDirectionAndDistanceTo(enterprise.Sector);
-            var hitStrength = (int)(_energy * (2 + attackStrength) / distanceToEnterprise);
-            _energy /= 3 + attackStrength;
+            var distanceToEnterprise = Sector.GetDistanceTo(enterprise.Sector);
+            var hitStrength = (int)(Energy * (2 + attackStrength) / distanceToEnterprise);
+            Energy /= 3 + attackStrength;
 
             return enterprise.TakeHit(Sector, hitStrength);
+        }
+
+        internal bool TakeHit(int hitStrength)
+        {
+            if (hitStrength < 0.15 * Energy) { return false; }
+
+            Energy -= hitStrength;
+            return true;
         }
     }
 }

@@ -83,6 +83,7 @@ namespace SuperStarTrek
             _enterprise
                 .Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
                 .Add(new LongRangeSensors(_galaxy, _output))
+                .Add(new PhaserControl(_enterprise, _output, _input, random))
                 .Add(new PhotonTubes(10, _enterprise, _output, _input))
                 .Add(new ShieldControl(_enterprise, _output, _input))
                 .Add(new DamageControl(_enterprise, _output))

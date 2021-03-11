@@ -72,10 +72,8 @@ namespace SuperStarTrek.Space
 
             switch (_sectors.GetValueOrDefault(coordinates))
             {
-                case Klingon _:
-                    _sectors.Remove(coordinates);
-                    _info.RemoveKlingon();
-                    message = "*** Klingon destroyed ***";
+                case Klingon klingon:
+                    message = Remove(klingon);
                     gameOver = _galaxy.KlingonCount == 0;
                     return true;
 
@@ -94,6 +92,13 @@ namespace SuperStarTrek.Space
                 default:
                     return false;
             }
+        }
+
+        internal string Remove(Klingon klingon)
+        {
+            _sectors.Remove(klingon.Sector);
+            _info.RemoveKlingon();
+            return "*** Klingon destroyed ***";
         }
 
         internal CommandResult KlingonsFireOnEnterprise()

@@ -32,6 +32,7 @@ namespace SuperStarTrek.Objects
         public Coordinates Quadrant => _quadrant.Coordinates;
         public Coordinates Sector { get; }
         public string Condition => GetCondition();
+        public LibraryComputer Computer => (LibraryComputer)_commandExecutors[Command.COM];
         public ShieldControl ShieldControl => (ShieldControl)_commandExecutors[Command.SHE];
         public float Energy => TotalEnergy - ShieldControl.ShieldEnergy;
         public float TotalEnergy { get; private set; }
