@@ -50,6 +50,16 @@ current_turn = 0
 # printed out during computer's turn
 print_computer_shots = False
 
+# keep track of the number
+# of available computer shots
+# inital shots are 7
+num_computer_shots = 7
+
+# keep track of the number
+# of available player shots
+# initial shots are 7
+num_player_shots = 7
+
 ####################
 #
 # game functions
@@ -162,6 +172,10 @@ def create_blank_board():
             for x in range(BOARD_HEIGHT)]
 
 
+# print_board
+#
+# print out the game board for testing
+# purposes
 def print_board(board):
 
     # print board header (column numbers)
@@ -221,6 +235,15 @@ def generate_board():
     return board, ship_coords
 
 
+# execute_shot
+#
+# given a board and x, y coordinates,
+# execute a shot. returns True if the shot
+# is valid, False if not
+def execute_shot(board, x, y):
+    print("execute shot:", x, y)
+
+
 # initialize
 #
 # function to initialize global variables used
@@ -243,6 +266,93 @@ def initialize_game():
     print('{0:>57s}'.format("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"))
     print('\n\n')
 
+    # ask the player for ship coordinates
+    print("ENTER COORDINATES FOR...")
+    ship_coords = []
+    for ship in SHIPS:
+        print(ship[0])
+        list = []
+        for i in range(ship[1]):
+            x, y = input_coord()
+            list.append((x, y))
+        ship_coords.append(list)
+
+    # add ships to the user's board
+    for ship in range(len(SHIPS)):
+        place_ship(player_board, ship_coords[ship], ship)
+
+    # see if the player wants the computer's ship
+    # locations printed out and if the player wants to
+    # start
+    input_loop = True
+    player_start = "YES"
+    while input_loop:
+        player_start = input("DO YOU WANT TO START? ")
+        if player_start == "WHERE ARE YOUR SHIPS?":
+            for ship in range(len(SHIPS)):
+                print(SHIPS[ship][0])
+                coords = computer_ship_coords[ship]
+                for coord in coords:
+                    x = coord[0]
+                    y = coord[1]
+                    print('{0:2}'.format(x), '{0:2}'.format(y))
+        else:
+            input_loop = False
+
+    # ask the player if they want the computer's shots
+    # printed out each turn
+    global print_computer_shots
+    see_computer_shots = input("DO YOU WANT TO SEE MY SHOTS? ")
+    if see_computer_shots.lower() == "yes":
+        print_computer_shots = True
+
+    global first_turn
+    global second_turn
+    if player_start.lower() != "yes":
+        first_turn = computer_turn
+        second_turn = player_turn
+
+
+####################################
+#
+# Turn Control
+#
+# define functions for executing the turns for
+# the player and the computer. By defining this as
+# functions, we can easily start the game with
+# either computer or player and alternate back and
+# forth, replicating the gotos in the original game
+def player_turn():
+    print("YOU HAVE", num_computer_shots, "SHOTS.")
+
+    shots = []
+    for shot in range(num_player_shots):
+        valid_shot = False
+        while not valid_shot:
+            x, y = input_coord()
+            valid_shot = execute_shot(player_board, x, y)
+            shots.append((x, y))
+
+    print(shots)
+
+
+# initialize the first_turn function to the
+# player's turn
+first_turn = player_turn
+
+
+def computer_turn():
+    print("I HAVE", num_computer_shots, "SHOTS.")
+
+
+# initialize the second_turn to the computer's
+# turn
+second_turn = computer_turn
+
+#
+# Turn Control
+#
+######################################
 
 ######################
 #
@@ -254,42 +364,12 @@ def initialize_game():
 # boards
 initialize_game()
 
-# ask the player for ship coordinates
-print("ENTER COORDINATES FOR...")
-ship_coords = []
-for ship in SHIPS:
-    print(ship[0])
-    list = []
-    for i in range(ship[1]):
-        x, y = input_coord()
-        list.append((x, y))
-    ship_coords.append(list)
+# execute turns until someone wins or we run
+# out of squares to shoot
 
-# add ships to the user's board
-for ship in range(len(SHIPS)):
-    place_ship(player_board, ship_coords[ship], ship)
+current_turn = current_turn + 1
+print("\n")
+print("TURN", current_turn)
 
-# see if the player wants the computer's ship
-# locations printed out and if the player wants to
-# start
-input_loop = True
-player_start = "YES"
-while input_loop:
-    player_start = input("DO YOU WANT TO START? ")
-    if player_start == "WHERE ARE YOUR SHIPS?":
-        for ship in range(len(SHIPS)):
-            print(SHIPS[ship][0])
-            coords = computer_ship_coords[ship]
-            for coord in coords:
-                x = coord[0]
-                y = coord[1]
-                print('{0:2}'.format(x), '{0:2}'.format(y))
-    else:
-        input_loop = False
-
-# ask the player if they want the computer's shots
-# printed out each turn
-see_computer_shots = input("DO YOU WANT TO SEE MY SHOTS? ")
-if see_computer_shots.lower() == "yes":
-    print_computer_shots = True
-
+first_turn()
+second_turn()
