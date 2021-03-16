@@ -10,10 +10,20 @@ import random
 BOARD_WIDTH = 10
 BOARD_HEIGHT = 10
 
-SHIPS = [("BATTLESHIP", 5),
-         ("CRUISER", 3),
-         ("DESTROYER<A>", 2),
-         ("DESTROYER<B>", 2)]
+# game ships
+#
+# data structure keeping track of information
+# about the ships in the game. for each ship,
+# the following information is provided:
+#
+#   name - string representation of the ship
+#   length - number of "parts" on the ship that
+#            can be shot
+#   shots - number of shots the ship counts for
+SHIPS = [("BATTLESHIP", 5, 3),
+         ("CRUISER", 3, 2),
+         ("DESTROYER<A>", 2, 1),
+         ("DESTROYER<B>", 2, 1)]
 
 VALID_MOVES = [[-1, 0],   # North
                [-1, 1],   # North East
@@ -46,6 +56,18 @@ computer_ship_coords = []
 # keep track of the turn
 current_turn = 0
 
+####################################
+#
+# SHOTS
+#
+# The number of shots computer/player
+# has is determined by the shot "worth"
+# of each ship the computer/player
+# possesses. As long as the ship has one
+# part not hit (i.e., ship was not
+# sunk), the player gets all the shots
+# from that ship.
+
 # flag indicating if computer's shots are
 # printed out during computer's turn
 print_computer_shots = False
@@ -59,6 +81,17 @@ num_computer_shots = 7
 # of available player shots
 # initial shots are 7
 num_player_shots = 7
+
+#
+# SHOTS
+#
+####################################
+
+# flag indicating whose turn
+# it currently is
+COMPUTER = 0
+PLAYER = 1
+active_turn = COMPUTER
 
 ####################
 #
@@ -241,7 +274,38 @@ def generate_board():
 # execute a shot. returns True if the shot
 # is valid, False if not
 def execute_shot(board, x, y):
-    print("execute shot:", x, y)
+
+    global current_turn
+    square = board[x-1][y-1]
+    if square is not None:
+        if square >= 0 and square < len(SHIPS):
+            if active_turn == PLAYER:
+                print("YOU HIT MY", SHIPS[square][0])
+            else:
+                print("I HIT YOUR", SHIPS[square][0])
+
+    board[x-1][y-1] = 10 + current_turn
+
+
+# calculate_shots
+#
+# function to examine each board
+# and determine how many shots remaining
+def calculate_shots(board):
+
+    ships_found = [0 for x in range(len(SHIPS))]
+    for x in range(BOARD_HEIGHT):
+        for y in range(BOARD_WIDTH):
+            square = board[x-1][y-1]
+            if square is not None:
+                if square >= 0 and square < len(SHIPS):
+                    ships_found[square] = 1
+    shots = 0
+    for ship in range(len(ships_found)):
+        if ships_found[ship] == 1:
+            shots += SHIPS[ship][2]
+
+    return shots
 
 
 # initialize
@@ -309,8 +373,14 @@ def initialize_game():
     global first_turn
     global second_turn
     if player_start.lower() != "yes":
-        first_turn = computer_turn
-        second_turn = player_turn
+        first_turn = COMPUTER
+        second_turn = PLAYER
+
+    # calculate the initial number of shots for each
+    global num_computer_shots
+    global num_player_shots
+    num_player_shots = calculate_shots(player_board)
+    num_computer_shots = calculate_shots(computer_board)
 
 
 ####################################
@@ -322,32 +392,94 @@ def initialize_game():
 # functions, we can easily start the game with
 # either computer or player and alternate back and
 # forth, replicating the gotos in the original game
+
+
+# initialize the first_turn function to the
+# player's turn
+first_turn = PLAYER
+
+
+# initialize the second_turn to the computer's
+# turn
+second_turn = COMPUTER
+
+
 def player_turn():
-    print("YOU HAVE", num_computer_shots, "SHOTS.")
+    print("YOU HAVE", num_player_shots, "SHOTS.")
+    global active_turn
+    active_turn = PLAYER
 
     shots = []
     for shot in range(num_player_shots):
         valid_shot = False
         while not valid_shot:
             x, y = input_coord()
-            valid_shot = execute_shot(player_board, x, y)
+            square = computer_board[x-1][y-1]
+            if square is not None:
+                if square > 10:
+                    if active_turn == PLAYER:
+                        print("YOU SHOT THERE BEFORE ON TURN", square - 10)
+                    continue
             shots.append((x, y))
-
-    print(shots)
-
-
-# initialize the first_turn function to the
-# player's turn
-first_turn = player_turn
+            valid_shot = True
+    for shot in shots:
+        execute_shot(computer_board, shot[0], shot[1])
 
 
-def computer_turn():
-    print("I HAVE", num_computer_shots, "SHOTS.")
+def execute_turn(turn):
 
+    global num_computer_shots
+    global num_player_shots
 
-# initialize the second_turn to the computer's
-# turn
-second_turn = computer_turn
+    # print out the number of shots the current
+    # player has
+    board = None
+    num_shots = 0
+    if turn == COMPUTER:
+        print("I HAVE", num_computer_shots, "SHOTS.")
+        board = player_board
+        num_shots = num_computer_shots
+    else:
+        print("YOU HAVE", num_player_shots, "SHOTS.")
+        board = computer_board
+        num_shots = num_player_shots
+
+    shots = []
+    for shot in range(num_shots):
+        valid_shot = False
+        x = -1
+        y = -1
+
+        # loop until we have a valid shot. for the
+        # computer, we randomly pick a shot. for the
+        # player we request shots
+        while not valid_shot:
+            if turn == COMPUTER:
+                x, y = random_x_y()
+            else:
+                x, y = input_coord()
+            square = board[x-1][y-1]
+            if square is not None:
+                if square > 10:
+                    if turn == PLAYER:
+                        print("YOU SHOT THERE BEFORE ON TURN", square - 10)
+                    continue
+            shots.append((x, y))
+            valid_shot = True
+
+    for shot in shots:
+        execute_shot(board, shot[0], shot[1])
+        if turn == COMPUTER:
+            if print_computer_shots:
+                print(shot[0], shot[1])
+
+    if turn == COMPUTER:
+        num_player_shots = calculate_shots(board)
+        return num_player_shots
+    else:
+        num_computer_shots = calculate_shots(board)
+        return num_computer_shots
+
 
 #
 # Turn Control
@@ -367,9 +499,22 @@ initialize_game()
 # execute turns until someone wins or we run
 # out of squares to shoot
 
-current_turn = current_turn + 1
-print("\n")
-print("TURN", current_turn)
+game_over = False
+while not game_over:
 
-first_turn()
-second_turn()
+    # increment the turn
+    current_turn = current_turn + 1
+
+    print("\n")
+    print("TURN", current_turn)
+    print("computer")
+    print_board(computer_board)
+    print("player")
+    print_board(player_board)
+
+    if execute_turn(first_turn) == 0:
+        game_over = True
+        continue
+    if execute_turn(second_turn) == 0:
+        game_over = True
+        continue
