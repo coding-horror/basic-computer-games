@@ -293,14 +293,12 @@ def execute_shot(turn, board, x, y):
 
     global current_turn
     square = board[x-1][y-1]
+    ship_hit = -1
     if square is not None:
         if square >= 0 and square < len(SHIPS):
-            if turn == COMPUTER:
-                print("I HIT YOUR", SHIPS[square][0])
-            else:
-                print("YOU HIT MY", SHIPS[square][0])
-
+            ship_hit = square
     board[x-1][y-1] = 10 + current_turn
+    return ship_hit
 
 
 # calculate_shots
@@ -423,28 +421,6 @@ first_turn = PLAYER
 second_turn = COMPUTER
 
 
-def player_turn():
-    print("YOU HAVE", num_player_shots, "SHOTS.")
-    global active_turn
-    active_turn = PLAYER
-
-    shots = []
-    for shot in range(num_player_shots):
-        valid_shot = False
-        while not valid_shot:
-            x, y = input_coord()
-            square = computer_board[x-1][y-1]
-            if square is not None:
-                if square > 10:
-                    if active_turn == PLAYER:
-                        print("YOU SHOT THERE BEFORE ON TURN", square - 10)
-                    continue
-            shots.append((x, y))
-            valid_shot = True
-    for shot in shots:
-        execute_shot(computer_board, shot[0], shot[1])
-
-
 def execute_turn(turn):
 
     global num_computer_shots
@@ -486,11 +462,21 @@ def execute_turn(turn):
             shots.append((x, y))
             valid_shot = True
 
+    hits = []
     for shot in shots:
-        execute_shot(turn, board, shot[0], shot[1])
+        hit = execute_shot(turn, board, shot[0], shot[1])
+        if hit >= 0:
+            hits.append(hit)
         if turn == COMPUTER:
             if print_computer_shots:
                 print(shot[0], shot[1])
+
+    for hit in hits:
+        if turn == COMPUTER:
+            print("I HIT YOUR", SHIPS[hit][0])
+        else:
+            print("YOU HIT MY", SHIPS[hit][0])
+
 
     if turn == COMPUTER:
         num_player_shots = calculate_shots(board)
