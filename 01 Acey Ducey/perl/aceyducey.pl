@@ -3,7 +3,10 @@
 use strict;
 use warnings;
 
-use List::Util qw(shuffle first);
+# The List::Util module is part of the core Perl distribution.  Using this
+# means we don't need to re-invent the wheel and create a way to shuffle
+# a list.
+use List::Util qw(shuffle);
 
 # Rather than put in a number of print (or say) statements here, we use a
 # "here document".  This is very useful for long strings of text.  In this
@@ -25,7 +28,7 @@ If you do not want to bet, input a 0.  If you want to quit, input a -1.
 
 END_INSTRUCTIONS
 
-my @cards       = (1 .. 13);    # That is, ace through king.
+my @cards       = (1 .. 13);    # That is, Ace through King.
 my $keepPlaying = 1;
 
 GAME:
