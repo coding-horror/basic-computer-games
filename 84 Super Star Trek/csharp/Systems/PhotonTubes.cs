@@ -39,6 +39,8 @@ namespace SuperStarTrek.Systems
                 return CommandResult.Ok;
             }
 
+            TorpedoCount -= 1;
+
             var isHit = false;
             _output.WriteLine("Torpedo track:");
             foreach (var sector in course.GetSectorsFrom(_enterprise.SectorCoordinates))

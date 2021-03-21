@@ -53,7 +53,7 @@ namespace SuperStarTrek.Systems
             yield return $"Condition          {_enterprise.Condition}";
             yield return $"Quadrant           {_enterprise.QuadrantCoordinates}";
             yield return $"Sector             {_enterprise.SectorCoordinates}";
-            yield return $"Photon torpedoes   {_enterprise.TorpedoCount}";
+            yield return $"Photon torpedoes   {_enterprise.PhotonTubes.TorpedoCount}";
             yield return $"Total energy       {Math.Ceiling(_enterprise.TotalEnergy)}";
             yield return $"Shields            {(int)_enterprise.ShieldControl.ShieldEnergy}";
             yield return $"Klingons remaining {_galaxy.KlingonCount}";
