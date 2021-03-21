@@ -179,6 +179,13 @@ namespace SuperStarTrek.Objects
             _quadrant.SetEnterpriseSector(sector);
             SectorCoordinates = sector;
 
+            TotalEnergy -= distance + 10;
+            if (Energy < 0)
+            {
+                _output.WriteLine("Shield Control supplies energy to complete the maneuver.");
+                ShieldControl.ShieldEnergy = Math.Max(0, TotalEnergy);
+            }
+
             return GetTimeElapsed(quadrant, warpFactor);
         }
 

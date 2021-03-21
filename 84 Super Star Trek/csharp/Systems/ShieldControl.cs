@@ -18,7 +18,7 @@ namespace SuperStarTrek.Systems
             _input = input;
         }
 
-        public float ShieldEnergy { get; private set; }
+        public float ShieldEnergy { get; set; }
 
         protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
 
