@@ -87,6 +87,11 @@ namespace SuperStarTrek.Objects
 
         public override string ToString() => "<*>";
 
+        internal void UseEnergy(float amountUsed)
+        {
+            TotalEnergy -= amountUsed;
+        }
+
         internal CommandResult TakeHit(Coordinates sector, int hitStrength)
         {
             _output.WriteLine($"{hitStrength} unit hit on Enterprise from sector {sector}");
