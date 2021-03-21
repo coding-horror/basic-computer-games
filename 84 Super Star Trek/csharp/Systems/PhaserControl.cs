@@ -42,6 +42,8 @@ namespace SuperStarTrek.Systems
             var phaserStrength = GetPhaserStrength();
             if (phaserStrength < 0) { return CommandResult.Ok; }
 
+            _enterprise.UseEnergy(phaserStrength);
+
             var perEnemyStrength = GetPerTargetPhaserStrength(phaserStrength, quadrant.KlingonCount);
 
             foreach (var klingon in quadrant.Klingons.ToList())
