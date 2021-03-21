@@ -176,5 +176,11 @@ namespace SuperStarTrek.Space
                     .Select(y => new Coordinates(x, y))
                     .Select(c => _sectors.GetValueOrDefault(c))
                     .Select(o => o?.ToString() ?? "   "));
+
+        internal void SetEnterpriseSector(Coordinates sector)
+        {
+            _sectors.Remove(_enterprise.SectorCoordinates);
+            _sectors[sector] = _enterprise;
+        }
     }
 }

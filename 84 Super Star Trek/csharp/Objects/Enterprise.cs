@@ -174,6 +174,7 @@ namespace SuperStarTrek.Objects
             {
                 _quadrant = new Quadrant(_quadrant.Galaxy[quadrant], this, _random, _quadrant.Galaxy, _input, _output);
             }
+            _quadrant.SetEnterpriseSector(sector);
             SectorCoordinates = sector;
 
             return GetTimeElapsed(quadrant, warpFactor);
