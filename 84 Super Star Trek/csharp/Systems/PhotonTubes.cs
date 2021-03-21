@@ -60,5 +60,7 @@ namespace SuperStarTrek.Systems
 
             return quadrant.KlingonsFireOnEnterprise();
         }
+
+        internal void ReplenishTorpedoes() => TorpedoCount = _tubeCount;
     }
 }

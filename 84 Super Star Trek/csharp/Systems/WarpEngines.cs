@@ -32,6 +32,13 @@ namespace SuperStarTrek.Systems
                 _enterprise.VaryConditionOfRandomSystem();
                 var timeElapsed = _enterprise.Move(course, warpFactor, distanceToMove);
 
+                if (_enterprise.IsDocked)
+                {
+                    _enterprise.ShieldControl.DropShields();
+                    _enterprise.Refuel();
+                    _enterprise.PhotonTubes.ReplenishTorpedoes();
+                }
+
                 return CommandResult.Elapsed(timeElapsed);
             }
 

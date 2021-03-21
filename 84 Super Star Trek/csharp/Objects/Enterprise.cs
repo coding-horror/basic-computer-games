@@ -75,6 +75,8 @@ namespace SuperStarTrek.Objects
             return _commandExecutors[command].ExecuteCommand(_quadrant);
         }
 
+        public void Refuel() => TotalEnergy = _maxEnergy;
+
         internal bool Recognises(string command)
         {
             throw new NotImplementedException();

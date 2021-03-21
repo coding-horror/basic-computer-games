@@ -51,5 +51,7 @@ namespace SuperStarTrek.Systems
         }
 
         internal void AbsorbHit(int hitStrength) => ShieldEnergy -= hitStrength;
+
+        internal void DropShields() => ShieldEnergy = 0;
     }
 }
