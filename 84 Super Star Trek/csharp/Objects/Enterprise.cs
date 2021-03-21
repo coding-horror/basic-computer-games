@@ -42,7 +42,7 @@ namespace SuperStarTrek.Objects
         public float TotalEnergy { get; private set; }
         public int DamagedSystemCount => _systems.Count(s => s.IsDamaged);
         public IEnumerable<Subsystem> Systems => _systems;
-        public int TorpedoCount { get; }
+        public PhotonTubes PhotonTubes => (PhotonTubes)_commandExecutors[Command.TOR];
         public bool IsDocked => _quadrant.EnterpriseIsNextToStarbase;
         public bool IsStranded => TotalEnergy < 10 || Energy < 10 && ShieldControl.IsDamaged;
 
