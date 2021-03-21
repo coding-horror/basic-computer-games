@@ -34,15 +34,14 @@ namespace SuperStarTrek.Systems
 
         protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
-            if (!_input.TryGetNumber("Photon torpedo course", 1, 9, out var direction))
+            if (!_input.TryGetCourse("Photon torpedo course", "Ensign Chekov", out var course))
             {
-                _output.WriteLine("Ensign Chekov reports, 'Incorrect course data, sir!'");
                 return CommandResult.Ok;
             }
 
             var isHit = false;
             _output.WriteLine("Torpedo track:");
-            foreach (var sector in new Course(direction).GetSectorsFrom(_enterprise.Sector))
+            foreach (var sector in course.GetSectorsFrom(_enterprise.SectorCoordinates))
             {
                 _output.WriteLine($"                {sector}");
 

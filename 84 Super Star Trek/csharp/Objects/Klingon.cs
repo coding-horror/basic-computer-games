@@ -22,7 +22,7 @@ namespace SuperStarTrek.Objects
         public CommandResult FireOn(Enterprise enterprise)
         {
             var attackStrength = _random.GetFloat();
-            var distanceToEnterprise = Sector.GetDistanceTo(enterprise.Sector);
+            var distanceToEnterprise = Sector.GetDistanceTo(enterprise.SectorCoordinates);
             var hitStrength = (int)(Energy * (2 + attackStrength) / distanceToEnterprise);
             Energy /= 3 + attackStrength;
 
@@ -36,5 +36,7 @@ namespace SuperStarTrek.Objects
             Energy -= hitStrength;
             return true;
         }
+
+        internal void MoveTo(Coordinates newSector) => Sector = newSector;
     }
 }

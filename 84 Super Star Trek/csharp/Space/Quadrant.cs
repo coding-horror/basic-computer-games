@@ -13,7 +13,8 @@ namespace SuperStarTrek.Space
         private readonly Random _random;
         private readonly Dictionary<Coordinates, object> _sectors;
         private readonly Enterprise _enterprise;
-        private readonly Galaxy _galaxy;
+        private readonly Output _output;
+        private bool _displayed = false;
 
         public Quadrant(
             QuadrantInfo info,
@@ -25,9 +26,11 @@ namespace SuperStarTrek.Space
         {
             _info = info;
             _random = random;
-            _galaxy = galaxy;
+            _output = output;
+            Galaxy = galaxy;
 
-            _sectors = new() { [enterprise.Sector] = _enterprise = enterprise };
+            info.MarkAsKnown();
+            _sectors = new() { [enterprise.SectorCoordinates] = _enterprise = enterprise };
             PositionObject(sector => new Klingon(sector, _random), _info.KlingonCount);
             if (_info.HasStarbase)
             {
@@ -41,10 +44,11 @@ namespace SuperStarTrek.Space
         public int KlingonCount => _info.KlingonCount;
         public bool HasStarbase => _info.HasStarbase;
         public Starbase Starbase { get; }
+        internal Galaxy Galaxy { get; }
         public bool EnterpriseIsNextToStarbase =>
             _info.HasStarbase &&
-            Math.Abs(_enterprise.Sector.X - Starbase.Sector.X) <= 1 &&
-            Math.Abs(_enterprise.Sector.Y - Starbase.Sector.Y) <= 1;
+            Math.Abs(_enterprise.SectorCoordinates.X - Starbase.Sector.X) <= 1 &&
+            Math.Abs(_enterprise.SectorCoordinates.Y - Starbase.Sector.Y) <= 1;
 
         internal IEnumerable<Klingon> Klingons => _sectors.Values.OfType<Klingon>();
 
@@ -65,6 +69,25 @@ namespace SuperStarTrek.Space
             }
         }
 
+        internal void Display(string textFormat)
+        {
+            if (_displayed) { return; }
+
+            _output.Write(textFormat, this);
+
+            if (_info.KlingonCount > 0)
+            {
+                _output.Write(Strings.CombatArea);
+                if (_enterprise.ShieldControl.ShieldEnergy <= 200) { _output.Write(Strings.LowShields); }
+            }
+
+            _enterprise.Execute(Command.SRS);
+
+            _displayed = true;
+        }
+
+        internal bool HasObjectAt(Coordinates coordinates) => _sectors.ContainsKey(coordinates);
+
         internal bool TorpedoCollisionAt(Coordinates coordinates, out string message, out bool gameOver)
         {
             gameOver = false;
@@ -74,7 +97,7 @@ namespace SuperStarTrek.Space
             {
                 case Klingon klingon:
                     message = Remove(klingon);
-                    gameOver = _galaxy.KlingonCount == 0;
+                    gameOver = Galaxy.KlingonCount == 0;
                     return true;
 
                 case Star _:
@@ -85,8 +108,8 @@ namespace SuperStarTrek.Space
                     _sectors.Remove(coordinates);
                     _info.RemoveStarbase();
                     message = "*** Starbase destroyed ***" +
-                        (_galaxy.StarbaseCount > 0 ? Strings.CourtMartial : Strings.RelievedOfCommand);
-                    gameOver = _galaxy.StarbaseCount == 0;
+                        (Galaxy.StarbaseCount > 0 ? Strings.CourtMartial : Strings.RelievedOfCommand);
+                    gameOver = Galaxy.StarbaseCount == 0;
                     return true;
 
                 default:
@@ -99,6 +122,19 @@ namespace SuperStarTrek.Space
             _sectors.Remove(klingon.Sector);
             _info.RemoveKlingon();
             return "*** Klingon destroyed ***";
+        }
+
+        internal CommandResult KlingonsMoveAndFire()
+        {
+            foreach (var klingon in Klingons.ToList())
+            {
+                var newSector = GetRandomEmptySector();
+                _sectors.Remove(klingon.Sector);
+                _sectors[newSector] = klingon;
+                klingon.MoveTo(newSector);
+            }
+
+            return KlingonsFireOnEnterprise();
         }
 
         internal CommandResult KlingonsFireOnEnterprise()

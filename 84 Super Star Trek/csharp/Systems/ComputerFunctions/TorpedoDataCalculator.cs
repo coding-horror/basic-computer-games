@@ -26,7 +26,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
 
             foreach (var klingon in quadrant.Klingons)
             {
-                WriteDirectionAndDistance(_enterprise.Sector, klingon.Sector);
+                WriteDirectionAndDistance(_enterprise.SectorCoordinates, klingon.Sector);
             }
         }
     }

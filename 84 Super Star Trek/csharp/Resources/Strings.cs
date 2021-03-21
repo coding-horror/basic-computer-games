@@ -17,7 +17,9 @@ namespace SuperStarTrek.Resources
         public static string LowShields => GetResource();
         public static string NoEnemyShips => GetResource();
         public static string NoStarbase => GetResource();
+        public static string NowEntering => GetResource();
         public static string Orders => GetResource();
+        public static string PermissionDenied => GetResource();
         public static string Protected => GetResource();
         public static string RegionNames => GetResource();
         public static string RelievedOfCommand => GetResource();

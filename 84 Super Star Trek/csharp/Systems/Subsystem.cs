@@ -41,13 +41,26 @@ namespace SuperStarTrek.Systems
 
         public virtual void Repair()
         {
-            if (IsDamaged) { Condition = 0; }
+            if (IsDamaged)
+            {
+                Condition = 0;
+            }
         }
 
-        internal void TakeDamage(float damage)
+        public virtual bool Repair(float repairWorkDone)
         {
-            Condition -= damage;
-            _output.WriteLine($"Damage Control reports, '{Name} damaged by the hit.'");
+            if (IsDamaged)
+            {
+                Condition += repairWorkDone;
+                if (Condition > -0.1f && Condition < 0)
+                {
+                    Condition = -0.1f;
+                }
+            }
+
+            return !IsDamaged;
         }
+
+        internal void TakeDamage(float damage) => Condition -= damage;
     }
 }

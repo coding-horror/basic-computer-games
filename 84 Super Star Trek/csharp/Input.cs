@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using SuperStarTrek.Commands;
-
+using SuperStarTrek.Space;
 using static System.StringComparison;
 
 namespace SuperStarTrek
@@ -80,6 +80,19 @@ namespace SuperStarTrek
                 }
                 _output.WriteLine();
             }
+        }
+
+        public bool TryGetCourse(string prompt, string officer, out Course course)
+        {
+            if (!TryGetNumber(prompt, 1, 9, out var direction))
+            {
+                _output.WriteLine($"{officer} reports, 'Incorrect course data, sir!'");
+                course = default;
+                return false;
+            }
+
+            course = new Course(direction);
+            return true;
         }
 
         public bool GetYesNo(string prompt, YesNoMode mode)
