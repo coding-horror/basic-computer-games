@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using SuperStarTrek.Objects;
 using SuperStarTrek.Resources;
 
 using static System.StringSplitOptions;
@@ -12,6 +13,7 @@ namespace SuperStarTrek.Space
         private static readonly string[] _regionNames;
         private static readonly string[] _subRegionIdentifiers;
         private readonly QuadrantInfo[][] _quadrants;
+        private readonly Random _random;
 
         static Galaxy()
         {
@@ -19,9 +21,9 @@ namespace SuperStarTrek.Space
             _subRegionIdentifiers = new[] { "I", "II", "III", "IV" };
         }
 
-        public Galaxy()
+        public Galaxy(Random random)
         {
-            var random = new Random();
+            _random = random;
 
             _quadrants = Enumerable
                 .Range(0, 8)

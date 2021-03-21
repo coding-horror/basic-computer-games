@@ -52,7 +52,7 @@ namespace SuperStarTrek.Space
             coordinates = default;
             return false;
 
-            int Round(float value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
+            static int Round(float value) => (int)Math.Round(value, MidpointRounding.AwayFromZero);
         }
 
         internal (float Direction, float Distance) GetDirectionAndDistanceTo(Coordinates destination) =>

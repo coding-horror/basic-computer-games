@@ -51,8 +51,8 @@ namespace SuperStarTrek.Systems
         {
             yield return $"Stardate           {_game.Stardate}";
             yield return $"Condition          {_enterprise.Condition}";
-            yield return $"Quadrant           {_enterprise.Quadrant}";
-            yield return $"Sector             {_enterprise.Sector}";
+            yield return $"Quadrant           {_enterprise.QuadrantCoordinates}";
+            yield return $"Sector             {_enterprise.SectorCoordinates}";
             yield return $"Photon torpedoes   {_enterprise.TorpedoCount}";
             yield return $"Total energy       {Math.Ceiling(_enterprise.TotalEnergy)}";
             yield return $"Shields            {(int)_enterprise.ShieldControl.ShieldEnergy}";

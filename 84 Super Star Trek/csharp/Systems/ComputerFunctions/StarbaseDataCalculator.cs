@@ -24,7 +24,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
 
             Output.WriteLine("From Enterprise to Starbase:");
 
-            WriteDirectionAndDistance(_enterprise.Sector, quadrant.Starbase.Sector);
+            WriteDirectionAndDistance(_enterprise.SectorCoordinates, quadrant.Starbase.Sector);
         }
     }
 }

@@ -21,7 +21,8 @@ namespace SuperStarTrek.Systems.ComputerFunctions
         internal override void Execute(Quadrant quadrant)
         {
             Output.WriteLine("Direction/distance calculator:")
-                .WriteLine($"You are at quadrant {_enterprise.Quadrant} sector {_enterprise.Sector}")
+                .Write($"You are at quadrant {_enterprise.QuadrantCoordinates}")
+                .WriteLine($" sector {_enterprise.SectorCoordinates}")
                 .WriteLine("Please enter");
 
             WriteDirectionAndDistance(

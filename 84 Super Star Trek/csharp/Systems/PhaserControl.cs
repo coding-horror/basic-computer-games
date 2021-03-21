@@ -75,7 +75,7 @@ namespace SuperStarTrek.Systems
 
         private void ResolveHitOn(Klingon klingon, float perEnemyStrength, Quadrant quadrant)
         {
-            var distance = _enterprise.Sector.GetDistanceTo(klingon.Sector);
+            var distance = _enterprise.SectorCoordinates.GetDistanceTo(klingon.Sector);
             var hitStrength = (int)(perEnemyStrength / distance * (2 + _random.GetFloat()));
 
             if (klingon.TakeHit(hitStrength))

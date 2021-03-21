@@ -16,21 +16,25 @@ namespace SuperStarTrek.Objects
         private readonly List<Subsystem> _systems;
         private readonly Dictionary<Command, Subsystem> _commandExecutors;
         private readonly Random _random;
+        private readonly Input _input;
         private Quadrant _quadrant;
 
-        public Enterprise(int maxEnergy, Coordinates sector, Output output, Random random)
+        public Enterprise(int maxEnergy, Coordinates sector, Output output, Random random, Input input)
         {
-            Sector = sector;
+            SectorCoordinates = sector;
             TotalEnergy = _maxEnergy = maxEnergy;
 
             _systems = new List<Subsystem>();
             _commandExecutors = new Dictionary<Command, Subsystem>();
             _output = output;
             _random = random;
+            _input = input;
         }
 
-        public Coordinates Quadrant => _quadrant.Coordinates;
-        public Coordinates Sector { get; }
+        public Quadrant Quadrant => _quadrant;
+        public Coordinates QuadrantCoordinates => _quadrant.Coordinates;
+        public Coordinates SectorCoordinates { get; private set; }
+
         public string Condition => GetCondition();
         public LibraryComputer Computer => (LibraryComputer)_commandExecutors[Command.COM];
         public ShieldControl ShieldControl => (ShieldControl)_commandExecutors[Command.SHE];
@@ -50,19 +54,10 @@ namespace SuperStarTrek.Objects
             return this;
         }
 
-        public void Enter(Quadrant quadrant, string entryTextFormat)
+        public void StartIn(Quadrant quadrant)
         {
             _quadrant = quadrant;
-
-            _output.Write(entryTextFormat, quadrant);
-
-            if (quadrant.HasKlingons)
-            {
-                _output.Write(Strings.CombatArea);
-                if (ShieldControl.ShieldEnergy <= 200) { _output.Write(Strings.LowShields); }
-            }
-
-            Execute(Command.SRS);
+            quadrant.Display(Strings.StartText);
         }
 
         private string GetCondition() =>
@@ -121,7 +116,100 @@ namespace SuperStarTrek.Objects
                 return;
             }
 
-            _systems[_random.Get1To8Inclusive() - 1].TakeDamage(hitShieldRatio + 0.5f * _random.GetFloat());
+            var system = _systems[_random.Get1To8Inclusive() - 1];
+            system.TakeDamage(hitShieldRatio + 0.5f * _random.GetFloat());
+            _output.WriteLine($"Damage Control reports, '{system.Name} damaged by the hit.'");
         }
+
+        internal void RepairSystems(float repairWorkDone)
+        {
+            var repairedSystems = new List<string>();
+
+            foreach (var system in _systems.Where(s => s.IsDamaged))
+            {
+                if (system.Repair(repairWorkDone))
+                {
+                    repairedSystems.Add(system.Name);
+                }
+            }
+
+            if (repairedSystems.Any())
+            {
+                _output.WriteLine("Damage Control report:");
+                foreach (var systemName in repairedSystems)
+                {
+                    _output.WriteLine($"        {systemName} repair completed.");
+                }
+            }
+        }
+
+        internal void VaryConditionOfRandomSystem()
+        {
+            if (_random.GetFloat() > 0.2f) { return; }
+
+            var system = _systems[_random.Get1To8Inclusive() - 1];
+            _output.Write($"Damage Control report:  {system.Name} ");
+            if (_random.GetFloat() >= 0.6)
+            {
+                system.Repair(_random.GetFloat() * 3 + 1);
+                _output.WriteLine("state of repair improved");
+            }
+            else
+            {
+                system.TakeDamage(_random.GetFloat() * 5 + 1);
+                _output.WriteLine("damaged");
+            }
+        }
+
+        internal float Move(Course course, float warpFactor, int distance)
+        {
+            var (quadrant, sector) = MoveWithinQuadrant(course, distance) ?? MoveBeyondQuadrant(course, distance);
+
+            if (quadrant != _quadrant.Coordinates)
+            {
+                _quadrant = new Quadrant(_quadrant.Galaxy[quadrant], this, _random, _quadrant.Galaxy, _input, _output);
+            }
+            SectorCoordinates = sector;
+
+            return GetTimeElapsed(quadrant, warpFactor);
+        }
+
+        private (Coordinates, Coordinates)? MoveWithinQuadrant(Course course, int distance)
+        {
+            var currentSector = SectorCoordinates;
+            foreach (var (sector, index) in course.GetSectorsFrom(SectorCoordinates).Select((s, i) => (s, i)))
+            {
+                if (distance == 0) { break; }
+
+                if (_quadrant.HasObjectAt(sector))
+                {
+                    _output.WriteLine($"Warp engines shut down at sector {currentSector} dues to bad navigation");
+                    distance = 0;
+                    break;
+                }
+
+                currentSector = sector;
+                distance -= 1;
+            }
+
+            return distance == 0 ? (_quadrant.Coordinates, currentSector) : null;
+        }
+
+        private (Coordinates, Coordinates) MoveBeyondQuadrant(Course course, int distance)
+        {
+            var (complete, quadrant, sector) = course.GetDestination(QuadrantCoordinates, SectorCoordinates, distance);
+
+            if (!complete)
+            {
+                _output.Write(Strings.PermissionDenied, sector, quadrant);
+            }
+
+            return (quadrant, sector);
+        }
+
+        private float GetTimeElapsed(Coordinates finalQuadrant, float warpFactor) =>
+            finalQuadrant == _quadrant.Coordinates
+                ? Math.Min(1, (float)Math.Round(warpFactor, 1, MidpointRounding.ToZero))
+                : 1;
     }
 }

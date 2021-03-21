@@ -12,6 +12,7 @@ namespace SuperStarTrek
     {
         private readonly Output _output;
         private readonly Input _input;
+        private readonly Random _random;
 
         private int _initialStardate;
         private int _finalStarDate;
@@ -25,6 +26,7 @@ namespace SuperStarTrek
         {
             _output = new Output();
             _input = new Input(_output);
+            _random = new Random();
         }
 
         public float Stardate => _currentStardate;
@@ -46,15 +48,19 @@ namespace SuperStarTrek
         {
             Initialise();
             var gameOver = false;
+            var newQuadrantText = Strings.StartText;
 
             while (!gameOver)
             {
+                _enterprise.Quadrant.Display(Strings.NowEntering);
+
                 var command = _input.GetCommand();
 
                 var result = _enterprise.Execute(command);
 
                 gameOver = result.IsGameOver || CheckIfStranded();
                 _currentStardate += result.TimeElapsed;
+                gameOver |= _currentStardate > _finalStarDate;
             }
 
             if (_galaxy.KlingonCount > 0)
@@ -69,21 +75,20 @@ namespace SuperStarTrek
 
         private void Initialise()
         {
-            var random = new Random();
+            _currentStardate = _initialStardate = _random.GetInt(20, 40) * 100;
+            _finalStarDate = _initialStardate + _random.GetInt(25, 35);
 
-            _currentStardate = _initialStardate = random.GetInt(20, 40) * 100;
-            _finalStarDate = _initialStardate + random.GetInt(25, 35);
+            _currentQuadrant = _random.GetCoordinate();
 
-            _currentQuadrant = random.GetCoordinate();
-
-            _galaxy = new Galaxy();
+            _galaxy = new Galaxy(_random);
             _initialKlingonCount = _galaxy.KlingonCount;
 
-            _enterprise = new Enterprise(3000, random.GetCoordinate(), _output, random);
+            _enterprise = new Enterprise(3000, _random.GetCoordinate(), _output, _random, _input);
             _enterprise
+                .Add(new WarpEngines(_enterprise, _output, _input))
                 .Add(new ShortRangeSensors(_enterprise, _galaxy, this, _output))
                 .Add(new LongRangeSensors(_galaxy, _output))
-                .Add(new PhaserControl(_enterprise, _output, _input, random))
+                .Add(new PhaserControl(_enterprise, _output, _input, _random))
                 .Add(new PhotonTubes(10, _enterprise, _output, _input))
                 .Add(new ShieldControl(_enterprise, _output, _input))
                 .Add(new DamageControl(_enterprise, _output))
@@ -109,9 +114,11 @@ namespace SuperStarTrek
 
             _input.WaitForAnyKeyButEnter("when ready to accept command");
 
-            var quadrant = _galaxy[_currentQuadrant].BuildQuadrant(_enterprise, random, _galaxy, _input, _output);
-            _enterprise.Enter(quadrant, Strings.StartText);
+            _enterprise.StartIn(BuildCurrentQuadrant());
         }
+
+        private Quadrant BuildCurrentQuadrant() =>
+           new Quadrant(_galaxy[_currentQuadrant], _enterprise, _random, _galaxy, _input, _output);
 
         public bool Replay() => _galaxy.StarbaseCount > 0 && _input.GetString(Strings.ReplayPrompt, "Aye");
 
