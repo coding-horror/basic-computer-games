@@ -34,11 +34,37 @@ namespace War
 
     // TODO Testing
 
-    class Card
+    public class Card
     {
-        // TODO Turn into properties, maybe??
-        private Suit suit;
-        private Rank rank;
+        private readonly Suit suit;
+        private readonly Rank rank;
+
+        private static Dictionary<Suit, string> suitNames = new Dictionary<Suit, string>()
+        {
+            { Suit.none, "N"},
+            { Suit.clubs, "C"},
+            { Suit.diamonds, "D"},
+            { Suit.hearts, "H"},
+            { Suit.spades, "S"},
+        };
+
+        private static Dictionary<Rank, string> rankNames = new Dictionary<Rank, string>()
+        {
+            { Rank.none, "0"},
+            { Rank.two, "2"},
+            { Rank.three, "3"},
+            { Rank.four, "4"},
+            { Rank.five, "5"},
+            { Rank.six, "6"},
+            { Rank.seven, "7"},
+            { Rank.eight, "8"},
+            { Rank.nine, "9"},
+            { Rank.ten, "10"},
+            { Rank.jack, "J"},
+            { Rank.queen, "Q"},
+            { Rank.king, "K"},
+            { Rank.ace, "A"},
+        };
 
         public Card(Suit suit, Rank rank) // immutable
         {
@@ -47,28 +73,31 @@ namespace War
         }
 
         // would normally consider suit and rank but in this case we only want to compare rank.
-        public static bool operator ==(Card lhs, Card rhs)
-        {
-            return lhs.rank == rhs.rank;
-        }
+        //public static bool operator ==(Card lhs, Card rhs)
+        //{
+        //    return lhs.rank == rhs.rank;
+        //}
 
-        public static bool operator !=(Card lhs, Card rhs)
-        {
-            return !(lhs == rhs);
-        }
+        //public static bool operator !=(Card lhs, Card rhs)
+        //{
+        //    return !(lhs == rhs);
+        //}
 
         public static bool operator <(Card lhs, Card rhs)
         {
             return lhs.rank < rhs.rank;
         }
+
         public static bool operator >(Card lhs, Card rhs)
         {
             return rhs < lhs;
         }
+
         public static bool operator <=(Card lhs, Card rhs)
         {
             return !(lhs > rhs);
         }
+
         public static bool operator >=(Card lhs, Card rhs)
         {
             return !(lhs < rhs);
@@ -76,38 +105,31 @@ namespace War
 
         public override string ToString()
         {
-            // TODO No need to create the dictionaries each time this is called.
-            // Also make it static.
-            // Is there a C# equivalent of an initializer list?
-            var suitNames = new Dictionary<Suit, string>();
-
-            suitNames[Suit.none]     = "N";
-            suitNames[Suit.clubs]    = "C";
-            suitNames[Suit.diamonds] = "D";
-            suitNames[Suit.hearts]   = "H";
-            suitNames[Suit.spades]   = "S";
-
-            var rankNames = new Dictionary<Rank, string>();
-            rankNames[Rank.none]  = "0";
-            rankNames[Rank.two]   = "2";
-            rankNames[Rank.three] = "3";
-            rankNames[Rank.four]  = "4";
-            rankNames[Rank.five]  = "5";
-            rankNames[Rank.six]   = "6";
-            rankNames[Rank.seven] = "7";
-            rankNames[Rank.eight] = "8";
-            rankNames[Rank.nine]  = "9";
-            rankNames[Rank.ten]   = "10";
-            rankNames[Rank.jack]  = "J";
-            rankNames[Rank.queen] = "Q";
-            rankNames[Rank.king]  = "K";
-            rankNames[Rank.ace]  = "A";
-
             return $"{suitNames[suit]}-{rankNames[rank]}"; // string interpolation
         }
     }
 
-    class Deck
+    public class Deck
     {
+        private const int deckSize = 52;
+        private Card[] theDeck = new Card[deckSize];
+
+        public Deck()
+        {
+            int i = 0;
+            for (Suit suit = Suit.clubs; suit <= Suit.spades; suit++)
+            {
+                for (Rank rank = Rank.two; rank <= Rank.ace; rank++)
+                {
+                    theDeck[i] = new Card(suit, rank);
+                    i++;
+                }
+            }
+        }
+
+        public void Shuffle()
+        {
+
+        }
     }
 }
