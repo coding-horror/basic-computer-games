@@ -111,7 +111,8 @@ namespace War
 
     public class Deck
     {
-        private const int deckSize = 52;
+        public const int deckSize = 52;
+
         private Card[] theDeck = new Card[deckSize];
 
         public Deck()
@@ -127,9 +128,21 @@ namespace War
             }
         }
 
+        public Card GetCard(int i) => theDeck[i];
+
         public void Shuffle()
         {
+            // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+            for (int i = deckSize - 1; i >= 1; i--)
+            {
+                var rand = new Random();
+                int j = rand.Next(0, i);
 
+                // Swap the cards at i and j
+                Card temp = theDeck[j];
+                theDeck[j] = theDeck[i];
+                theDeck[i] = temp;
+            }
         }
     }
 }
