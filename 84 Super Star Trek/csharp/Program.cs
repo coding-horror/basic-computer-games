@@ -29,6 +29,7 @@ namespace SuperStarTrek
     {
         static void Main()
         {
+            var foo = Utils.DirectionAndDistance.From(1,1).To(4,5);
             var game = new Game();
 
             game.DoIntroduction();

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using SuperStarTrek.Commands;
+using SuperStarTrek.Space;
 using static System.StringComparison;
 
 namespace SuperStarTrek
@@ -25,14 +27,14 @@ namespace SuperStarTrek
             return Console.ReadLine();
         }
 
-        public double GetNumber(string prompt)
+        public float GetNumber(string prompt)
         {
             _output.Prompt(prompt);
 
             while (true)
             {
                 var response = Console.ReadLine();
-                if (double.TryParse(response, out var value))
+                if (float.TryParse(response, out var value))
                 {
                     return value;
                 }
@@ -42,7 +44,14 @@ namespace SuperStarTrek
             }
         }
 
-        public bool TryGetNumber(string prompt, double minValue, double maxValue, out double value)
+        public (float X, float Y) GetCoordinates(string prompt)
+        {
+            _output.Prompt($"{prompt} (X,Y)");
+            var responses = ReadNumbers(2);
+            return (responses[0], responses[1]);
+        }
+
+        public bool TryGetNumber(string prompt, float minValue, float maxValue, out float value)
         {
             value = GetNumber($"{prompt} ({minValue}-{maxValue})");
 
@@ -58,7 +67,7 @@ namespace SuperStarTrek
             {
                 var response = GetString("Command");
 
-                if (response != "" &&
+                if (response.Length >= 3 &&
                     Enum.TryParse(response.Substring(0, 3), ignoreCase: true, out Command parsedCommand))
                 {
                     return parsedCommand;
@@ -71,6 +80,80 @@ namespace SuperStarTrek
                 }
                 _output.WriteLine();
             }
+        }
+
+        public bool TryGetCourse(string prompt, string officer, out Course course)
+        {
+            if (!TryGetNumber(prompt, 1, 9, out var direction))
+            {
+                _output.WriteLine($"{officer} reports, 'Incorrect course data, sir!'");
+                course = default;
+                return false;
+            }
+
+            course = new Course(direction);
+            return true;
+        }
+
+        public bool GetYesNo(string prompt, YesNoMode mode)
+        {
+            _output.Prompt($"{prompt} (Y/N)");
+            var response = Console.ReadLine().ToUpperInvariant();
+
+            return (mode, response) switch
+            {
+                (YesNoMode.FalseOnN, "N") => false,
+                (YesNoMode.FalseOnN, _) => true,
+                (YesNoMode.TrueOnY, "Y") => true,
+                (YesNoMode.TrueOnY, _) => false,
+                _ => throw new ArgumentOutOfRangeException(nameof(mode), mode, "Invalid value")
+            };
+        }
+
+        private float[] ReadNumbers(int quantity)
+        {
+            var numbers = new float[quantity];
+            var index = 0;
+            bool tryAgain;
+
+            do
+            {
+                tryAgain = false;
+                var responses = Console.ReadLine().Split(',');
+                if (responses.Length > quantity)
+                {
+                    _output.WriteLine("!Extra input ingored");
+                }
+
+                for (; index < responses.Length; index++)
+                {
+                    if (!float.TryParse(responses[index], out numbers[index]))
+                    {
+                        _output.WriteLine("!Number expected - retry input line");
+                        _output.Prompt();
+                        tryAgain = true;
+                        break;
+                    }
+                }
+            } while (tryAgain);
+
+            if (index < quantity)
+            {
+                _output.Prompt("?");
+                var responses = ReadNumbers(quantity - index);
+                for (int i = 0; i < responses.Length; i++, index++)
+                {
+                    numbers[index] = responses[i];
+                }
+            }
+
+            return numbers;
+        }
+
+        public enum YesNoMode
+        {
+            TrueOnY,
+            FalseOnN
         }
     }
 }

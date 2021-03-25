@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.ComponentModel;
 
-namespace SuperStarTrek
+namespace SuperStarTrek.Commands
 {
     internal static class CommandExtensions
     {
