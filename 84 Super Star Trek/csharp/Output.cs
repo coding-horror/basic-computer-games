@@ -4,12 +4,37 @@ namespace SuperStarTrek
 {
     internal class Output
     {
-        public void Write(string text) => Console.Write(text);
-        public void Write(string format, params object[] args) => Console.Write(format, args);
-        public void WriteLine(string text = "") => Console.WriteLine(text);
+        public Output Write(string text)
+        {
+            Console.Write(text);
+            return this;
+        }
 
-        public void NextLine() => Console.WriteLine();
+        public Output Write(string format, params object[] args)
+        {
+            Console.Write(format, args);
+            return this;
+        }
 
-        public void Prompt(string text = "") => Console.Write($"{text}? ");
+        public Output WriteLine(string text = "")
+        {
+            Console.WriteLine(text);
+            return this;
+        }
+
+
+        public Output NextLine()
+        {
+            Console.WriteLine();
+            return this;
+        }
+
+
+        public Output Prompt(string text = "")
+        {
+            Console.Write($"{text}? ");
+            return this;
+        }
+
     }
 }

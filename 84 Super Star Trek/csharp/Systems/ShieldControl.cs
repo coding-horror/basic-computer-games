@@ -1,3 +1,4 @@
+using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
@@ -10,36 +11,35 @@ namespace SuperStarTrek.Systems
         private readonly Input _input;
 
         public ShieldControl(Enterprise enterprise, Output output, Input input)
-            : base("Shield Control", Command.SHE)
+            : base("Shield Control", Command.SHE, output)
         {
             _enterprise = enterprise;
             _output = output;
             _input = input;
         }
 
-        public double Energy { get; private set; }
+        public float ShieldEnergy { get; set; }
 
-        public override void ExecuteCommand(Quadrant quadrant)
+        protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
+
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
-            if (Condition < 0)
-            {
-                _output.WriteLine("Shield Control inoperable");
-                return;
-            }
-
             _output.WriteLine($"Energy available = {_enterprise.TotalEnergy}");
             var requested = _input.GetNumber($"Number of units to shields");
 
             if (Validate(requested))
             {
-                Energy = requested;
-                return;
+                ShieldEnergy = requested;
+            }
+            else
+            {
+                _output.WriteLine("<SHIELDS UNCHANGED>");
             }
 
-            _output.WriteLine("<SHIELDS UNCHANGED>");
+            return CommandResult.Ok;
         }
 
-        private bool Validate(double requested)
+        private bool Validate(float requested)
         {
             if (requested > _enterprise.TotalEnergy)
             {
@@ -47,7 +47,11 @@ namespace SuperStarTrek.Systems
                 return false;
             }
 
-            return requested >= 0 && requested != Energy;
+            return requested >= 0 && requested != ShieldEnergy;
         }
+
+        internal void AbsorbHit(int hitStrength) => ShieldEnergy -= hitStrength;
+
+        internal void DropShields() => ShieldEnergy = 0;
     }
 }

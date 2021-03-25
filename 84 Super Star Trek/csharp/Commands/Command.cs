@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace SuperStarTrek
+namespace SuperStarTrek.Commands
 {
     internal enum Command
     {

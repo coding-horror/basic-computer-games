@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
@@ -16,7 +17,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
 
         public ShortRangeSensors(Enterprise enterprise, Galaxy galaxy, Game game, Output output)
-            : base("Short Range Sensors", Command.SRS)
+            : base("Short Range Sensors", Command.SRS, output)
         {
             _enterprise = enterprise;
             _galaxy = galaxy;
@@ -24,7 +25,7 @@ namespace SuperStarTrek.Systems
             _output = output;
         }
 
-        public override void ExecuteCommand(Quadrant quadrant)
+        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
         {
             if (_enterprise.IsDocked)
             {
@@ -42,17 +43,19 @@ namespace SuperStarTrek.Systems
                 .ToList()
                 .ForEach(l => _output.WriteLine(l));
             _output.WriteLine("---------------------------------");
+
+            return CommandResult.Ok;
         }
 
         public IEnumerable<string> GetStatusLines()
         {
             yield return $"Stardate           {_game.Stardate}";
             yield return $"Condition          {_enterprise.Condition}";
-            yield return $"Quadrant           {_enterprise.Quadrant}";
-            yield return $"Sector             {_enterprise.Sector}";
-            yield return $"Photon torpedoes   {_enterprise.TorpedoCount}";
-            yield return $"Total energy       {Math.Ceiling(_enterprise.Energy)}";
-            yield return $"Shields            {(int)_enterprise.Shields}";
+            yield return $"Quadrant           {_enterprise.QuadrantCoordinates}";
+            yield return $"Sector             {_enterprise.SectorCoordinates}";
+            yield return $"Photon torpedoes   {_enterprise.PhotonTubes.TorpedoCount}";
+            yield return $"Total energy       {Math.Ceiling(_enterprise.TotalEnergy)}";
+            yield return $"Shields            {(int)_enterprise.ShieldControl.ShieldEnergy}";
             yield return $"Klingons remaining {_galaxy.KlingonCount}";
         }
     }
