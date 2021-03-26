@@ -14,6 +14,8 @@ namespace WarTester
         private Card c3 = new Card(Suit.diamonds, Rank.ten);
         private Card c4 = new Card(Suit.diamonds, Rank.ten);
 
+        // Test the relational operators.
+
         [TestMethod]
         public void LessThanIsValid()
         {
@@ -77,10 +79,10 @@ namespace WarTester
         [TestMethod]
         public void ToStringIsValid()
         {
-            string s1 = c1.ToString();
-            string s2 = c3.ToString();
-            string s3 = new Card(Suit.hearts, Rank.queen).ToString();
-            string s4 = new Card(Suit.spades, Rank.ace).ToString();
+            var s1 = c1.ToString();
+            var s2 = c3.ToString();
+            var s3 = new Card(Suit.hearts, Rank.queen).ToString();
+            var s4 = new Card(Suit.spades, Rank.ace).ToString();
 
             Assert.IsTrue(s1 == "C-2", "s1 invalid");
             Assert.IsTrue(s2 == "D-10", "s2 invalid");
@@ -92,7 +94,10 @@ namespace WarTester
     [TestClass]
     public class DeckTest
     {
-        private string ConcatenateDeck(Deck d)
+        private readonly string cardNamesInOrder = "C-2C-3C-4C-5C-6C-7C-8C-9C-10C-JC-QC-KC-AD-2D-3D-4D-5D-6D-7D-8D-9D-10D-JD-QD-KD-AH-2H-3H-4H-5H-6H-7H-8H-9H-10H-JH-QH-KH-AS-2S-3S-4S-5S-6S-7S-8S-9S-10S-JS-QS-KS-A";
+
+        //Helper method. Adds the names of all the cards together into a single string.
+        private string ConcatenateTheDeck(Deck d)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -107,20 +112,21 @@ namespace WarTester
         [TestMethod]
         public void InitialDeckContainsCardsInOrder()
         {
-            Deck d1 = new Deck();
-            string allTheCards = ConcatenateDeck(d1);
+            Deck d = new Deck();
+            string allTheCards = ConcatenateTheDeck(d);
 
-            Assert.IsTrue(allTheCards == "C-2C-3C-4C-5C-6C-7C-8C-9C-10C-JC-QC-KC-AD-2D-3D-4D-5D-6D-7D-8D-9D-10D-JD-QD-KD-AH-2H-3H-4H-5H-6H-7H-8H-9H-10H-JH-QH-KH-AS-2S-3S-4S-5S-6S-7S-8S-9S-10S-JS-QS-KS-A");
+            Assert.IsTrue(allTheCards == cardNamesInOrder);
         }
 
         [TestMethod]
         public void ShufflingChangesDeck()
         {
-            Deck d1 = new Deck();
-            d1.Shuffle();
-            string allTheCards = ConcatenateDeck(d1);
+            // I'm not sure how to test that shuffling has worked other than to check that the cards aren't in the initial order.
+            Deck d = new Deck();
+            d.Shuffle();
+            string allTheCards = ConcatenateTheDeck(d);
 
-            Assert.IsTrue(allTheCards != "C-2C-3C-4C-5C-6C-7C-8C-9C-10C-JC-QC-KC-AD-2D-3D-4D-5D-6D-7D-8D-9D-10D-JD-QD-KD-AH-2H-3H-4H-5H-6H-7H-8H-9H-10H-JH-QH-KH-AS-2S-3S-4S-5S-6S-7S-8S-9S-10S-JS-QS-KS-A");
+            Assert.IsTrue(allTheCards != cardNamesInOrder);
         }
     }
 }

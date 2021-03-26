@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
+
 
 namespace War
 {
+    // These enums define the card's suit and rank.
     public enum Suit
     {
-        none = 0,
         clubs,
         diamonds,
         hearts,
@@ -15,7 +16,6 @@ namespace War
 
     public enum Rank
     {
-        none = 0,
         // Skip 1 because ace is high.
         two = 2,
         three,
@@ -32,25 +32,25 @@ namespace War
         ace
     }
 
-    // TODO Testing
-
+    // A class to represent a playing card.
     public class Card
     {
+        // A card is an immutable object (i.e. it can't be changed) so its suit
+        // and rank value are readonly; they can only be set in the constructor.
         private readonly Suit suit;
         private readonly Rank rank;
 
-        private static Dictionary<Suit, string> suitNames = new Dictionary<Suit, string>()
+        // These dictionaries are used to convert a suit or rank value into a string.
+        private readonly Dictionary<Suit, string> suitNames = new Dictionary<Suit, string>()
         {
-            { Suit.none, "N"},
             { Suit.clubs, "C"},
             { Suit.diamonds, "D"},
             { Suit.hearts, "H"},
             { Suit.spades, "S"},
         };
 
-        private static Dictionary<Rank, string> rankNames = new Dictionary<Rank, string>()
+        private readonly Dictionary<Rank, string> rankNames = new Dictionary<Rank, string>()
         {
-            { Rank.none, "0"},
             { Rank.two, "2"},
             { Rank.three, "3"},
             { Rank.four, "4"},
@@ -66,18 +66,30 @@ namespace War
             { Rank.ace, "A"},
         };
 
-        public Card(Suit suit, Rank rank) // immutable
+        public Card(Suit suit, Rank rank)
         {
             this.suit = suit;
             this.rank = rank;
         }
 
-        // would normally consider suit and rank but in this case we only want to compare rank.
+        // Relational Operator Overloading.
+        //
+        // You would normally expect the relational operators to consider both the suit and the
+        // rank of a card, but in this program suit doesn't matter so we define the operators to just
+        // compare rank.
+
+        // When adding relational operators we would normally include == and != but they are not
+        // relevant to this program so haven't been defined. Note that if they were defined we
+        // should also override the Equals() and GetHashCode() methods. See, for example:
+        // http://www.blackwasp.co.uk/CSharpRelationalOverload.aspx
+
+        // If the == and != operators were defined they would look like this:
+        //
         //public static bool operator ==(Card lhs, Card rhs)
         //{
         //    return lhs.rank == rhs.rank;
         //}
-
+        //
         //public static bool operator !=(Card lhs, Card rhs)
         //{
         //    return !(lhs == rhs);
@@ -105,10 +117,12 @@ namespace War
 
         public override string ToString()
         {
-            return $"{suitNames[suit]}-{rankNames[rank]}"; // string interpolation
+            // N.B. We are using string interpolation to create the card name.
+            return $"{suitNames[suit]}-{rankNames[rank]}";
         }
     }
 
+    // A class to represent a deck of cards.
     public class Deck
     {
         public const int deckSize = 52;
@@ -117,6 +131,7 @@ namespace War
 
         public Deck()
         {
+            // Populate theDeck with all the cards in order.
             int i = 0;
             for (Suit suit = Suit.clubs; suit <= Suit.spades; suit++)
             {
@@ -128,14 +143,21 @@ namespace War
             }
         }
 
+        // Return the card at a particular position in the deck.
+        // N.B. As this is such a short method, we make it an
+        // expression-body method.
         public Card GetCard(int i) => theDeck[i];
 
+        // Shuffle the cards, this uses the modern version of the
+        // Fisher-Yates shuffle, see:
+        // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
         public void Shuffle()
         {
-            // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+            var rand = new Random();
+
+            // Iterate backwards through the deck.
             for (int i = deckSize - 1; i >= 1; i--)
             {
-                var rand = new Random();
                 int j = rand.Next(0, i);
 
                 // Swap the cards at i and j
