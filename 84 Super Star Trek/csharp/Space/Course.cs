@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace SuperStarTrek.Space
 {
@@ -24,7 +25,7 @@ namespace SuperStarTrek.Space
             (0, 1)
         };
 
-        public Course(double direction)
+        internal Course(float direction)
         {
             if (direction < 1 || direction > 9)
             {
@@ -44,7 +45,53 @@ namespace SuperStarTrek.Space
             DeltaY = baseCardinal.DeltaY + (nextCardinal.DeltaY - baseCardinal.DeltaY) * fractionalDirection;
         }
 
-        public double DeltaX { get; }
-        public double DeltaY { get; }
+        internal float DeltaX { get; }
+        internal float DeltaY { get; }
+
+        internal IEnumerable<Coordinates> GetSectorsFrom(Coordinates start)
+        {
+            (float x, float y) = start;
+
+            while(true)
+            {
+                x += DeltaX;
+                y += DeltaY;
+
+                if (!Coordinates.TryCreate(x, y, out var coordinates))
+                {
+                    yield break;
+                }
+
+                yield return coordinates;
+            }
+        }
+
+        internal (bool, Coordinates, Coordinates) GetDestination(Coordinates quadrant, Coordinates sector, int distance)
+        {
+            var (xComplete, quadrantX, sectorX) = GetNewCoordinate(quadrant.X, sector.X, DeltaX * distance);
+            var (yComplete, quadrantY, sectorY) = GetNewCoordinate(quadrant.Y, sector.Y, DeltaY * distance);
+
+            return (xComplete && yComplete, new Coordinates(quadrantX, quadrantY), new Coordinates(sectorX, sectorY));
+        }
+
+        private (bool, int, int) GetNewCoordinate(int quadrant, int sector, float sectorsTravelled)
+        {
+            var galacticCoordinate = quadrant * 8 + sector + sectorsTravelled;
+            var newQuadrant = (int)(galacticCoordinate / 8);
+            var newSector = (int)(galacticCoordinate - newQuadrant * 8);
+
+            if (newSector == -1)
+            {
+                newQuadrant -= 1;
+                newSector = 7;
+            }
+
+            return newQuadrant switch
+            {
+                < 0 => (false, 0, 0),
+                > 7 => (false, 7, 7),
+                _ => (true, newQuadrant, newSector)
+            };
+        }
     }
 }
