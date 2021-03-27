@@ -43,9 +43,7 @@ public class OneCheck {
   }  // End of method showIntro        
   
   private void startGame() {
-    
-    boolean playAgain = true;
-    
+
     int fromSquare = 0;
     int numJumps = 0;
     int numPieces = 0;
