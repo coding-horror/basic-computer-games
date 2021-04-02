@@ -111,11 +111,10 @@ public class Orbit {
     String userResponse = "";       
 
     // Begin outer while loop
-    while (true) {
-      
-      shipAngle = (int) Math.floor(360 * Math.random());
-      shipAltitude = (int) Math.floor(200 * Math.random() + 200);
-      shipRate = (int) Math.floor(20 * Math.random() + 10);
+    while (true) {      
+      shipAngle = (int) (361 * Math.random());
+      shipAltitude = (int) (201 * Math.random() + 200);
+      shipRate = (int) (21 * Math.random() + 10);
 
       hour = 0;
       
@@ -157,7 +156,7 @@ public class Orbit {
         
         // Win condition
         if (bombDistance <= 50) {          
-          System.out.println("YOU HAVE SUCCESFULLY COMPLETED YOUR MISSION.");
+          System.out.println("YOU HAVE SUCCESSFULLY COMPLETED YOUR MISSION.");
           break;          
         } 
    
