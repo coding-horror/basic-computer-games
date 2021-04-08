@@ -11,3 +11,6 @@ out/
 
 *.py[co]
 Pipfile
+*/vbnet/bin
+*/vbnet/obj
+*.suo
