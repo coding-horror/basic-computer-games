@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Craps
 {
@@ -19,6 +18,6 @@ namespace Craps
             this.sides = sides;
         }
 
-        public int Roll() => rand.Next(1, sides);
+        public int Roll() => rand.Next(1, sides + 1);
     }
 }
