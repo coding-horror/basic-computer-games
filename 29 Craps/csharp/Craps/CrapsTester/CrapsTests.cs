@@ -1,5 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Craps;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 
