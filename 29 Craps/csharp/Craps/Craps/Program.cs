@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics;
 
 
 
@@ -6,21 +6,10 @@ namespace Craps
 {
     class Program
     {
-        enum Result
-        {
-            naturalWin,
-            snakeEyesLoss,
-            loss,
-            pointLoss,
-            pointWin,
-        };
-
         static void Main(string[] args)
         {
-            var dice1 = new Dice();
-            var dice2 = new Dice();
             var ui = new UserInterface();
-
+            var game = new CrapsGame(ref ui);
             int winnings = 0;
 
             ui.Intro();
@@ -28,56 +17,33 @@ namespace Craps
             do 
             {
 	            var bet = ui.PlaceBet();
-                var diceRoll = dice1.Roll() + dice2.Roll();
-                bool isWinner = false;
+                var result = game.Play(out int diceRoll);
 
-                if (Win(diceRoll))
+                switch (result)
                 {
-                    winnings += bet;
-                    isWinner = true;
-                }
-                else if (Lose(diceRoll))
-                {
-                    winnings -= bet;
-                    isWinner = false;
-                }
-                else
-                {
-	                var point = diceRoll;
-                    ui.Point(point);
+                    case Result.naturalWin:
+                        winnings += bet;
+                        break;
 
-                    while (true)
-                    {
-                        var newRoll = dice1.Roll() + dice2.Roll();
-                        if (newRoll == point)
-                        {
-                            winnings += bet;
-                            isWinner = true;
-                            break;
-                        }
-                        else if (newRoll == 7)
-                        {
-                            winnings -= bet;
-                            isWinner = false;
-                            break;
-                        }
+                    case Result.naturalLoss:
+                    case Result.snakeEyesLoss:
+                    case Result.pointLoss:
+                        winnings -= bet;
+                        break;
 
-                        ui.RollAgain();
-                    }
+                    case Result.pointWin:
+                        winnings += (2 * bet);
+                        break;
+
+                    // Include a default so that we will be warned if the values of the enum
+                    // ever change and we forget to add code to handle the new value.
+                    default:
+                        Debug.Assert(false); // We should never get here.
+                        break;
                 }
 
-                ui.ShowResult(isWinner, bet);
+                ui.ShowResult(result, diceRoll, bet);
             } while (ui.PlayAgain(winnings));
-        }
-
-        private static bool Lose(int diceRoll)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static bool Win(int diceRoll)
-        {
-            throw new NotImplementedException();
         }
     }
 }
