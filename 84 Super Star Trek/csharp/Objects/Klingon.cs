@@ -7,19 +7,20 @@ namespace SuperStarTrek.Objects
     {
         private readonly Random _random;
 
-        public Klingon(Coordinates sector, Random random)
+        internal Klingon(Coordinates sector, Random random)
         {
             Sector = sector;
             _random = random;
             Energy = _random.GetFloat(100, 300);
         }
 
-        public float Energy { get; private set; }
-        public Coordinates Sector { get; private set; }
+        internal float Energy { get; private set; }
+
+        internal Coordinates Sector { get; private set; }
 
         public override string ToString() => "+K+";
 
-        public CommandResult FireOn(Enterprise enterprise)
+        internal CommandResult FireOn(Enterprise enterprise)
         {
             var attackStrength = _random.GetFloat();
             var distanceToEnterprise = Sector.GetDistanceTo(enterprise.SectorCoordinates);
