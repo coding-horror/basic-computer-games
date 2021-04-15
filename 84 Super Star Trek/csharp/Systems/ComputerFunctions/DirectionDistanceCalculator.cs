@@ -9,7 +9,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
         private readonly Input _input;
 
         internal DirectionDistanceCalculator(Enterprise enterprise, Output output, Input input)
-            : base("Starbase nav data", output)
+            : base("Direction/distance calculator", output)
         {
             _enterprise = enterprise;
             _input = input;
