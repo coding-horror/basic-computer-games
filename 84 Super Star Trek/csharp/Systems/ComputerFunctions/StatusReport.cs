@@ -10,7 +10,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
         private readonly Galaxy _galaxy;
         private readonly Enterprise _enterprise;
 
-        public StatusReport(Game game, Galaxy galaxy, Enterprise enterprise, Output output)
+        internal StatusReport(Game game, Galaxy galaxy, Enterprise enterprise, Output output)
             : base("Status report", output)
         {
             _game = game;

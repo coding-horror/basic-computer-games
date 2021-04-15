@@ -7,7 +7,7 @@ namespace SuperStarTrek.Space
     // Note that the origin is top-left, x increase downwards, and y increases to the right.
     internal record Coordinates
     {
-        public Coordinates(int x, int y)
+        internal Coordinates(int x, int y)
         {
             X = Validated(x, nameof(x));
             Y = Validated(y, nameof(y));
@@ -16,10 +16,10 @@ namespace SuperStarTrek.Space
             SubRegionIndex = Y % 4;
         }
 
-        public int X { get; }
-        public int Y { get; }
-        public int RegionIndex { get; }
-        public int SubRegionIndex { get; }
+        internal int X { get; }
+        internal int Y { get; }
+        internal int RegionIndex { get; }
+        internal int SubRegionIndex { get; }
 
         private int Validated(int value, string argumentName)
         {

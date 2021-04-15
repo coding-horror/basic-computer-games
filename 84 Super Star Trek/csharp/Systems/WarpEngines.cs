@@ -11,7 +11,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
         private readonly Input _input;
 
-        public WarpEngines(Enterprise enterprise, Output output, Input input)
+        internal WarpEngines(Enterprise enterprise, Output output, Input input)
             : base("Warp Engines", Command.NAV, output)
         {
             _enterprise = enterprise;

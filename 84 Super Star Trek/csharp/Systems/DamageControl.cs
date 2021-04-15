@@ -9,7 +9,7 @@ namespace SuperStarTrek.Systems
         private readonly Enterprise _enterprise;
         private readonly Output _output;
 
-        public DamageControl(Enterprise enterprise, Output output)
+        internal DamageControl(Enterprise enterprise, Output output)
             : base("Damage Control", Command.DAM, output)
         {
             _enterprise = enterprise;
@@ -40,7 +40,7 @@ namespace SuperStarTrek.Systems
             return CommandResult.Ok;
         }
 
-        public void WriteDamageReport()
+        internal void WriteDamageReport()
         {
             _output.NextLine().WriteLine("Device             State of Repair");
             foreach (var system in _enterprise.Systems)

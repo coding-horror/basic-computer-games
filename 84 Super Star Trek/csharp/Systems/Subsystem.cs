@@ -1,4 +1,3 @@
-using System;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Space;
 
@@ -16,10 +15,10 @@ namespace SuperStarTrek.Systems
             _output = output;
         }
 
-        public string Name { get; }
-        public float Condition { get; private set; }
-        public bool IsDamaged => Condition < 0;
-        public Command Command { get; }
+        internal string Name { get; }
+        internal float Condition { get; private set; }
+        internal bool IsDamaged => Condition < 0;
+        internal Command Command { get; }
 
         protected virtual bool CanExecuteCommand() => true;
 
@@ -34,12 +33,12 @@ namespace SuperStarTrek.Systems
             return true;
         }
 
-        public CommandResult ExecuteCommand(Quadrant quadrant)
+        internal CommandResult ExecuteCommand(Quadrant quadrant)
             => CanExecuteCommand() ? ExecuteCommandCore(quadrant) : CommandResult.Ok;
 
         protected abstract CommandResult ExecuteCommandCore(Quadrant quadrant);
 
-        public virtual void Repair()
+        internal virtual void Repair()
         {
             if (IsDamaged)
             {
@@ -47,7 +46,7 @@ namespace SuperStarTrek.Systems
             }
         }
 
-        public virtual bool Repair(float repairWorkDone)
+        internal virtual bool Repair(float repairWorkDone)
         {
             if (IsDamaged)
             {
