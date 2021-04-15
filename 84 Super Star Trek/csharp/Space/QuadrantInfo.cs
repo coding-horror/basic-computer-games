@@ -19,9 +19,8 @@ namespace SuperStarTrek.Space
         internal bool HasStarbase { get; private set; }
         internal int StarCount { get; }
 
-        internal static QuadrantInfo Create(Coordinates coordinates, string name)
+        internal static QuadrantInfo Create(Coordinates coordinates, string name, Random random)
         {
-            var random = new Random();
             var klingonCount = random.GetFloat() switch
             {
                 > 0.98f => 3,
