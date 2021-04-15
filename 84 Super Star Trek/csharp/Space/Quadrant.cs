@@ -40,11 +40,17 @@ namespace SuperStarTrek.Space
         }
 
         internal Coordinates Coordinates => _info.Coordinates;
+
         internal bool HasKlingons => _info.KlingonCount > 0;
+
         internal int KlingonCount => _info.KlingonCount;
+
         internal bool HasStarbase => _info.HasStarbase;
+
         internal Starbase Starbase { get; }
+
         internal Galaxy Galaxy { get; }
+
         internal bool EnterpriseIsNextToStarbase =>
             _info.HasStarbase &&
             Math.Abs(_enterprise.SectorCoordinates.X - Starbase.Sector.X) <= 1 &&

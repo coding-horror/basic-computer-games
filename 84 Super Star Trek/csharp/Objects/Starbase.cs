@@ -18,6 +18,7 @@ namespace SuperStarTrek.Objects
         }
 
         internal Coordinates Sector { get; }
+
         public override string ToString() => ">!<";
 
         internal bool TryRepair(Enterprise enterprise, out float repairTime)

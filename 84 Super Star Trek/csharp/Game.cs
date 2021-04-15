@@ -29,6 +29,7 @@ namespace SuperStarTrek
         }
 
         internal float Stardate => _currentStardate;
+
         internal float StardatesRemaining => _finalStarDate - _currentStardate;
 
         internal void DoIntroduction()

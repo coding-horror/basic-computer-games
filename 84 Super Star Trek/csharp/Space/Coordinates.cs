@@ -17,8 +17,11 @@ namespace SuperStarTrek.Space
         }
 
         internal int X { get; }
+        
         internal int Y { get; }
+        
         internal int RegionIndex { get; }
+        
         internal int SubRegionIndex { get; }
 
         private static int Validated(int value, string argumentName)
