@@ -81,10 +81,10 @@ namespace SuperStarTrek.Space
             var newQuadrant = (int)(galacticCoordinate / 8);
             var newSector = (int)(galacticCoordinate - newQuadrant * 8);
 
-            if (newSector == -1)
+            if (newSector < 0)
             {
                 newQuadrant -= 1;
-                newSector = 7;
+                newSector += 8;
             }
 
             return newQuadrant switch
