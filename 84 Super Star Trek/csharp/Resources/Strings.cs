@@ -8,8 +8,6 @@ namespace SuperStarTrek.Resources
     {
         internal static string CombatArea => GetResource();
 
-        internal static string ComputerFunctions => GetResource();
-
         internal static string Congratulations => GetResource();
 
         internal static string CourtMartial => GetResource();
