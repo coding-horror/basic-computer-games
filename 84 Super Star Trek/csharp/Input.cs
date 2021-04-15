@@ -10,24 +10,24 @@ namespace SuperStarTrek
     {
         private readonly Output _output;
 
-        public Input(Output output)
+        internal Input(Output output)
         {
             _output = output;
         }
 
-        public void WaitForAnyKeyButEnter(string prompt)
+        internal void WaitForAnyKeyButEnter(string prompt)
         {
             _output.Write($"Hit any key but Enter {prompt} ");
             while (Console.ReadKey(intercept: true).Key == ConsoleKey.Enter);
         }
 
-        public string GetString(string prompt)
+        internal string GetString(string prompt)
         {
             _output.Prompt(prompt);
             return Console.ReadLine();
         }
 
-        public float GetNumber(string prompt)
+        internal float GetNumber(string prompt)
         {
             _output.Prompt(prompt);
 
@@ -44,24 +44,24 @@ namespace SuperStarTrek
             }
         }
 
-        public (float X, float Y) GetCoordinates(string prompt)
+        internal (float X, float Y) GetCoordinates(string prompt)
         {
             _output.Prompt($"{prompt} (X,Y)");
             var responses = ReadNumbers(2);
             return (responses[0], responses[1]);
         }
 
-        public bool TryGetNumber(string prompt, float minValue, float maxValue, out float value)
+        internal bool TryGetNumber(string prompt, float minValue, float maxValue, out float value)
         {
             value = GetNumber($"{prompt} ({minValue}-{maxValue})");
 
             return value >= minValue && value <= maxValue;
         }
 
-        internal bool GetString(string replayPrompt, string trueValue)
-            => GetString(replayPrompt).Equals(trueValue, InvariantCultureIgnoreCase);
+        internal bool GetString(string replayPrompt, string trueValue) =>
+            GetString(replayPrompt).Equals(trueValue, InvariantCultureIgnoreCase);
 
-        public Command GetCommand()
+        internal Command GetCommand()
         {
             while(true)
             {
@@ -82,7 +82,7 @@ namespace SuperStarTrek
             }
         }
 
-        public bool TryGetCourse(string prompt, string officer, out Course course)
+        internal bool TryGetCourse(string prompt, string officer, out Course course)
         {
             if (!TryGetNumber(prompt, 1, 9, out var direction))
             {
@@ -95,7 +95,7 @@ namespace SuperStarTrek
             return true;
         }
 
-        public bool GetYesNo(string prompt, YesNoMode mode)
+        internal bool GetYesNo(string prompt, YesNoMode mode)
         {
             _output.Prompt($"{prompt} (Y/N)");
             var response = Console.ReadLine().ToUpperInvariant();
@@ -150,7 +150,7 @@ namespace SuperStarTrek
             return numbers;
         }
 
-        public enum YesNoMode
+        internal enum YesNoMode
         {
             TrueOnY,
             FalseOnN

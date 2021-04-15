@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
@@ -31,22 +30,33 @@ namespace SuperStarTrek.Objects
             _input = input;
         }
 
-        public Quadrant Quadrant => _quadrant;
-        public Coordinates QuadrantCoordinates => _quadrant.Coordinates;
-        public Coordinates SectorCoordinates { get; private set; }
+        internal Quadrant Quadrant => _quadrant;
 
-        public string Condition => GetCondition();
-        public LibraryComputer Computer => (LibraryComputer)_commandExecutors[Command.COM];
-        public ShieldControl ShieldControl => (ShieldControl)_commandExecutors[Command.SHE];
-        public float Energy => TotalEnergy - ShieldControl.ShieldEnergy;
-        public float TotalEnergy { get; private set; }
-        public int DamagedSystemCount => _systems.Count(s => s.IsDamaged);
-        public IEnumerable<Subsystem> Systems => _systems;
-        public PhotonTubes PhotonTubes => (PhotonTubes)_commandExecutors[Command.TOR];
-        public bool IsDocked => _quadrant.EnterpriseIsNextToStarbase;
-        public bool IsStranded => TotalEnergy < 10 || Energy < 10 && ShieldControl.IsDamaged;
+        internal Coordinates QuadrantCoordinates => _quadrant.Coordinates;
 
-        public Enterprise Add(Subsystem system)
+        internal Coordinates SectorCoordinates { get; private set; }
+
+        internal string Condition => GetCondition();
+
+        internal LibraryComputer Computer => (LibraryComputer)_commandExecutors[Command.COM];
+
+        internal ShieldControl ShieldControl => (ShieldControl)_commandExecutors[Command.SHE];
+
+        internal float Energy => TotalEnergy - ShieldControl.ShieldEnergy;
+
+        internal float TotalEnergy { get; private set; }
+
+        internal int DamagedSystemCount => _systems.Count(s => s.IsDamaged);
+
+        internal IEnumerable<Subsystem> Systems => _systems;
+
+        internal PhotonTubes PhotonTubes => (PhotonTubes)_commandExecutors[Command.TOR];
+
+        internal bool IsDocked => _quadrant.EnterpriseIsNextToStarbase;
+
+        internal bool IsStranded => TotalEnergy < 10 || Energy < 10 && ShieldControl.IsDamaged;
+
+        internal Enterprise Add(Subsystem system)
         {
             _systems.Add(system);
             _commandExecutors[system.Command] = system;
@@ -54,7 +64,7 @@ namespace SuperStarTrek.Objects
             return this;
         }
 
-        public void StartIn(Quadrant quadrant)
+        internal void StartIn(Quadrant quadrant)
         {
             _quadrant = quadrant;
             quadrant.Display(Strings.StartText);
@@ -68,24 +78,14 @@ namespace SuperStarTrek.Objects
                 _ => "Green"
             };
 
-        public CommandResult Execute(Command command)
+        internal CommandResult Execute(Command command)
         {
             if (command == Command.XXX) { return CommandResult.GameOver; }
 
             return _commandExecutors[command].ExecuteCommand(_quadrant);
         }
 
-        public void Refuel() => TotalEnergy = _maxEnergy;
-
-        internal bool Recognises(string command)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal string GetCommandList()
-        {
-            throw new NotImplementedException();
-        }
+        internal void Refuel() => TotalEnergy = _maxEnergy;
 
         public override string ToString() => "<*>";
 

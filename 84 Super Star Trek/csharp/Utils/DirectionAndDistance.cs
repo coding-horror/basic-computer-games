@@ -14,13 +14,13 @@ namespace SuperStarTrek.Utils
             _fromY = fromY;
         }
 
-        public static DirectionAndDistance From(Coordinates coordinates) => From(coordinates.X, coordinates.Y);
+        internal static DirectionAndDistance From(Coordinates coordinates) => From(coordinates.X, coordinates.Y);
 
-        public static DirectionAndDistance From(float x, float y) => new DirectionAndDistance(x, y);
+        internal static DirectionAndDistance From(float x, float y) => new DirectionAndDistance(x, y);
 
-        public (float Direction, float Distance) To(Coordinates coordinates) => To(coordinates.X, coordinates.Y);
+        internal (float Direction, float Distance) To(Coordinates coordinates) => To(coordinates.X, coordinates.Y);
 
-        public (float Direction, float Distance) To(float x, float y)
+        internal (float Direction, float Distance) To(float x, float y)
         {
             var deltaX = x - _fromX;
             var deltaY = y - _fromY;

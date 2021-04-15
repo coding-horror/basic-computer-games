@@ -6,31 +6,31 @@ namespace SuperStarTrek.Resources
 {
     internal static class Strings
     {
-        public static string CombatArea => GetResource();
-        public static string ComputerFunctions => GetResource();
-        public static string Congratulations => GetResource();
-        public static string CourtMartial => GetResource();
-        public static string Destroyed => GetResource();
-        public static string EndOfMission => GetResource();
-        public static string Enterprise => GetResource();
-        public static string Instructions => GetResource();
-        public static string LowShields => GetResource();
-        public static string NoEnemyShips => GetResource();
-        public static string NoStarbase => GetResource();
-        public static string NowEntering => GetResource();
-        public static string Orders => GetResource();
-        public static string PermissionDenied => GetResource();
-        public static string Protected => GetResource();
-        public static string RegionNames => GetResource();
-        public static string RelievedOfCommand => GetResource();
-        public static string RepairEstimate => GetResource();
-        public static string RepairPrompt => GetResource();
-        public static string ReplayPrompt => GetResource();
-        public static string ShieldsDropped => GetResource();
-        public static string ShortRangeSensorsOut => GetResource();
-        public static string StartText => GetResource();
-        public static string Stranded => GetResource();
-        public static string Title => GetResource();
+        internal static string CombatArea => GetResource();
+        internal static string ComputerFunctions => GetResource();
+        internal static string Congratulations => GetResource();
+        internal static string CourtMartial => GetResource();
+        internal static string Destroyed => GetResource();
+        internal static string EndOfMission => GetResource();
+        internal static string Enterprise => GetResource();
+        internal static string Instructions => GetResource();
+        internal static string LowShields => GetResource();
+        internal static string NoEnemyShips => GetResource();
+        internal static string NoStarbase => GetResource();
+        internal static string NowEntering => GetResource();
+        internal static string Orders => GetResource();
+        internal static string PermissionDenied => GetResource();
+        internal static string Protected => GetResource();
+        internal static string RegionNames => GetResource();
+        internal static string RelievedOfCommand => GetResource();
+        internal static string RepairEstimate => GetResource();
+        internal static string RepairPrompt => GetResource();
+        internal static string ReplayPrompt => GetResource();
+        internal static string ShieldsDropped => GetResource();
+        internal static string ShortRangeSensorsOut => GetResource();
+        internal static string StartText => GetResource();
+        internal static string Stranded => GetResource();
+        internal static string Title => GetResource();
 
         private static string GetResource([CallerMemberName] string name = "")
         {

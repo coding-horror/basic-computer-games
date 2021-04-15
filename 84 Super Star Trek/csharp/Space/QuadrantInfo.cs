@@ -1,5 +1,3 @@
-using SuperStarTrek.Objects;
-
 namespace SuperStarTrek.Space
 {
     internal class QuadrantInfo
@@ -15,13 +13,13 @@ namespace SuperStarTrek.Space
             HasStarbase = hasStarbase;
         }
 
-        public Coordinates Coordinates { get; }
-        public string Name { get; }
-        public int KlingonCount { get; private set; }
-        public bool HasStarbase { get; private set; }
-        public int StarCount { get; }
+        internal Coordinates Coordinates { get; }
+        internal string Name { get; }
+        internal int KlingonCount { get; private set; }
+        internal bool HasStarbase { get; private set; }
+        internal int StarCount { get; }
 
-        public static QuadrantInfo Create(Coordinates coordinates, string name)
+        internal static QuadrantInfo Create(Coordinates coordinates, string name)
         {
             var random = new Random();
             var klingonCount = random.GetFloat() switch

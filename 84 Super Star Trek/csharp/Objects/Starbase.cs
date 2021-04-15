@@ -9,7 +9,7 @@ namespace SuperStarTrek.Objects
         private readonly Output _output;
         private readonly float _repairDelay;
 
-        public Starbase(Coordinates sector, Random random, Input input, Output output)
+        internal Starbase(Coordinates sector, Random random, Input input, Output output)
         {
             Sector = sector;
             _repairDelay = random.GetFloat() * 0.5f;
