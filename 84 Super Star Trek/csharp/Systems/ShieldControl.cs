@@ -1,5 +1,6 @@
 using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
+using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Systems
@@ -30,6 +31,7 @@ namespace SuperStarTrek.Systems
             if (Validate(requested))
             {
                 ShieldEnergy = requested;
+                _output.Write(Strings.ShieldsSet, requested);
             }
             else
             {

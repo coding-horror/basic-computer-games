@@ -46,6 +46,8 @@ namespace SuperStarTrek.Resources
 
         internal static string ShieldsDropped => GetResource();
 
+        internal static string ShieldsSet => GetResource();
+
         internal static string ShortRangeSensorsOut => GetResource();
 
         internal static string StartText => GetResource();
