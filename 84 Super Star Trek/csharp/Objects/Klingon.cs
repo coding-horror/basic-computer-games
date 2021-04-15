@@ -15,6 +15,7 @@ namespace SuperStarTrek.Objects
         }
 
         internal float Energy { get; private set; }
+
         internal Coordinates Sector { get; private set; }
 
         public override string ToString() => "+K+";

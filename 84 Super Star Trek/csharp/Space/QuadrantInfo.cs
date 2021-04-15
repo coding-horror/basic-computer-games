@@ -14,9 +14,13 @@ namespace SuperStarTrek.Space
         }
 
         internal Coordinates Coordinates { get; }
+
         internal string Name { get; }
+
         internal int KlingonCount { get; private set; }
+
         internal bool HasStarbase { get; private set; }
+
         internal int StarCount { get; }
 
         internal static QuadrantInfo Create(Coordinates coordinates, string name, Random random)
