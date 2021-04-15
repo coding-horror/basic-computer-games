@@ -14,7 +14,7 @@ namespace SuperStarTrek.Space
         private readonly Dictionary<Coordinates, object> _sectors;
         private readonly Enterprise _enterprise;
         private readonly Output _output;
-        private bool _displayed = false;
+        private bool _entered = false;
 
         internal Quadrant(
             QuadrantInfo info,
@@ -77,9 +77,11 @@ namespace SuperStarTrek.Space
 
         internal void Display(string textFormat)
         {
-            if (_displayed) { return; }
-
-            _output.Write(textFormat, this);
+            if (!_entered)
+            {
+                _output.Write(textFormat, this);
+                _entered = true;
+            }
 
             if (_info.KlingonCount > 0)
             {
@@ -88,8 +90,6 @@ namespace SuperStarTrek.Space
             }
 
             _enterprise.Execute(Command.SRS);
-
-            _displayed = true;
         }
 
         internal bool HasObjectAt(Coordinates coordinates) => _sectors.ContainsKey(coordinates);

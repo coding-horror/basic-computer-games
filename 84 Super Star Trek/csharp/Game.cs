@@ -51,8 +51,6 @@ namespace SuperStarTrek
 
             while (!gameOver)
             {
-                _enterprise.Quadrant.Display(Strings.NowEntering);
-
                 var command = _input.GetCommand();
 
                 var result = _enterprise.Execute(command);
