@@ -4,7 +4,7 @@ namespace SuperStarTrek
 {
     internal class Random
     {
-        private static readonly System.Random _random = new();
+        private readonly System.Random _random = new();
 
         internal Coordinates GetCoordinate() => new Coordinates(Get1To8Inclusive() - 1, Get1To8Inclusive() - 1);
 

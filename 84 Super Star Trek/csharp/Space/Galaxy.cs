@@ -11,7 +11,6 @@ namespace SuperStarTrek.Space
         private static readonly string[] _regionNames;
         private static readonly string[] _subRegionIdentifiers;
         private readonly QuadrantInfo[][] _quadrants;
-        private readonly Random _random;
 
         static Galaxy()
         {
@@ -21,8 +20,6 @@ namespace SuperStarTrek.Space
 
         internal Galaxy(Random random)
         {
-            _random = random;
-
             _quadrants = Enumerable
                 .Range(0, 8)
                 .Select(x => Enumerable

@@ -35,9 +35,7 @@ namespace SuperStarTrek.Resources
         private static string GetResource([CallerMemberName] string name = "")
         {
             var streamName = $"SuperStarTrek.Resources.{name}.txt";
-            using var stream = Assembly
-                .GetExecutingAssembly()
-                .GetManifestResourceStream(streamName);
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(streamName);
             using var reader = new StreamReader(stream);
 
             return reader.ReadToEnd();

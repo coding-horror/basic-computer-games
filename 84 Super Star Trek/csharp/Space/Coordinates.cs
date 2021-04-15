@@ -21,7 +21,7 @@ namespace SuperStarTrek.Space
         internal int RegionIndex { get; }
         internal int SubRegionIndex { get; }
 
-        private int Validated(int value, string argumentName)
+        private static int Validated(int value, string argumentName)
         {
             if (value >= 0 && value <= 7) { return value; }
 
