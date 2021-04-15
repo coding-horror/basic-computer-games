@@ -25,7 +25,7 @@ namespace SuperStarTrek.Space
                 .Select(x => Enumerable
                     .Range(0, 8)
                     .Select(y => new Coordinates(x, y))
-                    .Select(c => QuadrantInfo.Create(c, GetQuadrantName(c)))
+                    .Select(c => QuadrantInfo.Create(c, GetQuadrantName(c), random))
                     .ToArray())
                 .ToArray();
 
