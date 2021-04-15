@@ -71,11 +71,12 @@ namespace SuperStarTrek.Objects
         }
 
         private string GetCondition() =>
-            (_quadrant.HasKlingons, Energy / _maxEnergy) switch
+            IsDocked switch
             {
-                (true, _) => "*Red*",
-                (_, < 0.1f) => "Yellow",
-                _ => "Green"
+                true => "Docked",
+                false when _quadrant.HasKlingons => "*Red*",
+                false when Energy / _maxEnergy < 0.1f => "Yellow",
+                false => "Green"
             };
 
         internal CommandResult Execute(Command command)
