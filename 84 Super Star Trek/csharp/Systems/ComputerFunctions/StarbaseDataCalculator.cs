@@ -8,7 +8,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
     {
         private readonly Enterprise _enterprise;
 
-        public StarbaseDataCalculator(Enterprise enterprise, Output output)
+        internal StarbaseDataCalculator(Enterprise enterprise, Output output)
             : base("Starbase nav data", output)
         {
             _enterprise = enterprise;

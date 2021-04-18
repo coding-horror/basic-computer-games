@@ -4,7 +4,6 @@ using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 using SuperStarTrek.Systems;
 using SuperStarTrek.Systems.ComputerFunctions;
-using static System.StringComparison;
 
 namespace SuperStarTrek
 {
@@ -22,17 +21,18 @@ namespace SuperStarTrek
         private int _initialKlingonCount;
         private Enterprise _enterprise;
 
-        public Game()
+        internal Game(Output output, Input input, Random random)
         {
-            _output = new Output();
-            _input = new Input(_output);
-            _random = new Random();
+            _output = output;
+            _input = input;
+            _random = random;
         }
 
-        public float Stardate => _currentStardate;
-        public float StardatesRemaining => _finalStarDate - _currentStardate;
+        internal float Stardate => _currentStardate;
 
-        public void DoIntroduction()
+        internal float StardatesRemaining => _finalStarDate - _currentStardate;
+
+        internal void DoIntroduction()
         {
             _output.Write(Strings.Title);
 
@@ -44,16 +44,13 @@ namespace SuperStarTrek
             }
         }
 
-        public void Play()
+        internal void Play()
         {
             Initialise();
             var gameOver = false;
-            var newQuadrantText = Strings.StartText;
 
             while (!gameOver)
             {
-                _enterprise.Quadrant.Display(Strings.NowEntering);
-
                 var command = _input.GetCommand();
 
                 var result = _enterprise.Execute(command);
@@ -120,7 +117,7 @@ namespace SuperStarTrek
         private Quadrant BuildCurrentQuadrant() =>
            new Quadrant(_galaxy[_currentQuadrant], _enterprise, _random, _galaxy, _input, _output);
 
-        public bool Replay() => _galaxy.StarbaseCount > 0 && _input.GetString(Strings.ReplayPrompt, "Aye");
+        internal bool Replay() => _galaxy.StarbaseCount > 0 && _input.GetString(Strings.ReplayPrompt, "Aye");
 
         private bool CheckIfStranded()
         {

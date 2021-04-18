@@ -11,7 +11,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
         private readonly Input _input;
 
-        public PhotonTubes(int tubeCount, Enterprise enterprise, Output output, Input input)
+        internal PhotonTubes(int tubeCount, Enterprise enterprise, Output output, Input input)
             : base("Photon Tubes", Command.TOR, output)
         {
             TorpedoCount = _tubeCount = tubeCount;
@@ -20,7 +20,7 @@ namespace SuperStarTrek.Systems
             _input = input;
         }
 
-        public int TorpedoCount { get; private set; }
+        internal int TorpedoCount { get; private set; }
 
         protected override bool CanExecuteCommand() => HasTorpedoes() && IsOperational("{name} are not operational");
 

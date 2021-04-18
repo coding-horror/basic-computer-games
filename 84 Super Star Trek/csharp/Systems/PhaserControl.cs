@@ -13,7 +13,7 @@ namespace SuperStarTrek.Systems
         private readonly Input _input;
         private readonly Random _random;
 
-        public PhaserControl(Enterprise enterprise, Output output, Input input, Random random)
+        internal PhaserControl(Enterprise enterprise, Output output, Input input, Random random)
             : base("Phaser Control", Command.PHA, output)
         {
             _enterprise = enterprise;
