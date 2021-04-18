@@ -16,6 +16,8 @@
     class CrapsGame
     {
         private readonly UserInterface ui;
+        private Dice dice1 = new Dice();
+        private Dice dice2 = new Dice();
 
         public CrapsGame(ref UserInterface ui)
         {
@@ -24,9 +26,6 @@
 
         public Result Play(out int diceRoll)
         {
-
-            var dice1 = new Dice();
-            var dice2 = new Dice();
             diceRoll = dice1.Roll() + dice2.Roll();
 
             if (Win(diceRoll))
@@ -47,14 +46,16 @@
                     var newRoll = dice1.Roll() + dice2.Roll();
                     if (newRoll == point)
                     {
+                        diceRoll = newRoll;
                         return Result.pointWin;
                     }
                     else if (newRoll == 7)
                     {
+                        diceRoll = newRoll;
                         return Result.pointLoss;
                     }
 
-                    ui.NoPoint(diceRoll);
+                    ui.NoPoint(newRoll);
                 }
             }
         }
