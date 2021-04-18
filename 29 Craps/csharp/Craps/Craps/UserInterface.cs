@@ -17,31 +17,62 @@ namespace Craps
             // times as the number the user entered. This is presumably something to do with ensuring
             // that different random numbers will be generated each time the program is run.
             //
-            // This is not necessary in C#; the random number generator uses the time as a seed so the
-            // results will always be different every time it is run.
+            // This is not necessary in C#; the random number generator uses the current time as a seed
+            // so the results will always be different every time it is run.
             //
-            // So that the game exactly matches the original game we ask the question but then ignore the
-            // answer.
-            Console.WriteLine("PICK A NUMBER AND INPUT TO ROLL DICE");
+            // So that the game exactly matches the original game we ask the question but then ignore
+            // the answer.
+            Console.Write("PICK A NUMBER AND INPUT TO ROLL DICE ");
             GetInt();
         }
 
         public int PlaceBet()
         {
-            Console.WriteLine("INPUT THE AMOUNT OF YOUR WAGER.");
+            Console.Write("INPUT THE AMOUNT OF YOUR WAGER. ");
             int n = GetInt();
             Console.WriteLine("I WILL NOW THROW THE DICE");
 
             return n;
         }
 
-        public bool PlayAgain(int bet)
+        public bool PlayAgain(int winnings)
         {
             // Goodness knows why we have to enter 5 to play
             // again but that's what the original game asked.
-            Console.WriteLine("IF YOU WANT TO PLAY AGAIN PRINT 5 IF NOT PRINT 2");
+            Console.Write("IF YOU WANT TO PLAY AGAIN PRINT 5 IF NOT PRINT 2 ");
 
-            return GetInt() == 5;
+            bool playAgain = (GetInt() == 5);
+
+            if (winnings < 0)
+            {
+                Console.WriteLine($"YOU ARE NOW UNDER ${-winnings}");
+            }
+            else if (winnings > 0)
+            {
+                Console.WriteLine($"YOU ARE NOW OVER ${winnings}");
+            }
+            else
+            {
+                Console.WriteLine($"YOU ARE NOW EVEN AT ${winnings}");
+            }
+
+            return playAgain;
+        }
+
+        public void GoodBye(int winnings)
+        {
+            if (winnings < 0)
+            {
+                Console.WriteLine("TOO BAD, YOU ARE IN THE HOLE. COME AGAIN.");
+            }
+            else if (winnings > 0)
+            {
+                Console.WriteLine("CONGRATULATIONS---YOU CAME OUT A WINNER. COME AGAIN!");
+            }
+            else
+            {
+                Console.WriteLine("CONGRATULATIONS---YOU CAME OUT EVEN, NOT BAD FOR AN AMATEUR");
+            }
         }
 
         public void NoPoint(int diceRoll)
@@ -102,7 +133,7 @@ namespace Craps
                 }
                 else
                 {
-                    Console.WriteLine("ENTER AN INTEGER");
+                    Console.Write("ENTER AN INTEGER ");
                 }
             }
         }

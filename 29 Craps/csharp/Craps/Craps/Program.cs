@@ -44,6 +44,8 @@ namespace Craps
 
                 ui.ShowResult(result, diceRoll, bet);
             } while (ui.PlayAgain(winnings));
+
+            ui.GoodBye(winnings);
         }
     }
 }
