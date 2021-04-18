@@ -8,7 +8,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
     {
         private readonly Enterprise _enterprise;
 
-        public TorpedoDataCalculator(Enterprise enterprise, Output output)
+        internal TorpedoDataCalculator(Enterprise enterprise, Output output)
             : base("Photon torpedo data", output)
         {
             _enterprise = enterprise;

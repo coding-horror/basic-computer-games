@@ -90,6 +90,7 @@ One could go many directions with this game:
 game_number = 0
 move_count = 0
 losing_book = []
+n = 0
 
 MAX_HISTORY = 9
 LOSING_BOOK_SIZE = 50
