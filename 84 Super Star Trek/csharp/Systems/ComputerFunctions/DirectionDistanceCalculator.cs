@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
@@ -11,8 +8,8 @@ namespace SuperStarTrek.Systems.ComputerFunctions
         private readonly Enterprise _enterprise;
         private readonly Input _input;
 
-        public DirectionDistanceCalculator(Enterprise enterprise, Output output, Input input)
-            : base("Starbase nav data", output)
+        internal DirectionDistanceCalculator(Enterprise enterprise, Output output, Input input)
+            : base("Direction/distance calculator", output)
         {
             _enterprise = enterprise;
             _input = input;

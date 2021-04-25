@@ -10,7 +10,7 @@ namespace SuperStarTrek.Systems
         private readonly Input _input;
         private readonly ComputerFunction[] _functions;
 
-        public LibraryComputer(Output output, Input input, params ComputerFunction[] functions)
+        internal LibraryComputer(Output output, Input input, params ComputerFunction[] functions)
             : base("Library-Computer", Command.COM, output)
         {
             _output = output;

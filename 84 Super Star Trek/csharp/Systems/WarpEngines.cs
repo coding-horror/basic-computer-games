@@ -1,6 +1,7 @@
 using System;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
+using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Systems
@@ -11,7 +12,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
         private readonly Input _input;
 
-        public WarpEngines(Enterprise enterprise, Output output, Input input)
+        internal WarpEngines(Enterprise enterprise, Output output, Input input)
             : base("Warp Engines", Command.NAV, output)
         {
             _enterprise = enterprise;
@@ -38,6 +39,8 @@ namespace SuperStarTrek.Systems
                     _enterprise.Refuel();
                     _enterprise.PhotonTubes.ReplenishTorpedoes();
                 }
+
+                _enterprise.Quadrant.Display(Strings.NowEntering);
 
                 return CommandResult.Elapsed(timeElapsed);
             }

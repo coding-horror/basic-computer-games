@@ -1,9 +1,0 @@
-
-Functions available from Library-Computer:
-   0 = Cumulative galactic record
-   1 = Status report
-   2 = Photon torpedo data
-   3 = Starbase nav data
-   4 = Direction/distance calculator
-   5 = Galaxy 'region name' map
-

@@ -6,7 +6,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
 {
     internal abstract class GalacticReport : ComputerFunction
     {
-        public GalacticReport(string description, Output output, Galaxy galaxy)
+        internal GalacticReport(string description, Output output, Galaxy galaxy)
             : base(description, output)
         {
             Galaxy = galaxy;

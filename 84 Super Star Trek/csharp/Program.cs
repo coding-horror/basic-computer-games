@@ -29,8 +29,11 @@ namespace SuperStarTrek
     {
         static void Main()
         {
-            var foo = Utils.DirectionAndDistance.From(1,1).To(4,5);
-            var game = new Game();
+            var output = new Output();
+            var input = new Input(output);
+            var random = new Random();
+
+            var game = new Game(output, input, random);
 
             game.DoIntroduction();
 

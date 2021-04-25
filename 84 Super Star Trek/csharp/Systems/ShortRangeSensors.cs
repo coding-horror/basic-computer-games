@@ -16,7 +16,7 @@ namespace SuperStarTrek.Systems
         private readonly Game _game;
         private readonly Output _output;
 
-        public ShortRangeSensors(Enterprise enterprise, Galaxy galaxy, Game game, Output output)
+        internal ShortRangeSensors(Enterprise enterprise, Galaxy galaxy, Game game, Output output)
             : base("Short Range Sensors", Command.SRS, output)
         {
             _enterprise = enterprise;
@@ -47,7 +47,7 @@ namespace SuperStarTrek.Systems
             return CommandResult.Ok;
         }
 
-        public IEnumerable<string> GetStatusLines()
+        internal IEnumerable<string> GetStatusLines()
         {
             yield return $"Stardate           {_game.Stardate}";
             yield return $"Condition          {_enterprise.Condition}";

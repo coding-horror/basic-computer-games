@@ -11,6 +11,7 @@ namespace SuperStarTrek.Systems.ComputerFunctions
         }
 
         internal string Description { get; }
+
         protected Output Output { get; }
 
         internal abstract void Execute(Quadrant quadrant);
