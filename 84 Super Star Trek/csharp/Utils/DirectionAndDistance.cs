@@ -14,13 +14,13 @@ namespace SuperStarTrek.Utils
             _fromY = fromY;
         }
 
-        public static DirectionAndDistance From(Coordinates coordinates) => From(coordinates.X, coordinates.Y);
+        internal static DirectionAndDistance From(Coordinates coordinates) => From(coordinates.X, coordinates.Y);
 
-        public static DirectionAndDistance From(float x, float y) => new DirectionAndDistance(x, y);
+        internal static DirectionAndDistance From(float x, float y) => new DirectionAndDistance(x, y);
 
-        public (float Direction, float Distance) To(Coordinates coordinates) => To(coordinates.X, coordinates.Y);
+        internal (float Direction, float Distance) To(Coordinates coordinates) => To(coordinates.X, coordinates.Y);
 
-        public (float Direction, float Distance) To(float x, float y)
+        internal (float Direction, float Distance) To(float x, float y)
         {
             var deltaX = x - _fromX;
             var deltaY = y - _fromY;
@@ -45,7 +45,7 @@ namespace SuperStarTrek.Utils
         //     8430 PRINT"DIRECTION =";C1+(((ABS(X)-ABS(A))+ABS(X))/ABS(X)):GOTO8460
         //     8450 PRINT"DIRECTION =";C1+(ABS(X)/ABS(A))
         //     8460 PRINT"DISTANCE =";SQR(X^2+A^2):IFH8=1THEN1990
-        private float GetDirection(float deltaX, float deltaY)
+        private static float GetDirection(float deltaX, float deltaY)
         {
             var deltaXDominant = Math.Abs(deltaX) > Math.Abs(deltaY);
             var fractionalPart = deltaXDominant ? deltaY / deltaX : -deltaX / deltaY;
@@ -59,7 +59,7 @@ namespace SuperStarTrek.Utils
             return direction < 1 ? direction + 8 : direction;
         }
 
-        private float GetDistance(float deltaX, float deltaY) =>
+        private static float GetDistance(float deltaX, float deltaY) =>
             (float)Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
     }
 }

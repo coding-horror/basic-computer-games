@@ -14,9 +14,9 @@ namespace SuperStarTrek.Space
         private readonly Dictionary<Coordinates, object> _sectors;
         private readonly Enterprise _enterprise;
         private readonly Output _output;
-        private bool _displayed = false;
+        private bool _entered = false;
 
-        public Quadrant(
+        internal Quadrant(
             QuadrantInfo info,
             Enterprise enterprise,
             Random random,
@@ -39,13 +39,19 @@ namespace SuperStarTrek.Space
             PositionObject(_ => new Star(), _info.StarCount);
         }
 
-        public Coordinates Coordinates => _info.Coordinates;
-        public bool HasKlingons => _info.KlingonCount > 0;
-        public int KlingonCount => _info.KlingonCount;
-        public bool HasStarbase => _info.HasStarbase;
-        public Starbase Starbase { get; }
+        internal Coordinates Coordinates => _info.Coordinates;
+
+        internal bool HasKlingons => _info.KlingonCount > 0;
+
+        internal int KlingonCount => _info.KlingonCount;
+
+        internal bool HasStarbase => _info.HasStarbase;
+
+        internal Starbase Starbase { get; }
+
         internal Galaxy Galaxy { get; }
-        public bool EnterpriseIsNextToStarbase =>
+
+        internal bool EnterpriseIsNextToStarbase =>
             _info.HasStarbase &&
             Math.Abs(_enterprise.SectorCoordinates.X - Starbase.Sector.X) <= 1 &&
             Math.Abs(_enterprise.SectorCoordinates.Y - Starbase.Sector.Y) <= 1;
@@ -71,9 +77,11 @@ namespace SuperStarTrek.Space
 
         internal void Display(string textFormat)
         {
-            if (_displayed) { return; }
-
-            _output.Write(textFormat, this);
+            if (!_entered)
+            {
+                _output.Write(textFormat, this);
+                _entered = true;
+            }
 
             if (_info.KlingonCount > 0)
             {
@@ -82,8 +90,6 @@ namespace SuperStarTrek.Space
             }
 
             _enterprise.Execute(Command.SRS);
-
-            _displayed = true;
         }
 
         internal bool HasObjectAt(Coordinates coordinates) => _sectors.ContainsKey(coordinates);
@@ -166,10 +172,10 @@ namespace SuperStarTrek.Space
             }
         }
 
-        public IEnumerable<string> GetDisplayLines() => Enumerable.Range(0, 8).Select(x => GetDisplayLine(x));
+        internal IEnumerable<string> GetDisplayLines() => Enumerable.Range(0, 8).Select(x => GetDisplayLine(x));
 
-        private string GetDisplayLine(int x)
-            => string.Join(
+        private string GetDisplayLine(int x) =>
+            string.Join(
                 " ",
                 Enumerable
                     .Range(0, 8)

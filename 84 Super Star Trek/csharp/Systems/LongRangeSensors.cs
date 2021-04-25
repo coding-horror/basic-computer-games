@@ -1,10 +1,5 @@
-
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using SuperStarTrek.Commands;
-using SuperStarTrek.Objects;
-using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Systems
@@ -14,7 +9,7 @@ namespace SuperStarTrek.Systems
         private readonly Galaxy _galaxy;
         private readonly Output _output;
 
-        public LongRangeSensors(Galaxy galaxy, Output output)
+        internal LongRangeSensors(Galaxy galaxy, Output output)
             : base("Long Range Sensors", Command.LRS, output)
         {
             _galaxy = galaxy;

@@ -1,5 +1,6 @@
 using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
+using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 
 namespace SuperStarTrek.Systems
@@ -10,7 +11,7 @@ namespace SuperStarTrek.Systems
         private readonly Output _output;
         private readonly Input _input;
 
-        public ShieldControl(Enterprise enterprise, Output output, Input input)
+        internal ShieldControl(Enterprise enterprise, Output output, Input input)
             : base("Shield Control", Command.SHE, output)
         {
             _enterprise = enterprise;
@@ -18,7 +19,7 @@ namespace SuperStarTrek.Systems
             _input = input;
         }
 
-        public float ShieldEnergy { get; set; }
+        internal float ShieldEnergy { get; set; }
 
         protected override bool CanExecuteCommand() => IsOperational("{name} inoperable");
 
@@ -30,6 +31,7 @@ namespace SuperStarTrek.Systems
             if (Validate(requested))
             {
                 ShieldEnergy = requested;
+                _output.Write(Strings.ShieldsSet, requested);
             }
             else
             {
