@@ -40,6 +40,6 @@
         /// Gets a flag indicating whether the player was impeached for
         /// starving too many people.
         /// </summary>
-        public bool WasImpeached { get; init; }
+        public bool WasPlayerImpeached { get; init; }
     }
 }
