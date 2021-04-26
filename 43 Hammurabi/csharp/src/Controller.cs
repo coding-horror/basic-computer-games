@@ -23,7 +23,7 @@ namespace Hammurabi
         /// <returns>
         /// The updated game state.
         /// </returns>
-        public static GameState TryUntilSuccess(
+        public static GameState UpdateGameState(
             GameState state,
             Action prompt,
             Func<GameState, int, (GameState newState, ActionResult result)> rule)
@@ -35,29 +35,28 @@ namespace Hammurabi
                 if (!Int32.TryParse(Console.ReadLine(), out var amount))
                 {
                     View.ShowInvalidNumber();
+                    continue;
                 }
-                else
-                {
-                    var (newState, result) = rule(state, amount);
 
-                    switch (result)
-                    {
-                        case ActionResult.InsufficientLand:
-                            View.ShowInsufficientLand(state);
-                            break;
-                        case ActionResult.InsufficientPopulation:
-                            View.ShowInsufficientPopulation(state);
-                            break;
-                        case ActionResult.InsufficientStores:
-                            View.ShowInsufficientStores(state);
-                            break;
-                        case ActionResult.Offense:
-                            // Not sure why we have to blow up the game here...
-                            // Maybe this made sense in the 70's.
-                            throw new GreatOffence();
-                        default:
-                            return newState;
-                    }
+                var (newState, result) = rule(state, amount);
+
+                switch (result)
+                {
+                    case ActionResult.InsufficientLand:
+                        View.ShowInsufficientLand(state);
+                        break;
+                    case ActionResult.InsufficientPopulation:
+                        View.ShowInsufficientPopulation(state);
+                        break;
+                    case ActionResult.InsufficientStores:
+                        View.ShowInsufficientStores(state);
+                        break;
+                    case ActionResult.Offense:
+                        // Not sure why we have to blow up the game here...
+                        // Maybe this made sense in the 70's.
+                        throw new GreatOffence();
+                    default:
+                        return newState;
                 }
             }
         }
