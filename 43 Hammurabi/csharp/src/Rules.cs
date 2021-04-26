@@ -12,7 +12,7 @@ namespace Hammurabi
         public static GameState BeginGame() =>
             new GameState
             {
-                Year                = 1,
+                Year                = 0,
                 Population          = 95,
                 PopulationIncrease  = 5,
                 Starvation          = 0,
@@ -22,7 +22,7 @@ namespace Hammurabi
                 Productivity        = 3,
                 Spoilage            = 200,
                 IsPlagueYear        = false,
-                IsImpeached         = false
+                IsPlayerImpeached   = false
             };
 
         /// <summary>
@@ -31,6 +31,7 @@ namespace Hammurabi
         public static GameState BeginTurn(GameState state, Random random) =>
             state with
             {
+                Year            = state.Year + 1,
                 Population      = (state.Population + state.PopulationIncrease - state.Starvation) / (state.IsPlagueYear ? 2 : 1),
                 LandPrice       = random.Next(10) + 17,
                 Stores          = state.Stores + (state.AcresPlanted * state.Productivity) - state.Spoilage,
@@ -139,23 +140,22 @@ namespace Hammurabi
                 _ => 0
             };
 
-            var populationIncrease= (int)((double) random.Next(1, 6) * (20 * state.Acres + state.Stores + harvest - spoilage) / state.Population / 100 + 1);
+            var populationIncrease= (int)((double)random.Next(1, 6) * (20 * state.Acres + state.Stores + harvest - spoilage) / state.Population / 100 + 1);
 
             var plagueYear = random.Next(20) < 3;
 
-            var peopleFed = state.FoodDistributed / 20;
+            var peopleFed  = state.FoodDistributed / 20;
             var starvation = peopleFed < state.Population ? state.Population - peopleFed : 0;
             var impeached  = starvation > state.Population * 0.45;
 
             return state with
             {
-                Year               = state.Year + 1,
                 Productivity       = productivity,
                 Spoilage           = spoilage,
                 PopulationIncrease = populationIncrease,
                 Starvation         = starvation,
                 IsPlagueYear       = plagueYear,
-                IsImpeached        = impeached
+                IsPlayerImpeached  = impeached
             };
         }
 
@@ -176,7 +176,7 @@ namespace Hammurabi
 
             var acresPerPerson = finalState.Acres / finalState.Population;
 
-            var rating = finalState.IsImpeached ?
+            var rating = finalState.IsPlayerImpeached ?
                 PerformanceRating.Disgraceful :
                 (averageStarvationRate, acresPerPerson) switch
                 {
@@ -200,7 +200,7 @@ namespace Hammurabi
                 TotalStarvation       = totalStarvation,
                 AverageStarvationRate = averageStarvationRate,
                 Assassins             = assassins,
-                WasImpeached          = finalState.IsImpeached
+                WasPlayerImpeached    = finalState.IsPlayerImpeached
             };
         }
     }
