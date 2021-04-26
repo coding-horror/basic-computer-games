@@ -68,6 +68,6 @@
         /// <summary>
         /// Gets a flag indicating whether the player has been impeached.
         /// </summary>
-        public bool IsImpeached { get; init; }
+        public bool IsPlayerImpeached { get; init; }
     }
 }

@@ -110,7 +110,7 @@ namespace Hammurabi
         /// </summary>
         public static void ShowGameResult(GameResult result)
         {
-            if (!result.WasImpeached)
+            if (!result.WasPlayerImpeached)
             {
                 Console.WriteLine($"IN YOUR 10-YEAR TERM OF OFFICE, {result.AverageStarvationRate} PERCENT OF THE");
                 Console.WriteLine("POPULATION STARVED PER YEAR ON THE AVERAGE, I.E. A TOTAL OF");
@@ -124,7 +124,7 @@ namespace Hammurabi
             switch (result.Rating)
             {
                 case PerformanceRating.Disgraceful:
-                    if (result.WasImpeached)
+                    if (result.WasPlayerImpeached)
                         Console.WriteLine($"YOU STARVED {result.FinalStarvation} PEOPLE IN ONE YEAR!!!");
 
                     Console.WriteLine("DUE TO THIS EXTREME MISMANAGEMENT YOU HAVE NOT ONLY");
@@ -163,7 +163,7 @@ namespace Hammurabi
         /// </summary>
         public static void PromptBuyLand()
         {
-            Console.WriteLine ("HOW MANY ACRES DO YOU WISH TO BUY");
+            Console.Write("HOW MANY ACRES DO YOU WISH TO BUY? ");
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Hammurabi
         /// </summary>
         public static void PromptSellLand()
         {
-            Console.WriteLine("HOW MANY ACRES DO YOU WISH TO SELL");
+            Console.Write("HOW MANY ACRES DO YOU WISH TO SELL? ");
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace Hammurabi
         /// </summary>
         public static void PromptFeedPeople()
         {
-            Console.WriteLine("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE");
+            Console.Write("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? ");
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Hammurabi
         /// </summary>
         public static void PromptPlantCrops()
         {
-            Console.WriteLine("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED");
+            Console.Write("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED? ");
         }
     }
 }
