@@ -256,10 +256,6 @@ public class Bowling {
     }  // End outer while loop    
     
   }  // End of method startGame  
-
-  public void printBoard(int[] board) {    
-    
-  }  // End of method printBoard
     
   public static void printRules() {
     
