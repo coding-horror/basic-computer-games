@@ -153,19 +153,19 @@ namespace banner
                 throw new KeyNotFoundException($"The provided letter {outCh} was not found in the letters list");
             }
 
-            // New int array declarations default to zeros
-            // numSections decides how many 'sections' need to be printed
-            // for a given line of each character
-            int[] numSections = new int[7];
-            // fillInSection decides whether each 'section' of the 
-            // character gets filled in with the character or with blanks
-            int[] fillInSection = new int[9];
-
             // This iterates through each of the parts that make up
             // each letter.  Each part represents 1 * Horizontal lines
             // of actual output.
             for (int idx = 0; idx < 7; idx++)
             {
+                // New int array declarations default to zeros
+                // numSections decides how many 'sections' need to be printed
+                // for a given line of each character
+                int[] numSections = new int[7];
+                // fillInSection decides whether each 'section' of the 
+                // character gets filled in with the character or with blanks
+                int[] fillInSection = new int[9];
+
                 // This uses the value in each part to decide which
                 // sections are empty spaces in the letter or filled in
                 // spaces.  For each section marked with 1 in fillInSection,
@@ -228,7 +228,7 @@ namespace banner
             // In the original version, it would print an additional 75 blank
             // lines in order to feed the printer paper...don't really need this
             // since we're not actually printing.
-            Console.WriteLine(new string('\n', 75));
+            // Console.WriteLine(new string('\n', 75));
         }
 
         /// <summary>
