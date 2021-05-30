@@ -9,7 +9,7 @@ namespace Hammurabi
 
         public static void Main(string[] args)
         {
-            var random  = new Random ((int) (DateTime.UtcNow.Ticks / 10000)) ;
+            var random  = new Random() ;
             var state   = Rules.BeginGame();
             var history = ImmutableList<GameState>.Empty;
 
@@ -17,21 +17,24 @@ namespace Hammurabi
 
             try
             {
-                while (state.Year <= GameLength && !state.IsImpeached)
+                while (!state.IsPlayerImpeached)
                 {
                     state = Rules.BeginTurn(state, random);
                     View.ShowCitySummary(state);
 
+                    if (state.Year > GameLength)
+                        break;
+
                     View.ShowLandPrice(state);
-                    var newState = Controller.TryUntilSuccess(state, View.PromptBuyLand, Rules.BuyLand);
+                    var newState = Controller.UpdateGameState(state, View.PromptBuyLand, Rules.BuyLand);
                     state = newState.Acres != state.Acres ?
-                        newState : Controller.TryUntilSuccess(state, View.PromptSellLand, Rules.SellLand);
+                        newState : Controller.UpdateGameState(state, View.PromptSellLand, Rules.SellLand);
 
                     View.ShowSeparator();
-                    state = Controller.TryUntilSuccess(state, View.PromptFeedPeople, Rules.FeedPeople);
+                    state = Controller.UpdateGameState(state, View.PromptFeedPeople, Rules.FeedPeople);
 
                     View.ShowSeparator();
-                    state = Controller.TryUntilSuccess(state, View.PromptPlantCrops, Rules.PlantCrops);
+                    state = Controller.UpdateGameState(state, View.PromptPlantCrops, Rules.PlantCrops);
 
                     state = Rules.EndTurn(state, random);
                     history = history.Add(state);
