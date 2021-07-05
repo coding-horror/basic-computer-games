@@ -2,7 +2,7 @@
 
 We're updating the first million selling computer book, [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games), for 2021!
 
-[Read book] (https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf)
+[Read book](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf)
 
 ### Where can we discuss it?
 

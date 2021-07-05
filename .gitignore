@@ -12,3 +12,5 @@ out/
 
 *.py[co]
 Pipfile
+
+.DS_Store
