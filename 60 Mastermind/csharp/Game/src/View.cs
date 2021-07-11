@@ -18,15 +18,6 @@ namespace Game
             Console.WriteLine();
         }
 
-        public static void ShowStartOfRound(int roundNumber)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"ROUND NUMBER {roundNumber} ----");
-            Console.WriteLine();
-            Console.WriteLine("GUESS MY COMBINATION.");
-            Console.WriteLine();
-        }
-
         public static void ShowTotalPossibilities(int possibilities)
         {
             Console.WriteLine($"TOTAL POSSIBILITIES = {possibilities}");
@@ -42,6 +33,15 @@ namespace Game
             foreach (var color in Colors.List.Take(numberOfColors))
                 Console.WriteLine($"{color.LongName,-13}{color.ShortName}");
 
+            Console.WriteLine();
+        }
+
+        public static void ShowStartOfRound(int roundNumber)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"ROUND NUMBER {roundNumber} ----");
+            Console.WriteLine();
+            Console.WriteLine("GUESS MY COMBINATION.");
             Console.WriteLine();
         }
 
