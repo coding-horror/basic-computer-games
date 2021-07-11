@@ -22,6 +22,8 @@ namespace Game
 
             for (var round = 1; round <= rounds; ++round)
             {
+                View.ShowStartOfRound(round);
+
                 if (!HumanTakesTurn())
                     return;
 
