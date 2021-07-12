@@ -102,7 +102,7 @@ namespace Game
                         if (input.FindFirstIndex(c => !TranslateColor(c).HasValue) is int invalidPosition)
                             View.NotifyInvalidColor(input[invalidPosition]);
                         else
-                            return (Command.MakeGuess, new Code(input.SelectNonNull(TranslateColor)));
+                            return (Command.MakeGuess, new Code(input.Select(c => TranslateColor(c)!.Value)));
 
                         break;
                 }

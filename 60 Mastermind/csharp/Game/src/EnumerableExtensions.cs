@@ -84,28 +84,5 @@ namespace Game
 
             return defaultValue;
         }
-
-        /// <summary>
-        /// Maps the values of the source sequence to a nullable type and
-        /// returns the non-null values.
-        /// </summary>
-        /// <typeparam name="T">
-        /// The type of elements in the source sequence.
-        /// </typeparam>
-        /// <param name="source">
-        /// The source sequence.
-        /// </param>
-        /// <param name="selector">
-        /// The selector function.
-        /// </param>
-        public static IEnumerable<TResult> SelectNonNull<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult?> selector) where TResult: struct
-        {
-            foreach (var element in source)
-            {
-                var result = selector(element);
-                if (result.HasValue)
-                    yield return result.Value;
-            }
-        }
     }
 }
