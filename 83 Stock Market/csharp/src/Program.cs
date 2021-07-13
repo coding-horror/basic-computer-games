@@ -11,11 +11,11 @@ namespace Game
         /// </summary>
         private static ImmutableArray<Company> Companies = ImmutableArray.CreateRange(new[]
         {
-            new Company { Name = "INT. BALLISTIC MISSILES",     StockSymbol = "IBM", SharePrice = 100 },
-            new Company { Name = "RED CROSS OF AMERICA",        StockSymbol = "RCA", SharePrice = 85  },
-            new Company { Name = "LICHTENSTEIN, BUMRAP & JOKE", StockSymbol = "LBJ", SharePrice = 150 },
-            new Company { Name = "AMERICAN BANKRUPT CO.",       StockSymbol = "ABC", SharePrice = 140 },
-            new Company { Name = "CENSURED BOOKS STORE",        StockSymbol = "CBS", SharePrice = 110 }
+            new Company("INT. BALLISTIC MISSILES",     "IBM", sharePrice:100),
+            new Company("RED CROSS OF AMERICA",        "RCA", sharePrice:85 ),
+            new Company("LICHTENSTEIN, BUMRAP & JOKE", "LBJ", sharePrice:150),
+            new Company("AMERICAN BANKRUPT CO.",       "ABC", sharePrice:140),
+            new Company("CENSURED BOOKS STORE",        "CBS", sharePrice:110)
         });
 
         static void Main()

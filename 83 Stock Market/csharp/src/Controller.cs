@@ -97,10 +97,15 @@ namespace Game
             while (true)
             {
                 View.PromptBuySellCompany(company);
-                if (Int32.TryParse(Console.ReadLine(), out var amount))
-                    return amount;
+
+                var input = Console.ReadLine();
+                if (input is null)
+                    Environment.Exit(0);
                 else
+                if (!Int32.TryParse(input, out var amount))
                     View.PromptValidInteger();
+                else
+                    return amount;
             }
         }
     }
