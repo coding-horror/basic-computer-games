@@ -9,7 +9,7 @@ namespace Game
         /// <summary>
         /// Defines the set of companies that will be simulated in the game.
         /// </summary>
-        private static ImmutableArray<Company> Companies = ImmutableArray.CreateRange(new[]
+        private readonly static ImmutableArray<Company> Companies = ImmutableArray.CreateRange(new[]
         {
             new Company("INT. BALLISTIC MISSILES",     "IBM", sharePrice:100),
             new Company("RED CROSS OF AMERICA",        "RCA", sharePrice:85 ),
