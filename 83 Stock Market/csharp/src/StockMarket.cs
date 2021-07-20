@@ -38,13 +38,13 @@ namespace Game
                 },
                 (parameters, previousDay) => previousDay with
                 {
-                    Companies = ImmutableArray.CreateRange(
-                        previousDay.Companies.Select ((company, index) => AdjustSharePrice(
+                    Companies = previousDay.Companies.Map(
+                        (company, index) => AdjustSharePrice(
                             random,
                             company,
                             parameters.trend,
                             parameters.positiveSpike == index,
-                            parameters.negativeSpike == index)))
+                            parameters.negativeSpike == index))
                 });
         }
 
@@ -106,7 +106,7 @@ namespace Game
         /// The maximum number of days each trend should last.
         /// </param>
         public static IEnumerable<double> Trends(Random random, int minDays, int maxDays) =>
-            random.Integers(minDays, maxDays + 1).SelectMany(days => Enumerable.Repeat(GenerateTrend(random), days));
+            random.Integers(minDays, maxDays + 1).SelectMany(daysInCycle => Enumerable.Repeat(GenerateTrend(random), daysInCycle));
 
         /// <summary>
         /// Generates a random value for the market trend.
@@ -143,7 +143,7 @@ namespace Game
         private static IEnumerable<int?> PriceSpikes(Random random, int companyCount, int minDays, int maxDays) =>
             random.Integers(minDays, maxDays + 1)
                 .SelectMany(
-                    days => Enumerable.Range(0, days),
-                    (days, dayNumber) => dayNumber == 0 ? random.Next(companyCount) : default(int?));
+                    daysInCycle => Enumerable.Range(0, daysInCycle),
+                    (daysInCycle, dayNumber) => dayNumber == 0 ? random.Next(companyCount) : default(int?));
     }
 }
