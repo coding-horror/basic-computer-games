@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Game
+﻿namespace Game
 {
     class Program
     {
@@ -8,49 +6,49 @@ namespace Game
         {
             Controller.StartGame();
 
-            var random = new Random();
-            var match = Rules.StartMatch(random);
-            View.ShowStartingConditions(match.Conditions);
-
-            while (match.Result == ActionResult.FightContinues)
+            var mediator = new Mediator();
+            foreach (var evt in BullFight.Begin(mediator))
             {
-                match = match with { PassNumber = match.PassNumber + 1 };
-
-                View.StartOfPass(match.PassNumber);
-
-                var (action, riskLevel) = Controller.GetPlayerIntention(match.PassNumber);
-                match = action switch
+                switch (evt)
                 {
-                    Action.Dodge => Rules.TryDodge(random, riskLevel, match),
-                    Action.Kill  => Rules.TryKill(random, riskLevel, match),
-                    _            => Rules.Panic(match)
-                };
+                    case Events.MatchStarted matchStarted:
+                        View.ShowStartingConditions(matchStarted);
+                        break;
 
-                var first = true;
-                while (match.Result == ActionResult.BullGoresPlayer)
-                {
-                    View.ShowPlayerGored(action == Action.Panic, first);
-                    first = false;
+                    case Events.BullCharging bullCharging:
+                        View.ShowStartOfPass(bullCharging.PassNumber);
+                        var (action, riskLevel) = Controller.GetPlayerIntention(bullCharging.PassNumber);
+                        switch (action)
+                        {
+                            case Action.Dodge:
+                                mediator.Dodge(riskLevel);
+                                break;
+                            case Action.Kill:
+                                mediator.Kill(riskLevel);
+                                break;
+                            case Action.Panic:
+                                mediator.Panic();
+                                break;
+                        }
+                        break;
 
-                    match = Rules.TrySurvive(random, match);
-                    if (match.Result == ActionResult.FightContinues)
-                    {
+                    case Events.PlayerGored playerGored:
+                        View.ShowPlayerGored(playerGored.Panicked, playerGored.FirstGoring);
+                        break;
+
+                    case Events.PlayerSurvived:
                         View.ShowPlayerSurvives();
-
-                        if (Controller.PlayerRunsFromRing())
-                        {
-                            match = Rules.Flee(match);
-                        }
+                        if (Controller.GetPlayerRunsFromRing())
+                            mediator.RunFromRing();
                         else
-                        {
-                            View.ShowPlayerFoolhardy();
-                            match = Rules.IgnoreInjury(random, action, match);
-                        }
-                    }
+                            mediator.ContinueFighting();
+                        break;
+
+                    case Events.MatchCompleted matchCompleted:
+                        View.ShowFinalResult(matchCompleted.Result, matchCompleted.ExtremeBravery, matchCompleted.Reward);
+                        break;
                 }
             }
-
-            View.ShowFinalResult(match.Result, match.Bravery, Rules.GetReward(random, match));
         }
     }
 }

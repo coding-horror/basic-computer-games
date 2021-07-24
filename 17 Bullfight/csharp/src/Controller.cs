@@ -93,10 +93,15 @@ namespace Game
         /// <returns>
         /// True if the player flees; otherwise, false.
         /// </returns>
-        public static bool PlayerRunsFromRing()
+        public static bool GetPlayerRunsFromRing()
         {
             View.PromptRunFromRing();
-            return GetYesOrNo();
+
+            var playerFlees = GetYesOrNo();
+            if (!playerFlees)
+                View.ShowPlayerFoolhardy();
+
+            return playerFlees;
         }
 
         /// <summary>

@@ -47,22 +47,22 @@ namespace Game
             Console.WriteLine();
         }
 
-        public static void ShowStartingConditions(MatchConditions conditions)
+        public static void ShowStartingConditions(Events.MatchStarted matchStarted)
         {
             ShowBullQuality();
-            ShowHelpQuality("TOREADORES", conditions.ToreadorePerformance, conditions.ToreadoresKilled, 0);
-            ShowHelpQuality("PICADORES", conditions.PicadorePerformance, conditions.PicadoresKilled, conditions.HorsesKilled);
+            ShowHelpQuality("TOREADORES", matchStarted.ToreadorePerformance, matchStarted.ToreadoresKilled, 0);
+            ShowHelpQuality("PICADORES", matchStarted.PicadorePerformance, matchStarted.PicadoresKilled, matchStarted.HorsesKilled);
 
             void ShowBullQuality()
             {
-                Console.WriteLine($"YOU HAVE DRAWN A {QualityString[(int)conditions.BullQuality - 1]} BULL.");
+                Console.WriteLine($"YOU HAVE DRAWN A {QualityString[(int)matchStarted.BullQuality - 1]} BULL.");
 
-                if (conditions.BullQuality > Quality.Poor)
+                if (matchStarted.BullQuality > Quality.Poor)
                 {
                     Console.WriteLine("YOU'RE LUCKY");
                 }
                 else
-                if (conditions.BullQuality < Quality.Good)
+                if (matchStarted.BullQuality < Quality.Good)
                 {
                     Console.WriteLine("GOOD LUCK.  YOU'LL NEED IT.");
                     Console.WriteLine();
@@ -86,9 +86,11 @@ namespace Game
                     case Quality.Poor:
                         if (horsesKilled > 0)
                             Console.WriteLine($"ONE OF THE HORSES OF THE {helperName} WAS KILLED.");
-                        
+
                         if (helpersKilled > 0)
                             Console.WriteLine($"ONE OF THE {helperName} WAS KILLED.");
+                        else
+                            Console.WriteLine($"NO {helperName} WERE KILLED.");
                         break;
 
                     case Quality.Awful:
@@ -101,7 +103,7 @@ namespace Game
             }
         }
 
-        public static void StartOfPass(int passNumber)
+        public static void ShowStartOfPass(int passNumber)
         {
             Console.WriteLine();
             Console.WriteLine();
@@ -129,7 +131,7 @@ namespace Game
             Console.WriteLine("YOU ARE BRAVE.  STUPID, BUT BRAVE.");
         }
 
-        public static void ShowFinalResult(ActionResult result, double bravery, Reward reward)
+        public static void ShowFinalResult(ActionResult result, bool extremeBravery, Reward reward)
         {
             Console.WriteLine();
             Console.WriteLine();
@@ -156,7 +158,7 @@ namespace Game
             }
             else
             {
-                if (bravery == 2) // You were gored by the bull but survived (and did not later die or flee)
+                if (extremeBravery)
                     Console.WriteLine("THE CROWD CHEERS WILDLY!");
                 else
                 if (result == ActionResult.PlayerKillsBull)
