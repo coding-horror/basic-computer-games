@@ -1,0 +1,15 @@
+                                 Mugwump
+               Creative Computing  Morristown, New Jersey
+
+
+
+The object of this game is to find four mugwumps
+hidden on a 10 by 10 grid.  Homebase is position 0,0.
+Any guess you make must be two numbers with each
+number between 0 and 9, inclusive.  First number
+is distance to right of homebase and second number
+is distance above homebase.
+
+You get 10 tries.  After each try, I will tell
+you how far you are from each wugwump.
+
