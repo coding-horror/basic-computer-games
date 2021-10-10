@@ -172,7 +172,7 @@ if ( __name__ == '__main__' ):
                 print( "YOU MAY NOT HAVE THAT MANY FURS." )
                 print( "DO NOT TRY TO CHEAT.  I CAN ADD." )
                 print( "YOU MUST START AGAIN." )
-                state = 'starting'   # T/N: Wow, harsh.
+                game_state = 'starting'   # T/N: Wow, harsh.
             else:
                 game_state = 'choosing fort'
 
