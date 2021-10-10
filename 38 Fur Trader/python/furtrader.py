@@ -101,7 +101,8 @@ def getYesOrNo():
         Return a single letter 'Y' or 'N' """
     result = 0
     while ( result not in ( 'Y', 'N' ) ):
-        player_choice = input( "ANSWER YES OR NO >>" )
+        print( "ANSWER YES OR NO" )
+        player_choice = input( ">> " )
         player_choice = player_choice.strip().upper()  # trim spaces, make upper-case
         if ( player_choice.startswith( 'Y' ) ):
             result = 'Y'
