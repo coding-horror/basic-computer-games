@@ -3,7 +3,6 @@
 import sys             # for system function, like exit()
 import random          # for generating random numbers
 
-from enum import IntEnum  # for setting the fur type numbers
 
 ### global variables for storing player's status
 player_funds = 0               # no money
