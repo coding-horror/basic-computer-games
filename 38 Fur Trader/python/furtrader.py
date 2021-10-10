@@ -115,7 +115,7 @@ def getFursPurchase():
         Accept numeric inputs, re-prompting on incorrect input values """
     results = []
 
-    print( "YOUR 190 FURS ARE DISTRIBUTED AMONG THE FOLLOWING" )
+    print( "YOUR " + str( MAX_FURS ) + " FURS ARE DISTRIBUTED AMONG THE FOLLOWING" )
     print( "KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX." )
     print( "" )
 
@@ -163,7 +163,7 @@ if ( __name__ == '__main__' ):
         elif ( game_state == 'trading' ):
             print( "" )
             print( "YOU HAVE $ %1.2f IN SAVINGS" % ( player_funds ) )
-            print( "AND 190 FURS TO BEGIN THE EXPEDITION" )
+            print( "AND " + str( MAX_FURS ) + " FURS TO BEGIN THE EXPEDITION" )
             player_furs = getFursPurchase()
 
             if ( sum( player_furs ) > MAX_FURS ):
