@@ -5,7 +5,7 @@ Conversion to [Python](https://www.python.org/about/)
 ##### Translator Notes:
 I tried to preserve as much of the original layout and flow of the code
 as possible.  However I did use quasi enumerated types for the Fort numbers
-and Fur types.  I think this was certinaly a change for the better, and 
+and Fur types.  I think this was certainly a change for the better, and 
 makes the code much easier to read.
 
 I program in many different languages on a daily basis.  Most languages
