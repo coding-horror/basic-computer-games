@@ -8,13 +8,13 @@ namespace Tower.Models
     {
         private readonly Stack<int> _disks = new Stack<int>();
 
-        public int Top => _disks.TryPeek(out var disc) ? disc : default;
+        public int Top => _disks.TryPeek(out var disk) ? disk : default;
 
-        public bool TryPut(int disc)
+        public bool TryPut(int disk)
         {
-            if (_disks.Count == 0 || disc < _disks.Peek())
+            if (_disks.Count == 0 || disk < _disks.Peek())
             {
-                _disks.Push(disc);
+                _disks.Push(disk);
                 return true;
             }
 
@@ -24,7 +24,7 @@ namespace Tower.Models
         public bool TryGetTopDisk(out int disk) => _disks.TryPop(out disk);
 
         public IEnumerator<int> GetEnumerator() =>
-            Enumerable.Repeat(1, 7 - _disks.Count).Concat(_disks).GetEnumerator();
+            Enumerable.Repeat(0, 7 - _disks.Count).Concat(_disks).GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
