@@ -36,7 +36,7 @@ namespace Tower.Models
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private class TowersEnumerator : IEnumerator<(int First, int Second, int Third)>
+        private class TowersEnumerator : IEnumerator<(int, int, int)>
         {
             private readonly List<IEnumerator<int>> _enumerators;
 
@@ -45,7 +45,7 @@ namespace Tower.Models
                 _enumerators = needles.Select(n => n.GetEnumerator()).ToList();
             }
 
-            public (int First, int Second, int Third) Current =>
+            public (int, int, int) Current =>
                 (_enumerators[0].Current, _enumerators[1].Current, _enumerators[2].Current);
 
             object IEnumerator.Current => Current;
