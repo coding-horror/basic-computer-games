@@ -19,15 +19,15 @@ namespace Tower.UI
 
             foreach (var row in _towers)
             {
-                AddTower(row.Item1);
-                AddTower(row.Item2);
-                AddTower(row.Item3);
+                AppendTower(row.Item1);
+                AppendTower(row.Item2);
+                AppendTower(row.Item3);
                 builder.AppendLine();
             }
 
             return builder.ToString();
 
-            void AddTower(int size)
+            void AppendTower(int size)
             {
                 var padding = 10 - size / 2;
                 builder.Append(' ', padding).Append('*', Math.Max(1, size)).Append(' ', padding);

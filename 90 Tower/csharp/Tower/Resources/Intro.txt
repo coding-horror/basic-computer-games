@@ -1,7 +1,3 @@
-                                 Towers
-               Creative Computing  Morristown, New Jersey
-
-
 
 Towers of Hanoi puzzle.
 

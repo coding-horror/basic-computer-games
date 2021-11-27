@@ -8,6 +8,8 @@ namespace Tower.Models
     {
         private readonly Stack<int> _disks = new Stack<int>();
 
+        public bool IsEmpty => _disks.Count == 0;
+
         public int Top => _disks.TryPeek(out var disk) ? disk : default;
 
         public bool TryPut(int disk)
