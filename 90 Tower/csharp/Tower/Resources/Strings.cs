@@ -10,6 +10,7 @@ namespace Tower.Resources
         internal static string DiskCountPrompt => GetResource();
         internal static string DiskCountQuit => GetResource();
         internal static string DiskCountRetry => GetResource();
+        internal static string DiskNotInPlay => GetResource();
         internal static string DiskPrompt => GetResource();
         internal static string DiskQuit => GetResource();
         internal static string DiskRetry => GetResource();
@@ -21,6 +22,7 @@ namespace Tower.Resources
         internal static string NeedleQuit => GetResource();
         internal static string NeedleRetry => GetResource();
         internal static string PlayAgainPrompt => GetResource();
+        internal static string TaskFinished => GetResource();
         internal static string Thanks => GetResource();
         internal static string Title => GetResource();
         internal static string TooManyMoves => GetResource();

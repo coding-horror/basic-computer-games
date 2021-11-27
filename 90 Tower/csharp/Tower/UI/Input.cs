@@ -61,6 +61,8 @@ namespace Tower.UI
 
         private static string ReadString(string prompt)
         {
+            Prompt(prompt);
+
             var inputValues = ReadStrings();
             if (inputValues.Length > 1)
             {

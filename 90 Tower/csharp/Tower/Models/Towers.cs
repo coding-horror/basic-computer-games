@@ -2,33 +2,60 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Tower.Resources;
 
 namespace Tower.Models
 {
     internal class Towers : IEnumerable<(int, int, int)>
     {
-        private readonly Needle[] _needles = new[] { new Needle(), new Needle(), new Needle() };
+        private static int[] _availableDisks = new[] { 15, 13, 11, 9, 7, 5, 3 };
 
-        public bool TryFindDisk(int disk, out int needle)
+        private readonly Needle[] _needles = new[] { new Needle(), new Needle(), new Needle() };
+        private readonly int _smallestDisk;
+
+        public Towers(int diskCount)
         {
-            for (needle = 1; needle <= 3; needle++)
+            foreach (int disk in _availableDisks.Take(diskCount))
             {
-                if (_needles[needle].Top == disk) { return true; }
+                this[1].TryPut(disk);
+                _smallestDisk = disk;
+            }
+        }
+
+        private Needle this[int i] => _needles[i-1];
+
+        public bool Finished => this[1].IsEmpty && this[2].IsEmpty;
+
+        public bool TryFindDisk(int disk, out int needle, out string message)
+        {
+            needle = default;
+            message = default;
+
+            if (disk < _smallestDisk)
+            {
+                message = Strings.DiskNotInPlay;
+                return false;
             }
 
+            for (needle = 1; needle <= 3; needle++)
+            {
+                if (this[needle].Top == disk) { return true; }
+            }
+
+            message = Strings.DiskUnavailable;
             return false;
         }
 
         public bool TryMoveDisk(int from, int to)
         {
-            if (!_needles[from].TryGetTopDisk(out var disk))
+            if (!this[from].TryGetTopDisk(out var disk))
             {
                 throw new InvalidOperationException($"Needle {from} is empty");
             }
 
-            if (_needles[to].TryPut(disk)) { return true; }
+            if (this[to].TryPut(disk)) { return true; }
 
-            _needles[from].TryPut(disk);
+            this[from].TryPut(disk);
             return false;
         }
 
