@@ -1,3 +1,58 @@
+import random
+
+def printIntro():
+    print("                                DIGITS")
+    print("              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print("\n\n")
+    print("THIS IS A GAME OF GUESSING.")
+
+
+def readInstructionChoice():
+    print("FOR INSTRUCTIONS, TYPE '1', ELSE TYPE '0' ? ")
+    try:
+        choice = int(input())
+        return choice == 1
+    except (ValueError, TypeError) as m:
+        return False
+
+
+def printInstructions():
+    print("\n")
+    print("PLEASE TAKE A PIECE OF PAPER AND WRITE DOWN")
+    print("THE DIGITS '0', '1', OR '2' THIRTY TIMES AT RANDOM.")
+    print("ARRANGE THEM IN THREE LINES OF TEN DIGITS EACH.")
+    print("I WILL ASK FOR THEN TEN AT A TIME.")
+    print("I WILL ALWAYS GUESS THEM FIRST AND THEN LOOK AT YOUR")
+    print("NEXT NUMBER TO SEE IF I WAS RIGHT. BY PURE LUCK,")
+    print("I OUGHT TO BE RIGHT TEN TIMES. BUT I HOPE TO DO BETTER")
+    print("THAN THAT *****")
+    print()
+
+
+def read10Numbers():
+    print("TEN NUMBERS, PLEASE ? ")
+    numbers = []
+
+    for i in range(10):
+        validInput = False
+        while not validInput:
+            try:
+                n = int(input())
+                validInput = True
+                numbers.append(n)
+            except (TypeError, ValueError) as e:
+                print("!NUMBER EXPECTED - RETRY INPUT LINE")
+
+    return numbers
+
+def readContinueChoice():
+    print("\nDO YOU WANT TO TRY AGAIN (1 FOR YES, 0 FOR NO) ? ")
+    try:
+        choice = int(input())
+        return choice == 1
+    except (ValueError, TypeError) as m:
+        return False
+
 if __name__ == '__main__':
     printIntro()
     if readInstructionChoice():
