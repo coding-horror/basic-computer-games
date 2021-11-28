@@ -1,3 +1,106 @@
+MAX_UNITS = 72000
+planeCrashWin = False
+usrArmy = 0
+usrNavy = 0
+usrAir = 0
+cpuArmy = 30000
+cpuNavy = 20000
+cpuAir = 22000
+
+
+def showIntro():
+    global MAX_UNITS
+
+    print(" " * 32 + "COMBAT")
+    print(" " * 14 + "CREATIVE COMPUTING MORRISTOWN, NEW JERSEY")
+    print("\n\n")
+    print("I AM AT WAR WITH YOU.")
+    print("WE HAVE " + str(MAX_UNITS) + " SOLDIERS APIECE.")
+
+
+def getForces():
+    global usrArmy, usrNavy, usrAir
+
+    while True:
+        print("DISTRIBUTE YOUR FORCES.")
+        print("              ME              YOU")
+        print("ARMY           " + str(cpuArmy) + "        ? ", end="")
+        usrArmy = int(input())
+        print("NAVY           " + str(cpuNavy) + "        ? ", end="")
+        usrNavy = int(input())
+        print("A. F.          " + str(cpuAir) + "        ? ", end="")
+        usrAir = int(input())
+        if not ((usrArmy + usrNavy + usrAir) > MAX_UNITS):
+            break
+
+
+def attackFirst():
+    global usrArmy, usrNavy, usrAir
+    global cpuArmy, cpuNavy, cpuAir
+
+    numUnits = 0
+    unitType = 0
+
+    while True:
+        print("YOU ATTACK FIRST. TYPE (1) FOR ARMY; (2) FOR NAVY;")
+        print("AND (3) FOR AIR FORCE.")
+        print("?", end=' ')
+        unitType = int(input())
+        if not (unitType < 1 or unitType > 3):
+            break
+
+    while True:
+        print("HOW MANY MEN")
+        print("?", end=' ')
+        numUnits = int(input())
+        if not ((numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or (
+                (unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir))):
+            break
+
+    if unitType == 1:
+        if numUnits < (usrArmy / 3):
+            print("YOU LOST " + str(numUnits) + " MEN FROM YOUR ARMY.")
+            usrArmy = usrArmy - numUnits
+        elif numUnits < (2 * usrArmy / 3):
+            print("YOU LOST " + str(int(numUnits / 3)) + " MEN, BUT I LOST " + str(int(2 * cpuArmy / 3)))
+            usrArmy = int(usrArmy - (numUnits / 3))
+            cpuArmy = 0
+        else:
+            print("YOU SUNK ONE OF MY PATROL BOATS, BUT I WIPED OUT TWO")
+            print("OF YOUR AIR FORCE BASES AND 3 ARMY BASES.")
+            usrArmy = int(usrArmy / 3)
+            usrAir = int(usrAir / 3)
+            cpuNavy = int(2 * cpuNavy / 3)
+    elif unitType == 2:
+        if numUnits < cpuNavy / 3:
+            print("YOUR ATTACK WAS STOPPED!")
+            usrNavy = usrNavy - numUnits
+        elif numUnits < 2 * cpuNavy / 3:
+            print("YOU DESTROYED " + str(int(2 * cpuNavy / 3)) + " OF MY ARMY.")
+            cpuNavy = int(cpuNavy / 3)
+        else:
+            print("YOU SUNK ONE OF MY PATROL BOATS, BUT I WIPED OUT TWO")
+            print("OF YOUR AIR FORCE BASES AND 3 ARMY BASES.")
+            usrArmy = int(usrArmy / 3)
+            usrAir = int(usrAir / 3)
+            cpuNavy = int(2 * cpuNavy / 3)
+    elif unitType == 3:
+        if numUnits < usrAir / 3:
+            print("YOUR ATTACK WAS WIPED OUT.")
+            usrAir = usrAir - numUnits
+        elif numUnits < 2 * usrAir / 3:
+            print("WE HAD A DOGFIGHT. YOU WON - AND FINISHED YOUR MISSION.")
+            cpuArmy = int(2 * cpuArmy / 3)
+            cpuNavy = int(cpuNavy / 3)
+            cpuAir = int(cpuAir / 3)
+        else:
+            print("YOU WIPED OUT ONE OF MY ARMY PATROLS, BUT I DESTROYED")
+            print("TWO NAVY BASES AND BOMBED THREE ARMY BASES.")
+            usrArmy = int(usrArmy / 4)
+            usrNavy = int(usrNavy / 3)
+            cpuArmy = int(2 * cpuArmy / 3)
+
+
 def attackSecond():
     global usrArmy, usrNavy, usrAir, cpuArmy, cpuNavy, cpuAir
     global planeCrashWin
@@ -71,7 +174,7 @@ def attackSecond():
         print("THE TREATY OF PARIS CONCLUDED THAT WE TAKE OUR")
         print("RESPECTIVE COUNTRIES AND LIVE IN PEACE.")
 
-            
+
 def main():
     showIntro()
     getForces()
