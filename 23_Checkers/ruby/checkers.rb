@@ -139,10 +139,10 @@ def my_turn(board, jumpStart = nil)
 
   # Do the move
   puts "My move: #{bestMove}"
-  canMoveAgain = board.make_move!(bestMove)
+  board.make_move!(bestMove)
 
   # Repeat (recursively) if we can make another jump
-  my_turn(board, bestMove.to) if canMoveAgain
+  my_turn(board, bestMove.to) if bestMove.jump?
 
   # No loss yet!
   return true
@@ -182,8 +182,8 @@ def players_turn(board)
     return false    if !from && !move
     return true     if from && !move
 
-    canMoveAgain = board.make_move!(move)
-    return true unless canMoveAgain
+    board.make_move!(move)
+    return true unless move.jump?
 
     # If the player can jump again, repeat from the new position.
     from = move.to
