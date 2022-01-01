@@ -13,15 +13,17 @@ namespace Buzzword
             Console.WriteLine();
         }
 
+        static string keys = "type a 'Y' for another phrase or 'N' to quit";
+
         static void Instructions()
         {
             Console.WriteLine("This program prints highly acceptable phrases in\n"
             + "'Educator-speak'that you can work into reports\n"
             + "and speeches. Whenever a question mark is printed,\n"
-            + "type a 'Y' for another phrase or 'N' to quit.");
+            + $"{keys}.");
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("Here's the first phrase:");
+            Console.Write("Here's the first phrase:");
         }
 
         static string[] Phrases = new[]
@@ -50,7 +52,21 @@ namespace Buzzword
         {
             return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble() + 1) % Phrases.Length])} "
                 + $"{Phrases[(int)(13 * rnd.NextDouble() + 14) % Phrases.Length]} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 27) % Phrases.Length]}.";
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 27) % Phrases.Length]}";
+        }
+
+        static bool Decision()
+        {
+            while (true)
+            {
+                var answer = Console.ReadKey();
+                if (answer.Key == ConsoleKey.Y)
+                    return true;
+                else if (answer.Key == ConsoleKey.N)
+                    return false;
+                else
+                    Console.WriteLine($"\n{keys}");
+            }
         }
 
         static void Main(string[] args)
@@ -62,11 +78,13 @@ namespace Buzzword
             {
                 Console.WriteLine();
                 Console.WriteLine(GeneratePhrase());
+                Console.WriteLine();
 
-                var answer = Console.ReadKey();
-                if (answer.Key == ConsoleKey.N)
+                if (!Decision())
                     break;
             }
+
+            Console.WriteLine("\nCome back when you need help with another report!");
         }
     }
 }
