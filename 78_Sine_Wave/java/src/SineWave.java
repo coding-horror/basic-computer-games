@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 /**
  * Sine Wave
  *
@@ -12,24 +10,19 @@ import java.util.Arrays;
 public class SineWave {
 
     public static void main(String[] args) {
-
-        System.out.println("SINE WAVE");
-        System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-        System.out.println();
-
-        int toggle = 0;
-        for(double t = 0; t<40; t += .25) {
-            int a = 26 + (int) (25 * Math.sin(t));
-            char[] repeat = new char[a];
-            Arrays.fill(repeat,' ');
-            System.out.print(new String(repeat));
-            if (toggle == 1) {
-                System.out.println("COMPUTING");
-                toggle = 0;
-            } else {
-                System.out.println("CREATIVE");
-                toggle = 1;
-            }
+        System.out.println("""
+           SINE WAVE
+           CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
+           """);
+        var isCreative = true;
+        for(var t = 0d; t<40; t += .25) {
+            //Indent output
+            var indentations = 26 + (int) (25 * Math.sin(t));
+            System.out.print(" ".repeat(indentations));
+            //Change output every iteration
+            var word = isCreative ? "CREATIVE" : "COMPUTING";
+            System.out.println(word);
+            isCreative  = !isCreative ;
         }
     }
 }
