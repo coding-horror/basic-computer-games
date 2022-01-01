@@ -1,135 +1,100 @@
-// ACEY DUCEY
-//
-// Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
-//
+import { readLine, print, spaces } from "./io.js";
 
-function print(str)
-{
-    document.getElementById("output").appendChild(document.createTextNode(str));
+const minFaceCard = 11;
+const faceCards = {
+  11: "JACK",
+  12: "QUEEN",
+  13: "KING",
+  14: "ACE"
+};
+
+function randomCard() {
+  return Math.floor(Math.random() * 13 + 2);
 }
 
-function input()
-{
-    var input_element;
-    var input_str;
-    
-    return new Promise(function (resolve) {
-                       input_element = document.createElement("INPUT");
-                       
-                       print("? ");
-                       input_element.setAttribute("type", "text");
-                       input_element.setAttribute("length", "50");
-                       document.getElementById("output").appendChild(input_element);
-                       input_element.focus();
-                       input_str = undefined;
-                       input_element.addEventListener("keydown", function (event) {
-                                                      if (event.keyCode == 13) {
-                                                      input_str = input_element.value;
-                                                      document.getElementById("output").removeChild(input_element);
-                                                      print(input_str);
-                                                      print("\n");
-                                                      resolve(input_str);
-                                                      }
-                                                      });
-                       });
+function printCard(card) {
+  if (card < minFaceCard) {
+    print(card);
+  } else {
+    print(faceCards[card]);
+  }
+  print("\n");
 }
 
-function tab(space)
-{
-    var str = "";
-    while (space-- > 0)
-        str += " ";
-    return str;
-}
-
-print(tab(26) + "ACEY DUCEY CARD GAME\n");
-print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
-print("\n");
-print("\n");
+print(spaces(26) + "ACEY DUCEY CARD GAME\n");
+print(spaces(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n");
 print("ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER\n");
 print("THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP\n");
 print("YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING\n");
 print("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE\n");
 print("A VALUE BETWEEN THE FIRST TWO.\n");
-print("IF YOU DO NOT WANT TO BET, INPUT A 0\n");
+print("IF YOU DO NOT WANT TO BET, INPUT '0'\n");
 
-function show_card(card)
-{
-    if (card < 11)
-        print(card + "\n");
-    else if (card == 11)
-        print("JACK\n");
-    else if (card == 12)
-        print("QUEEN\n");
-    else if (card == 13)
-        print("KING\n");
-    else
-        print("ACE\n");
-}
+let currentMoney = 100;
+while (true) {
+  print(`YOU NOW HAVE ${currentMoney} DOLLARS.\n\n`);
 
-// Main program
-async function main()
-{
-    q = 100;
-    while (1) {
-        print("YOU NOW HAVE " + q + " DOLLARS.\n");
-        print("\n");
-        
-        do {
-            print("HERE ARE YOUR NEXT TWO CARDS: \n");
-            do {
-                a = Math.floor(Math.random() * 13 + 2);
-                b = Math.floor(Math.random() * 13 + 2);
-            } while (a >= b) ;
-            show_card(a);
-            show_card(b);
-            print("\n");
-            while (1) {
-                print("\n");
-                print("WHAT IS YOUR BET");
-                m = parseInt(await input());
-                if (m > 0) {
-                    if (m > q) {
-                        print("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.\n");
-                        print("YOU HAVE ONLY " + q + "DOLLARS TO BET.\n");
-                        continue;
-                    }
-                    break;
-                }
-                m = 0;
-                print("CHICKEN!!\n");
-                print("\n");
-                break;
-            }
-        } while (m == 0) ;
-        c = Math.floor(Math.random() * 13 + 2);
-        show_card(c);
-        if (c > a && c < b) {
-            print("YOU WIN!!!\n");
-            q = q + m;
-        } else {
-            print("SORRY, YOU LOSE\n");
-            if (m >= q) {
-                print("\n");
-                print("\n");
-                print("SORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n");
-                print("\n");
-                print("\n");
-                print("TRY AGAIN (YES OR NO)");
-                a = await input();
-                print("\n");
-                print("\n");
-                if (a == "YES") {
-                    q = 100;
-                } else {
-                    print("O.K., HOPE YOU HAD FUN!");
-                    break;
-                }
-            } else {
-                q = q - m;
-            }
+  let card1, card2, currentBet;
+  do {
+    print("HERE ARE YOUR NEXT TWO CARDS: \n");
+    [card1, card2] = [randomCard(), randomCard()];
+
+    // Ensure we always show cards in order of lowest to highest, and we never
+    // get two of the same card.
+    do {
+      card1 = randomCard();
+      card2 = randomCard();
+    } while (card1 >= card2);
+
+    printCard(card1);
+    printCard(card2);
+    print("\n");
+
+    while (true) {
+      print("\nWHAT IS YOUR BET? ");
+      currentBet = parseInt(await readLine(), 10);
+
+      if (currentBet > 0) {
+        if (currentBet > currentMoney) {
+          print("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.\n");
+          print(`YOU HAVE ONLY ${currentMoney} DOLLARS TO BET.\n`);
+          continue;
         }
-    }
-}
+        break;
+      }
 
-main();
+      // Invalid bet value. Output an error message and reset to undefined to
+      // restart the loop with new cards.
+      currentBet = undefined;
+      print("CHICKEN!!\n");
+      print("\n");
+      break;
+    }
+  } while (currentBet === undefined);
+
+  const actualCard = randomCard();
+  print("\n\nHERE IS THE CARD WE DREW:\n")
+  printCard(actualCard);
+  print("\n\n");
+
+  if (actualCard > card1 && actualCard < card2) {
+    print("YOU WIN!!!\n");
+    currentMoney += currentBet;
+  } else {
+    print("SORRY, YOU LOSE\n");
+    if (currentBet < currentMoney) {
+      currentMoney -= currentBet;
+    } else {
+      print("\n\nSORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n\n\n");
+      print("TRY AGAIN (YES OR NO)");
+      const tryAgain = await readLine();
+      print("\n\n");
+      if (tryAgain.toLowerCase() === "yes") {
+        currentMoney = 100;
+      } else {
+        print("O.K., HOPE YOU HAD FUN!");
+        break;
+      }
+    }
+  }
+}
