@@ -36,11 +36,19 @@ namespace Buzzword
             "performance", "reinforcement", "open classroom", "resource",
             "structure", "facility", "environment" };
 
+        static string Capitalize(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+
+            return input.Substring(0, 1).ToUpper() + input[1..];
+        }
+
         static Random rnd = new Random(1);
 
         static string GeneratePhrase()
         {
-            return $"{Phrases[(int)(13 * rnd.NextDouble() + 1) % Phrases.Length]} "
+            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble() + 1) % Phrases.Length])} "
                 + $"{Phrases[(int)(13 * rnd.NextDouble() + 14) % Phrases.Length]} "
                 + $"{Phrases[(int)(13 * rnd.NextDouble() + 27) % Phrases.Length]}.";
         }
@@ -54,8 +62,8 @@ namespace Buzzword
             {
                 Console.WriteLine();
                 Console.WriteLine(GeneratePhrase());
-                var answer = Console.ReadKey();
 
+                var answer = Console.ReadKey();
                 if (answer.Key == ConsoleKey.N)
                     break;
             }
