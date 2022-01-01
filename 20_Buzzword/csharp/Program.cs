@@ -55,7 +55,7 @@ namespace Buzzword
             if (string.IsNullOrWhiteSpace(input))
                 return string.Empty;
 
-            return input.Substring(0, 1).ToUpper() + input[1..];
+            return char.ToUpper(input[0]) + input[1..];
         }
 
         // Seed has been calculated to get the same effect as in original,
