@@ -53,10 +53,9 @@ namespace Buzzword
         static string GeneratePhrase()
         {
             // Indexing from 0, so had to decrease generated numbers
-            // modulo Phrases.Length added to not get out of bond
-            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble()) % Phrases.Length])} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 13) % Phrases.Length]} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 26) % Phrases.Length]}";
+            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble())])} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 13)]} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 26)]}";
         }
 
         static bool Decision()
