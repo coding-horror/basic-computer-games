@@ -4,6 +4,9 @@ namespace Buzzword
 {
     class Program
     {
+        /// <summary>
+        /// Displays header.
+        /// </summary>
         static void Header()
         {
             Console.WriteLine("Buzzword generator".PadLeft(26));
@@ -13,12 +16,16 @@ namespace Buzzword
             Console.WriteLine();
         }
 
+        // Information for the user about possible key input.
         static string keys = "type a 'Y' for another phrase or 'N' to quit";
 
+        /// <summary>
+        /// Displays instructions.
+        /// </summary>
         static void Instructions()
         {
             Console.WriteLine("This program prints highly acceptable phrases in\n"
-            + "'Educator-speak'that you can work into reports\n"
+            + "'educator-speak' that you can work into reports\n"
             + "and speeches. Whenever a question mark is printed,\n"
             + $"{keys}.");
             Console.WriteLine();
@@ -26,7 +33,7 @@ namespace Buzzword
             Console.Write("Here's the first phrase:");
         }
 
-        static string[] Phrases = new[]
+        static string[] Words = new[]
             { "ability", "basal", "behavioral", "child-centered",
             "differentiated", "discovery", "flexible", "heterogenous",
             "homogenous", "manipulative", "modular", "tavistock",
@@ -38,6 +45,11 @@ namespace Buzzword
             "performance", "reinforcement", "open classroom", "resource",
             "structure", "facility", "environment" };
 
+        /// <summary>
+        /// Capitalizes first letter of given string.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>string</returns>
         static string Capitalize(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
@@ -50,18 +62,29 @@ namespace Buzzword
         // at least in first phrase
         static readonly Random rnd = new Random(1486);
 
+        /// <summary>
+        /// Generates random phrase from words available in Words array.
+        /// </summary>
+        /// <returns>String representing random phrase where first letter is capitalized.</returns>
         static string GeneratePhrase()
         {
             // Indexing from 0, so had to decrease generated numbers
-            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble())])} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 13)]} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 26)]}";
+            // modulo Phrases.Length added to not get out of bond
+            return $"{Capitalize(Words[(int)(13 * rnd.NextDouble())])} "
+                + $"{Words[(int)(13 * rnd.NextDouble() + 13)]} "
+                + $"{Words[(int)(13 * rnd.NextDouble() + 26)]}";
         }
 
+        /// <summary>
+        /// Handles user input. On wrong input it displays information about 
+        /// valid keys in infinite loop.
+        /// </summary>
+        /// <returns>True if user pressed 'Y', false if 'N'.</returns>
         static bool Decision()
         {
             while (true)
             {
+                Console.Write("?");
                 var answer = Console.ReadKey();
                 if (answer.Key == ConsoleKey.Y)
                     return true;
