@@ -24,10 +24,41 @@ namespace Buzzword
             Console.WriteLine("Here's the first phrase:");
         }
 
+        static string[] Phrases = new[]
+            { "ability", "basal", "behavioral", "child-centered",
+            "differentiated", "discovery", "flexible", "heterogenous",
+            "homogenous", "manipulative", "modular", "tavistock",
+            "individualized", "learning", "evaluative", "objective",
+            "cognitive", "enrichment", "scheduling", "humanistic",
+            "integrated", "non-graded", "training", "vertical age",
+            "motivational", "creative", "grouping", "modification",
+            "accountability", "process", "core curriculum", "algorithm",
+            "performance", "reinforcement", "open classroom", "resource",
+            "structure", "facility", "environment" };
+
+        static Random rnd = new Random(1);
+
+        static string GeneratePhrase()
+        {
+            return $"{Phrases[(int)(13 * rnd.NextDouble() + 1) % Phrases.Length]} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 14) % Phrases.Length]} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 27) % Phrases.Length]}.";
+        }
+
         static void Main(string[] args)
         {
             Header();
             Instructions();
+
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine(GeneratePhrase());
+                var answer = Console.ReadKey();
+
+                if (answer.Key == ConsoleKey.N)
+                    break;
+            }
         }
     }
 }
