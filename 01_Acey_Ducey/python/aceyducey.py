@@ -174,7 +174,7 @@ print("OK Hope you had fun\n")
 #
 #   Give the user the ability to quit the game, perhaps
 #   by typing "quit" instead of making a bet.  Provide a
-#   final assement based on how much of the original
+#   final assessment based on how much of the original
 #   bankroll they have left.
 #
 #   Or have the game run for a set number of rounds or
