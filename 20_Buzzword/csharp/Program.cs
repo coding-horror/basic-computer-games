@@ -69,10 +69,9 @@ namespace Buzzword
         static string GeneratePhrase()
         {
             // Indexing from 0, so had to decrease generated numbers
-            // NextDouble used to reflect original
-            return $"{Capitalize(Words[(int)(13 * rnd.NextDouble())])} "
-                + $"{Words[(int)(13 * rnd.NextDouble() + 13)]} "
-                + $"{Words[(int)(13 * rnd.NextDouble() + 26)]}";
+            return $"{Capitalize(Words[rnd.Next(13)])} "
+                + $"{Words[rnd.Next(13, 26)]} "
+                + $"{Words[rnd.Next(26, 39)]}";
         }
 
         /// <summary>
