@@ -41,4 +41,4 @@ Feel free to begin converting these classic games into the above list of modern,
 
 ### Have fun!
 
-Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2021!
+Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2022 and beyond!
