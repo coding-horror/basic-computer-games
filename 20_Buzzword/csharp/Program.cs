@@ -46,13 +46,17 @@ namespace Buzzword
             return input.Substring(0, 1).ToUpper() + input[1..];
         }
 
-        static Random rnd = new Random(1);
+        // Seed has been calculated to get the same effect as in original,
+        // at least in first phrase
+        static readonly Random rnd = new Random(1486);
 
         static string GeneratePhrase()
         {
-            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble() + 1) % Phrases.Length])} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 14) % Phrases.Length]} "
-                + $"{Phrases[(int)(13 * rnd.NextDouble() + 27) % Phrases.Length]}";
+            // Indexing from 0, so had to decrease generated numbers
+            // modulo Phrases.Length added to not get out of bond
+            return $"{Capitalize(Phrases[(int)(13 * rnd.NextDouble()) % Phrases.Length])} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 13) % Phrases.Length]} "
+                + $"{Phrases[(int)(13 * rnd.NextDouble() + 26) % Phrases.Length]}";
         }
 
         static bool Decision()
