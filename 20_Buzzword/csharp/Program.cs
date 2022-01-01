@@ -36,7 +36,7 @@ namespace Buzzword
         static string[] Words = new[]
             { "ability", "basal", "behavioral", "child-centered",
             "differentiated", "discovery", "flexible", "heterogenous",
-            "homogenous", "manipulative", "modular", "tavistock",
+            "homogeneous", "manipulative", "modular", "tavistock",
             "individualized", "learning", "evaluative", "objective",
             "cognitive", "enrichment", "scheduling", "humanistic",
             "integrated", "non-graded", "training", "vertical age",
