@@ -91,9 +91,9 @@ namespace Change
                 Console.WriteLine($"{nickels} nickel(s)");
 
             temp -= nickels * 5;
-            var pennys = (int)(temp + 0.5);
-            if (pennys > 0)
-                Console.WriteLine($"{pennys} penny(s)");
+            var pennies = (int)(temp + 0.5);
+            if (pennies > 0)
+                Console.WriteLine($"{pennies} penny(s)");
         }
 
         static void Main(string[] args)
