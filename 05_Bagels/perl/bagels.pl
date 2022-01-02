@@ -16,12 +16,11 @@ sub yes_input {
 }
 
 # Main code starts here.
-# 
-# Provide instructions if requested 
 
 print ' 'x32; print "Bagels\n";
 print ' 'x14; print "Creative Computing  Morristown, New Jersey\n\n";
 
+# Provide instructions if requested 
 print "Would you like the rules (yes or no)? ";
 if (yes_input()) {
 
