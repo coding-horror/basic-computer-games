@@ -4,6 +4,9 @@ namespace Change
 {
     class Program
     {
+        /// <summary>
+        /// Prints header.
+        /// </summary>
         static void Header()
         {
             Console.WriteLine("Change".PadLeft(33));
@@ -17,6 +20,14 @@ namespace Change
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Gets user input for price and payment.
+        /// </summary>
+        /// <returns>
+        /// False if any input can't be parsed to double. Price and payment returned would be 0.
+        /// True if it was possible to parse inputs into doubles. Price and payment returned 
+	    /// would be as provided by the user.
+	    /// </returns>
         static (bool status, double price, double payment) GetInput()
         {
             Console.WriteLine("Cost of item? ");
@@ -38,6 +49,10 @@ namespace Change
             return (true, price, payment);
         }
 
+        /// <summary>
+        /// Prints bills and coins for given change.
+        /// </summary>
+        /// <param name="change"></param>
         static void PrintChange(double change)
         {
             var tens = (int)(change / 10);
