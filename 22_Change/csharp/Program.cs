@@ -17,14 +17,14 @@ namespace Change
             Console.WriteLine();
         }
 
-        static (bool, double) GetInput()
+        static (bool status, double price, double payment) GetInput()
         {
             Console.WriteLine("Cost of item? ");
             var priceString = Console.ReadLine();
             if (!double.TryParse(priceString, out double price))
             {
                 Console.WriteLine($"{priceString} isn't a number!");
-                return (false, 0);
+                return (false, 0, 0);
             }
 
             Console.WriteLine("Amount of payment? ");
@@ -32,10 +32,53 @@ namespace Change
             if (!double.TryParse(paymentString, out double payment))
             {
                 Console.WriteLine($"{paymentString} isn't a number!");
-                return (false, 0);
+                return (false, 0, 0);
             }
 
-            return (true, payment - price);
+            return (true, price, payment);
+        }
+
+        static void PrintChange(double change)
+        {
+            var tens = (int)(change / 10);
+            if (tens > 0)
+                Console.WriteLine($"{tens} ten dollar bill(s)");
+
+            var temp = change - (tens * 10);
+            var fives = (int)(temp / 5);
+            if (fives > 0)
+                Console.WriteLine($"{fives} five dollar bill(s)");
+
+            temp -= fives * 5;
+            var ones = (int)temp;
+            if (ones > 0)
+                Console.WriteLine($"{ones} one dollar bill(s)");
+
+            temp -= ones;
+            var cents = temp * 100;
+            var half = (int)(cents / 50);
+            if (half > 0)
+                Console.WriteLine($"{half} one half dollar(s)");
+
+            temp = cents - (half * 50);
+            var quarters = (int)(temp / 25);
+            if (quarters > 0)
+                Console.WriteLine($"{quarters} quarter(s)");
+
+            temp -= quarters * 25;
+            var dimes = (int)(temp / 10);
+            if (dimes > 0)
+                Console.WriteLine($"{dimes} dime(s)");
+
+            temp -= dimes * 10;
+            var nickels = (int)(temp / 5);
+            if (nickels > 0)
+                Console.WriteLine($"{nickels} nickel(s)");
+
+            temp -= nickels * 5;
+            var pennys = (int)(temp + 0.5);
+            if (pennys > 0)
+                Console.WriteLine($"{pennys} penny(s)");
         }
 
         static void Main(string[] args)
@@ -44,15 +87,27 @@ namespace Change
 
             while (true)
             {
-                (bool result, double change) = GetInput();
+                (bool result, double price, double payment) = GetInput();
                 if (!result)
                     continue;
 
+                var change = payment - price;
                 if (change == 0)
                 {
                     Console.WriteLine("Correct amount, thank you!");
                     continue;
                 }
+
+                if (change < 0)
+                {
+                    Console.WriteLine($"Sorry, you have short-changed me ${price - payment}!");
+                    continue;
+                }
+
+                Console.WriteLine($"Your change ${change:N2}");
+                PrintChange(change);
+                Console.WriteLine("Thank you, come again!");
+                Console.WriteLine();
             }
         }
     }
