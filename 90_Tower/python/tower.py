@@ -60,7 +60,10 @@ GOOD LUCK!
 
 class Game:
     def __init__(self):
-        self.__sizes = [3, 5, 7]  # ,9,11,13,15]
+        # use fewer sizes to make debugging easier
+        # self.__sizes = [3, 5, 7]  # ,9,11,13,15]
+        self.__sizes = [3, 5, 7, 9, 11, 13, 15]
+        
         self.__sizes.sort()
 
         self.__towers = []
