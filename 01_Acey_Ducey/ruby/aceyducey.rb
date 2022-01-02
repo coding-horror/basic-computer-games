@@ -56,9 +56,9 @@ while true # Game loop
   puts
   puts "HERE ARE YOUR NEXT TWO CARDS:"
 
-  # Randomly draw two cards from 2 to 14 and make sure the first card is lower in value than the second
+  # Randomly draw two cards and make sure the first card is lower in value than the second
   # Using array destructuring, this sorted array can be assigned to `first_card` and `second_card`
-  first_card, second_card = [rand(2..14), rand(2..14)].sort
+  first_card, second_card = (2...14).to_a.shuffle.pop(2).sort
 
   # Helper method to convert a numeric card into a String for printing
   def card_name(card)
