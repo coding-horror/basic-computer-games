@@ -1,0 +1,69 @@
+# EditorConfig is awesome: https://EditorConfig.org
+# .editorconfig
+
+# Please see doc/developer_notes.md
+# If you find anything egregious or missing, please consider submitting a pull request
+# to https://github.com/theias/ias_package_shell
+
+
+# top-most EditorConfig file
+root = true
+
+# Sensible defaults for everything
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+# JavaScript
+[**.js]
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+
+# Ruby
+[**.rb]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+# Python
+[**.py]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+# Perl
+[**.pl]
+charset = utf-8
+insert_final_newline = true
+[**.pm]
+charset = utf-8
+insert_final_newline = true
+
+# PHP
+[**.php]
+charset = utf-8
+indent_size = 4
+indent_style = space
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+[**.gmk]
+indent_style = tab
+
+# Configuration Files
+# Matches the exact files either package.json or .travis.yml
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2
+
+# Diff files
+[*.{diff,patch}]
+trim_trailing_whitespace = false
