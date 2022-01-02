@@ -27,14 +27,14 @@ function getRandomCard() {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function getGameCards() {
+function newGameCards() {
     let cardOne = getRandomCard();
     let cardTwo = getRandomCard();
     let cardThree = getRandomCard();
     // We want:
     // 1. cardOne and cardTwo to be different cards
     // 2. cardOne to be lower than cardTwo
-    // So, while cardOne is greater than or equal two cardTwo
+    // So, while cardOne is greater than or equal too cardTwo
     // we will continue to generate random cards.
     while (cardOne >= cardTwo) {
         cardOne = getRandomCard();
@@ -75,7 +75,7 @@ async function main() {
 
     // Loop game forever
     while (true) {
-        let [cardOne, cardTwo, cardThree] = getGameCards();
+        let [cardOne, cardTwo, cardThree] = newGameCards();
 
         print(`YOU NOW HAVE ${availableDollars} DOLLARS.\n`);
 
