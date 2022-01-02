@@ -100,7 +100,7 @@ namespace Change
 
                 if (change < 0)
                 {
-                    Console.WriteLine($"Sorry, you have short-changed me ${price - payment}!");
+                    Console.WriteLine($"Sorry, you have short-changed me ${price - payment:N2}!");
                     continue;
                 }
 
