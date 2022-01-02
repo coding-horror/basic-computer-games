@@ -1,135 +1,216 @@
-// ACEY DUCEY
-//
-// Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
-//
+// UTILITY VARIABLES
 
-function print(str)
-{
-    document.getElementById("output").appendChild(document.createTextNode(str));
+// By default:
+// — Browsers have a window object
+// — Node.js does not
+// Checking for an undefined window object is a loose check
+// to enable browser and Node.js support
+const isRunningInBrowser = typeof window !== 'undefined';
+
+// To easily validate input strings with utility functions
+const validLowerCaseYesStrings = ['yes', 'y'];
+const validLowerCaseNoStrings = ['no', 'n'];
+const validLowerCaseYesAndNoStrings = [
+    ...validLowerCaseYesStrings,
+    ...validLowerCaseNoStrings,
+];
+// UTILITY VARIABLES
+
+// Function to get a random number (card) 2-14 (ACE is 14)
+function getRandomCard() {
+    // In our game, the value of ACE is greater than face cards;
+    // instead of having the value of ACE be 1, we’ll have it be 14.
+    // So, we want to shift the range of random numbers from 1-13 to 2-14
+    let min = 2;
+    let max = 14;
+    // Return random integer between two values, inclusive
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function input()
-{
-    var input_element;
-    var input_str;
-    
-    return new Promise(function (resolve) {
-                       input_element = document.createElement("INPUT");
-                       
-                       print("? ");
-                       input_element.setAttribute("type", "text");
-                       input_element.setAttribute("length", "50");
-                       document.getElementById("output").appendChild(input_element);
-                       input_element.focus();
-                       input_str = undefined;
-                       input_element.addEventListener("keydown", function (event) {
-                                                      if (event.keyCode == 13) {
-                                                      input_str = input_element.value;
-                                                      document.getElementById("output").removeChild(input_element);
-                                                      print(input_str);
-                                                      print("\n");
-                                                      resolve(input_str);
-                                                      }
-                                                      });
-                       });
+function newGameCards() {
+    let cardOne = getRandomCard();
+    let cardTwo = getRandomCard();
+    let cardThree = getRandomCard();
+    // We want:
+    // 1. cardOne and cardTwo to be different cards
+    // 2. cardOne to be lower than cardTwo
+    // So, while cardOne is greater than or equal too cardTwo
+    // we will continue to generate random cards.
+    while (cardOne >= cardTwo) {
+        cardOne = getRandomCard();
+        cardTwo = getRandomCard();
+    }
+    return [cardOne, cardTwo, cardThree];
 }
 
-function tab(space)
-{
-    var str = "";
-    while (space-- > 0)
-        str += " ";
-    return str;
+// Function to get card value
+function getCardValue(card) {
+    let faceOrAce = {
+        11: 'JACK',
+        12: 'QUEEN',
+        13: 'KING',
+        14: 'ACE',
+    };
+    // If card value matches a key in faceOrAce, use faceOrAce value;
+    // Else, return undefined and handle with the Nullish Coalescing Operator (??)
+    // and default to card value.
+    let cardValue = faceOrAce[card] ?? card;
+    return cardValue;
 }
 
-print(tab(26) + "ACEY DUCEY CARD GAME\n");
-print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
-print("\n");
-print("\n");
-print("ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER\n");
-print("THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP\n");
-print("YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING\n");
-print("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE\n");
-print("A VALUE BETWEEN THE FIRST TWO.\n");
-print("IF YOU DO NOT WANT TO BET, INPUT A 0\n");
+print(spaces(26) + 'ACEY DUCEY CARD GAME');
+print(spaces(15) + 'CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n');
+print('ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER');
+print('THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP');
+print('YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING');
+print('ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE');
+print('A VALUE BETWEEN THE FIRST TWO.');
+print("IF YOU DO NOT WANT TO BET, INPUT '0'");
 
-function show_card(card)
-{
-    if (card < 11)
-        print(card + "\n");
-    else if (card == 11)
-        print("JACK\n");
-    else if (card == 12)
-        print("QUEEN\n");
-    else if (card == 13)
-        print("KING\n");
-    else
-        print("ACE\n");
-}
+main();
 
-// Main program
-async function main()
-{
-    q = 100;
-    while (1) {
-        print("YOU NOW HAVE " + q + " DOLLARS.\n");
-        print("\n");
-        
-        do {
-            print("HERE ARE YOUR NEXT TWO CARDS: \n");
-            do {
-                a = Math.floor(Math.random() * 13 + 2);
-                b = Math.floor(Math.random() * 13 + 2);
-            } while (a >= b) ;
-            show_card(a);
-            show_card(b);
-            print("\n");
-            while (1) {
-                print("\n");
-                print("WHAT IS YOUR BET");
-                m = parseInt(await input());
-                if (m > 0) {
-                    if (m > q) {
-                        print("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.\n");
-                        print("YOU HAVE ONLY " + q + "DOLLARS TO BET.\n");
-                        continue;
-                    }
-                    break;
-                }
-                m = 0;
-                print("CHICKEN!!\n");
-                print("\n");
-                break;
-            }
-        } while (m == 0) ;
-        c = Math.floor(Math.random() * 13 + 2);
-        show_card(c);
-        if (c > a && c < b) {
-            print("YOU WIN!!!\n");
-            q = q + m;
-        } else {
-            print("SORRY, YOU LOSE\n");
-            if (m >= q) {
-                print("\n");
-                print("\n");
-                print("SORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n");
-                print("\n");
-                print("\n");
-                print("TRY AGAIN (YES OR NO)");
-                a = await input();
-                print("\n");
-                print("\n");
-                if (a == "YES") {
-                    q = 100;
+async function main() {
+    let bet;
+    let availableDollars = 100;
+
+    // Loop game forever
+    while (true) {
+        let [cardOne, cardTwo, cardThree] = newGameCards();
+
+        print(`YOU NOW HAVE ${availableDollars} DOLLARS.\n`);
+
+        print('HERE ARE YOUR NEXT TWO CARDS: ');
+        print(getCardValue(cardOne));
+        print(getCardValue(cardTwo));
+        print('');
+
+        // Loop until receiving a valid bet
+        let validBet = false;
+        while (!validBet) {
+            print('\nWHAT IS YOUR BET? ');
+            bet = parseInt(await input(), 10);
+            let minimumRequiredBet = 0;
+            if (bet > minimumRequiredBet) {
+                if (bet > availableDollars) {
+                    print('SORRY, MY FRIEND, BUT YOU BET TOO MUCH.');
+                    print(`YOU HAVE ONLY ${availableDollars} DOLLARS TO BET.`);
                 } else {
-                    print("O.K., HOPE YOU HAD FUN!");
+                    validBet = true;
+                }
+            } else {
+                // Does not meet minimum required bet
+                print('CHICKEN!!');
+                print('');
+            }
+        }
+
+        print('\n\nHERE IS THE CARD WE DREW: ');
+        print(getCardValue(cardThree));
+
+        // Determine if player won or lost
+        if (cardThree > cardOne && cardThree < cardTwo) {
+            print('YOU WIN!!!');
+            availableDollars = availableDollars + bet;
+        } else {
+            print('SORRY, YOU LOSE');
+
+            if (bet >= availableDollars) {
+                print('');
+                print('');
+                print('SORRY, FRIEND, BUT YOU BLEW YOUR WAD.');
+                print('');
+                print('');
+                print('TRY AGAIN (YES OR NO)');
+
+                let tryAgainInput = await input();
+
+                print('');
+                print('');
+
+                if (isValidYesNoString(tryAgainInput)) {
+                    availableDollars = 100;
+                } else {
+                    print('O.K., HOPE YOU HAD FUN!');
                     break;
                 }
             } else {
-                q = q - m;
+                availableDollars = availableDollars - bet;
             }
         }
     }
 }
 
-main();
+// UTILITY FUNCTIONS
+function isValidYesNoString(string) {
+    return validLowerCaseYesAndNoStrings.includes(string.toLowerCase());
+}
+
+function isValidYesString(string) {
+    return validLowerCaseYesStrings.includes(string.toLowerCase());
+}
+
+function isValidNoString(string) {
+    return validLowerCaseNoStrings.includes(string.toLowerCase());
+}
+
+function print(string) {
+    if (isRunningInBrowser) {
+        // Adds trailing newline to match console.log behavior
+        document
+            .getElementById('output')
+            .appendChild(document.createTextNode(string + '\n'));
+    } else {
+        console.log(string);
+    }
+}
+
+function input() {
+    if (isRunningInBrowser) {
+        // Accept input from the browser DOM input
+        return new Promise((resolve) => {
+            const outputElement = document.querySelector('#output');
+            const inputElement = document.createElement('input');
+            outputElement.append(inputElement);
+            inputElement.focus();
+
+            inputElement.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    const result = inputElement.value;
+                    inputElement.remove();
+                    print(result);
+                    print('');
+                    resolve(result);
+                }
+            });
+        });
+    } else {
+        // Accept input from the command line in Node.js
+        // See: https://nodejs.dev/learn/accept-input-from-the-command-line-in-nodejs
+        return new Promise(function (resolve) {
+            const readline = require('readline').createInterface({
+                input: process.stdin,
+                output: process.stdout,
+            });
+            readline.question('', function (input) {
+                resolve(input);
+                readline.close();
+            });
+        });
+    }
+}
+
+function printInline(string) {
+    if (isRunningInBrowser) {
+        document
+            .getElementById('output')
+            .appendChild(document.createTextNode(string));
+    } else {
+        process.stdout.write(string);
+    }
+}
+
+function spaces(numberOfSpaces) {
+    return ' '.repeat(numberOfSpaces);
+}
+
+// UTILITY FUNCTIONS
