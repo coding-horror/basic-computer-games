@@ -30,7 +30,7 @@ namespace Change
 	    /// </returns>
         static (bool status, double price, double payment) GetInput()
         {
-            Console.WriteLine("Cost of item? ");
+            Console.Write("Cost of item? ");
             var priceString = Console.ReadLine();
             if (!double.TryParse(priceString, out double price))
             {
@@ -38,7 +38,7 @@ namespace Change
                 return (false, 0, 0);
             }
 
-            Console.WriteLine("Amount of payment? ");
+            Console.Write("Amount of payment? ");
             var paymentString = Console.ReadLine();
             if (!double.TryParse(paymentString, out double payment))
             {
