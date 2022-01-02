@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -112,13 +112,13 @@ async function main()
             print("\n");
             print("WHICH SYSTEM OF MEASUREMENT DO YOU PREFER?\n");
             print(" 1=METRIC     0=ENGLISH\n");
-            print("ENTER THE APPROPIATE NUMBER");
+            print("ENTER THE APPROPRIATE NUMBER");
         }
         while (1) {
             k = parseInt(await input());
             if (k == 0 || k == 1)
                 break;
-            print("ENTER THE APPROPIATE NUMBER");
+            print("ENTER THE APPROPRIATE NUMBER");
         }
         if (k == 1) {
             z = 1852.8;

@@ -42,3 +42,5 @@ Feel free to begin converting these classic games into the above list of modern,
 ### Have fun!
 
 Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2022 and beyond!
+
+NOTE: per [the official blog post announcement](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/), I will be **donating $5 for each contributed program in the 8 agreed upon languages to [Girls Who Code](https://girlswhocode.com/)**.

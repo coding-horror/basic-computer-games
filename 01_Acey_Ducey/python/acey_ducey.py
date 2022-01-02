@@ -78,7 +78,7 @@ if __name__ == "__main__":
         """
 Acey-Ducey is played in the following manner
 The dealer (computer) deals two cards face up
-You have an option to be or not bet depending
+You have an option to bet or not bet depending
 on whether or not you feel the card will have
 a value between the first two.
 If you do not want to bet, input a 0
