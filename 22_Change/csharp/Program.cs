@@ -17,9 +17,43 @@ namespace Change
             Console.WriteLine();
         }
 
+        static (bool, double) GetInput()
+        {
+            Console.WriteLine("Cost of item? ");
+            var priceString = Console.ReadLine();
+            if (!double.TryParse(priceString, out double price))
+            {
+                Console.WriteLine($"{priceString} isn't a number!");
+                return (false, 0);
+            }
+
+            Console.WriteLine("Amount of payment? ");
+            var paymentString = Console.ReadLine();
+            if (!double.TryParse(paymentString, out double payment))
+            {
+                Console.WriteLine($"{paymentString} isn't a number!");
+                return (false, 0);
+            }
+
+            return (true, payment - price);
+        }
+
         static void Main(string[] args)
         {
             Header();
+
+            while (true)
+            {
+                (bool result, double change) = GetInput();
+                if (!result)
+                    continue;
+
+                if (change == 0)
+                {
+                    Console.WriteLine("Correct amount, thank you!");
+                    continue;
+                }
+            }
         }
     }
 }
