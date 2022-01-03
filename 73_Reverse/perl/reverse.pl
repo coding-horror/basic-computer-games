@@ -62,7 +62,7 @@ HERE
 # continue block at the end of the main block,
 # which handles the logic of whether the user
 # wants to play again or not.
-PLAY: while(1) {
+PLAY: while (1) {
 
     # start of game. Initialize the number array.
     my(@list) = ();
