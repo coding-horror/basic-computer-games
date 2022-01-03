@@ -25,24 +25,25 @@ sub game_play {
 		$sum = $sum + $roll;			# keeping track of the summary
 		#print "Sum: $sum Roll: $roll\n";
 		if ($num == 1) {
-			print "      +\n";			# if its the first roll then print an addition sign
+			print "\n   +\n\n";			# if its the first roll then print an addition sign
 		}
 		if ($num == 2) {
-			print "      =\n";			# if its the second roll print the equals sign and wait for an answer
+			print "     =? ";			# if its the second roll print the equals sign and wait for an answer
 			my $answer = <STDIN>;
 			chomp($answer);
 			if ($answer == 0) {
 				die "You input '0', Thanks for playing!\n";
 			}
 			elsif ($answer == $sum) {
-				print "RIGHT!\nTHE DICE ROLL AGAIN\n";
+				print "RIGHT!\n\nTHE DICE ROLL AGAIN\n\n";
 			}
 			else {						# code execution if they don't get the right answer
 				print "NO,COUNT THE SPOTS AND GIVE ANOTHER ANSWER\n";
+				print "     =? ";
 				$answer = <STDIN>;
 				chomp($answer);
 				if ($answer == $sum){
-					print "RIGHT!\nTHE DICE ROLL AGAIN\n";
+					print "RIGHT!\n\nTHE DICE ROLL AGAIN\n\n";
 				}
 			    else {
 					print "N0, THE ANSWER IS $sum\n";
