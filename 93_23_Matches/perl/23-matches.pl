@@ -55,6 +55,8 @@ TURN: while (1) {
     # value between 1 and 3
     USERIN: while (1) {
         chomp($user = <STDIN>);
+        # Prevent user from entering decimal values
+        $user = int($user);
         if ($user <= 0 or $user > 3) {
             print "Very funny! Dummy!\n";
             print "Do you want to play or goof around?\n";
