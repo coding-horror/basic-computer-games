@@ -129,7 +129,7 @@ PLAY: while (1) {
                 next TURN;
             }
         }
-        # User won!
+        # User won! (Note the logic that prints out the correct noun form)
         printf("\nYou won it in %d %s!!!\n", $turns, ($turns == 1 ? 'move' : 'moves'));
 
         # Execution passes to the continue block of the PLAY loop
