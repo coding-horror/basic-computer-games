@@ -59,9 +59,9 @@ HERE
 
 # The PLAY block allows the user to keep playing
 # as long as they want. Note the associated
-# continue block at the end of this file, which
-# handles the logic of whether the user wants to
-# play again or not.
+# continue block at the end of the main block,
+# which handles the logic of whether the user
+# wants to play again or not.
 PLAY: while(1) {
 
     # start of game. Initialize the number array.
