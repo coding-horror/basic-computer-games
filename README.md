@@ -27,6 +27,8 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 
 ### Project goals
 
+> **Note:** At this point there are solutions implemented in all languages, but further updates could still be done to keep these updated with "modern" coding conventions as they change over time, or by improving comments to better explain the code
+
 Feel free to begin converting these classic games into the above list of modern, memory safe languages. But first, a few guidelines:
 
 - **These are very old games**. They date from the mid-70s so they're not exactly examples of what kids (or anyone, really?) would be playing these days. Consider them more like classic programming exercises to teach programming.  We're paying it forward by converting them into modern languages, so the next generation can learn from the programs in this classic book -- and compare implementations across common modern languages.
