@@ -115,8 +115,7 @@ PLAY: while (1) {
         ++$turns;
 
         # calculate the reversed list in a temp variable
-        my(@tmp) = ();
-        @tmp = ( 
+        my(@tmp) = (
             reverse(@list[0 .. $num-1]),  # reversing the first $num elements...
             @list[$num .. $#list]         # ...and appending the non-reversed ones
         );
