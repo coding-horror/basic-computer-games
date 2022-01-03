@@ -359,7 +359,7 @@ class GameState(val yearsRequired: Int = 8) {
                     explanationOfSellingGiven = true
                 }
             }
-        } while (sellThisYear <= 0 || sellThisYear > landArea - 1000)
+        } while (sellThisYear < 0 || sellThisYear > landArea - 1000)
     }
 
     /**
@@ -376,7 +376,7 @@ class GameState(val yearsRequired: Int = 8) {
                 retry = true
             }
 
-            if (welfareThisYear <= 0) {
+            if (welfareThisYear < 0) {
                 retry = true
             }
         } while (retry)
@@ -495,6 +495,14 @@ class GameState(val yearsRequired: Int = 8) {
                 (sellThisYear + rnd * 10.0 + rnd * 20.0).toInt() + (if (foreignWorkers <= 0) 20 else 0)
             } else 0
 
+        /*
+        Immigration is calculated as
+            One for every thousand rallods more welfare than strictly required
+            minus one for every 10 starvation deaths
+            plus One for every 25 rallods spent on pollution control
+            plus one for every 50 square miles of arable land
+            minus one for every 2 pollution deaths
+         */
         val immigration = (
                 (welfareThisYear / 100.0 - countrymen) / 10.0 +
                         moneySpentOnPollutionControl / 25.0 -
@@ -510,6 +518,12 @@ class GameState(val yearsRequired: Int = 8) {
         countrymen += immigration
         foreignWorkers += newForeigners
 
+        /*
+        Crop loss is between 75% and 125% of the land sold to industry,
+        due to the pollution that industry causes.
+        Money spent on pollution control reduces pollution deaths among
+        the population, but does not affect crop losses.
+         */
         var cropLoss = ((2000 - landArea) * (rnd + 1.5) / 2.0).toInt()
         val cropLossWorse = false
         if (foreignWorkers > 0)
