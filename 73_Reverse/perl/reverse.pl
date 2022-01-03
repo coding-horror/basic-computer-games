@@ -114,14 +114,12 @@ PLAY: while (1) {
         # Keep track of turns
         ++$turns;
 
-        # calculate the reversed list in a temp variable
-        my(@tmp) = (
+        # calculate the reversed list 
+        @list = (
             reverse(@list[0 .. $num-1]),  # reversing the first $num elements...
             @list[$num .. $#list]         # ...and appending the non-reversed ones
         );
 
-        # reassign the temp variable to the list var, and print
-        @list = @tmp;
         printf("%s\n", join(' ', @list));
 
         # Has the user won?
