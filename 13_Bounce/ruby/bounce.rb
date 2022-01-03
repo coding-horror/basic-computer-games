@@ -38,7 +38,7 @@ def calc_ball_height(v0, bounce, coefficient, t)
     h = v * t - 0.5 * G * t**2
 end
 
-def heighest_position_in_next_bounce(time_in_bounce, i)
+def heighest_position_in_next_bounce(time_in_bounce, v0, i, c)
     time_in_next_bounce = time_in_bounce[i+1]
     return -1 if time_in_next_bounce.nil?
     return calc_ball_height(v0, i, c, time_in_next_bounce / 2) unless time_in_next_bounce.nil?
@@ -82,11 +82,12 @@ def plot_bouncing_ball(strobbing_time, v0, c)
     plot_width = 0
 
     # Calculate the highest position for the ball after the very first bounce
-    plot_y = (calc_ball_height(v0, 0, c, v0/G) + 0.5).to_i
+    plotted_height = (calc_ball_height(v0, 0, c, v0/G) + 0.5).to_i
 
-    while plot_y >= 0 do
+    ## Plotting bouncing ball
+    while plotted_height >= 0 do
         # We will print only whole-number heights
-        print plot_y.to_i if plot_y.to_i === plot_y
+        print plotted_height.to_i if plotted_height.to_i === plotted_height
 
         print BALL_PLOT_INDENT
 
@@ -96,7 +97,7 @@ def plot_bouncing_ball(strobbing_time, v0, c)
 
                 # If the ball is within the acceptable deviation
                 # from the current height, we will plot it
-                if (plot_y - ball_pos).abs <= BALL_PLOT_DEVIATION then
+                if (plotted_height - ball_pos).abs <= BALL_PLOT_DEVIATION then
                     print "0"
                 else
                     print " "
@@ -105,10 +106,10 @@ def plot_bouncing_ball(strobbing_time, v0, c)
                 # Increment the plot width when we are plotting height = 0
                 # which will definitely be the longest since it never gets
                 # skipped by line 98
-                plot_width += 1 if plot_y == 0
+                plot_width += 1 if plotted_height == 0
             }
             
-            if heighest_position_in_next_bounce(time_in_bounce, i) < plot_y then
+            if heighest_position_in_next_bounce(time_in_bounce, v0, i, c) < plotted_height then
                 # If we got no more ball positions at or above current height, we can skip
                 # the rest of the bounces and move down to the next height to plot
                 puts
@@ -116,7 +117,7 @@ def plot_bouncing_ball(strobbing_time, v0, c)
             end
         }
 
-        plot_y -= BALL_PLOT_HEIGHT_STEP
+        plotted_height -= BALL_PLOT_HEIGHT_STEP
     end
 
     # Return plot_width to be used by the plot_footer
@@ -160,7 +161,7 @@ def game_loop
     puts "COEFFICIENT"
     c = gets.to_f
 
-    ## Plotting
+    # Plotting
     plot_header
 
     plot_width = plot_bouncing_ball strobbing_time, v0, c
@@ -168,7 +169,9 @@ def game_loop
     plot_footer plot_width, strobbing_time
 end
 
-## Entry point
+
+## Game entry point
+
 begin
     intro
     while true
