@@ -95,10 +95,13 @@ class Game:
                     self.not_done = False
                     break
 
-                if len(self.deck.cards) <= 1:
+                if len(self.deck.cards) <= 3:
                     print('You ran out of cards. Game over.')
                     self.not_done = False
                     break
+
+                self.card_a = self.deck.deal()
+                self.card_b = self.deck.deal()
 
         if self.money == 0:
             self.not_done = False
