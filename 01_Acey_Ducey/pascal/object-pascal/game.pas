@@ -85,6 +85,7 @@ end;
 
 constructor TGame.Create;
 begin
+  Randomize;
   FDeck:= TDeck.Create;
 end;
 
@@ -99,7 +100,6 @@ begin
   ClrScr;
   PrintGreeting;
   repeat
-    Randomize;
     FStash:= 100;
     repeat
       PrintBalance;
