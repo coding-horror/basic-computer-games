@@ -118,10 +118,10 @@ begin
 end;
 
 begin
+  Randomize;
   ClrScr;
   PrintGreeting;
   repeat
-    Randomize;
     Stash:= 100;
     repeat
       PrintBalance;
