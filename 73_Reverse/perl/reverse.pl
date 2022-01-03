@@ -92,7 +92,7 @@ PLAY: while (1) {
 
             # Perl will throw an error if we use the user's input
             # and it isn't an actual number, so this just checks
-            # to see if $num looks liek a number. (See the docs
+            # to see if $num looks like a number. (See the docs
             # for Scalar::Util for some more useful subs!)
             if (! looks_like_number($num)) {
                 print "Please enter a number from 1 to $MAXNUM\n";
