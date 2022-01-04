@@ -74,7 +74,7 @@ You can manage and use different versions of python with [pip](https://pypi.org/
 
 ## ruby
 
-If you don't already have a ruby interpreter, you can download it from the [ruby projet site](https://www.ruby-lang.org/en/).
+If you don't already have a ruby interpreter, you can download it from the [ruby project site](https://www.ruby-lang.org/en/).
 
 1. From the command-line, navigate to the corresponding directory.
 1. Invoke with the `ruby` tool.
