@@ -28,17 +28,15 @@ If you do not want to bet, input a 0.  If you want to quit, input a -1.
 
 END_INSTRUCTIONS
 
-my @cards       = (1 .. 13);    # That is, Ace through King.
+my @cards       = ( 1 .. 13 );    # That is, Ace through King.
 my $keepPlaying = 1;
 
 GAME:
-while ($keepPlaying)
-{
-    my $playerBalance = 100;    # The player starts with $100
+while ($keepPlaying) {
+    my $playerBalance = 100;      # The player starts with $100
 
-  HAND:
-    while (1)
-    {
+    HAND:
+    while (1) {
         print "\nYou now have $playerBalance dollars.\n\n";
 
         # We'll create a new array that is a shuffled version of the deck.
@@ -48,19 +46,17 @@ while ($keepPlaying)
         # that those will be unique.  This way we don't have to keep drawing
         # if we get, say, two queens.  We sort them as we pull them to make
         # sure that the first card is lower than the second one.
-        my ($firstCard, $secondCard) = sort { $a <=> $b } @shuffledDeck[ 0 .. 1 ];
+        my ( $firstCard, $secondCard ) = sort { $a <=> $b } @shuffledDeck[ 0 .. 1 ];
 
         print "I drew ", nameOfCard($firstCard), " and ", nameOfCard($secondCard), ".\n";
 
         my $bet = getValidBet($playerBalance);
-        if ($bet == 0)
-        {
+        if ( $bet == 0 ) {
             print "Chicken!\n\n";
             next HAND;
         }
 
-        if ($bet < 0)
-        {
+        if ( $bet < 0 ) {
             last GAME;
         }
 
@@ -72,19 +68,16 @@ while ($keepPlaying)
 
         print "I drew ", nameOfCard($thirdCard), "!\n";
 
-        if (($firstCard < $thirdCard) && ($thirdCard < $secondCard))
-        {
+        if ( ( $firstCard < $thirdCard ) && ( $thirdCard < $secondCard ) ) {
             print "You win!\n\n";
             $playerBalance += $bet;
         }
-        else
-        {
+        else {
             print "You lose!\n\n";
             $playerBalance -= $bet;
         }
 
-        if ($playerBalance <= 0)
-        {
+        if ( $playerBalance <= 0 ) {
             print "Sorry, buddy, you blew your wad!\n\n";
             last HAND;
         }
@@ -96,49 +89,43 @@ while ($keepPlaying)
 print "Thanks for playing!\n";
 
 ###############
-sub getValidBet
-{
+sub getValidBet {
     my $maxBet = shift;
 
-    print "\nWhat's your bet? ";
-
-    my $input = <STDIN>;
-    chomp $input;
-
-    # This regular expression will validate that the player entered an integer.
-    # The !~ match operate *negates* the match, so if the player did NOT enter
-    # an integer, they'll be given an error and prompted again.
-    if ($input !~ /^        # Match the beginning of the string
-                   [+-]?    # Optional plus or minus...
-                   \d+      # followed by one more more digits...
-                   $        # and then the end of the string
-                  /x        # The x modifier ignores whitespace in this regex...
-                  )
+    INPUT:
     {
-        print "Sorry, numbers only!\n";
-        $input = getValidBet($maxBet);
-    }
+        print "\nWhat's your bet? ";
 
-    if ($input > $maxBet)
-    {
-        print "Sorry, my friend, you can't bet more money than you have.\n";
-        print "You only have $maxBet dollars to spend!\n";
-        $input = getValidBet($maxBet);
-    }
+        chomp( my $input = <STDIN> );
 
-    if ($input != int($input))
-    {
-        print "Sorry, you must bet in whole dollars.  No change!\n";
-        $input = getValidBet($maxBet);
-    }
+        # This regular expression will validate that the player entered an integer.
+        # The !~ match operate *negates* the match, so if the player did NOT enter
+        # an integer, they'll be given an error and prompted again.
+        if (
+            $input !~ /^        # Match the beginning of the string
+                    [+-]?    # Optional plus or minus...
+                    \d+      # followed by one more more digits...
+                    $        # and then the end of the string
+                    /x    # The x modifier ignores whitespace in this regex...
+          )
+        {
+            print "Sorry, numbers only!\n";
+            redo INPUT;
+        }
 
-    return $input;
+        if ( $input > $maxBet ) {
+            print "Sorry, my friend, you can't bet more money than you have.\n";
+            print "You only have $maxBet dollars to spend!\n";
+            redo INPUT;
+        }
+
+        return $input;
+    }
 }
 
 # Since arrays in Perl are 0-based, we need to convert the value that we drew from
 # the array to its proper position in the deck.
-sub nameOfCard
-{
+sub nameOfCard {
     my $value = shift;
 
     # Note that the Joker isn't used in this game, but since arrays in Perl are
@@ -150,25 +137,21 @@ sub nameOfCard
     return $cardlist[$value];
 }
 
-sub promptUserToKeepPlaying
-{
-    print "Try again (Y/N)? ";
-    my $input = <STDIN>;
-    chomp $input;
+sub promptUserToKeepPlaying {
+    YESNO:
+    {
+        print "Try again (Y/N)? ";
 
-    my $keepGoing;
-    if (uc($input) eq 'Y')
-    {
-        $keepGoing = 1;
-    }
-    elsif (uc($input) eq 'N')
-    {
-        $keepGoing = 0;
-    }
-    else
-    {
-        $keepGoing = promptUserToKeepPlaying();
-    }
+        chomp( my $input = uc <STDIN> );
 
-    return $keepGoing;
+        if ( $input eq 'Y' ) {
+            return 1;
+        }
+        elsif ( $input eq 'N' ) {
+            return 0;
+        }
+        else {
+            redo YESNO;
+        }
+    }
 }
