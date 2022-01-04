@@ -134,12 +134,12 @@ async function main() {
     let shouldContinuePlaying = true;
     
     while (deck.length > 0 && shouldContinuePlaying) {
-        const m1 = deck.shift();    // Take a card
-        const m2 = deck.shift();    // Take a card
-        printCards(cards[m1], cards[m2]);
+        const playerCard = deck.shift();    // Take a card
+        const computerCard = deck.shift();    // Take a card
+        printCards(cards[playerCard], cards[computerCard]);
 
-        const playerCardValue = computeCardValue(m1);
-        const computerCardValue = computeCardValue(m2);
+        const playerCardValue = computeCardValue(playerCard);
+        const computerCardValue = computeCardValue(computerCard);
         if (playerCardValue < computerCardValue) {
             computerScore++;
             print("THE COMPUTER WINS!!! YOU HAVE " + playerScore + " AND THE COMPUTER HAS " + computerScore + "\n");
