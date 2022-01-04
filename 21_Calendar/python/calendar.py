@@ -58,6 +58,7 @@ def calendar(weekday, leap_year):
                     print(" {}".format(d2), end='       ')
                 else:
                     print("{}".format(d2), end='       ')
+            print()
 
             if d2 >= months_days[n]:
                 break
@@ -66,6 +67,8 @@ def calendar(weekday, leap_year):
             d -= g
 
         print("\n")
+
+    print("\n")
 
 
 if __name__ == "__main__":
