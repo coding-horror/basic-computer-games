@@ -73,7 +73,7 @@ function createGameDeck(cards, gameSize) {
         do {
             card = Math.floor(deckSize * Math.random());
         } while (deck.includes(card));
-        deck[j] = card
+        deck.push(card);
     }
     return deck;
 }
@@ -129,7 +129,7 @@ async function main() {
     let playerScore = 0;
     
     // Generate a random deck
-    const gameSize = 4;
+    const gameSize = cards.length;    // Number of cards to shuffle into the game deck.  Can be <= cards.length.
     const deck = createGameDeck(cards, gameSize);
     let shouldContinuePlaying = true;
     
