@@ -21,7 +21,7 @@ sub game_play {
 	if ($choice == 0) {
 		until ($marbles == 0) {
 
-			my $computer_choice = &computer_select($marbles,$turn);
+			my $computer_choice = &computer_select($marbles,$turn,$player_total);
 			$marbles = $marbles - $computer_choice;
 			$computer_total = $computer_total + $computer_choice;
 			print "MY TOTAL IS $computer_total\n";
@@ -52,7 +52,7 @@ sub game_play {
 			
 			if ($marbles == 0) {&determine_winner($computer_total,$player_total)};
 
-			my $computer_choice = &computer_select($marbles,$turn);
+			my $computer_choice = &computer_select($marbles,$turn,$player_total);
 			$marbles = $marbles - $computer_choice;
 			$computer_total = $computer_total + $computer_choice;
 			print "MY TOTAL IS $computer_total\n";
@@ -114,6 +114,7 @@ sub player_select {
 sub computer_select {
 	my $marbles = shift;
 	my $turn = shift;
+	my $player_total = shift;
 	my $num = 2;
 	my $validity = "invalid";
 	if ($turn == 0) {
@@ -122,14 +123,24 @@ sub computer_select {
 	else {
 		until ($validity eq "valid") {
 			my $R=$marbles-6*int(($marbles/6));
-			if ($marbles < 4.2) {
+			
+			if (int($player_total/2) == $player_total/2) {
+				if ($R < 1.5 || $R > 5.3) {
+					$num = 1;
+				}
+				else {
+					$num = $R - 1;
+				}
+			}
+			 
+			elsif ($marbles < 4.2) {
 				$num = $marbles;
 			}
-			if ($R > 3.4) {
+			elsif ($R > 3.4) {
 				if ($R < 4.7 || $R > 3.5) {
 					$num = 4;
 				}
-				else {
+			else {
 					$num = 1;
 				}
 			}
