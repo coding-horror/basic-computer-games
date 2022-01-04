@@ -3,7 +3,8 @@ import kotlin.random.Random
 import kotlin.system.exitProcess
 
 lateinit var gameState: GameState
-const val INCLUDE_BUGS_FROM_ORIGINAL = false
+const val KEEP_ORIGINAL_BUGS = false
+const val KEEP_ORIGINAL_SUICIDE_REFERENCE = false
 
 val rnd: Double get() = Random.nextDouble()
 fun tab(i: Int) = " ".repeat(i)
@@ -198,15 +199,26 @@ sealed class YearOutcome {
     object StarvationWithFullTreasury : YearOutcome() {
         override fun displayConsequences() {
             println(
-                """
-            MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
-            NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
-            OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
-            BEEN FORCED TO EITHER RESIGN OR COMMIT SUICIDE.
-            THE CHOICE IS YOURS.
-            IF YOU CHOOSE THE LATTER, PLEASE TURN OFF YOUR COMPUTER
-            BEFORE PROCEEDING.
-        """.trimIndent()
+                if (KEEP_ORIGINAL_SUICIDE_REFERENCE) {
+                    """
+                    MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
+                    NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
+                    OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
+                    BEEN FORCED TO EITHER RESIGN OR COMMIT SUICIDE.
+                    THE CHOICE IS YOURS.
+                    IF YOU CHOOSE THE LATTER, PLEASE TURN OFF YOUR COMPUTER
+                    BEFORE PROCEEDING.
+                """.trimIndent()
+                } else {
+                    """
+                    MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
+                    NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
+                    OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
+                    BEEN FORCED TO RESIGN.
+                    PLEASE TURN OFF YOUR COMPUTER AND SURRENDER IT TO
+                    THE NEAREST POLICE STATION.
+                """.trimIndent()
+                }
             )
         }
     }
@@ -566,7 +578,7 @@ class GameState(val yearsRequired: Int = 8) {
 
             https://github.com/coding-horror/basic-computer-games/blob/main/53_King/king.bas#:~:text=1450%20V3%3DINT,INT(A%2BV3)
          */
-        if (INCLUDE_BUGS_FROM_ORIGINAL) {
+        if (KEEP_ORIGINAL_BUGS) {
             tourists += rallods
         } else {
             tourists = abs(v1 - v2)
