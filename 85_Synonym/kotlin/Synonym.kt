@@ -26,7 +26,7 @@ private fun SynonymList.testUser() {
             answer == "HELP" ->
                 println("""**** A SYNONYM OF $word IS ${synonyms.random()}.""")
             synonyms.contains(answer) ->
-                println(RANDOM_ANSWERS.random())
+                println(RANDOM_AFFIRMATION.random())
             else ->
                 println("TRY AGAIN.")
         }
@@ -54,7 +54,7 @@ private fun ask(text: String): String {
 // Just like TAB in BASIC
 private fun tab(spaces: Int): String = " ".repeat(spaces)
 
-val RANDOM_ANSWERS = arrayOf("RIGHT", "CORRECT", "FINE", "GOOD!", "CHECK")
+val RANDOM_AFFIRMATION = arrayOf("RIGHT", "CORRECT", "FINE", "GOOD!", "CHECK")
 
 // List of words and synonyms
 private val synonyms = listOf(
