@@ -77,10 +77,7 @@ fun loadOldGame(): GameState = GameState().apply {
     do {
         var retry = false
         print("HOW MANY YEARS HAD YOU BEEN IN OFFICE WHEN INTERRUPTED? ")
-        currentYear = numberInput()
-
-        if (currentYear <= 0)
-            throw DataEntryValidation()
+        currentYear = validatedInput { it > 0 }
 
         if (currentYear >= yearsRequired) {
             println("   COME ON, YOUR TERM IN OFFICE IS ONLY $yearsRequired YEARS.")
@@ -89,21 +86,19 @@ fun loadOldGame(): GameState = GameState().apply {
     } while (retry)
 
     print("HOW MUCH DID YOU HAVE IN THE TREASURY? ")
-    rallods = numberInput()
-    if (rallods < 0)
-        throw DataEntryValidation()
+    rallods = validatedInput { it >= 0 }
+
+    print("HOW MANY COUNTRYMEN? ")
+    countrymen = validatedInput { it >= 0 }
 
     print("HOW MANY WORKERS? ")
-    foreignWorkers = numberInput()
-    if (foreignWorkers < 0)
-        throw DataEntryValidation()
+    foreignWorkers = validatedInput { it >= 0 }
 
     do {
         var retry = false
         print("HOW MANY SQUARE MILES OF LAND? ")
-        landArea = numberInput()
-        if (landArea < 0)
-            throw DataEntryValidation()
+        landArea = validatedInput { it >= 0 }
+
         if (landArea > 2000 || landArea <= 1000) {
             println("   COME ON, YOU STARTED WITH 1000 SQ. MILES OF FARM LAND")
             println("   AND 10,000 SQ. MILES OF FOREST LAND.")
@@ -218,13 +213,10 @@ sealed class YearOutcome {
 
 }
 
-class DataEntryValidation : Throwable()
-
 /**
  * Record data, allow data input, and process the simulation for the game.
  */
 class GameState(val yearsRequired: Int = 8) {
-
     /**
      * The current year. Years start with zero, but we never
      * output the current year.
@@ -246,8 +238,8 @@ class GameState(val yearsRequired: Int = 8) {
     private var tourists = 0
 
     private var moneySpentOnPollutionControl = 0
-    private var moneySpentOnPlanting = 0
 
+    private var moneySpentOnPlanting = 0
     /**
      * Current stock of rallods.
      * Player starts with between 59000 and 61000 rallods, but
@@ -258,10 +250,10 @@ class GameState(val yearsRequired: Int = 8) {
 
     /**
      * Population.
-     * Initial population is about to 500.
+     * Initial population is about 500.
      * 75% of the time it's between 495 and 505.
      */
-    private var countrymen = (500 + (10 * rnd) - (10 * rnd)).toInt()
+    var countrymen = (500 + (10 * rnd) - (10 * rnd)).toInt()
 
     /**
      * Land sale price is evenly between 95 and 104 rallods per
@@ -271,8 +263,8 @@ class GameState(val yearsRequired: Int = 8) {
     private var landPrice = (10 * rnd + 95).toInt()
 
     private var plantingArea = 0
-    private var welfareThisYear = 0
 
+    private var welfareThisYear = 0
     /**
      * Land area in square miles. Arable land is 1000 square miles less.
      * Almost all calculations use landArea-1000 because only arable
@@ -345,7 +337,6 @@ class GameState(val yearsRequired: Int = 8) {
         rallods -= welfareThisYear
     }
 
-
     /**
      * Ask how much land we want to sell. Immediately get the money.
      * The player has to do the calculations to work out how much
@@ -367,6 +358,7 @@ class GameState(val yearsRequired: Int = 8) {
             }
         } while (sellThisYear < 0 || sellThisYear > landArea - 1000)
     }
+
 
     /**
      * Input the value of `welfareThisYear`
@@ -599,14 +591,12 @@ class GameState(val yearsRequired: Int = 8) {
     }
 }
 
-
 private fun numberInput() = try {
     readLine()?.toInt() ?: throw EndOfInputException()
 } catch (r: NumberFormatException) {
     0
 }
 
-
-
-
-
+class DataEntryValidationException : Throwable()
+private fun validatedInput(predicate : (Int)->Boolean) =
+    numberInput().apply { if (!predicate(this)) throw DataEntryValidationException() }
