@@ -13,22 +13,24 @@
 fun main() {
     println(introText)
     synonyms.forEach {
-        // Inside with, "this" is the current synonym
-        with(it) {
-            do {
-                val answer = ask("     WHAT IS A SYNONYM OF $word ? ")
-                when {
-                    answer == "HELP" ->
-                        println("""**** A SYNONYM OF $word IS ${synonyms.random()}.""")
-                    synonyms.contains(answer) ->
-                        println(RANDOM_ANSWERS.random())
-                    else ->
-                        println("TRY AGAIN.")
-                }
-            } while (!synonyms.contains(answer))
-        }
+        it.testUser()
     }
     println("SYNONYM DRILL COMPLETED.")
+}
+// We could put this inside of SynonymList, but this keeps the core implementation
+// right here at the top
+private fun SynonymList.testUser() {
+    do {
+        val answer = ask("     WHAT IS A SYNONYM OF $word ? ")
+        when {
+            answer == "HELP" ->
+                println("""**** A SYNONYM OF $word IS ${synonyms.random()}.""")
+            synonyms.contains(answer) ->
+                println(RANDOM_ANSWERS.random())
+            else ->
+                println("TRY AGAIN.")
+        }
+    } while (!synonyms.contains(answer))
 }
 
 val introText = """
