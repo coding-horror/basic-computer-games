@@ -110,8 +110,8 @@ def plot_bouncing_ball(strobbing_time, v0, c)
             }
             
             if heighest_position_in_next_bounce(time_in_bounce, v0, i, c) < plotted_height then
-                # If we got no more ball positions at or above current height, we can skip
-                # the rest of the bounces and move down to the next height to plot
+                # If we got no more ball positions at or above current height in the next bounce,
+                # we can skip the rest of the bounces and move down to the next height to plot
                 puts
                 break
             end
@@ -170,11 +170,11 @@ def game_loop
 end
 
 
-## Game entry point
+## Entry point
 
 begin
     intro
-    while true
+    loop do
         game_loop
     end
 rescue SystemExit, Interrupt
