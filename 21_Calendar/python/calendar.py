@@ -8,7 +8,7 @@ def calendar(weekday, leap_year):
         _leap_year_: bool - indicates if the year is a leap year
     """
     months_days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    days = '     S       M       T       W       T       F       S'
+    days = 'S        M        T        W        T        F        S\n'
     sep = "*" * 59
     years_day = 365
     d = weekday
@@ -32,17 +32,16 @@ def calendar(weekday, leap_year):
 
     print(" "*32 + "CALENDAR")
     print(" "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-
+    print("\n"*11)
     days_count = 0  # S in the original program
 
     # main loop
     for n in range(1, 13):
         days_count += months_days[n-1]
-        print("** {} ****************** {} ****************** {} **".format(days_count,
+        print("** {} ****************** {} ****************** {} **\n".format(days_count,
                                                                             months_names[n-1], years_day-days_count))
         print(days)
         print(sep)
-        print("\n")
 
         for w in range(1, 7):
             print("\n")
@@ -54,9 +53,13 @@ def calendar(weekday, leap_year):
                     break
 
                 if d2 > 0:
-                    print("{}".format(d2),end='       ')
+                    if d2 < 10:
+                        print(" {}".format(d2), end='       ')
+                    else:
+                        print("{}".format(d2), end='       ')
                 else:
-                    print("{}".format(''),end='       ')
+                    print("{}".format('  '), end='       ')
+
             if d2 >= months_days[n]:
                 break
 
@@ -65,5 +68,6 @@ def calendar(weekday, leap_year):
 
         print("\n")
 
+
 if __name__ == "__main__":
-    calendar(-1, False)
+    calendar(-6, False)
