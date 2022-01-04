@@ -8,6 +8,8 @@ The money system is Rollods; each person needs 100 Rallods per year to survive. 
 
 The author of this program is James A. Storer who wrote it while a student at Lexington High School.
 
+⚠️ This game includes references to suicide or self-harm.
+
 ### Bugs
 
 Implementers should be aware that this game contains at least one bug.
