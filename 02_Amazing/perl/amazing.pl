@@ -60,6 +60,10 @@ while (keys %is_visited < $width * $height) {
     }
 }
 
+unless ($path_found) {
+    $walls[-1]->[rand $width] |= 1;
+}
+
 print_maze();
 
 sub input_dimensions {
