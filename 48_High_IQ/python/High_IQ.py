@@ -31,10 +31,10 @@ def print_instructions():
 
 def play_game():
     print("Lets play a game")
-  
+
 def main():
     if input("Do you want instrunctions?\n").lower().startswith("y"):
         print_instructions()
-    
+
 if __name__ == "__main__":
     main()
