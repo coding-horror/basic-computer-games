@@ -4,6 +4,8 @@ In this game, you are given by the computer a revolver loaded with one bullet an
 
 Tom Adametx wrote this program while a student at Curtis Jr. High School in Sudbury, Massachusetts.
 
+⚠️ This game includes EXPLICT references to suicide, and should not be included in most distributions, especially considering the extreme simplicity of the program.
+
 ---
 
 As published in Basic Computer Games (1978):
