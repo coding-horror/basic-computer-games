@@ -3,7 +3,8 @@ import kotlin.random.Random
 import kotlin.system.exitProcess
 
 lateinit var gameState: GameState
-const val INCLUDE_BUGS_FROM_ORIGINAL = false
+const val KEEP_ORIGINAL_BUGS = false
+const val KEEP_ORIGINAL_SUICIDE_REFERENCE = false
 
 val rnd: Double get() = Random.nextDouble()
 fun tab(i: Int) = " ".repeat(i)
@@ -19,29 +20,25 @@ fun main() {
     }
         ?: throw EndOfInputException()
 
-    try {
-        with(gameState) {
-            while(currentYear < yearsRequired) {
-                recalculateLandCost()
-                displayStatus()
-                inputLandSale()
-                performLandSale()
-                inputWelfare()
-                performWelfare()
-                inputPlantingArea()
-                performPlanting()
-                inputPollutionControl()
-                if (zeroInput()) {
-                    displayExitMessage()
-                    exitProcess(0)
-                }
-                simulateOneYear()
-                currentYear ++
+    with(gameState) {
+        do {
+            recalculateLandCost()
+            displayStatus()
+            inputLandSale()
+            performLandSale()
+            inputWelfare()
+            performWelfare()
+            inputPlantingArea()
+            performPlanting()
+            inputPollutionControl()
+            if (zeroInput()) {
+                displayExitMessage()
+                exitProcess(0)
             }
-        }
-        win(gameState.yearsRequired)
-    } catch (e: GameEndingException) {
-        e.displayConsequences()
+            val yearResult = simulateOneYear().also {
+                it.displayConsequences()
+            }
+        } while (yearResult == YearOutcome.ContinueNextYear)
     }
 }
 
@@ -54,7 +51,8 @@ private fun header() {
 }
 
 fun instructions(yearsRequired: Int) {
-    println("""
+    println(
+        """
 
 
         CONGRATULATIONS! YOU'VE JUST BEEN ELECTED PREMIER OF SETATS
@@ -80,10 +78,7 @@ fun loadOldGame(): GameState = GameState().apply {
     do {
         var retry = false
         print("HOW MANY YEARS HAD YOU BEEN IN OFFICE WHEN INTERRUPTED? ")
-        currentYear = numberInput()
-
-        if (currentYear <= 0)
-            throw GameEndingException.DataEntryValidation()
+        currentYear = validatedInput { it > 0 }
 
         if (currentYear >= yearsRequired) {
             println("   COME ON, YOUR TERM IN OFFICE IS ONLY $yearsRequired YEARS.")
@@ -92,21 +87,19 @@ fun loadOldGame(): GameState = GameState().apply {
     } while (retry)
 
     print("HOW MUCH DID YOU HAVE IN THE TREASURY? ")
-    rallods = numberInput()
-    if (rallods < 0)
-        throw GameEndingException.DataEntryValidation()
+    rallods = validatedInput { it >= 0 }
+
+    print("HOW MANY COUNTRYMEN? ")
+    countrymen = validatedInput { it >= 0 }
 
     print("HOW MANY WORKERS? ")
-    foreignWorkers = numberInput()
-    if (foreignWorkers < 0)
-        throw GameEndingException.DataEntryValidation()
+    foreignWorkers = validatedInput { it >= 0 }
 
     do {
         var retry = false
         print("HOW MANY SQUARE MILES OF LAND? ")
-        landArea = numberInput()
-        if (landArea<0)
-            throw GameEndingException.DataEntryValidation()
+        landArea = validatedInput { it >= 0 }
+
         if (landArea > 2000 || landArea <= 1000) {
             println("   COME ON, YOU STARTED WITH 1000 SQ. MILES OF FARM LAND")
             println("   AND 10,000 SQ. MILES OF FOREST LAND.")
@@ -118,11 +111,13 @@ fun loadOldGame(): GameState = GameState().apply {
 
 
 /**
- * All exceptions which indicate the premature ending of the game, due
- * to mismanagement, starvation, revolution, or mis-entry of a game state.
+ * Possible outcomes for a year.
  */
-sealed class GameEndingException : Throwable() {
-    abstract fun displayConsequences()
+sealed class YearOutcome {
+
+    open fun displayConsequences() {
+        // Default display nothing
+    }
 
     fun finalFate() {
         if (rnd < .5) {
@@ -135,7 +130,28 @@ sealed class GameEndingException : Throwable() {
         println()
     }
 
-    class ExtremeMismanagement(private val death: Int) : GameEndingException() {
+    object ContinueNextYear : YearOutcome()
+
+    class Win(val yearsRequired: Int) : YearOutcome() {
+        override fun displayConsequences() {
+            // The misspelling of "successfully" is in the original code.
+            println(
+                """
+        
+                CONGRATULATIONS!!!!!!!!!!!!!!!!!!
+                YOU HAVE SUCCESFULLY COMPLETED YOUR $yearsRequired YEAR TERM
+                OF OFFICE. YOU WERE, OF COURSE, EXTREMELY LUCKY, BUT
+                NEVERTHELESS, IT'S QUITE AN ACHIEVEMENT. GOODBYE AND GOOD
+                LUCK - YOU'LL PROBABLY NEED IT IF YOU'RE THE TYPE THAT
+                PLAYS THIS GAME.
+        
+                
+            """.trimIndent()
+            )
+        }
+    }
+
+    class ExtremeMismanagement(private val death: Int) : YearOutcome() {
         override fun displayConsequences() {
             println()
             println("$death COUNTRYMEN DIED IN ONE YEAR!!!!!")
@@ -151,74 +167,68 @@ sealed class GameEndingException : Throwable() {
         }
     }
 
-    class TooManyPeopleDead : GameEndingException() {
+    object TooManyPeopleDead : YearOutcome() {
         // The mistyping of "population" is in the original game.
         override fun displayConsequences() {
-            println("""
+            println(
+                """
             
             
             OVER ONE THIRD OF THE POPULTATION HAS DIED SINCE YOU
             WERE ELECTED TO OFFICE. THE PEOPLE (REMAINING)
             HATE YOUR GUTS.
-        """.trimIndent())
+        """.trimIndent()
+            )
             finalFate()
         }
     }
 
-    class AntiImmigrationRevolution : GameEndingException() {
+    object AntiImmigrationRevolution : YearOutcome() {
         override fun displayConsequences() {
-            println("""
+            println(
+                """
             THE NUMBER OF FOREIGN WORKERS HAS EXCEEDED THE NUMBER
             OF COUNTRYMEN. AS A MINORITY, THEY HAVE REVOLTED AND
             TAKEN OVER THE COUNTRY.
-        """.trimIndent())
+        """.trimIndent()
+            )
             finalFate()
         }
     }
 
-    class StarvationWithFullTreasury : GameEndingException() {
+    object StarvationWithFullTreasury : YearOutcome() {
         override fun displayConsequences() {
-            println("""
-            MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
-            NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
-            OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
-            BEEN FORCED TO EITHER RESIGN OR COMMIT SUICIDE.
-            THE CHOICE IS YOURS.
-            IF YOU CHOOSE THE LATTER, PLEASE TURN OFF YOUR COMPUTER
-            BEFORE PROCEEDING.
-        """.trimIndent())
+            println(
+                if (KEEP_ORIGINAL_SUICIDE_REFERENCE) {
+                    """
+                    MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
+                    NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
+                    OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
+                    BEEN FORCED TO EITHER RESIGN OR COMMIT SUICIDE.
+                    THE CHOICE IS YOURS.
+                    IF YOU CHOOSE THE LATTER, PLEASE TURN OFF YOUR COMPUTER
+                    BEFORE PROCEEDING.
+                """.trimIndent()
+                } else {
+                    """
+                    MONEY WAS LEFT OVER IN THE TREASURY WHICH YOU DID
+                    NOT SPEND. AS A RESULT, SOME OF YOUR COUNTRYMEN DIED
+                    OF STARVATION. THE PUBLIC IS ENRAGED AND YOU HAVE
+                    BEEN FORCED TO RESIGN.
+                    PLEASE TURN OFF YOUR COMPUTER AND SURRENDER IT TO
+                    THE NEAREST POLICE STATION.
+                """.trimIndent()
+                }
+            )
         }
     }
 
-    class DataEntryValidation : GameEndingException() {
-        override fun displayConsequences() {
-            // no action
-        }
-    }
-
-
-}
-
-fun win(yearsRequired: Int) {
-    // The misspelling of "successfully" is in the original code.
-    println("""
-
-        CONGRATULATIONS!!!!!!!!!!!!!!!!!!
-        YOU HAVE SUCCESFULLY COMPLETED YOUR $yearsRequired YEAR TERM
-        OF OFFICE. YOU WERE, OF COURSE, EXTREMELY LUCKY, BUT
-        NEVERTHELESS, IT'S QUITE AN ACHIEVEMENT. GOODBYE AND GOOD
-        LUCK - YOU'LL PROBABLY NEED IT IF YOU'RE THE TYPE THAT
-        PLAYS THIS GAME.
-
-        
-    """.trimIndent())
 }
 
 /**
  * Record data, allow data input, and process the simulation for the game.
  */
 class GameState(val yearsRequired: Int = 8) {
-
     /**
      * The current year. Years start with zero, but we never
      * output the current year.
@@ -240,8 +250,8 @@ class GameState(val yearsRequired: Int = 8) {
     private var tourists = 0
 
     private var moneySpentOnPollutionControl = 0
-    private var moneySpentOnPlanting = 0
 
+    private var moneySpentOnPlanting = 0
     /**
      * Current stock of rallods.
      * Player starts with between 59000 and 61000 rallods, but
@@ -252,10 +262,10 @@ class GameState(val yearsRequired: Int = 8) {
 
     /**
      * Population.
-     * Initial population is about to 500.
+     * Initial population is about 500.
      * 75% of the time it's between 495 and 505.
      */
-    private var countrymen = (500 + (10 * rnd) - (10 * rnd)).toInt()
+    var countrymen = (500 + (10 * rnd) - (10 * rnd)).toInt()
 
     /**
      * Land sale price is evenly between 95 and 104 rallods per
@@ -265,8 +275,8 @@ class GameState(val yearsRequired: Int = 8) {
     private var landPrice = (10 * rnd + 95).toInt()
 
     private var plantingArea = 0
-    private var welfareThisYear = 0
 
+    private var welfareThisYear = 0
     /**
      * Land area in square miles. Arable land is 1000 square miles less.
      * Almost all calculations use landArea-1000 because only arable
@@ -339,7 +349,6 @@ class GameState(val yearsRequired: Int = 8) {
         rallods -= welfareThisYear
     }
 
-
     /**
      * Ask how much land we want to sell. Immediately get the money.
      * The player has to do the calculations to work out how much
@@ -361,6 +370,7 @@ class GameState(val yearsRequired: Int = 8) {
             }
         } while (sellThisYear < 0 || sellThisYear > landArea - 1000)
     }
+
 
     /**
      * Input the value of `welfareThisYear`
@@ -444,7 +454,7 @@ class GameState(val yearsRequired: Int = 8) {
             plantingArea == 0 &&
             moneySpentOnPollutionControl == 0
 
-    fun simulateOneYear() {
+    fun simulateOneYear(): YearOutcome {
         rallods -= moneySpentOnPollutionControl
         val rallodsAfterPollutionControl = rallods
 
@@ -460,7 +470,7 @@ class GameState(val yearsRequired: Int = 8) {
             https://github.com/coding-horror/basic-computer-games/blob/main/53_King/king.bas#:~:text=1105%20IF%20I/100%3C50%20THEN%201700
              */
             if (welfareThisYear / 100.0 < 50)
-                throw GameEndingException.TooManyPeopleDead()
+                return YearOutcome.TooManyPeopleDead
 
             starvationDeaths = (countrymen - (welfareThisYear / 100.0)).toInt()
             println("$starvationDeaths COUNTRYMEN DIED OF STARVATION")
@@ -568,25 +578,30 @@ class GameState(val yearsRequired: Int = 8) {
 
             https://github.com/coding-horror/basic-computer-games/blob/main/53_King/king.bas#:~:text=1450%20V3%3DINT,INT(A%2BV3)
          */
-        if (INCLUDE_BUGS_FROM_ORIGINAL) {
+        if (KEEP_ORIGINAL_BUGS) {
             tourists += rallods
         } else {
             tourists = abs(v1 - v2)
         }
         rallods += tourists
 
-        if (death > 200)
-            throw GameEndingException.ExtremeMismanagement(death)
-        if (countrymen < 343)
-            throw GameEndingException.TooManyPeopleDead()
-        if (rallodsAfterPollutionControl / 100 > 5 && death - pollutionDeaths >= 2)
-            throw GameEndingException.StarvationWithFullTreasury()
-        if (foreignWorkers > countrymen)
-            throw GameEndingException.AntiImmigrationRevolution()
+        return if (death > 200)
+            YearOutcome.ExtremeMismanagement(death)
+        else if (countrymen < 343)
+            YearOutcome.TooManyPeopleDead
+        else if (rallodsAfterPollutionControl / 100 > 5 && death - pollutionDeaths >= 2)
+            YearOutcome.StarvationWithFullTreasury
+        else if (foreignWorkers > countrymen)
+            YearOutcome.AntiImmigrationRevolution
+        else {
+            if (currentYear++ > yearsRequired)
+                YearOutcome.Win(yearsRequired)
+            else
+                YearOutcome.ContinueNextYear
+        }
 
     }
 }
-
 
 private fun numberInput() = try {
     readLine()?.toInt() ?: throw EndOfInputException()
@@ -594,7 +609,6 @@ private fun numberInput() = try {
     0
 }
 
-
-
-
-
+class DataEntryValidationException : Throwable()
+private fun validatedInput(predicate : (Int)->Boolean) =
+    numberInput().apply { if (!predicate(this)) throw DataEntryValidationException() }

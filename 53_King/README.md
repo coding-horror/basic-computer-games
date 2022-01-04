@@ -1,4 +1,4 @@
-### King
+## King
 
 This is one of the most comprehensive, difficult, and interesting games. (If you’ve never played one of these games, start with HAMMURABI.)
 
@@ -8,7 +8,9 @@ The money system is Rollods; each person needs 100 Rallods per year to survive. 
 
 The author of this program is James A. Storer who wrote it while a student at Lexington High School.
 
-## Bugs
+⚠️ This game includes references to suicide or self-harm.
+
+### Bugs
 
 Implementers should be aware that this game contains at least one bug.
 
