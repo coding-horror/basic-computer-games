@@ -8,6 +8,28 @@ The money system is Rollods; each person needs 100 Rallods per year to survive. 
 
 The author of this program is James A. Storer who wrote it while a student at Lexington High School.
 
+## Bugs
+
+Implementers should be aware that this game contains at least one bug.
+
+On basic line 1450
+
+    1450 V3=INT(A+V3)
+    1451 A=INT(A+V3)
+
+...where A is the current treasury, and V3 is initially zero.
+This would mean that the treasury doubles at the end of the first year, and all calculations for an increase in the treasury due to tourism are discarded.
+Possibly, this made the game more playable, although impossible for the player to understand why the treasury was increasing?
+
+A quick fix for this bug in the original code would be
+
+    1450 V3=ABS(INT(V1-V2))
+    1451 A=INT(A+V3)
+    
+...judging from the description of tourist income on basic line 1410
+
+    1410 PRINT " YOU MADE";ABS(INT(V1-V2));"RALLODS FROM TOURIST TRADE."
+
 ---
 
 As published in Basic Computer Games (1978):
