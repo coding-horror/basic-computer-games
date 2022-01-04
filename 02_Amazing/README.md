@@ -12,3 +12,7 @@ As published in Basic Computer Games (1978):
 
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
+
+---
+
+**2022-01-04:** patched original source in [#400](https://github.com/coding-horror/basic-computer-games/pull/400) to fix a minor bug where a generated maze may be missing an exit, particularly at small maze sizes.
