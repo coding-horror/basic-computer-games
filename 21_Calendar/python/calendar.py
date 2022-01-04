@@ -1,3 +1,24 @@
+########################################################
+# Calendar
+#
+# From: BASIC Computer Games (1978)
+#       Edited by David Ahl#
+#
+#    This program prints out a calendar
+# for any year. You must specify the
+# starting day of the week of the year in
+# statement 130. (Sunday(0), Monday
+# (-1), Tuesday(-2), etc.) You can determine
+# this by using the program WEEKDAY.
+# You must also make two changes
+# for leap years in statement 360 and 620.
+# The program listing describes the necessary
+# changes. Running the program produces a
+# nice 12-month calendar.
+#    The program was written by Geofrey
+# Chase of the Abbey, Portsmouth, Rhode Island.
+#
+########################################################
 
 def parse_input():
     """
@@ -121,3 +142,15 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+########################################################
+#
+########################################################
+#
+# Porting notes:
+#
+# It has been added an input at the beginning of the
+# program so the user can specify the first day of the
+# week of the year and if the year is leap or not.
+#
+########################################################
