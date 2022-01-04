@@ -142,17 +142,32 @@ def game_over():
     print('')
 
 def computer_turn():
-    global marbles_in_middle
-    global computer_marbles
+	global marbles_in_middle
+	global computer_marbles
+	global human_marbles
 
-    print("It's the computer's turn ...")
-    max_choice = min(4, marbles_in_middle)
+	marbles_to_take=0
 
-    # choose at random
-    n = random.randint(1, max_choice)
-    print(f'Computer takes {marbles_str(n)} ...')
-    marbles_in_middle -= n
-    computer_marbles += n
+	print("It's the computer's turn ...")
+	r = marbles_in_middle - 6 * int((marbles_in_middle/6)) 	#line 500
+
+	if int(human_marbles/2) == human_marbles/2: 			#line 510
+		if r < 1.5 or r > 5.3: 								#lines 710 and 720	
+			marbles_to_take = 1
+		else:
+			marbles_to_take = r - 1
+
+	elif marbles_in_middle < 4.2:							#line 580
+		marbles_to_take = marbles_in_middle
+	elif r > 3.4:											#line 530
+		if r < 4.7 or r > 3.5:
+			marbles_to_take = 4
+	else:
+		marbles_to_take = r + 1
+	
+	print(f'Computer takes {marbles_str(marbles_to_take)} ...')
+	marbles_in_middle -= marbles_to_take
+	computer_marbles += marbles_to_take
 
 def play_game():
     global marbles_in_middle
