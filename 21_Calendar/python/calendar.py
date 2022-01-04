@@ -1,4 +1,46 @@
 
+def parse_input():
+    """
+    function to parse input for weekday and leap year boolean
+    """
+
+    days_mapping = {
+        "sunday": 0,
+        "monday": -1,
+        "tuesday": -2,
+        "wednesday": -3,
+        "thursday": -4,
+        "friday": -5,
+        "saturday": -6
+    }
+
+    day = 0
+    leap_day = False
+
+    correct_day_input = False
+    while not correct_day_input:
+        weekday = input("INSERT THE STARTING DAY OF THE WEEK OF THE YEAR:")
+
+        for day_k in days_mapping.keys():
+            if weekday.lower() in day_k:
+                day = days_mapping[day_k]
+                correct_day_input = True
+                break
+
+    while True:
+        leap = input("IS IT A LEAP YEAR?:")
+
+        if 'y' in leap.lower():
+            leap_day = True
+            break
+
+        if 'n' in leap.lower():
+            leap_day = False
+            break
+
+    return day, leap_day
+
+
 def calendar(weekday, leap_year):
     """
     function to print a year's calendar.
@@ -30,9 +72,6 @@ def calendar(weekday, leap_year):
                     " NOVEMBER",
                     " DECEMBER"]
 
-    print(" "*32 + "CALENDAR")
-    print(" "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print("\n"*11)
     days_count = 0  # S in the original program
 
     # main loop
@@ -71,5 +110,14 @@ def calendar(weekday, leap_year):
     print("\n")
 
 
+def main():
+    print(" "*32 + "CALENDAR")
+    print(" "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print("\n"*11)
+
+    day, leap_year = parse_input()
+    calendar(day, leap_year)
+
+
 if __name__ == "__main__":
-    calendar(-6, False)
+    main()
