@@ -39,7 +39,7 @@ def calendar(weekday, leap_year):
     for n in range(1, 13):
         days_count += months_days[n-1]
         print("** {} ****************** {} ****************** {} **\n".format(days_count,
-                                                                            months_names[n-1], years_day-days_count))
+                                                                              months_names[n-1], years_day-days_count))
         print(days)
         print(sep)
 
@@ -52,13 +52,12 @@ def calendar(weekday, leap_year):
                 if d2 > months_days[n]:
                     break
 
-                if d2 > 0:
-                    if d2 < 10:
-                        print(" {}".format(d2), end='       ')
-                    else:
-                        print("{}".format(d2), end='       ')
-                else:
+                if d2 <= 0:
                     print("{}".format('  '), end='       ')
+                elif d2 < 10:
+                    print(" {}".format(d2), end='       ')
+                else:
+                    print("{}".format(d2), end='       ')
 
             if d2 >= months_days[n]:
                 break
