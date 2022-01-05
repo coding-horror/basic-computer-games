@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -121,8 +122,6 @@ public class Splat {
                     }
                     System.out.println("SUCCESSFUL JUMP!!!");
                 }
-
-
             }
             boolean chosen = false;
             while (!chosen) {
@@ -156,38 +155,19 @@ public class Splat {
     }
 
     private void showRandomSplatMessage() {
-        switch (random.nextInt(10)) {
-            case 0:
-                System.out.println("REQUIESCAT IN PACE.");
-                break;
-            case 1:
-                System.out.println("MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.");
-                break;
-            case 2:
-                System.out.println("REST IN PEACE.");
-                break;
-            case 3:
-                System.out.println("SON-OF-A-GUN.");
-                break;
-            case 4:
-                System.out.println("#$%&&%!$");
-                break;
-            case 5:
-                System.out.println("A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.");
-                break;
-            case 6:
-                System.out.println("HMMM. SHOULD HAVE PICKED A SHORTER TIME.");
-                break;
-            case 7:
-                System.out.println("MUTTER. MUTTER. MUTTER.");
-                break;
-            case 8:
-                System.out.println("PUSHING UP DAISIES.");
-                break;
-            default:
-                System.out.println("EASY COME, EASY GO.");
-
-        }
+        List<String> messages = Arrays.asList(
+            "REQUIESCAT IN PACE.",
+            "MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.",
+            "REST IN PEACE.",
+            "SON-OF-A-GUN.",
+            "#$%&&%!$",
+            "A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.",
+            "HMMM. SHOULD HAVE PICKED A SHORTER TIME.",
+            "MUTTER. MUTTER. MUTTER.",
+            "PUSHING UP DAISIES.",
+            "EASY COME, EASY GO."
+        );
+        System.out.println(messages.get(random.nextInt(10)));
     }
 
     private InitialJumpConditions buildInitialConditions() {
