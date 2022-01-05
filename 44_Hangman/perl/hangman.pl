@@ -17,8 +17,8 @@ my(@WORDS) = qw(
     MAGISTRATE ERRONEOUSLY LOUDSPEAKER PHYTOTOXIC
     MATRIMONIAL PARASYMPATHOMIMETIC THIGMOTROPISM
 );
-my(@PIC,$board,@guessedLetters,$guesses,$hangCount);
-my($guess,%GUESSED);
+my(@PIC,$board,@guessedLetters,$guessCount,$hangCount);
+my(%GUESSED);
 
 # Subroutines defined here.
 
@@ -41,7 +41,7 @@ sub init_variables {
         'X           ',
         'X           ',
     );
-    $guesses = 0; %GUESSED = ();
+    $guessCount = 0; %GUESSED = ();
     $hangCount = 0;
 }
 
@@ -83,7 +83,7 @@ PLAY: while (1) {
         printf("\n\n%s\n", $board);
 
         print "What is your guess for a letter ? ";
-        chomp($guess = <STDIN>);
+        chomp(my $guess = <STDIN>);
         # The %GUESSED hash allows us to quickly identify
         # letters that have already been guessed
         if ($GUESSED{lc $guess}) {
@@ -94,7 +94,7 @@ PLAY: while (1) {
         # save the guessed letter
         push @guessedLetters, $guess;
         $GUESSED{lc $guess} = 1;
-        ++$guesses;
+        ++$guessCount;
 
         # now look for the letter in the $thisWord var
         # and put it into the $board var wherever it
@@ -123,7 +123,7 @@ PLAY: while (1) {
                     # Go to the next iteration of the GUESS loop
                     next GUESS;
                 }
-                printf("Right! It took you %d %s!\n", $guesses, ($guesses == 1 ? 'guess' : 'guesses'));
+                printf("Right! It took you %d %s!\n", $guessCount, ($guessCount == 1 ? 'guess' : 'guesses'));
             }
             # At this point the user has discovered the word and won.
             # This "next" statement takes execution down to the
