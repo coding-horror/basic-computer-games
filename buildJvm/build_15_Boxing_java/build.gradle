@@ -1,0 +1,24 @@
+plugins {
+    id 'application'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs "../../$gameSource"
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = gameMain
+}

@@ -1,0 +1,19 @@
+plugins {
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs '../../05_Bagels/java'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'Bagels'
+}

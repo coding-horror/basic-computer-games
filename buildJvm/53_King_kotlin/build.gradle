@@ -1,0 +1,20 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs '../../53_King/kotlin'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'king53.KingKt'
+}

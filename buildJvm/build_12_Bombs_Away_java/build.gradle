@@ -1,0 +1,19 @@
+plugins {
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs '../../12_Bombs_Away/java/src'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'BombsAwayGame'
+}
