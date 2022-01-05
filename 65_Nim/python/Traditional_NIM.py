@@ -111,8 +111,8 @@ if __name__ == "__main__":
     game.Remove_pegs(command)
     End = game.Checkforwin()
     if End == True: 
-      print('Player Wins the Game, Congratulations!!')
-      input('Press any key to exit')
+      print('\nPlayer Wins the Game, Congratulations!!')
+      input('\nPress any key to exit')
       break
     
     #Computers Move
