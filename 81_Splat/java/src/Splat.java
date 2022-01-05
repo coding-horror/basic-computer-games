@@ -59,7 +59,15 @@ public class Splat {
                 System.out.printf("%10.2f  %f\n", i, D);
             }
 
-            if (!splat) {
+            if (splat) {
+                if (terminalReached) {
+                    System.out.printf("%.2f SPLAT\n", (V / A) + ((jump.getAltitude() - (V * V / (2 * A))) / V));
+                } else {
+                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * jump.getAltitude() / A));
+
+                }
+                showRandomSplatMessage();
+            } else {
 
                 System.out.println("CHUTE OPEN");
                 int J = 0;
@@ -115,45 +123,6 @@ public class Splat {
                 }
 
 
-            } else {
-                if (terminalReached) {
-                    System.out.printf("%.2f SPLAT\n", (V / A) + ((jump.getAltitude() - (V * V / (2 * A))) / V));
-                } else {
-                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * jump.getAltitude() / A));
-
-                }
-                switch (random.nextInt(10)) {
-                    case 0:
-                        System.out.println("REQUIESCAT IN PACE.");
-                        break;
-                    case 1:
-                        System.out.println("MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.");
-                        break;
-                    case 2:
-                        System.out.println("REST IN PEACE.");
-                        break;
-                    case 3:
-                        System.out.println("SON-OF-A-GUN.");
-                        break;
-                    case 4:
-                        System.out.println("#$%&&%!$");
-                        break;
-                    case 5:
-                        System.out.println("A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.");
-                        break;
-                    case 6:
-                        System.out.println("HMMM. SHOULD HAVE PICKED A SHORTER TIME.");
-                        break;
-                    case 7:
-                        System.out.println("MUTTER. MUTTER. MUTTER.");
-                        break;
-                    case 8:
-                        System.out.println("PUSHING UP DAISIES.");
-                        break;
-                    default:
-                        System.out.println("EASY COME, EASY GO.");
-
-                }
             }
             boolean chosen = false;
             while (!chosen) {
@@ -184,6 +153,41 @@ public class Splat {
 
         }
 
+    }
+
+    private void showRandomSplatMessage() {
+        switch (random.nextInt(10)) {
+            case 0:
+                System.out.println("REQUIESCAT IN PACE.");
+                break;
+            case 1:
+                System.out.println("MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.");
+                break;
+            case 2:
+                System.out.println("REST IN PEACE.");
+                break;
+            case 3:
+                System.out.println("SON-OF-A-GUN.");
+                break;
+            case 4:
+                System.out.println("#$%&&%!$");
+                break;
+            case 5:
+                System.out.println("A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.");
+                break;
+            case 6:
+                System.out.println("HMMM. SHOULD HAVE PICKED A SHORTER TIME.");
+                break;
+            case 7:
+                System.out.println("MUTTER. MUTTER. MUTTER.");
+                break;
+            case 8:
+                System.out.println("PUSHING UP DAISIES.");
+                break;
+            default:
+                System.out.println("EASY COME, EASY GO.");
+
+        }
     }
 
     private InitialJumpConditions buildInitialConditions() {
@@ -243,6 +247,7 @@ public class Splat {
     }
 
 
+    // Immutable
     static class InitialJumpConditions {
         private final float originalTerminalVelocity;
         private final float originalGravitationalAcceleration;
