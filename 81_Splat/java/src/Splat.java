@@ -3,7 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Splat {
-    private final Random random = new Random();
+    private static final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -19,19 +19,15 @@ public class Splat {
         int K1 = 0;
         while (true) {
 
-            System.out.print("\n\n");
-            int D1 = (int) (9001.0f * random.nextFloat() + 1000);
-
-            float terminalVelocity = promptTerminalVelocity();
-            float V = terminalVelocity + ((terminalVelocity * random.nextFloat()) / 20.0f) - ((terminalVelocity * random.nextFloat()) / 20.0f);
-
-            float gravitationalAcceleration = promptGravitationalAcceleration();
-            float A = gravitationalAcceleration + ((gravitationalAcceleration * random.nextFloat()) / 20.0f) - ((gravitationalAcceleration * random.nextFloat()) / 20.0f);
+            InitialJumpConditions jump = buildInitialConditions();
+            final float V = jump.getTerminalVelocity();
+            final float A = jump.getGravitationalAcceleration();
 
             System.out.println();
-            System.out.printf("    ALTITUDE         = %d FT\n", D1);
-            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", terminalVelocity);
-            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", gravitationalAcceleration);
+            System.out.printf("    ALTITUDE         = %d FT\n", jump.getAltitude());
+            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", jump.getOriginalTerminalVelocity());
+            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", jump.getOriginalGravitationalAcceleration());
+
             System.out.println("SET THE TIMER FOR YOUR FREEFALL.");
             System.out.print("HOW MANY SECONDS ");
             float T = scanner.nextFloat();
@@ -42,12 +38,11 @@ public class Splat {
             boolean terminalReached = false;
             float D = 0.0f;
             for (float i = 0.0f; !splat && (i < T); i += T / 8) {
-                if (i > (V / A)) {
+                if (i > jump.getTimeOfTerminalAccelerationReached()) {
                     terminalReached = true;
-                    System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", (V / A));
+                    System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", jump.getTimeOfTerminalAccelerationReached());
                     for (i = i; i < T; i += T / 8) {
-                        D = D1 - ((V * V / (2 * A)) + (V * (i - (V / A))));
-//                    System.out.printf("   ......................................tv %f\n", D);
+                        D = jump.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A))));
                         if (D <= 0) {
                             splat = true;
                             break;
@@ -56,8 +51,7 @@ public class Splat {
                     }
                     break;
                 }
-                D = D1 - ((A / 2) * i * i);
-//            System.out.printf("   ......................................debug %f\n", D);
+                D = jump.getAltitude() - ((A / 2) * i * i);
                 if (D <= 0) {
                     splat = true;
                     break;
@@ -123,9 +117,9 @@ public class Splat {
 
             } else {
                 if (terminalReached) {
-                    System.out.printf("%.2f SPLAT\n", (V / A) + ((D1 - (V * V / (2 * A))) / V));
+                    System.out.printf("%.2f SPLAT\n", (V / A) + ((jump.getAltitude() - (V * V / (2 * A))) / V));
                 } else {
-                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * D1 / A));
+                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * jump.getAltitude() / A));
 
                 }
                 switch (random.nextInt(10)) {
@@ -192,6 +186,13 @@ public class Splat {
 
     }
 
+    private InitialJumpConditions buildInitialConditions() {
+        System.out.print("\n\n");
+        float terminalVelocity = promptTerminalVelocity();
+        float gravitationalAcceleration = promptGravitationalAcceleration();
+        return InitialJumpConditions.create(terminalVelocity, gravitationalAcceleration);
+    }
+
     private void showIntroduction() {
         System.out.printf("%33s%s\n", " ", "SPLAT");
         System.out.printf("%15s%s\n", " ", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
@@ -239,6 +240,59 @@ public class Splat {
         Planet planet = Planet.pickRandom();
         System.out.printf("%s. ACCELERATION=%.2f FT/SEC/SEC.\n", planet.getMessage(), planet.getAcceleration());
         return planet.getAcceleration();
+    }
+
+
+    static class InitialJumpConditions {
+        private final float originalTerminalVelocity;
+        private final float originalGravitationalAcceleration;
+        private final float terminalVelocity;
+        private final float gravitationalAcceleration;
+        private final int altitude;
+
+        private InitialJumpConditions(float originalTerminalVelocity, float originalGravitationalAcceleration,
+                                      float terminalVelocity, float gravitationalAcceleration, int altitude) {
+            this.originalTerminalVelocity = originalTerminalVelocity;
+            this.originalGravitationalAcceleration = originalGravitationalAcceleration;
+            this.terminalVelocity = terminalVelocity;
+            this.gravitationalAcceleration = gravitationalAcceleration;
+            this.altitude = altitude;
+        }
+
+        // Create initial jump conditions with adjusted velocity/acceleration and a random initial altitude
+        private static InitialJumpConditions create(float terminalVelocity, float gravitationalAcceleration) {
+            final int altitude = (int) (9001.0f * random.nextFloat() + 1000);
+            return new InitialJumpConditions(terminalVelocity, gravitationalAcceleration,
+                    plusMinus5Percent(terminalVelocity), plusMinus5Percent(gravitationalAcceleration), altitude);
+        }
+
+        private static float plusMinus5Percent(float value) {
+            return value + ((value * random.nextFloat()) / 20.0f) - ((value * random.nextFloat()) / 20.0f);
+        }
+
+        public float getOriginalTerminalVelocity() {
+            return originalTerminalVelocity;
+        }
+
+        public float getOriginalGravitationalAcceleration() {
+            return originalGravitationalAcceleration;
+        }
+
+        public float getTerminalVelocity() {
+            return terminalVelocity;
+        }
+
+        public float getGravitationalAcceleration() {
+            return gravitationalAcceleration;
+        }
+
+        public int getAltitude() {
+            return altitude;
+        }
+
+        public float getTimeOfTerminalAccelerationReached(){
+            return terminalVelocity / gravitationalAcceleration;
+        }
     }
 
     enum Planet {
