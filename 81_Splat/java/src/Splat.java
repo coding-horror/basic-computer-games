@@ -94,7 +94,7 @@ public class Splat {
         return Math.sqrt(2 * initial.getAltitude() / A);
     }
 
-    // Returns the number of jumps that this jump was better than
+    // Returns the number of jumps for which this jump was better
     private int countWorseHistoricalJumps(JumpResult jump) {
         return (int) pastSuccessfulJumpDistances.stream()
                 .filter(distance -> jump.getDistance() < distance)
