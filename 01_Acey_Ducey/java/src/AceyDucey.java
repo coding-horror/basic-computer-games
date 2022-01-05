@@ -167,6 +167,6 @@ public class AceyDucey {
         System.out.println("YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING");
         System.out.println("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE");
         System.out.println("A VALUE BETWEEN THE FIRST TWO.");
-        System.out.println("IF YOU DO NOT WANT TO BET, INPUT A 0");
+        System.out.println("IF YOU DO NOT WANT TO BET, INPUT: 0");
     }
 }
