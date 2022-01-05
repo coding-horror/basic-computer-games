@@ -30,7 +30,6 @@ public class Splat {
             int N = 0;
             int M = 0;
             int D1 = (int) (9001.0f * random.nextFloat() + 1000);
-            D1 = 2937; //debug fixme
 
             System.out.print("SELECT YOUR OWN TERMINAL VELOCITY (YES OR NO) ");
             float V1;
@@ -56,50 +55,7 @@ public class Splat {
             while (true) {
                 String B1 = scanner.next();
                 if (B1.equals("NO")) {
-                    switch (random.nextInt(10)) {
-                        case 0:
-                            System.out.println("FINE. YOU'RE ON MERCURY. ACCELERATION=12.2 FT/SEC/SEC.");
-                            A2 = 12.2f;
-                            break;
-                        case 1:
-                            System.out.println("ALL RIGHT. YOU'RE ON VENUS. ACCELERATION=28.3 FT/SEC/SEC.");
-                            A2 = 28.3f;
-                            break;
-                        case 2:
-                            System.out.println("THEN YOU'RE ON EARTH. ACCELERATION=32.16 FT/SEC/SEC.");
-                            A2 = 32.16f;
-                            break;
-                        case 3:
-                            System.out.println("FINE. YOU'RE ON THE MOON. ACCELERATION=5.15 FT/SEC/SEC.");
-                            A2 = 5.15f;
-                            break;
-                        case 4:
-                            System.out.println("ALL RIGHT. YOU'RE ON MARS. ACCELERATION=12.5 FT/SEC/SEC.");
-                            A2 = 12.5f;
-                            break;
-                        case 5:
-                            System.out.println("THEN YOU'RE ON JUPITER. ACCELERATION=85.2 FT/SEC/SEC.");
-                            A2 = 85.2f;
-                            break;
-                        case 6:
-                            System.out.println("FINE. YOU'RE ON SATURN. ACCELERATION=37.6 FT/SEC/SEC.");
-                            A2 = 37.6f;
-                            break;
-                        case 7:
-                            System.out.println("ALL RIGHT. YOU'RE ON URANUS. ACCELERATION=33.8 FT/SEC/SEC.");
-                            A2 = 33.8f;
-                            break;
-                        case 8:
-                            System.out.println("THEN YOU'RE ON NEPTUNE. ACCELERATION=39.6 FT/SEC/SEC.");
-                            A2 = 39.6f;
-                            break;
-                        case 9:
-                            System.out.println("FINE. YOU'RE ON THE SUN. ACCELERATION=896 FT/SEC/SEC.");
-                            A2 = 896.0f;
-                            break;
-                        default:
-                            throw new RuntimeException("Impossible. Will fix stupid switch statement later.");
-                    }
+                    A2 = chooseRandomAcceleration();
                     break;
                 }
                 if (!B1.equals("YES")) {
@@ -273,5 +229,45 @@ public class Splat {
 
         }
 
+    }
+
+    private float chooseRandomAcceleration() {
+        Planet planet = Planet.pickRandom();
+        System.out.printf("%s. ACCELERATION=%.2f FT/SEC/SEC.\n", planet.getMessage(), planet.getAcceleration());
+        return planet.getAcceleration();
+    }
+
+    enum Planet {
+        MERCURY("FINE. YOU'RE ON MERCURY", 12.2f),
+        VENUS("ALL RIGHT. YOU'RE ON VENUS", 28.3f),
+        EARTH("THEN YOU'RE ON EARTH", 32.16f),
+        MOON("FINE. YOU'RE ON THE MOON", 5.15f),
+        MARS("ALL RIGHT. YOU'RE ON MARS", 12.5f),
+        JUPITER("THEN YOU'RE ON JUPITER", 85.2f),
+        SATURN("FINE. YOU'RE ON SATURN", 37.6f),
+        URANUS("ALL RIGHT. YOU'RE ON URANUS", 33.8f),
+        NEPTUNE("THEN YOU'RE ON NEPTUNE", 39.6f),
+        SUN("FINE. YOU'RE ON THE SUN", 896.0f);
+
+        static final Random random = new Random();
+        private final String message;
+        private final float acceleration;
+
+        Planet(String message, float acceleration) {
+            this.message = message;
+            this.acceleration = acceleration;
+        }
+
+        static Planet pickRandom(){
+            return values()[random.nextInt(Planet.values().length)];
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public float getAcceleration() {
+            return acceleration;
+        }
     }
 }
