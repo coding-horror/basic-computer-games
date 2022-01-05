@@ -27,27 +27,18 @@ public class Splat {
             System.out.print("\n\n");
             float V = 0.0f;
             float A = 0.0f;
-            int N = 0;
-            int M = 0;
             int D1 = (int) (9001.0f * random.nextFloat() + 1000);
 
-            System.out.print("SELECT YOUR OWN TERMINAL VELOCITY (YES OR NO) ");
             float V1;
-            while (true) {
-                String A1 = scanner.next();
-                if (A1.equals("NO")) {
-                    V1 = (int) (1000 * random.nextFloat());
-                    System.out.printf("OK.  TERMINAL VELOCITY = %d MI/HR\n", (int) V1);
-                    break;
-                }
-                if (!A1.equals("YES")) {
-                    System.out.print("YES OR NO ");
-                    continue;
-                }
+            if(askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")){
                 System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
                 V1 = scanner.nextInt();
-                break;
             }
+            else {
+                V1 = (int) (1000 * random.nextFloat());
+                System.out.printf("OK.  TERMINAL VELOCITY = %d MI/HR\n", (int) V1);
+            }
+
             V1 = V1 * (5280.0f / 3600.0f);
             V = V1 + ((V1 * random.nextFloat()) / 20.0f) - ((V1 * random.nextFloat()) / 20.0f);
             System.out.print("WANT TO SELECT ACCELERATION DUE TO GRAVITY (YES OR NO) ");
@@ -229,6 +220,18 @@ public class Splat {
 
         }
 
+    }
+
+    private boolean askYesNo(String prompt){
+        System.out.printf("%s (YES OR NO) ", prompt);
+        while (true) {
+            String answer = scanner.next();
+            switch(answer){
+                case "YES": return true;
+                case "NO": return false;
+                default: System.out.print("YES OR NO ");
+            }
+        }
     }
 
     private float chooseRandomAcceleration() {
