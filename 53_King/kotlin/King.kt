@@ -1,3 +1,5 @@
+package king53
+
 import kotlin.math.abs
 import kotlin.random.Random
 import kotlin.system.exitProcess
@@ -22,6 +24,7 @@ fun main() {
 
     with(gameState) {
         do {
+
             recalculateLandCost()
             displayStatus()
             inputLandSale()
@@ -84,6 +87,7 @@ fun loadOldGame(): GameState = GameState().apply {
             println("   COME ON, YOUR TERM IN OFFICE IS ONLY $yearsRequired YEARS.")
             retry = true
         }
+
     } while (retry)
 
     print("HOW MUCH DID YOU HAVE IN THE TREASURY? ")
@@ -115,6 +119,10 @@ fun loadOldGame(): GameState = GameState().apply {
  */
 sealed class YearOutcome {
 
+    /**
+     * Display output for the end of the year, for each different possible
+     * year outcome.
+     */
     open fun displayConsequences() {
         // Default display nothing
     }
@@ -132,7 +140,7 @@ sealed class YearOutcome {
 
     object ContinueNextYear : YearOutcome()
 
-    class Win(val yearsRequired: Int) : YearOutcome() {
+    class Win(private val yearsRequired: Int) : YearOutcome() {
         override fun displayConsequences() {
             // The misspelling of "successfully" is in the original code.
             println(
@@ -229,11 +237,17 @@ sealed class YearOutcome {
  * Record data, allow data input, and process the simulation for the game.
  */
 class GameState(val yearsRequired: Int = 8) {
+
     /**
      * The current year. Years start with zero, but we never
      * output the current year.
      */
     var currentYear = 0
+
+    /**
+     * Keep track of each year's crop loss, so we can report increases.
+     */
+    private var lastYearsCropLoss: Int = 0
 
     /**
      * Number of countrymen who have died of either pollution
@@ -535,11 +549,12 @@ class GameState(val yearsRequired: Int = 8) {
         the population, but does not affect crop losses.
          */
         var cropLoss = ((2000 - landArea) * (rnd + 1.5) / 2.0).toInt()
-        val cropLossWorse = false
         if (foreignWorkers > 0)
             print("OF $plantingArea SQ. MILES PLANTED,")
         if (plantingArea <= cropLoss)
             cropLoss = plantingArea
+        val cropLossWorse = cropLoss > lastYearsCropLoss
+        lastYearsCropLoss = cropLoss
         println(" YOU HARVESTED ${plantingArea - cropLoss} SQ. MILES OF CROPS.")
 
         if (cropLoss > 0) {
