@@ -20,65 +20,41 @@ public class Splat {
         int K1 = 0;
         while (true) {
 
-            InitialJumpConditions jump = buildInitialConditions();
+            InitialJumpConditions initial = buildInitialConditions();
 
             System.out.println();
-            System.out.printf("    ALTITUDE         = %d FT\n", jump.getAltitude());
-            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", jump.getOriginalTerminalVelocity());
-            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", jump.getOriginalAcceleration());
+            System.out.printf("    ALTITUDE         = %d FT\n", initial.getAltitude());
+            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", initial.getOriginalTerminalVelocity());
+            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", initial.getOriginalAcceleration());
 
             System.out.println("SET THE TIMER FOR YOUR FREEFALL.");
             System.out.print("HOW MANY SECONDS ");
-            float T = scanner.nextFloat();
+            float freefallTime = scanner.nextFloat();
             System.out.println("HERE WE GO.\n");
             System.out.println("TIME (SEC)  DIST TO FALL (FT)");
             System.out.println("==========  =================");
-            final float V = jump.getTerminalVelocity();
-            final float A = jump.getAcceleration();
-            boolean splat = false;
-            boolean terminalReached = false;
-            float D = 0.0f;
-            for (float i = 0.0f; !splat && (i < T); i += T / 8) {
-                if (i > jump.getTimeOfTerminalAccelerationReached()) {
-                    terminalReached = true;
-                    System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", jump.getTimeOfTerminalAccelerationReached());
-                    for (i = i; i < T; i += T / 8) {
-                        D = jump.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A))));
-                        if (D <= 0) {
-                            splat = true;
-                            break;
-                        }
-                        System.out.printf("%10.2f  %f\n", i, D);
-                    }
-                    break;
-                }
-                D = jump.getAltitude() - ((A / 2) * i * i);
-                if (D <= 0) {
-                    splat = true;
-                    break;
-                }
-                System.out.printf("%10.2f  %f\n", i, D);
-            }
+            final float V = initial.getTerminalVelocity();
+            final float A = initial.getAcceleration();
+            JumpResult jump = executeJump(initial, freefallTime);
 
-            if (splat) {
-                if (terminalReached) {
-                    System.out.printf("%.2f SPLAT\n", (V / A) + ((jump.getAltitude() - (V * V / (2 * A))) / V));
+            if (jump.isSplat()) {
+                if (jump.hasReachedTerminalVelocity()) {
+                    System.out.printf("%.2f SPLAT\n", (V / A) + ((initial.getAltitude() - (V * V / (2 * A))) / V));
                 } else {
-                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * jump.getAltitude() / A));
+                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * initial.getAltitude() / A));
 
                 }
                 showRandomSplatMessage();
             } else {
-
                 System.out.println("CHUTE OPEN");
                 int J = 0;
                 for (J = 0; J < 42; J++) {
                     if (Arr[J] == 0) {
-                        Arr[J] = D;
+                        Arr[J] = jump.getDistance();
                         break;
                     }
                     K = K + 1;
-                    if (D > Arr[J]) {
+                    if (jump.getDistance() > Arr[J]) {
                         continue;
                     }
                     K1 = K1 + 1;
@@ -98,7 +74,7 @@ public class Splat {
                         System.out.printf("YOU WERE BEATEN OUT BY %d OF THEM.\n", K - K1);
                     } else if (K - K1 <= 0.75 * K) {
                         System.out.printf("CONSERVATIVE, AREN'T YOU?  YOU RANKED ONLY %d IN THE\n", K - K1);
-                        System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.", K);
+                        System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
                     } else if (K - K1 <= -0.9 * K) {
                         System.out.println("HUMPH!  DON'T YOU HAVE ANY SPORTING BLOOD?  THERE WERE");
                         System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS AND YOU CAME IN %d JUMPS\n", K, K1);
@@ -128,6 +104,33 @@ public class Splat {
             }
         }
 
+    }
+
+    private JumpResult executeJump(InitialJumpConditions initial, float T) {
+        final float V = initial.getTerminalVelocity();
+        final float A = initial.getAcceleration();
+
+        JumpResult jump = new JumpResult(initial.getAltitude());
+        for (float i = 0.0f; !jump.isSplat() && (i < T); i += T / 8) {
+            if (i > initial.getTimeOfTerminalAccelerationReached()) {
+                jump.setReachedTerminalVelocity();
+                System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", initial.getTimeOfTerminalAccelerationReached());
+                for (i = i; i < T; i += T / 8) {
+                    jump.setDistance(initial.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A)))));
+                    if (jump.isSplat()) {
+                        break;
+                    }
+                    System.out.printf("%10.2f  %f\n", i, jump.getDistance());
+                }
+                break;
+            }
+            jump.setDistance( initial.getAltitude() - ((A / 2) * i * i));
+            if (jump.isSplat()) {
+                break;
+            }
+            System.out.printf("%10.2f  %f\n", i, jump.getDistance());
+        }
+        return jump;
     }
 
     private boolean playAgain() {
@@ -211,6 +214,36 @@ public class Splat {
         Planet planet = Planet.pickRandom();
         System.out.printf("%s. ACCELERATION=%.2f FT/SEC/SEC.\n", planet.getMessage(), planet.getAcceleration());
         return planet.getAcceleration();
+    }
+
+    // Mutable
+    static class JumpResult {
+        private boolean reachedTerminalVelocity = false;
+        private float distance; // from the ground
+
+        public JumpResult(float distance) {
+            this.distance = distance;
+        }
+
+        public boolean isSplat() {
+            return distance <= 0;
+        }
+
+        public boolean hasReachedTerminalVelocity() {
+            return reachedTerminalVelocity;
+        }
+
+        public float getDistance() {
+            return distance;
+        }
+
+        public void setDistance(float distance){
+            this.distance = distance;
+        }
+
+        public void setReachedTerminalVelocity(){
+            reachedTerminalVelocity = true;
+        }
     }
 
     // Immutable
