@@ -1,25 +1,27 @@
+import java.util.Map;
+import java.util.HashMap;
+
 public class Board {
   
-    private int[][] board;
+    private final Map<Integer,Integer> board;
   
     public Board() {
-        board = new int[7][7];
-    
-        //Set all of the corners to -1, and place pegs in proper spaces
-        for(int i = 0; i < 7; i++) {
-            for(int j = 0; j < 7; j++) {
-                if((i < 3 || i > 5) && (j < 3 || j > 5)) {
-                    //If both i and j are either less than 3 or greater than 5, then the index is a corner
-                    board[i][j] = -1;
-                } else if(i == 4 && j == 4) {
-                    //Do not place a peg in the center
-                    board[i][j] = 0;
-                } else {
-                    //Place a peg everywhere else
-                    board[i][j] = 1;
-                }
-            }
+        board = new HashMap<>();
+        
+        int[] locations = new int[] {13,14,15,
+          22,23,24,
+    29,30,31,32,33,34,35,
+    38,39,40,42,43,44,
+    47,48,49,50,51,52,53,
+          58,59,60,
+          67,68,69};
+      
+        for(int i : locations) {
+            //put board(i) in
         }
+        
+        //set the center position as 0
+        
     }
   
     public String toString() {
