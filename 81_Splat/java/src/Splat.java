@@ -6,6 +6,9 @@ import java.util.Scanner;
 public class Splat {
     private static final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
+    private final float[] Arr = new float[42];
+    private int K = 0;
+    private int K1 = 0;
 
     public static void main(String[] args) {
         new Splat().run();
@@ -14,10 +17,7 @@ public class Splat {
     public void run() {
         showIntroduction();
 
-        float[] Arr = new float[42];
         Arrays.fill(Arr, 0.0f);
-        int K = 0;
-        int K1 = 0;
         while (true) {
 
             InitialJumpConditions initial = buildInitialConditions();
@@ -33,104 +33,98 @@ public class Splat {
             System.out.println("HERE WE GO.\n");
             System.out.println("TIME (SEC)  DIST TO FALL (FT)");
             System.out.println("==========  =================");
-            final float V = initial.getTerminalVelocity();
-            final float A = initial.getAcceleration();
+
             JumpResult jump = executeJump(initial, freefallTime);
+            showJumpResults(initial, jump);
 
-            if (jump.isSplat()) {
-                if (jump.hasReachedTerminalVelocity()) {
-                    System.out.printf("%.2f SPLAT\n", (V / A) + ((initial.getAltitude() - (V * V / (2 * A))) / V));
-                } else {
-                    System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * initial.getAltitude() / A));
-
-                }
-                showRandomSplatMessage();
-            } else {
-                System.out.println("CHUTE OPEN");
-                int J = 0;
-                for (J = 0; J < 42; J++) {
-                    if (Arr[J] == 0) {
-                        Arr[J] = jump.getDistance();
-                        break;
-                    }
-                    K = K + 1;
-                    if (jump.getDistance() > Arr[J]) {
-                        continue;
-                    }
-                    K1 = K1 + 1;
-                }
-
-                if (J > 2) {
-                    if (K - K1 <= 0.1 * K) {
-                        System.out.printf("WOW!  THAT'S SOME JUMPING.  OF THE %d SUCCESSFUL JUMPS\n", K);
-                        System.out.printf("BEFORE YOURS, ONLY %d OPENED THEIR CHUTES LOWER THAN\n", K - K1);
-                        System.out.println("YOU DID.");
-                    } else if (K - K1 <= 0.25 * K) {
-                        System.out.printf("PRETTY GOOD!  %d SUCCESSFUL JUMPS PRECEDED YOURS AND ONLY\n", K);
-                        System.out.printf("%d OF THEM GOT LOWER THAN YOU DID BEFORE THEIR CHUTES\n", K - K1);
-                        System.out.println("OPENED.");
-                    } else if (K - K1 <= 0.5 * K) {
-                        System.out.printf("NOT BAD.  THERE HAVE BEEN %d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
-                        System.out.printf("YOU WERE BEATEN OUT BY %d OF THEM.\n", K - K1);
-                    } else if (K - K1 <= 0.75 * K) {
-                        System.out.printf("CONSERVATIVE, AREN'T YOU?  YOU RANKED ONLY %d IN THE\n", K - K1);
-                        System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
-                    } else if (K - K1 <= -0.9 * K) {
-                        System.out.println("HUMPH!  DON'T YOU HAVE ANY SPORTING BLOOD?  THERE WERE");
-                        System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS AND YOU CAME IN %d JUMPS\n", K, K1);
-                        System.out.println("BETTER THAN THE WORST.  SHAPE UP!!!\n");
-                    } else {
-                        System.out.printf("HEY!  YOU PULLED THE RIP CORD MUCH TOO SOON.  %f SUCCESSFUL\n", K);
-                        System.out.printf("JUMPS BEFORE YOURS AND YOU CAME IN NUMBER %d!  GET WITH IT!\n", K - K1);
-                    }
-                } else {
-                    System.out.println("AMAZING!!! NOT BAD FOR YOUR ");
-                    switch (J) {
-                        case 0:
-                            System.out.print("1ST ");
-                            break;
-                        case 1:
-                            System.out.print("2ND ");
-                            break;
-                        case 2:
-                            System.out.print("3RD ");
-                            break;
-                    }
-                    System.out.println("SUCCESSFUL JUMP!!!");
-                }
-            }
             if(!playAgain()){
+                System.out.println("SSSSSSSSSS.");
                 return;
             }
         }
-
     }
 
-    private JumpResult executeJump(InitialJumpConditions initial, float T) {
+    private void showJumpResults(InitialJumpConditions initial, JumpResult jump) {
         final float V = initial.getTerminalVelocity();
         final float A = initial.getAcceleration();
 
+        if (jump.isSplat()) {
+            if (jump.hasReachedTerminalVelocity()) {
+                System.out.printf("%.2f SPLAT\n", (V / A) + ((initial.getAltitude() - (V * V / (2 * A))) / V));
+            } else {
+                System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * initial.getAltitude() / A));
+            }
+            showRandomSplatMessage();
+        } else {
+            System.out.println("CHUTE OPEN");
+            int J = 0;
+            for (J = 0; J < 42; J++) {
+                if (Arr[J] == 0) {
+                    Arr[J] = jump.getDistance();
+                    break;
+                }
+                K = K + 1;
+                if (jump.getDistance() > Arr[J]) {
+                    continue;
+                }
+                K1 = K1 + 1;
+            }
+
+            if (J > 2) {
+                if (K - K1 <= 0.1 * K) {
+                    System.out.printf("WOW!  THAT'S SOME JUMPING.  OF THE %d SUCCESSFUL JUMPS\n", K);
+                    System.out.printf("BEFORE YOURS, ONLY %d OPENED THEIR CHUTES LOWER THAN\n", K - K1);
+                    System.out.println("YOU DID.");
+                } else if (K - K1 <= 0.25 * K) {
+                    System.out.printf("PRETTY GOOD!  %d SUCCESSFUL JUMPS PRECEDED YOURS AND ONLY\n", K);
+                    System.out.printf("%d OF THEM GOT LOWER THAN YOU DID BEFORE THEIR CHUTES\n", K - K1);
+                    System.out.println("OPENED.");
+                } else if (K - K1 <= 0.5 * K) {
+                    System.out.printf("NOT BAD.  THERE HAVE BEEN %d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
+                    System.out.printf("YOU WERE BEATEN OUT BY %d OF THEM.\n", K - K1);
+                } else if (K - K1 <= 0.75 * K) {
+                    System.out.printf("CONSERVATIVE, AREN'T YOU?  YOU RANKED ONLY %d IN THE\n", K - K1);
+                    System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
+                } else if (K - K1 <= -0.9 * K) {
+                    System.out.println("HUMPH!  DON'T YOU HAVE ANY SPORTING BLOOD?  THERE WERE");
+                    System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS AND YOU CAME IN %d JUMPS\n", K, K1);
+                    System.out.println("BETTER THAN THE WORST.  SHAPE UP!!!\n");
+                } else {
+                    System.out.printf("HEY!  YOU PULLED THE RIP CORD MUCH TOO SOON.  %f SUCCESSFUL\n", K);
+                    System.out.printf("JUMPS BEFORE YOURS AND YOU CAME IN NUMBER %d!  GET WITH IT!\n", K - K1);
+                }
+            } else {
+                String[] nums = new String[]{ "1ST", "2ND", "3RD"};
+                System.out.printf("AMAZING!!! NOT BAD FOR YOUR %s SUCCESSFUL JUMP!!!\n", nums[J]);
+            }
+        }
+    }
+
+    private JumpResult executeJump(InitialJumpConditions initial, float chuteOpenTime) {
         JumpResult jump = new JumpResult(initial.getAltitude());
-        for (float i = 0.0f; !jump.isSplat() && (i < T); i += T / 8) {
-            if (i > initial.getTimeOfTerminalAccelerationReached()) {
+        for (float time = 0.0f; !jump.isSplat() && (time < chuteOpenTime); time += chuteOpenTime / 8) {
+            if (!jump.hasReachedTerminalVelocity() && time > initial.getTimeOfTerminalAccelerationReached()) {
                 jump.setReachedTerminalVelocity();
                 System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", initial.getTimeOfTerminalAccelerationReached());
-                for (i = i; i < T; i += T / 8) {
-                    jump.setDistance(initial.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A)))));
-                    if (jump.isSplat()) {
-                        break;
-                    }
-                    System.out.printf("%10.2f  %f\n", i, jump.getDistance());
-                }
-                break;
             }
-            jump.setDistance( initial.getAltitude() - ((A / 2) * i * i));
+            float newDistance = computeDistance(initial, time, jump.hasReachedTerminalVelocity());
+            jump.setDistance(newDistance);
+
             if (jump.isSplat()) {
-                break;
+                return jump;
             }
-            System.out.printf("%10.2f  %f\n", i, jump.getDistance());
+            System.out.printf("%10.2f  %f\n", time, jump.getDistance());
         }
         return jump;
+    }
+
+    private float computeDistance(InitialJumpConditions initial, float i, boolean hasReachedTerminalVelocity) {
+        final float V = initial.getTerminalVelocity();
+        final float A = initial.getAcceleration();
+        if(hasReachedTerminalVelocity) {
+            return initial.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A))));
+        }
+        return initial.getAltitude() - ((A / 2) * i * i);
     }
 
     private boolean playAgain() {
@@ -140,7 +134,6 @@ public class Splat {
         if (askYesNo("PLEASE")) {
             return true;
         }
-        System.out.println("SSSSSSSSSS.");
         return false;
     }
 
