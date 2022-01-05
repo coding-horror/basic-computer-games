@@ -1,5 +1,22 @@
 import java.util.*;
 
+/**
+ * SPLAT simulates a parachute jump in which you try to open your parachute at the last possible moment without going
+ * splat! You may select your own terminal velocity or let the computer do it for you. You many also select the
+ * acceleration due to gravity or, again, let the computer do it in which case you might wind up on any of eight
+ * planets (out to Neptune), the moon, or the sun.
+ * <p>
+ * The computer then tells you the height you’re jumping from and asks for the seconds of free fall. It then divides
+ * your free fall time into eight intervals and gives you progress reports on your way down. The computer also keeps
+ * track of all prior jumps in the array A and lets you know how you compared with previous successful jumps. If you
+ * want to recall information from previous runs, then you should store array A in a disk or take file and read it
+ * before each run.
+ * <p>
+ * John Yegge created this program while at the Oak Ridge Associated Universities.
+ * <p>
+ * Ported from BASIC by jason plumb (@breedx2)
+ * </p>
+ */
 public class Splat {
     private static final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
@@ -31,11 +48,72 @@ public class Splat {
             JumpResult jump = executeJump(initial, freefallTime);
             showJumpResults(initial, jump);
 
-            if(!playAgain()){
+            if (!playAgain()) {
                 System.out.println("SSSSSSSSSS.");
                 return;
             }
         }
+    }
+
+    private void showIntroduction() {
+        System.out.printf("%33s%s\n", " ", "SPLAT");
+        System.out.printf("%15s%s\n", " ", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+        System.out.print("\n\n\n");
+        System.out.println("WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE");
+        System.out.println("JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE");
+        System.out.println("MOMENT WITHOUT GOING SPLAT.");
+    }
+
+    private InitialJumpConditions buildInitialConditions() {
+        System.out.print("\n\n");
+        float terminalVelocity = promptTerminalVelocity();
+        float acceleration = promptGravitationalAcceleration();
+        return InitialJumpConditions.create(terminalVelocity, acceleration);
+    }
+
+    private float promptTerminalVelocity() {
+        if (askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")) {
+            System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
+            return mphToFeetPerSec(scanner.nextFloat());
+        }
+        float terminalVelocity = (int) (1000 * random.nextFloat());
+        System.out.printf("OK.  TERMINAL VELOCITY = %.2f MI/HR\n", terminalVelocity);
+        return mphToFeetPerSec(terminalVelocity);
+    }
+
+    private float promptGravitationalAcceleration() {
+        if (askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")) {
+            System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
+            return scanner.nextFloat();
+        }
+        return chooseRandomAcceleration();
+    }
+
+    private JumpResult executeJump(InitialJumpConditions initial, float chuteOpenTime) {
+        JumpResult jump = new JumpResult(initial.getAltitude());
+        for (float time = 0.0f; !jump.isSplat() && (time < chuteOpenTime); time += chuteOpenTime / 8) {
+            if (!jump.hasReachedTerminalVelocity() && time > initial.getTimeOfTerminalAccelerationReached()) {
+                jump.setReachedTerminalVelocity();
+                System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", initial.getTimeOfTerminalAccelerationReached());
+            }
+            float newDistance = computeDistance(initial, time, jump.hasReachedTerminalVelocity());
+            jump.setDistance(newDistance);
+
+            if (jump.isSplat()) {
+                return jump;
+            }
+            System.out.printf("%10.2f  %f\n", time, jump.getDistance());
+        }
+        return jump;
+    }
+
+    private float computeDistance(InitialJumpConditions initial, float i, boolean hasReachedTerminalVelocity) {
+        final float V = initial.getTerminalVelocity();
+        final float A = initial.getAcceleration();
+        if (hasReachedTerminalVelocity) {
+            return initial.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A))));
+        }
+        return initial.getAltitude() - ((A / 2) * i * i);
     }
 
     private void showJumpResults(InitialJumpConditions initial, JumpResult jump) {
@@ -85,6 +163,9 @@ public class Splat {
         System.out.printf("%10.2f  SPLAT\n", timeOfSplat);
     }
 
+    /**
+     * Returns the number of jumps for which this jump was better
+     */
     private double computeTimeOfSplat(InitialJumpConditions initial, JumpResult jump) {
         final float V = initial.getTerminalVelocity();
         final float A = initial.getAcceleration();
@@ -94,38 +175,26 @@ public class Splat {
         return Math.sqrt(2 * initial.getAltitude() / A);
     }
 
-    // Returns the number of jumps for which this jump was better
     private int countWorseHistoricalJumps(JumpResult jump) {
         return (int) pastSuccessfulJumpDistances.stream()
                 .filter(distance -> jump.getDistance() < distance)
                 .count();
     }
 
-    private JumpResult executeJump(InitialJumpConditions initial, float chuteOpenTime) {
-        JumpResult jump = new JumpResult(initial.getAltitude());
-        for (float time = 0.0f; !jump.isSplat() && (time < chuteOpenTime); time += chuteOpenTime / 8) {
-            if (!jump.hasReachedTerminalVelocity() && time > initial.getTimeOfTerminalAccelerationReached()) {
-                jump.setReachedTerminalVelocity();
-                System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", initial.getTimeOfTerminalAccelerationReached());
-            }
-            float newDistance = computeDistance(initial, time, jump.hasReachedTerminalVelocity());
-            jump.setDistance(newDistance);
-
-            if (jump.isSplat()) {
-                return jump;
-            }
-            System.out.printf("%10.2f  %f\n", time, jump.getDistance());
-        }
-        return jump;
-    }
-
-    private float computeDistance(InitialJumpConditions initial, float i, boolean hasReachedTerminalVelocity) {
-        final float V = initial.getTerminalVelocity();
-        final float A = initial.getAcceleration();
-        if(hasReachedTerminalVelocity) {
-            return initial.getAltitude() - ((V * V / (2 * A)) + (V * (i - (V / A))));
-        }
-        return initial.getAltitude() - ((A / 2) * i * i);
+    private void showCleverSplatMessage() {
+        List<String> messages = Arrays.asList(
+                "REQUIESCAT IN PACE.",
+                "MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.",
+                "REST IN PEACE.",
+                "SON-OF-A-GUN.",
+                "#$%&&%!$",
+                "A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.",
+                "HMMM. SHOULD HAVE PICKED A SHORTER TIME.",
+                "MUTTER. MUTTER. MUTTER.",
+                "PUSHING UP DAISIES.",
+                "EASY COME, EASY GO."
+        );
+        System.out.println(messages.get(random.nextInt(10)));
     }
 
     private boolean playAgain() {
@@ -135,68 +204,21 @@ public class Splat {
         return askYesNo("PLEASE");
     }
 
-    private void showCleverSplatMessage() {
-        List<String> messages = Arrays.asList(
-            "REQUIESCAT IN PACE.",
-            "MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.",
-            "REST IN PEACE.",
-            "SON-OF-A-GUN.",
-            "#$%&&%!$",
-            "A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.",
-            "HMMM. SHOULD HAVE PICKED A SHORTER TIME.",
-            "MUTTER. MUTTER. MUTTER.",
-            "PUSHING UP DAISIES.",
-            "EASY COME, EASY GO."
-        );
-        System.out.println(messages.get(random.nextInt(10)));
-    }
-
-    private InitialJumpConditions buildInitialConditions() {
-        System.out.print("\n\n");
-        float terminalVelocity = promptTerminalVelocity();
-        float acceleration = promptGravitationalAcceleration();
-        return InitialJumpConditions.create(terminalVelocity, acceleration);
-    }
-
-    private void showIntroduction() {
-        System.out.printf("%33s%s\n", " ", "SPLAT");
-        System.out.printf("%15s%s\n", " ", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-        System.out.print("\n\n\n");
-        System.out.println("WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE");
-        System.out.println("JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE");
-        System.out.println("MOMENT WITHOUT GOING SPLAT.");
-    }
-
-    private float promptTerminalVelocity() {
-        if(askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")){
-            System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
-            return mphToFeetPerSec(scanner.nextFloat());
-        }
-        float terminalVelocity = (int) (1000 * random.nextFloat());
-        System.out.printf("OK.  TERMINAL VELOCITY = %.2f MI/HR\n", terminalVelocity);
-        return mphToFeetPerSec(terminalVelocity);
-    }
-
-    private float promptGravitationalAcceleration() {
-        if(askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")){
-            System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
-            return scanner.nextFloat();
-        }
-        return chooseRandomAcceleration();
-    }
-
-    private float mphToFeetPerSec(float speed){
+    private float mphToFeetPerSec(float speed) {
         return speed * (5280.0f / 3600.0f);
     }
 
-    private boolean askYesNo(String prompt){
+    private boolean askYesNo(String prompt) {
         System.out.printf("%s (YES OR NO) ", prompt);
         while (true) {
             String answer = scanner.next();
-            switch(answer){
-                case "YES": return true;
-                case "NO": return false;
-                default: System.out.print("YES OR NO ");
+            switch (answer) {
+                case "YES":
+                    return true;
+                case "NO":
+                    return false;
+                default:
+                    System.out.print("YES OR NO ");
             }
         }
     }
@@ -228,7 +250,7 @@ public class Splat {
             this.acceleration = acceleration;
         }
 
-        static Planet pickRandom(){
+        static Planet pickRandom() {
             return values()[random.nextInt(Planet.values().length)];
         }
 
@@ -262,11 +284,11 @@ public class Splat {
             return distance;
         }
 
-        void setDistance(float distance){
+        void setDistance(float distance) {
             this.distance = distance;
         }
 
-        void setReachedTerminalVelocity(){
+        void setReachedTerminalVelocity() {
             reachedTerminalVelocity = true;
         }
     }
@@ -319,7 +341,7 @@ public class Splat {
             return altitude;
         }
 
-        float getTimeOfTerminalAccelerationReached(){
+        float getTimeOfTerminalAccelerationReached() {
             return terminalVelocity / acceleration;
         }
     }
