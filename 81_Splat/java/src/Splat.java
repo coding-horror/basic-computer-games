@@ -11,12 +11,7 @@ public class Splat {
     }
 
     public void run() {
-        System.out.printf("%33s%s\n", " ", "SPLAT");
-        System.out.printf("%15s%s\n", " ", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-        System.out.print("\n\n\n");
-        System.out.println("WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE");
-        System.out.println("JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE");
-        System.out.println("MOMENT WITHOUT GOING SPLAT.");
+        showIntroduction();
 
         float[] Arr = new float[42];
         Arrays.fill(Arr, 0.0f);
@@ -25,37 +20,18 @@ public class Splat {
         while (true) {
 
             System.out.print("\n\n");
-            float V = 0.0f;
-            float A = 0.0f;
             int D1 = (int) (9001.0f * random.nextFloat() + 1000);
 
-            float V1;
-            if(askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")){
-                System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
-                V1 = scanner.nextInt();
-            }
-            else {
-                V1 = (int) (1000 * random.nextFloat());
-                System.out.printf("OK.  TERMINAL VELOCITY = %d MI/HR\n", (int) V1);
-            }
+            float terminalVelocity = promptTerminalVelocity();
+            float V = terminalVelocity + ((terminalVelocity * random.nextFloat()) / 20.0f) - ((terminalVelocity * random.nextFloat()) / 20.0f);
 
-            V1 = V1 * (5280.0f / 3600.0f);
-            V = V1 + ((V1 * random.nextFloat()) / 20.0f) - ((V1 * random.nextFloat()) / 20.0f);
+            float gravitationalAcceleration = promptGravitationalAcceleration();
+            float A = gravitationalAcceleration + ((gravitationalAcceleration * random.nextFloat()) / 20.0f) - ((gravitationalAcceleration * random.nextFloat()) / 20.0f);
 
-            float A2;
-            if(askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")){
-                System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
-                A2 = scanner.nextFloat();
-            }
-            else {
-                A2 = chooseRandomAcceleration();
-            }
-
-            A = A2 + ((A2 * random.nextFloat()) / 20.0f) - ((A2 * random.nextFloat()) / 20.0f);
             System.out.println();
             System.out.printf("    ALTITUDE         = %d FT\n", D1);
-            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", V1);
-            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", A2);
+            System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", terminalVelocity);
+            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", gravitationalAcceleration);
             System.out.println("SET THE TIMER FOR YOUR FREEFALL.");
             System.out.print("HOW MANY SECONDS ");
             float T = scanner.nextFloat();
@@ -214,6 +190,37 @@ public class Splat {
 
         }
 
+    }
+
+    private void showIntroduction() {
+        System.out.printf("%33s%s\n", " ", "SPLAT");
+        System.out.printf("%15s%s\n", " ", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+        System.out.print("\n\n\n");
+        System.out.println("WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES A PARACHUTE");
+        System.out.println("JUMP.  TRY TO OPEN YOUR CHUTE AT THE LAST POSSIBLE");
+        System.out.println("MOMENT WITHOUT GOING SPLAT.");
+    }
+
+    private float promptTerminalVelocity() {
+        if(askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")){
+            System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
+            return mphToFeetPerSec(scanner.nextFloat());
+        }
+        float terminalVelocity = (int) (1000 * random.nextFloat());
+        System.out.printf("OK.  TERMINAL VELOCITY = %.2f MI/HR\n", terminalVelocity);
+        return mphToFeetPerSec(terminalVelocity);
+    }
+
+    private float promptGravitationalAcceleration() {
+        if(askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")){
+            System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
+            return scanner.nextFloat();
+        }
+        return chooseRandomAcceleration();
+    }
+
+    private float mphToFeetPerSec(float speed){
+        return speed * (5280.0f / 3600.0f);
     }
 
     private boolean askYesNo(String prompt){
