@@ -21,13 +21,11 @@ public class Splat {
         while (true) {
 
             InitialJumpConditions jump = buildInitialConditions();
-            final float V = jump.getTerminalVelocity();
-            final float A = jump.getGravitationalAcceleration();
 
             System.out.println();
             System.out.printf("    ALTITUDE         = %d FT\n", jump.getAltitude());
             System.out.printf("    TERM. VELOCITY   = %.2f FT/SEC +/-5%%\n", jump.getOriginalTerminalVelocity());
-            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", jump.getOriginalGravitationalAcceleration());
+            System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", jump.getOriginalAcceleration());
 
             System.out.println("SET THE TIMER FOR YOUR FREEFALL.");
             System.out.print("HOW MANY SECONDS ");
@@ -35,6 +33,8 @@ public class Splat {
             System.out.println("HERE WE GO.\n");
             System.out.println("TIME (SEC)  DIST TO FALL (FT)");
             System.out.println("==========  =================");
+            final float V = jump.getTerminalVelocity();
+            final float A = jump.getAcceleration();
             boolean splat = false;
             boolean terminalReached = false;
             float D = 0.0f;
@@ -123,35 +123,22 @@ public class Splat {
                     System.out.println("SUCCESSFUL JUMP!!!");
                 }
             }
-            boolean chosen = false;
-            while (!chosen) {
-                System.out.print("DO YOU WANT TO PLAY AGAIN ");
-                String Z = scanner.next();
-                if (Z.equals("YES")) {
-                    break;
-                }
-                if (Z.equals("NO")) {
-                    System.out.print("PLEASE ");
-                    while (true) {
-                        Z = scanner.next();
-                        if (Z.equals("YES")) {
-                            chosen = true;
-                            break;
-                        }
-                        if (Z.equals("NO")) {
-                            System.out.println("SSSSSSSSSS.");
-                            return;
-                        }
-                        System.out.print("YES OR NO ");
-                    }
-                    continue;
-                } else {
-                    System.out.print("YES OR NO ");
-                }
+            if(!playAgain()){
+                return;
             }
-
         }
 
+    }
+
+    private boolean playAgain() {
+        if (askYesNo("DO YOU WANT TO PLAY AGAIN ")) {
+            return true;
+        }
+        if (askYesNo("PLEASE")) {
+            return true;
+        }
+        System.out.println("SSSSSSSSSS.");
+        return false;
     }
 
     private void showRandomSplatMessage() {
@@ -173,8 +160,8 @@ public class Splat {
     private InitialJumpConditions buildInitialConditions() {
         System.out.print("\n\n");
         float terminalVelocity = promptTerminalVelocity();
-        float gravitationalAcceleration = promptGravitationalAcceleration();
-        return InitialJumpConditions.create(terminalVelocity, gravitationalAcceleration);
+        float acceleration = promptGravitationalAcceleration();
+        return InitialJumpConditions.create(terminalVelocity, acceleration);
     }
 
     private void showIntroduction() {
@@ -226,21 +213,20 @@ public class Splat {
         return planet.getAcceleration();
     }
 
-
     // Immutable
     static class InitialJumpConditions {
         private final float originalTerminalVelocity;
-        private final float originalGravitationalAcceleration;
+        private final float originalAcceleration;
         private final float terminalVelocity;
-        private final float gravitationalAcceleration;
+        private final float acceleration;
         private final int altitude;
 
-        private InitialJumpConditions(float originalTerminalVelocity, float originalGravitationalAcceleration,
-                                      float terminalVelocity, float gravitationalAcceleration, int altitude) {
+        private InitialJumpConditions(float originalTerminalVelocity, float originalAcceleration,
+                                      float terminalVelocity, float acceleration, int altitude) {
             this.originalTerminalVelocity = originalTerminalVelocity;
-            this.originalGravitationalAcceleration = originalGravitationalAcceleration;
+            this.originalAcceleration = originalAcceleration;
             this.terminalVelocity = terminalVelocity;
-            this.gravitationalAcceleration = gravitationalAcceleration;
+            this.acceleration = acceleration;
             this.altitude = altitude;
         }
 
@@ -259,16 +245,16 @@ public class Splat {
             return originalTerminalVelocity;
         }
 
-        public float getOriginalGravitationalAcceleration() {
-            return originalGravitationalAcceleration;
+        public float getOriginalAcceleration() {
+            return originalAcceleration;
         }
 
         public float getTerminalVelocity() {
             return terminalVelocity;
         }
 
-        public float getGravitationalAcceleration() {
-            return gravitationalAcceleration;
+        public float getAcceleration() {
+            return acceleration;
         }
 
         public int getAltitude() {
@@ -276,7 +262,7 @@ public class Splat {
         }
 
         public float getTimeOfTerminalAccelerationReached(){
-            return terminalVelocity / gravitationalAcceleration;
+            return terminalVelocity / acceleration;
         }
     }
 
