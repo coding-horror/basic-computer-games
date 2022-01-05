@@ -91,7 +91,7 @@ public class Splat {
 
     private JumpResult executeJump(InitialJumpConditions initial, float chuteOpenTime) {
         JumpResult jump = new JumpResult(initial.getAltitude());
-        for (float time = 0.0f; !jump.isSplat() && (time < chuteOpenTime); time += chuteOpenTime / 8) {
+        for (float time = 0.0f; time < chuteOpenTime; time += chuteOpenTime / 8) {
             if (!jump.hasReachedTerminalVelocity() && time > initial.getTimeOfTerminalAccelerationReached()) {
                 jump.setReachedTerminalVelocity();
                 System.out.printf("TERMINAL VELOCITY REACHED AT T PLUS %f SECONDS.\n", initial.getTimeOfTerminalAccelerationReached());
