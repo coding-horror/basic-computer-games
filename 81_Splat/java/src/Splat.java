@@ -41,22 +41,16 @@ public class Splat {
 
             V1 = V1 * (5280.0f / 3600.0f);
             V = V1 + ((V1 * random.nextFloat()) / 20.0f) - ((V1 * random.nextFloat()) / 20.0f);
-            System.out.print("WANT TO SELECT ACCELERATION DUE TO GRAVITY (YES OR NO) ");
+
             float A2;
-            while (true) {
-                String B1 = scanner.next();
-                if (B1.equals("NO")) {
-                    A2 = chooseRandomAcceleration();
-                    break;
-                }
-                if (!B1.equals("YES")) {
-                    System.out.print("YES OR NO ");
-                    continue;
-                }
+            if(askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")){
                 System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
                 A2 = scanner.nextFloat();
-                break;
             }
+            else {
+                A2 = chooseRandomAcceleration();
+            }
+
             A = A2 + ((A2 * random.nextFloat()) / 20.0f) - ((A2 * random.nextFloat()) / 20.0f);
             System.out.println();
             System.out.printf("    ALTITUDE         = %d FT\n", D1);
