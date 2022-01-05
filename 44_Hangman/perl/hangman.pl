@@ -17,7 +17,7 @@ my(@WORDS) = qw(
     MAGISTRATE ERRONEOUSLY LOUDSPEAKER PHYTOTOXIC
     MATRIMONIAL PARASYMPATHOMIMETIC THIGMOTROPISM
 );
-my(@PIC,@L,$board,@guessedLetters,$guesses,$hangCount);
+my(@PIC,$board,@guessedLetters,$guesses,$hangCount);
 my($guess,%GUESSED);
 
 # Subroutines defined here.
