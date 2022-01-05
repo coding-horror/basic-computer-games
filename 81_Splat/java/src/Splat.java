@@ -46,8 +46,8 @@ public class Splat {
         }
         System.out.println("CHUTE OPEN");
         int worseJumpCount = countWorseHistoricalJumps(jump);
-        pastSuccessfulJumpDistances.add(jump.getDistance());
         int successfulJumpCt = pastSuccessfulJumpDistances.size();
+        pastSuccessfulJumpDistances.add(jump.getDistance());
 
         if (pastSuccessfulJumpDistances.size() <= 2) {
             List<String> ordinals = Arrays.asList("1ST", "2ND", "3RD");
@@ -207,6 +207,40 @@ public class Splat {
         return planet.getAcceleration();
     }
 
+    enum Planet {
+        MERCURY("FINE. YOU'RE ON", 12.2f),
+        VENUS("ALL RIGHT. YOU'RE ON", 28.3f),
+        EARTH("THEN YOU'RE ON", 32.16f),
+        MOON("FINE. YOU'RE ON THE", 5.15f),
+        MARS("ALL RIGHT. YOU'RE ON", 12.5f),
+        JUPITER("THEN YOU'RE ON", 85.2f),
+        SATURN("FINE. YOU'RE ON", 37.6f),
+        URANUS("ALL RIGHT. YOU'RE ON", 33.8f),
+        NEPTUNE("THEN YOU'RE ON", 39.6f),
+        SUN("FINE. YOU'RE ON THE", 896.0f);
+
+        private static final Random random = new Random();
+        private final String message;
+        private final float acceleration;
+
+        Planet(String message, float acceleration) {
+            this.message = message;
+            this.acceleration = acceleration;
+        }
+
+        static Planet pickRandom(){
+            return values()[random.nextInt(Planet.values().length)];
+        }
+
+        String getMessage() {
+            return message;
+        }
+
+        float getAcceleration() {
+            return acceleration;
+        }
+    }
+
     // Mutable
     static class JumpResult {
         private boolean reachedTerminalVelocity = false;
@@ -216,23 +250,23 @@ public class Splat {
             this.distance = distance;
         }
 
-        public boolean isSplat() {
+        boolean isSplat() {
             return distance <= 0;
         }
 
-        public boolean hasReachedTerminalVelocity() {
+        boolean hasReachedTerminalVelocity() {
             return reachedTerminalVelocity;
         }
 
-        public float getDistance() {
+        float getDistance() {
             return distance;
         }
 
-        public void setDistance(float distance){
+        void setDistance(float distance){
             this.distance = distance;
         }
 
-        public void setReachedTerminalVelocity(){
+        void setReachedTerminalVelocity(){
             reachedTerminalVelocity = true;
         }
     }
@@ -265,62 +299,28 @@ public class Splat {
             return value + ((value * random.nextFloat()) / 20.0f) - ((value * random.nextFloat()) / 20.0f);
         }
 
-        public float getOriginalTerminalVelocity() {
+        float getOriginalTerminalVelocity() {
             return originalTerminalVelocity;
         }
 
-        public float getOriginalAcceleration() {
+        float getOriginalAcceleration() {
             return originalAcceleration;
         }
 
-        public float getTerminalVelocity() {
+        float getTerminalVelocity() {
             return terminalVelocity;
         }
 
-        public float getAcceleration() {
+        float getAcceleration() {
             return acceleration;
         }
 
-        public int getAltitude() {
+        int getAltitude() {
             return altitude;
         }
 
-        public float getTimeOfTerminalAccelerationReached(){
+        float getTimeOfTerminalAccelerationReached(){
             return terminalVelocity / acceleration;
-        }
-    }
-
-    enum Planet {
-        MERCURY("FINE. YOU'RE ON", 12.2f),
-        VENUS("ALL RIGHT. YOU'RE ON", 28.3f),
-        EARTH("THEN YOU'RE ON", 32.16f),
-        MOON("FINE. YOU'RE ON THE", 5.15f),
-        MARS("ALL RIGHT. YOU'RE ON", 12.5f),
-        JUPITER("THEN YOU'RE ON", 85.2f),
-        SATURN("FINE. YOU'RE ON", 37.6f),
-        URANUS("ALL RIGHT. YOU'RE ON", 33.8f),
-        NEPTUNE("THEN YOU'RE ON", 39.6f),
-        SUN("FINE. YOU'RE ON THE", 896.0f);
-
-        static final Random random = new Random();
-        private final String message;
-        private final float acceleration;
-
-        Planet(String message, float acceleration) {
-            this.message = message;
-            this.acceleration = acceleration;
-        }
-
-        static Planet pickRandom(){
-            return values()[random.nextInt(Planet.values().length)];
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public float getAcceleration() {
-            return acceleration;
         }
     }
 }
