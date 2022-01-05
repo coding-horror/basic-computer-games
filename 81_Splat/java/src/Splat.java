@@ -1,14 +1,9 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Splat {
     private static final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
-    private final float[] Arr = new float[42];
-    private int K = 0;
-    private int K1 = 0;
+    private final List<Float> pastSuccessfulJumpDistances = new ArrayList<>();
 
     public static void main(String[] args) {
         new Splat().run();
@@ -17,7 +12,6 @@ public class Splat {
     public void run() {
         showIntroduction();
 
-        Arrays.fill(Arr, 0.0f);
         while (true) {
 
             InitialJumpConditions initial = buildInitialConditions();
@@ -45,59 +39,66 @@ public class Splat {
     }
 
     private void showJumpResults(InitialJumpConditions initial, JumpResult jump) {
+        if (jump.isSplat()) {
+            showSplatMessage(initial, jump);
+            showCleverSplatMessage();
+            return;
+        }
+        System.out.println("CHUTE OPEN");
+        int worseJumpCount = countWorseHistoricalJumps(jump);
+        pastSuccessfulJumpDistances.add(jump.getDistance());
+        int successfulJumpCt = pastSuccessfulJumpDistances.size();
+
+        if (pastSuccessfulJumpDistances.size() <= 2) {
+            List<String> ordinals = Arrays.asList("1ST", "2ND", "3RD");
+            System.out.printf("AMAZING!!! NOT BAD FOR YOUR %s SUCCESSFUL JUMP!!!\n", ordinals.get(successfulJumpCt));
+            return;
+        }
+
+        int betterThanCount = successfulJumpCt - worseJumpCount;
+        if (betterThanCount <= 0.1 * successfulJumpCt) {
+            System.out.printf("WOW!  THAT'S SOME JUMPING.  OF THE %d SUCCESSFUL JUMPS\n", successfulJumpCt);
+            System.out.printf("BEFORE YOURS, ONLY %d OPENED THEIR CHUTES LOWER THAN\n", betterThanCount);
+            System.out.println("YOU DID.");
+        } else if (betterThanCount <= 0.25 * successfulJumpCt) {
+            System.out.printf("PRETTY GOOD!  %d SUCCESSFUL JUMPS PRECEDED YOURS AND ONLY\n", successfulJumpCt);
+            System.out.printf("%d OF THEM GOT LOWER THAN YOU DID BEFORE THEIR CHUTES\n", betterThanCount);
+            System.out.println("OPENED.");
+        } else if (betterThanCount <= 0.5 * successfulJumpCt) {
+            System.out.printf("NOT BAD.  THERE HAVE BEEN %d SUCCESSFUL JUMPS BEFORE YOURS.\n", successfulJumpCt);
+            System.out.printf("YOU WERE BEATEN OUT BY %d OF THEM.\n", betterThanCount);
+        } else if (betterThanCount <= 0.75 * successfulJumpCt) {
+            System.out.printf("CONSERVATIVE, AREN'T YOU?  YOU RANKED ONLY %d IN THE\n", betterThanCount);
+            System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.\n", successfulJumpCt);
+        } else if (betterThanCount <= -0.9 * successfulJumpCt) {
+            System.out.println("HUMPH!  DON'T YOU HAVE ANY SPORTING BLOOD?  THERE WERE");
+            System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS AND YOU CAME IN %d JUMPS\n", successfulJumpCt, worseJumpCount);
+            System.out.println("BETTER THAN THE WORST.  SHAPE UP!!!\n");
+        } else {
+            System.out.printf("HEY!  YOU PULLED THE RIP CORD MUCH TOO SOON.  %d SUCCESSFUL\n", successfulJumpCt);
+            System.out.printf("JUMPS BEFORE YOURS AND YOU CAME IN NUMBER %d!  GET WITH IT!\n", betterThanCount);
+        }
+    }
+
+    private void showSplatMessage(InitialJumpConditions initial, JumpResult jump) {
+        double timeOfSplat = computeTimeOfSplat(initial, jump);
+        System.out.printf("%10.2f  SPLAT\n", timeOfSplat);
+    }
+
+    private double computeTimeOfSplat(InitialJumpConditions initial, JumpResult jump) {
         final float V = initial.getTerminalVelocity();
         final float A = initial.getAcceleration();
-
-        if (jump.isSplat()) {
-            if (jump.hasReachedTerminalVelocity()) {
-                System.out.printf("%.2f SPLAT\n", (V / A) + ((initial.getAltitude() - (V * V / (2 * A))) / V));
-            } else {
-                System.out.printf("%.2f SPLAT\n", Math.sqrt(2 * initial.getAltitude() / A));
-            }
-            showRandomSplatMessage();
-        } else {
-            System.out.println("CHUTE OPEN");
-            int J = 0;
-            for (J = 0; J < 42; J++) {
-                if (Arr[J] == 0) {
-                    Arr[J] = jump.getDistance();
-                    break;
-                }
-                K = K + 1;
-                if (jump.getDistance() > Arr[J]) {
-                    continue;
-                }
-                K1 = K1 + 1;
-            }
-
-            if (J > 2) {
-                if (K - K1 <= 0.1 * K) {
-                    System.out.printf("WOW!  THAT'S SOME JUMPING.  OF THE %d SUCCESSFUL JUMPS\n", K);
-                    System.out.printf("BEFORE YOURS, ONLY %d OPENED THEIR CHUTES LOWER THAN\n", K - K1);
-                    System.out.println("YOU DID.");
-                } else if (K - K1 <= 0.25 * K) {
-                    System.out.printf("PRETTY GOOD!  %d SUCCESSFUL JUMPS PRECEDED YOURS AND ONLY\n", K);
-                    System.out.printf("%d OF THEM GOT LOWER THAN YOU DID BEFORE THEIR CHUTES\n", K - K1);
-                    System.out.println("OPENED.");
-                } else if (K - K1 <= 0.5 * K) {
-                    System.out.printf("NOT BAD.  THERE HAVE BEEN %d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
-                    System.out.printf("YOU WERE BEATEN OUT BY %d OF THEM.\n", K - K1);
-                } else if (K - K1 <= 0.75 * K) {
-                    System.out.printf("CONSERVATIVE, AREN'T YOU?  YOU RANKED ONLY %d IN THE\n", K - K1);
-                    System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS.\n", K);
-                } else if (K - K1 <= -0.9 * K) {
-                    System.out.println("HUMPH!  DON'T YOU HAVE ANY SPORTING BLOOD?  THERE WERE");
-                    System.out.printf("%d SUCCESSFUL JUMPS BEFORE YOURS AND YOU CAME IN %d JUMPS\n", K, K1);
-                    System.out.println("BETTER THAN THE WORST.  SHAPE UP!!!\n");
-                } else {
-                    System.out.printf("HEY!  YOU PULLED THE RIP CORD MUCH TOO SOON.  %f SUCCESSFUL\n", K);
-                    System.out.printf("JUMPS BEFORE YOURS AND YOU CAME IN NUMBER %d!  GET WITH IT!\n", K - K1);
-                }
-            } else {
-                String[] nums = new String[]{ "1ST", "2ND", "3RD"};
-                System.out.printf("AMAZING!!! NOT BAD FOR YOUR %s SUCCESSFUL JUMP!!!\n", nums[J]);
-            }
+        if (jump.hasReachedTerminalVelocity()) {
+            return (V / A) + ((initial.getAltitude() - (V * V / (2 * A))) / V);
         }
+        return Math.sqrt(2 * initial.getAltitude() / A);
+    }
+
+    // Returns the number of jumps that this jump was better than
+    private int countWorseHistoricalJumps(JumpResult jump) {
+        return (int) pastSuccessfulJumpDistances.stream()
+                .filter(distance -> jump.getDistance() < distance)
+                .count();
     }
 
     private JumpResult executeJump(InitialJumpConditions initial, float chuteOpenTime) {
@@ -131,13 +132,10 @@ public class Splat {
         if (askYesNo("DO YOU WANT TO PLAY AGAIN ")) {
             return true;
         }
-        if (askYesNo("PLEASE")) {
-            return true;
-        }
-        return false;
+        return askYesNo("PLEASE");
     }
 
-    private void showRandomSplatMessage() {
+    private void showCleverSplatMessage() {
         List<String> messages = Arrays.asList(
             "REQUIESCAT IN PACE.",
             "MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.",
@@ -205,7 +203,7 @@ public class Splat {
 
     private float chooseRandomAcceleration() {
         Planet planet = Planet.pickRandom();
-        System.out.printf("%s. ACCELERATION=%.2f FT/SEC/SEC.\n", planet.getMessage(), planet.getAcceleration());
+        System.out.printf("%s %s. ACCELERATION=%.2f FT/SEC/SEC.\n", planet.getMessage(), planet.name(), planet.getAcceleration());
         return planet.getAcceleration();
     }
 
@@ -293,16 +291,16 @@ public class Splat {
     }
 
     enum Planet {
-        MERCURY("FINE. YOU'RE ON MERCURY", 12.2f),
-        VENUS("ALL RIGHT. YOU'RE ON VENUS", 28.3f),
-        EARTH("THEN YOU'RE ON EARTH", 32.16f),
-        MOON("FINE. YOU'RE ON THE MOON", 5.15f),
-        MARS("ALL RIGHT. YOU'RE ON MARS", 12.5f),
-        JUPITER("THEN YOU'RE ON JUPITER", 85.2f),
-        SATURN("FINE. YOU'RE ON SATURN", 37.6f),
-        URANUS("ALL RIGHT. YOU'RE ON URANUS", 33.8f),
-        NEPTUNE("THEN YOU'RE ON NEPTUNE", 39.6f),
-        SUN("FINE. YOU'RE ON THE SUN", 896.0f);
+        MERCURY("FINE. YOU'RE ON", 12.2f),
+        VENUS("ALL RIGHT. YOU'RE ON", 28.3f),
+        EARTH("THEN YOU'RE ON", 32.16f),
+        MOON("FINE. YOU'RE ON THE", 5.15f),
+        MARS("ALL RIGHT. YOU'RE ON", 12.5f),
+        JUPITER("THEN YOU'RE ON", 85.2f),
+        SATURN("FINE. YOU'RE ON", 37.6f),
+        URANUS("ALL RIGHT. YOU'RE ON", 33.8f),
+        NEPTUNE("THEN YOU'RE ON", 39.6f),
+        SUN("FINE. YOU'RE ON THE", 896.0f);
 
         static final Random random = new Random();
         private final String message;
