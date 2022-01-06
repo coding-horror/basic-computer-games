@@ -9,9 +9,9 @@ public class HighIQ {
     private PrintStream out;
     private Scanner scanner;
 
-    public HighIQ() {
+    public HighIQ(Scanner sccanner) {
         out = System.out;
-        scanner = new Scanner(System.in);
+        this.scanner = scanner;
         board = new HashMap<>();
 
         //Set of all locations to put initial pegs on
@@ -25,6 +25,7 @@ public class HighIQ {
 
         board.put(41, false);
     }
+   
 
     public boolean move() {
         System.out.println("MOVE WHICH PIECE");
@@ -63,7 +64,6 @@ public class HighIQ {
 
     public void play() {
         do {
-            do {
                 while(!move()) {
                     System.out.println("ILLEGAL MOVE, TRY AGAIN...");
                 }
@@ -83,14 +83,12 @@ public class HighIQ {
                 out.println("SAVE THIS PAPER AS A RECORD OF YOUR ACCOMPLISHMENT!");
             }
             
-        } while(playAgain());
-        out.println("SO LONG FOR NOW.");
     }
 
-    private boolean playAgain() {
-        out.println("PLAY AGAIN (YES OR NO)");
-        return scanner.nextLine().toLowerCase().equals("yes");
-    }
+//     private boolean playAgain() {
+//         out.println("PLAY AGAIN (YES OR NO)");
+//         return scanner.nextLine().toLowerCase().equals("yes");
+//     }
     
     
     public boolean isGameFinished() {
