@@ -3,11 +3,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Game of HighIQ
+ * <p>
+ * Based on the Basic Game of HighIQ Here:
+ * https://github.com/coding-horror/basic-computer-games/blob/main/48_High_IQ/highiq.bas
+ *
+ * No additional functionality has been added
+ */
 public class HighIQ {
 
-    private Map<Integer, Boolean> board;
-    private PrintStream out;
-    private Scanner scanner;
+    //Game board, as a map of position numbers to their values
+    private final Map<Integer, Boolean> board;
+
+    //Output stream
+    private final PrintStream out;
+
+    //Input scanner to use
+    private final Scanner scanner;
+
 
     public HighIQ(Scanner scanner) {
         out = System.out;
@@ -26,13 +40,14 @@ public class HighIQ {
         board.put(41, false);
     }
 
+    /**
+     * Plays the actual game, from start to finish.
+     */
     public void play() {
-
-
         do {
             printBoard();
             while (!move()) {
-                System.out.println("ILLEGAL MOVE, TRY AGAIN...");
+                out.println("ILLEGAL MOVE, TRY AGAIN...");
             }
         } while (!isGameFinished());
 
@@ -51,8 +66,12 @@ public class HighIQ {
         }
     }
 
+    /**
+     * Makes an individual move
+     * @return True if the move was valid, false if the user made an error and the move is invalid
+     */
     public boolean move() {
-        System.out.println("MOVE WHICH PIECE");
+        out.println("MOVE WHICH PIECE");
         int from = scanner.nextInt();
 
         //using the getOrDefault, which will make the statement false if it is an invalid position
@@ -60,7 +79,7 @@ public class HighIQ {
             return false;
         }
 
-        System.out.println("TO WHERE");
+        out.println("TO WHERE");
         int to = scanner.nextInt();
 
         if (board.getOrDefault(to, true)) {
@@ -83,14 +102,18 @@ public class HighIQ {
             return false;
         }
 
+        //Actually move
+        board.put(from,false);
+        board.put(to,true);
+        board.put((from + to) / 2, false);
+
         return true;
     }
 
-//     private boolean playAgain() {
-//         out.println("PLAY AGAIN (YES OR NO)");
-//         return scanner.nextLine().toLowerCase().equals("yes");
-//     }
-
+    /**
+     * Checks if the game is finished
+     * @return True if there are no more moves, False otherwise
+     */
     public boolean isGameFinished() {
         for (Integer key : board.keySet()) {
             if (board.get(key)) {
