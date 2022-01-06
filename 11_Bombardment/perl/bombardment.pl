@@ -112,8 +112,8 @@ sub populate_computer_bases {
 }
 
 sub print_intro {
-    print "" * 33 + "BOMBARDMENT\n";
-    print "" * 15 + " CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n";
+    print " " x 33, "BOMBARDMENT\n";
+    print " " x 15, " CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n";
     print "\n\n";
     print "YOU ARE ON A BATTLEFIELD WITH 4 PLATOONS AND YOU\n";
     print "HAVE 25 OUTPOSTS AVAILABLE WHERE THEY MAY BE PLACED.\n";
@@ -122,8 +122,8 @@ sub print_intro {
     print "THE OBJECT OF THE GAME IS TO FIRE MISSLES AT THE\n";
     print "OUTPOSTS OF THE COMPUTER.  IT WILL DO THE SAME TO YOU.\n";
     print "THE ONE WHO DESTROYS ALL FOUR OF THE ENEMY'S PLATOONS\n";
-    print "FIRST IS THE WINNER.\n";
-    print "GOOD LUCK... AND TELL US WHERE YOU WANT THE BODIES SENT!\n";
+    print "FIRST IS THE WINNER.\n\n";
+    print "GOOD LUCK... AND TELL US WHERE YOU WANT THE BODIES SENT!\n\n";
     print "TEAR OFF MATRIX AND USE IT TO CHECK OFF THE NUMBERS.\n";
     print "\n\n\n\n";
 }
