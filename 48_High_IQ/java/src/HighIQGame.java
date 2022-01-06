@@ -6,6 +6,6 @@ public class HighIQGame {
         do {
             new HighIQ(scanner).play();
             System.out.println("PLAY AGAIN (YES OR NO)");
-        } while(scanner.nextLine().toLowerCase().equals("yes"));
+        } while(scanner.nextLine().equalsIgnoreCase("yes"));
     }
 }
