@@ -51,8 +51,8 @@ def play_game():
     print_board(board)
 
 def main():
-    if input("Do you want instrunctions?\n").lower().startswith("y"):
-        print_instructions()
+#     if input("Do you want instrunctions?\n").lower().startswith("y"):
+    print_instructions()
     play_game()
 
 if __name__ == "__main__":
