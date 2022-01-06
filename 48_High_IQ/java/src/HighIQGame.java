@@ -13,6 +13,8 @@ public class HighIQGame {
     }
 
     public static void printInstructions() {
+        System.out.println("\t\t\t H-I-Q");
+        System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
         System.out.println("HERE IS THE BOARD:");
         System.out.println("          !    !    !");
         System.out.println("         13   14   15\n");
