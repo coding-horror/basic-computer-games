@@ -27,7 +27,10 @@ public class HighIQ {
     }
 
     public void play() {
+
+
         do {
+            printBoard();
             while (!move()) {
                 System.out.println("ILLEGAL MOVE, TRY AGAIN...");
             }
