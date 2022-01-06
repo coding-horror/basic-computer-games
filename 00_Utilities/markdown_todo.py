@@ -10,6 +10,8 @@ write_string = "# TODO list \n game | csharp | java | javascript | pascal | perl
 # Set the directory you want to start from
 rootDir = '..'
 
+strings_done = []
+
 checklist = ["game", "csharp", "java", "javascript",
              "pascal", "perl", "python", "ruby", "vbnet"]
 
@@ -25,7 +27,7 @@ for dirName, subdirList, fileList in os.walk(rootDir):
 
         if prev_game != split_dir[1]:
             # it's a new dir
-            write_string += " | ".join(checklist) + "\n"
+            strings_done.append(checklist)
             checklist = [split_dir[1], "csharp", "java", "javascript",
                          "pascal", "perl", "python", "ruby", "vbnet"]
             prev_game = split_dir[1]
@@ -37,6 +39,11 @@ for dirName, subdirList, fileList in os.walk(rootDir):
                 checklist[lang_pos[split_dir[2]]] = "✅"
             else:
                 checklist[lang_pos[split_dir[2]]] = "⬜️"
+
+
+sorted_strings = list(map(lambda l: " | ".join(l) + "\n",
+                          sorted(strings_done, key=lambda x: x[0])))
+write_string += ''.join(sorted_strings)
 
 
 with open("README.md", "w") as f:
