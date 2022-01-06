@@ -61,8 +61,8 @@ def is_game_finished(board):
     for pos in board.keys():
         if board[pos] == "X":
             for space in [1,9]:
-                nextToPeg = ((pos + space) in board) and board[pos + space]
-                hasMovableSpace = (not ((pos - space) in board and board[pos - space])) or (not ((pos + space * 2) in board and board[pos + space * 2]))
+                nextToPeg = ((pos + space) in board) and board[pos + space] == "X"
+                hasMovableSpace = (not ((pos - space) in board and board[pos - space] == "X")) or (not ((pos + space * 2) in board and board[pos + space * 2] == "X"))
                 if nextToPeg and hasMovableSpace:
                     return False
                 
