@@ -62,12 +62,38 @@ public class HighIQ {
     }
 
     public void play() {
-        while(true) {
-            while(!move()) {
-                System.out.println("ILLEGAL MOVE, TRY AGAIN...");
-
+        do {
+            do {
+                while(!move()) {
+                    System.out.println("ILLEGAL MOVE, TRY AGAIN...");
+                }
+            } while(!isGameFinished());
+            
+            int pegCount = 0;
+            for(Integer key : board.getKeySet()) {
+                if(board.getOrDefault(key,false)) {
+                    pegCount++;
+                }
             }
-        }
+        
+            out.println("YOU HAD " + pegCount + " PEGS REMAINING");
+        
+            if(pegCount == 1) {
+                out.println("BRAVO!  YOU MADE A PERFECT SCORE!");
+                out.println("SAVE THIS PAPER AS A RECORD OF YOUR ACCOMPLISHMENT!");
+            }
+            
+        } while(playAgain());
+    }
+
+    private boolean playAgain() {
+        out.println("PLAY AGAIN (YES OR NO)");
+        return scanner.nextLine().toLowerCase().equals("yes");
+    }
+    
+    
+    public boolean isGameFinished() {
+        return false;
     }
 
     public void printBoard() {
