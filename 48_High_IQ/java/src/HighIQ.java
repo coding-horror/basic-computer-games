@@ -71,7 +71,12 @@ public class HighIQ {
     }
 
     public void printBoard() {
-        
+        for(int i = 0; i < 7; i++) {
+            for(int j = 11; j < 18; j++) {
+                out.print(getChar(j + 9 * i));
+            }
+            out.println();
+        }
     }
     
     private char getChar(int position) {
