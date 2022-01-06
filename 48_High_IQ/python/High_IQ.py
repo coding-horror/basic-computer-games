@@ -56,6 +56,18 @@ def main():
     print("\t" * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print_instructions()
     play_game()
+    
+def is_game_finished(board):
+    for pos in board.keys():
+        if board[pos] == "X":
+            for space in [1,9]:
+                nextToPeg = ((pos + space) in board) and board[pos + space]
+                hasMovableSpace = (not ((pos - space) in board and board[pos - space])) or (not ((pos + space * 2) in board and board[pos + space * 2]))
+                if nextToPeg and hasMovableSpace:
+                    return False
+                
+    return True
+                
 
 if __name__ == "__main__":
     main()
