@@ -96,18 +96,13 @@ public class HighIQ {
         for(Integer key : board.getKeySet()) {
             if(board.get(key)) {
                 //Spacing is either 1 or 9
-                for(int space = 1; space <= 9; space += 8) {
-                    //Next val is the next spot, prev and next after are the two spots where the peg would go if a move was possible
-                    Boolean nextVal = board.get(key + space);
-                    Boolean prevAfter = board.get(key - space);
-                    Boolean nextAfter = board.get(key + space * 2);
-                    
-                    if(nextVal != null && nextVal) {
-                        if((prevAfter != null && !prevAfter) || (nextAfter != null && !nextAfter)) {
-                            return false;
-                        }
+                //Looking to the right and down from every point, checking for both directions of movement
+                for(int space : new int[] {1,9}) {
+                    Boolean nextToPeg = board.getOrDefault(key + space,false);
+                    Boolean hasMovableSpace = !board.getOrDefault(key - space,true) || !board.getOrDefault(key + space * 2, true);
+                    if(nextToPeg && hasMovableSpace) {
+                        return false;
                     }
-                    
                 }
             }
                 
