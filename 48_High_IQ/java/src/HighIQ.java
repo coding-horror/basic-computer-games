@@ -84,6 +84,7 @@ public class HighIQ {
             }
             
         } while(playAgain());
+        out.println("SO LONG FOR NOW.");
     }
 
     private boolean playAgain() {
