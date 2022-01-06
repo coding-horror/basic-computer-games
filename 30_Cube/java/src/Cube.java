@@ -178,6 +178,12 @@ public class Cube {
         }
     }
 
+    /**
+     * Checks if a move is valid
+     * @param from The point that the player is at
+     * @param to The point that the player wishes to move to
+     * @return True if the player is only moving, at most, 1 location in any direction, False if the move is invalid
+     */
     private boolean isMoveValid(Location from, Location to) {
         return Math.abs(from.x - to.x) + Math.abs(from.y - to.y) + Math.abs(from.z - to.z) <= 1;
     }
