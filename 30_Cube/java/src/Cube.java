@@ -4,16 +4,33 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * Game of Cube
+ * <p>
+ * Based on game of Cube at:
+ * https://github.com/coding-horror/basic-computer-games/blob/main/30_Cube/cube.bas
+ *
+ *
+ */
 public class Cube {
 
+    //Current player location
     private Location playerLocation;
+
+    //Current list of mines
     private Set<Location> mines;
+
+    //System input / output objects
     private PrintStream out;
     private Scanner scanner;
 
+    //Player's current money
     private int money;
 
-
+    /**
+     * Entry point, creates a new Cube object and calls the play method
+     * @param args Java execution arguments, not used in application
+     */
     public static void main(String[] args) {
         new Cube().play();
     }
@@ -22,9 +39,12 @@ public class Cube {
         out = System.out;
         scanner = new Scanner(System.in);
         money = 500;
-        mines = new HashSet<>();
+        mines = new HashSet<>(5);
     }
 
+    /**
+     * Clears mines and places 5 new mines on the board
+     */
     private void placeMines() {
         mines.clear();
         Random random = new Random();
@@ -36,6 +56,9 @@ public class Cube {
         }
     }
 
+    /**
+     * Runs the entire game until the player runs out of money or chooses to stop
+     */
     public void play() {
         out.println("DO YOU WANT TO SEE INSTRUCTIONS? (YES--1,NO--0)");
         if(readParsedBoolean()) {
@@ -99,6 +122,11 @@ public class Cube {
         out.println("\nGOODBYE.");
     }
 
+    /**
+     * Queries the user whether they want to play another round
+     * @return True if the player decides to play another round,
+     * False if the player would not like to play again
+     */
     private boolean doAnotherRound() {
         if(money > 0) {
             out.println("DO YOU WANT TO TRY AGAIN?");
@@ -108,6 +136,9 @@ public class Cube {
         }
     }
 
+    /**
+     * Prints the instructions to the game, copied from the original code.
+     */
     public void printInstructions() {
         out.println("THIS IS A GAME IN WHICH YOU WILL BE PLAYING AGAINST THE");
         out.println("RANDOM DECISION OF THE COMPUTER. THE FIELD OF PLAY IS A");
@@ -133,6 +164,11 @@ public class Cube {
         out.println("GOOD LUCK!");
     }
 
+    /**
+     * Waits for the user to input a boolean value. This could either be (true,false), (1,0), (y,n), (yes,no), etc.
+     * By default, it will return false
+     * @return Parsed boolean value of the user input
+     */
     private boolean readParsedBoolean() {
         String in = scanner.nextLine();
         try {
@@ -155,6 +191,9 @@ public class Cube {
             this.z = z;
         }
 
+        /*
+        For use in HashSet and checking if two Locations are the same
+         */
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -167,6 +206,9 @@ public class Cube {
             return z == location.z;
         }
 
+        /*
+        For use in the HashSet to accordingly index the set
+         */
         @Override
         public int hashCode() {
             int result = x;
