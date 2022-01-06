@@ -71,6 +71,17 @@ public class HighIQ {
     }
 
     public void printBoard() {
-
+        
+    }
+    
+    private char getChar(int position) {
+        Boolean value = board.get(position);
+        if(value == null) {
+            return ' ';
+        } else if(value) {
+            return '!';
+        } else {
+            return 'O';
+        }
     }
 }
