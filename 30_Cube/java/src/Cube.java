@@ -49,19 +49,24 @@ public class Cube {
             if(readParsedBoolean()) {
                 out.println("HOW MUCH?");
                 do {
-                    wager = scanner.nextInt();
+                    wager = Integer.parseInt(scanner.nextLine());
                     if(wager > money) {
                         out.println("TRIED TO FOOL ME; BET AGAIN");
                     }
                 } while(wager > money);
             }
 
-
+            playerLocation = new Location(1,1,1);
             while(playerLocation.x + playerLocation.y + playerLocation.z != 9) {
                 out.println("\nNEXT MOVE");
                 String input = scanner.nextLine();
 
                 String[] stringValues = input.split(",");
+
+                if(stringValues.length < 3) {
+                    out.println("ILLEGAL MOVE, YOU LOSE.");
+                    return;
+                }
 
                 int x = Integer.parseInt(stringValues[0]);
                 int y = Integer.parseInt(stringValues[1]);
@@ -69,7 +74,7 @@ public class Cube {
 
                 Location location = new Location(x,y,z);
 
-                if(x < 1 || x > 3 || y < 1 || y > 3 || z < 1 || z > 3 || isMoveValid(playerLocation,location)) {
+                if(x < 1 || x > 3 || y < 1 || y > 3 || z < 1 || z > 3 || !isMoveValid(playerLocation,location)) {
                     out.println("ILLEGAL MOVE, YOU LOSE.");
                     return;
                 }
@@ -80,9 +85,18 @@ public class Cube {
                     out.println("******BANG******");
                     out.println("YOU LOSE!\n\n");
                     money -= wager;
+                    break;
                 }
             }
-        } while(money > 0 && !doAnotherRound());
+
+            if(wager > 0) {
+                out.printf("YOU NOW HAVE %d DOLLARS\n",money);
+            }
+
+        } while(money > 0 && doAnotherRound());
+
+        out.println("TOUGH LUCK!");
+        out.println("\nGOODBYE.");
     }
 
     private boolean doAnotherRound() {
@@ -121,7 +135,11 @@ public class Cube {
 
     private boolean readParsedBoolean() {
         String in = scanner.nextLine();
-        return in.toLowerCase().charAt(0) == 'y' || Boolean.parseBoolean(in);
+        try {
+            return in.toLowerCase().charAt(0) == 'y' || Boolean.parseBoolean(in) || Integer.parseInt(in) == 1;
+        } catch(NumberFormatException exception) {
+            return false;
+        }
     }
 
     private boolean isMoveValid(Location from, Location to) {
