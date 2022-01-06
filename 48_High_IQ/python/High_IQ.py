@@ -37,13 +37,13 @@ def print_instructions():
     print("NUMBERS.  OK, LET'S BEGIN.\n")
 
 def print_board(board):
-    print(" " * 3 + board[13] + board[14] + board[15] + " " * 3)
-    print(" " * 3 + board[22] + board[23] + board[24] + " " * 3)
+    print(" " * 3 + board[13] + board[14] + board[15])
+    print(" " * 3 + board[22] + board[23] + board[24])
     print(board[29] + board[30] + board[31] + board[32] + board[33] + board[34] + board[35])
     print(board[38] + board[39] + board[40] + board[41] + board[42] + board[43] + board[44])
     print(board[47] + board[48] + board[49] + board[50] + board[51] + board[52] + board[53])
-    print(" " * 3 + board[58] + board[59] + board[60] + " " * 3)
-    print(" " * 3 + board[67] + board[68] + board[69] + " " * 3)
+    print(" " * 3 + board[58] + board[59] + board[60])
+    print(" " * 3 + board[67] + board[68] + board[69])
     
 def play_game():
     print("Lets play a game")
