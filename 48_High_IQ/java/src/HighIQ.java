@@ -9,7 +9,7 @@ public class HighIQ {
     private PrintStream out;
     private Scanner scanner;
 
-    public HighIQ(Scanner sccanner) {
+    public HighIQ(Scanner scanner) {
         out = System.out;
         this.scanner = scanner;
         board = new HashMap<>();
@@ -70,7 +70,7 @@ public class HighIQ {
             } while(!isGameFinished());
             
             int pegCount = 0;
-            for(Integer key : board.getKeySet()) {
+            for(Integer key : board.keySet()) {
                 if(board.getOrDefault(key,false)) {
                     pegCount++;
                 }
@@ -92,7 +92,7 @@ public class HighIQ {
     
     
     public boolean isGameFinished() {
-        for(Integer key : board.getKeySet()) {
+        for(Integer key : board.keySet()) {
             if(board.get(key)) {
                 //Spacing is either 1 or 9
                 //Looking to the right and down from every point, checking for both directions of movement
