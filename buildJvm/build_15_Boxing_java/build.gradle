@@ -2,11 +2,6 @@ plugins {
     id 'application'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_16
-    targetCompatibility = JavaVersion.VERSION_16
-}
-
 sourceSets {
     main {
         java {
