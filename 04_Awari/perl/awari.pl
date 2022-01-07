@@ -190,7 +190,8 @@ sub computer_move ($board, $failures, $moves) {
          # be obtained by setting the ORIGINAL environment variable to a
          # "true" value (in Perl terms). Otherwise it is calculated
          # according to the real rules for the game.
-         my $p_score = $ENV{ORIGINAL} ? $landing > 13 : int(($landing - 5) / 14);
+         my $p_score = $ENV{ORIGINAL} ? $landing > 13
+            : ($landing + 1) % 14 > 6;
 
          # whatever, the landing position must be within the bounds
          $landing %= 14;
