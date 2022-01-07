@@ -67,6 +67,7 @@ sub main {
 	print "IT'S A DRAW. THANK YOU.\n";
 }
 
+# This will check to see if anyone has won by adding up the various 3-in-a-row lines.
 sub check_for_winners {
 	my %tally;
 	foreach my $key (keys %winning_combos) {
@@ -85,6 +86,8 @@ sub check_for_winners {
 		}
 	}
 }
+
+#On the computer's turn it will first check to see if it should block the player.  If it finds it isn't going to win or need to block a player, the it will choose a spot to place it's X or O.
 
 sub computer_choice {
 	my $move;
