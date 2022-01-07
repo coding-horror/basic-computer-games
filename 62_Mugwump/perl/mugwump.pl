@@ -33,7 +33,7 @@ number between 0 and 9, inclusive.  First number
 is distance to right of homebase and second number
 is distance above homebase.
 
-You get 10 tries.  After each try, i will tell
+You get 10 tries.  After each try, I will tell
 you how far you are from each Mugwump.
 
 HERE
