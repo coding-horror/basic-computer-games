@@ -89,7 +89,7 @@ NOW THEN, ';
    our $double_fire = 0;
    my $response = choose(
       'DOES THE ENEMY HAVE GUNS(1), MISSILES(2), OR BOTH(3)', 3);
-   if ($response < 2) {
+   if ($response != 2) {
       print q{WHAT'S THE PERCENT HIT RATE OF ENEMY GUNNERS (10 TO 50)? };
       chomp (our $hit_rate = <STDIN>);
       if ($hit_rate < 10) {
@@ -98,7 +98,7 @@ NOW THEN, ';
       }
       say '';
    }
-   else {
+   if ($response > 1) {
       $double_fire = 35;
    }
    return endgame();
