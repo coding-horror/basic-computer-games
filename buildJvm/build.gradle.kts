@@ -19,63 +19,29 @@ java {
     }
 }
 
-task("copyScripts", Copy::class) {
+task("distributeBin", Copy::class) {
     from(filesType("bin"))
-    into("/tmp/bin7/bin")
+    into("$buildDir/distrib/bin")
     duplicatesStrategy = DuplicatesStrategy.WARN
-    mustRunAfter(":installDist")
+    dependsOn(":build_94_War_kotlin:installDist")
 }
 
-task("copyLibs", Copy::class) {
+task("distributeLib", Copy::class) {
     from(filesType("lib"))
-    into("/tmp/bin7/lib")
+    into("$buildDir/distrib/lib")
     duplicatesStrategy = DuplicatesStrategy.WARN
-    mustRunAfter(":installDist")
+    dependsOn("installDist")
 }
 
-task ("copyAll") {
+task("copyAll") {
     dependsOn(
-        ":assemble",
-        ":installDist",
-        ":copyScripts",
-        ":copyLibs"
+        ":distributeBin",
+        ":distributeLib"
     )
 }
 
-//
-//java {
-//    toolchain {
-//        languageVersion = JavaLanguageVersion.of(17)
-//    }
-//}
-//
-//dependencies {
-//    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
-//}
-//
-//task buildAll {
-//    doLast {
-//        def bins = fileTree(dir: "$buildDir/..").getFiles()
-//        println bins
-//    }
-//}
-//tasks.register('fullBuild', Copy) {
-////    from fileTree(dir: "$buildDir/../").getFiles()
-////    into file("/tmp/bin6")
-////    duplicatesStrategy = DuplicatesStrategy.WARN
-//    doLast {
-//        println (fileTree(dir: "$buildDir/../").getFiles())
-//    }
-////    def i=0
-////    eachFile {
-////        details ->
-////            details.setPath( "bbb${i}")
-////            i++
-////            duplicatesStrategy = DuplicatesStrategy.WARN
-////    }
-//}
-
-fun Build_gradle.filesType(type: String) = fileTree("$buildDir/..").files.filter {
-    it.path.contains("build/install/build_.*/$type".toRegex())
-            && it.isFile
-}
+fun filesType(type: String) =
+    fileTree("$buildDir/..").files.filter {
+        it.path.contains("build/install/build_.*/$type".toRegex())
+                && it.isFile
+    }
