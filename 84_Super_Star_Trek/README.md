@@ -101,4 +101,4 @@ Instructions in this directory at
 instructions.txt
 
 #### External Links
- - Super Star Trek in C++ : https://www.codeproject.com/Articles/28399/The-Object-Oriented-Text-Star-Trek-Game-in-C
+ - C++: https://www.codeproject.com/Articles/28399/The-Object-Oriented-Text-Star-Trek-Game-in-C

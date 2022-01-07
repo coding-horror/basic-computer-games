@@ -37,14 +37,14 @@ fun main() {
 // an answer or a blank string
 fun ask(question: String): String {
     print("$question? ")
-    return readLine()?.uppercase() ?: ""
+    return readln().uppercase() ?: ""
 }
 
 // Special case for a "yes or no" question, returns true of yes
 fun askYesOrNo(question: String): Boolean {
     return generateSequence {
         print("$question? ")
-        readLine()
+        readln()
     }.firstNotNullOf { yesOrNo(it) }
 }
 
