@@ -90,18 +90,22 @@ async function main() {
             print('\nWHAT IS YOUR BET? ');
             bet = parseInt(await input(), 10);
             let minimumRequiredBet = 0;
-            if (bet > minimumRequiredBet) {
+            if (bet >= minimumRequiredBet) {
                 if (bet > availableDollars) {
                     print('SORRY, MY FRIEND, BUT YOU BET TOO MUCH.');
                     print(`YOU HAVE ONLY ${availableDollars} DOLLARS TO BET.`);
                 } else {
                     validBet = true;
                 }
-            } else {
-                // Does not meet minimum required bet
-                print('CHICKEN!!');
-                print('');
             }
+        }
+        if (bet == 0) 
+        {
+            // User chose not to bet.
+            print('CHICKEN!!');
+            print('');
+            // Don't draw a third card, draw a new set of 2 cards.
+            continue;
         }
 
         print('\n\nHERE IS THE CARD WE DREW: ');
@@ -127,7 +131,7 @@ async function main() {
                 print('');
                 print('');
 
-                if (isValidYesNoString(tryAgainInput)) {
+                if (isValidYesString(tryAgainInput)) {
                     availableDollars = 100;
                 } else {
                     print('O.K., HOPE YOU HAD FUN!');
