@@ -58,6 +58,10 @@ sub main {
 			$count++;
 			&print_board;
 			&check_for_winners;
+			if ($count >= 9) {
+				print "IT'S A DRAW. THANK YOU.\n";
+				exit;
+			}
 			&player_choice;
 			$count++;
 			&print_board;
@@ -65,6 +69,7 @@ sub main {
 		}
 	}
 	print "IT'S A DRAW. THANK YOU.\n";
+	exit;
 }
 
 # This will check to see if anyone has won by adding up the various 3-in-a-row lines.
