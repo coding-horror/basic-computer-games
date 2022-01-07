@@ -4,7 +4,7 @@ import java.util.Random;
 /**
  * @author Ollie Hensman-Crook
  */
-public class TicTacToe {
+public class TicTacToe2 {
     public static void main(String[] args) {
         Board gameBoard = new Board();
         Random compChoice = new Random();
