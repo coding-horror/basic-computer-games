@@ -168,6 +168,7 @@ NOW THEN, ';
    my $response = choose(
       'DOES THE ENEMY HAVE GUNS(1), MISSILES(2), OR BOTH(3)', 3);
 
+   # Apply Gun damage for responses 1 and 3
    if ($response != 2) { # there's some guns involved, ask more
       say '';
 
@@ -190,7 +191,8 @@ NOW THEN, ';
       }
       say '';
    }
-   else {
+   # Apply missile damage for responses 2 and 3
+   if ($response > 1 )  {
       $missiles_hit_rate = 35;  # remember... this is a global variable
    }
 
