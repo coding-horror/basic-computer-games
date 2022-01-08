@@ -281,18 +281,20 @@ public class BombsAway {
                     if(enemyDefences == null) {
                         System.out.println("TRY AGAIN...");
                     } else {
+                        chanceToBeHit = 35;
                         switch(enemyDefences) {
                             case MISSILES:
-                                chanceToBeHit = 35;
+                                // MISSILES... An extra 35 but cannot specify percentage hit rate for gunners
                                 break;
 
                             case GUNS:
-
-                                // fall through (no break) on purpose to case BOTH
-                                // since it's identical code for GUNS or BOTH weapons
+                                    // GUNS...  No extra 35 but can specify percentage hit rate for gunners
+                                chanceToBeHit = 0;
+                                // fall through (no break) on purpose because remaining code is applicable
+                                // for both GUNS and BOTH options.
 
                             case BOTH:
-                                chanceToBeHit = 0;
+                                // BOTH... An extra 35 and percentage hit rate for gunners can be specified.
                                 percentageHitRateOfGunners = getNumberFromKeyboard("WHAT'S THE PERCENT HIT RATE OF ENEMY GUNNERS (10 TO 50)? ");
                                 if(percentageHitRateOfGunners < 10) {
                                     System.out.println("YOU LIE, BUT YOU'LL PAY...");
