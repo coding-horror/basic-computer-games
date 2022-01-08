@@ -2,8 +2,8 @@ from random import random
 from random import seed
 
 
-def gen_random(C):
-    C = int(random() * 5) + 1
+def gen_random():
+    return int(random() * 5) + 1
 
 
 def bad_input_850():
@@ -144,19 +144,19 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
             else:  # we're good. decrement the grain store
                 S = S - int(D / 2)
 
-    gen_random(C)
+    C = gen_random()
     # REM *** A BOUNTIFUL HARVEST!
     Y = C
     H = D * Y
     E = 0
 
-    gen_random(C)
+    C = gen_random()
     if int(C / 2) == C / 2:  # even number. 50/50 chance
         # REM *** RATS ARE RUNNING WILD!!
         E = int(S / C)  # calc losses due to rats, based on previous random number
         S = S - E + H  # deduct losses from stores
 
-    gen_random(C)
+    C = gen_random()
     # REM *** LET'S HAVE SOME BABIES
     I = int(C * (20 * A + S) / P / 100 + 1)
     # REM *** HOW MANY PEOPLE HAD FULL TUMMIES?
