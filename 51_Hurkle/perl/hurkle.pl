@@ -72,7 +72,7 @@ PLAY: while (1) {
     } # tries loop
 
     # No more guesses
-    printf("Sorry, that's %d gueses.\n", $TRIES);
+    printf("Sorry, that's %d guesses.\n", $TRIES);
     printf("The Hurkle is at %d, %d\n", $H1, $H2);
 }
 
