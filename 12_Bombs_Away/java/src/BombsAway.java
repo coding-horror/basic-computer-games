@@ -4,10 +4,16 @@ import java.util.Scanner;
  * Game of Bombs Away
  *
  * Based on the Basic game of Bombs Away here
- * https://github.com/coding-horror/basic-computer-games/blob/main/12%20Bombs%20Away/bombsaway.bas
+ * https://github.com/coding-horror/basic-computer-games/blob/main/12_Bombs_Away/bombsaway.bas
  *
- * Note:  The idea was to create a version of the 1970's Basic game in Java, without introducing
- *        new features - no additional text, error checking, etc has been added.
+ * Note:  The idea was to create a version of the 1970's Basic game in Java, without adding new features.
+ * Obvious bugs where found have been fixed, but the playability and overlook and feel
+ * of the game have been faithfully reproduced.
+ *
+ * Modern Java coding conventions have been employed and JDK 11 used for maximum compatibility.
+ *
+ * Java port by https://github.com/journich
+ *
  */
 public class BombsAway {
 
@@ -116,8 +122,9 @@ public class BombsAway {
 
     private int missions;
 
-    private int chanceToHit;
+    private int chanceToBeHit;
     private int percentageHitRateOfGunners;
+    private boolean liar;
 
     public BombsAway() {
 
@@ -139,8 +146,9 @@ public class BombsAway {
                 // Show an introduction the first time the game is played.
                 case START:
                     intro();
-                    chanceToHit = 0;
+                    chanceToBeHit = 0;
                     percentageHitRateOfGunners = 0;
+                    liar = false;
 
                     gameState = GAME_STATE.CHOOSE_SIDE;
                     break;
@@ -267,7 +275,7 @@ public class BombsAway {
                     break;
 
                 case CHOOSE_ENEMY_DEFENCES:
-                    boolean bothWeapons = true;
+                    percentageHitRateOfGunners = 0;
 
                     ENEMY_DEFENCES enemyDefences = getEnemyDefences("DOES THE ENEMY HAVE GUNS(1), MISSILES(2), OR BOTH(3) ? ");
                     if(enemyDefences == null) {
@@ -275,31 +283,38 @@ public class BombsAway {
                     } else {
                         switch(enemyDefences) {
                             case MISSILES:
-                            case GUNS:
-                                bothWeapons = false;
+                                chanceToBeHit = 35;
+                                break;
 
-                                // fall through on purpose to BOTH since its pretty much identical code other than the chance to hit
-                                // increasing if both weapons are part of the defence.
+                            case GUNS:
+
+                                // fall through (no break) on purpose to case BOTH
+                                // since it's identical code for GUNS or BOTH weapons
 
                             case BOTH:
+                                chanceToBeHit = 0;
                                 percentageHitRateOfGunners = getNumberFromKeyboard("WHAT'S THE PERCENT HIT RATE OF ENEMY GUNNERS (10 TO 50)? ");
                                 if(percentageHitRateOfGunners < 10) {
                                     System.out.println("YOU LIE, BUT YOU'LL PAY...");
-                                }
-                                if(bothWeapons) {
-                                    chanceToHit = 35;
-
+                                    liar = true;
                                 }
                                 break;
                         }
                     }
-                    gameState = GAME_STATE.PROCESS_FLAK;
+                    // If player didn't lie when entering percentage hit rate of gunners continue with game
+                    // Otherwise shoot down the player.
+                    if(!liar) {
+                        gameState = GAME_STATE.PROCESS_FLAK;
+                    } else {
+                        gameState = GAME_STATE.SHOT_DOWN;
+                    }
+                    break;
 
-                // Determine if the players airplan makes it through the Flak.
+                // Determine if the player's airplane makes it through the Flak.
                 case PROCESS_FLAK:
                     double calc = (CHANCE_OF_BEING_SHOT_DOWN_BASE * randomNumber(1));
 
-                    if ((chanceToHit + percentageHitRateOfGunners) > calc) {
+                    if ((chanceToBeHit + percentageHitRateOfGunners) > calc) {
                         gameState = GAME_STATE.SHOT_DOWN;
                     } else {
                         gameState = GAME_STATE.MADE_IT_THROUGH_FLAK;
@@ -462,7 +477,7 @@ public class BombsAway {
     /**
      * Check whether a string equals one of a variable number of values
      * Useful to check for Y or YES for example
-     * Comparison is case insensitive.
+     * Comparison is case-insensitive.
      *
      * @param text source string
      * @param values a range of values to compare against the source string
