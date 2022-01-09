@@ -32,6 +32,8 @@ To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https:/
     * eg. `javac AceyDuceyGame.java`
 1. Run the compiled program with `java`:
     * eg. `java AceyDuceyGame`
+    
+or if you are **using JDK11 or later** you can now execute a self contained java file that has a main method directly with `java <filename>.java`.
 
 ## javascript
 
