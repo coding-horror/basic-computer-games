@@ -1,5 +1,7 @@
 require 'strscan'
 
+# Prints a number according to Vintage Basic's PRINT statement
+# @param n The number to print
 def print_number(n)
   # PRINT adds padding after a number and before a positive number
   print ' ' if n >= 0
@@ -7,6 +9,9 @@ def print_number(n)
   print ' '
 end
 
+# Mimic the INPUT statement using Vintage Basic as a reference
+# @param prompt The prompt to show to the user
+# @return An array of strings representing the inputted values
 def input(prompt)
   prompt_suffix = '? '
   print "#{prompt}#{prompt_suffix}"
@@ -55,6 +60,7 @@ class Game
     @non_win_count = non_win_count
   end
 
+  # @return [Boolean] True if the computer did not win the game
   def play
     while true
       print_beans
@@ -218,7 +224,6 @@ class Game
     integer_value
   end
 
-  # @param [Array] beans
   def get_computer_move
     d = -99
     home_pit = 13
@@ -294,7 +299,8 @@ non_win_count = 0
 
 # APPLICATION LOOP
 while true
-  print "\n", "\n"
+  puts
+  puts
 
   history[non_win_count] = 0
 
