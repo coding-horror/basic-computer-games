@@ -5,7 +5,7 @@ def print_beans(beans)
 
   # Print computer beans
   print "   "
-  beans[7..12].reverse.each {|bean_count| print_bean(bean_count)}
+  beans[7..12].reverse.each { |bean_count| print_bean(bean_count) }
   puts
 
   # Print home beans
@@ -16,7 +16,7 @@ def print_beans(beans)
 
   # Print player beans
   print "   "
-  beans[0..5].each {|bean_count| print_bean(bean_count)}
+  beans[0..5].each { |bean_count| print_bean(bean_count) }
   puts
 
   puts
@@ -102,7 +102,6 @@ def input(prompt)
   input_values
 end
 
-
 def distribute_beans(beans, start_pit, home_pit)
   beans_to_distribute = beans[start_pit]
   beans[start_pit] = 0
@@ -124,15 +123,11 @@ def distribute_beans(beans, start_pit, home_pit)
   current_pit
 end
 
-def update_internals(beans, current_move)
+def update_history(current_move)
   k = current_move % 7
   $c = $c + 1
 
-  $f[$n] = $f[$n] * 6 + k if $c < 9
-
-  unless beans[0...6].find { |b| b != 0 } && beans[7...13].find { |b| b != 0 }
-    $game_over = true
-  end
+  $history[$non_win_count] = $history[$non_win_count] * 6 + k if $c < 9
 end
 
 # @param [Array] beans
@@ -141,11 +136,12 @@ end
 def perform_move(beans, move, home_pit)
   last_pit = distribute_beans(beans, move, home_pit)
 
-  update_internals(beans, move)
+  update_history(move)
 
   last_pit
 end
 
+# @return [Boolean] True if the computer did not win
 def end_game(beans)
   puts
   puts "GAME OVER"
@@ -158,10 +154,12 @@ def end_game(beans)
     return
   end
 
-  $n += 1
+  $non_win_count += 1
 
   puts "YOU WIN BY #{difference} POINTS" if difference > 0
   puts "DRAWN GAME" if difference == 0
+
+  difference >= 0
 end
 
 # @param [Array] beans
@@ -209,11 +207,11 @@ def get_computer_move(beans)
     # Final score for move is computer score, minus the player's score and any player gains from their best move
     final_score = beans_copy[13] - beans_copy[6] - player_max_score
 
-    if $c <=8
+    if $c < 9
       k = move_under_test % 7
 
-      (0...$n).each do |i|
-        final_score = final_score - 2 if $f[$n] * 6 + k == ((Float($f[i])/6 ** (7-$c)) + 0.1).floor
+      (0...$non_win_count).each do |i|
+        final_score = final_score - 2 if $history[$non_win_count] * 6 + k == ((Float($history[i]) / 6 ** (7 - $c)) + 0.1).floor
       end
     end
 
@@ -229,70 +227,86 @@ def get_computer_move(beans)
   [chosen_move, last_pit]
 end
 
+class Game
+  def initialize(history, non_win_count)
+    @beans = Array.new(13, 3)
+    @beans[6] = 0
+    @beans[13] = 0
+
+    @turn_counter = 0
+
+    @history = history
+    @non_win_count = non_win_count
+  end
+
+  def game_over
+    @beans[0...6].all? { |b| b == 0 } || @beans[7...13].all? { |b| b == 0 }
+  end
+
+  def play
+    until game_over
+      print_beans(@beans)
+
+      move = get_move("YOUR MOVE", @beans)
+      home_pit = 6
+      computer_home_pit = 13
+
+      last_pit = perform_move(@beans, move, home_pit)
+
+      print_beans(@beans)
+
+      if game_over
+        return end_game(@beans)
+      end
+
+      if home_pit == last_pit
+        second_move = get_move("AGAIN", @beans)
+
+        perform_move(@beans, second_move, home_pit)
+
+        print_beans(@beans)
+
+        if game_over
+          return end_game(@beans)
+        end
+      end
+
+      computer_move, computer_last_pit = get_computer_move(@beans)
+      print "MY MOVE IS #{computer_move - 6}"
+
+      if game_over
+        return end_game(@beans)
+      end
+
+      if computer_last_pit == computer_home_pit
+        second_computer_move, _ = get_computer_move(@beans)
+        print ",#{second_computer_move - 6}"
+
+        if game_over
+          return end_game(@beans)
+        end
+      end
+    end
+  end
+
+end
+
 puts 'AWARI'.center(80)
 puts 'CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY'.center(80)
 
 # Initialise stable variables
-$f = Array.new(50)
-$n = 0
+$history = Array.new(50)
+$non_win_count = 0
 
 # APPLICATION LOOP
-:game
 while true
   print "\n", "\n"
-  beans = Array.new(13, 3)
-  beans[6] = 0
-  beans[13] = 0
 
-  $f[$n] = 0
-  $game_over = false
+  $history[$non_win_count] = 0
   $c = 0
 
-  until $game_over
-    print_beans(beans)
+  game = Game.new($history, $non_win_count)
 
-    move = get_move("YOUR MOVE", beans)
-    home_pit = 6
-    computer_home_pit = 13
-
-    last_pit = perform_move(beans, move, home_pit)
-
-    print_beans(beans)
-
-    if $game_over
-      end_game(beans)
-      next :game
-    end
-
-    if home_pit == last_pit
-      second_move = get_move("AGAIN", beans)
-
-      perform_move(beans, second_move, home_pit)
-
-      print_beans(beans)
-
-      if $game_over
-        end_game(beans)
-        next :game
-      end
-    end
-
-    computer_move, computer_last_pit = get_computer_move(beans)
-    print "MY MOVE IS #{computer_move - 6}"
-
-    if $game_over
-      end_game(beans)
-      next :game
-    end
-
-    if computer_last_pit == computer_home_pit
-      second_computer_move, _ = get_computer_move(beans)
-      print ",#{second_computer_move - 6}"
-
-      if $game_over
-        end_game(beans)
-        next :game
-      end
-    end
-  end
+  computer_didnt_win = game.play
+  $non_win_count += 1 if computer_didnt_win
 end
