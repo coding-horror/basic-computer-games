@@ -32,7 +32,7 @@ def input(prompt)
         next_string.chomp!('"')
       else
         # No close quote – Vintage Basic crashes in this case
-        raise ArgumentError('Unmatched quotes in input')
+        raise 'Unmatched quotes in input'
       end
     elsif scanner.exist?(/,/)
       next_string = scanner.scan_until(/,/).chomp(',')
