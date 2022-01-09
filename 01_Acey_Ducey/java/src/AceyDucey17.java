@@ -45,7 +45,7 @@ public class AceyDucey17 {
       final int bet = getBet(cashOnHand);
       final int winnings = determineWinnings(lowCard,highCard,bet);
       cashOnHand += winnings;
-      if(winnings != 0){  //note [2]
+      if(winnings != 0 || cashOnHand != 0){  //note [2]
         System.out.println("YOU NOW HAVE  "+ cashOnHand +"  DOLLARS.");//note [6]
       }
     }
@@ -72,11 +72,14 @@ public class AceyDucey17 {
     System.out.println("SORRY, FRIEND, BUT YOU BLEW YOUR WAD.");
     System.out.println();
     System.out.println();
-    System.out.println("TRY AGAIN (YES OR NO)");
+    System.out.print("TRY AGAIN (YES OR NO)? ");
     Scanner input = new Scanner(System.in);
-    return input.nextLine()
-                .toUpperCase()
-                .startsWith("Y"); // note [9]
+    boolean playAgain = input.nextLine()
+                             .toUpperCase()
+                             .startsWith("Y"); // note [9]
+    System.out.println();
+    System.out.println();
+    return playAgain;
   }
 
   public static int getBet(int cashOnHand){
@@ -145,6 +148,8 @@ public class AceyDucey17 {
     1. Multiline strings, a.k.a. text blocks, were added in JDK15.
     2. The original game only displays the players balance if it changed,
        which it does not when the player chickens out and bets zero.
+       It also doesn't display the balance when it becomes zero because it has
+       a more appropriate message: Sorry, You Lose.
     3. To pick two cards to show, the original BASIC implementation has a
        bug that could cause a race condition if the RND function never chose
        a lower number first and higher number second. It loops infinitely
