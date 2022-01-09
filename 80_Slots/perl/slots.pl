@@ -72,7 +72,7 @@ while ( 1 ) {   # Iterate indefinitely
         }
     } elsif ( $reel_x == $reel_z ) {
         if ( $reel_z ) {
-            $winnings += double( $bet );
+            $winnings += double( $bet );        # Bug fix?
             # NOTE that the below code is what is actually implemented
             # in the basic, but it is implemented strangely enough (a
             # GOTO a line that contains a test that, if I understand the
@@ -80,7 +80,7 @@ while ( 1 ) {   # Iterate indefinitely
             # I know nothing about slot machines, but research suggests
             # the payoff table is fairly arbitrary. The code above makes
             # code above makes the game orthogonal.
-            # $winnings += you_lost( $bet );
+            # $winnings += you_lost( $bet );    # Bug?
         } else {
             $winnings += double_bar( $bet );
         }
@@ -214,6 +214,10 @@ for a bar (and therefore a double bar) fails it goes back and checks for
 a double on the second and third reels. But we know this check will
 fail, since the check for a double on the first and second reels failed.
 So if a loss was intended at this point, why not just call it a loss?
+
+To restore the original behavior, comment out the entire line commented
+C<'# Bug fix?'> (about line 75) and uncomment the line with the trailing
+comment C<'# Bug?'> (about line 83).
 
 =head1 PORTED BY
 
