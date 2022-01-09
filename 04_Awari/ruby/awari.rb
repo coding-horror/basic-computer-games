@@ -124,11 +124,11 @@ def distribute_beans(beans, start_pit, home_pit)
   current_pit
 end
 
-def update_internals(beans)
-  $k = $k % 7
+def update_internals(beans, current_move)
+  k = current_move % 7
   $c = $c + 1
 
-  $f[$n] = $f[$n] * 6 + $k if $c < 9
+  $f[$n] = $f[$n] * 6 + k if $c < 9
 
   unless beans[0...6].find { |b| b != 0 } && beans[7...13].find { |b| b != 0 }
     $game_over = true
@@ -141,7 +141,7 @@ end
 def perform_move(beans, move, home_pit)
   last_pit = distribute_beans(beans, move, home_pit)
 
-  update_internals(beans)
+  update_internals(beans, move)
 
   last_pit
 end
@@ -210,11 +210,11 @@ def get_computer_move(beans)
     final_score = beans_copy[13] - beans_copy[6] - player_max_score
 
     if $c <=8
-      $k = move_under_test % 7
-    end
+      k = move_under_test % 7
 
-    (0...$n).each do |i|
-      final_score = final_score - 2 if $f[$n] * 6 + $k == ((Float($f[i])/6 ** (7-$c)) + 0.1).floor
+      (0...$n).each do |i|
+        final_score = final_score - 2 if $f[$n] * 6 + k == ((Float($f[i])/6 ** (7-$c)) + 0.1).floor
+      end
     end
 
     # Choose the move if it is the best move found so far
@@ -254,7 +254,6 @@ while true
     move = get_move("YOUR MOVE", beans)
     home_pit = 6
     computer_home_pit = 13
-    $k = move
 
     last_pit = perform_move(beans, move, home_pit)
 
@@ -267,7 +266,6 @@ while true
 
     if home_pit == last_pit
       second_move = get_move("AGAIN", beans)
-      $k = second_move
 
       perform_move(beans, second_move, home_pit)
 
