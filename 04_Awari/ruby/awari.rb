@@ -125,7 +125,7 @@ def distribute_beans(beans, start_pit, home_pit)
 end
 
 def update_internals(beans)
-  $k = $k - 7 if $k > 6
+  $k = $k % 7
   $c = $c + 1
 
   $f[$n] = $f[$n] * 6 + $k if $c < 9
@@ -168,51 +168,65 @@ end
 def get_computer_move(beans)
   d = -99
   home_pit = 13
-  beans_copy = beans.dup
 
-  move_to_do = 0
+  chosen_move = 7
 
-  (7..12).each do |move_under_test|
-    if beans[move_under_test] == 0
-      next
-    end
+  # Test all possible moves
+  (7...13).each do |move_under_test|
+    # Create a copy of the beans to test against
+    beans_copy = beans.dup
 
-    max_score = 0
+    # If the move is not legal, skip it
+    next if beans[move_under_test] == 0
 
+    # Determine the best response the player may make to this move
+    player_max_score = 0
+
+    # Make the move under test against the copy
     distribute_beans(beans_copy, move_under_test, home_pit)
 
+    # Test every player response
     (0...6).each do |i|
+      # Skip the move if it would be illegal
       next if beans_copy[i] == 0
 
-      l = beans_copy[i] + i
-      r = l / 14
-      l_mod_14 = l % 14
+      # Determine the last
+      landing_with_overflow = beans_copy[i] + i
+      # If landing > 13 the player has put a bean in both home pits
+      player_move_score = (landing_with_overflow > 14) ? 1 : 0
+      # Find the actual pit
+      landing = landing_with_overflow % 14
 
-      r = beans_copy[12 - l_mod_14] + r if beans_copy[l_mod_14] == 0 && l_mod_14 != 6 && l_mod_14 != 13
+      # If the landing pit is empty, the player will steal beans
+      if beans_copy[landing] == 0 && landing != 6 && landing != 13
+        player_move_score = beans_copy[12 - landing] + player_move_score
+      end
 
-      max_score = r if r > max_score
+      # Update the max score if this move is the best player move
+      player_max_score = player_move_score if player_move_score > player_max_score
     end
 
-    final_score = beans_copy[13] - beans_copy[6] - max_score
+    # Final score for move is computer score, minus the player's score and any player gains from their best move
+    final_score = beans_copy[13] - beans_copy[6] - player_max_score
 
     if $c <=8
-      $k = move_under_test
-      $k = $k - 7 if $k > 6
+      $k = move_under_test % 7
     end
 
-    (1...$n).each do |i|
-      final_score = final_score - 2 if $f[$n] * 6 + $k == (($f[i]/6 ** (7-$c)) + 0.1).floor
+    (0...$n).each do |i|
+      final_score = final_score - 2 if $f[$n] * 6 + $k == ((Float($f[i])/6 ** (7-$c)) + 0.1).floor
     end
 
+    # Choose the move if it is the best move found so far
     if final_score >= d
-      move_to_do = move_under_test
+      chosen_move = move_under_test
       d = final_score
     end
   end
 
-  last_pit = perform_move(beans, move_to_do, home_pit)
+  last_pit = perform_move(beans, chosen_move, home_pit)
 
-  [move_to_do, last_pit]
+  [chosen_move, last_pit]
 end
 
 puts 'AWARI'.center(80)
