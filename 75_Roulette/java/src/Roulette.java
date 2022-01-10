@@ -1,5 +1,6 @@
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.*;
 
 public class Roulette {
@@ -38,7 +39,7 @@ public class Roulette {
             printInstructions();
         }
 
-        while(houseBalance > 0 && playerBalance > 0) {
+        do {
 
             Bet[] bets = queryBets();
 
@@ -53,13 +54,33 @@ public class Roulette {
                 out.println(result + " BLACK");
             }
              */
-           switch(result) {
-               case 37 -> out.print("00");
-               case 38 -> out.print("0");
-               default ->  out.println(result + (RED_NUMBERS.contains(result) ? " RED\n" : " BLACK\n"));
-           }
+            switch(result) {
+                case 37 -> out.print("00");
+                case 38 -> out.print("0");
+                default ->  out.println(result + (RED_NUMBERS.contains(result) ? " RED\n" : " BLACK\n"));
+            }
 
+            betResults(bets,result);
+            out.println();
 
+            out.println("TOTALS:");
+            out.println("\tME: " + houseBalance);
+            out.println("\tYOU " + playerBalance);
+
+        } while(playAgain());
+        if(playerBalance <= 0) {
+            out.println("OOPS! YOU JUST SPENT YOUR LAST DOLLAR!");
+        } else if(houseBalance <= 0) {
+            out.println("YOU BROKE THE HOUSE!");
+        }
+    }
+
+    private boolean playAgain() {
+        if(playerBalance > 0 && houseBalance > 0) {
+            out.println("PLAY AGAIN?");
+            return scanner.nextLine().toLowerCase().charAt(0) == 'y';
+        } else {
+            return false;
         }
     }
 
@@ -134,6 +155,15 @@ public class Roulette {
             };
 
             int betResult = bet.amount * coefficient;
+
+            if(betResult < 0) {
+                out.println("YOU LOSE " + -betResult + " DOLLARS ON BET " + (i + 1));
+            } else {
+                out.println("YOU WIN " + betResult + " DOLLARS ON BET " + (i + 1));
+            }
+
+            playerBalance += betResult;
+            houseBalance -= betResult;
         }
     }
 
