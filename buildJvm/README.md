@@ -1,25 +1,28 @@
 # JVM gradle scripts
 
 ## Quickstart
+You will need to install openjdk 17, because some games use advanced Java features.
+We should be using version 17 anyway, because anything less than 17 is deprecated.
 
 Build all the games:
-
-    cd buildJvm
-    ./gradlew -q assemble installDist distributeBin distributeLib
+```shell
+ cd buildJvm
+ ./gradlew -q assemble installDist distributeBin distributeLib
+```
 
 Then, run a game
 
 ### Mac or linux:
-    
-    build/distrib/bin/build_53_King_kotlin
-
+```shell
+build/distrib/bin/build_53_King_kotlin
+```
 ### Windows
 [not tested yet]
 
-    build\distrib\bin\build_53_King_kotlin.bat
+```shell
+build\distrib\bin\build_53_King_kotlin.bat
+```
 
-You will need to install openjdk 17, because some games use advanced Java features. 
-We should be using version 17 anyway, because anything less than 17 is deprecated.
 ---
 ## Using an IDE to work on JVM games
 
@@ -62,7 +65,7 @@ there is some special requirement.
 directory for the java or kotlin file, and the class that contains the `main` method.
 
 The `build.gradle` file will normally be identical to this:
-
+```groovy
     plugins {
         id 'application'
         // id 'org.jetbrains.kotlin.jvm' // UNCOMMENT for kotlin projects
@@ -83,6 +86,7 @@ The `build.gradle` file will normally be identical to this:
     application {
         mainClass = gameMain
     }
+```
 
 And the `gradle.properties` file should look like this:
 
