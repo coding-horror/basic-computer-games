@@ -38,7 +38,10 @@ const getPuzzleFolders = () => {
   return fs
     .readdirSync(ROOT_PATH, { withFileTypes: true })
     .filter((dirEntry) => dirEntry.isDirectory())
-    .filter((dirEntry) => ![".git", "node_modules"].includes(dirEntry.name))
+    .filter(
+      (dirEntry) =>
+        ![".git", "node_modules", "00_Utilities"].includes(dirEntry.name)
+    )
     .map((dirEntry) => dirEntry.name);
 };
 
