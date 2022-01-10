@@ -53,7 +53,11 @@ public class Roulette {
                 out.println(result + " BLACK");
             }
              */
-            out.println(result + (RED_NUMBERS.contains(result) ? " RED\n" : " BLACK\n"));
+           switch(result) {
+               case 37 -> out.print("00");
+               case 38 -> out.print("0");
+               default ->  out.println(result + (RED_NUMBERS.contains(result) ? " RED\n" : " BLACK\n"));
+           }
 
 
         }
@@ -80,7 +84,7 @@ public class Roulette {
                 int betValue = Integer.parseInt(values[1]);
 
                 for(int j = 0; j < i; j++) {
-                    if(bets[j].number == betNumber) {
+                    if(bets[j].num == betNumber) {
                         out.println("YOU MADE THAT BET ONCE ALREADY,DUM-DUM");
                         throw new Exception();
                     }
@@ -102,6 +106,35 @@ public class Roulette {
             }
         }
         return bets;
+    }
+
+    private void betResults(Bet[] bets, int num) {
+        for(int i = 0; i < bets.length; i++) {
+            Bet bet = bets[i];
+            /*
+            Using a switch statement of ternary operators that check if a certain condition is met based on the bet value
+            Returns the coefficient that the bet amount should be multiplied by to get the resulting value
+             */
+            int coefficient = switch(bet.num) {
+                case 37 -> (num <= 12) ? 2 : -1;
+                case 38 -> (num > 12 && num <= 24) ? 2 : -1;
+                case 39 -> (num > 24 && num < 37) ? 2 : -1;
+                case 40 -> (num < 37 && num % 3 == 1) ? 2 : -1;
+                case 41 -> (num < 37 && num % 3 == 2) ? 2 : -1;
+                case 42 -> (num < 37 && num % 3 == 0) ? 2 : -1;
+                case 43 -> (num <= 18) ? 1 : -1;
+                case 44 -> (num > 18 && num <= 36) ? 1 : -1;
+                case 45 -> (num % 2 == 0) ? 1 : -1;
+                case 46 -> (num % 2 == 1) ? 1 : -1;
+                case 47 -> RED_NUMBERS.contains(num) ? 1 : -1;
+                case 48 -> !RED_NUMBERS.contains(num) ? 1 : -1;
+                case 49 -> (num == 37) ? 35 : -1;
+                case 50 -> (num == 38) ? 35 : -1;
+                default -> (bet.num < 49 && bet.num == num) ? 35 : -1;
+            };
+
+            int betResult = bet.amount * coefficient;
+        }
     }
 
     public void printInstructions() {
@@ -155,11 +188,11 @@ public class Roulette {
     }
 
     public class Bet {
-        final int number, value;
+        final int num, amount;
 
-        public Bet(int number, int value) {
-            this.number = number;
-            this.value = value;
+        public Bet(int num, int amount) {
+            this.num = num;
+            this.amount = amount;
         }
     }
 }
