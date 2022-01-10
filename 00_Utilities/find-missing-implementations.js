@@ -15,7 +15,7 @@ const ROOT_PATH = ".";
 const languages = [
   { name: "csharp", extension: "cs" },
   { name: "java", extension: "java" },
-  { name: "javascript", extension: "js" },
+  { name: "javascript", extension: "html" },
   { name: "pascal", extension: "pas" },
   { name: "perl", extension: "pl" },
   { name: "python", extension: "py" },
@@ -45,6 +45,7 @@ const getPuzzleFolders = () => {
 (async () => {
   let missingGames = {};
   let missingLanguageCounts = {};
+  languages.forEach((l) => (missingLanguageCounts[l.name] = 0));
   const puzzles = getPuzzleFolders();
   for (const puzzle of puzzles) {
     for (const { name: language, extension } of languages) {
@@ -53,12 +54,8 @@ const getPuzzleFolders = () => {
         extension
       );
       if (files.length === 0) {
-        if (!missingGames[puzzle]) {
-          missingGames[puzzle] = [];
-        }
-        if (!missingLanguageCounts[language]) {
-          missingLanguageCounts[language] = 0;
-        }
+        if (!missingGames[puzzle]) missingGames[puzzle] = [];
+
         missingGames[puzzle].push(language);
         missingLanguageCounts[language]++;
       }
@@ -70,15 +67,14 @@ const getPuzzleFolders = () => {
   } else {
     console.log(`Missing ${missingCount} implementations:`);
 
-    console.log(`\nMissing languages by game:`);
-    for (const [puzzle, languages] of Object.entries(missingGames)) {
-      console.log(`${puzzle}: ${languages.join(", ")}`);
-    }
+    Object.entries(missingGames).forEach(
+      ([p, ls]) => (missingGames[p] = ls.join(", "))
+    );
 
+    console.log(`\nMissing languages by game:`);
+    console.table(missingGames);
     console.log(`\nBy language:`);
-    for (const [language, count] of Object.entries(missingLanguageCounts)) {
-      console.log(`${language}: ${count} missing`);
-    }
+    console.table(missingLanguageCounts);
   }
 })();
 
