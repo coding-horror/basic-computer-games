@@ -1,6 +1,7 @@
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.PlatformLoggingMXBean;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Roulette {
@@ -69,14 +70,54 @@ public class Roulette {
 
         } while(playAgain());
         if(playerBalance <= 0) {
-            out.println("OOPS! YOU JUST SPENT YOUR LAST DOLLAR!");
+            out.println("THANKS FOR YOUR MONEY\nI'LL USE IT TO BUY A SOLID GOLD ROULETTE WHEEL");
         } else if(houseBalance <= 0) {
-            out.println("YOU BROKE THE HOUSE!");
+            out.println("TO WHOM SHALL I MAKE THE CHECK");
+            String name = scanner.nextLine();
+            out.println();
+            for(int i = 0; i < 72; i++) {
+                out.print("-");
+            }
+            out.println();
+            for(int i = 0; i < 50; i++) {
+                out.print(" ");
+            }
+            out.println("CHECK NO. " + random.nextInt(0,1000));
+            out.println();
+            for(int i = 0; i < 40; i++) {
+                out.print(" ");
+            }
+            out.println(LocalDateTime.now());
+            out.println("\n");
+            out.println("PAY TO THE ORDER OF----- " + name + "------$" + (playerBalance - 1000));
+            out.println("\n");
+            for(int i = 0; i < 10; i++) {
+                out.print(" ");
+            }
+            out.println("THE MEMORY BANK OF NEW YORK");
+            for(int i = 0; i < 40; i++) {
+                out.print(" ");
+            }
+            out.println("THE COMPUTER");
+            for(int i = 0; i < 40; i++) {
+                out.print(" ");
+            }
+            out.println("----------X-----");
+            for(int i = 0; i < 72; i++) {
+                out.print("-");
+            }
+            out.println("\n");
+            out.println("COME BACK SOON");
         }
     }
 
     private boolean playAgain() {
-        if(playerBalance > 0 && houseBalance > 0) {
+        if(playerBalance > 0) {
+            if(houseBalance <= 0) {
+                out.println("YOU BROKE THE HOUSE!");
+                //using default values
+                playerBalance = 101000;
+            }
             out.println("PLAY AGAIN?");
             return scanner.nextLine().toLowerCase().charAt(0) == 'y';
         } else {
