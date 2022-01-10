@@ -7,18 +7,26 @@ import java.util.Random;
 import java.util.function.Predicate;
 import java.text.NumberFormat;
 
+
+/* This class holds the game state and the game logic */
 public class Battle {
+
+    /* parameters of the game */
     private int seaSize;
     private int[] sizes;
     private int[] counts;
-    
+
+    /* The game setup - the ships and the sea */
     private ArrayList<Ship> ships;
     private Sea sea;
 
-    private int[] losses;
-    private int hits;
-    private int misses;
+    /* game state counts */
+    private int[] losses;    // how many of each type of ship have been sunk
+    private int hits;        // how many hits the player has made
+    private int misses;      // how many misses the player has made
 
+    // Names of ships of each size. The game as written has ships of size 3, 4 and 5 but
+    // can easily be modified. It makes no sense to have a ship of size zero though.
     private static String NAMES_BY_SIZE[] = {
         "error",
         "size1",
@@ -27,10 +35,11 @@ public class Battle {
         "aircraft carrier",
         "size5" };
 
+    // Entrypoint
     public static void main(String args[]) {
-        Battle game = new Battle(6,
-                                 new int[] { 2, 3, 4 },
-                                 new int[] { 2, 2, 2 });
+        Battle game = new Battle(6,                        // Sea is 6 x 6 tiles
+                                 new int[] { 2, 3, 4 },    // Ships are of sizes 2, 3, and 4
+                                 new int[] { 2, 2, 2 });   // there are two ships of each size
         game.play();
     }
 
@@ -39,7 +48,7 @@ public class Battle {
         sizes = shipSizes;
         counts = shipCounts;
 
-        /* validate parameters */
+        // validate parameters
         if (seaSize < 4) throw new RuntimeException("Sea Size " + seaSize + " invalid, must be at least 4");
 
         for (int sz : sizes) {
@@ -51,20 +60,25 @@ public class Battle {
             throw new RuntimeException("Ship counts must match");
         }
 
-        sea = new Sea(seaSize);
-        ships = new ArrayList<Ship>();
-        losses = new int[counts.length];
+        // Initialize game state
+        sea = new Sea(seaSize);          // holds what ship if any occupies each tile
+        ships = new ArrayList<Ship>();   // positions and states of all the ships
+        losses = new int[counts.length]; // how many ships of each type have been sunk
 
+        // Build up the list of all the ships
         int shipNumber = 1;
         for (int type = 0; type < counts.length; ++type) {
             for (int i = 0; i < counts[i]; ++i) {
-                ships.add(new Ship(shipNumber++, "Ship", sizes[type]));
+                ships.add(new Ship(shipNumber++, sizes[type]));
             }
         }
 
+        // When we put the ships in the sea, we put the biggest ones in first, or they might
+        // not fit
         ArrayList<Ship> largestFirst = new ArrayList<>(ships);
         Collections.sort(largestFirst, Comparator.comparingInt((Ship ship) -> ship.size()).reversed());
 
+        // place each ship into the sea
         for (Ship ship : largestFirst) {
             ship.placeRandom(sea);
         }
@@ -79,11 +93,13 @@ public class Battle {
         System.out.println("Start game");
         Input input = new Input(seaSize);
         try {
-            while (lost < ships.size()) {
-                if (! input.readCoordinates()) {
+            while (lost < ships.size()) {          // the game continues while some ships remain unsunk
+                if (! input.readCoordinates()) {   // ... unless there is no more input from the user
                     return;
                 }
 
+                // The computer thinks of the sea as a grid of rows, from top to bottom.
+                // However, the user will use X and Y coordinates, with Y going bottom to top
                 int row = seaSize - input.y();
                 int col = input.x() - 1;
 
@@ -104,6 +120,9 @@ public class Battle {
                         ship.hit(col, row);
                         ++hits;
                         System.out.println("A direct hit on ship number " + ship.id());
+
+                        // If a ship was hit, we need to know whether it was sunk.
+                        // If so, tell the player and update our counts
                         if (ship.isSunk()) {
                             ++lost;
                             System.out.println("And you sunk it.  Hurrah for the good guys.");
@@ -142,6 +161,8 @@ public class Battle {
             }
         }
         catch (IOException e) {
+            // This should not happen running from console, but java requires us to check for it
+            System.err.println("System error.\n" + e);
         }
     }
 }
