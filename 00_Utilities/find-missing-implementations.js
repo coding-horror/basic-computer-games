@@ -10,7 +10,7 @@ const fs = require("fs");
 const glob = require("glob");
 
 // relative path to the repository root
-const ROOT_PATH = ".";
+const ROOT_PATH = "../.";
 
 const languages = [
   { name: "csharp", extension: "cs" },
