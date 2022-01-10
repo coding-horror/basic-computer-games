@@ -23,12 +23,8 @@ Alternatively, for non-dotnet compatible translations, you will need [Visual Stu
 
 ## java
 
-{% tip %}
-
-You can build all the java and kotlin games at once
+**TIP:** You can build all the java and kotlin games at once
 using the instructions in the [buildJvm directory](buildJvm/README.md)
-
-{% endtip %}
 
 The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
 
