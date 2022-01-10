@@ -63,10 +63,9 @@ public class Roulette {
 
             betResults(bets,result);
             out.println();
-
-            out.println("TOTALS:");
-            out.println("\tME: " + houseBalance);
-            out.println("\tYOU " + playerBalance);
+            
+            out.println("TOTALS:\tME\tYOU");
+            out.println("\t\t" + houseBalance + "\t" + playerBalance);
 
         } while(playAgain());
         if(playerBalance <= 0) {
