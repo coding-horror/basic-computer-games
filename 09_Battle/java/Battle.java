@@ -1,5 +1,3 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,43 +77,15 @@ public class Battle {
 
         int lost = 0;
         System.out.println("Start game");
+        Input input = new Input(seaSize);
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            NumberFormat parser = NumberFormat.getIntegerInstance();
-
             while (lost < ships.size()) {
-                System.out.print("\nTarget x,y\n> ");
-                String inputLine = input.readLine();
-                if (inputLine == null) {
-                    System.out.println("Game quit\n");
+                if (! input.readCoordinates()) {
                     return;
                 }
-                String[] coords = inputLine.split(",");
-                if (coords.length != 2) {
-                    System.out.println("Need two coordinates separated by ','");
-                    continue;
-                }
-                int[] xy = new int[2];
-                boolean error = false;
-                try {
-                    for (int c = 0 ; c < 2; ++c ) {
-                        int val = Integer.parseInt(coords[c].strip());
-                        if ((val < 1) || (val > seaSize)) {
-                            System.out.println("Coordinates must be from 1 to " + seaSize);
-                            error = true;
-                        } else {
-                            xy[c] = val;
-                        }
-                    }
-                }
-                catch (NumberFormatException ne) {
-                    System.out.println("Coordinates must be numbers");
-                    error = true;
-                }
-                if (error) continue;
 
-                int row = seaSize - xy[1];
-                int col = xy[0] - 1;
+                int row = seaSize - input.y();
+                int col = input.x() - 1;
 
                 if (sea.isEmpty(col, row)) {
                     ++misses;
