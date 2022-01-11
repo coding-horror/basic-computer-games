@@ -47,10 +47,6 @@ void PrintHeader()
         .First();
 }
 
-try
-{
-
-
 
 PrintHeader();
 
@@ -106,33 +102,22 @@ Simulation InitializeSimulation(string[] inputPattern, MatrixSpace matrixToIniti
 }
 
 
-// PrintMatrix(matrixSpace.Matrix);
-void PrintMatrix(int[,] matrix)
+void ProcessGeneration()
 {
-    Console.WriteLine("Matrix:");
-    for (int x = 0; x < matrix.GetLength(0); x++)
-    {
-        for (int y = 0; y < matrix.GetLength(1); y++)
-        {
-            var character = matrix[x, y] == 0 ? ' ' : '*';
-            Console.Write(character);
-        }
-        Console.WriteLine();
-    }
-}
+    var matrix = matrixSpace.Matrix; // TODO refactor
 
-    void ProcessGeneration()
+    while (true)
     {
-        var matrix = matrixSpace.Matrix; // TODO refactor
-        
+
         // generation++;
-        
+
         void PrintPopulation(int generation, int population)
         {
             Console.WriteLine($"GENERATION: {generation}\tPOPULATION: {population}");
             if (isInvalid)
                 Console.WriteLine("INVALID!");
         }
+
         PrintPopulation(simulation.Generation, simulation.Population);
 
         simulation.StartNewGeneration();
@@ -148,14 +133,14 @@ void PrintMatrix(int[,] matrix)
         int nextMinY = MaxWidth - 1; // y4
         int nextMaxX = 0; // x3
         int nextMaxY = 0; // y3
-        
-        
+
+
         // prints lines before
         for (int x = 0; x < minX; x++)
         {
             Console.WriteLine();
         }
-        
+
         // prints matrix and 
         for (var x = minX; x < maxX; x++)
         {
@@ -164,9 +149,10 @@ void PrintMatrix(int[,] matrix)
             {
                 if (matrix[x, y] == 2)
                 {
-                    matrix[x, y] = 0; 
+                    matrix[x, y] = 0;
                     continue;
                 }
+
                 if (matrix[x, y] == 3)
                 {
                     matrix[x, y] = 1;
@@ -179,10 +165,11 @@ void PrintMatrix(int[,] matrix)
                 printedLine[y] = '*';
 
                 nextMinX = Math.Min(x, nextMinX);
-                nextMaxX = Math.Max(x+1, nextMaxX);
+                nextMaxX = Math.Max(x + 1, nextMaxX);
                 nextMinY = Math.Min(y, nextMinY);
-                nextMaxY = Math.Max(y+1, nextMaxY);
+                nextMaxY = Math.Max(y + 1, nextMaxY);
             }
+
             Console.WriteLine(string.Join(separator: null, values: printedLine));
         }
 
@@ -191,29 +178,33 @@ void PrintMatrix(int[,] matrix)
         {
             Console.WriteLine();
         }
+
         Console.WriteLine();
 
         minX = nextMinX;
         maxX = nextMaxX;
         minY = nextMinY;
         maxY = nextMaxY;
-        
+
         // TODO boundaries? review
         if (minX < 3)
         {
             minX = 3;
             isInvalid = true;
         }
+
         if (maxX > 22)
         {
             maxX = 22;
             isInvalid = true;
         }
+
         if (minY < 3)
         {
             minY = 3;
             isInvalid = true;
         }
+
         if (maxY > 68)
         {
             maxY = 68;
@@ -239,6 +230,7 @@ void PrintMatrix(int[,] matrix)
                                 neighbors++;
                         }
                     }
+
                     // PrintMatrix(matrix);
                     if (matrix[x, y] == 0)
                     {
@@ -268,20 +260,14 @@ void PrintMatrix(int[,] matrix)
             maxY++;
         }
         // PrintMatrix(matrix);
-        ProcessGeneration();
     }
-
-
-
-    Console.WriteLine();
-    Console.WriteLine();
-    Console.WriteLine();
-    ProcessGeneration();
 }
-catch (Exception e)
-{
-    Console.WriteLine(e);
-}
+
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine();
+ProcessGeneration();
+
 public class Simulation
 {
     public int Generation { get; private set; }
