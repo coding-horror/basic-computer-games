@@ -56,6 +56,7 @@ THE MINIMUM BET IS $5, THE MAXIMUM IS $500.
     """)
 
 def query_bets():
+    """Queries the user to input their bets"""
     betCount = -1
     while betCount <= 0:
         try:
@@ -87,6 +88,7 @@ def query_bets():
     return bet_IDs,bet_Values
 
 def bet_results(bet_IDs,bet_Values,result):
+    """Computes the results, prints them, and returns the total net winnings"""
     total_winnings = 0
     def get_modifier(id,num):
         if id == 37 and num <= 12:
@@ -130,6 +132,7 @@ def bet_results(bet_IDs,bet_Values,result):
     return winnings
 
 def print_check(amount):
+    """Prints a check of a given amount"""
     name = input("TO WHOM SHALL I MAKE THE CHECK? ")
 
     print("-" * 72)
@@ -203,7 +206,8 @@ def main():
 
 
 def stringtobool(string):
+    """Converts a string to a bool"""
     return string.lower() in ("yes","y","true","t","yes")
 
-# a,b = query_bets()
-main()
+if __name__ == '__main__':
+    main()
