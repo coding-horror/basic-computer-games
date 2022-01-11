@@ -1,40 +1,16 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.Text;
 
-using System.Drawing;
-using System.Text;
-
-const int MaxWidth = 70;
-const int MaxHeight = 24;
-
-
+const int maxWidth = 70;
+const int maxHeight = 24;
 
 Console.WriteLine("ENTER YOUR PATTERN:");
-// var pattern = ReadPattern(limitHeight: MaxHeight).ToArray();
-var pattern = new[]
-{
-    "*", 
-    "*", 
-    "*" 
-}; // FOR DEBUGGING PURPOSES
-// var pattern = new[]
-// {
-//     "**", 
-//     "**", 
-// }; // FOR DEBUGGING PURPOSES
-// var pattern = new[]
-// {
-//     "***", 
-//     "*", 
-// }; // FOR DEBUGGING PURPOSES
+var pattern = ReadPattern(limitHeight: maxHeight).ToArray();
 
-var isInvalid = false;
+var (minX, minY) = FindTopLeftCorner(pattern);
+var maxX = maxHeight;
+var maxY = maxWidth;
 
-var (index, value) = FindLongestInput(pattern);
-var minX = (11 - index / 2) - 1;              // middle x
-var minY = (33 - value.Length / 2) - 1;       // middle y
-var maxX = MaxHeight;
-var maxY = MaxWidth;
-var matrix = new Matrix(height: MaxHeight, width: MaxWidth);
+var matrix = new Matrix(height: maxHeight, width: maxWidth);
 var simulation = InitializeSimulation(pattern, matrix);
 
 PrintHeader();
@@ -59,12 +35,15 @@ IEnumerable<string> ReadPattern(int limitHeight)
     }
 }
 
-(int index, string value) FindLongestInput(IEnumerable<string> strings)
+(int minX, int minY) FindTopLeftCorner(IEnumerable<string> patternLines)
 {
-    return strings
+    var longestInput = patternLines
         .Select((value, index) => (index, value))
         .OrderByDescending(input => input.value.Length)
         .First();
+    var centerX = (11 - longestInput.index / 2) - 1;
+    var centerY = (33 - longestInput.value.Length / 2) - 1;
+    return (centerX, centerY);
 }
 
 void PrintHeader()
@@ -88,13 +67,14 @@ void PrintHeader()
 Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
 
+    // copies the pattern to the middle of the simulation and counts initial population
     for (var x = 0; x < inputPattern.Count; x++)
     {
         for (var y = 0; y < inputPattern[x].Length; y++)
         {
             if (inputPattern[x][y] == ' ') continue;
             
-            matrixToInitialize[minX + x, minY + y] = Cell.NeutralCell; // copy the pattern to the middle of the simulation
+            matrixToInitialize[minX + x, minY + y] = Cell.NeutralCell;
             newSimulation.IncreasePopulation();
         }
     }
@@ -104,20 +84,19 @@ Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matri
 
 void ProcessGeneration()
 {
-    void PrintPopulation(int generation, int population)
-    {
-        Console.WriteLine($"GENERATION: {generation}\tPOPULATION: {population}");
-        if (isInvalid)
-            Console.WriteLine("INVALID!");
-    }
+    var isInvalid = false;
     
     while (true)
     {
-        PrintPopulation(simulation.Generation, simulation.Population);
+        // Thread.Sleep(millisecondsTimeout: 1000);
+        Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population}");
+        if (isInvalid)
+            Console.WriteLine("INVALID!");
+        
         simulation.StartNewGeneration();
 
-        var nextMinX = MaxHeight - 1; 
-        var nextMinY = MaxWidth - 1;
+        var nextMinX = maxHeight - 1; 
+        var nextMinY = maxWidth - 1;
         var nextMaxX = 0; 
         var nextMaxY = 0; 
 
@@ -130,7 +109,7 @@ void ProcessGeneration()
         // refreshes the matrix and updates search area 
         for (var x = minX; x < maxX; x++)
         {
-            var printedLine = Enumerable.Repeat(' ', MaxWidth).ToList();
+            var printedLine = Enumerable.Repeat(' ', maxWidth).ToList();
             for (var y = minY; y < maxY; y++)
             {
                 if (matrix[x, y] == Cell.DyingCel)
@@ -159,7 +138,7 @@ void ProcessGeneration()
         }
 
         // prints empty lines after search area
-        for (var x = maxX + 1; x < MaxHeight; x++)
+        for (var x = maxX + 1; x < maxHeight; x++)
         {
             Console.WriteLine();
         }
@@ -172,7 +151,6 @@ void ProcessGeneration()
             minY = nextMinY;
             maxY = nextMaxY;
 
-            // TODO boundaries? review
             if (minX < 3)
             {
                 minX = 3;
