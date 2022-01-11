@@ -82,13 +82,32 @@ Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matri
     return newSimulation;
 }
 
+TimeSpan GetPauseBetweenIterations()
+{
+    if (args.Length == 2)
+    {
+        var parameter = args[0].ToLower();
+        if (parameter.Contains("wait"))
+        {
+            var value = args[1];
+            if (int.TryParse(value, out var sleepMilliseconds))
+                return TimeSpan.FromMilliseconds(sleepMilliseconds);
+        }
+    }
+
+    return TimeSpan.Zero;
+}
+
 void ProcessGeneration()
 {
+    var pauseBetweenIterations = GetPauseBetweenIterations();
     var isInvalid = false;
     
     while (true)
     {
-        // Thread.Sleep(millisecondsTimeout: 1000);
+        if (pauseBetweenIterations > TimeSpan.Zero)
+            Thread.Sleep(pauseBetweenIterations);
+        
         Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population}");
         if (isInvalid)
             Console.WriteLine("INVALID!");
