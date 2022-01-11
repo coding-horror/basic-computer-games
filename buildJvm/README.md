@@ -7,7 +7,7 @@ We should be using version 17 anyway, because anything less than 17 is deprecate
 Build all the games:
 ```shell
  cd buildJvm
- ./gradlew -q assemble installDist distributeBin distributeLib
+ ./gradlew -q clean assemble installDist distributeBin distributeLib
 ```
 
 Then, run a game
