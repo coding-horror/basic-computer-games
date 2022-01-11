@@ -39,16 +39,10 @@ void PrintHeader()
     Console.WriteLine();    
 }
 
-(int index, string value) GetLongestInput(IEnumerable<string> strings)
-{
-    return strings
-        .Select((value, index) => (index, value))
-        .OrderByDescending(input => input.value.Length)
-        .First();
-}
 
 
-PrintHeader();
+
+
 
 Console.WriteLine("ENTER YOUR PATTERN:");
 // var pattern = ReadPattern(limitHeight: MaxHeight).ToArray();
@@ -58,59 +52,59 @@ var pattern = new[]
     "*", 
     "*" 
 }; // FOR DEBUGGING PURPOSES
+// var pattern = new[]
+// {
+//     "**", 
+//     "**", 
+// }; // FOR DEBUGGING PURPOSES
+// var pattern = new[]
+// {
+//     "***", 
+//     "*", 
+// }; // FOR DEBUGGING PURPOSES
+
+
+const int MaxWidth = 70;
+const int MaxHeight = 24;
+
+var isInvalid = false;
+
 var (index, value) = GetLongestInput(pattern);
-Console.WriteLine("" + index + ", " + value);
-
-// B = pattern
-
-
-const int MaxWidth = 70; // Y2
-const int MaxHeight = 24; // X2
-
-// var matrix = new int[24, 70]; // TODO understand it
-var matrixSpace = new MatrixSpace(height: 24, width: 70);
-// int population = 0; 
-var isInvalid = false; // TODO understand
-
-
-
 int minX = (11 - index / 2) - 1;              // middle x
 int minY = (33 - value.Length / 2) - 1;       // middle y
 int maxX = MaxHeight;
 int maxY = MaxWidth;
-var simulation = InitializeSimulation(pattern, matrixSpace);
+var matrix = new Matrix(height: MaxHeight, width: MaxWidth);
+var simulation = InitializeSimulation(pattern, matrix);
+
+PrintHeader();
+Console.WriteLine();
+Console.WriteLine();
+Console.WriteLine();
+ProcessGeneration();
 
 
-
-Simulation InitializeSimulation(string[] inputPattern, MatrixSpace matrixToInitialize) {
+Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
 
-    for (var x = 0; x < inputPattern.Length; x++)
+    for (var x = 0; x < inputPattern.Count; x++)
     {
         for (var y = 0; y < inputPattern[x].Length; y++)
         {
-            if (inputPattern[x][y] != ' ')
-            {
-                matrixToInitialize.Matrix[minX + x, minY + y] = 1; // copy the pattern to the middle of the simulation
-                // population++; // increments the population
-                newSimulation.IncreasePopulation();
-            }
+            if (inputPattern[x][y] == ' ') continue;
+            
+            matrixToInitialize[minX + x, minY + y] = 1; // copy the pattern to the middle of the simulation
+            newSimulation.IncreasePopulation();
         }
     }
 
     return newSimulation;
 }
 
-
 void ProcessGeneration()
 {
-    var matrix = matrixSpace.Matrix; // TODO refactor
-
     while (true)
     {
-
-        // generation++;
-
         void PrintPopulation(int generation, int population)
         {
             Console.WriteLine($"GENERATION: {generation}\tPOPULATION: {population}");
@@ -123,25 +117,18 @@ void ProcessGeneration()
         simulation.StartNewGeneration();
 
         // LINE 215
-        // x3 = 24 = MaxHeight
-        // y3 = 70 = MaxWidth
-        // x4 = 1
-        // y4 = 1
-        // g = g + 1
+        var nextMinX = MaxHeight - 1; 
+        var nextMinY = MaxWidth - 1;
+        var nextMaxX = 0; 
+        var nextMaxY = 0; 
 
-        int nextMinX = MaxHeight - 1; // x4
-        int nextMinY = MaxWidth - 1; // y4
-        int nextMaxX = 0; // x3
-        int nextMaxY = 0; // y3
-
-
-        // prints lines before
-        for (int x = 0; x < minX; x++)
+        // prints empty lines before alive cells
+        for (var x = 0; x < minX; x++)
         {
             Console.WriteLine();
         }
 
-        // prints matrix and 
+        // refreshes the matrix and updates search area 
         for (var x = minX; x < maxX; x++)
         {
             var printedLine = Enumerable.Repeat(' ', MaxWidth).ToList();
@@ -152,7 +139,6 @@ void ProcessGeneration()
                     matrix[x, y] = 0;
                     continue;
                 }
-
                 if (matrix[x, y] == 3)
                 {
                     matrix[x, y] = 1;
@@ -173,12 +159,11 @@ void ProcessGeneration()
             Console.WriteLine(string.Join(separator: null, values: printedLine));
         }
 
-        // prints lines after
-        for (int x = maxX + 1; x < MaxHeight; x++) // TODO test +1
+        // prints empty lines after alive cells
+        for (int x = maxX + 1; x < MaxHeight; x++)
         {
             Console.WriteLine();
         }
-
         Console.WriteLine();
 
         minX = nextMinX;
@@ -211,62 +196,60 @@ void ProcessGeneration()
             isInvalid = true;
         }
 
-        // LINE 309
-        ProcessPopulation();
-
-        void ProcessPopulation()
+        for (var x = minX - 1; x < maxX + 2; x++)
         {
-            // var population = 0;
-            for (int x = minX - 1; x < maxX + 2; x++) // TODO review indices
+            for (var y = minY - 1; y < maxY + 2; y++)
             {
-                for (int y = minY - 1; y < maxY + 2; y++) // TODO review indices
+                int CountNeighbors()
                 {
                     var neighbors = 0;
-                    for (int i = x - 1; i < x + 2; i++) // TODO review indices
+                    for (var i = x - 1; i < x + 2; i++)
                     {
-                        for (int j = y - 1; j < y + 2; j++) // TODO review indices
+                        for (var j = y - 1; j < y + 2; j++)
                         {
                             if (matrix[i, j] == 1 || matrix[i, j] == 2)
                                 neighbors++;
                         }
                     }
 
-                    // PrintMatrix(matrix);
-                    if (matrix[x, y] == 0)
+                    return neighbors;
+                }
+
+                var neighbors = CountNeighbors();
+                if (matrix[x, y] == 0)
+                {
+                    if (neighbors == 3)
                     {
-                        if (neighbors == 3)
-                        {
-                            matrix[x, y] = 3;
-                            // population++;
-                            simulation.IncreasePopulation();
-                        }
-                    }
-                    else if (neighbors is < 3 or > 4)
-                    {
-                        matrix[x, y] = 2;
-                    }
-                    else
-                    {
-                        // population++;
+                        matrix[x, y] = 3;
                         simulation.IncreasePopulation();
                     }
                 }
+                else if (neighbors is < 3 or > 4)
+                {
+                    matrix[x, y] = 2;
+                }
+                else
+                {
+                    simulation.IncreasePopulation();
+                }
             }
-
-            // LINE 635
-            minX--;
-            minY--;
-            maxX++;
-            maxY++;
         }
-        // PrintMatrix(matrix);
+
+        // expands search area to accommodate new cells 
+        minX--;
+        minY--;
+        maxX++;
+        maxY++;
     }
 }
 
-Console.WriteLine();
-Console.WriteLine();
-Console.WriteLine();
-ProcessGeneration();
+(int index, string value) GetLongestInput(IEnumerable<string> strings)
+{
+    return strings
+        .Select((value, index) => (index, value))
+        .OrderByDescending(input => input.value.Length)
+        .First();
+}
 
 public class Simulation
 {
@@ -286,33 +269,29 @@ public class Simulation
     }
 }
 
-
-// int x1 = 1, y1 = 1;
-// int x2 = 24, y2 = 70;
-
-// var b = new string[24];
-
-
-
-
-
-public class MatrixSpace
+class Matrix
 {
-    public int[,] Matrix { get; }
+    private readonly int[,] _matrix;
 
-    public MatrixSpace(int height, int width)
+    public Matrix(int height, int width)
     {
-        Matrix = new int[height, width];
+        _matrix = new int[height, width];
     }
 
+    public int this[int x, int y]
+    {
+        get => _matrix[x, y];
+        set => _matrix[x, y] = value;
+    }
+    
     public override string ToString()
     {
         var stringBuilder = new StringBuilder();
-        for (var x = 0; x < Matrix.GetLength(0); x++)
+        for (var x = 0; x < _matrix.GetLength(0); x++)
         {
-            for (var y = 0; y < Matrix.GetLength(1); y++)
+            for (var y = 0; y < _matrix.GetLength(1); y++)
             {
-                var character = Matrix[x, y] == 0 ? " ": Matrix[x, y].ToString();
+                var character = _matrix[x, y] == 0 ? " ": _matrix[x, y].ToString();
                 stringBuilder.Append(character);
             }
 
