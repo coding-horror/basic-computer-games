@@ -1,9 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Drawing;
 using System.Text;
 
 const int MaxWidth = 70;
 const int MaxHeight = 24;
+
+
 
 Console.WriteLine("ENTER YOUR PATTERN:");
 // var pattern = ReadPattern(limitHeight: MaxHeight).ToArray();
@@ -91,7 +94,7 @@ Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matri
         {
             if (inputPattern[x][y] == ' ') continue;
             
-            matrixToInitialize[minX + x, minY + y] = 1; // copy the pattern to the middle of the simulation
+            matrixToInitialize[minX + x, minY + y] = Cell.NeutralCell; // copy the pattern to the middle of the simulation
             newSimulation.IncreasePopulation();
         }
     }
@@ -130,16 +133,16 @@ void ProcessGeneration()
             var printedLine = Enumerable.Repeat(' ', MaxWidth).ToList();
             for (var y = minY; y < maxY; y++)
             {
-                if (matrix[x, y] == 2)
+                if (matrix[x, y] == Cell.DyingCel)
                 {
                     matrix[x, y] = 0;
                     continue;
                 }
-                if (matrix[x, y] == 3)
+                if (matrix[x, y] == Cell.NewCell)
                 {
-                    matrix[x, y] = 1;
+                    matrix[x, y] = Cell.NeutralCell;
                 }
-                else if (matrix[x, y] != 1)
+                else if (matrix[x, y] != Cell.NeutralCell)
                 {
                     continue;
                 }
@@ -207,7 +210,7 @@ void ProcessGeneration()
                     {
                         for (var j = y - 1; j < y + 2; j++)
                         {
-                            if (matrix[i, j] == 1 || matrix[i, j] == 2)
+                            if (matrix[i, j] == Cell.NeutralCell || matrix[i, j] == Cell.DyingCel)
                                 neighbors++;
                         }
                     }
@@ -220,13 +223,13 @@ void ProcessGeneration()
                 {
                     if (neighbors == 3)
                     {
-                        matrix[x, y] = 3;
+                        matrix[x, y] = Cell.NewCell;
                         simulation.IncreasePopulation();
                     }
                 }
                 else if (neighbors is < 3 or > 4)
                 {
-                    matrix[x, y] = 2;
+                    matrix[x, y] = Cell.DyingCel;
                 }
                 else
                 {
@@ -241,6 +244,14 @@ void ProcessGeneration()
         maxX++;
         maxY++;
     }
+}
+
+internal enum Cell
+{
+    EmptyCell = 0,
+    NeutralCell = 1,
+    DyingCel = 2,
+    NewCell =3
 }
 
 public class Simulation
@@ -263,14 +274,14 @@ public class Simulation
 
 class Matrix
 {
-    private readonly int[,] _matrix;
+    private readonly Cell[,] _matrix;
 
     public Matrix(int height, int width)
     {
-        _matrix = new int[height, width];
+        _matrix = new Cell[height, width];
     }
 
-    public int this[int x, int y]
+    public Cell this[int x, int y]
     {
         get => _matrix[x, y];
         set => _matrix[x, y] = value;
@@ -283,7 +294,7 @@ class Matrix
         {
             for (var y = 0; y < _matrix.GetLength(1); y++)
             {
-                var character = _matrix[x, y] == 0 ? " ": _matrix[x, y].ToString();
+                var character = _matrix[x, y] == 0 ? " ": ((int)_matrix[x, y]).ToString();
                 stringBuilder.Append(character);
             }
 
