@@ -1,4 +1,5 @@
-
+from datetime import date
+import random
 
 global RED_NUMBERS
 RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
@@ -124,8 +125,23 @@ def bet_results(bet_IDs,bet_Values,result):
         else:
             print("YOU LOSE " + str(winnings * -1) + " DOLLARS ON BET " + str(i + 1))
 
+def print_check(amount):
+    name = input("TO WHOM SHALL I MAKE THE CHECK? ")
+
+    print("-" * 72)
+    print()
+    print(" " * 40 + "CHECK NO. " + str(random.randint(0,100)))
+    print(" " * 40 + str(date.today()))
+    print()
+    print("PAY TO THE ORDER OF -----" + name + "----- $" + str(amount))
+    print()
+    print(" " * 40 + "THE MEMORY BANK OF NEW YORK")
+    print(" " * 40 + "THE COMPUTER")
+    print(" " * 40 + "----------X-----")
+    print("-" * 72)
+
 def main():
     ...
 
-a,b = query_bets()
-bet_results(a,b,5)
+# a,b = query_bets()
+print_check(5)
