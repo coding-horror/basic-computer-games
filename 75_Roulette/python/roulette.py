@@ -87,6 +87,7 @@ def query_bets():
     return bet_IDs,bet_Values
 
 def bet_results(bet_IDs,bet_Values,result):
+    total_winnings = 0
     def get_modifier(id,num):
         if id == 37 and num <= 12:
             return 2
@@ -119,11 +120,14 @@ def bet_results(bet_IDs,bet_Values,result):
 
     for i in range(len(bet_IDs)):
         winnings = bet_Values[i] * get_modifier(bet_IDs[i],result)
+        total_winnings += winnings
 
         if winnings >= 0:
             print("YOU WIN " + str(winnings) + " DOLLARS ON BET " + str(i + 1))
         else:
             print("YOU LOSE " + str(winnings * -1) + " DOLLARS ON BET " + str(i + 1))
+
+    return winnings
 
 def print_check(amount):
     name = input("TO WHOM SHALL I MAKE THE CHECK? ")
@@ -141,7 +145,65 @@ def print_check(amount):
     print("-" * 72)
 
 def main():
-    ...
+    player_balance = 1000
+    host_balance = 100000
+
+    print(" " * 32 + "ROULETTE")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print()
+    print()
+    print()
+
+    if stringtobool(input("DO YOU WANT INSTRUCTIONS? ")):
+        print_instructions()
+
+    while True:
+        bet_IDs,bet_Values = query_bets()
+
+        print("SPINNING")
+        print()
+        print()
+
+        val = random.randint(0,38)
+        if val == 38:
+            print("0")
+        elif val == 37:
+            print("00")
+        elif val in RED_NUMBERS:
+            print(str(val) + " RED")
+        else:
+            print(str(val) + " BLACK")
+
+        print()
+        total_winnings = bet_results(bet_IDs,bet_Values,val)
+        player_balance += total_winnings
+        host_balance -= total_winnings
+
+        print()
+        print("TOTALS:\tME\t\tYOU")
+        print("\t\t" + str(host_balance) + "\t" + str(player_balance))
+
+        if player_balance <= 0:
+            print("OOPS! YOU JUST SPENT YOUR LAST DOLLAR!")
+            break
+        elif host_balance <= 0:
+            print("YOU BROKE THE HOUSE!")
+            player_balance = 101000
+            break
+        if not stringtobool(input("PLAY AGAIN? ")):
+            break
+
+
+    if player_balance <= 0:
+        print("THANKS FOR YOUR MONEY")
+        print("I'LL USE IT TO BUY A SOLID GOLD ROULETTE WHEEL")
+    else:
+        print_check(player_balance)
+    print("COME BACK SOON!")
+
+
+def stringtobool(string):
+    return string.lower() in ("yes","y","true","t","yes")
 
 # a,b = query_bets()
-print_check(5)
+main()
