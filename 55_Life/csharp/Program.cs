@@ -1,4 +1,16 @@
-﻿using System.Text;
+﻿/*
+ * LIFE
+ * An implementation of John Conway's popular cellular automaton
+ * Ported by Dyego Alekssander Maas
+ *
+ * An example pattern would be:
+ * " * "
+ * "***"
+ * "DONE" (indicates that the simulation can start)
+ * 
+ * You can find patterns to play with here: http://pi.math.cornell.edu/~lipa/mec/lesson6.html
+*/
+using System.Text;
 
 const int maxWidth = 70;
 const int maxHeight = 24;
