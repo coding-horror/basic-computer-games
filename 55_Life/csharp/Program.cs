@@ -107,9 +107,6 @@ void ProcessSimulation()
     
     while (true)
     {
-        if (pauseBetweenIterations > TimeSpan.Zero)
-            Thread.Sleep(pauseBetweenIterations);
-        
         Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population}");
         if (isInvalid)
             Console.WriteLine("INVALID!");
@@ -242,6 +239,9 @@ void ProcessSimulation()
         minY--;
         maxX++;
         maxY++;
+        
+        if (pauseBetweenIterations > TimeSpan.Zero)
+            Thread.Sleep(pauseBetweenIterations);
     }
 }
 
