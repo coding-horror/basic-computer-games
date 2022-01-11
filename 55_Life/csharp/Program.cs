@@ -2,47 +2,8 @@
 
 using System.Text;
 
-IEnumerable<string> ReadPattern(int limitHeight)
-{
-    for (var i = 0; i < limitHeight; i++)
-    {
-        var input = Console.ReadLine();
-        if (input.ToUpper() == "DONE")
-        {
-            yield return string.Empty;
-            break;
-        }
-
-        // kept for compatibility
-        if (input.StartsWith('.'))
-            yield return input.Substring(1, input.Length - 2);
-
-        yield return input;
-    }
-}
-
-void PrintHeader()
-{
-    const int pageWidth = 64;
-
-    void PrintCentered(string text)
-    {
-        var spaceCount = (pageWidth - text.Length) / 2;
-        Console.Write(new string(' ', spaceCount));
-        Console.WriteLine(text);
-    }
-    
-    PrintCentered("LIFE");
-    PrintCentered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-    Console.WriteLine();
-    Console.WriteLine();
-    Console.WriteLine();    
-}
-
-
-
-
-
+const int MaxWidth = 70;
+const int MaxHeight = 24;
 
 Console.WriteLine("ENTER YOUR PATTERN:");
 // var pattern = ReadPattern(limitHeight: MaxHeight).ToArray();
@@ -63,26 +24,63 @@ var pattern = new[]
 //     "*", 
 // }; // FOR DEBUGGING PURPOSES
 
-
-const int MaxWidth = 70;
-const int MaxHeight = 24;
-
 var isInvalid = false;
 
-var (index, value) = GetLongestInput(pattern);
-int minX = (11 - index / 2) - 1;              // middle x
-int minY = (33 - value.Length / 2) - 1;       // middle y
-int maxX = MaxHeight;
-int maxY = MaxWidth;
+var (index, value) = FindLongestInput(pattern);
+var minX = (11 - index / 2) - 1;              // middle x
+var minY = (33 - value.Length / 2) - 1;       // middle y
+var maxX = MaxHeight;
+var maxY = MaxWidth;
 var matrix = new Matrix(height: MaxHeight, width: MaxWidth);
 var simulation = InitializeSimulation(pattern, matrix);
 
 PrintHeader();
-Console.WriteLine();
-Console.WriteLine();
-Console.WriteLine();
 ProcessGeneration();
 
+IEnumerable<string> ReadPattern(int limitHeight)
+{
+    for (var i = 0; i < limitHeight; i++)
+    {
+        var input = Console.ReadLine();
+        if (input.ToUpper() == "DONE")
+        {
+            yield return string.Empty;
+            break;
+        }
+
+        // kept for compatibility
+        if (input.StartsWith('.'))
+            yield return input.Substring(1, input.Length - 2);
+
+        yield return input;
+    }
+}
+
+(int index, string value) FindLongestInput(IEnumerable<string> strings)
+{
+    return strings
+        .Select((value, index) => (index, value))
+        .OrderByDescending(input => input.value.Length)
+        .First();
+}
+
+void PrintHeader()
+{
+    void PrintCentered(string text)
+    {
+        const int pageWidth = 64;
+
+        var spaceCount = (pageWidth - text.Length) / 2;
+        Console.Write(new string(' ', spaceCount));
+        Console.WriteLine(text);
+    }
+    
+    PrintCentered("LIFE");
+    PrintCentered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+    Console.WriteLine();
+    Console.WriteLine();
+    Console.WriteLine();    
+}
 
 Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
@@ -103,26 +101,24 @@ Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matri
 
 void ProcessGeneration()
 {
+    void PrintPopulation(int generation, int population)
+    {
+        Console.WriteLine($"GENERATION: {generation}\tPOPULATION: {population}");
+        if (isInvalid)
+            Console.WriteLine("INVALID!");
+    }
+    
     while (true)
     {
-        void PrintPopulation(int generation, int population)
-        {
-            Console.WriteLine($"GENERATION: {generation}\tPOPULATION: {population}");
-            if (isInvalid)
-                Console.WriteLine("INVALID!");
-        }
-
         PrintPopulation(simulation.Generation, simulation.Population);
-
         simulation.StartNewGeneration();
 
-        // LINE 215
         var nextMinX = MaxHeight - 1; 
         var nextMinY = MaxWidth - 1;
         var nextMaxX = 0; 
         var nextMaxY = 0; 
 
-        // prints empty lines before alive cells
+        // prints the empty lines before search area
         for (var x = 0; x < minX; x++)
         {
             Console.WriteLine();
@@ -159,42 +155,46 @@ void ProcessGeneration()
             Console.WriteLine(string.Join(separator: null, values: printedLine));
         }
 
-        // prints empty lines after alive cells
-        for (int x = maxX + 1; x < MaxHeight; x++)
+        // prints empty lines after search area
+        for (var x = maxX + 1; x < MaxHeight; x++)
         {
             Console.WriteLine();
         }
         Console.WriteLine();
 
-        minX = nextMinX;
-        maxX = nextMaxX;
-        minY = nextMinY;
-        maxY = nextMaxY;
-
-        // TODO boundaries? review
-        if (minX < 3)
+        void UpdateSearchArea()
         {
-            minX = 3;
-            isInvalid = true;
-        }
+            minX = nextMinX;
+            maxX = nextMaxX;
+            minY = nextMinY;
+            maxY = nextMaxY;
 
-        if (maxX > 22)
-        {
-            maxX = 22;
-            isInvalid = true;
-        }
+            // TODO boundaries? review
+            if (minX < 3)
+            {
+                minX = 3;
+                isInvalid = true;
+            }
 
-        if (minY < 3)
-        {
-            minY = 3;
-            isInvalid = true;
-        }
+            if (maxX > 22)
+            {
+                maxX = 22;
+                isInvalid = true;
+            }
 
-        if (maxY > 68)
-        {
-            maxY = 68;
-            isInvalid = true;
+            if (minY < 3)
+            {
+                minY = 3;
+                isInvalid = true;
+            }
+
+            if (maxY > 68)
+            {
+                maxY = 68;
+                isInvalid = true;
+            }
         }
+        UpdateSearchArea();
 
         for (var x = minX - 1; x < maxX + 2; x++)
         {
@@ -241,14 +241,6 @@ void ProcessGeneration()
         maxX++;
         maxY++;
     }
-}
-
-(int index, string value) GetLongestInput(IEnumerable<string> strings)
-{
-    return strings
-        .Select((value, index) => (index, value))
-        .OrderByDescending(input => input.value.Length)
-        .First();
 }
 
 public class Simulation
