@@ -9,6 +9,10 @@
  * "DONE" (indicates that the simulation can start)
  * 
  * You can find patterns to play with here: http://pi.math.cornell.edu/~lipa/mec/lesson6.html
+ *
+ * Optionally, you can run this program with the "--wait 1000" argument, the number being the time in milliseconds
+ * that the application will pause between each iteration. This is enables you to watch the simulation unfolding.
+ * By default, there is no pause between iterations.
 */
 using System.Text;
 
