@@ -1,7 +1,7 @@
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.management.PlatformLoggingMXBean;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Roulette {
@@ -35,135 +35,143 @@ public class Roulette {
         out.println("                                ROULETTE");
         out.println("               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
         out.println("WELCOME TO THE ROULETTE TABLE\n");
-        out.println("DO YOU WANT INSTRUCTIONS");
+        out.print("DO YOU WANT INSTRUCTIONS? ");
         if(scanner.nextLine().toLowerCase().charAt(0) != 'n') {
             printInstructions();
         }
+
 
         do {
 
             Bet[] bets = queryBets();
 
-            out.println("SPINNING...\n\n\n");
+            out.print("SPINNING...\n\n");
             int result = random.nextInt(1,39);
 
             /*
             Equivalent to following line
-            if(RED_NUMBERS.contains(result)) {
+            if(result == 37) {
+                out.println("00");
+            } else if(result == 38) {
+                out.println("0");
+            } else if(RED_NUMBERS.contains(result)) {
                 out.println(result + " RED");
             } else {
                 out.println(result + " BLACK");
             }
              */
-            switch(result) {
-                case 37 -> out.print("00");
-                case 38 -> out.print("0");
-                default ->  out.println(result + (RED_NUMBERS.contains(result) ? " RED\n" : " BLACK\n"));
-            }
+            out.println(switch(result) {
+                case 37 -> "00";
+                case 38 -> "0";
+                default ->  result + (RED_NUMBERS.contains(result) ? " RED" : " BLACK");
+            });
 
             betResults(bets,result);
             out.println();
             
-            out.println("TOTALS:\tME\tYOU");
-            out.println("\t\t" + houseBalance + "\t" + playerBalance);
+            out.println("TOTALS:\tME\t\tYOU");
+            out.format("\t\t%5d\t%d\n",houseBalance,playerBalance);
 
         } while(playAgain());
         if(playerBalance <= 0) {
             out.println("THANKS FOR YOUR MONEY\nI'LL USE IT TO BUY A SOLID GOLD ROULETTE WHEEL");
-        } else if(houseBalance <= 0) {
-            out.println("TO WHOM SHALL I MAKE THE CHECK");
-            String name = scanner.nextLine();
-            out.println();
-            for(int i = 0; i < 72; i++) {
-                out.print("-");
-            }
-            out.println();
-            for(int i = 0; i < 50; i++) {
-                out.print(" ");
-            }
-            out.println("CHECK NO. " + random.nextInt(0,1000));
-            out.println();
-            for(int i = 0; i < 40; i++) {
-                out.print(" ");
-            }
-            out.println(LocalDateTime.now());
-            out.println("\n");
-            out.println("PAY TO THE ORDER OF----- " + name + "------$" + (playerBalance - 1000));
-            out.println("\n");
-            for(int i = 0; i < 10; i++) {
-                out.print(" ");
-            }
-            out.println("THE MEMORY BANK OF NEW YORK");
-            for(int i = 0; i < 40; i++) {
-                out.print(" ");
-            }
-            out.println("THE COMPUTER");
-            for(int i = 0; i < 40; i++) {
-                out.print(" ");
-            }
-            out.println("----------X-----");
-            for(int i = 0; i < 72; i++) {
-                out.print("-");
-            }
-            out.println("\n");
-            out.println("COME BACK SOON");
+        } else {
+            printCheck();
         }
+        out.println("COME BACK SOON!");
+    }
+
+    private void printCheck() {
+        out.print("TO WHOM SHALL I MAKE THE CHECK? ");
+        String name = scanner.nextLine();
+
+        out.println();
+        for(int i = 0; i < 72; i++) {
+            out.print("-");
+        }
+        out.println();
+
+        for(int i = 0; i < 50; i++) {
+            out.print(" ");
+        }
+        out.println("CHECK NO. " + random.nextInt(0,100));
+
+        for(int i =  0; i< 40; i++) {
+            out.print(" ");
+        }
+        out.println(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        out.println();
+
+        out.println("PAY TO THE ORDER OF -----" + name + "----- $" + (playerBalance));
+        out.println();
+
+        for(int i = 0; i < 40; i++) {
+            out.print(" ");
+        }
+        out.println("THE MEMORY BANK OF NEW YORK");
+
+        for(int i = 0; i < 40; i++) {
+            out.print(" ");
+        }
+        out.println("THE COMPUTER");
+
+        for(int i = 0; i < 40; i++) {
+            out.print(" ");
+        }
+        out.println("----------X-----");
+
+        for(int i = 0; i < 72; i++) {
+            out.print("-");
+        }
+        out.println();
     }
 
     private boolean playAgain() {
-        if(playerBalance > 0) {
-            if(houseBalance <= 0) {
-                out.println("YOU BROKE THE HOUSE!");
-                //using default values
-                playerBalance = 101000;
-            }
+
+        if(playerBalance <= 0) {
+            out.println("OOPS! YOU JUST SPENT YOUR LAST DOLLAR!");
+            return false;
+        } else if(houseBalance <= 0) {
+            out.println("YOU BROKE THE HOUSE!");
+            playerBalance = 10100;
+            houseBalance = 0;
+            return false;
+        } else {
             out.println("PLAY AGAIN?");
             return scanner.nextLine().toLowerCase().charAt(0) == 'y';
-        } else {
-            return false;
         }
     }
 
     private Bet[] queryBets() {
         int numBets = -1;
         while(numBets < 1) {
-            out.println("HOW MANY BETS");
+            out.print("HOW MANY BETS? ");
             try {
                 numBets = Integer.parseInt(scanner.nextLine());
-            } catch(NumberFormatException exception) {
-                out.println("THAT IS NOT A NUMBER");
-            }
+            } catch(NumberFormatException ignored) {}
         }
 
         Bet[] bets = new Bet[numBets];
 
         for(int i = 0; i < numBets; i++) {
-            try {
-                out.println("BET NUMBER " + (i + 1) + ":");
-                String[] values = scanner.nextLine().split(",");
-                int betNumber = Integer.parseInt(values[0]);
-                int betValue = Integer.parseInt(values[1]);
+            while(bets[i] == null) {
+                try {
+                    out.print("NUMBER" + (i + 1) + "? ");
+                    String[] values = scanner.nextLine().split(",");
+                    int betNumber = Integer.parseInt(values[0]);
+                    int betValue = Integer.parseInt(values[1]);
 
-                for(int j = 0; j < i; j++) {
-                    if(bets[j].num == betNumber) {
-                        out.println("YOU MADE THAT BET ONCE ALREADY,DUM-DUM");
-                        throw new Exception();
+                    for(int j = 0; j < i; j++) {
+                        if(bets[j].num == betNumber) {
+                            out.println("YOU MADE THAT BET ONCE ALREADY,DUM-DUM");
+                            betNumber = -1; //Since -1 is out of the range, this will throw it out at the end
+                        }
                     }
-                }
 
-                if(betNumber < 1 || betNumber > 50 || betValue < 5 || betValue > 500) {
-                    out.println("INVALID VALUE, TRY AGAIN");
-                    i--;
-                    continue;
-                }
-
-                bets[i] = new Bet(betNumber,betValue);
-
-            } catch(Exception exception) {
-                if(exception instanceof NumberFormatException) {
-                    out.println("SYNTAX ERROR, TRY AGAIN");
-                }
-                i--;
+                    if(betNumber > 0 && betNumber <= 50 && betValue >= 5 && betValue <= 500) {
+                        bets[i] = new Bet(betValue,betNumber);
+                    }
+                } catch(Exception ignored) {}
             }
         }
         return bets;
