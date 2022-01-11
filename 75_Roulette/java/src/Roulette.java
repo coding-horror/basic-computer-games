@@ -157,7 +157,8 @@ public class Roulette {
                     }
 
                     if (betNumber > 0 && betNumber <= 50 && betValue >= 5 && betValue <= 500) {
-                        bets[i] = new Bet(betValue, betNumber);
+                        bets[i] = new Bet(betNumber,betValue);
+                        playerBalance -= betValue;
                     }
                 } catch (Exception ignored) {
                 }
