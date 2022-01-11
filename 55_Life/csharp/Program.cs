@@ -14,7 +14,7 @@ var matrix = new Matrix(height: maxHeight, width: maxWidth);
 var simulation = InitializeSimulation(pattern, matrix);
 
 PrintHeader();
-ProcessGeneration();
+ProcessSimulation();
 
 IEnumerable<string> ReadPattern(int limitHeight)
 {
@@ -27,7 +27,9 @@ IEnumerable<string> ReadPattern(int limitHeight)
             break;
         }
 
-        // kept for compatibility
+        // In the original version, BASIC would trim the spaces in the beginning of an input, so the original
+        // game allowed you to input an '.' before the spaces to circumvent this limitation. This behavior was
+        // kept for compatibility.
         if (input.StartsWith('.'))
             yield return input.Substring(1, input.Length - 2);
 
@@ -67,14 +69,14 @@ void PrintHeader()
 Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
 
-    // copies the pattern to the middle of the simulation and counts initial population
+    // translates the pattern to the middle of the simulation and counts initial population
     for (var x = 0; x < inputPattern.Count; x++)
     {
         for (var y = 0; y < inputPattern[x].Length; y++)
         {
             if (inputPattern[x][y] == ' ') continue;
             
-            matrixToInitialize[minX + x, minY + y] = Cell.NeutralCell;
+            matrixToInitialize[minX + x, minY + y] = CellState.Stable;
             newSimulation.IncreasePopulation();
         }
     }
@@ -98,7 +100,7 @@ TimeSpan GetPauseBetweenIterations()
     return TimeSpan.Zero;
 }
 
-void ProcessGeneration()
+void ProcessSimulation()
 {
     var pauseBetweenIterations = GetPauseBetweenIterations();
     var isInvalid = false;
@@ -131,16 +133,16 @@ void ProcessGeneration()
             var printedLine = Enumerable.Repeat(' ', maxWidth).ToList();
             for (var y = minY; y < maxY; y++)
             {
-                if (matrix[x, y] == Cell.DyingCel)
+                if (matrix[x, y] == CellState.Dying)
                 {
-                    matrix[x, y] = 0;
+                    matrix[x, y] = CellState.Empty;
                     continue;
                 }
-                if (matrix[x, y] == Cell.NewCell)
+                if (matrix[x, y] == CellState.New)
                 {
-                    matrix[x, y] = Cell.NeutralCell;
+                    matrix[x, y] = CellState.Stable;
                 }
-                else if (matrix[x, y] != Cell.NeutralCell)
+                else if (matrix[x, y] != CellState.Stable)
                 {
                     continue;
                 }
@@ -207,7 +209,7 @@ void ProcessGeneration()
                     {
                         for (var j = y - 1; j < y + 2; j++)
                         {
-                            if (matrix[i, j] == Cell.NeutralCell || matrix[i, j] == Cell.DyingCel)
+                            if (matrix[i, j] == CellState.Stable || matrix[i, j] == CellState.Dying)
                                 neighbors++;
                         }
                     }
@@ -220,13 +222,13 @@ void ProcessGeneration()
                 {
                     if (neighbors == 3)
                     {
-                        matrix[x, y] = Cell.NewCell;
+                        matrix[x, y] = CellState.New;
                         simulation.IncreasePopulation();
                     }
                 }
                 else if (neighbors is < 3 or > 4)
                 {
-                    matrix[x, y] = Cell.DyingCel;
+                    matrix[x, y] = CellState.Dying;
                 }
                 else
                 {
@@ -243,12 +245,15 @@ void ProcessGeneration()
     }
 }
 
-internal enum Cell
+/// <summary>
+/// Indicates the state of a given cell in the simulation.
+/// </summary>
+internal enum CellState
 {
-    EmptyCell = 0,
-    NeutralCell = 1,
-    DyingCel = 2,
-    NewCell =3
+    Empty = 0,
+    Stable = 1,
+    Dying = 2,
+    New = 3
 }
 
 public class Simulation
@@ -269,16 +274,19 @@ public class Simulation
     }
 }
 
+/// <summary>
+/// This class was created to aid debugging, through the implementation of the ToString() method.
+/// </summary>
 class Matrix
 {
-    private readonly Cell[,] _matrix;
+    private readonly CellState[,] _matrix;
 
     public Matrix(int height, int width)
     {
-        _matrix = new Cell[height, width];
+        _matrix = new CellState[height, width];
     }
 
-    public Cell this[int x, int y]
+    public CellState this[int x, int y]
     {
         get => _matrix[x, y];
         set => _matrix[x, y] = value;
