@@ -211,7 +211,7 @@ public class Roulette {
             return false;
         } else if (houseBalance <= 0) {
             out.println("YOU BROKE THE HOUSE!");
-            playerBalance = 10100;
+            playerBalance = 101000;
             houseBalance = 0;
             return false;
         } else {
