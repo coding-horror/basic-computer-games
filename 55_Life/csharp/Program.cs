@@ -132,12 +132,14 @@ void ProcessSimulation()
         var nextMinX = maxHeight - 1; 
         var nextMinY = maxWidth - 1;
         var nextMaxX = 0; 
-        var nextMaxY = 0; 
+        var nextMaxY = 0;
+
+        var matrixOutput = new StringBuilder();
 
         // prints the empty lines before search area
         for (var x = 0; x < minX; x++)
         {
-            Console.WriteLine();
+            matrixOutput.AppendLine();
         }
 
         // refreshes the matrix and updates search area 
@@ -168,14 +170,15 @@ void ProcessSimulation()
                 nextMaxY = Math.Max(y + 1, nextMaxY);
             }
 
-            Console.WriteLine(string.Join(separator: null, values: printedLine));
+            matrixOutput.AppendLine(string.Join(separator: null, values: printedLine));
         }
 
         // prints empty lines after search area
         for (var x = maxX + 1; x < maxHeight; x++)
         {
-            Console.WriteLine();
+            matrixOutput.AppendLine();
         }
+        Console.WriteLine(matrixOutput);
         Console.WriteLine();
 
         void UpdateSearchArea()
