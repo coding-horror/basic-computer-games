@@ -251,8 +251,12 @@ public class Pattern
     {
         Height = patternLines.Count;
         Width = patternLines.Max(x => x.Length);
-        
-        Content = patternLines
+        Content = NormalizeWidth(patternLines);
+    }
+
+    private string[] NormalizeWidth(IReadOnlyCollection<string> patternLines)
+    {
+        return patternLines
             .Select(x => x.PadRight(Width, ' '))
             .ToArray();
     }
