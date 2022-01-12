@@ -111,5 +111,16 @@ namespace Reverse.Tests
 
             Assert.False(result);
         }
+
+        [Fact]
+        public void GetArrayString_ReturnsSpaceSeparatedElementsOfArrayInStringFormat()
+        {
+            var sut = new TestReverser(1);
+            sut.SetArray(new int[] { 1, 2 });
+
+            var result = sut.GetArrayString();
+
+            Assert.Equal(" 1  2 ", result);
+        }
     }
 }

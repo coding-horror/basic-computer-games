@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Reverse
 {
@@ -69,6 +70,18 @@ namespace Reverse
             }
 
             return true;
+        }
+
+        public string GetArrayString()
+        {
+            var sb = new StringBuilder();
+
+            foreach (int i in _array)
+            {
+                sb.Append(" " + i + " ");
+            }
+
+            return sb.ToString();
         }
     }
 }
