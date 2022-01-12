@@ -1,3 +1,5 @@
+using FsCheck.Xunit;
+using Reverse.Tests.Generators;
 using System.Linq;
 using Xunit;
 
@@ -48,6 +50,34 @@ namespace Reverse.Tests
 
             Assert.True(input.SequenceEqual(output));
         }
+
+        [Property(Arbitrary = new[] { typeof(PositiveIntegerGenerator) })]
+        public void CreateRandomArray_ReturnsRandomArrayOfSpecifiedLength()
+        {
+            var result = Reverser.CreateRandomArray(5);
+
+            Assert.Equal(5, result.Length);
+        }
+
+        [Property(Arbitrary = new[] { typeof(PositiveIntegerGenerator) })]
+        public void CreateRandomArray_MaxElementValueIsEqualToSize(int size)
+        {
+            var result = Reverser.CreateRandomArray(size);
+
+            Assert.Equal(size, result.Max());
+        }
+
+        [Property(Arbitrary = new[] { typeof(PositiveIntegerGenerator) })]
+        public void CreateRandomArray_ReturnsRandomArrayWithDistinctElements(int size)
+        {
+            var array = Reverser.CreateRandomArray(size);
+
+            var arrayGroup = array.GroupBy(x => x);
+            var duplicateFound = arrayGroup.Any(x => x.Count() > 1);
+
+            Assert.False(duplicateFound);
+        }
+
         [Theory]
         [InlineData(new int[] { 1 })]
         [InlineData(new int[] { 1, 2 })]
