@@ -48,5 +48,23 @@ namespace Reverse.Tests
 
             Assert.True(input.SequenceEqual(output));
         }
+        [Theory]
+        [InlineData(new int[] { 1 })]
+        [InlineData(new int[] { 1, 2 })]
+        [InlineData(new int[] { 1, 1 })]
+        public void IsArrayInAscendingOrder_WhenArrayElementsAreInNumericAscendingOrder_ReturnsTrue(int[] input)
+        {
+            var result = Reverser.IsArrayInAscendingOrder(input);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsArrayInOrder_WhenArrayElementsAreNotInNumericAscendingOrder_ReturnsFalse()
+        {
+            var result = Reverser.IsArrayInAscendingOrder(new int[] { 2, 1 });
+
+            Assert.False(result);
+        }
     }
 }
