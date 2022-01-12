@@ -9,7 +9,7 @@ namespace Reverse.Tests
         [InlineData(new int[] { 1 }, new int[] { 1 })]
         [InlineData(new int[] { 1, 2 }, new int[] { 2, 1 })]
         [InlineData(new int[] { 1, 2, 3 }, new int[] { 3, 2, 1 })]
-        public void ReverserReversesTheArray(int[] input, int[] output)
+        public void Reverse_WillReverseEntireArray(int[] input, int[] output)
         {
             Reverser.Reverse(input, input.Length);
 
@@ -17,7 +17,7 @@ namespace Reverse.Tests
         }
 
         [Fact]
-        public void ReverserReversesTheArrayAtTheSpecifiedIndex()
+        public void Reverse_WithSpecifiedIndex_ReversesItemsUpToThatIndex()
         {
             var input = new int[] { 1, 2, 3, 4 };
             var output = new int[] { 2, 1, 3, 4 };
@@ -28,7 +28,7 @@ namespace Reverse.Tests
         }
 
         [Fact]
-        public void ReversingAtIndexOneDoesNotChangeTheArray()
+        public void Reverse_WithIndexOne_DoesNothing()
         {
             var input = new int[] { 1, 2 };
             var output = new int[] { 1, 2 };
