@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use strict;
+
+print ' 'x33 . "CHEMIST\n";
+print ' 'x15 . "CREATIVE COMPUTING MORRISTOWN, NEW JERSEY\n";
+print "\n"; print "\n"; print "\n";
+print "THE FICTITIOUS CHECMICAL KRYPTOCYANIC ACID CAN ONLY BE\n";
+print "DILUTED BY THE RATIO OF 7 PARTS WATER TO 3 PARTS ACID.\n";
+print "IF ANY OTHER RATIO IS ATTEMPTED, THE ACID BECOMES UNSTABLE\n";
+print "AND SOON EXPLODES. GIVEN THE AMOUNT OF ACID, YOU MUST\n";
+print "DECIDE HOW MUCH WATER TO ADD FOR DILUTION. IF YOU MISS\n";
+print "YOU FACE THE CONSEQUENCES.\n";
+
+my $T=0;
+while ($T<9) {
+	my $A= int(rand(50) + 1);
+	my $W= 7*$A/3;
+	print " $A LITERS OF KRYPTOCYANIC ACID. HOW MUCH WATER? ";
+	chomp(my $R = <STDIN>);
+	my $D= abs($W-$R);
+	if ($D>$W/20) {
+		print "SIZZLE! YOU HAVE JUST BEEN DESALINATED INTO A BLOB\n";
+		print "OF QUIVERING PROTOPLASM!\n";
+		print "HOWEVER, YOU MAY TRY AGAIN WITH ANOTHER LIFE.\n";
+		print "\n";
+		$T++;
+	} else {
+		print "GOOD JOB! YOU MAY BREATHE NOW, BUT DON'T INHALE THE FUMES!\n";
+		print "\n";
+	}
+}
+
+print "YOUR 9 LIVES ARE USED, BUT YOU WILL BE LONG REMEMBERED FOR\n";
+print "YOUR CONTRIBUTIONS TO THE FIELD OF COMIC BOOK CHEMISTRY.\n";
+exit;
+
+

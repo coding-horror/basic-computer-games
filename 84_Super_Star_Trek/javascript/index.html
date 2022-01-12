@@ -1,0 +1,234 @@
+<html>
+  <head>
+    <title>Super Star Trek</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/xterm@4.10.0/css/xterm.css"
+    />
+    <style type="text/css">
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        background: rgba(0, 0, 0, 0.7);
+        color: rgba(192, 255, 192, 0.8);
+      }
+      a {
+        color: rgba(192, 255, 192, 1);
+      }
+      .game {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 100%;
+      }
+      .terminalFrame {
+        background: rgba(0, 0, 0, 1);
+        padding: 1.25em;
+        width: calc(100% - 2.5em);
+        height: calc(100% - 2.5em);
+      }
+      .terminal {
+        width: 100%;
+        height: 100%;
+      }
+      .instructions {
+        width: 100%;
+        padding: 1em 2em;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="game">
+      <div class="terminalFrame">
+        <div class="terminal"></div>
+      </div>
+      <div class="instructions">
+        <h1>Super Star Trek</h1>
+        <p>
+          Originally found in
+          <a
+            href="https://www.atariarchives.org/basicgames/showpage.php?page=157"
+            >David Ahl's BASIC Computer Games (1978)</a
+          >
+        </p>
+        <p>
+          <a
+            href="https://github.com/lmorchard/basic-computer-games/tree/84-js-super-star-trek/84%20Super%20Star%20Trek/javascript"
+            >Converted to JavaScript</a
+          >
+          in February 2021
+          by <a href="https://lmorchard.com">Les Orchard</a>
+          &lt;me@lmorchard.com&gt;
+        </p>
+
+        <pre>
+      INSTRUCTIONS FOR 'SUPER STAR TREK'
+
+1. WHEN YOU SEE \COMMAND ?\ PRINTED, ENTER ONE OF THE LEGAL
+     COMMANDS (NAV,SRS,LRS,PHA,TOR,SHE,DAM,COM, OR XXX).
+
+2. IF YOU SHOULD TYPE IN AN ILLEGAL COMMAND, YOU'LL GET A SHORT
+     LIST OF THE LEGAL COMMANDS PRINTED OUT.
+
+3. SOME COMMANDS REQUIRE YOU TO ENTER DATA (FOR EXAMPLE, THE
+     'NAV' COMMAND COMES BACK WITH 'COURSE (1-9) ?'.)  IF YOU
+     TYPE IN ILLEGAL DATA (LIKE NEGATIVE NUMBERS), THAN COMMAND
+     WILL BE ABORTED
+     THE GALAXY IS DIVIDED INTO AN 8 X 8 QUADRANT GRID,
+AND EACH QUADRANT IS FURTHER DIVIDED INTO AN 8 X 8 SECTOR GRID.
+     YOU WILL BE ASSIGNED A STARTING POINT SOMEWHERE IN THE
+GALAXY TO BEGIN A TOUR OF DUTY AS COMANDER OF THE STARSHIP
+\ENTERPRISE\; YOUR MISSION: TO SEEK AND DESTROY THE FLEET OF
+KLINGON WARWHIPS WHICH ARE MENACING THE UNITED FEDERATION OF
+PLANETS.
+
+     YOU HAVE THE FOLLOWING COMMANDS AVAILABLE TO YOU AS CAPTAIN
+OF THE STARSHIP ENTERPRISE:
+
+\NAV\ COMMAND = WARP ENGINE CONTROL --
+     COURSE IS IN A CIRCULAR NUMERICAL      4  3  2
+     VECTOR ARRANGEMENT AS SHOWN             . . .
+     INTEGER AND REAL VALUES MAY BE           ...
+     USED.  (THUS COURSE 1.5 IS HALF-     5 ---*--- 1
+     WAY BETWEEN 1 AND 2                      ...
+                                             . . .
+     VALUES MAY APPROACH 9.0, WHICH         6  7  8
+     ITSELF IS EQUIVALENT TO 1.0"         
+                                            COURSE
+     ONE WARP FACTOR IS THE SIZE OF 
+     ONE QUADTANT.  THEREFORE, TO GET
+     FROM QUADRANT 6,5 TO 5,5, YOU WOULD
+     USE COURSE 3, WARP FACTOR 1.
+
+\SRS\ COMMAND = SHORT RANGE SENSOR SCAN
+     SHOWS YOU A SCAN OF YOUR PRESENT QUADRANT.
+     SYMBOLOGY ON YOUR SENSOR SCREEN IS AS FOLLOWS:
+        <*> = YOUR STARSHIP'S POSITION
+        +K+ = KLINGON BATTLE CRUISER
+        >!< = FEDERATION STARBASE (REFUEL/REPAIR/RE-ARM HERE!)
+         *  = STAR
+     A CONDENSED 'STATUS REPORT' WILL ALSO BE PRESENTED.
+
+\LRS\ COMMAND = LONG RANGE SENSOR SCAN
+     SHOWS CONDITIONS IN SPACE FOR ONE QUADRANT ON EACH SIDE
+     OF THE ENTERPRISE (WHICH IS IN THE MIDDLE OF THE SCAN)
+     THE SCAN IS CODED IN THE FORM \###\, WHERE TH UNITS DIGIT
+     IS THE NUMBER OF STARS, THE TENS DIGIT IS THE NUMBER OF
+     STARBASES, AND THE HUNDRESDS DIGIT IS THE NUMBER OF
+     KLINGONS.
+     EXAMPLE - 207 = 2 KLINGONS, NO STARBASES, & 7 STARS.
+
+\PHA\ COMMAND = PHASER CONTROL.
+     ALLOWS YOU TO DESTROY THE KLINGON BATTLE CRUISERS BY 
+     ZAPPING THEM WITH SUITABLY LARGE UNITS OF ENERGY TO
+     DEPLETE THEIR SHIELD POWER.  (REMBER, KLINGONS HAVE
+     PHASERS TOO!)
+
+\TOR\ COMMAND = PHOTON TORPEDO CONTROL
+     TORPEDO COURSE IS THE SAME AS USED IN WARP ENGINE CONTROL
+     IF YOU HIT THE KLINGON VESSEL, HE IS DESTROYED AND
+     CANNOT FIRE BACK AT YOU.  IF YOU MISS, YOU ARE SUBJECT TO
+     HIS PHASER FIRE.  IN EITHER CASE, YOU ARE ALSO SUBJECT TO
+     THE PHASER FIRE OF ALL OTHER KLINGONS IN THE QUADRANT.
+     THE LIBRARY-COMPUTER (\COM\ COMMAND) HAS AN OPTION TO
+     COMPUTE TORPEDO TRAJECTORY FOR YOU (OPTION 2)
+
+\SHE\ COMMAND = SHIELD CONTROL
+     DEFINES THE NUMBER OF ENERGY UNITS TO BE ASSIGNED TO THE
+     SHIELDS.  ENERGY IS TAKEN FROM TOTAL SHIP'S ENERGY.  NOTE
+     THAN THE STATUS DISPLAY TOTAL ENERGY INCLUDES SHIELD ENERGY
+
+\DAM\ COMMAND = DAMMAGE CONTROL REPORT
+     GIVES THE STATE OF REPAIR OF ALL DEVICES.  WHERE A NEGATIVE
+     'STATE OF REPAIR' SHOWS THAT THE DEVICE IS TEMPORARILY
+     DAMAGED."
+
+\COM\ COMMAND = LIBRARY-COMPUTER
+     THE LIBRARY-COMPUTER CONTAINS SIX OPTIONS:
+     OPTION 0 = CUMULATIVE GALACTIC RECORD
+        THIS OPTION SHOWES COMPUTER MEMORY OF THE RESULTS OF ALL
+        PREVIOUS SHORT AND LONG RANGE SENSOR SCANS        
+     OPTION 1 = STATUS REPORT
+        THIS OPTION SHOWS THE NUMBER OF KLINGONS, STARDATES,
+        AND STARBASES REMAINING IN THE GAME.
+     OPTION 2 = PHOTON TORPEDO DATA
+        WHICH GIVES DIRECTIONS AND DISTANCE FROM THE ENTERPRISE
+        TO ALL KLINGONS IN YOUR QUADRANT
+     OPTION 3 = STARBASE NAV DATA
+        THIS OPTION GIVES DIRECTION AND DISTANCE TO ANY
+        STARBASE WITHIN YOUR QUADRANT
+     OPTION 4 = DIRECTION/DISTANCE CALCULATOR
+        THIS OPTION ALLOWS YOU TO ENTER COORDINATES FOR
+        DIRECTION/DISTANCE CALCULATIONS
+     OPTION 5 = GALACTIC /REGION NAME/ MAP
+        THIS OPTION PRINTS THE NAMES OF THE SIXTEEN MAJOR
+        GALACTIC REGIONS REFERRED TO IN THE GAME.
+    </pre
+        >
+      </div>
+    </section>
+
+    <script src="https://unpkg.com/xterm@4.10.0/lib/xterm.js"></script>
+    <script src="https://unpkg.com/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
+
+    <script type="module">
+      import {
+        onExit,
+        onPrint,
+        onInput,
+        setGameOptions,
+        getGameState,
+        gameMain,
+      } from "./superstartrek.mjs";
+
+      var term = new Terminal({
+        fontSize: 14,
+      });
+      const fitAddon = new FitAddon.FitAddon();
+      term.loadAddon(fitAddon);
+      term.open(document.querySelector(".terminal"));
+      fitAddon.fit();
+      term.focus();
+
+      function print(...messages) {
+        term.write(messages.join("").replace(/\n/g, "\r\n") + "\r\n");
+      }
+
+      function input(prompt) {
+        return new Promise((resolve) => {
+          let str = "";
+          term.write(`${prompt}? `);
+          const initialX = term._core.buffer.x;
+          const disposeOnData = term.onData((data) => {
+            if (data == "\n" || data == "\r") {
+              term.write("\r\n");
+              disposeOnData.dispose();
+              resolve(str);
+            } else if (/^[a-zA-Z0-9,\.]+$/.test(data)) {
+              str += data;
+              term.write(data);
+            } else if (data == "\u007F" && str.length > 0) {
+              str = str.slice(0, -1);
+              term.write("\b \b");
+            }
+          });
+        });
+      }
+
+      async function exit() {
+        print();
+        await input("GAME EXITED, PRESS ENTER TO RESTART");
+        window.location.reload();
+      }
+
+      onPrint(print);
+      onInput(input);
+      onExit(exit);
+
+      gameMain().then().catch(window.alert);
+    </script>
+  </body>
+</html>
