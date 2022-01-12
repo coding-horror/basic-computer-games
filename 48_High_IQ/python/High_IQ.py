@@ -47,12 +47,30 @@ def print_board(board):
     print(" " * 2 + board[67] + board[68] + board[69])
 
 def play_game():
-    print("Lets play a game")
     board = new_board()
 
     while not is_game_finished(board):
         print_board(board)
+        while not move(board):
+            print("ILLEGAL MOVE! TRY AGAIN")
         
+def move(board):
+    try:
+        start = int(input("MOVE WHICH PIECE? "))
+        if not (board[start] == "'!'):
+            return False
+        
+        end = int(input("TO WHERE? "))
+        if not (board[end] == 'O'):
+            return False
+        difference = abs(end - start)
+        if difference != 2 and difference != 18:
+            return False
+        center = (end + start) / 2
+        
+    except:
+        return False
+    return True
 
 def main():
 #     if input("Do you want instrunctions?\n").lower().startswith("y"):
