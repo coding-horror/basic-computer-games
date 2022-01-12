@@ -19,7 +19,15 @@ namespace Reverse
 
         public bool IsArrayInAscendingOrder()
         {
-            return IsArrayInAscendingOrder(_array);
+            for (int i = 1; i < _array.Length; i++)
+            {
+                if (_array[i] < _array[i - 1])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static void Reverse(int[] arrayToReverse, int indexToReverseTo)
@@ -57,19 +65,6 @@ namespace Reverse
                 array[k] = temp;
             }
             return array;
-        }
-
-        public static bool IsArrayInAscendingOrder(int[] array)
-        {
-            for (int i = 1; i < array.Length; i++)
-            {
-                if (array[i] < array[i - 1])
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         public string GetArrayString()
