@@ -39,8 +39,7 @@ public class Splat {
             System.out.printf("    ACCELERATION     = %.2f FT/SEC/SEC +/-5%%\n", initial.getOriginalAcceleration());
 
             System.out.println("SET THE TIMER FOR YOUR FREEFALL.");
-            System.out.print("HOW MANY SECONDS ");
-            float freefallTime = scanner.nextFloat();
+            float freefallTime = promptFloat("HOW MANY SECONDS ");
             System.out.println("HERE WE GO.\n");
             System.out.println("TIME (SEC)  DIST TO FALL (FT)");
             System.out.println("==========  =================");
@@ -73,18 +72,28 @@ public class Splat {
 
     private float promptTerminalVelocity() {
         if (askYesNo("SELECT YOUR OWN TERMINAL VELOCITY")) {
-            System.out.print("WHAT TERMINAL VELOCITY (MI/HR) ");
-            return mphToFeetPerSec(scanner.nextFloat());
+            float terminalVelocity = promptFloat("WHAT TERMINAL VELOCITY (MI/HR) ");
+            return mphToFeetPerSec(terminalVelocity);
         }
         float terminalVelocity = (int) (1000 * random.nextFloat());
         System.out.printf("OK.  TERMINAL VELOCITY = %.2f MI/HR\n", terminalVelocity);
         return mphToFeetPerSec(terminalVelocity);
     }
 
+    private float promptFloat(String prompt){
+        while(true){
+            System.out.print(prompt);
+            try {
+                return scanner.nextFloat();
+            } catch (Exception e) {
+                scanner.next(); // clear current input
+            }
+        }
+    }
+
     private float promptGravitationalAcceleration() {
         if (askYesNo("WANT TO SELECT ACCELERATION DUE TO GRAVITY")) {
-            System.out.print("WHAT ACCELERATION (FT/SEC/SEC) ");
-            return scanner.nextFloat();
+            return promptFloat("WHAT ACCELERATION (FT/SEC/SEC) ");
         }
         return chooseRandomAcceleration();
     }
