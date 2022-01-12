@@ -30,7 +30,7 @@ IEnumerable<string> ReadPattern(int limitHeight)
         // game allowed you to input an '.' before the spaces to circumvent this limitation. This behavior was
         // kept for compatibility.
         if (input.StartsWith('.'))
-            yield return input.Substring(1, input.Length - 2);
+            yield return input.Substring(1, input.Length - 1);
 
         yield return input;
     }
