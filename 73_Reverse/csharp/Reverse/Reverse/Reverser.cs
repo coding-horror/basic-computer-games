@@ -4,6 +4,23 @@ namespace Reverse
 {
     public class Reverser
     {
+        protected int[] _array;
+
+        public Reverser(int arraySize)
+        {
+            _array = CreateRandomArray(arraySize);
+        }
+
+        public void Reverse(int index)
+        {
+            Reverse(_array, index);
+        }
+
+        public bool IsArrayInAscendingOrder()
+        {
+            return IsArrayInAscendingOrder(_array);
+        }
+
         public static void Reverse(int[] arrayToReverse, int indexToReverseTo)
         {
             if (indexToReverseTo > arrayToReverse.Length)
