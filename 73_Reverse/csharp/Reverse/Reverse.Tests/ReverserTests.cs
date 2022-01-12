@@ -37,5 +37,16 @@ namespace Reverse.Tests
 
             Assert.True(input.SequenceEqual(output));
         }
+
+        [Fact]
+        public void Reverse_WithIndexGreaterThanArrayLength_DoesNothing()
+        {
+            var input = new int[] { 1, 2 };
+            var output = new int[] { 1, 2 };
+
+            Reverser.Reverse(input, input.Length + 1);
+
+            Assert.True(input.SequenceEqual(output));
+        }
     }
 }
