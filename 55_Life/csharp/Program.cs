@@ -4,11 +4,12 @@ const int maxWidth = 70;
 const int maxHeight = 24;
 
 Console.WriteLine("ENTER YOUR PATTERN:");
-var pattern = ReadPattern(limitHeight: maxHeight).ToArray();
+var pattern = new Pattern(ReadPattern(limitHeight: maxHeight).ToArray());
 
-var (minX, minY) = FindTopLeftCorner(pattern);
-var maxX = maxHeight;
-var maxY = maxWidth;
+var minX = 10 - pattern.Height / 2; // was 11
+var minY = 32 - pattern.Width / 2; // was 33
+var maxX = maxHeight - 1;
+var maxY = maxWidth - 1;
 
 var matrix = new Matrix(height: maxHeight, width: maxWidth);
 var simulation = InitializeSimulation(pattern, matrix);
@@ -36,17 +37,6 @@ IEnumerable<string> ReadPattern(int limitHeight)
     }
 }
 
-(int minX, int minY) FindTopLeftCorner(IEnumerable<string> patternLines)
-{
-    var longestInput = patternLines
-        .Select((value, index) => (index, value))
-        .OrderByDescending(input => input.value.Length)
-        .First();
-    var centerX = (11 - longestInput.index / 2) - 1;
-    var centerY = (33 - longestInput.value.Length / 2) - 1;
-    return (centerX, centerY);
-}
-
 void PrintHeader()
 {
     void PrintCentered(string text)
@@ -65,15 +55,16 @@ void PrintHeader()
     Console.WriteLine();    
 }
 
-Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
+Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
 
-    // translates the pattern to the middle of the simulation and counts initial population
-    for (var x = 0; x < inputPattern.Count; x++)
+    // transcribes the pattern to the middle of the simulation and counts initial population
+    for (var x = 0; x < pattern.Height; x++)
     {
-        for (var y = 0; y < inputPattern[x].Length; y++)
+        for (var y = 0; y < pattern.Width; y++)
         {
-            if (inputPattern[x][y] == ' ') continue;
+            if (pattern.Content[x][y] == ' ')
+                continue;
             
             matrixToInitialize[minX + x, minY + y] = CellState.Stable;
             newSimulation.IncreasePopulation();
@@ -244,6 +235,23 @@ void ProcessSimulation()
         
         if (pauseBetweenIterations > TimeSpan.Zero)
             Thread.Sleep(pauseBetweenIterations);
+    }
+}
+
+public class Pattern
+{
+    public string[] Content { get; }
+    public int Height { get; }
+    public int Width { get; }
+
+    public Pattern(IReadOnlyCollection<string> patternLines)
+    {
+        Height = patternLines.Count;
+        Width = patternLines.Max(x => x.Length);
+        
+        Content = patternLines
+            .Select(x => x.PadRight(Width, ' '))
+            .ToArray();
     }
 }
 
