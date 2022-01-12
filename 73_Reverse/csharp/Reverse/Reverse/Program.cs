@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Text;
 
 namespace Reverse
 {
     class Program
     {
+        private static int arrayLength = 9;
         static void Main(string[] args)
         {
             PrintTitle();
@@ -19,8 +19,10 @@ namespace Reverse
             var tryAgain = string.Empty;
             while (!string.Equals(tryAgain, "NO", StringComparison.OrdinalIgnoreCase))
             {
-                var array = Reverser.CreateRandomArray(9);
-                Console.WriteLine(PrintArrayContents(array));
+                var reverser = new Reverser(arrayLength);
+
+                Console.WriteLine(reverser.GetArrayString());
+
                 var arrayIsNotInAscendingOrder = true;
                 var numberOfMoves = 0;
                 while (arrayIsNotInAscendingOrder)
@@ -32,10 +34,10 @@ namespace Reverse
                         break;
                     }
 
-                    Reverser.Reverse(array, index);
-                    Console.WriteLine(PrintArrayContents(array));
+                    reverser.Reverse(index);
+                    Console.WriteLine(reverser.GetArrayString());
 
-                    if (Reverser.IsArrayInAscendingOrder(array))
+                    if (reverser.IsArrayInAscendingOrder())
                     {
                         arrayIsNotInAscendingOrder = false;
                         Console.WriteLine($"YOU WON IT IN {numberOfMoves} MOVES!!!");
@@ -58,12 +60,12 @@ namespace Reverse
             {
                 if (input > 9)
                 {
-                    Console.WriteLine("OOPS! TOO MANY! I CAN REVERSE AT MOST THIS MANY");
+                    Console.WriteLine($"OOPS! TOO MANY! I CAN REVERSE AT MOST {arrayLength}");
                 }
 
                 if (input < 0)
                 {
-                    Console.WriteLine("OOPS! TOO FEW! I CAN REVERSE BETWEEN 1 AND THIS MANY");
+                    Console.WriteLine($"OOPS! TOO FEW! I CAN REVERSE BETWEEN 1 AND {arrayLength}");
                 }
                 Console.Write("HOW MANY SHALL I REVERSE? ");
                 input = ReadIntegerInput();
@@ -77,18 +79,6 @@ namespace Reverse
             var input = Console.ReadLine();
             int.TryParse(input, out var index);
             return index;
-        }
-
-        private static string PrintArrayContents(int[] arr)
-        {
-            var sb = new StringBuilder();
-
-            foreach (int i in arr)
-            {
-                sb.Append(" " + i + " ");
-            }
-
-            return sb.ToString();
         }
 
         private static void PrintTitle()
