@@ -46,7 +46,7 @@ namespace Reverse
             }
         }
 
-        public static int[] CreateRandomArray(int size)
+        private int[] CreateRandomArray(int size)
         {
             var array = new int[size];
             for (int i = 1; i <= size; i++)
