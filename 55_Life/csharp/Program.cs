@@ -96,9 +96,8 @@ void ProcessSimulation()
     
     while (true)
     {
-        Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population}");
-        if (isInvalid)
-            Console.WriteLine("INVALID!");
+        var invalidText = isInvalid ? "INVALID!" : "";
+        Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population} {invalidText}");
         
         simulation.StartNewGeneration();
 
