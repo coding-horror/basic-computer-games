@@ -6,8 +6,8 @@ const int maxHeight = 24;
 Console.WriteLine("ENTER YOUR PATTERN:");
 var pattern = new Pattern(ReadPattern(limitHeight: maxHeight).ToArray());
 
-var minX = 10 - pattern.Height / 2; // was 11
-var minY = 32 - pattern.Width / 2; // was 33
+var minX = 10 - pattern.Height / 2;
+var minY = 34 - pattern.Width / 2;
 var maxX = maxHeight - 1;
 var maxY = maxWidth - 1;
 
@@ -66,7 +66,7 @@ Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
             if (pattern.Content[x][y] == ' ')
                 continue;
             
-            matrixToInitialize[minX + x, minY + y + 2] = CellState.Stable;
+            matrixToInitialize[minX + x, minY + y] = CellState.Stable;
             newSimulation.IncreasePopulation();
         }
     }
