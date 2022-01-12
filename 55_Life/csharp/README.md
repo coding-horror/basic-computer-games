@@ -19,6 +19,51 @@ that the application will pause between each iteration. This is enables you to w
 
 The complete command would be `dotnet run --wait 1000`.
 
+## Entering patterns
+
+Once running the game, you are expected to enter a pattern. This pattern consists of multiple lines of text with either **spaces** or **some character**, usually an asterisk (`*`).
+
+Spaces represent empty cells. Asterisks represent alive cells.
+
+After entering the pattern, you need to enter the word "DONE". It is not case sensitive. An example of pattern would be:
+
+```
+ *
+***
+DONE
+```
+
+### Some patterns you could try
+
+```
+ *
+***
+```
+
+```
+*
+***
+```
+
+```
+**
+**
+```
+
+```
+  *
+ *
+*
+```
+
+This one is known as **glider**:
+
+```
+***
+*
+ *
+```
+
 ## Instructions to the port
 
 Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/games.html)
