@@ -4,6 +4,11 @@
     {
         public static void Reverse(int[] arrayToReverse, int indexToReverseTo)
         {
+            if (indexToReverseTo > arrayToReverse.Length)
+            {
+                return;
+            }
+
             for (int i = 0; i < indexToReverseTo / 2; i++)
             {
                 int temp = arrayToReverse[i];
