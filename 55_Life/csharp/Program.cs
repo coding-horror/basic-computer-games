@@ -162,30 +162,30 @@ void ProcessSimulation()
             minY = nextMinY;
             maxY = nextMaxY;
 
-            if (minX < 2) // was 3
-            {
-                minX = 2; // was 3
-                isInvalid = true;
-            }
-
-            const int limitX = 22; //maxHeight - 2; // was 22
-            const int limitY = 68; //maxWidth - 2; // was 68
+            const int limitX = 21;
+            const int limitY = 67;
             
-            if (maxX > limitX) // was 22
+            if (minX < 2)
             {
-                maxX = limitX; // was 22
+                minX = 2;
+                isInvalid = true;
+            }
+            
+            if (maxX > limitX)
+            {
+                maxX = limitX;
                 isInvalid = true;
             }
 
-            if (minY < 2) // was 3
+            if (minY < 2)
             {
-                minY = 2; // was 3
+                minY = 2;
                 isInvalid = true;
             }
 
-            if (maxY > limitY) // was 68
+            if (maxY > limitY)
             {
-                maxY = limitY; // was 68
+                maxY = limitY;
                 isInvalid = true;
             }
         }
