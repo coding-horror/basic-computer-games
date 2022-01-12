@@ -1,0 +1,6 @@
+Your orders are as follows:
+    Destroy the {0} Klingon warships which have invaded
+  the galaxy before they can attack federation headquarters
+  on stardate {1}. This gives you {2} days. There {3}
+  {4} starbase{5} in the galaxy for resupplying your ship.
+

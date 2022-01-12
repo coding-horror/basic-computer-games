@@ -1,0 +1,19 @@
+plugins {
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs "../../$gameSource"
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = gameMain
+}

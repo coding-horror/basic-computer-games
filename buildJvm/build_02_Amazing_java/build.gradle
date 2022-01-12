@@ -1,0 +1,19 @@
+plugins {
+    id 'application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs '../../02_Amazing/java'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'AmazingGame'
+}
