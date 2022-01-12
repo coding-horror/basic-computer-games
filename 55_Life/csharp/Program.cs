@@ -76,15 +76,14 @@ Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
 
 TimeSpan GetPauseBetweenIterations()
 {
-    if (args.Length == 2)
+    if (args.Length != 2) return TimeSpan.Zero;
+    
+    var parameter = args[0].ToLower();
+    if (parameter.Contains("wait"))
     {
-        var parameter = args[0].ToLower();
-        if (parameter.Contains("wait"))
-        {
-            var value = args[1];
-            if (int.TryParse(value, out var sleepMilliseconds))
-                return TimeSpan.FromMilliseconds(sleepMilliseconds);
-        }
+        var value = args[1];
+        if (int.TryParse(value, out var sleepMilliseconds))
+            return TimeSpan.FromMilliseconds(sleepMilliseconds);
     }
 
     return TimeSpan.Zero;
