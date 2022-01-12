@@ -66,7 +66,7 @@ Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
             if (pattern.Content[x][y] == ' ')
                 continue;
             
-            matrixToInitialize[minX + x, minY + y] = CellState.Stable;
+            matrixToInitialize[minX + x, minY + y + 2] = CellState.Stable;
             newSimulation.IncreasePopulation();
         }
     }
