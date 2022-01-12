@@ -117,10 +117,10 @@ void ProcessSimulation()
         }
 
         // refreshes the matrix and updates search area 
-        for (var x = minX; x < maxX; x++)
+        for (var x = minX; x <= maxX; x++)
         {
             var printedLine = Enumerable.Repeat(' ', maxWidth).ToList();
-            for (var y = minY; y < maxY; y++)
+            for (var y = minY; y <= maxY; y++)
             {
                 if (matrix[x, y] == CellState.Dying)
                 {
@@ -139,9 +139,9 @@ void ProcessSimulation()
                 printedLine[y] = '*';
 
                 nextMinX = Math.Min(x, nextMinX);
-                nextMaxX = Math.Max(x + 1, nextMaxX);
+                nextMaxX = Math.Max(x, nextMaxX);
                 nextMinY = Math.Min(y, nextMinY);
-                nextMaxY = Math.Max(y + 1, nextMaxY);
+                nextMaxY = Math.Max(y, nextMaxY);
             }
 
             matrixOutput.AppendLine(string.Join(separator: null, values: printedLine));
@@ -162,42 +162,45 @@ void ProcessSimulation()
             minY = nextMinY;
             maxY = nextMaxY;
 
-            if (minX < 3)
+            if (minX < 2) // was 3
             {
-                minX = 3;
+                minX = 2; // was 3
                 isInvalid = true;
             }
 
-            if (maxX > 22)
+            const int limitX = 22; //maxHeight - 2; // was 22
+            const int limitY = 68; //maxWidth - 2; // was 68
+            
+            if (maxX > limitX) // was 22
             {
-                maxX = 22;
+                maxX = limitX; // was 22
                 isInvalid = true;
             }
 
-            if (minY < 3)
+            if (minY < 2) // was 3
             {
-                minY = 3;
+                minY = 2; // was 3
                 isInvalid = true;
             }
 
-            if (maxY > 68)
+            if (maxY > limitY) // was 68
             {
-                maxY = 68;
+                maxY = limitY; // was 68
                 isInvalid = true;
             }
         }
         UpdateSearchArea();
 
-        for (var x = minX - 1; x < maxX + 2; x++)
+        for (var x = minX - 1; x <= maxX + 1; x++)
         {
-            for (var y = minY - 1; y < maxY + 2; y++)
+            for (var y = minY - 1; y <= maxY + 1; y++)
             {
                 int CountNeighbors()
                 {
                     var neighbors = 0;
-                    for (var i = x - 1; i < x + 2; i++)
+                    for (var i = x - 1; i <= x + 1; i++)
                     {
-                        for (var j = y - 1; j < y + 2; j++)
+                        for (var j = y - 1; j <= y + 1; j++)
                         {
                             if (matrix[i, j] == CellState.Stable || matrix[i, j] == CellState.Dying)
                                 neighbors++;
@@ -208,7 +211,7 @@ void ProcessSimulation()
                 }
 
                 var neighbors = CountNeighbors();
-                if (matrix[x, y] == 0)
+                if (matrix[x, y] == CellState.Empty)
                 {
                     if (neighbors == 3)
                     {
