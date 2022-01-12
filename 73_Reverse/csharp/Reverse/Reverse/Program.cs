@@ -10,7 +10,7 @@ namespace Reverse
             PrintTitle();
             Console.Write("DO YOU WANT THE RULES? ");
             var needRulesInput = Console.ReadLine();
-
+            Console.WriteLine();
             if (string.Equals(needRulesInput, "YES", StringComparison.OrdinalIgnoreCase))
             {
                 DisplayRules();
@@ -21,8 +21,8 @@ namespace Reverse
             {
                 var reverser = new Reverser(arrayLength);
 
-                Console.WriteLine(reverser.GetArrayString());
-
+                Console.WriteLine("HERE WE GO ... THE LIST IS:\n");
+                PrintList(reverser.GetArrayString());
                 var arrayIsNotInAscendingOrder = true;
                 var numberOfMoves = 0;
                 while (arrayIsNotInAscendingOrder)
@@ -35,7 +35,7 @@ namespace Reverse
                     }
 
                     reverser.Reverse(index);
-                    Console.WriteLine(reverser.GetArrayString());
+                    PrintList(reverser.GetArrayString());
 
                     if (reverser.IsArrayInAscendingOrder())
                     {
@@ -81,6 +81,13 @@ namespace Reverse
             return index;
         }
 
+        private static void PrintList(string list)
+        {
+            Console.WriteLine();
+            Console.WriteLine(list);
+            Console.WriteLine();
+        }
+
         private static void PrintTitle()
         {
             Console.WriteLine("REVERSE");
@@ -89,7 +96,25 @@ namespace Reverse
 
         private static void DisplayRules()
         {
-            Console.WriteLine("RULES");
+            Console.WriteLine("THIS IS THE GAME OF 'REVERSE'. TO WIN, ALL YOU HAVE");
+            Console.WriteLine("TO DO IS ARRANGE A LIST OF NUMBERS (1 THOUGH 9 )");
+            Console.WriteLine("IN NUMBERICAL ORDER FROM LEFT TO RIGHT. TO MOVE, YOU");
+            Console.WriteLine("TELL ME HOW MANY NUMBERS (COUNTING FROM THE LEFT) TO");
+            Console.WriteLine("REVERSE. FOR EXAMPLE, IF THE CURRENT LIST IS:");
+            Console.WriteLine();
+            Console.WriteLine(" 2  3  4  5  1  6  7  8  9");
+            Console.WriteLine();
+            Console.WriteLine("AND YOU REVERSE 4, THE RESULT WILL BE:");
+            Console.WriteLine();
+            Console.WriteLine(" 5  4  3  2  1  6  7  8  9");
+            Console.WriteLine();
+            Console.WriteLine("NOW IF YOU REVERSE 5, YOU WIN!");
+            Console.WriteLine();
+            Console.WriteLine(" 1  2  3  4  5  6  7  8  9");
+            Console.WriteLine();
+            Console.WriteLine("NO DOUBT YOU WILL LIKE THIS GAME, BUT ");
+            Console.WriteLine("IF YOU WANT TO QUIT, REVERSE 0 (ZERO)");
+            Console.WriteLine();
         }
     }
 }
