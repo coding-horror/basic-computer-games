@@ -23,7 +23,6 @@ IEnumerable<string> ReadPattern(int limitHeight)
         var input = Console.ReadLine();
         if (input.ToUpper() == "DONE")
         {
-            yield return string.Empty;
             break;
         }
 
