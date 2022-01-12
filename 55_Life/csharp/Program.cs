@@ -150,8 +150,7 @@ void ProcessSimulation()
         {
             matrixOutput.AppendLine();
         }
-        Console.WriteLine(matrixOutput);
-        Console.WriteLine();
+        Console.Write(matrixOutput);
 
         void UpdateSearchArea()
         {
