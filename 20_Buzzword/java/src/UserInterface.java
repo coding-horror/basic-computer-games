@@ -1,5 +1,4 @@
-import static java.lang.System.out;
-
+import java.io.PrintStream;
 import java.util.Scanner;
 import java.util.function.Supplier;
 
@@ -15,6 +14,11 @@ public class UserInterface implements Runnable {
 	private final Scanner input;
 
 	/**
+	 * Output to the user.
+	 */
+	private final PrintStream output;
+
+	/**
 	 * The buzzword generator.
 	 */
 	private final Supplier<String> buzzwords;
@@ -23,35 +27,38 @@ public class UserInterface implements Runnable {
 	 * Create a new user interface.
 	 *
 	 * @param input The input scanner with which the user gives commands.
+	 * @param output The output to show messages to the user.
 	 * @param buzzwords The buzzword supplier.
 	 */
 	public UserInterface(final Scanner input,
-		final Supplier<String> buzzwords) {
+			final PrintStream output,
+			final Supplier<String> buzzwords) {
 		this.input = input;
+		this.output = output;
 		this.buzzwords = buzzwords;		
 	}
 
 	@Override
 	public void run() {
-		out.println("              BUZZWORD GENERATOR");
-		out.println("   CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-		out.println();
-		out.println();
-		out.println();
-		out.println("THIS PROGRAM PRINTS HIGHLY ACCEPTABLE PHRASES IN");
-		out.println("'EDUCATOR-SPEAK' THAT YOU CAN WORK INTO REPORTS");
-		out.println("AND SPEECHES.  WHENEVER A QUESTION MARK IS PRINTED,");
-		out.println("TYPE A 'Y' FOR ANOTHER PHRASE OR 'N' TO QUIT.");
-		out.println();
-		out.println();
-		out.println("HERE'S THE FIRST PHRASE:");
+		output.println("              BUZZWORD GENERATOR");
+		output.println("   CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+		output.println();
+		output.println();
+		output.println();
+		output.println("THIS PROGRAM PRINTS HIGHLY ACCEPTABLE PHRASES IN");
+		output.println("'EDUCATOR-SPEAK' THAT YOU CAN WORK INTO REPORTS");
+		output.println("AND SPEECHES.  WHENEVER A QUESTION MARK IS PRINTED,");
+		output.println("TYPE A 'Y' FOR ANOTHER PHRASE OR 'N' TO QUIT.");
+		output.println();
+		output.println();
+		output.println("HERE'S THE FIRST PHRASE:");
 
 		do {
-			out.println(buzzwords.get());
-			out.println();
-			out.print("?");
+			output.println(buzzwords.get());
+			output.println();
+			output.print("?");
 		} while ("Y".equals(input.nextLine().toUpperCase()));
 
-		out.println("COME BACK WHEN YOU NEED HELP WITH ANOTHER REPORT!");
+		output.println("COME BACK WHEN YOU NEED HELP WITH ANOTHER REPORT!");
 	}
 }
