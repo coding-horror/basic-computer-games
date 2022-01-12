@@ -56,8 +56,8 @@ def play_game():
 
 def main():
 #     if input("Do you want instrunctions?\n").lower().startswith("y"):
-    print("\t" * 33 + "H-I-Q")
-    print("\t" * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print(" " * 33 + "H-I-Q")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print_instructions()
     play_game()
 
