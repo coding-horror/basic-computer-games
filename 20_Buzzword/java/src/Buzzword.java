@@ -10,7 +10,7 @@ public class Buzzword {
 		) {
 			final BuzzwordSupplier buzzwords = new BuzzwordSupplier();
 			final UserInterface userInterface = new UserInterface(
-					scanner, buzzwords);
+					scanner, System.out, buzzwords);
 			userInterface.run();
 		}
 	}
