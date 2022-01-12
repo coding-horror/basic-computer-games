@@ -14,7 +14,18 @@ namespace Reverse
 
         public void Reverse(int index)
         {
-            Reverse(_array, index);
+            if (index > _array.Length)
+            {
+                return;
+            }
+
+            for (int i = 0; i < index / 2; i++)
+            {
+                int temp = _array[i];
+                int upperIndex = index - 1 - i;
+                _array[i] = _array[upperIndex];
+                _array[upperIndex] = temp;
+            }
         }
 
         public bool IsArrayInAscendingOrder()
@@ -28,22 +39,6 @@ namespace Reverse
             }
 
             return true;
-        }
-
-        public static void Reverse(int[] arrayToReverse, int indexToReverseTo)
-        {
-            if (indexToReverseTo > arrayToReverse.Length)
-            {
-                return;
-            }
-
-            for (int i = 0; i < indexToReverseTo / 2; i++)
-            {
-                int temp = arrayToReverse[i];
-                int upperIndex = indexToReverseTo - 1 - i;
-                arrayToReverse[i] = arrayToReverse[upperIndex];
-                arrayToReverse[upperIndex] = temp;
-            }
         }
 
         private int[] CreateRandomArray(int size)
