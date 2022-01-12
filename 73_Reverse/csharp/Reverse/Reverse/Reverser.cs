@@ -17,5 +17,18 @@
                 arrayToReverse[upperIndex] = temp;
             }
         }
+
+        public static bool IsArrayInAscendingOrder(int[] array)
+        {
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (array[i] < array[i - 1])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
