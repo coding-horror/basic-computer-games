@@ -53,6 +53,17 @@ def play_game():
         print_board(board)
         while not move(board):
             print("ILLEGAL MOVE! TRY AGAIN")
+    
+    peg_count = 0
+    for key in board.keys():
+        if board[key] == '!':
+            peg_count += 1
+    
+    print("YOU HAD " + str(peg_count) + " PEGS REMAINING")
+    
+    if peg_count == 1:
+        print("BRAVO! YOU MADE A PERFECT SCORE!")
+        print("SAVE THIS PAPER AS A RECORD OF YOUR ACCOMPLISHMENT!")
         
 def move(board):
     try:
