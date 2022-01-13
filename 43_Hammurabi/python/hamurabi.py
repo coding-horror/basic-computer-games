@@ -137,7 +137,7 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
                 # REM *** ENOUGH GRAIN FOR SEED?
                 bad_input_710(S)
                 D = -99
-            elif D >= 10 * P:
+            elif D > 10 * P:
                 # REM *** ENOUGH PEOPLE TO TEND THE CROPS?
                 print("BUT YOU HAVE ONLY", P, "PEOPLE TO TEND THE FIELDS!  NOW THEN,")
                 D = -99
