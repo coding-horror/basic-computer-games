@@ -68,7 +68,7 @@ def play_game():
 def move(board):
     try:
         start = int(input("MOVE WHICH PIECE? "))
-        if not (board[start] == "'!'):
+        if not (board[start] == '!'):
             return False
         
         end = int(input("TO WHERE? "))
@@ -97,7 +97,6 @@ def is_game_finished(board):
                 hasMovableSpace = (not ((pos - space) in board and board[pos - space] == "!")) or (not ((pos + space * 2) in board and board[pos + space * 2] == "!"))
                 if nextToPeg and hasMovableSpace:
                     return False
-
     return True
 
 
