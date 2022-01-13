@@ -107,7 +107,7 @@ namespace Reverse
             Console.WriteLine();
             Console.WriteLine("THIS IS THE GAME OF 'REVERSE'. TO WIN, ALL YOU HAVE");
             Console.WriteLine("TO DO IS ARRANGE A LIST OF NUMBERS (1 THOUGH 9 )");
-            Console.WriteLine("IN NUMBERICAL ORDER FROM LEFT TO RIGHT. TO MOVE, YOU");
+            Console.WriteLine("IN NUMERICAL ORDER FROM LEFT TO RIGHT. TO MOVE, YOU");
             Console.WriteLine("TELL ME HOW MANY NUMBERS (COUNTING FROM THE LEFT) TO");
             Console.WriteLine("REVERSE. FOR EXAMPLE, IF THE CURRENT LIST IS:");
             Console.WriteLine();
