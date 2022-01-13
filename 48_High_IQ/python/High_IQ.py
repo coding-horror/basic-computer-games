@@ -67,10 +67,15 @@ def move(board):
         if difference != 2 and difference != 18:
             return False
         center = (end + start) / 2
+        if not board[center] == '!':
+            return False
         
+        board[start] = 'O'
+        board[center] = 'O'
+        board[end] = '!'
+        return True
     except:
         return False
-    return True
 
 def main():
 #     if input("Do you want instrunctions?\n").lower().startswith("y"):
