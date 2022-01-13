@@ -1,5 +1,6 @@
 using FsCheck.Xunit;
 using Reverse.Tests.Generators;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -7,6 +8,14 @@ namespace Reverse.Tests
 {
     public class ReverserTests
     {
+        [Fact]
+        public void Constructor_CannotAcceptNumberLessThanZero()
+        {
+            Action action = () => new Reverser(0);
+
+            Assert.Throws<ArgumentOutOfRangeException>(action);
+        }
+
         [Property(Arbitrary = new[] { typeof(PositiveIntegerGenerator) })]
         public void Constructor_CreatesRandomArrayOfSpecifiedLength(int size)
         {
