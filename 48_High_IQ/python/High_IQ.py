@@ -2,8 +2,8 @@
 def new_board():
     board = {}
     for i in [13, 14, 15, 22, 23, 24, 29, 30, 31, 32, 33, 34, 35, 38, 39, 40, 42, 43, 44, 47, 48, 49, 50, 51, 52, 53, 58, 59, 60, 67, 68, 69]:
-        board[i] = "!"
-    board[41] = "O"
+        board[i] = '!'
+    board[41] = 'O'
     return board
 
 
@@ -91,10 +91,10 @@ def main():
 
 def is_game_finished(board):
     for pos in board.keys():
-        if board[pos] == "X":
+        if board[pos] == 'X':
             for space in [1,9]:
-                nextToPeg = ((pos + space) in board) and board[pos + space] == "!"
-                hasMovableSpace = (not ((pos - space) in board and board[pos - space] == "!")) or (not ((pos + space * 2) in board and board[pos + space * 2] == "!"))
+                nextToPeg = ((pos + space) in board) and board[pos + space] == '!'
+                hasMovableSpace = (not ((pos - space) in board and board[pos - space] == '!')) or (not ((pos + space * 2) in board and board[pos + space * 2] == '!'))
                 if nextToPeg and hasMovableSpace:
                     return False
     return True
