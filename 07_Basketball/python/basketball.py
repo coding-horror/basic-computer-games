@@ -13,7 +13,7 @@ class Basketball():
         self.defense = None
         self.defense_choices = [6, 6.5, 7, 7.5]
         self.shot = None
-        self.shot_choices = [1, 2, 3, 4]
+        self.shot_choices = [0, 1, 2, 3, 4]
         self.z1 = None
 
         # Explains the keyboard inputs
