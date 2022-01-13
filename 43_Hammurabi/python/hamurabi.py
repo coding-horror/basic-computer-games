@@ -154,7 +154,8 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
     if int(C / 2) == C / 2:  # even number. 50/50 chance
         # REM *** RATS ARE RUNNING WILD!!
         E = int(S / C)  # calc losses due to rats, based on previous random number
-        S = S - E + H  # deduct losses from stores
+
+    S = S - E + H  # deduct losses from stores
 
     C = gen_random()
     # REM *** LET'S HAVE SOME BABIES
