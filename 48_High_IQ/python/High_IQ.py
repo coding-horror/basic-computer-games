@@ -113,7 +113,7 @@ def move(board):
     
     end = int(end_input)
 
-    if end not in board or board[end] != '0':
+    if end not in board or board[end] != 'O':
         return False
     
     difference = abs(start - end)
@@ -121,7 +121,7 @@ def move(board):
     if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
         board[start] = 'O'
         board[center] = 'O'
-        board[end] == '!'
+        board[end] = '!'
         return True
     else:
         return False
