@@ -72,30 +72,60 @@ def play_game():
         
 def move(board):
     """Queries the user to move. Returns false if the user puts in an invalid input or move, returns true if the move was successful"""
-    try:
-        # Ask for the "start" location
-        start = int(input("MOVE WHICH PIECE? "))
-        # Verify that the location has a peg
-        if not (board[start] == '!'):
-            return False
+    # try:
+    #     # Ask for the "start" location
+    #     start = int(input("MOVE WHICH PIECE? "))
+    #     # Verify that the location has a peg
+    #     if not (board[start] == '!'):
+    #         return False
         
-        # Ask for the "end" location
-        end = int(input("TO WHERE? "))
+    #     # Ask for the "end" location
+    #     end = int(input("TO WHERE? "))
 
-        # difference and center
-        difference = abs(end - start)
-        center = (end + start) / 2
+    #     # difference and center
+    #     difference = abs(end - start)
+    #     center = (end + start) / 2
         
-        # Execute the move if the difference is correct, there is a peg in the center and no peg at the end
-        if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
-            board[start] = 'O'
-            board[center] = 'O'
-            board[end] == '!'
-            return True
-        else:
-            return False
-    except:
+    #     # Execute the move if the difference is correct, there is a peg in the center and no peg at the end
+    #     if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
+    #         board[start] = 'O'
+    #         board[center] = 'O'
+    #         board[end] == '!'
+    #         return True
+    #     else:
+    #         return False
+    # except:
+    #     return False
+    start_input = input("MOVE WHICH PIECE? ")
+    
+    if not start_input.isdigit():
         return False
+    
+    start = int(start_input)
+
+    if start not in board or board[start] != '!':
+        return False
+    
+    end_input = input("TO WHERE? ")
+
+    if not end_input.isdigit():
+        return False
+    
+    end = int(end_input)
+
+    if end not in board or board[end] != '0':
+        return False
+    
+    difference = abs(start - end)
+    center = (end + start) / 2
+    if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
+        board[start] = 'O'
+        board[center] = 'O'
+        board[end] == '!'
+        return True
+    else:
+        return False
+    
 
 def main():
     print(" " * 33 + "H-I-Q")
