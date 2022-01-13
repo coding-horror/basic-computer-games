@@ -22,11 +22,10 @@ namespace Reverse
                 var reverser = new Reverser(arrayLength);
 
                 Console.WriteLine("HERE WE GO ... THE LIST IS:");
-                Console.WriteLine();
                 PrintList(reverser.GetArrayString());
-                var arrayIsNotInAscendingOrder = true;
+                var arrayIsInAscendingOrder = false;
                 var numberOfMoves = 0;
-                while (arrayIsNotInAscendingOrder)
+                while (arrayIsInAscendingOrder == false)
                 {
                     int index = ReadNextInput();
 
@@ -37,23 +36,24 @@ namespace Reverse
 
                     reverser.Reverse(index);
                     PrintList(reverser.GetArrayString());
-
-                    if (reverser.IsArrayInAscendingOrder())
-                    {
-                        arrayIsNotInAscendingOrder = false;
-                        Console.WriteLine($"YOU WON IT IN {numberOfMoves} MOVES!!!");
-                        Console.WriteLine();
-                        Console.WriteLine();
-                    }
+                    arrayIsInAscendingOrder = reverser.IsArrayInAscendingOrder();
                     numberOfMoves++;
                 }
 
+                if (arrayIsInAscendingOrder)
+                {
+                    Console.WriteLine($"YOU WON IT IN {numberOfMoves} MOVES!!!");
+
+                }
+
+                Console.WriteLine();
+                Console.WriteLine();
                 Console.Write("TRY AGAIN (YES OR NO) ");
                 tryAgain = Console.ReadLine();
             }
 
             Console.WriteLine();
-            Console.WriteLine("OK HOPE YOU HAD FUN");
+            Console.WriteLine("OK HOPE YOU HAD FUN!!");
         }
 
         private static int ReadNextInput()
