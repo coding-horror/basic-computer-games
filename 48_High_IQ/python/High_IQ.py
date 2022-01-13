@@ -136,7 +136,7 @@ def main():
 def is_game_finished(board):
     # Checks all locations and whether or not a move is possible at that location.
     for pos in board.keys():
-        if board[pos] == 'X':
+        if board[pos] == '!':
             for space in [1,9]:
                 # Checks if the next location has a peg
                 nextToPeg = ((pos + space) in board) and board[pos + space] == '!'
