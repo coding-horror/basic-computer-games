@@ -87,6 +87,19 @@ namespace Reverse.Tests
             Assert.True(sut.GetArray().SequenceEqual(output));
         }
 
+        [Fact]
+        public void Reverse_WithIndexLessThanZero_DoesNothing()
+        {
+            var input = new int[] { 1, 2 };
+            var output = new int[] { 1, 2 };
+            var sut = new TestReverser(1);
+            sut.SetArray(input);
+
+            sut.Reverse(-1);
+
+            Assert.True(sut.GetArray().SequenceEqual(output));
+        }
+
         [Theory]
         [InlineData(new int[] { 1 })]
         [InlineData(new int[] { 1, 2 })]
