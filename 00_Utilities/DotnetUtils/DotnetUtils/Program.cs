@@ -157,6 +157,9 @@ void multipleProjs() {
     var data = infos.Where(x => x.Projs.Length > 1).ToArray();
     foreach (var item in data) {
         WriteLine(item.LangPath);
+        WriteLine();
+        printProjs(item);
+
     }
     WriteLine();
     WriteLine($"Count: {data.Length}");
