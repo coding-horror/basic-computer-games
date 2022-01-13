@@ -61,19 +61,14 @@ def move(board):
             return False
         
         end = int(input("TO WHERE? "))
-        if not (board[end] == 'O'):
-            return False
         difference = abs(end - start)
-        if difference != 2 and difference != 18:
-            return False
         center = (end + start) / 2
-        if not board[center] == '!':
-            return False
         
-        board[start] = 'O'
-        board[center] = 'O'
-        board[end] = '!'
-        return True
+        if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
+            board[start] = 'O'
+            board[center] = 'O'
+            board[end] == '!'
+            return True
     except:
         return False
 
