@@ -1,30 +1,15 @@
-﻿/*
- * LIFE
- * An implementation of John Conway's popular cellular automaton
- * Ported by Dyego Alekssander Maas
- *
- * An example pattern would be:
- * " * "
- * "***"
- * "DONE" (indicates that the simulation can start)
- * 
- * You can find patterns to play with here: http://pi.math.cornell.edu/~lipa/mec/lesson6.html
- *
- * Optionally, you can run this program with the "--wait 1000" argument, the number being the time in milliseconds
- * that the application will pause between each iteration. This is enables you to watch the simulation unfolding.
- * By default, there is no pause between iterations.
-*/
-using System.Text;
+﻿using System.Text;
 
 const int maxWidth = 70;
 const int maxHeight = 24;
 
 Console.WriteLine("ENTER YOUR PATTERN:");
-var pattern = ReadPattern(limitHeight: maxHeight).ToArray();
+var pattern = new Pattern(ReadPattern(limitHeight: maxHeight).ToArray());
 
-var (minX, minY) = FindTopLeftCorner(pattern);
-var maxX = maxHeight;
-var maxY = maxWidth;
+var minX = 10 - pattern.Height / 2;
+var minY = 34 - pattern.Width / 2;
+var maxX = maxHeight - 1;
+var maxY = maxWidth - 1;
 
 var matrix = new Matrix(height: maxHeight, width: maxWidth);
 var simulation = InitializeSimulation(pattern, matrix);
@@ -39,7 +24,6 @@ IEnumerable<string> ReadPattern(int limitHeight)
         var input = Console.ReadLine();
         if (input.ToUpper() == "DONE")
         {
-            yield return string.Empty;
             break;
         }
 
@@ -47,21 +31,10 @@ IEnumerable<string> ReadPattern(int limitHeight)
         // game allowed you to input an '.' before the spaces to circumvent this limitation. This behavior was
         // kept for compatibility.
         if (input.StartsWith('.'))
-            yield return input.Substring(1, input.Length - 2);
+            yield return input.Substring(1, input.Length - 1);
 
         yield return input;
     }
-}
-
-(int minX, int minY) FindTopLeftCorner(IEnumerable<string> patternLines)
-{
-    var longestInput = patternLines
-        .Select((value, index) => (index, value))
-        .OrderByDescending(input => input.value.Length)
-        .First();
-    var centerX = (11 - longestInput.index / 2) - 1;
-    var centerY = (33 - longestInput.value.Length / 2) - 1;
-    return (centerX, centerY);
 }
 
 void PrintHeader()
@@ -82,15 +55,16 @@ void PrintHeader()
     Console.WriteLine();    
 }
 
-Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matrixToInitialize) {
+Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
     var newSimulation = new Simulation();
 
-    // translates the pattern to the middle of the simulation and counts initial population
-    for (var x = 0; x < inputPattern.Count; x++)
+    // transcribes the pattern to the middle of the simulation and counts initial population
+    for (var x = 0; x < pattern.Height; x++)
     {
-        for (var y = 0; y < inputPattern[x].Length; y++)
+        for (var y = 0; y < pattern.Width; y++)
         {
-            if (inputPattern[x][y] == ' ') continue;
+            if (pattern.Content[x][y] == ' ')
+                continue;
             
             matrixToInitialize[minX + x, minY + y] = CellState.Stable;
             newSimulation.IncreasePopulation();
@@ -102,15 +76,14 @@ Simulation InitializeSimulation(IReadOnlyList<string> inputPattern, Matrix matri
 
 TimeSpan GetPauseBetweenIterations()
 {
-    if (args.Length == 2)
+    if (args.Length != 2) return TimeSpan.Zero;
+    
+    var parameter = args[0].ToLower();
+    if (parameter.Contains("wait"))
     {
-        var parameter = args[0].ToLower();
-        if (parameter.Contains("wait"))
-        {
-            var value = args[1];
-            if (int.TryParse(value, out var sleepMilliseconds))
-                return TimeSpan.FromMilliseconds(sleepMilliseconds);
-        }
+        var value = args[1];
+        if (int.TryParse(value, out var sleepMilliseconds))
+            return TimeSpan.FromMilliseconds(sleepMilliseconds);
     }
 
     return TimeSpan.Zero;
@@ -123,28 +96,29 @@ void ProcessSimulation()
     
     while (true)
     {
-        Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population}");
-        if (isInvalid)
-            Console.WriteLine("INVALID!");
+        var invalidText = isInvalid ? "INVALID!" : "";
+        Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population} {invalidText}");
         
         simulation.StartNewGeneration();
 
         var nextMinX = maxHeight - 1; 
         var nextMinY = maxWidth - 1;
         var nextMaxX = 0; 
-        var nextMaxY = 0; 
+        var nextMaxY = 0;
+
+        var matrixOutput = new StringBuilder();
 
         // prints the empty lines before search area
         for (var x = 0; x < minX; x++)
         {
-            Console.WriteLine();
+            matrixOutput.AppendLine();
         }
 
         // refreshes the matrix and updates search area 
-        for (var x = minX; x < maxX; x++)
+        for (var x = minX; x <= maxX; x++)
         {
             var printedLine = Enumerable.Repeat(' ', maxWidth).ToList();
-            for (var y = minY; y < maxY; y++)
+            for (var y = minY; y <= maxY; y++)
             {
                 if (matrix[x, y] == CellState.Dying)
                 {
@@ -163,20 +137,20 @@ void ProcessSimulation()
                 printedLine[y] = '*';
 
                 nextMinX = Math.Min(x, nextMinX);
-                nextMaxX = Math.Max(x + 1, nextMaxX);
+                nextMaxX = Math.Max(x, nextMaxX);
                 nextMinY = Math.Min(y, nextMinY);
-                nextMaxY = Math.Max(y + 1, nextMaxY);
+                nextMaxY = Math.Max(y, nextMaxY);
             }
 
-            Console.WriteLine(string.Join(separator: null, values: printedLine));
+            matrixOutput.AppendLine(string.Join(separator: null, values: printedLine));
         }
 
         // prints empty lines after search area
         for (var x = maxX + 1; x < maxHeight; x++)
         {
-            Console.WriteLine();
+            matrixOutput.AppendLine();
         }
-        Console.WriteLine();
+        Console.Write(matrixOutput);
 
         void UpdateSearchArea()
         {
@@ -185,42 +159,45 @@ void ProcessSimulation()
             minY = nextMinY;
             maxY = nextMaxY;
 
-            if (minX < 3)
+            const int limitX = 21;
+            const int limitY = 67;
+            
+            if (minX < 2)
             {
-                minX = 3;
+                minX = 2;
+                isInvalid = true;
+            }
+            
+            if (maxX > limitX)
+            {
+                maxX = limitX;
                 isInvalid = true;
             }
 
-            if (maxX > 22)
+            if (minY < 2)
             {
-                maxX = 22;
+                minY = 2;
                 isInvalid = true;
             }
 
-            if (minY < 3)
+            if (maxY > limitY)
             {
-                minY = 3;
-                isInvalid = true;
-            }
-
-            if (maxY > 68)
-            {
-                maxY = 68;
+                maxY = limitY;
                 isInvalid = true;
             }
         }
         UpdateSearchArea();
 
-        for (var x = minX - 1; x < maxX + 2; x++)
+        for (var x = minX - 1; x <= maxX + 1; x++)
         {
-            for (var y = minY - 1; y < maxY + 2; y++)
+            for (var y = minY - 1; y <= maxY + 1; y++)
             {
                 int CountNeighbors()
                 {
                     var neighbors = 0;
-                    for (var i = x - 1; i < x + 2; i++)
+                    for (var i = x - 1; i <= x + 1; i++)
                     {
-                        for (var j = y - 1; j < y + 2; j++)
+                        for (var j = y - 1; j <= y + 1; j++)
                         {
                             if (matrix[i, j] == CellState.Stable || matrix[i, j] == CellState.Dying)
                                 neighbors++;
@@ -231,7 +208,7 @@ void ProcessSimulation()
                 }
 
                 var neighbors = CountNeighbors();
-                if (matrix[x, y] == 0)
+                if (matrix[x, y] == CellState.Empty)
                 {
                     if (neighbors == 3)
                     {
@@ -258,6 +235,27 @@ void ProcessSimulation()
         
         if (pauseBetweenIterations > TimeSpan.Zero)
             Thread.Sleep(pauseBetweenIterations);
+    }
+}
+
+public class Pattern
+{
+    public string[] Content { get; }
+    public int Height { get; }
+    public int Width { get; }
+
+    public Pattern(IReadOnlyCollection<string> patternLines)
+    {
+        Height = patternLines.Count;
+        Width = patternLines.Max(x => x.Length);
+        Content = NormalizeWidth(patternLines);
+    }
+
+    private string[] NormalizeWidth(IReadOnlyCollection<string> patternLines)
+    {
+        return patternLines
+            .Select(x => x.PadRight(Width, ' '))
+            .ToArray();
     }
 }
 
