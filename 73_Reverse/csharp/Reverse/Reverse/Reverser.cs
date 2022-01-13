@@ -43,6 +43,11 @@ namespace Reverse
 
         private int[] CreateRandomArray(int size)
         {
+            if (size < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(size), "Array size must be a positive integer");
+            }
+
             var array = new int[size];
             for (int i = 1; i <= size; i++)
             {
