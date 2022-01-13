@@ -72,30 +72,6 @@ def play_game():
         
 def move(board):
     """Queries the user to move. Returns false if the user puts in an invalid input or move, returns true if the move was successful"""
-    # try:
-    #     # Ask for the "start" location
-    #     start = int(input("MOVE WHICH PIECE? "))
-    #     # Verify that the location has a peg
-    #     if not (board[start] == '!'):
-    #         return False
-        
-    #     # Ask for the "end" location
-    #     end = int(input("TO WHERE? "))
-
-    #     # difference and center
-    #     difference = abs(end - start)
-    #     center = (end + start) / 2
-        
-    #     # Execute the move if the difference is correct, there is a peg in the center and no peg at the end
-    #     if (difference == 2 or difference == 18) and board[end] == 'O' and board[center] == '!':
-    #         board[start] = 'O'
-    #         board[center] = 'O'
-    #         board[end] == '!'
-    #         return True
-    #     else:
-    #         return False
-    # except:
-    #     return False
     start_input = input("MOVE WHICH PIECE? ")
     
     if not start_input.isdigit():
