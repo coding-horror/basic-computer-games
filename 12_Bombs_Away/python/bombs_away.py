@@ -51,14 +51,12 @@ def commence_non_kamikazi_attack() -> None:
                 print("MISSIONS, NOT MILES...")
                 print("150 MISSIONS IS HIGH EVEN FOR OLD-TIMERS")
                 nmissions = int(input("NOW THEN, HOW MANY MISSIONS HAVE YOU FLOWN? "))
-                break
+            break
         except ValueError:
             # In the BASIC implementation this
             # wasn't accounted for
             print("TRY AGAIN...")
             continue
-        else:
-            break
 
     if nmissions >= 100:
         print("THAT'S PUSHING THE ODDS!")
