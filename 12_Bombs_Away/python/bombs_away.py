@@ -8,7 +8,7 @@ import random
 from typing import Iterable
 
 
-def _stdin_choice(*, prompt: str, choices: Iterable[str]) -> str:
+def _stdin_choice(prompt: str, *, choices: Iterable[str]) -> str:
     ret = input(prompt)
     while ret not in choices:
         print("TRY AGAIN...")
@@ -43,12 +43,22 @@ def death_with_chance(p_death: float) -> bool:
 
 
 def commence_non_kamikazi_attack() -> None:
-    nmissions = int(input("HOW MANY MISSIONS HAVE YOU FLOWN? "))
+    while True:
+        try:
+            nmissions = int(input("HOW MANY MISSIONS HAVE YOU FLOWN? "))
 
-    while nmissions >= 160:
-        print("MISSIONS, NOT MILES...")
-        print("150 MISSIONS IS HIGH EVEN FOR OLD-TIMERS")
-        nmissions = int(input("NOW THEN, HOW MANY MISSIONS HAVE YOU FLOWN? "))
+            while nmissions >= 160:
+                print("MISSIONS, NOT MILES...")
+                print("150 MISSIONS IS HIGH EVEN FOR OLD-TIMERS")
+                nmissions = int(input("NOW THEN, HOW MANY MISSIONS HAVE YOU FLOWN? "))
+                break
+        except ValueError:
+            # In the BASIC implementation this
+            # wasn't accounted for
+            print("TRY AGAIN...")
+            continue
+        else:
+            break
 
     if nmissions >= 100:
         print("THAT'S PUSHING THE ODDS!")
@@ -73,7 +83,7 @@ def mission_failure() -> None:
     print()
     enemy_weapons = _stdin_choice(
         prompt="DOES THE ENEMY HAVE GUNS(1), MISSILES(2), OR BOTH(3)? ",
-        choices=weapons_choices.keys(),
+        choices=weapons_choices,
     )
 
     # If there are no gunners (i.e. weapon choice 2) then
@@ -83,9 +93,17 @@ def mission_failure() -> None:
     enemy_gunner_accuracy = 0.0
     if enemy_weapons != "2":
         # If the enemy has guns, how accurate are the gunners?
-        enemy_gunner_accuracy = float(
-            input("WHAT'S THE PERCENT HIT RATE OF ENEMY GUNNERS (10 TO 50)? ")
-        )
+        while True:
+            try:
+                enemy_gunner_accuracy = float(
+                    input("WHAT'S THE PERCENT HIT RATE OF ENEMY GUNNERS (10 TO 50)? ")
+                )
+                break
+            except ValueError:
+                # In the BASIC implementation this
+                # wasn't accounted for
+                print("TRY AGAIN...")
+                continue
 
         if enemy_gunner_accuracy < 10:
             print("YOU LIE, BUT YOU'LL PAY...")
@@ -109,7 +127,7 @@ def play_italy() -> None:
     }
     target = _stdin_choice(
         prompt="YOUR TARGET -- ALBANIA(1), GREECE(2), NORTH AFRICA(3)",
-        choices=targets_to_messages.keys(),
+        choices=targets_to_messages,
     )
 
     print(targets_to_messages[target])
@@ -125,7 +143,7 @@ def play_allies() -> None:
     }
     aircraft = _stdin_choice(
         prompt="AIRCRAFT -- LIBERATOR(1), B-29(2), B-17(3), LANCASTER(4): ",
-        choices=aircraft_to_message.keys(),
+        choices=aircraft_to_message,
     )
 
     print(aircraft_to_message[aircraft])
@@ -137,10 +155,7 @@ def play_japan() -> None:
     first_mission = input("YOUR FIRST KAMIKAZE MISSION? (Y OR N): ")
     if first_mission.lower() == "n":
         return player_death()
-
-    if random.random() > 0.65:
-        return mission_success()
-    return player_death()
+    return mission_success() if random.random() > 0.65 else player_death()
 
 
 def play_germany() -> None:
@@ -152,7 +167,7 @@ def play_germany() -> None:
     }
     target = _stdin_choice(
         prompt="A NAZI, EH?  OH WELL.  ARE YOU GOING FOR RUSSIA(1),\nENGLAND(2), OR FRANCE(3)? ",
-        choices=targets_to_messages.keys(),
+        choices=targets_to_messages,
     )
 
     print(targets_to_messages[target])
@@ -164,8 +179,7 @@ def play_game() -> None:
     print("YOU ARE A PILOT IN A WORLD WAR II BOMBER.")
     sides = {"1": play_italy, "2": play_allies, "3": play_japan, "4": play_germany}
     side = _stdin_choice(
-        prompt="WHAT SIDE -- ITALY(1), ALLIES(2), JAPAN(3), GERMANY(4): ",
-        choices=sides.keys(),
+        prompt="WHAT SIDE -- ITALY(1), ALLIES(2), JAPAN(3), GERMANY(4): ", choices=sides
     )
     return sides[side]()
 
