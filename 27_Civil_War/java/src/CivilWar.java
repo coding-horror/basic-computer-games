@@ -13,15 +13,9 @@ public class CivilWar {
     private final List<HistoricalDatum> data;
 
     private BattleState currentBattle;
-    private int R1;
-    private int R2;
     private final int[] strategies;
     private int numGenerals;
-    private final int[] B;
-    private final int[] F;
-    private final int[] H;
-    private final int[] D;
-    private final double[] O;
+    private final ArmyPair<ArmyResources> resources;
     private int battleNumber;
     private int Y;
     private int Y2;
@@ -31,10 +25,9 @@ public class CivilWar {
     private int excessiveUnionLosses;
     private int L;
     private int W;
-    private int M3;
-    private int M4;
-    private int Q1;
-    private int Q2;
+    private final ArmyPair<Integer> revenue;
+    private final ArmyPair<Integer> totalExpenditure;
+    private final ArmyPair<Integer> totalTroops;
     private double C6;
     private double E2;
     private int W0;
@@ -42,8 +35,7 @@ public class CivilWar {
     private int unionTroops;  // M6
     private boolean confedSurrender;
     private boolean unionSurrender;
-    private int I1;
-    private int I2;
+    private final ArmyPair<Integer> inflation;
     private double R;
     private boolean wantBattleDescriptions;
 
@@ -152,21 +144,21 @@ public class CivilWar {
 
         // INFLATION CALC
         // REM - ONLY IN PRINTOUT IS CONFED INFLATION = I1+15%
-        I1 = 10 + (L - W) * 2;
-        I2 = 10 + (W - L) * 2;
+        inflation.confederate = 10 + (L - W) * 2;
+        inflation.union = 10 + (W - L) * 2;
 
         // MONEY AVAILABLE
-        this.D[0] = 100 * (int) Math.floor((battle.troops.confederate * (100.0 - I1) / 2000) * (1 + (R1 - Q1) / (R1 + 1.0)) + .5);
+        resources.confederate.budget = 100 * (int) Math.floor((battle.troops.confederate * (100.0 - inflation.confederate) / 2000) * (1 + (revenue.confederate - totalExpenditure.confederate) / (revenue.confederate + 1.0)) + .5);
 
         // MEN AVAILABLE
-        this.confedTroops = (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (M3 + 1.0)));
-        this.unionTroops = (int) Math.floor(battle.troops.union * (1 + (totalExpectedCasualties.union - totalCasualties.union) / (M4 + 1.0)));
+        this.confedTroops = (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
+        this.unionTroops = (int) Math.floor(battle.troops.union * (1 + (totalExpectedCasualties.union - totalCasualties.union) / (totalTroops.union + 1.0)));
         battleState.F1 = 5 * battle.troops.confederate / 6.0;
 
         if (this.numGenerals == 2) {
-            this.D[1] = 100 * (int) Math.floor((battle.troops.union * (100.0 - I2) / 2000) * (1 + (R2 - Q2) / (R2 + 1.0)) + .5);
+            resources.union.budget = 100 * (int) Math.floor((battle.troops.union * (100.0 - inflation.union) / 2000) * (1 + (revenue.union - totalExpenditure.union) / (revenue.union + 1.0)) + .5);
         } else {
-            this.D[1] = 100 * (int) Math.floor(battle.troops.union * (100.0 - I2) / 2000 + .5);
+            resources.union.budget = 100 * (int) Math.floor(battle.troops.union * (100.0 - inflation.union) / 2000 + .5);
         }
 
         out.println();
@@ -185,8 +177,8 @@ public class CivilWar {
         out.println();
         out.println("          CONFEDERACY     UNION");
         out.println("MEN         " + confedTroops + "          " + unionTroops);
-        out.println("MONEY     $ " + this.D[0] + "       $ " + this.D[1]);
-        out.println("INFLATION   " + (I1 + 15) + "%          " + I2 + "%");
+        out.println("MONEY     $ " + resources.confederate.budget + "       $ " + resources.union.budget);
+        out.println("INFLATION   " + (inflation.confederate + 15) + "%          " + inflation.union + "%");
 
         // ONLY IN PRINTOUT IS CONFED INFLATION = I1+15%
         // IF TWO GENERALS, INPUT CONFED. FIRST
@@ -194,32 +186,36 @@ public class CivilWar {
         for (int i = 0; i < numGenerals; i++) {
             out.println();
 
+            ArmyResources currentResources;
+
             if (this.numGenerals == 1 || i == 0) {
                 out.print("CONFEDERATE GENERAL --- ");
+                currentResources = resources.confederate;
             } else {
                 out.print("UNION GENERAL --- ");
+                currentResources = resources.union;
             }
 
             out.println("HOW MUCH DO YOU WISH TO SPEND FOR");
             out.print("- FOOD...... ? ");
             var F = terminalInput.nextInt();
             if (F == 0) {
-                if (this.R1 != 0) {
+                if (this.revenue.confederate != 0) {
                     out.println("ASSUME YOU WANT TO KEEP SAME ALLOCATIONS");
                     out.println();
                 }
             }
 
-            this.F[i] = F;
+            currentResources.food = F;
 
             out.print("- SALARIES.. ? ");
-            this.H[i] = terminalInput.nextInt();
+            currentResources.salaries = terminalInput.nextInt();
 
             out.print("- AMMUNITION ? ");
-            this.B[i] = terminalInput.nextInt();  // FIXME Retry if -ve
+            currentResources.ammunition = terminalInput.nextInt();  // FIXME Retry if -ve
 
-            if (this.F[i] + this.H[i] + this.B[i] > this.D[i]) {
-                out.println("THINK AGAIN! YOU HAVE ONLY $" + this.D[i]);
+            if (currentResources.getTotal() > currentResources.budget) {
+                out.println("THINK AGAIN! YOU HAVE ONLY $" + currentResources.budget);
                 // FIXME Redo inputs from Food
             }
         }
@@ -237,17 +233,21 @@ public class CivilWar {
     private String moraleForArmy(BattleState battleState, int armyIdx) {
         var builder = new StringBuilder();
 
+        ArmyResources currentResources;
+
         if (this.numGenerals == 1 || armyIdx == 0) {
             builder.append("CONFEDERATE ");
+            currentResources = resources.confederate;
         } else {
             builder.append("UNION ");
+            currentResources = resources.union;
         }
 
         // FIND MORALE
-        this.O[armyIdx] = (2 * Math.pow(F[armyIdx], 2) + Math.pow(H[armyIdx], 2)) / Math.pow(battleState.F1, 2) + 1;
-        if (this.O[armyIdx] >= 10) {
+        currentResources.morale = (2 * Math.pow(currentResources.food, 2) + Math.pow(currentResources.salaries, 2)) / Math.pow(battleState.F1, 2) + 1;
+        if (currentResources.morale >= 10) {
             builder.append("MORALE IS HIGH");
-        } else if (this.O[armyIdx] >= 5) {
+        } else if (currentResources.morale >= 5) {
             builder.append("MORALE IS FAIR");
         } else {
             builder.append("MORALE IS POOR");
@@ -295,10 +295,10 @@ public class CivilWar {
     // 2070  REM : SIMULATED LOSSES-NORTH
     private void simulatedLosses(HistoricalDatum battle) {
         C6 = (2.0 * battle.expectedCasualties.union / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
-        C6 = C6 * (1.28 + (5.0 * battle.troops.union / 6) / (B[1] + 1));
-        C6 = Math.floor(C6 * (1 + 1 / O[1]) + 0.5);
+        C6 = C6 * (1.28 + (5.0 * battle.troops.union / 6) / (resources.union.ammunition + 1));
+        C6 = Math.floor(C6 * (1 + 1 / resources.union.morale) + 0.5);
         // IF LOSS > MEN PRESENT, RESCALE LOSSES
-        E2 = 100 / O[1];
+        E2 = 100 / resources.union.morale;
         if (Math.floor(C6 + E2) >= unionTroops) {
             C6 = Math.floor(13.0 * unionTroops / 20);
             E2 = 7 * C6 / 13;
@@ -313,11 +313,11 @@ public class CivilWar {
         out.println("            CONFEDERACY    UNION");
 
         var C5 = (2 * battle.data.expectedCasualties.confederate / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
-        C5 = (int) Math.floor(C5 * (1 + 1.0 / this.O[0]) * (1.28 + battle.F1 / (this.B[0] + 1.0)) + .5);
-        var E = 100 / O[0];
+        C5 = (int) Math.floor(C5 * (1 + 1.0 / resources.confederate.morale) * (1.28 + battle.F1 / (resources.confederate.ammunition + 1.0)) + .5);
+        var E = 100 / resources.confederate.morale;
 
-        if (C5 + 100 / O[0] >= battle.data.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (M3 + 1.0))) {
-            C5 = (int) Math.floor(13.0 * battle.data.troops.confederate / 20 * (1 + (totalExpectedCasualties.union - totalCasualties.confederate) / (M3 + 1.0)));
+        if (C5 + 100 / resources.confederate.morale >= battle.data.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0))) {
+            C5 = (int) Math.floor(13.0 * battle.data.troops.confederate / 20 * (1 + (totalExpectedCasualties.union - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
             E = 7 * C5 / 13.0;
             excessiveConfederateLosses = 1;
         }
@@ -326,7 +326,7 @@ public class CivilWar {
 
         if (this.numGenerals == 1) {
             C6 = (int) Math.floor(17.0 * battle.data.expectedCasualties.union * battle.data.expectedCasualties.confederate / (C5 * 20));
-            E2 = 5 * O[0];
+            E2 = 5 * resources.confederate.morale;
         }
 
         out.println("CASUALTIES:  " + rightAlignInt(C5) + "        " + rightAlignInt(C6));
@@ -379,12 +379,12 @@ public class CivilWar {
             totalCasualties.union += (int) (C6 + E2);
             totalExpectedCasualties.confederate += battle.data.expectedCasualties.confederate;
             totalExpectedCasualties.union += battle.data.expectedCasualties.union;
-            Q1 += F[0] + H[0] + B[0];
-            Q2 += F[1] + H[1] + B[1];
-            R1 += battle.data.troops.confederate * (100 - I1) / 20;
-            R2 += battle.data.troops.union * (100 - I2) / 20;
-            M3 += battle.data.troops.confederate;
-            M4 += battle.data.troops.union;
+            totalExpenditure.confederate += resources.confederate.getTotal();
+            totalExpenditure.union += resources.union.getTotal();
+            revenue.confederate += battle.data.troops.confederate * (100 - inflation.confederate) / 20;
+            revenue.union += battle.data.troops.union * (100 - inflation.union) / 20;
+            totalTroops.confederate += battle.data.troops.confederate;
+            totalTroops.union += battle.data.troops.union;
 
             updateStrategies(this.Y);
         }
@@ -420,7 +420,6 @@ public class CivilWar {
         // FIXME 2960  IF R1=0 THEN 3100
 
         out.println("FOR THE " + (W + L + W0) + " BATTLES FOUGHT (EXCLUDING RERUNS)");
-//        out.println(" ", " ", " ");
         out.println("                       CONFEDERACY    UNION");
         out.println("HISTORICAL LOSSES      " + (int) Math.floor(totalExpectedCasualties.confederate + .5) + "          " + (int) Math.floor(totalExpectedCasualties.union + .5));
         out.println("SIMULATED LOSSES       " + (int) Math.floor(totalCasualties.confederate + .5) + "          " + (int) Math.floor(totalCasualties.union + .5));
@@ -494,15 +493,16 @@ public class CivilWar {
 
         this.totalCasualties = new ArmyPair<>(0, 0);
         this.totalExpectedCasualties = new ArmyPair<>(0, 0);
+        this.totalExpenditure = new ArmyPair<>(0, 0);
+        this.totalTroops = new ArmyPair<>(0, 0);
+
+        this.revenue = new ArmyPair<>(0, 0);
+        this.inflation = new ArmyPair<>(0, 0);
+
+        this.resources = new ArmyPair<>(new ArmyResources(), new ArmyResources());
 
         // UNION INFO ON LIKELY CONFEDERATE STRATEGY
         this.strategies = new int[]{25, 25, 25, 25};
-
-        this.F = new int[]{0, 0};
-        this.H = new int[]{0, 0};
-        this.B = new int[]{0, 0};
-        this.D = new int[]{0, 0};
-        this.O = new double[]{0, 0};
 
         // READ HISTORICAL DATA.
         // HISTORICAL DATA...CAN ADD MORE (STRAT.,ETC) BY INSERTING DATA STATEMENTS AFTER APPRO. INFO, AND ADJUSTING READ
@@ -620,6 +620,19 @@ public class CivilWar {
         public ArmyPair(T confederate, T union) {
             this.confederate = confederate;
             this.union = union;
+        }
+    }
+
+    private static class ArmyResources {
+        private int food;
+        private int salaries;
+        private int ammunition;
+        private int budget;
+
+        private double morale;  // TODO really here?
+
+        public int getTotal() {
+            return this.food + this.salaries + this.ammunition;
         }
     }
 
