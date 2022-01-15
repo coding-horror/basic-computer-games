@@ -1,6 +1,7 @@
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.IntStream.range;
@@ -46,6 +47,9 @@ public class CivilWar {
     private double R;
     private boolean wantBattleDescriptions;
 
+    private final static String YES_NO_REMINDER = "(ANSWER YES OR NO)";
+    private final static Predicate<String> YES_NO_CHECKER = i -> isYes(i) || isNo(i);
+
     /**
      * ORIGINAL GAME DESIGN: CRAM, GOODIE, HIBBARD LEXINGTON H.S.
      * MODIFICATIONS: G. PAUL, R. HESS (TIES), 1973
@@ -58,16 +62,11 @@ public class CivilWar {
 
         System.out.print("DO YOU WANT INSTRUCTIONS? ");
 
-        var terminalInput = new Scanner(System.in);
-        String s = terminalInput.nextLine();
-        switch (s) {
-            case "Y" -> {
-                x.showHelp();
-                x.gameLoop();
-            }
-            case "N" -> x.gameLoop();
-            default -> System.out.println("YES OR NO -- ");
+        if (isYes(inputString(YES_NO_CHECKER, YES_NO_REMINDER))) {
+            x.showHelp();
         }
+
+        x.gameLoop();
     }
 
     private void gameLoop() {
@@ -76,19 +75,13 @@ public class CivilWar {
         out.println();
         out.print("ARE THERE TWO GENERALS PRESENT (ANSWER YES OR NO)? ");
 
-        var terminalInput = new Scanner(System.in);
-        String twoGeneralsAnswer = terminalInput.nextLine();
-        switch (twoGeneralsAnswer) {
-            case "YES" -> this.numGenerals = 2;
-            case "NO" -> {
-                this.numGenerals = 1;
-                out.println();
-                out.println("YOU ARE THE CONFEDERACY.   GOOD LUCK!");
-                out.println();
-            }
-            default -> {
-                // FIXME Retry!
-            }
+        if (isYes(inputString(YES_NO_CHECKER, YES_NO_REMINDER))) {
+            this.numGenerals = 2;
+        } else {
+            this.numGenerals = 1;
+            out.println();
+            out.println("YOU ARE THE CONFEDERACY.   GOOD LUCK!");
+            out.println();
         }
 
         out.println("SELECT A BATTLE BY TYPING A NUMBER FROM 1 TO 14 ON");
@@ -101,9 +94,8 @@ public class CivilWar {
         out.println();
 
         out.print("AFTER REQUESTING A BATTLE, DO YOU WISH BATTLE DESCRIPTIONS (ANSWER YES OR NO)? ");
-        String descriptionsAnswer = terminalInput.nextLine();
-        this.wantBattleDescriptions = descriptionsAnswer.equals("YES");
-        // FIXME Retry if not "YES" or "NO"
+
+        this.wantBattleDescriptions = isYes(inputString(YES_NO_CHECKER, YES_NO_REMINDER));
 
         while (true) {
             var battle = startBattle();
@@ -582,6 +574,34 @@ public class CivilWar {
 
     private String rightAlignInt(double number) {
         return rightAlignInt((int) Math.floor(number));
+    }
+
+    private static String inputString(Predicate<String> validator, String reminder) {
+        var terminalInput = new Scanner(System.in);
+
+        while (true) {
+            var input = terminalInput.nextLine();
+            if (validator.test(input)) {
+                return input;
+            }
+            System.out.println(reminder);
+        }
+    }
+
+    private static boolean isYes(String s) {
+        if (s == null) {
+            return false;
+        }
+        var uppercase = s.toUpperCase();
+        return uppercase.equals("Y") || uppercase.equals("YES");
+    }
+
+    private static boolean isNo(String s) {
+        if (s == null) {
+            return false;
+        }
+        var uppercase = s.toUpperCase();
+        return uppercase.equals("N") || uppercase.equals("NO");
     }
 
     private static class BattleState {
