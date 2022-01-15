@@ -21,21 +21,16 @@ public class CivilWar {
     private int Y2;
     private final ArmyPair<Integer> totalExpectedCasualties;
     private final ArmyPair<Integer> totalCasualties;
-    private int excessiveConfederateLosses;
-    private int excessiveUnionLosses;
-    private int L;
-    private int W;
+    private boolean excessiveConfederateLosses;
+    private boolean excessiveUnionLosses;
+    private final BattleResults results;
     private final ArmyPair<Integer> revenue;
+    private final ArmyPair<Integer> inflation;
     private final ArmyPair<Integer> totalExpenditure;
     private final ArmyPair<Integer> totalTroops;
-    private double C6;
-    private double E2;
-    private int W0;
-    private int confedTroops;  // M5
     private int unionTroops;  // M6
     private boolean confedSurrender;
     private boolean unionSurrender;
-    private final ArmyPair<Integer> inflation;
     private double R;
     private boolean wantBattleDescriptions;
 
@@ -101,7 +96,6 @@ public class CivilWar {
 
             unionStrategy();
 
-            simulatedLosses(battle.data);
             calcLosses(battle);
 
             reset();
@@ -140,18 +134,18 @@ public class CivilWar {
         var battleState = new BattleState(battle);
 
 
-        excessiveConfederateLosses = 0;
+        excessiveConfederateLosses = false;
 
         // INFLATION CALC
         // REM - ONLY IN PRINTOUT IS CONFED INFLATION = I1+15%
-        inflation.confederate = 10 + (L - W) * 2;
-        inflation.union = 10 + (W - L) * 2;
+        inflation.confederate = 10 + (results.union - results.confederate) * 2;
+        inflation.union = 10 + (results.confederate - results.union) * 2;
 
         // MONEY AVAILABLE
         resources.confederate.budget = 100 * (int) Math.floor((battle.troops.confederate * (100.0 - inflation.confederate) / 2000) * (1 + (revenue.confederate - totalExpenditure.confederate) / (revenue.confederate + 1.0)) + .5);
 
         // MEN AVAILABLE
-        this.confedTroops = (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
+        var confedTroops = (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
         this.unionTroops = (int) Math.floor(battle.troops.union * (1 + (totalExpectedCasualties.union - totalCasualties.union) / (totalTroops.union + 1.0)));
         battleState.F1 = 5 * battle.troops.confederate / 6.0;
 
@@ -293,17 +287,20 @@ public class CivilWar {
     }
 
     // 2070  REM : SIMULATED LOSSES-NORTH
-    private void simulatedLosses(HistoricalDatum battle) {
-        C6 = (2.0 * battle.expectedCasualties.union / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
-        C6 = C6 * (1.28 + (5.0 * battle.troops.union / 6) / (resources.union.ammunition + 1));
-        C6 = Math.floor(C6 * (1 + 1 / resources.union.morale) + 0.5);
+    private UnionLosses simulateUnionLosses(HistoricalDatum battle) {
+        var losses = (2.0 * battle.expectedCasualties.union / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
+        losses = losses * (1.28 + (5.0 * battle.troops.union / 6) / (resources.union.ammunition + 1));
+        losses = Math.floor(losses * (1 + 1 / resources.union.morale) + 0.5);
         // IF LOSS > MEN PRESENT, RESCALE LOSSES
-        E2 = 100 / resources.union.morale;
-        if (Math.floor(C6 + E2) >= unionTroops) {
-            C6 = Math.floor(13.0 * unionTroops / 20);
-            E2 = 7 * C6 / 13;
-            excessiveUnionLosses = 1;
+        var moraleFactor = 100 / resources.union.morale;
+
+        if (Math.floor(losses + moraleFactor) >= unionTroops) {
+            losses = Math.floor(13.0 * unionTroops / 20);
+            moraleFactor = 7 * losses / 13;
+            excessiveUnionLosses = true;
         }
+
+        return new UnionLosses((int) losses, (int) Math.floor(moraleFactor));
     }
 
     // 2170: CALCULATE SIMULATED LOSSES
@@ -319,41 +316,44 @@ public class CivilWar {
         if (C5 + 100 / resources.confederate.morale >= battle.data.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0))) {
             C5 = (int) Math.floor(13.0 * battle.data.troops.confederate / 20 * (1 + (totalExpectedCasualties.union - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
             E = 7 * C5 / 13.0;
-            excessiveConfederateLosses = 1;
+            excessiveConfederateLosses = true;
         }
 
         /////  2270
 
+        final UnionLosses unionLosses;
+
         if (this.numGenerals == 1) {
-            C6 = (int) Math.floor(17.0 * battle.data.expectedCasualties.union * battle.data.expectedCasualties.confederate / (C5 * 20));
-            E2 = 5 * resources.confederate.morale;
+            unionLosses = new UnionLosses((int) Math.floor(17.0 * battle.data.expectedCasualties.union * battle.data.expectedCasualties.confederate / (C5 * 20)), (int) Math.floor(5 * resources.confederate.morale));
+        } else {
+            unionLosses = simulateUnionLosses(battle.data);
         }
 
-        out.println("CASUALTIES:  " + rightAlignInt(C5) + "        " + rightAlignInt(C6));
-        out.println("DESERTIONS:  " + rightAlignInt(E) + "        " + rightAlignInt(E2));
+        out.println("CASUALTIES:  " + rightAlignInt(C5) + "        " + rightAlignInt(unionLosses.losses));
+        out.println("DESERTIONS:  " + rightAlignInt(E) + "        " + rightAlignInt(unionLosses.desertions));
         out.println();
 
         if (numGenerals == 2) {
             out.println("COMPARED TO THE ACTUAL CASUALTIES AT " + battle.data.name);
             out.println("CONFEDERATE: " + (int) Math.floor(100 * (C5 / (double) battle.data.expectedCasualties.confederate) + 0.5) + " % OF THE ORIGINAL");
-            out.println("UNION:       " + (int) Math.floor(100 * (C6 / (double) battle.data.expectedCasualties.union) + 0.5) + " % OF THE ORIGINAL");
+            out.println("UNION:       " + (int) Math.floor(100 * (unionLosses.losses / (double) battle.data.expectedCasualties.union) + 0.5) + " % OF THE ORIGINAL");
 
             out.println();
 
             // REM - 1 WHO WON
-            var winner = findWinner(C5 + E, C6 + E2);
+            var winner = findWinner(C5 + E, unionLosses.losses + unionLosses.desertions);
             switch (winner) {
                 case UNION -> {
                     out.println("THE UNION WINS " + battle.data.name);
-                    L++;
+                    results.union++;
                 }
                 case CONFED -> {
                     out.println("THE CONFEDERACY WINS " + battle.data.name);
-                    W++;
+                    results.confederate++;
                 }
                 case INDECISIVE -> {
                     out.println("BATTLE OUTCOME UNRESOLVED");
-                    this.W0++;
+                    results.indeterminate++;
                 }
             }
         } else {
@@ -361,22 +361,22 @@ public class CivilWar {
 
             // FIND WHO WON
 
-            if (excessiveConfederateLosses == 1) {
+            if (excessiveConfederateLosses) {
                 out.println("YOU LOSE " + battle.data.name);
 
                 if (this.battleNumber != 0) {
-                    L++;
+                    results.union++;
                 }
             } else {
                 out.println("YOU WIN " + battle.data.name);
                 // CUMULATIVE BATTLE FACTORS WHICH ALTER HISTORICAL RESOURCES AVAILABLE.IF A REPLAY DON'T UPDATE.
-                W++;
+                results.confederate++;
             }
         }
 
         if (this.battleNumber != 0) {
             totalCasualties.confederate += (int) (C5 + E);
-            totalCasualties.union += (int) (C6 + E2);
+            totalCasualties.union += unionLosses.losses + unionLosses.desertions;
             totalExpectedCasualties.confederate += battle.data.expectedCasualties.confederate;
             totalExpectedCasualties.union += battle.data.expectedCasualties.union;
             totalExpenditure.confederate += resources.confederate.getTotal();
@@ -392,7 +392,7 @@ public class CivilWar {
 
     // 2790
     private void reset() {
-        excessiveConfederateLosses = excessiveUnionLosses = 0;
+        excessiveConfederateLosses = excessiveUnionLosses = false;
 
         out.println("---------------");
     }
@@ -405,13 +405,13 @@ public class CivilWar {
         out.println();
         out.println();
         out.println();
-        out.println("THE CONFEDERACY HAS WON " + this.W + " BATTLES AND LOST " + this.L);
+        out.println("THE CONFEDERACY HAS WON " + results.confederate + " BATTLES AND LOST " + results.union);
 
         if (this.Y2 == 5) {
             out.println("THE CONFEDERACY HAS WON THE WAR");
         }
 
-        if (this.Y == 5 || this.W <= this.L) {
+        if (this.Y == 5 || results.confederate <= results.union) {
             out.println("THE UNION HAS WON THE WAR");
         }
 
@@ -419,7 +419,7 @@ public class CivilWar {
 
         // FIXME 2960  IF R1=0 THEN 3100
 
-        out.println("FOR THE " + (W + L + W0) + " BATTLES FOUGHT (EXCLUDING RERUNS)");
+        out.println("FOR THE " + results.getTotal() + " BATTLES FOUGHT (EXCLUDING RERUNS)");
         out.println("                       CONFEDERACY    UNION");
         out.println("HISTORICAL LOSSES      " + (int) Math.floor(totalExpectedCasualties.confederate + .5) + "          " + (int) Math.floor(totalExpectedCasualties.union + .5));
         out.println("SIMULATED LOSSES       " + (int) Math.floor(totalCasualties.confederate + .5) + "          " + (int) Math.floor(totalCasualties.union + .5));
@@ -435,15 +435,15 @@ public class CivilWar {
     }
 
     private Winner findWinner(double confLosses, double unionLosses) {
-        if (this.excessiveConfederateLosses == 1 && this.excessiveUnionLosses == 1) {
+        if (this.excessiveConfederateLosses && this.excessiveUnionLosses) {
             return Winner.INDECISIVE;
         }
 
-        if (this.excessiveConfederateLosses == 1) {
+        if (this.excessiveConfederateLosses) {
             return Winner.UNION;
         }
 
-        if (this.excessiveUnionLosses == 1 || confLosses < unionLosses) {
+        if (this.excessiveUnionLosses || confLosses < unionLosses) {
             return Winner.CONFED;
         }
 
@@ -490,6 +490,8 @@ public class CivilWar {
 
     public CivilWar(PrintStream out) {
         this.out = out;
+
+        this.results = new BattleResults();
 
         this.totalCasualties = new ArmyPair<>(0, 0);
         this.totalExpectedCasualties = new ArmyPair<>(0, 0);
@@ -623,6 +625,16 @@ public class CivilWar {
         }
     }
 
+    private static class BattleResults {
+        private int confederate;
+        private int union;
+        private int indeterminate;
+
+        public int getTotal() {
+            return confederate + union + indeterminate;
+        }
+    }
+
     private static class ArmyResources {
         private int food;
         private int salaries;
@@ -639,5 +651,8 @@ public class CivilWar {
     private record HistoricalDatum(String name, ArmyPair<Integer> troops,
                                    ArmyPair<Integer> expectedCasualties,
                                    OffensiveStatus offensiveStatus, String[] blurb) {
+    }
+
+    private record UnionLosses(int losses, int desertions) {
     }
 }
