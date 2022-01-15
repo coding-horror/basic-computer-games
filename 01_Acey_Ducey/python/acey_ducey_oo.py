@@ -36,7 +36,7 @@ class Deck:
 
     def build(self):
         for suit in ['\u2665', '\u2666', '\u2663', '\u2660']:
-            for rank in range(1, 14):
+            for rank in range(2, 15):
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self):
@@ -95,10 +95,13 @@ class Game:
                     self.not_done = False
                     break
 
-                if len(self.deck.cards) <= 1:
+                if len(self.deck.cards) <= 3:
                     print('You ran out of cards. Game over.')
                     self.not_done = False
                     break
+
+                self.card_a = self.deck.deal()
+                self.card_b = self.deck.deal()
 
         if self.money == 0:
             self.not_done = False

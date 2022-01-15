@@ -42,6 +42,11 @@ function tab(space)
     return str;
 }
 
+function roll()
+{
+    return Math.floor(6 * Math.random())+1 + Math.floor(6 * Math.random())+1;
+}
+
 // Main program
 async function main()
 {
@@ -52,22 +57,11 @@ async function main()
     print("\n");
     r = 0;
     print("2,3,12 ARE LOSERS: 4,5,6,8,9,10 ARE POINTS: 7,11 ARE NATURAL WINNERS.\n");
-    t = 1;
-    print("PICK A NUMBER AND INPUT TO ROLL DICE");
-    z = parseInt(await input());
-    do {
-        x = Math.random();
-        t++;
-    } while (t <= z) ;
     while (1) {
         print("INPUT THE AMOUNT OF YOUR WAGER.");
         f = parseInt(await input());
         print("I WILL NOW THROW THE DICE\n");
-        do {
-            e = Math.floor(7 * Math.random());
-            s = Math.floor(7 * Math.random());
-            x = e + s;
-        } while (x == 0 || x == 1) ;
+        x = roll();
         if (x == 7 || x == 11) {
             print(x + " - NATURAL....A WINNER!!!!\n");
             print(x + " PAYS EVEN MONEY, YOU WIN " + f + " DOLLARS\n");
@@ -83,11 +77,7 @@ async function main()
         } else {
             print(x + " IS THE POINT. I WILL ROLL AGAIN\n");
             while (1) {
-                do {
-                    h = Math.floor(7 * Math.random());
-                    q = Math.floor(7 * Math.random());
-                    o = h + q;
-                } while (o == 0 || o == 1) ;
+                o = roll();
                 if (o == 7) {
                     print(o + " - CRAPS, YOU LOSE.\n");
                     print("YOU LOSE $" + f + "\n");
