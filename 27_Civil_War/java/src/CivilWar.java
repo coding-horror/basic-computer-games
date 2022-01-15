@@ -1,6 +1,8 @@
 import java.io.PrintStream;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.joining;
@@ -116,15 +118,14 @@ public class CivilWar {
         out.println();
         out.print("WHICH BATTLE DO YOU WISH TO SIMULATE ? ");
 
-        var terminalInput = new Scanner(System.in);
-        var battleNumber = terminalInput.nextInt();
+        var battleNumber = inputInt(i -> i >= 1 || (i == 0 && this.currentBattle != null), i -> "BATTLE " + i + " NOT ALLOWED.");
 
-        if (battleNumber == 0 && this.currentBattle != null) {
+        if (battleNumber == 0) {
             out.println(this.currentBattle.data.name + " INSTANT REPLAY");
             return this.currentBattle;
         }
 
-        if (battleNumber <= 0 || battleNumber > this.data.size()) {
+        if (battleNumber > this.data.size()) {  // TYPE ANY OTHER NUMBER TO END THE SIMULATION
             return null;
         }
 
@@ -176,6 +177,8 @@ public class CivilWar {
 
         // ONLY IN PRINTOUT IS CONFED INFLATION = I1+15%
         // IF TWO GENERALS, INPUT CONFED. FIRST
+
+        var terminalInput = new Scanner(System.in);
 
         for (int i = 0; i < numGenerals; i++) {
             out.println();
