@@ -598,14 +598,30 @@ public class CivilWar {
     }
 
     private static String inputString(Predicate<String> validator, String reminder) {
-        var terminalInput = new Scanner(System.in);
-
         while (true) {
-            var input = terminalInput.nextLine();
-            if (validator.test(input)) {
-                return input;
+            try {
+                var input = new Scanner(System.in).nextLine();
+                if (validator.test(input)) {
+                    return input;
+                }
+            } catch (InputMismatchException e) {
+                // Ignore
             }
             System.out.println(reminder);
+        }
+    }
+
+    private static int inputInt(Predicate<Integer> validator, Function<Integer, String> reminder) {
+        while (true) {
+            try {
+                var input = new Scanner(System.in).nextInt();
+                if (validator.test(input)) {
+                    return input;
+                }
+                System.out.println(reminder.apply(input));
+            } catch (InputMismatchException e) {
+                System.out.println(reminder.apply(0));
+            }
         }
     }
 
