@@ -25,6 +25,8 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 - Delphi / Object Pascal
 - Perl
 
+
+
 ### Project goals
 
 Feel free to begin converting these classic games into the above list of modern, memory safe languages. But first, a few guidelines:
@@ -38,6 +40,16 @@ Feel free to begin converting these classic games into the above list of modern,
 - **Use lots of comments to explain what is going on**. Comment liberally! If there were clever tricks in the original code, decompose those tricks into simpler (even if more verbose) code, and use comments to explain what's happening and why.
 
 - **Don't get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable -- the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks.
+
+### Emulation and Bugfixes
+
+We want the general behavior of the original programs to be preserved, _however_, we also want to update them, specifically:
+
+- allow both UPPERCASE and lowercase input and display
+- incorporate any bugfixes to the original programs; see the `readme.md` in the game folder
+- improved error handling for bad or erroneous input
+
+Please note that on the back of the Basic Computer Games book it says **Microsoft 8K Basic, Rev 4.0 was the version David Ahl used to test**, so that is the level of compatibility we are looking for.  QBasic on the DOS emulation is a later version of Basic but one that retains downwards compatibility so far in our testing. We're working on a recommended emulation to verify behavior.
 
 ### Have fun!
 
