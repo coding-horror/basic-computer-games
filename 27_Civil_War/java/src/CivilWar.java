@@ -19,8 +19,8 @@ public class CivilWar {
     private int numGenerals;
     private final ArmyPair<ArmyResources> resources;
     private int battleNumber;
-    private int Y;
-    private int Y2;
+    private int confedStrategy;
+    private int unionStrategy;
     private final ArmyPair<Integer> totalExpectedCasualties;
     private final ArmyPair<Integer> totalCasualties;
     private boolean excessiveConfederateLosses;
@@ -95,8 +95,6 @@ public class CivilWar {
             this.currentBattle = battle;
 
             offensiveLogic(battle.data);
-
-            unionStrategy();
 
             calcLosses(battle);
 
@@ -280,22 +278,26 @@ public class CivilWar {
             out.print("YOUR STRATEGY ? ");
         }
 
-        var terminalInput = new Scanner(System.in);
-        Y = terminalInput.nextInt();
-        if (Math.abs(Y - 3) >= 3) {
-            out.println("STRATEGY " + Y + " NOT ALLOWED.");
-            // FIXME Proper numeric check!! Not abs
-            // FIXME Retry Y input
+        confedStrategy = inputInt(i -> i >= 1 && i <= 5, i -> "STRATEGY " + i + " NOT ALLOWED.");
+        if (confedStrategy == 5) {  // 1970
+            confedSurrender = true;
         }
 
-        if (Y == 5) {  // 1970
-            confedSurrender = true;
+        if (numGenerals == 2) {
+            out.print("UNION STRATEGY ? ");
+
+            unionStrategy = inputInt(i -> i >= 1 && i <= 5, i -> "STRATEGY " + i + " NOT ALLOWED.");
+            if (unionStrategy == 5) {  // 1970
+                unionSurrender = true;
+            }
+        } else {
+            unionStrategy();
         }
     }
 
     // 2070  REM : SIMULATED LOSSES-NORTH
     private UnionLosses simulateUnionLosses(HistoricalDatum battle) {
-        var losses = (2.0 * battle.expectedCasualties.union / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
+        var losses = (2.0 * battle.expectedCasualties.union / 5) * (1 + 1.0 / (2 * (Math.abs(unionStrategy - confedStrategy) + 1)));
         losses = losses * (1.28 + (5.0 * battle.troops.union / 6) / (resources.union.ammunition + 1));
         losses = Math.floor(losses * (1 + 1 / resources.union.morale) + 0.5);
         // IF LOSS > MEN PRESENT, RESCALE LOSSES
@@ -316,7 +318,7 @@ public class CivilWar {
         out.println();
         out.println("            CONFEDERACY    UNION");
 
-        var C5 = (2 * battle.data.expectedCasualties.confederate / 5) * (1 + 1.0 / (2 * (Math.abs(Y2 - Y) + 1)));
+        var C5 = (2 * battle.data.expectedCasualties.confederate / 5) * (1 + 1.0 / (2 * (Math.abs(unionStrategy - confedStrategy) + 1)));
         C5 = (int) Math.floor(C5 * (1 + 1.0 / resources.confederate.morale) * (1.28 + battle.F1 / (resources.confederate.ammunition + 1.0)) + .5);
         var E = 100 / resources.confederate.morale;
 
@@ -393,7 +395,7 @@ public class CivilWar {
             totalTroops.confederate += battle.data.troops.confederate;
             totalTroops.union += battle.data.troops.union;
 
-            updateStrategies(this.Y);
+            updateStrategies(this.confedStrategy);
         }
     }
 
@@ -414,11 +416,11 @@ public class CivilWar {
         out.println();
         out.println("THE CONFEDERACY HAS WON " + results.confederate + " BATTLES AND LOST " + results.union);
 
-        if (this.Y2 == 5) {
+        if (this.unionStrategy == 5) {
             out.println("THE CONFEDERACY HAS WON THE WAR");
         }
 
-        if (this.Y == 5 || results.confederate <= results.union) {
+        if (this.confedStrategy == 5 || results.confederate <= results.union) {
             out.println("THE UNION HAS WON THE WAR");
         }
 
@@ -466,16 +468,17 @@ public class CivilWar {
     }
 
     private void unionStrategy() {
-        if (this.battleNumber != 0) {
+        // 3130 ... so you can only input / override Union strategy on re-run??
+        if (this.battleNumber == 0) {
             out.print("UNION STRATEGY ? ");
             var terminalInput = new Scanner(System.in);
-            Y2 = terminalInput.nextInt();
-            if (Y2 < 0) {
+            unionStrategy = terminalInput.nextInt();
+            if (unionStrategy < 0) {
                 out.println("ENTER 1, 2, 3, OR 4 (USUALLY PREVIOUS UNION STRATEGY)");
                 // FIXME Retry Y2 input !!!
             }
 
-            if (Y2 < 5) {  // 3155
+            if (unionStrategy < 5) {  // 3155
                 return;
             }
         }
@@ -484,15 +487,15 @@ public class CivilWar {
 
         this.R = 100 * Math.random();
 
-        for (Y2 = 0; Y2 < 4; Y2++) {
-            S0 += this.strategies[Y2];
+        for (unionStrategy = 1; unionStrategy <= 4; unionStrategy++) {
+            S0 += this.strategies[unionStrategy - 1];
             // IF ACTUAL STRATEGY INFO IS IN PROGRAM DATA STATEMENTS THEN R-100 IS EXTRA WEIGHT GIVEN TO THAT STATEGY.
             if (R < S0) {
                 break;
             }
         }
         // IF ACTUAL STRAT. IN,THEN HERE IS Y2= HIST. STRAT.
-        out.println("UNION STRATEGY IS " + Y2);
+        out.println("UNION STRATEGY IS " + unionStrategy);
     }
 
     public CivilWar(PrintStream out) {
