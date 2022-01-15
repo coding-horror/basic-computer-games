@@ -190,27 +190,31 @@ public class CivilWar {
                 currentResources = resources.union;
             }
 
-            out.println("HOW MUCH DO YOU WISH TO SPEND FOR");
-            out.print("- FOOD...... ? ");
-            var F = terminalInput.nextInt();
-            if (F == 0) {
-                if (this.revenue.confederate != 0) {
-                    out.println("ASSUME YOU WANT TO KEEP SAME ALLOCATIONS");
-                    out.println();
+            var validInputs = false;
+            while (!validInputs) {
+                out.println("HOW MUCH DO YOU WISH TO SPEND FOR");
+                out.print("- FOOD...... ? ");
+                var food = terminalInput.nextInt();
+                if (food == 0) {
+                    if (this.revenue.confederate != 0) {
+                        out.println("ASSUME YOU WANT TO KEEP SAME ALLOCATIONS");
+                        out.println();
+                    }
+                } else {
+                    currentResources.food = food;
                 }
-            }
 
-            currentResources.food = F;
+                out.print("- SALARIES.. ? ");
+                currentResources.salaries = terminalInput.nextInt();
 
-            out.print("- SALARIES.. ? ");
-            currentResources.salaries = terminalInput.nextInt();
+                out.print("- AMMUNITION ? ");
+                currentResources.ammunition = terminalInput.nextInt();  // FIXME Retry if -ve
 
-            out.print("- AMMUNITION ? ");
-            currentResources.ammunition = terminalInput.nextInt();  // FIXME Retry if -ve
-
-            if (currentResources.getTotal() > currentResources.budget) {
-                out.println("THINK AGAIN! YOU HAVE ONLY $" + currentResources.budget);
-                // FIXME Redo inputs from Food
+                if (currentResources.getTotal() > currentResources.budget) {
+                    out.println("THINK AGAIN! YOU HAVE ONLY $" + currentResources.budget);
+                } else {
+                    validInputs = true;
+                }
             }
         }
 
