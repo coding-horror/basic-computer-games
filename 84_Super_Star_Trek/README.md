@@ -89,6 +89,17 @@ The relation between the Historical and Standard nomenclatures is shown in the s
 15. This version of Star Trek was created for a Data General Nova 800 system with 32K or core. So that it would fit, the instructions are separated from the main program via a CHAIN. For conversion to DEC BASIC-PLUS, Statement 160 (Randomize) should be moved after the return from the chained instructions, say to Statement 245. For Altair BASIC, Randomize and the chain instructions should be eliminated.
 
 ---
+#### Bugs
+
+Many of the programs in this book and this collection have bugs in the original code. 
+
+Jack Boyce has discovered and fixed a number of bugs in his [python implementation](python/superstartrek.py), which should be noted by other implementers:
+
+- line `4410` : `D(7)` should be `D(6)`
+- lines `8310`,`8330`,`8430`,`8450` : Division by zero is possible
+- line `440` : `B9` should be initialised to 0, not 2
+
+---
 
 As published in Basic Computer Games (1978):
 - [Atari Archives](https://www.atariarchives.org/basicgames/showpage.php?page=157)
