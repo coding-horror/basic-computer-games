@@ -2,9 +2,8 @@
 .vscode/
 .gradle/
 node_modules/
-buildJvm/
-
-build.gradle
+buildJvm/bin
+buildJvm/*/build/
 
 .classpath
 .project
