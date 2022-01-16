@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using DotnetUtils;
+﻿using DotnetUtils;
 using static System.Console;
 using static System.IO.Path;
 using static DotnetUtils.Methods;
