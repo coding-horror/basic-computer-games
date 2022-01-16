@@ -1,6 +1,8 @@
-﻿using DotnetUtils;
+﻿using System.Diagnostics;
+using DotnetUtils;
 using static System.Console;
 using static System.IO.Path;
+using static DotnetUtils.Methods;
 
 var infos = PortInfos.Get;
 
@@ -11,7 +13,10 @@ var actions = new (Action action, string description)[] {
     (multipleSlns, "Output multiple sln files"),
     (missingProj, "Output missing project file"),
     (unexpectedProjName, "Output misnamed project files"),
-    (multipleProjs, "Output multiple project files")
+    (multipleProjs, "Output multiple project files"),
+
+    (generateMissingSlns, "Generate solution files when missing"),
+    (generateMissingProjs, "Generate project files when missing")
 };
 
 foreach (var (_, description, index) in actions.WithIndex()) {
@@ -159,8 +164,52 @@ void multipleProjs() {
         WriteLine(item.LangPath);
         WriteLine();
         printProjs(item);
-
     }
     WriteLine();
     WriteLine($"Count: {data.Length}");
+}
+
+void generateMissingSlns() {
+    foreach (var item in infos.Where(x => !x.Slns.Any())) {
+        var result = RunProcess("dotnet", $"new sln -n {item.GameName} -o {item.LangPath}");
+        WriteLine(result);
+
+        var slnFullPath = Combine(item.LangPath, $"{item.GameName}.sln");
+        foreach (var proj in item.Projs) {
+            result = RunProcess("dotnet", $"sln {slnFullPath} add {proj}");
+            WriteLine(result);
+        }
+    }
+}
+
+void generateMissingProjs() {
+    foreach (var item in infos.Where(x => !x.Projs.Any())) {
+        var (langArg, langVersion) = item.Lang switch {
+            "csharp" => ("\"C#\"", 10),
+            "vbnet" => ("\"VB\"", 16.9),
+            _ => throw new InvalidOperationException()
+        };
+
+        var result = RunProcess("dotnet", $"new console --language {langArg} --name {item.GameName}.{item.ProjExt} -o {item.LangPath} -f net6.0 --langversion {langVersion}");
+        WriteLine(result);
+
+        var projFullPath = Combine(item.LangPath, $"{item.GameName}.{item.ProjExt}");
+        if (item.Slns.Length == 1) {
+            result = RunProcess("dotnet", $"sln {item.Slns[0]} add {projFullPath}");
+            WriteLine(result);
+        }
+    }
+}
+
+void checkProjects() {
+    // warn if project files do not:
+    //      target .NET 6
+    //      implicit using
+    //      nullable enable
+    // warn if none og the projects have:
+    //      output type exe
+}
+
+void tryBuild() {
+    // if has code files, try to build
 }

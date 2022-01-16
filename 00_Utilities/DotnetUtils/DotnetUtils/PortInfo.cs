@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using static System.IO.Directory;
+﻿using static System.IO.Directory;
 using static System.IO.Path;
 using static DotnetUtils.Globals;
 
@@ -17,6 +16,14 @@ public record PortInfo(
         MatchCasing = MatchCasing.CaseInsensitive
     };
 
+    // .NET namespaces cannot have a digit as the first character
+    // For games whose name starts with a digit, we map the name to a specific string
+    private static readonly Dictionary<string, string> specialGameNames = new() {
+        { "3-D_Plot", "ThreeDPlot" },
+        { "3-D_Tic-Tac-Toe", "ThreeDTicTacToe" },
+        { "23_Matches", "TwentyThreeMatches"}
+    };
+
     public static PortInfo? Create(string fullPath, string langKeyword) {
         var folderName = GetFileName(fullPath);
         var parts = folderName.Split('_', 2);
@@ -27,9 +34,11 @@ public record PortInfo(
                 (int?)null;
 
         var gameName =
-            parts.Length > 1 ?
-                parts[1].Replace("_", "") :
-                null;
+            parts.Length == 0 ?
+                null :
+                specialGameNames.TryGetValue(parts[1], out var specialName) ?
+                    specialName :
+                    parts[1].Replace("_", "").Replace("-", "");
 
         if (index is 0 or null || gameName is null) { return null; }
 
