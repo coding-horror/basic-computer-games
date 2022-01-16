@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Number {
+public class Number1 {
 
     public static int points = 0;
 
