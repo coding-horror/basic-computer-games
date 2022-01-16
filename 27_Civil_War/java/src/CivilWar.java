@@ -14,26 +14,30 @@ public class CivilWar {
     private final PrintStream out;
     private final List<HistoricalDatum> data;
 
+    private final BattleResults results;
+
     private BattleState currentBattle;
-    private final int[] strategies;
     private int numGenerals;
-    private final ArmyPair<ArmyResources> resources;
     private int battleNumber;
+    private boolean wantBattleDescriptions;
+    private final int[] strategies;
+
     private int confedStrategy;
     private int unionStrategy;
+
+    private final ArmyPair<ArmyResources> resources;
     private final ArmyPair<Integer> totalExpectedCasualties;
     private final ArmyPair<Integer> totalCasualties;
-    private boolean excessiveConfederateLosses;
-    private boolean excessiveUnionLosses;
-    private final BattleResults results;
     private final ArmyPair<Integer> revenue;
     private final ArmyPair<Integer> inflation;
     private final ArmyPair<Integer> totalExpenditure;
     private final ArmyPair<Integer> totalTroops;
-    private int unionTroops;  // M6
+
+    private boolean excessiveConfederateLosses;
+    private boolean excessiveUnionLosses;
+
     private boolean confedSurrender;
     private boolean unionSurrender;
-    private boolean wantBattleDescriptions;
 
     private final static String YES_NO_REMINDER = "(ANSWER YES OR NO)";
     private final static Predicate<String> YES_NO_CHECKER = i -> isYes(i) || isNo(i);
@@ -143,8 +147,6 @@ public class CivilWar {
         resources.confederate.budget = 100 * (int) Math.floor((battle.troops.confederate * (100.0 - inflation.confederate) / 2000) * (1 + (revenue.confederate - totalExpenditure.confederate) / (revenue.confederate + 1.0)) + .5);
 
         // MEN AVAILABLE
-        var confedTroops = (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
-        this.unionTroops = (int) Math.floor(battle.troops.union * (1 + (totalExpectedCasualties.union - totalCasualties.union) / (totalTroops.union + 1.0)));
         battleState.F1 = 5 * battle.troops.confederate / 6.0;
 
         if (this.numGenerals == 2) {
@@ -168,7 +170,7 @@ public class CivilWar {
 
         out.println();
         out.println("          CONFEDERACY     UNION");
-        out.println("MEN         " + confedTroops + "          " + unionTroops);
+        out.println("MEN         " + getConfedTroops(battle) + "          " + getUnionTroops(battle));
         out.println("MONEY     $ " + resources.confederate.budget + "       $ " + resources.union.budget);
         out.println("INFLATION   " + (inflation.confederate + 15) + "%          " + inflation.union + "%");
 
@@ -226,6 +228,14 @@ public class CivilWar {
         out.println();
 
         return battleState;
+    }
+
+    private int getUnionTroops(HistoricalDatum battle) {
+        return (int) Math.floor(battle.troops.union * (1 + (totalExpectedCasualties.union - totalCasualties.union) / (totalTroops.union + 1.0)));
+    }
+
+    private int getConfedTroops(HistoricalDatum battle) {
+        return (int) Math.floor(battle.troops.confederate * (1 + (totalExpectedCasualties.confederate - totalCasualties.confederate) / (totalTroops.confederate + 1.0)));
     }
 
     private String moraleForArmy(BattleState battleState, int armyIdx) {
@@ -302,8 +312,8 @@ public class CivilWar {
         // IF LOSS > MEN PRESENT, RESCALE LOSSES
         var moraleFactor = 100 / resources.union.morale;
 
-        if (Math.floor(losses + moraleFactor) >= unionTroops) {
-            losses = Math.floor(13.0 * unionTroops / 20);
+        if (Math.floor(losses + moraleFactor) >= getUnionTroops(battle)) {
+            losses = Math.floor(13.0 * getUnionTroops(battle) / 20);
             moraleFactor = 7 * losses / 13;
             excessiveUnionLosses = true;
         }
