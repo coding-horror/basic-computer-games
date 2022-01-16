@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class main {
+public class Name {
 
     public static void printempty() { System.out.println(" "); }
 
