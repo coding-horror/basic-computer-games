@@ -93,7 +93,7 @@ The relation between the Historical and Standard nomenclatures is shown in the s
 
 Many of the programs in this book and this collection have bugs in the original code. 
 
-Jack Boyce has discovered and fixed a number of bugs in his [python implementation](python/superstartrek.py), which should be noted by other implementers:
+@jkboyce has done a great job of discovering and fixing a number of bugs in the [original code](superstartrek.bas), as part of his [python implementation](python/superstartrek.py), which should be noted by other implementers:
 
 - line `4410` : `D(7)` should be `D(6)`
 - lines `8310`,`8330`,`8430`,`8450` : Division by zero is possible
