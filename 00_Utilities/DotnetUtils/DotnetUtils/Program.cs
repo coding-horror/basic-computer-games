@@ -184,18 +184,37 @@ void generateMissingSlns() {
 
 void generateMissingProjs() {
     foreach (var item in infos.Where(x => !x.Projs.Any())) {
-        var (langArg, langVersion) = item.Lang switch {
-            "csharp" => ("\"C#\"", 10),
-            "vbnet" => ("\"VB\"", 16.9),
+        // We can't use the dotnet command to create a new project using the built-in console template, because part of that template
+        // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and 
+        // if there's already such a file, it might try to overwrite it.
+
+        var projText = item.Lang switch {
+            "csharp" => @"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>
+",
+            "vbnet" => @$"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>{item.GameName}</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>16.9</LangVersion>
+  </PropertyGroup>
+</Project>
+",
             _ => throw new InvalidOperationException()
         };
-
-        var result = RunProcess("dotnet", $"new console --language {langArg} --name {item.GameName}.{item.ProjExt} -o {item.LangPath} -f net6.0 --langversion {langVersion}");
-        WriteLine(result);
-
         var projFullPath = Combine(item.LangPath, $"{item.GameName}.{item.ProjExt}");
+        File.WriteAllText(projFullPath, projText);
+        
         if (item.Slns.Length == 1) {
-            result = RunProcess("dotnet", $"sln {item.Slns[0]} add {projFullPath}");
+            var result = RunProcess("dotnet", $"sln {item.Slns[0]} add {projFullPath}");
             WriteLine(result);
         }
     }
