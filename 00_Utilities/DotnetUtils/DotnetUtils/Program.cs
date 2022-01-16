@@ -1,6 +1,7 @@
 ﻿using DotnetUtils;
 using static System.Console;
 using static System.IO.Path;
+using static DotnetUtils.Methods;
 
 var infos = PortInfos.Get;
 
@@ -11,7 +12,10 @@ var actions = new (Action action, string description)[] {
     (multipleSlns, "Output multiple sln files"),
     (missingProj, "Output missing project file"),
     (unexpectedProjName, "Output misnamed project files"),
-    (multipleProjs, "Output multiple project files")
+    (multipleProjs, "Output multiple project files"),
+
+    (generateMissingSlns, "Generate solution files when missing"),
+    (generateMissingProjs, "Generate project files when missing")
 };
 
 foreach (var (_, description, index) in actions.WithIndex()) {
@@ -159,8 +163,71 @@ void multipleProjs() {
         WriteLine(item.LangPath);
         WriteLine();
         printProjs(item);
-
     }
     WriteLine();
     WriteLine($"Count: {data.Length}");
+}
+
+void generateMissingSlns() {
+    foreach (var item in infos.Where(x => !x.Slns.Any())) {
+        var result = RunProcess("dotnet", $"new sln -n {item.GameName} -o {item.LangPath}");
+        WriteLine(result);
+
+        var slnFullPath = Combine(item.LangPath, $"{item.GameName}.sln");
+        foreach (var proj in item.Projs) {
+            result = RunProcess("dotnet", $"sln {slnFullPath} add {proj}");
+            WriteLine(result);
+        }
+    }
+}
+
+void generateMissingProjs() {
+    foreach (var item in infos.Where(x => !x.Projs.Any())) {
+        // We can't use the dotnet command to create a new project using the built-in console template, because part of that template
+        // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and 
+        // if there's already such a file, it might try to overwrite it.
+
+        var projText = item.Lang switch {
+            "csharp" => @"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>
+",
+            "vbnet" => @$"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>{item.GameName}</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>16.9</LangVersion>
+  </PropertyGroup>
+</Project>
+",
+            _ => throw new InvalidOperationException()
+        };
+        var projFullPath = Combine(item.LangPath, $"{item.GameName}.{item.ProjExt}");
+        File.WriteAllText(projFullPath, projText);
+        
+        if (item.Slns.Length == 1) {
+            var result = RunProcess("dotnet", $"sln {item.Slns[0]} add {projFullPath}");
+            WriteLine(result);
+        }
+    }
+}
+
+void checkProjects() {
+    // warn if project files do not:
+    //      target .NET 6
+    //      implicit using
+    //      nullable enable
+    // warn if none og the projects have:
+    //      output type exe
+}
+
+void tryBuild() {
+    // if has code files, try to build
 }
