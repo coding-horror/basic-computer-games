@@ -30,5 +30,4 @@ out/
 Pipfile
 
 .DS_Store
-/.vs/basic-computer-games/v16
-/.vs
+.vs/
