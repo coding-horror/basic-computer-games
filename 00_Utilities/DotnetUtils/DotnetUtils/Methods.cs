@@ -50,7 +50,7 @@ public sealed record ProcessResult(int ExitCode, string StdOut, string StdErr) {
     public override string? ToString() =>
         StdOut +
         (StdOut is not (null or "") && ExitCode > 0 ? "\n" : "") +
-        (ExitCode > 0 ?
+        (ExitCode != 0 ?
             $"{ExitCode}\n{StdErr}" :
             "");
 }

@@ -34,7 +34,7 @@ public record PortInfo(
                 (int?)null;
 
         var gameName =
-            parts.Length == 0 ?
+            parts.Length <= 1 ?
                 null :
                 specialGameNames.TryGetValue(parts[1], out var specialName) ?
                     specialName :
