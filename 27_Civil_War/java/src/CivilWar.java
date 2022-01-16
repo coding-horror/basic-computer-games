@@ -33,7 +33,6 @@ public class CivilWar {
     private int unionTroops;  // M6
     private boolean confedSurrender;
     private boolean unionSurrender;
-    private double R;
     private boolean wantBattleDescriptions;
 
     private final static String YES_NO_REMINDER = "(ANSWER YES OR NO)";
@@ -484,13 +483,12 @@ public class CivilWar {
         }
 
         var S0 = 0;
-
-        this.R = 100 * Math.random();
+        var r = 100 * Math.random();
 
         for (unionStrategy = 1; unionStrategy <= 4; unionStrategy++) {
             S0 += this.strategies[unionStrategy - 1];
             // IF ACTUAL STRATEGY INFO IS IN PROGRAM DATA STATEMENTS THEN R-100 IS EXTRA WEIGHT GIVEN TO THAT STATEGY.
-            if (R < S0) {
+            if (r < S0) {
                 break;
             }
         }
