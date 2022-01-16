@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using static System.IO.Path;
 
 namespace DotnetUtils;
 
@@ -18,10 +19,7 @@ public static class Extensions {
             rootPath.IsNullOrWhitespace()
         ) { return path; }
 
-        var path1 = path.TrimEnd('\\');
-        rootPath = rootPath.TrimEnd('\\');
-        if (!path1.StartsWith(rootPath, StringComparison.InvariantCultureIgnoreCase)) { return path; }
-
-        return path1[(rootPath.Length + 1)..]; // ignore the initial /
+        path = path.TrimEnd('\\'); // remove trailing backslash, if present
+        return GetRelativePath(rootPath, path.TrimEnd('\\'));
     }
 }
