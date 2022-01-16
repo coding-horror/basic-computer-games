@@ -44,6 +44,38 @@ public static class Methods {
         process.WaitForExit();
         return new ProcessResult(process.ExitCode, output, error);
     }
+
+    public static Task<ProcessResult> RunProcessAsync(Process process, string input = "") {
+        var tcs = new TaskCompletionSource<ProcessResult>();
+        var (output, error) = ("", "");
+        var (redirectOut, redirectErr) = (
+            process.StartInfo.RedirectStandardOutput,
+            process.StartInfo.RedirectStandardError
+        );
+
+        process.Exited += (s, e) => tcs.SetResult(new ProcessResult(process.ExitCode, output, error));
+
+        if (redirectOut) {
+            process.OutputDataReceived += (s, ea) => output += ea.Data + "\n";
+        }
+        if (redirectErr) {
+            process.ErrorDataReceived += (s, ea) => error += ea.Data + "\n";
+        }
+
+        if (!process.Start()) {
+            // what happens to the Exited event if process doesn't start successfully?
+            throw new InvalidOperationException();
+        }
+
+        if (redirectOut) { process.BeginOutputReadLine(); }
+        if (redirectErr) { process.BeginErrorReadLine(); }
+        if (!string.IsNullOrEmpty(input)) {
+            process.StandardInput.WriteLine(input);
+            process.StandardInput.Close();
+        }
+
+        return tcs.Task;
+    }
 }
 
 public sealed record ProcessResult(int ExitCode, string StdOut, string StdErr) {
