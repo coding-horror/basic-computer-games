@@ -1,7 +1,9 @@
-﻿using DotnetUtils;
+﻿using System.Xml.Linq;
+using DotnetUtils;
 using static System.Console;
 using static System.IO.Path;
 using static DotnetUtils.Methods;
+using static DotnetUtils.Functions;
 
 var infos = PortInfos.Get;
 
@@ -13,6 +15,8 @@ var actions = new (Action action, string description)[] {
     (missingProj, "Output missing project file"),
     (unexpectedProjName, "Output misnamed project files"),
     (multipleProjs, "Output multiple project files"),
+    (checkProjects, "Check .csproj/.vbproj files for target framework, nullability etc."),
+    (checkExecutableProject, "Check that there is at least one executable project per port"),
 
     (generateMissingSlns, "Generate solution files when missing"),
     (generateMissingProjs, "Generate project files when missing")
@@ -220,12 +224,66 @@ void generateMissingProjs() {
 }
 
 void checkProjects() {
-    // warn if project files do not:
-    //      target .NET 6
-    //      implicit using
-    //      nullable enable
-    // warn if none og the projects have:
-    //      output type exe
+    foreach (var (proj,item) in infos.SelectMany(item => item.Projs.Select(proj => (proj,item)))) {
+        var warnings = new List<string>();
+        var parent = XDocument.Load(proj).Element("Project")?.Element("PropertyGroup");
+
+        var (
+            framework,
+            nullable,
+            implicitUsing,
+            rootNamespace,
+            langVersion
+        ) = (
+            getValue(parent, "TargetFramework", "TargetFrameworks"),
+            getValue(parent, "Nullable"),
+            getValue(parent, "ImplicitUsings"),
+            getValue(parent, "RootNamespace"),
+            getValue(parent, "LangVersion")
+        );
+
+        if (framework != "net6.0") {
+            warnings.Add($"Target: {framework}");
+        }
+
+        if (item.Lang == "csharp") {
+            if (nullable != "enable") {
+                warnings.Add($"Nullable: {nullable}");
+            }
+            if (implicitUsing != "enable") {
+                warnings.Add($"ImplicitUsings: {implicitUsing}");
+            }
+            if (rootNamespace != null && rootNamespace != item.GameName) {
+                warnings.Add($"RootNamespace: {rootNamespace}");
+            }
+            if (langVersion != "10") {
+                warnings.Add($"LangVersion: {langVersion}");
+            }
+        }
+
+        if (item.Lang == "vbnet") {
+            if (rootNamespace != item.GameName) {
+                warnings.Add($"RootNamespace: {rootNamespace}");
+            }
+            if (langVersion != "16.9") {
+                warnings.Add($"LangVersion: {langVersion}");
+            }
+        }
+
+        if (warnings.Any()) {
+            WriteLine(proj);
+            WriteLine(string.Join("\n", warnings));
+            WriteLine();
+        }
+    }
+}
+
+void checkExecutableProject() {
+    foreach (var item in infos) {
+        if (item.Projs.All(proj => getValue(proj,"OutputType") != "Exe")) {
+            WriteLine($"{item.LangPath}");
+        }
+    }
 }
 
 void tryBuild() {
