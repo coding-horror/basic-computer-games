@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ThreeDPlot</RootNamespace>
+    <RootNamespace>Plot</RootNamespace>
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>16.9</LangVersion>
   </PropertyGroup>
