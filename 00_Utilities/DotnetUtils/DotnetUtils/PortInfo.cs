@@ -5,7 +5,7 @@ using static DotnetUtils.Globals;
 namespace DotnetUtils;
 
 public record PortInfo(
-    string FullPath, string FolderName, int Index, string GameName,
+    string GamePath, string FolderName, int Index, string GameName,
     string LangPath, string Lang, string Ext, string ProjExt,
     string[] CodeFiles, string[] Slns, string[] Projs
 ) {
@@ -24,33 +24,32 @@ public record PortInfo(
         { "23_Matches", "TwentyThreeMatches"}
     };
 
-    public static PortInfo? Create(string fullPath, string langKeyword) {
-        var folderName = GetFileName(fullPath);
+    public static PortInfo? Create(string gamePath, string langKeyword) {
+        var folderName = GetFileName(gamePath);
         var parts = folderName.Split('_', 2);
 
-        var index =
-            parts.Length > 0 && int.TryParse(parts[0], out var n) ?
+        if (parts.Length <= 1) { return null; }
+
+        var (index, gameName) = (
+            int.TryParse(parts[0], out var n) && n > 0 ? // ignore utilities folder
                 n :
-                (int?)null;
+                (int?)null,
+            specialGameNames.TryGetValue(parts[1], out var specialName) ? 
+                specialName :
+                parts[1].Replace("_", "").Replace("-", "")
+        );
 
-        var gameName =
-            parts.Length <= 1 ?
-                null :
-                specialGameNames.TryGetValue(parts[1], out var specialName) ?
-                    specialName :
-                    parts[1].Replace("_", "").Replace("-", "");
-
-        if (index is 0 or null || gameName is null) { return null; }
+        if (index is null || gameName is null) { return null; }
 
         var (ext, projExt) = LangData[langKeyword];
-        var langPath = Combine(fullPath, langKeyword);
+        var langPath = Combine(gamePath, langKeyword);
         var codeFiles =
             GetFiles(langPath, $"*.{ext}", enumerationOptions)
                 .Where(x => !x.Contains("\\bin\\") && !x.Contains("\\obj\\"))
                 .ToArray();
 
         return new PortInfo(
-            fullPath, folderName, index.Value, gameName,
+            gamePath, folderName, index.Value, gameName,
             langPath, langKeyword, ext, projExt,
             codeFiles,
             GetFiles(langPath, "*.sln", enumerationOptions),

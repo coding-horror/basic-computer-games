@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using static System.Console;
 
 namespace DotnetUtils;
 
@@ -18,4 +19,17 @@ public static class Functions {
         }
         return elem?.Value;
     }
+
+    public static int getChoice(int maxValue) => getChoice(0, maxValue);
+
+    public static int getChoice(int minValue, int maxValue) {
+        int result;
+        do {
+            Write("? ");
+        } while (!int.TryParse(ReadLine(), out result) || result < minValue || result > maxValue);
+        //WriteLine();
+        return result;
+    }
+
+
 }
