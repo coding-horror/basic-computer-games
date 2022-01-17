@@ -2,12 +2,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Represents a state change for a single cell within the matrix.
+ *
+ * @param y the y coordinate (row) of the cell
+ * @param x the x coordinate (column) of the cell
+ * @param newState the new state of the cell (either DEAD or ALIVE)
+ */
 record Transition(int y, int x, byte newState) { }
 
+/**
+ * The Game of Life class.<br>
+ * <br>
+ * Mimics the behaviour of the BASIC version, however the Java code does not have much in common with the original.
+ * <br>
+ * Differences in behaviour:
+ * <ul>
+ *     <li>Input supports the "." character, but it's optional.</li>
+ *     <li>Input regarding the "DONE" string is case insensitive.</li>
+ * </ul>
+ */
 public class Life {
 
     private static final byte DEAD  = 0;
     private static final byte ALIVE = 1;
+
+    private final Scanner consoleReader = new Scanner(System.in);
 
     private final byte[][] matrix = new byte[21][67];
     private int generation = 0;
@@ -15,36 +35,36 @@ public class Life {
     boolean invalid = false;
 
     private void start() throws Exception {
-        Scanner s = new Scanner(System.in);
         printGameHeader();
         readPattern();
         while (true) {
-            printPattern();
+            printGeneration();
             advanceToNextGeneration();
-            s.nextLine();
+            consoleReader.nextLine();
 //            Thread.sleep(1000);
         }
     }
 
     private void advanceToNextGeneration() {
+        // store all transitions of cells in a list, i.e. if a dead cell becomes alive, or a living cell dies
         List<Transition> transitions = new ArrayList<>();
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length; x++) {
                 int neighbours = countNeighbours(y, x);
-                if (matrix[y][x] == DEAD) {
-                    if (neighbours == 3) {
-                        transitions.add(new Transition(y, x, ALIVE));
-                        population++;
-                    }
-                } else {
-                    // cell is alive
+                if (matrix[y][x] == ALIVE) {
                     if (neighbours < 2 || neighbours > 3) {
                         transitions.add(new Transition(y, x, DEAD));
                         population--;
                     }
+                } else { // cell is dead
+                    if (neighbours == 3) {
+                        transitions.add(new Transition(y, x, ALIVE));
+                        population++;
+                    }
                 }
             }
         }
+        // apply all transitions to the matrix
         transitions.forEach(t -> matrix[t.y()][t.x()] = t.newState());
         generation++;
     }
@@ -66,14 +86,13 @@ public class Life {
 
     private void readPattern() {
         System.out.println("ENTER YOUR PATTERN:");
-        Scanner s = new Scanner(System.in);
         List<String> lines = new ArrayList<>();
         String line;
         int maxLineLength = 0;
         boolean reading = true;
         while (reading) {
             System.out.print("? ");
-            line = s.nextLine();
+            line = consoleReader.nextLine();
             if (line.equalsIgnoreCase("done")) {
                 reading = false;
             } else {
@@ -93,24 +112,28 @@ public class Life {
             String line = lines.get(y);
             for (int x = 1; x <= line.length(); x++) {
                 if (line.charAt(x-1) == '*') {
-                    matrix[round(yMin + y)][round(xMin + x)] = ALIVE;
+                    matrix[floor(yMin + y)][floor(xMin + x)] = ALIVE;
                     population++;
                 }
             }
         }
     }
 
-    private int round(float f) {
+    private int floor(float f) {
         return (int) Math.floor(f);
     }
 
     private void printGameHeader() {
-        System.out.println(" ".repeat(34) + "LIFE");
-        System.out.println(" ".repeat(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
+        printIndented(34, "LIFE");
+        printIndented(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
         System.out.println("\n\n\n");
     }
 
-    private void printPattern() {
+    private void printIndented(int spaces, String str) {
+        System.out.println(" ".repeat(spaces) + str);
+    }
+
+    private void printGeneration() {
         System.out.println("GENERATION: " + generation + "          POPULATION: " + population);
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length; x++) {
@@ -120,6 +143,12 @@ public class Life {
         }
     }
 
+    /**
+     * Main method that starts the program.
+     *
+     * @param args the command line arguments.
+     * @throws Exception if something goes wrong.
+     */
     public static void main(String[] args) throws Exception {
         new Life().start();
     }
