@@ -134,13 +134,18 @@ public class Life {
     }
 
     private void printGeneration() {
-        System.out.println("GENERATION: " + generation + "          POPULATION: " + population);
+        printGenerationHeader();
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length; x++) {
                 System.out.print(matrix[y][x] == 1 ? "*" : " ");
             }
             System.out.println();
         }
+    }
+
+    private void printGenerationHeader() {
+        String invalidText = invalid ? "INVALID!" : "";
+        System.out.printf("GENERATION: %-13d POPULATION: %d %s\n", generation, population, invalidText);
     }
 
     /**
