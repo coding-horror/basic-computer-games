@@ -12,8 +12,8 @@ public static class PortInfos {
         Root = Root[..Root.IndexOf(@"\00_Utilities")];
 
         Get = GetDirectories(Root)
-            .SelectMany(fullPath => LangData.Keys.Select(keyword => (fullPath, keyword)))
-            .SelectT((fullPath, keyword) => PortInfo.Create(fullPath, keyword))
+            .SelectMany(gamePath => LangData.Keys.Select(keyword => (gamePath, keyword)))
+            .SelectT((gamePath, keyword) => PortInfo.Create(gamePath, keyword))
             .Where(x => x is not null)
             .ToArray()!;
     }
