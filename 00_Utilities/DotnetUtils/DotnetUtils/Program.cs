@@ -221,7 +221,6 @@ void checkProjects() {
     }
 }
 
-// TODO make this run on a single project
 void printProjectWarnings(PortInfo info) {
     foreach (var proj in info.Projs) {
         var warnings = new List<string>();
