@@ -216,8 +216,8 @@ void generateMissingProjs() {
 
 void checkProjects() {
     foreach (var info in infos) {
+        WriteLine(info.LangPath);
         printProjectWarnings(info);
-        WriteLine();
     }
 }
 
