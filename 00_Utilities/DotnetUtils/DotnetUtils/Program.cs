@@ -101,7 +101,7 @@ void unexpectedSlnName() {
         if (!item.Slns.Any()) { continue; }
 
         var expectedSlnName = $"{item.GameName}.sln";
-        if (item.Slns.Contains(Combine(item.LangPath, expectedSlnName))) { continue; }
+        if (item.Slns.Contains(Combine(item.LangPath, expectedSlnName), StringComparer.InvariantCultureIgnoreCase)) { continue; }
 
         counter += 1;
         WriteLine(item.LangPath);
@@ -221,7 +221,6 @@ void checkProjects() {
     }
 }
 
-// TODO make this run on a single project
 void printProjectWarnings(PortInfo info) {
     foreach (var proj in info.Projs) {
         var warnings = new List<string>();

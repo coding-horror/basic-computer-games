@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HiLo", "HiLo.csproj", "{C4D0FAB6-056D-4DD2-827D-3383BE0AA382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CivilWar", "CivilWar.csproj", "{4EE5EFE7-2D60-464A-9F8D-4BBD2A14AAC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C4D0FAB6-056D-4DD2-827D-3383BE0AA382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4D0FAB6-056D-4DD2-827D-3383BE0AA382}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4D0FAB6-056D-4DD2-827D-3383BE0AA382}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4D0FAB6-056D-4DD2-827D-3383BE0AA382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EE5EFE7-2D60-464A-9F8D-4BBD2A14AAC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EE5EFE7-2D60-464A-9F8D-4BBD2A14AAC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EE5EFE7-2D60-464A-9F8D-4BBD2A14AAC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EE5EFE7-2D60-464A-9F8D-4BBD2A14AAC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BF77DB59-426B-4A01-A8AC-09AAF42DA633}
+		SolutionGuid = {59BCA2DE-D5C7-40F7-BB99-B5C8D2416D8B}
 	EndGlobalSection
 EndGlobal

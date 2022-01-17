@@ -19,7 +19,7 @@ public record PortInfo(
     // .NET namespaces cannot have a digit as the first character
     // For games whose name starts with a digit, we map the name to a specific string
     private static readonly Dictionary<string, string> specialGameNames = new() {
-        { "3-D_Plot", "ThreeDPlot" },
+        { "3-D_Plot", "Plot" },
         { "3-D_Tic-Tac-Toe", "ThreeDTicTacToe" },
         { "23_Matches", "TwentyThreeMatches"}
     };
