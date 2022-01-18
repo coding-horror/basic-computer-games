@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CivilWar", "CivilWar\CivilWar.csproj", "{09C22BBE-8480-4B8C-9A07-E2DAA24B692B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SineWave", "SineWave.csproj", "{730FA2CC-5AA5-4BE2-8DF9-8E55FDC8FB30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{09C22BBE-8480-4B8C-9A07-E2DAA24B692B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09C22BBE-8480-4B8C-9A07-E2DAA24B692B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09C22BBE-8480-4B8C-9A07-E2DAA24B692B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09C22BBE-8480-4B8C-9A07-E2DAA24B692B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{730FA2CC-5AA5-4BE2-8DF9-8E55FDC8FB30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{730FA2CC-5AA5-4BE2-8DF9-8E55FDC8FB30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{730FA2CC-5AA5-4BE2-8DF9-8E55FDC8FB30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{730FA2CC-5AA5-4BE2-8DF9-8E55FDC8FB30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {59BCA2DE-D5C7-40F7-BB99-B5C8D2416D8B}
+		SolutionGuid = {32A37343-2955-4124-8765-9143F6C529DC}
 	EndGlobalSection
 EndGlobal
