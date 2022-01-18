@@ -568,9 +568,15 @@ namespace ThreeDTicTacToe
         ///  
         /// If a player trap is not possible, but a row is found that is
         ///  particularly advantageous for the machine to move to, the machine
-        ///  will try and move to a corner-edge in that row.
+        ///  will try and move to a plane edge in that row.
         ///  
         /// Original BASIC: 1300-1480
+        /// 
+        /// Lines 1440/50 of the BASIC call 2360 (MovePlaneEdge). Because it
+        ///  goes to this code only after it has found an open space marked as
+        ///  potential, it cannot reach line 2440 of that code, as that is only
+        ///  reached if an open space failed to be found in the row on which
+        ///  that code was called.
         /// </summary>
         /// <returns>
         /// Move if a trap was created,
@@ -618,11 +624,11 @@ namespace ThreeDTicTacToe
                 // A row may be particularly advantageous for the machine to
                 // move to at this point; this is the case if a row is entirely
                 // filled with POTENTIAL or has one MACHINE and others
-                // POTENTIAL.
+                // POTENTIAL. Such rows may help set up trapping opportunities.
                 if (RowSums[row] == (POTENTIAL * 4) || RowSums[row] == MACHINE + (POTENTIAL * 3))
                 {
-                    // Try moving to a corner-edge in an advantageous row.
-                    return MoveCornerEdges(row, POTENTIAL);
+                    // Try moving to a plane edge in an advantageous row.
+                    return MovePlaneEdge(row, POTENTIAL);
                 }
             }
 
@@ -637,9 +643,15 @@ namespace ThreeDTicTacToe
         ///  
         /// If there are no player traps to block, but a row is found that is
         ///  particularly advantageous for the player to move to, the machine
-        ///  will try and move to a corner-edge in that row.
+        ///  will try and move to a plane edge in that row.
         ///  
         /// Original BASIC: 1030-1190
+        /// 
+        /// Lines 1160/1170 of the BASIC call 2360 (MovePlaneEdge). As with
+        ///  MakePlayerTrap, because it goes to this code only after it has
+        ///  found an open space marked as potential, it cannot reach line 2440
+        ///  of that code, as that is only reached if an open space failed to be
+        ///  found in the row on which that code was called.
         /// </summary>
         /// <returns>
         /// Move if a trap was created,
@@ -685,11 +697,12 @@ namespace ThreeDTicTacToe
             {
                 // A row may be particularly advantageous for the player to move
                 // to at this point, indicated by a row containing all POTENTIAL
-                // moves or one PLAYER and rest POTENTIAL.
+                // moves or one PLAYER and rest POTENTIAL. Such rows may aid in
+                // in the later creation of traps.
                 if (RowSums[row] == (POTENTIAL * 4) || RowSums[row] == PLAYER + (POTENTIAL * 3))
                 {
-                    // Try moving to a corner-edge in an advantageous row.
-                    return MoveCornerEdges(row, POTENTIAL);
+                    // Try moving to a plane edge in an advantageous row.
+                    return MovePlaneEdge(row, POTENTIAL);
                 }
             }
 
@@ -743,24 +756,20 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Find a satisfactory plane on the board and move to one if that
-        ///  plane's corner-edges.
+        ///  plane's plane edges.
         ///  
         /// A plane on the board is satisfactory if it meets the following
         ///  conditions:
         ///     1. Player has made exactly 4 moves on the plane.
         ///     2. Machine has made either 0 or one moves on the plane.
-        ///  The machine then attempts to move to a corner-edge in that plane,
-        ///  first finding any potential moves from the previous action it took
-        ///  and moving there, and moving to any open corner-edge if there are
-        ///  no potential moves found.
-        ///  
-        /// This action by the machine tries to prevent the player from having
-        ///  exclusive control over any plane in the board.
+        ///  Such a plane is one that the player could likely use to form traps.
         /// 
         /// Original BASIC: 1830-2020
         /// 
-        /// The BASIC code for this action is tightly bound with base code for
-        ///  MoveCornerEdges.
+        /// Line 1990 of the original basic calls 2370 (MovePlaneEdge). Only on
+        ///  this call to MovePlaneEdge can line 2440 of that method be reached,
+        ///  which surves to help this method iterate through the rows of a
+        ///  plane.
         /// </summary>
         /// <returns>
         /// Move if a move in a plane was found,
@@ -781,21 +790,21 @@ namespace ThreeDTicTacToe
                     (planeSum >= P4_M1 && planeSum < P4_M1 + 1)
                 )
                 {
-                    // Try to move to corner edges in each row of plane
-                    // First, check for corner edges marked as POTENTIAL.
+                    // Try to move to plane edges in each row of plane
+                    // First, check for plane edges marked as POTENTIAL.
                     for (int row = (4 * plane) - 4; row < (4 * plane); row++)
                     {
-                        var moveResult = MoveCornerEdges(row, POTENTIAL);
+                        var moveResult = MovePlaneEdge(row, POTENTIAL);
                         if (moveResult != MachineAction.None)
                         {
                             return moveResult;
                         }
                     }
 
-                    // If no POTENTIAL corner-edge found, look for an EMPTY one.
+                    // If no POTENTIAL plane edge found, look for an EMPTY one.
                     for (int row = (4 * plane) - 4; row < (4 * plane); row++)
                     {
-                        var moveResult = MoveCornerEdges(row, EMPTY);
+                        var moveResult = MovePlaneEdge(row, EMPTY);
                         if (moveResult != MachineAction.None)
                         {
                             return moveResult;
@@ -804,48 +813,53 @@ namespace ThreeDTicTacToe
                 }
             }
 
-            // No good corner edges found by plane.
+            // No satisfactory planes with open plane edges found.
             ClearPotentialMoves();
             return MachineAction.None;
         }
 
         /// <summary>
-        /// Given a row, move to the first corner-edge of the cube that has the
-        ///  given value.
+        /// Given a row, move to the first space in that row that:
+        ///  1. is a plane edge, and
+        ///  2. has the given value in Board
         ///  
-        /// Corner edges are pieces of the cube that have two faces. The AI
+        /// Plane edges are any spaces on a plane with one face exposed. The AI
         ///  prefers to move to these spaces before others, presumably
-        ///  because they are powerful moves: a corner edge space is contained
-        ///  in 3 rows on the cube. 
+        ///  because they are powerful moves: a plane edge is contained on 3-4
+        ///  winning rows of the cube.
         ///  
         /// Original BASIC: 2360-2490
         /// 
         /// In the original BASIC, this code is pointed to from three different
-        ///  locations by GOTOs (1440/50, or MakePlayerTrap; 1160/70, or
-        ///  BlockMachineTrap; and 1990, or MoveByPlane). Interestingly, line
-        ///  2440 can only be reached if the code proceeds after a call from
-        ///  1990. In short, this means that the code flow is incredibly
-        ///  difficult to understand; the block of code at 2360 acts like a
-        ///  generalized subroutine, but contains bits of code that belong
-        ///  to specific pieces of calling code.
+        ///  locations by GOTOs: 
+        ///  - 1440/50, or MakePlayerTrap; 
+        ///  - 1160/70, or BlockMachineTrap; and
+        ///  - 1990, or MoveByPlane. 
+        /// At line 2440, this code jumps back to line 2000, which is in
+        ///  MoveByPlane. This makes it appear as though calling MakePlayerTrap
+        ///  or BlockPlayerTrap in the BASIC could jump into the middle of the
+        ///  MoveByPlane method; were this to happen, not all of MoveByPlane's
+        ///  variables would be defined! However, the program logic prevents
+        ///  this from ever occurring; see each method's description for why
+        ///  this is the case.
         /// </summary>
         /// <param name="row">the row to try to move to</param>
         /// <param name="spaceValue">
         /// what value the space to move to should have in Board
         /// </param>
         /// <returns>
-        /// Move if a corner-edge piece in the row with the given spaceValue was
+        /// Move if a plane edge piece in the row with the given spaceValue was
         /// found,
         /// None otherwise
         /// </returns>
-        private MachineAction MoveCornerEdges(int row, double spaceValue)
+        private MachineAction MovePlaneEdge(int row, double spaceValue)
         {
-            // Given a row, we want to find the corner-edge pieces in that row.
+            // Given a row, we want to find the plane edge pieces in that row.
             // We know that each row is part of a plane, and that the first
             // and last rows of the plane are on the plane edge, while the
             // other two rows are in the middle. If we know whether a row is an
             // edge or middle, we can determine which spaces in that row are
-            // corner-edges.
+            // plane edges.
             //
             // Below is a birds-eye view of a plane in the cube, with rows
             // oriented horizontally:
@@ -855,11 +869,11 @@ namespace ThreeDTicTacToe
             //   row 2: (0) ( ) ( ) (3)
             //   row 3: ( ) (1) (2) ( )
             //
-            // The corner edge pieces have their row indices marked. The pattern
+            // The plane edge pieces have their row indices marked. The pattern
             // above shows that:
             // 
-            //  if row == 0 | 3, corner edge spaces = [1, 2]
-            //  if row == 1 | 2, corner edge spaces = [0, 3]
+            //  if row == 0 | 3, plane edge spaces = [1, 2]
+            //  if row == 1 | 2, plane edge spaces = [0, 3]
 
             // The below condition replaces the following BASIC code (2370):
             //  
@@ -883,7 +897,7 @@ namespace ThreeDTicTacToe
                 _ => throw new Exception($"unreachable ({row % 4})"),
             };
 
-            // Iterate through corner edge pieces of the row.
+            // Iterate through plane edge pieces of the row.
             //
             //  if a = 1 (row is edge), iterate through [0, 3]
             //  if a = 2 (row is middle), iterate through [1, 2]
@@ -891,7 +905,7 @@ namespace ThreeDTicTacToe
             {
                 if (Board[RowsByPlane[row, space]] == spaceValue)
                 {
-                    // Found a corner-edge to take!
+                    // Found a plane edge to take!
                     Board[RowsByPlane[row, space]] = MACHINE;
                     Console.WriteLine($"MACHINE TAKES {IndexToCoord(RowsByPlane[row, space])}");
                     return MachineAction.Move;
