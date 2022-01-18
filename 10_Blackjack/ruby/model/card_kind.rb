@@ -33,7 +33,7 @@ class CardKind
 
   protected
 
-  attr_reader :value
+  attr_reader :label, :value
 
   def initialize(label, value)
     @label = label

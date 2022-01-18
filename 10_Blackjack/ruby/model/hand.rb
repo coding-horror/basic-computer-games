@@ -6,14 +6,15 @@ class Hand
   HAND_STATE_BUSTED = :hand_busted
   HAND_STATE_STAND = :hand_stand
 
-  def initialize(bet: 0, cards: [])
+  def initialize(bet: 0, cards: [], is_split_hand: false)
     @state = HAND_STATE_PLAYING
     @bet = bet
     @cards = cards
     @total = nil
+    @is_split_hand = is_split_hand
   end
 
-  attr_reader :bet
+  attr_reader :bet, :cards
 
   def is_playing?
     @state == HAND_STATE_PLAYING
@@ -47,16 +48,19 @@ class Hand
   ## Hand actions
 
   def can_split?
-    @cards.length == 2 && @cards[0].same_value?(cards[1])
+    not @is_split_hand and @cards.length == 2 && @cards[0].same_value?(cards[1])
   end
 
   def split
     throw "can't split" unless can_split?
-    [Hand.new(@bet, @cards[0..1]), Hand.new(@bet, @cards[1..1])]
+    [
+      Hand.new(@bet, @cards[0..1], is_split_hand: true),
+      Hand.new(@bet, @cards[1..1], is_split_hand: true)
+    ]
   end
 
   def hit(card)
-    throw "can't hit" if unless @state == HAND_STATE_PLAYING
+    throw "can't hit" unless @state == HAND_STATE_PLAYING
 
     @cards.push(card)
     @total = nil
@@ -65,14 +69,14 @@ class Hand
   end
 
   def double_down(card)
-    throw "can't double down" if unless @state == HAND_STATE_PLAYING
+    throw "can't double down" unless @state == HAND_STATE_PLAYING
 
     @bet *= 2
     hit card
   end
 
   def stand
-    throw "can't double down" if unless @state == HAND_STATE_PLAYING
+    throw "can't double down" unless @state == HAND_STATE_PLAYING
 
     @state = HAND_STATE_STAND
   end
