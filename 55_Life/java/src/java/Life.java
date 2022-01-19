@@ -58,6 +58,9 @@ public class Life {
                     }
                 } else { // cell is dead
                     if (neighbours == 3) {
+                        if (x < 2 || x > 67 || y < 2 || y > 21) {
+                            invalid = true;
+                        }
                         transitions.add(new Transition(y, x, ALIVE));
                         population++;
                     }
