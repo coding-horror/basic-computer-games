@@ -232,13 +232,15 @@ void printProjectWarnings(PortInfo info) {
             nullable,
             implicitUsing,
             rootNamespace,
-            langVersion
+            langVersion,
+            optionStrict
         ) = (
             getValue(parent, "TargetFramework", "TargetFrameworks"),
             getValue(parent, "Nullable"),
             getValue(parent, "ImplicitUsings"),
             getValue(parent, "RootNamespace"),
-            getValue(parent, "LangVersion")
+            getValue(parent, "LangVersion"),
+            getValue(parent, "OptionStrict")
         );
 
         if (framework != "net6.0") {
@@ -266,6 +268,9 @@ void printProjectWarnings(PortInfo info) {
             }
             if (langVersion != "16.9") {
                 warnings.Add($"LangVersion: {langVersion}");
+            }
+            if (optionStrict != "On") {
+                warnings.Add($"OptionStrict: {optionStrict}");
             }
         }
 
