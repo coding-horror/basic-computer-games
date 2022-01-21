@@ -10,6 +10,7 @@
     Public Property Yes As Branch
     Public Property No As Branch
 
+    ' Allows walking all the descendants recursively
     Public Iterator Function DescendantTexts() As IEnumerable(Of String)
         If Yes IsNot Nothing Then
             Yield Yes.Text
