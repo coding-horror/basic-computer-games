@@ -18,7 +18,32 @@ public class Blackjack {
 		}
 
 		int nPlayers = promptInt("NUMBER OF PLAYERS ", 1, 7);
-		System.out.println("You picked " + nPlayers);
+
+		System.out.println("BETS: ");
+		for(int i = 1; i <= nPlayers; i++) {
+			// TODO that this will repeat the individual player's prompt if the number is out of range.
+			// The original BASIC code accepts all bets, then validates them together and prompts all
+			// players again if any inputs are invalid. This should be updated to behave like the original.
+			promptInt("#" + i, 1, 500);
+		}
+
+		/*
+		Note that LinkedList is a Deque: https://docs.oracle.com/javase/8/docs/api/java/util/Deque.html
+		Player
+			CurrentBet
+			Total
+			Hand
+		Hand
+			cards LinkedList<Card>
+			evaluate() // see 300 in blackjack.bas for eval subroutine logic
+		Deck // note the game is played with more than one deck
+			cards LinkedList<Card> // instantiate cards and randomize in constructor via Collections.shuffle()
+			List<Hand> dealHands(n)
+		discardPile Queue<Card>
+		Card
+			Value
+			Suit
+		*/
 	}
 
 	/**
