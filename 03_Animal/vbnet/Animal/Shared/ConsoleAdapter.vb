@@ -14,6 +14,7 @@
     End Sub
 
     Public Overrides Sub WriteCenteredLine(value As Object)
+        If Console.CursorLeft <> 0 Then Throw New InvalidOperationException("Can only write centered line if cursor is at start of line.")
         Dim toWrite = If(value?.ToString, "")
         Console.WriteLine($"{Space((Console.WindowWidth - toWrite.Length) \ 2)}{toWrite}")
     End Sub
