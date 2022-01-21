@@ -10,6 +10,11 @@ public static class Extensions {
         src.Select(x => selector(x.Item1, x.Item2, x.Item3));
     public static IEnumerable<(T1, T2, int)> WithIndex<T1, T2>(this IEnumerable<(T1, T2)> src) => src.Select((x, index) => (x.Item1, x.Item2, index));
 
+    public static bool None<T>(this IEnumerable<T> src, Func<T, bool>? predicate = null) =>
+        predicate is null ?
+            !src.Any() :
+            !src.Any(predicate);
+
     public static bool IsNullOrWhitespace([NotNullWhen(false)] this string? s) => string.IsNullOrWhiteSpace(s);
 
     [return: NotNullIfNotNull("path")]
