@@ -1,12 +1,8 @@
-import java.util.Scanner;
-
 public class Blackjack {
 	public static void main(String[] args) {
 		System.out.println("BLACK JACK");
 		System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n");
-		System.out.println("Do you want instructions?");
-		String input = getInput();
-		if(input.toLowerCase().equals("y")){
+		if(promptBoolean("DO YOU WANT INSTRUCTIONS ")){
 			System.out.println("THIS IS THE GAME OF 21. AS MANY AS 7 PLAYERS MAY PLAY THE");
 			System.out.println("GAME. ON EACH DEAL, BETS WILL BE ASKED FOR, AND THE");
 			System.out.println("PLAYERS' BETS SHOULD BE TYPED IN. THE CARDS WILL THEN BE");
@@ -19,28 +15,61 @@ public class Blackjack {
 			System.out.println("'H', UNLESS THE CARDS WERE SPLIT, IN WHICH CASE DOUBLING");
 			System.out.println("DOWN IS AGAIN PERMITTED. IN ORDER TO COLLECT FOR");
 			System.out.println("BLACKJACK, THE INITIAL RESPONSE SHOULD BE 'S'.");
-			System.out.println("NUMBER OF PLAYERS");
 		}
-		System.out.println(input);
+		int nPlayers = promptInt("NUMBER OF PLAYERS ", 1, 7);
+		System.out.println("You picked " + nPlayers);
 	}
 
-	// TODO copied from Craps. Clean this up.
-	public static String getInput() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("> ");
-		while (true) {
-		  try {
-			return scanner.nextLine();
-		  } catch (Exception ex) {
+	/**
+	 * Prompts the user for a "Yes" or "No" answer.
+	 * @param prompt The prompt to display to the user on STDOUT.
+	 * @return false if the user enters a value beginning with "N" (case insensitive), or true otherwise.
+	 */
+	public static boolean promptBoolean(String prompt) {
+		System.out.print(prompt);
+
+		// Other ways to read input are
+		// new BufferedReader(new InputStreamReader(System.in)).readLine();
+		// and new Scanner(System.in)
+		// But those are less expressive and care must be taken to close the
+		// Reader or Scanner resource.
+		String input = System.console().readLine();
+
+		// input will be null if the user presses CTRL+D or CTRL+Z in Windows
+		if(input != null && input.toLowerCase().startsWith("n")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Prompts the user for an integer. Re-prompts if the input is not an int or outside the given range.
+	 * @param prompt The prompt to display to the user on STDIN
+	 * @param min The minimum allowed value (inclusive)
+	 * @param max The maximum allowed value (inclusive)
+	 * @return The number given by the user, or -1 for any non-numeric input.
+	 */
+	public static int promptInt(String prompt, int min, int max) {
+		while(true) {
+			System.out.print(prompt);
+
+			String input = System.console().readLine();
+			int numericInput;
 			try {
-			  scanner.nextLine(); // flush whatever this non number stuff is.
-			} catch (Exception ns_ex) { // received EOF (ctrl-d or ctrl-z if windows)
-			  System.out.println("END OF INPUT, STOPPING PROGRAM.");
-			  System.exit(1);
+				numericInput = Integer.parseInt(input);
+			} catch(NumberFormatException e) {
+				// Non-int input (including CTRL+D/CTRL+Z)
+				System.out.println();
+				continue;
 			}
-		  }
-		  System.out.println("!NUMBER EXPECTED - RETRY INPUT LINE");
-		  System.out.print("> ");
+			if(numericInput < min || numericInput > max) {
+				// Out of range. Clear input and re-prompt
+				System.out.println();
+				continue;
+			} else {
+				return numericInput;
+			}
 		}
 	}
 }
