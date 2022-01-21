@@ -40,8 +40,8 @@ def place_ship(sea: SeaType, size: int, code: int) -> None:
             point = add_vector(point, vector)
             points.append(point)
 
-        if not (all([is_within_sea(point, sea) for point in points]) and
-                all([value_at(point, sea) == 0  for point in points])):
+        if (not all([is_within_sea(point, sea) for point in points]) or
+                any([value_at(point, sea) for point in points])):
             # ship out of bounds or crosses other ship, trying again
             continue
 
@@ -65,7 +65,7 @@ def has_ship(sea: SeaType, code: int) -> bool:
     return any(code in row for row in sea)
 
 
-def count_sunk(sea: SeaType, codes: Tuple[int, ...]) -> int:
+def count_sunk(sea: SeaType, *codes: int) -> int:
     return sum(not has_ship(sea, code) for code in codes)
 
 
@@ -106,20 +106,23 @@ def setup_ships(sea: SeaType):
 
 
 def main() -> None:
-    print('                BATTLE')
-    print('CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY')
-    print()
     sea = tuple(([0 for _ in range(SEA_WIDTH)] for _ in range(SEA_WIDTH)))
     setup_ships(sea)
-    print('THE FOLLOWING CODE OF THE BAD GUYS\' FLEET DISPOSITION')
-    print('HAS BEEN CAPTURED BUT NOT DECODED:')
-    print()
+    print(f'''
+                BATTLE
+CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
+
+THE FOLLOWING CODE OF THE BAD GUYS' FLEET DISPOSITION
+HAS BEEN CAPTURED BUT NOT DECODED:
+
+''')
     print_encoded_sea(sea)
-    print()
-    print('DE-CODE IT AND USE IT IF YOU CAN')
-    print('BUT KEEP THE DE-CODING METHOD A SECRET.')
-    print()
-    print('START GAME')
+    print('''
+
+DE-CODE IT AND USE IT IF YOU CAN
+BUT KEEP THE DE-CODING METHOD A SECRET.
+
+START GAME''')
     splashes = 0
     hits = 0
 
@@ -142,11 +145,11 @@ def main() -> None:
         if not has_ship(sea, target_value):
             print('AND YOU SUNK IT. HURRAH FOR THE GOOD GUYS.')
             print('SO FAR, THE BAD GUYS HAVE LOST')
-            print(f'{count_sunk(sea, (1, 2))} DESTROYER(S),',
-                  f'{count_sunk(sea, (3, 4))} CRUISER(S),',
-                  f'AND {count_sunk(sea, (5, 6))} AIRCRAFT CARRIER(S).')
+            print(f'{count_sunk(sea, 1, 2)} DESTROYER(S),',
+                  f'{count_sunk(sea, 3, 4)} CRUISER(S),',
+                  f'AND {count_sunk(sea, 5, 6)} AIRCRAFT CARRIER(S).')
 
-        if any(has_ship(sea, code) for code in range(1, SEA_WIDTH + 1)):
+        if any(has_ship(sea, code) for code in range(1, 7)):
             print(f'YOUR CURRENT SPLASH/HIT RATIO IS {splashes}/{hits}')
             continue
 
@@ -156,8 +159,7 @@ def main() -> None:
         if not splashes:
             print('CONGRATULATIONS -- A DIRECT HIT EVERY TIME.')
 
-        print()
-        print('****************************')
+        print("\n****************************")
         break
 
 
