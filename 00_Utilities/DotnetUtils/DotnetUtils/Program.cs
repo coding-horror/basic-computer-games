@@ -17,6 +17,7 @@ var actions = new (Action action, string description)[] {
     (multipleProjs, "Output multiple project files"),
     (checkProjects, "Check .csproj/.vbproj files for target framework, nullability etc."),
     (checkExecutableProject, "Check that there is at least one executable project per port"),
+    (noCodeFiles, "Output ports without any code files"),
     (printPortInfo, "Print info about a single port"),
 
     (generateMissingSlns, "Generate solution files when missing"),
@@ -87,7 +88,7 @@ void printInfos() {
 }
 
 void missingSln() {
-    var data = infos.Where(x => !x.Slns.Any()).ToArray();
+    var data = infos.Where(x => x.Slns.None()).ToArray();
     foreach (var item in data) {
         WriteLine(item.LangPath);
     }
@@ -98,7 +99,7 @@ void missingSln() {
 void unexpectedSlnName() {
     var counter = 0;
     foreach (var item in infos) {
-        if (!item.Slns.Any()) { continue; }
+        if (item.Slns.None()) { continue; }
 
         var expectedSlnName = $"{item.GameName}.sln";
         if (item.Slns.Contains(Combine(item.LangPath, expectedSlnName), StringComparer.InvariantCultureIgnoreCase)) { continue; }
@@ -125,7 +126,7 @@ void multipleSlns() {
 }
 
 void missingProj() {
-    var data = infos.Where(x => !x.Projs.Any()).ToArray();
+    var data = infos.Where(x => x.Projs.None()).ToArray();
     foreach (var item in data) {
         WriteLine(item.LangPath);
     }
@@ -136,7 +137,7 @@ void missingProj() {
 void unexpectedProjName() {
     var counter = 0;
     foreach (var item in infos) {
-        if (!item.Projs.Any()) { continue; }
+        if (item.Projs.None()) { continue; }
 
         var expectedProjName = $"{item.GameName}.{item.ProjExt}";
         if (item.Projs.Contains(Combine(item.LangPath, expectedProjName))) { continue; }
@@ -164,7 +165,7 @@ void multipleProjs() {
 }
 
 void generateMissingSlns() {
-    foreach (var item in infos.Where(x => !x.Slns.Any())) {
+    foreach (var item in infos.Where(x => x.Slns.None())) {
         var result = RunProcess("dotnet", $"new sln -n {item.GameName} -o {item.LangPath}");
         WriteLine(result);
 
@@ -177,7 +178,7 @@ void generateMissingSlns() {
 }
 
 void generateMissingProjs() {
-    foreach (var item in infos.Where(x => !x.Projs.Any())) {
+    foreach (var item in infos.Where(x => x.Projs.None())) {
         // We can't use the dotnet command to create a new project using the built-in console template, because part of that template
         // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and 
         // if there's already such a file, it might try to overwrite it.
@@ -216,8 +217,8 @@ void generateMissingProjs() {
 
 void checkProjects() {
     foreach (var info in infos) {
+        WriteLine(info.LangPath);
         printProjectWarnings(info);
-        WriteLine();
     }
 }
 
@@ -231,13 +232,15 @@ void printProjectWarnings(PortInfo info) {
             nullable,
             implicitUsing,
             rootNamespace,
-            langVersion
+            langVersion,
+            optionStrict
         ) = (
             getValue(parent, "TargetFramework", "TargetFrameworks"),
             getValue(parent, "Nullable"),
             getValue(parent, "ImplicitUsings"),
             getValue(parent, "RootNamespace"),
-            getValue(parent, "LangVersion")
+            getValue(parent, "LangVersion"),
+            getValue(parent, "OptionStrict")
         );
 
         if (framework != "net6.0") {
@@ -266,6 +269,9 @@ void printProjectWarnings(PortInfo info) {
             if (langVersion != "16.9") {
                 warnings.Add($"LangVersion: {langVersion}");
             }
+            if (optionStrict != "On") {
+                warnings.Add($"OptionStrict: {optionStrict}");
+            }
         }
 
         if (warnings.Any()) {
@@ -281,6 +287,15 @@ void checkExecutableProject() {
         if (item.Projs.All(proj => getValue(proj, "OutputType") != "Exe")) {
             WriteLine($"{item.LangPath}");
         }
+    }
+}
+
+void noCodeFiles() {
+    var qry = infos
+        .Where(x => x.CodeFiles.None())
+        .OrderBy(x => x.Lang);
+    foreach (var item in qry) {
+        WriteLine(item.LangPath);
     }
 }
 
