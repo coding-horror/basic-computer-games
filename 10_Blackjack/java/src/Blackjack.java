@@ -2,7 +2,7 @@ public class Blackjack {
 	public static void main(String[] args) {
 		System.out.println("BLACK JACK");
 		System.out.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n");
-		if(promptBoolean("DO YOU WANT INSTRUCTIONS ")){
+		if(promptBoolean("DO YOU WANT INSTRUCTIONS? ")){
 			System.out.println("THIS IS THE GAME OF 21. AS MANY AS 7 PLAYERS MAY PLAY THE");
 			System.out.println("GAME. ON EACH DEAL, BETS WILL BE ASKED FOR, AND THE");
 			System.out.println("PLAYERS' BETS SHOULD BE TYPED IN. THE CARDS WILL THEN BE");
@@ -16,6 +16,7 @@ public class Blackjack {
 			System.out.println("DOWN IS AGAIN PERMITTED. IN ORDER TO COLLECT FOR");
 			System.out.println("BLACKJACK, THE INITIAL RESPONSE SHOULD BE 'S'.");
 		}
+
 		int nPlayers = promptInt("NUMBER OF PLAYERS ", 1, 7);
 		System.out.println("You picked " + nPlayers);
 	}
