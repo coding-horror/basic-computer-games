@@ -12,8 +12,10 @@
     Public Overrides Sub WriteCenteredLines(value As Object)
         If Console.CursorLeft <> 0 Then WriteLine()
         Dim toWrite = If(value?.ToString, "")
-        Write($"{Space((Console.WindowWidth - toWrite.Length) \ 2)}{toWrite}")
-        WriteLine()
+        For Each line In toWrite.Split(Environment.NewLine)
+            Write($"{Space((Console.WindowWidth - line.Length) \ 2)}{line}")
+            WriteLine()
+        Next
     End Sub
 
     Public Overrides Function ReadLine() As String
