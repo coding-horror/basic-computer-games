@@ -1,6 +1,9 @@
-﻿using DotnetUtils;
+﻿using System.Xml.Linq;
+using DotnetUtils;
 using static System.Console;
 using static System.IO.Path;
+using static DotnetUtils.Methods;
+using static DotnetUtils.Functions;
 
 var infos = PortInfos.Get;
 
@@ -11,7 +14,14 @@ var actions = new (Action action, string description)[] {
     (multipleSlns, "Output multiple sln files"),
     (missingProj, "Output missing project file"),
     (unexpectedProjName, "Output misnamed project files"),
-    (multipleProjs, "Output multiple project files")
+    (multipleProjs, "Output multiple project files"),
+    (checkProjects, "Check .csproj/.vbproj files for target framework, nullability etc."),
+    (checkExecutableProject, "Check that there is at least one executable project per port"),
+    (noCodeFiles, "Output ports without any code files"),
+    (printPortInfo, "Print info about a single port"),
+
+    (generateMissingSlns, "Generate solution files when missing"),
+    (generateMissingProjs, "Generate project files when missing")
 };
 
 foreach (var (_, description, index) in actions.WithIndex()) {
@@ -21,15 +31,6 @@ foreach (var (_, description, index) in actions.WithIndex()) {
 WriteLine();
 
 actions[getChoice(actions.Length - 1)].action();
-
-int getChoice(int maxValue) {
-    int result;
-    do {
-        Write("? ");
-    } while (!int.TryParse(ReadLine(), out result) || result < 0 || result > maxValue);
-    WriteLine();
-    return result;
-}
 
 void printSlns(PortInfo pi) {
     switch (pi.Slns.Length) {
@@ -65,7 +66,6 @@ void printProjs(PortInfo pi) {
             }
             break;
     }
-    WriteLine();
 }
 
 void printInfos() {
@@ -88,7 +88,7 @@ void printInfos() {
 }
 
 void missingSln() {
-    var data = infos.Where(x => !x.Slns.Any()).ToArray();
+    var data = infos.Where(x => x.Slns.None()).ToArray();
     foreach (var item in data) {
         WriteLine(item.LangPath);
     }
@@ -99,10 +99,10 @@ void missingSln() {
 void unexpectedSlnName() {
     var counter = 0;
     foreach (var item in infos) {
-        if (!item.Slns.Any()) { continue; }
+        if (item.Slns.None()) { continue; }
 
         var expectedSlnName = $"{item.GameName}.sln";
-        if (item.Slns.Contains(Combine(item.LangPath, expectedSlnName))) { continue; }
+        if (item.Slns.Contains(Combine(item.LangPath, expectedSlnName), StringComparer.InvariantCultureIgnoreCase)) { continue; }
 
         counter += 1;
         WriteLine(item.LangPath);
@@ -126,7 +126,7 @@ void multipleSlns() {
 }
 
 void missingProj() {
-    var data = infos.Where(x => !x.Projs.Any()).ToArray();
+    var data = infos.Where(x => x.Projs.None()).ToArray();
     foreach (var item in data) {
         WriteLine(item.LangPath);
     }
@@ -137,7 +137,7 @@ void missingProj() {
 void unexpectedProjName() {
     var counter = 0;
     foreach (var item in infos) {
-        if (!item.Projs.Any()) { continue; }
+        if (item.Projs.None()) { continue; }
 
         var expectedProjName = $"{item.GameName}.{item.ProjExt}";
         if (item.Projs.Contains(Combine(item.LangPath, expectedProjName))) { continue; }
@@ -159,8 +159,205 @@ void multipleProjs() {
         WriteLine(item.LangPath);
         WriteLine();
         printProjs(item);
-
     }
     WriteLine();
     WriteLine($"Count: {data.Length}");
+}
+
+void generateMissingSlns() {
+    foreach (var item in infos.Where(x => x.Slns.None())) {
+        var result = RunProcess("dotnet", $"new sln -n {item.GameName} -o {item.LangPath}");
+        WriteLine(result);
+
+        var slnFullPath = Combine(item.LangPath, $"{item.GameName}.sln");
+        foreach (var proj in item.Projs) {
+            result = RunProcess("dotnet", $"sln {slnFullPath} add {proj}");
+            WriteLine(result);
+        }
+    }
+}
+
+void generateMissingProjs() {
+    foreach (var item in infos.Where(x => x.Projs.None())) {
+        // We can't use the dotnet command to create a new project using the built-in console template, because part of that template
+        // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and 
+        // if there's already such a file, it might try to overwrite it.
+
+        var projText = item.Lang switch {
+            "csharp" => @"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>
+",
+            "vbnet" => @$"<Project Sdk=""Microsoft.NET.Sdk"">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>{item.GameName}</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>16.9</LangVersion>
+  </PropertyGroup>
+</Project>
+",
+            _ => throw new InvalidOperationException()
+        };
+        var projFullPath = Combine(item.LangPath, $"{item.GameName}.{item.ProjExt}");
+        File.WriteAllText(projFullPath, projText);
+
+        if (item.Slns.Length == 1) {
+            var result = RunProcess("dotnet", $"sln {item.Slns[0]} add {projFullPath}");
+            WriteLine(result);
+        }
+    }
+}
+
+void checkProjects() {
+    foreach (var info in infos) {
+        WriteLine(info.LangPath);
+        printProjectWarnings(info);
+    }
+}
+
+void printProjectWarnings(PortInfo info) {
+    foreach (var proj in info.Projs) {
+        var warnings = new List<string>();
+        var parent = XDocument.Load(proj).Element("Project")?.Element("PropertyGroup");
+
+        var (
+            framework,
+            nullable,
+            implicitUsing,
+            rootNamespace,
+            langVersion,
+            optionStrict
+        ) = (
+            getValue(parent, "TargetFramework", "TargetFrameworks"),
+            getValue(parent, "Nullable"),
+            getValue(parent, "ImplicitUsings"),
+            getValue(parent, "RootNamespace"),
+            getValue(parent, "LangVersion"),
+            getValue(parent, "OptionStrict")
+        );
+
+        if (framework != "net6.0") {
+            warnings.Add($"Target: {framework}");
+        }
+
+        if (info.Lang == "csharp") {
+            if (nullable != "enable") {
+                warnings.Add($"Nullable: {nullable}");
+            }
+            if (implicitUsing != "enable") {
+                warnings.Add($"ImplicitUsings: {implicitUsing}");
+            }
+            if (rootNamespace != null && rootNamespace != info.GameName) {
+                warnings.Add($"RootNamespace: {rootNamespace}");
+            }
+            if (langVersion != "10") {
+                warnings.Add($"LangVersion: {langVersion}");
+            }
+        }
+
+        if (info.Lang == "vbnet") {
+            if (rootNamespace != info.GameName) {
+                warnings.Add($"RootNamespace: {rootNamespace}");
+            }
+            if (langVersion != "16.9") {
+                warnings.Add($"LangVersion: {langVersion}");
+            }
+            if (optionStrict != "On") {
+                warnings.Add($"OptionStrict: {optionStrict}");
+            }
+        }
+
+        if (warnings.Any()) {
+            WriteLine(proj.RelativePath(info.LangPath));
+            WriteLine(string.Join("\n", warnings));
+            WriteLine();
+        }
+    }
+}
+
+void checkExecutableProject() {
+    foreach (var item in infos) {
+        if (item.Projs.All(proj => getValue(proj, "OutputType") != "Exe")) {
+            WriteLine($"{item.LangPath}");
+        }
+    }
+}
+
+void noCodeFiles() {
+    var qry = infos
+        .Where(x => x.CodeFiles.None())
+        .OrderBy(x => x.Lang);
+    foreach (var item in qry) {
+        WriteLine(item.LangPath);
+    }
+}
+
+void tryBuild() {
+    // if has code files, try to build
+}
+
+void printPortInfo() {
+    // prompt for port number
+    Write("Enter number from 1 to 96 ");
+    var index = getChoice(1, 96);
+
+    Write("Enter 0 for C#, 1 for VB ");
+    var lang = getChoice(1) switch {
+        0 => "csharp",
+        1 => "vbnet",
+        _ => throw new InvalidOperationException()
+    };
+
+    WriteLine();
+
+    var info = infos.Single(x => x.Index == index && x.Lang == lang);
+
+    WriteLine(info.LangPath);
+    WriteLine(new string('-', 50));
+
+    // print solutions
+    printSlns(info);
+
+    // mismatched solution name/location? (expected x)
+    var expectedSlnName = Combine(info.LangPath, $"{info.GameName}.sln");
+    if (!info.Slns.Contains(expectedSlnName)) {
+        WriteLine($"Expected name/path: {expectedSlnName.RelativePath(info.LangPath)}");
+    }
+
+    // has executable project?
+    if (info.Projs.All(proj => getValue(proj, "OutputType") != "Exe")) {
+        WriteLine("No executable project");
+    }
+
+    WriteLine();
+
+    // print projects
+    printProjs(info);
+
+    // mimsatched project name/location? (expected x)
+    var expectedProjName = Combine(info.LangPath, $"{info.GameName}.{info.ProjExt}");
+    if (info.Projs.Length < 2 && !info.Projs.Contains(expectedProjName)) {
+        WriteLine($"Expected name/path: {expectedProjName.RelativePath(info.LangPath)}");
+    }
+
+    WriteLine();
+
+    // verify project properties
+    printProjectWarnings(info);
+
+    WriteLine("Code files:");
+
+    // list code files
+    foreach (var codeFile in info.CodeFiles) {
+        WriteLine(codeFile.RelativePath(info.LangPath));
+    }
+
+    // try build
 }

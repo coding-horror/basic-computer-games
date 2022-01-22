@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>banner</RootNamespace>
+    <RootNamespace>Banner</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>16.9</LangVersion>
   </PropertyGroup>
 
 </Project>
