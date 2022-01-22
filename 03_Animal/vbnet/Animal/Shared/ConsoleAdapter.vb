@@ -5,18 +5,15 @@
         Console.Write(value)
     End Sub
 
-    Public Overrides Sub WriteLine(value As Object)
-        Console.WriteLine(value)
-    End Sub
-
     Public Overrides Sub WriteLine()
         Console.WriteLine()
     End Sub
 
-    Public Overrides Sub WriteCenteredLine(value As Object)
-        If Console.CursorLeft <> 0 Then Throw New InvalidOperationException("Can only write centered line if cursor is at start of line.")
+    Public Overrides Sub WriteCenteredLines(value As Object)
+        If Console.CursorLeft <> 0 Then WriteLine()
         Dim toWrite = If(value?.ToString, "")
-        Console.WriteLine($"{Space((Console.WindowWidth - toWrite.Length) \ 2)}{toWrite}")
+        Write($"{Space((Console.WindowWidth - toWrite.Length) \ 2)}{toWrite}")
+        WriteLine()
     End Sub
 
     Public Overrides Function ReadLine() As String

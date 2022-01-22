@@ -46,8 +46,11 @@ Public Class Game
 
     Sub BeginLoop()
         ' Print the program heading
-        console.WriteCenteredLine("ANIMAL")
-        console.WriteCenteredLine("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+        console.WriteCenteredLines(
+"ANIMAL
+CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+
+        ' Print the program description
         console.Write(
 "
 
@@ -64,9 +67,10 @@ THINK OF AN ANIMAL AND THE COMPUTER WILL TRY TO GUESS IT.
             Dim response = console.ReadLine
             If response = "list" Then
                 ' List all the stored animals
-                console.WriteLine(
+                console.Write(
 "
-ANIMALS I ALREADY KNOW ARE:")
+ANIMALS I ALREADY KNOW ARE:
+")
 
                 ' We're using a ForEach extension method instead of the regular For Each loop to provide the index alongside the text
                 root.DescendantTexts.ForEach(Sub(text, index)
@@ -76,8 +80,9 @@ ANIMALS I ALREADY KNOW ARE:")
                                                  If index > 0 AndAlso index Mod 4 = 0 Then console.WriteLine()
                                                  console.Write($"{text.MaxLength(15),-15}")
                                              End Sub)
-                console.WriteLine(
+                console.Write(
 "
+
 ")
                 Continue Do
             End If
@@ -105,25 +110,26 @@ ANIMALS I ALREADY KNOW ARE:")
             ' Now we're at an end branch
             console.Write($"IS IT A {currentBranch.Text}? ")
             ynResponse = GetYesNo()
-            If ynResponse Then ' Only if ynResponse = True will we go into this If Then
+            If ynResponse Then ' Only if ynResponse = True will we go into this If Then block
+                ' The computer guessed the animal; we can go back to the beginning of the game
                 console.WriteLine("WHY NOT TRY ANOTHER ANIMAL?")
                 Continue Do
             End If
 
-            ' Get the new animal
+            ' Get the new animal from the user
             console.Write("THE ANIMAL YOU WERE THINKING OF WAS A ? ")
-            Dim newAnimal = console.ReadLine
+            Dim newAnimal = console.ReadLine.ToUpperInvariant
 
             ' Get the question used to distinguish the new animal from the current end branch
-            console.WriteLine(
-$"PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A 
-{newAnimal} FROM A {currentBranch.Text}")
-            Dim newQuestion = console.ReadLine
+            console.Write(
+$"PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A
+{newAnimal} FROM A {currentBranch.Text}
+")
+            Dim newQuestion = console.ReadLine.ToUpperInvariant
 
             ' Get the answer to that question, for the new animal
-            ' for the old animal, the answer would be the opposite
-            console.Write(
-$"FOR A {newAnimal} THE ANSWER WOULD BE ? ")
+            ' for the old animal, the answer will be the opposite
+            console.Write($"FOR A {newAnimal} THE ANSWER WOULD BE? ")
             Do
                 ynResponse = GetYesNo()
             Loop While ynResponse Is Nothing

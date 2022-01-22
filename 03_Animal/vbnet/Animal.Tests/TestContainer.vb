@@ -36,7 +36,7 @@ Public Class TestContainer
     Sub List(listResponse As String)
         Dim console As New MockConsole({listResponse})
         Dim game As New Game(console)
-        Assert.Throws(Of EndOfStreamException)(Sub() game.BeginLoop())
+        Assert.Throws(Of EndOfInputsException)(Sub() game.BeginLoop())
         Assert.Equal(
             {
                 "ANIMALS I ALREADY KNOW ARE:",
@@ -52,7 +52,7 @@ Public Class TestContainer
     Sub YesVariant(yesVariant As String)
         Dim console As New MockConsole({yesVariant})
         Dim game As New Game(console)
-        Assert.Throws(Of EndOfStreamException)(Sub() game.BeginLoop())
+        Assert.Throws(Of EndOfInputsException)(Sub() game.BeginLoop())
         Assert.Equal(
             {
                 $"ARE YOU THINKING OF AN ANIMAL? {yesVariant}",
@@ -68,13 +68,51 @@ Public Class TestContainer
     Sub NoVariant(noVariant As String)
         Dim console As New MockConsole({"y", noVariant})
         Dim game As New Game(console)
-        Assert.Throws(Of EndOfStreamException)(Sub() game.BeginLoop())
+        Assert.Throws(Of EndOfInputsException)(Sub() game.BeginLoop())
         Assert.Equal(
             {
                 $"DOES IT SWIM? {noVariant}",
                 "IS IT A BIRD? "
             },
             console.Lines.Slice(-2, 0).Select(Function(x) x.line)
+        )
+    End Sub
+
+    ''' <summary>Test adding a new animal and using the new animal in the game</summary>
+    <Fact>
+    Sub TestAddedAnimal()
+        Dim console As New MockConsole({
+            "y",
+            "y",
+            "n",
+            "whale",
+            "is it a mammal?",
+            "y",
+            "y",
+            "y",
+            "y",
+            "y"
+        })
+        Dim game As New Game(console)
+        Assert.Throws(Of EndOfInputsException)(Sub() game.BeginLoop())
+        Assert.Equal(
+            {
+                "ARE YOU THINKING OF AN ANIMAL? y",
+                "DOES IT SWIM? y",
+                "IS IT A FISH? n",
+                "THE ANIMAL YOU WERE THINKING OF WAS A ? whale",
+                "PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A",
+                "WHALE FROM A FISH",
+                "is it a mammal?",
+                "FOR A WHALE THE ANSWER WOULD BE? y",
+                "ARE YOU THINKING OF AN ANIMAL? y",
+                "DOES IT SWIM? y",
+                "IS IT A MAMMAL? y",
+                "IS IT A WHALE? y",
+                "WHY NOT TRY ANOTHER ANIMAL?",
+                "ARE YOU THINKING OF AN ANIMAL? "
+            },
+            console.Lines.Slice(9, 100).Select(Function(x) x.line)
         )
     End Sub
 End Class
