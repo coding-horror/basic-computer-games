@@ -11,9 +11,14 @@ my @Langs= qw(PL JS VB PAS RB C# JAVA PY);
 my @Dirs= qw(perl javascript vbnet pascal ruby csharp java python);
 my %Sum;
 
-print " "x 25 ."BAS\t";
+my $Row=25;
+my $Tab=7;
+
+printf("%-$Row\s", "PATH");
+printf("%$Tab\s", "BAS");
+
 foreach my $Dir (@Langs) {
-	print "$Dir\t";
+	printf("%$Tab\s", $Dir);
 	}	
 print "\n";
 
@@ -25,31 +30,31 @@ foreach my $Lin (@Ret) {
 	my @Parts= split(/\//, $File);
 	my $Base= $Parts[1];
 
-	my $Tab= 25-length($Base);
-	print "$Base".(" "x$Tab)."$Num\t";
+	printf("%-$Row\s", $Base);
+	printf("%$Tab\s", "$Num");
 
 	foreach my $Dir (@Dirs) {
 		my $Path= "../$Base/$Dir/";
 		my $Ret= `ls $Path | wc -l`;
-		if ($Ret>1) { print "YES"; $Sum{$Dir}++; }
-			else { print "  ";}
-		print "\t";
+		if ($Ret>1) { printf("%$Tab\s", "YES"); $Sum{$Dir}++; }
+			else { printf("%$Tab\s", " ");}
 		}
-	print "\n";
-	
+	print "\n";	
 	}
 
-print "\t\tFILES:\t\t";
+
+printf("%$Row\s", "FILES:");
+printf("%$Tab\s", " ");
 foreach my $Dir (@Dirs) {
-	print "$Sum{$Dir}\t";
+	printf("%$Tab\s", "$Sum{$Dir}");
 	}
 print "\n";
 
-
-print "\t\tADVANCE:\t";
+printf("%$Row\s", "ADVANCE:");
+printf("%$Tab\s", " ");
 foreach my $Dir (@Dirs) {
 	my $Per= int($Sum{$Dir}/$Count*100)."%";
-	print "$Per\t";
+	printf("%$Tab\s", "$Per");
 	}
 print "\n";
 
