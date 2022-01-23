@@ -1,9 +1,11 @@
 rootProject.name = 'BasicComputerGames'
 
+include ":build_01_Acey_Ducey_kotlin"
 include ":build_03_Animal_kotlin"
 include ":build_53_King_kotlin"
 include ":build_47_Hi-Lo_kotlin"
 include ":build_53_King_kotlin"
+include ":build_85_Synonym_kotlin"
 include ":build_89_Tic-Tac-Toe_kotlin"
 include ":build_94_War_kotlin"
 

@@ -1,20 +1,11 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm'
-    id 'application'
-}
-
 sourceSets {
     main {
         java {
-            srcDirs '../../03_Animal/kotlin'
+            srcDirs "../../$gameSource"
         }
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 application {
-    mainClass = 'AnimalKt'
+    mainClass = gameMain
 }
