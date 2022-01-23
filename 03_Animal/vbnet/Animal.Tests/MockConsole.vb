@@ -37,26 +37,21 @@ Public Class MockConsole
         WriteString(value?.ToString)
     End Sub
 
-    Public Overrides Sub WriteLine(value As Object)
-        WriteString(value?.ToString)
-        WriteLine()
-    End Sub
-
     Public Overrides Sub WriteLine()
         Lines.Add(("", False))
     End Sub
 
-    Public Overrides Sub WriteCenteredLine(value As Object)
+    Public Overrides Sub WriteCenteredLines(value As Object)
         If Lines.Count = 0 Then Lines.Add(("", False))
         Dim currentLast = Lines(Lines.Count - 1).line
-        If currentLast.Length > 0 Then Throw New InvalidOperationException("Can only write centered line if cursor is at start of line.")
+        If currentLast.Length > 0 Then Lines.Add(("", False))
         WriteString(value?.ToString, True)
         WriteLine()
     End Sub
 
     Public Overrides Function ReadLine() As String
         ' Indicates the end of a test run, for programs which loop endlessly
-        If inputs.Count = 0 Then Throw New EndOfStreamException("End of inputs")
+        If inputs.Count = 0 Then Throw New EndOfInputsException
 
         Dim nextInput = inputs.Dequeue.Trim
         WriteLine(nextInput)
