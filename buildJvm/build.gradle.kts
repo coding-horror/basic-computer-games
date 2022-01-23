@@ -40,6 +40,14 @@ task("copyAll") {
     )
 }
 
+subprojects {
+    apply(plugin = "application")
+    apply(plugin = "kotlin")
+        repositories {
+            mavenCentral()
+        }
+}
+
 fun filesType(type: String) =
     fileTree("$buildDir/..").files.filter {
         it.path.contains("build/install/build_.*/$type".toRegex())

@@ -1,19 +1,11 @@
-plugins {
-    id 'application'
-}
-
 sourceSets {
     main {
         java {
-            srcDirs '../../08_Batnum/java/src'
+            srcDirs "../../$gameSource"
         }
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 application {
-    mainClass = 'BatNumGame'
+    mainClass = gameMain
 }

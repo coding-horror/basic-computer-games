@@ -1,19 +1,11 @@
-plugins {
-    id 'application'
-}
-
 sourceSets {
     main {
         java {
-            srcDirs '../../04_Awari/java'
+            srcDirs "../../$gameSource"
         }
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 application {
-    mainClass = 'AwariGame'
+    mainClass = gameMain
 }

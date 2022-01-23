@@ -1,18 +1,9 @@
-plugins {
-    id 'application'
-    id 'org.jetbrains.kotlin.jvm'
-}
-
 sourceSets {
     main {
         java {
             srcDirs "../../$gameSource"
         }
     }
-}
-
-repositories {
-    mavenCentral()
 }
 
 application {
