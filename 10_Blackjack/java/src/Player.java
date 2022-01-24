@@ -1,4 +1,4 @@
-import Card;
+import java.util.LinkedList;
 
 public class Player {
 
