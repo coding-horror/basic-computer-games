@@ -1,4 +1,8 @@
+import static java.util.stream.Collectors.joining;
+
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class Blackjack {
 	public static void main(String[] args) {
@@ -23,6 +27,15 @@ public class Blackjack {
 		while(nPlayers < 1 || nPlayers > 7) {
 			nPlayers = promptInt("NUMBER OF PLAYERS");
 		}
+
+		System.out.println("RESHUFFLING");
+		LinkedList<Card> deck = new LinkedList<>();
+		for(Card.Suit suit : Card.Suit.values()) {
+			for(int value = 1; value < 14; value++) {
+				deck.add(new Card(value, suit));
+			}
+		}
+		Collections.shuffle(deck);
 
 		int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
 		while(!betsAreValid(bets)){

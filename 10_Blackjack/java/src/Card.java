@@ -31,4 +31,24 @@ public final class Card {
 		return this.value;
     }
 
+	public Suit getSuit() {
+		return this.suit;
+	}
+
+    public String toString() {
+        StringBuilder result = new StringBuilder(2); 
+        if(value < 11) {
+            result.append(value);
+        } else if(value == 11) {
+            result.append('J');
+        } else if(value == 12) {
+            result.append('Q');
+        } else if(value == 13) {
+            result.append('K');
+        }
+        // Uncomment to include the suit in output. Useful for debugging, but
+        // doesn't match the original BASIC behavior.
+        // result.append(suit.name().charAt(0));
+        return result.toString();
+    }
 }
