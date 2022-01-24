@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Blackjack {
 	public static void main(String[] args) {
 		System.out.println("BLACK JACK");
@@ -17,14 +19,19 @@ public class Blackjack {
 			System.out.println("BLACKJACK, THE INITIAL RESPONSE SHOULD BE 'S'.");
 		}
 
-		int nPlayers = promptInt("NUMBER OF PLAYERS ", 1, 7);
+		int nPlayers = 0;
+		while(nPlayers < 1 || nPlayers > 7) {
+			nPlayers = promptInt("NUMBER OF PLAYERS");
+		}
 
-		System.out.println("BETS: ");
-		for(int i = 1; i <= nPlayers; i++) {
-			// TODO that this will repeat the individual player's prompt if the number is out of range.
-			// The original BASIC code accepts all bets, then validates them together and prompts all
-			// players again if any inputs are invalid. This should be updated to behave like the original.
-			promptInt("#" + i, 1, 500);
+		int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
+		while(!betsAreValid(bets)){
+			System.out.println("BETS:");
+			for(int i = 0; i < nPlayers; i++) {
+				// Note that the bet for player "1" is at index "0" in the bets
+				// array and take care to avoid off-by-one errors.
+				bets[i] = promptInt("#" + (i + 1));
+			}
 		}
 
 		/*
@@ -49,7 +56,7 @@ public class Blackjack {
 	/**
 	 * Prompts the user for a "Yes" or "No" answer.
 	 * @param prompt The prompt to display to the user on STDOUT.
-	 * @return false if the user enters a value beginning with "N" (case insensitive), or true otherwise.
+	 * @return false if the user enters a value beginning with "N" or "n"; true otherwise.
 	 */
 	public static boolean promptBoolean(String prompt) {
 		System.out.print(prompt);
@@ -60,9 +67,14 @@ public class Blackjack {
 		// But those are less expressive and care must be taken to close the
 		// Reader or Scanner resource.
 		String input = System.console().readLine();
+		if(input == null) {
+			// readLine returns null on CTRL-D or CTRL-Z
+			// this is how the original basic handled that.
+			System.out.println("!END OF INPUT");
+			System.exit(0);
+		}
 
-		// input will be null if the user presses CTRL+D or CTRL+Z in Windows
-		if(input != null && input.toLowerCase().startsWith("n")) {
+		if(input.toLowerCase().startsWith("n")) {
 			return false;
 		} else {
 			return true;
@@ -70,32 +82,45 @@ public class Blackjack {
 	}
 
 	/**
-	 * Prompts the user for an integer. Re-prompts if the input is not an int or outside the given range.
-	 * @param prompt The prompt to display to the user on STDIN
-	 * @param min The minimum allowed value (inclusive)
-	 * @param max The maximum allowed value (inclusive)
-	 * @return The number given by the user, or -1 for any non-numeric input.
+	 * Prompts the user for an integer.  As in Vintage Basic, "the optional
+	 * prompt string is followed by a question mark and a space." and if the
+	 * input is non-numeric, "an error will be generated and the user will be
+	 * re-prompted.""
+	 *
+	 * @param prompt The prompt to display to the user.
+	 * @return the number given by the user.
 	 */
-	public static int promptInt(String prompt, int min, int max) {
-		while(true) {
-			System.out.print(prompt);
+	public static int promptInt(String prompt) {
+		System.out.print(prompt + "? ");
 
+		while(true) {
 			String input = System.console().readLine();
-			int numericInput;
-			try {
-				numericInput = Integer.parseInt(input);
-			} catch(NumberFormatException e) {
-				// Non-int input (including CTRL+D/CTRL+Z)
-				System.out.println();
-				continue;
+			if(input == null) {
+				// readLine returns null on CTRL-D or CTRL-Z
+				// this is how the original basic handled that.
+				System.out.println("!END OF INPUT");
+				System.exit(0);
 			}
-			if(numericInput < min || numericInput > max) {
-				// Out of range. Clear input and re-prompt
-				System.out.println();
+			try {
+				return Integer.parseInt(input);
+			} catch(NumberFormatException e) {
+				// Input was not numeric.
+				System.out.println("!NUMBER EXPECTED - RETRY INPUT LINE");
+				System.out.print("? ");
 				continue;
-			} else {
-				return numericInput;
 			}
 		}
 	}
+
+	/**
+	 * Validates that all bets are between 1 and 500 (inclusive).
+	 * 
+	 * @param bets The array of bets for each player.
+	 * @return true if all bets are valid, false otherwise.
+	 */
+	public static boolean betsAreValid(int[] bets) {
+		return Arrays.stream(bets)
+			.allMatch(bet -> bet >= 1 && bet <= 500);
+	}
+
 }
