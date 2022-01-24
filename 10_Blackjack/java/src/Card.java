@@ -1,6 +1,11 @@
 public class Card {
+
+    public enum Suit {
+        HEARTS, DIAMONDS, SPADES, CLUBS;
+    }
+
     private int value;
-    private String suit;
+    private Suit suit;
 
     public void setValue(int value) {
         this.value = value;
@@ -10,11 +15,11 @@ public class Card {
         return this.value;
     } 
     
-    public void setSuit(int suit) {
+    public void setSuit(Suit suit) {
         this.suit = suit;
     }
 
-    public int getSuit() {
+    public Suit getSuit() {
         return this.suit;
     }
 
