@@ -1,8 +1,7 @@
-import static java.util.stream.Collectors.joining;
-
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Blackjack {
 	public static void main(String[] args) {
@@ -28,42 +27,117 @@ public class Blackjack {
 			nPlayers = promptInt("NUMBER OF PLAYERS");
 		}
 
+		Deck deck = new Deck(4); // TODO figure out how many decks the BASIC version uses
 		System.out.println("RESHUFFLING");
-		LinkedList<Card> deck = new LinkedList<>();
-		for(Card.Suit suit : Card.Suit.values()) {
-			for(int value = 1; value < 14; value++) {
-				deck.add(new Card(value, suit));
-			}
-		}
-		Collections.shuffle(deck);
+		deck.shuffle();
 
-		int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
-		while(!betsAreValid(bets)){
-			System.out.println("BETS:");
-			for(int i = 0; i < nPlayers; i++) {
-				// Note that the bet for player "1" is at index "0" in the bets
-				// array and take care to avoid off-by-one errors.
-				bets[i] = promptInt("#" + (i + 1));
-			}
-		}
+		List<Player> players = new ArrayList<>();
+		// TODO instantiate Player instances and update below to set their current bets. Finish TODOs in Player.java first.
 
+		while(true) { // TODO is there a w
+			int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
+			while(!betsAreValid(bets)){
+				System.out.println("BETS:");
+				for(int i = 0; i < nPlayers; i++) {
+					// Note that the bet for player "1" is at index "0" in the bets
+					// array and take care to avoid off-by-one errors.
+					bets[i] = promptInt("#" + (i + 1));
+				}
+			}
+
+			printInitialDeal();
+
+			for(Player player : players){
+				// TODO deal two cards to each player from the deck.
+			}
+
+			// Consider adding a Dealer class to track the dealer's hand and running total.
+			LinkedList<Card> dealerHand = new LinkedList<>();
+			// TODO deal two cards to the dealer
+
+			// TODO handle 'insurance' if the dealer's card is an Ace.
+
+			for(Player player : players){
+				play(player, deck);
+			}
+
+			// only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
+			// otherwise, just print the dealer's concealed card
+			dealerHand = playDealer(dealerHand, deck);
+
+			evaluateRound(players, dealerHand);
+		}
+	}
+
+	private static void printInitialDeal() {
+		// TODO implement printInitialDeal()
+		// Print the initial deal in the following format:
 		/*
-		Note that LinkedList is a Deque: https://docs.oracle.com/javase/8/docs/api/java/util/Deque.html
-		Player
-			CurrentBet
-			Total
-			Hand
-		Hand
-			cards LinkedList<Card>
-			evaluate() // see 300 in blackjack.bas for eval subroutine logic
-		Deck // note the game is played with more than one deck
-			cards LinkedList<Card> // instantiate cards and randomize in constructor via Collections.shuffle()
-			List<Hand> dealHands(n)
-		discardPile Queue<Card>
-		Card
-			Value
-			Suit
+		PLAYER 1     2    DEALER
+               7    10     4   
+               2     A   
+	   */
+	}
+
+	/**
+	 * Plays the players turn. Prompts the user to hit (H), stay (S), or if
+	 * appropriate, split (/) or double down (D), and then performs those
+	 * actions. On a hit, prints "RECEIVED A  [x]  HIT? "
+	 * 
+	 * @param player
+	 * @param deck
+	 */
+	private static void play(Player player, Deck deck) {
+		// TODO implement play(player, deck)
+		// If the player hits, deal another card. If the player stays, return. If the player busts, return.
+		// delegate to evaluateHand(hand) to determine whether the player busted.
+		// Use promptBoolean and promptInt as examples to start with for prompting actions
+		// initially prompt with "PLAYER [x] ?" where x is the player number and accept H, S, D, or /
+		// after hitting, prompt "RECEIVED A  [c]  HIT? " where c is the card received and only accept H or S
+		// handle splitting and doubling down, or feel free to skip implementing
+		// split/double down for now, but leave a todo if that is unfinished
+		// after the first pass.
+		}
+
+	private static int evaluateHand(LinkedList<Card> hand){
+		// TODO implement evaluateHand
+		//   'int' is maybe the wrong return type. We need to indicate a bust and somehow communicate the ambiguity of aces.
+		//   OR maybe we stick with 'int' and use -1 for a bust and otherwise determine the value of aces that gives the highest non-bust score.
+		//   but note that we also need a distinction between a natural Blackjack (21 in only 2 cards) and a 21 with more than 2 cards (the natural blackjack wins)
+		return 0;
+	}
+
+	/**
+	 * Play the dealer's hand. The dealer draws until they have >=17 or busts. Prints each draw as in the following example:
+	 * 
+	 * DEALER HAS A  5 CONCEALED FOR A TOTAL OF 11 
+	 * DRAWS 10   ---TOTAL IS 21
+	 * 
+	 * TODO find out if the dealer draws on a "soft" 17 (17 using an ace as 11) or not in the original basic code.
+	 * 
+	 * @param dealerHand
+	 * @return
+	 */
+	private static LinkedList<Card> playDealer(LinkedList<Card> dealerHand, Deck deck) {
+		// TODO implement playDealer
+		return null;
+	}
+
+	/**
+	 * Evaluates the result of the round, prints the results, and updates player/dealer totals.
+	 * @param players
+	 * @param dealerHand
+	 */
+	private static void evaluateRound(List<Player> players, LinkedList<Card> dealerHand) {
+		// TODO implement evaluateRound
+		//   print something like:
+		/*
+		PLAYER 1 LOSES   100 TOTAL=-100 
+		PLAYER 2  WINS   150 TOTAL= 150
+		DEALER'S TOTAL= 200
 		*/
+		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
+		// remember to handle a "PUSH" when the dealer ties and the bet is returned.
 	}
 
 	/**
