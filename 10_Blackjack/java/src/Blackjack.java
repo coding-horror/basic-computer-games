@@ -52,6 +52,7 @@ public class Blackjack {
 			}
 
 			// Consider adding a Dealer class to track the dealer's hand and running total.
+			// Alternately, the dealer could just be a Player instance where currentBet=0 and is ignored.
 			LinkedList<Card> dealerHand = new LinkedList<>();
 			// TODO deal two cards to the dealer
 
@@ -137,6 +138,7 @@ public class Blackjack {
 		DEALER'S TOTAL= 200
 		*/
 		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
+		// currentBets of each player are added/subtracted from the dealer total depending on whether they win/lose (accounting for doubling down, insurance etc.)
 		// remember to handle a "PUSH" when the dealer ties and the bet is returned.
 	}
 
