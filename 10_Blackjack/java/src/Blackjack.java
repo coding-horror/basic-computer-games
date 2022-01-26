@@ -34,7 +34,7 @@ public class Blackjack {
 		List<Player> players = new ArrayList<>();
 		// TODO instantiate Player instances and update below to set their current bets. Finish TODOs in Player.java first.
 
-		while(true) { // TODO is there a w
+		while(true) {
 			int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
 			while(!betsAreValid(bets)){
 				System.out.println("BETS:");
