@@ -48,6 +48,7 @@ public class Life {
             printGeneration();
             advanceToNextGeneration();
             if (stopAfterGen) {
+                System.out.print("PRESS ENTER TO CONTINUE");
                 consoleReader.nextLine();
             }
         }
@@ -163,7 +164,8 @@ public class Life {
     /**
      * Main method that starts the program.
      *
-     * @param args the command line arguments.
+     * @param args the command line arguments:
+     *             <pre>-s: Stop after each generation (press enter to continue)</pre>
      * @throws Exception if something goes wrong.
      */
     public static void main(String[] args) throws Exception {
