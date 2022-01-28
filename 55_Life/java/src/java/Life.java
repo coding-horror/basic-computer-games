@@ -3,15 +3,6 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Represents a state change for a single cell within the matrix.
- *
- * @param y the y coordinate (row) of the cell
- * @param x the x coordinate (column) of the cell
- * @param newState the new state of the cell (either DEAD or ALIVE)
- */
-record Transition(int y, int x, byte newState) { }
-
-/**
  * The Game of Life class.<br>
  * <br>
  * Mimics the behaviour of the BASIC version, however the Java code does not have much in common with the original.
@@ -26,28 +17,47 @@ public class Life {
 
     private static final byte DEAD  = 0;
     private static final byte ALIVE = 1;
+    private static final String NEWLINE = "\n";
 
     private final Scanner consoleReader = new Scanner(System.in);
 
     private final byte[][] matrix = new byte[21][67];
     private int generation = 0;
     private int population = 0;
+    boolean stopAfterGen = false;
     boolean invalid = false;
 
-    private void start() throws Exception {
+
+    public Life(String[] args) {
+        parse(args);
+    }
+
+    private void parse(String[] args) {
+        for (String arg : args) {
+            if ("-s".equals(arg)) {
+                stopAfterGen = true;
+                break;
+            }
+        }
+    }
+
+    private void start() {
         printGameHeader();
         readPattern();
         while (true) {
             printGeneration();
             advanceToNextGeneration();
-            consoleReader.nextLine();
-//            Thread.sleep(1000);
+            if (stopAfterGen) {
+                consoleReader.nextLine();
+            }
         }
     }
 
     private void advanceToNextGeneration() {
-        // store all transitions of cells in a list, i.e. if a dead cell becomes alive, or a living cell dies
+        // store all cell transitions in a list, i.e. if a dead cell becomes alive, or a living cell dies
         List<Transition> transitions = new ArrayList<>();
+        // there's still room for optimization: instead of iterating over all cells in the matrix,
+        // we could consider only the section containing the pattern(s), as in the BASIC version
         for (int y = 0; y < matrix.length; y++) {
             for (int x = 0; x < matrix[y].length; x++) {
                 int neighbours = countNeighbours(y, x);
@@ -110,7 +120,6 @@ public class Life {
     private void fillMatrix(List<String> lines, int maxLineLength) {
         float xMin = 33 - maxLineLength / 2f;
         float yMin = 11 - lines.size() / 2f;
-        System.out.println("lines=" + lines.size() + " columns=" + maxLineLength + " yMin=" + yMin + " xMin=" + xMin);
         for (int y = 0; y < lines.size(); y++) {
             String line = lines.get(y);
             for (int x = 1; x <= line.length(); x++) {
@@ -129,7 +138,7 @@ public class Life {
     private void printGameHeader() {
         printIndented(34, "LIFE");
         printIndented(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
-        System.out.println("\n\n\n");
+        System.out.println(NEWLINE.repeat(3));
     }
 
     private void printIndented(int spaces, String str) {
@@ -158,7 +167,16 @@ public class Life {
      * @throws Exception if something goes wrong.
      */
     public static void main(String[] args) throws Exception {
-        new Life().start();
+        new Life(args).start();
     }
 
 }
+
+/**
+ * Represents a state change for a single cell within the matrix.
+ *
+ * @param y the y coordinate (row) of the cell
+ * @param x the x coordinate (column) of the cell
+ * @param newState the new state of the cell (either DEAD or ALIVE)
+ */
+record Transition(int y, int x, byte newState) { }
