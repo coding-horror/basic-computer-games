@@ -137,7 +137,7 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
                 # REM *** ENOUGH GRAIN FOR SEED?
                 bad_input_710(S)
                 D = -99
-            elif D >= 10 * P:
+            elif D > 10 * P:
                 # REM *** ENOUGH PEOPLE TO TEND THE CROPS?
                 print("BUT YOU HAVE ONLY", P, "PEOPLE TO TEND THE FIELDS!  NOW THEN,")
                 D = -99
@@ -154,7 +154,8 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
     if int(C / 2) == C / 2:  # even number. 50/50 chance
         # REM *** RATS ARE RUNNING WILD!!
         E = int(S / C)  # calc losses due to rats, based on previous random number
-        S = S - E + H  # deduct losses from stores
+
+    S = S - E + H  # deduct losses from stores
 
     C = gen_random()
     # REM *** LET'S HAVE SOME BABIES
