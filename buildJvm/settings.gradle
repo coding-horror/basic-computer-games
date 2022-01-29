@@ -1,5 +1,7 @@
 rootProject.name = 'BasicComputerGames'
 
+include ":build_00_utilities"
+
 include ":build_01_Acey_Ducey_kotlin"
 include ":build_03_Animal_kotlin"
 include ":build_53_King_kotlin"
