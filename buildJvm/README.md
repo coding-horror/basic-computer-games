@@ -67,16 +67,16 @@ directory for the java or kotlin file, and the class that contains the `main` me
 The `build.gradle` file **should** be identical to all the other `build.gradle` files
 in all the other subprojects:
 ```groovy
-    sourceSets {
-        main {
-            java {
-                srcDirs "../../$gameSource"
-            }
-        }
-    }
-    application {
-        mainClass = gameMain
-    }
+ sourceSets {
+     main {
+         java {
+             srcDirs "../../$gameSource"
+         }
+     }
+ }
+ application {
+     mainClass = gameMain
+ }
 ```
 
 The `gradle.properties` file should look like this:
@@ -91,4 +91,85 @@ project to the list.
 
 ```groovy
 include ":build_91_Train_java"
+```
+
+### Adding a game with tests
+
+You can add tests for JVM games with a `build.gradle` looking a little different.
+Use the build files from `03_Animal` as a template to add tests:
+
+```groovy
+sourceSets {
+    main {
+        java {
+            srcDirs "../../$gameSource"
+        }
+    }
+    test {
+        java {
+            srcDirs "../../$gameTest"
+        }
+    }
+}
+
+application {
+    mainClass = gameMain
+}
+
+dependencies {
+    testImplementation(project(":build_00_utilities").sourceSets.test.output)
+}
+```
+
+The gradle.properties needs an additional directory name for the tests, as `gameTest` : 
+```
+gameSource=03_Animal/java/src
+gameTest=03_Animal/java/test
+gameMain=Animal
+```
+
+Each project should have its own test, and shouldn't share test source directories
+with other projects, even if they are for the same game.
+
+Tests are constructed by subclassing `ConsoleTest`. This allows you to use the
+`assertConversation` function to check for correct interactive conversations.
+```kotlin
+import com.pcholt.console.testutils.ConsoleTest
+import org.junit.Test
+
+class AnimalJavaTest : ConsoleTest() {
+    @Test
+    fun `should have a simple conversation`() {
+       assertConversation(
+          """
+            WHAT'S YOUR NAME? {PAUL}
+            YOUR NAME IS PAUL? {YES}
+            THANKS FOR PLAYING
+            """
+       ) {
+          // The game's Main method
+          main()
+       }
+    }
+}
+```
+
+Curly brackets are the expected user input.
+Note - this is actually just a way of defining the expected input as "PAUL" and "YES" 
+and not that the input happens at the exact prompt position. Thus this is equivalent:
+```kotlin
+"""
+{PAUL} {YES} WHAT'S YOUR NAME? 
+YOUR NAME IS PAUL?
+THANKS FOR PLAYING
+"""
+```
+
+Amounts of whitespace are not counted, but whitespace is significant: You will get a failure if
+your game emits `"NAME?"` when it expects `"NAME ?"`.
+
+Run all the tests from within the buildJvm project directory:
+```bash
+cd buildJvm
+./gradlew test
 ```
