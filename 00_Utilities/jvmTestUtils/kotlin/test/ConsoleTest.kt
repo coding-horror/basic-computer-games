@@ -1,3 +1,5 @@
+package com.pcholt.console.testutils
+
 import com.google.common.truth.Truth
 import org.junit.Rule
 import org.junit.contrib.java.lang.system.SystemOutRule

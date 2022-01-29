@@ -1,3 +1,4 @@
+import com.pcholt.console.testutils.ConsoleTest
 import org.junit.Test
 
 class AnimalJavaTest : ConsoleTest() {
