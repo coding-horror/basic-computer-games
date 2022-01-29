@@ -167,3 +167,9 @@ THANKS FOR PLAYING
 
 Amounts of whitespace are not counted, but whitespace is significant: You will get a failure if
 your game emits `"NAME?"` when it expects `"NAME ?"`.
+
+Run all the tests from within the buildJvm project directory:
+```bash
+cd buildJvm
+./gradlew test
+```
