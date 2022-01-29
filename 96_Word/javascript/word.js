@@ -10,25 +10,22 @@ function print(str)
 
 function input()
 {
-    var input_element;
-    var input_str;
 
     return new Promise(function (resolve) {
-                       input_element = document.createElement("INPUT");
+                       const input_element = document.createElement("INPUT");
 
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
                        document.getElementById("output").appendChild(input_element);
                        input_element.focus();
-                       input_str = undefined;
                        input_element.addEventListener("keydown", function (event) {
-                                                      if (event.keyCode == 13) {
-                                                      input_str = input_element.value;
-                                                      document.getElementById("output").removeChild(input_element);
-                                                      print(input_str);
-                                                      print("\n");
-                                                      resolve(input_str);
+                                                      if (event.keyCode === 13) {
+                                                          const input_str = input_element.value;
+                                                          document.getElementById("output").removeChild(input_element);
+                                                          print(input_str);
+                                                          print("\n");
+                                                          resolve(input_str);
                                                       }
                                                       });
                        });
@@ -36,21 +33,21 @@ function input()
 
 function tab(space)
 {
-    var str = "";
+    let str = "";
     while (space-- > 0)
         str += " ";
     return str;
 }
 
-var words = ["DINKY", "SMOKE", "WATER", "GLASS", "TRAIN",
+const words = ["DINKY", "SMOKE", "WATER", "GLASS", "TRAIN",
              "MIGHT", "FIRST", "CANDY", "CHAMP", "WOULD",
              "CLUMP", "DOPEY"];
 
-var s = [];
-var a = [];
-var l = [];
-var d = [];
-var p = [];
+const s = [];
+const a = [];
+const l = [];
+const d = [];
+const p = [];
 
 // Main control section
 async function main()
@@ -68,47 +65,48 @@ async function main()
         print("\n");
         print("\n");
         print("YOU ARE STARTING A NEW GAME...\n");
-        n = words.length;
-        ss = words[Math.floor(Math.random() * n)];
-        g = 0;
+        let n = words.length;
+        let ss = words[Math.floor(Math.random() * n)];
+        let g = 0;
         s[0] = ss.length;
-        for (i = 1; i <= ss.length; i++)
+        for (let i = 1; i <= ss.length; i++)
             s[i] = ss.charCodeAt(i - 1);
-        for (i = 1; i <= 5; i++)
+        for (let i = 1; i <= 5; i++)
             a[i] = 45;
-        for (j = 1; j <= 5; j++)
+        for (let j = 1; j <= 5; j++)
             p[j] = 0;
+        let ls = undefined;
         while (1) {
             print("GUESS A FIVE LETTER WORD");
             ls = await input();
             g++;
-            if (ss == ls)
+            if (ss === ls)
                 break;
-            for (i = 1; i <= 7; i++)
+            for (let i = 1; i <= 7; i++)
                 p[i] = 0;
             l[0] = ls.length;
-            for (i = 1; i <= ls.length; i++) {
+            for (let i = 1; i <= ls.length; i++) {
                 l[i] = ls.charCodeAt(i - 1);
             }
-            if (l[1] == 63) {
+            if (l[1] === 63) {
                 print("THE SECRET WORD IS " + ss + "\n");
                 print("\n");
                 break;
             }
-            if (l[0] != 5) {
+            if (l[0] !== 5) {
                 print("YOU MUST GUESS A 5 LETTER WORD.  START AGAIN.\n");
                 print("\n");
                 g--;
                 continue;
             }
-            m = 0;
-            q = 1;
-            for (i = 1; i <= 5; i++) {
-                for (j = 1; j <= 5; j++) {
-                    if (s[i] == l[j]) {
+            let m = 0;
+            let q = 1;
+            for (let i = 1; i <= 5; i++) {
+                for (let j = 1; j <= 5; j++) {
+                    if (s[i] === l[j]) {
                         p[q] = l[j];
                         q++;
-                        if (i == j)
+                        if (i === j)
                             a[j] = l[j];
                         m++;
                     }
@@ -116,15 +114,15 @@ async function main()
             }
             a[0] = 5;
             p[0] = m;
-            as = "";
-            for (i = 1; i <= a[0]; i++)
+            let as = "";
+            for (let i = 1; i <= a[0]; i++)
                 as += String.fromCharCode(a[i]);
-            ps = "";
-            for (i = 1; i <= p[0]; i++)
+            let ps = "";
+            for (let i = 1; i <= p[0]; i++)
                 ps += String.fromCharCode(p[i]);
             print("THERE WERE " + m + " MATCHES AND THE COMMON LETTERS WERE... " + ps + "\n");
             print("FROM THE EXACT LETTER MATCHES, YOU KNOW............ " + as + "\n");
-            if (as == ss) {
+            if (as === ss) {
                 ls = as;
                 break;
             }
@@ -134,15 +132,15 @@ async function main()
                 print("\n");
             }
         }
-        if (ss == ls) {
+        if (ss === ls) {
             print("YOU HAVE GUESSED THE WORD.  IT TOOK " + g + " GUESSES!\n");
             print("\n");
         } else {
             continue;
         }
         print("WANT TO PLAY AGAIN");
-        qs = await input();
-        if (qs != "YES")
+        let qs = await input();
+        if (qs !== "YES")
             break;
     }
 }
