@@ -74,11 +74,11 @@ public class Animal {
     private static void askForInformationAndSave(Scanner scan, AnimalNode current, QuestionNode previous, boolean previousToCurrentDecisionChoice) {
         //Failed to get it right and ran out of questions
         //Let's ask the user for the new information
-        System.out.print("THE ANIMAL YOU WERE THINKING OF WAS A ");
+        System.out.print("THE ANIMAL YOU WERE THINKING OF WAS A ? ");
         String animal = scan.nextLine();
-        System.out.printf("PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A %s FROM A %s ", animal, current.getAnimal());
+        System.out.printf("PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A %s FROM A %s ? ", animal, current.getAnimal());
         String newQuestion = scan.nextLine();
-        System.out.printf("FOR A %s THE ANSWER WOULD BE ", animal);
+        System.out.printf("FOR A %s THE ANSWER WOULD BE ? ", animal);
         boolean newAnswer = readYesOrNo(scan);
         //Add it to our question store
         addNewAnimal(current, previous, animal, newQuestion, newAnswer, previousToCurrentDecisionChoice);
