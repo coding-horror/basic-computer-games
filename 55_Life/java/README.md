@@ -16,3 +16,4 @@ However, the Java code does not have much in common with the original.
 **Differences in behaviour:**
 * Input supports the ```.``` character, but it's optional.
 * Evaluation of ```DONE``` input string is case insensitive.
+* Run with the ```-s``` command line argument to halt the program after each generation, and continue when ```ENTER``` is pressed. 
