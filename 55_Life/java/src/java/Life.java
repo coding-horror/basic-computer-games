@@ -27,7 +27,11 @@ public class Life {
     boolean stopAfterGen = false;
     boolean invalid = false;
 
-
+    /**
+     * Constructor.
+     *
+     * @param args the command line arguments
+     */
     public Life(String[] args) {
         parse(args);
     }
@@ -41,7 +45,10 @@ public class Life {
         }
     }
 
-    private void start() {
+    /**
+     * Starts the game.
+     */
+    public void start() {
         printGameHeader();
         readPattern();
         while (true) {
