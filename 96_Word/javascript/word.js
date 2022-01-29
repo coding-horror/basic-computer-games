@@ -78,7 +78,7 @@ async function main()
         let ls = undefined;
         while (1) {
             print("GUESS A FIVE LETTER WORD");
-            ls = await input();
+            ls = (await input()).toUpperCase();
             g++;
             if (ss === ls)
                 break;
@@ -139,7 +139,7 @@ async function main()
             continue;
         }
         print("WANT TO PLAY AGAIN");
-        let qs = await input();
+        let qs = (await input()).toUpperCase();
         if (qs !== "YES")
             break;
     }
