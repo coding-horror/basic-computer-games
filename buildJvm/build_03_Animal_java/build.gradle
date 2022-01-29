@@ -4,6 +4,11 @@ sourceSets {
             srcDirs "../../$gameSource"
         }
     }
+    test {
+        java {
+            srcDirs "../../$gameTest"
+        }
+    }
 }
 
 application {
