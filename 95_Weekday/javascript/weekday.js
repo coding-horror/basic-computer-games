@@ -74,29 +74,50 @@ function getFormattedDate(year, month, dayOfMonth) {
     return month + "/" + dayOfMonth + "/" + year;
 }
 
-let k5;
-let k6;
-let k7;
-
-function time_spent(f, a8)
+/**
+ * Calculate years, months and days as factor of days.
+ * This is a naive calculation which assumes all months are 30 days.
+ * @param factor
+ * @param dayCount
+ * @returns {{years: number, months: number, days: number}}
+ */
+function time_spent(factor, dayCount)
 {
-    let k1 = Math.floor(f * a8);
-    const i5 = Math.floor(k1 / 365);
-    k1 -= i5 * 365;
-    const i6 = Math.floor(k1 / 30);
-    const i7 = k1 - (i6 * 30);
-    k5 -= i5;
-    k6 -= i6;
-    k7 -= i7;
-    if (k7 < 0) {
-        k7 += 30;
-        k6--;
+    let totalDays = Math.floor(factor * dayCount);
+    const years = Math.floor(totalDays / 365);
+    totalDays -= years * 365;
+    const months = Math.floor(totalDays / 30);
+    const days = totalDays - (months * 30);
+    return {years, months, days}
+}
+
+/**
+ * Print the supplied time
+ * @param years
+ * @param months
+ * @param days
+ */
+function printTimeSpent({years, months, days}) {
+    print(years + "\t" + months + "\t" + days + "\n");
+}
+
+/**
+ * Adjust unaccounted time by remove years, months and days supplied.
+ * @param {{years:number, months:number, days:number}} unaccountedTime
+ * @param {{years:number, months:number, days:number}} timeToRemove
+ */
+function adjustUnaccountedTime(unaccountedTime, timeToRemove) {
+    unaccountedTime.years -= timeToRemove.years;
+    unaccountedTime.months -= timeToRemove.months;
+    unaccountedTime.days -= timeToRemove.days;
+    if (unaccountedTime.days < 0) {
+        unaccountedTime.days += 30;
+        unaccountedTime.months--;
     }
-    if (k6 <= 0) {
-        k6 += 12;
-        k5--;
+    if (unaccountedTime.months <= 0) {
+        unaccountedTime.months += 12;
+        unaccountedTime.years--;
     }
-    print(i5 + "\t" + i6 + "\t" + i7 + "\n");
 }
 
 function getDayOfWeek(dobYear, dobMonth, dobDayOfMonth) {
@@ -210,32 +231,42 @@ async function main()
                 print("                        \tYEARS\tMONTHS\tDAYS\n");
                 print("                        \t-----\t------\t----\n");
                 print("YOUR AGE (IF BIRTHDATE) \t" + yearsBetweenDates + "\t" + monthsBetweenDates + "\t" + daysBetweenDates + "\n");
-                const a8 = (yearsBetweenDates * 365) + (monthsBetweenDates * 30) + daysBetweenDates + Math.floor(monthsBetweenDates / 2);
-                k5 = yearsBetweenDates;
-                k6 = monthsBetweenDates;
-                k7 = daysBetweenDates;
-                // Calculate retirement date.
-                const e = dobYear + 65;
+                const approximateDaysBetween = (yearsBetweenDates * 365) + (monthsBetweenDates * 30) + daysBetweenDates + Math.floor(monthsBetweenDates / 2);
+                // Create an object containing time unaccounted for
+                const unaccountedTime = {years: yearsBetweenDates, months: monthsBetweenDates, days: daysBetweenDates};
+
                 // Calculate time spent in the following functions.
                 print("YOU HAVE SLEPT \t\t\t");
-                time_spent(0.35, a8);
+                const sleepTimeSpent = time_spent(0.35, approximateDaysBetween);
+                printTimeSpent(sleepTimeSpent);
+
+                adjustUnaccountedTime(unaccountedTime, sleepTimeSpent);
                 print("YOU HAVE EATEN \t\t\t");
-                time_spent(0.17, a8);
-                if (k5 <= 3) {
+                const eatenTimeSpent = time_spent(0.17, approximateDaysBetween);
+                printTimeSpent(eatenTimeSpent);
+
+                adjustUnaccountedTime(unaccountedTime, eatenTimeSpent);
+                if (unaccountedTime.years <= 3) {
                     print("YOU HAVE PLAYED \t\t\t");
-                } else if (k5 <= 9) {
+                } else if (unaccountedTime.years <= 9) {
                     print("YOU HAVE PLAYED/STUDIED \t\t");
                 } else {
                     print("YOU HAVE WORKED/PLAYED \t\t");
                 }
-                time_spent(0.23, a8);
-                if (k6 === 12) {
-                    k5++;
-                    k6 = 0;
+                const workPlayTimeSpent = time_spent(0.23, approximateDaysBetween);
+                printTimeSpent(workPlayTimeSpent);
+
+                adjustUnaccountedTime(unaccountedTime, workPlayTimeSpent);
+                if (unaccountedTime.months === 12) {
+                    unaccountedTime.years++;
+                    unaccountedTime.months = 0;
                 }
-                print("YOU HAVE RELAXED \t\t" + k5 + "\t" + k6 + "\t" + k7 + "\n");
+                print("YOU HAVE RELAXED \t\t");
+                printTimeSpent(unaccountedTime)
+
+                const retirementYear = dobYear + 65;
                 print("\n");
-                print(tab(16) + "***  YOU MAY RETIRE IN " + e + " ***\n");
+                print(tab(16) + "***  YOU MAY RETIRE IN " + retirementYear + " ***\n");
                 print("\n");
             }
         }
