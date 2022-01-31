@@ -119,6 +119,18 @@ function isLeapYear(year) {
     return true;
 }
 
+/**
+ * Determine the day of the week.
+ * This calculation returns a number between 1 and 7 where Sunday=1, Monday=2, ..., Saturday=7.
+ * First it calculates a known date near the start of the century (defined as a year ending "00").
+ * January 1st in "00" years is always one of: Saturday (years divisible by 400), Friday, Wednesday, or Monday.
+ * This is a combination of years being 52 weeks and either 1 (non-leap years) or 2 (leap years) days,
+ * and years ending "00" only being leap years if they are also divisible by 400.
+ * @param year
+ * @param month
+ * @param day
+ * @returns {number} Value between 1 and 7 representing Sunday to Saturday.
+ */
 function getDayOfWeek(year, month, day) {
     const centuriesSince1500 = Math.floor((year - 1500) / 100);
     let centuryOffset = centuriesSince1500 * 5 + (centuriesSince1500 + 3) / 4;
@@ -127,11 +139,13 @@ function getDayOfWeek(year, month, day) {
     const yearInCentury = year % 100;
     const yearInCenturyOffsets = yearInCentury / 4 + yearInCentury;
 
-    const a = yearInCenturyOffsets + day + COMMON_YEAR_MONTH_OFFSET[month-1] + centuryOffset;
-
-    let dayOfWeek = Math.floor(a % 7) + 1;
+    let dayOfWeek = centuryOffset +  yearInCenturyOffsets + day + COMMON_YEAR_MONTH_OFFSET[month-1];
+    dayOfWeek = Math.floor(dayOfWeek % 7) + 1;
     if (month <= 2 && isLeapYear(year)) {
         dayOfWeek--;
+    }
+    if (dayOfWeek === 0) {
+        dayOfWeek = 7;
     }
     return dayOfWeek;
 }
