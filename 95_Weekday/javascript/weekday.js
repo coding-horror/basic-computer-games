@@ -3,51 +3,40 @@
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
 //
 
-function print(str)
-{
+function print(str) {
     document.getElementById("output").appendChild(document.createTextNode(str));
 }
 
-function input()
-{
+function input() {
     return new Promise(function (resolve) {
-                       const input_element = document.createElement("INPUT");
-                       
-                       print("? ");
-                       input_element.setAttribute("type", "text");
-                       input_element.setAttribute("length", "50");
-                       document.getElementById("output").appendChild(input_element);
-                       input_element.focus();
-                       input_element.addEventListener("keydown", function (event) {
-                                                          if (event.keyCode === 13) {
-                                                              const input_str = input_element.value;
-                                                              document.getElementById("output").removeChild(input_element);
-                                                              print(input_str);
-                                                              print("\n");
-                                                              resolve(input_str);
-                                                          }
-                                                      });
-                       });
+        const input_element = document.createElement("INPUT");
+
+        print("? ");
+        input_element.setAttribute("type", "text");
+        input_element.setAttribute("length", "50");
+        document.getElementById("output").appendChild(input_element);
+        input_element.focus();
+        input_element.addEventListener("keydown", function (event) {
+            if (event.keyCode === 13) {
+                const input_str = input_element.value;
+                document.getElementById("output").removeChild(input_element);
+                print(input_str);
+                print("\n");
+                resolve(input_str);
+            }
+        });
+    });
 }
 
-function tab(space)
-{
+function tab(space) {
     let str = "";
     while (space-- > 0)
         str += " ";
     return str;
 }
 
-function fna(arg) {
-    return Math.floor(arg / 4);
-}
-
-function fnb(arg) {
-    return Math.floor(arg / 7);
-}
-
 // in a non-leap year the day of the week for the first of each month moves by the following amounts.
-const MONTHLY_DAY_OF_WEEK_OFFSETS = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
+const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
 
 /**
  * Reads a date, and extracts the date information.
@@ -67,11 +56,11 @@ async function readDateElements() {
  * Returns a US formatted date, i.e. Month/Day/Year.
  * @param year
  * @param month
- * @param dayOfMonth
+ * @param day
  * @returns {string}
  */
-function getFormattedDate(year, month, dayOfMonth) {
-    return month + "/" + dayOfMonth + "/" + year;
+function getFormattedDate(year, month, day) {
+    return month + "/" + day + "/" + year;
 }
 
 /**
@@ -81,8 +70,7 @@ function getFormattedDate(year, month, dayOfMonth) {
  * @param dayCount
  * @returns {{years: number, months: number, days: number}}
  */
-function time_spent(factor, dayCount)
-{
+function time_spent(factor, dayCount) {
     let totalDays = Math.floor(factor * dayCount);
     const years = Math.floor(totalDays / 365);
     totalDays -= years * 365;
@@ -120,30 +108,30 @@ function adjustUnaccountedTime(unaccountedTime, timeToRemove) {
     }
 }
 
-function getDayOfWeek(dobYear, dobMonth, dobDayOfMonth) {
-    const i1 = Math.floor((dobYear - 1500) / 100);
-    let a = i1 * 5 + (i1 + 3) / 4;
-    const i2 = Math.floor(a - fnb(a) * 7);
-    const y2 = Math.floor(dobYear / 100);
-    const y3 = Math.floor(dobYear - y2 * 100);
-    a = y3 / 4 + y3 + dobDayOfMonth + MONTHLY_DAY_OF_WEEK_OFFSETS[dobMonth-1] + i2;
-    let dayOfWeek = Math.floor(a - fnb(a) * 7) + 1;
-    if (dobMonth <= 2) {
-        if (y3 !== 0) {
-            t1 = Math.floor(dobYear - fna(dobYear) * 4);
-        } else {
-            a = i1 - 1;
-            t1 = Math.floor(a - fna(a) * 4);
-        }
-        if (t1 === 0) {
-            if (dayOfWeek === 0) {
-                dayOfWeek = 6;
-            }
-            dayOfWeek--;
-        }
+function isLeapYear(year) {
+    if ((year % 4) !== 0) {
+        return false;
+    } else if ((year % 100) !== 0) {
+        return true;
+    } else if ((year % 400) !== 0) {
+        return false;
     }
-    if (dayOfWeek === 0) {
-        dayOfWeek = 7;
+    return true;
+}
+
+function getDayOfWeek(year, month, day) {
+    const centuriesSince1500 = Math.floor((year - 1500) / 100);
+    let centuryOffset = centuriesSince1500 * 5 + (centuriesSince1500 + 3) / 4;
+    centuryOffset = Math.floor(centuryOffset % 7);
+    // January 1st moves forward by approximately 1.25 days per year
+    const yearInCentury = year % 100;
+    const yearInCenturyOffsets = yearInCentury / 4 + yearInCentury;
+
+    const a = yearInCenturyOffsets + day + COMMON_YEAR_MONTH_OFFSET[month-1] + centuryOffset;
+
+    let dayOfWeek = Math.floor(a % 7) + 1;
+    if (month <= 2 && isLeapYear(year)) {
+        dayOfWeek--;
     }
     return dayOfWeek;
 }
@@ -151,18 +139,17 @@ function getDayOfWeek(dobYear, dobMonth, dobDayOfMonth) {
 /**
  * The following performs a special hash on the day parts which guarantees
  * that different days will return different numbers, and the numbers returned are in ordered.
- * @param todayYear
- * @param todayMonth
- * @param todayDayOfMonth
+ * @param year
+ * @param month
+ * @param day
  * @returns {*}
  */
-function getNormalisedDay(todayYear, todayMonth, todayDayOfMonth) {
-    return (todayYear * 12 + todayMonth) * 31 + todayDayOfMonth;
+function getNormalisedDay(year, month, day) {
+    return (year * 12 + month) * 31 + day;
 }
 
 // Main control section
-async function main()
-{
+async function main() {
     print(tab(32) + "WEEKDAY\n");
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n");
     print("\n");
@@ -197,11 +184,21 @@ async function main()
             print(getFormattedDate(dobYear, dobMonth, dobDayOfMonth) + " WAS A ");
         }
         switch (dayOfWeek) {
-            case 1: print("SUNDAY.\n"); break;
-            case 2: print("MONDAY.\n"); break;
-            case 3: print("TUESDAY.\n"); break;
-            case 4: print("WEDNESDAY.\n"); break;
-            case 5: print("THURSDAY.\n"); break;
+            case 1:
+                print("SUNDAY.\n");
+                break;
+            case 2:
+                print("MONDAY.\n");
+                break;
+            case 3:
+                print("TUESDAY.\n");
+                break;
+            case 4:
+                print("WEDNESDAY.\n");
+                break;
+            case 5:
+                print("THURSDAY.\n");
+                break;
             case 6:
                 if (dobDayOfMonth === 13) {
                     print("FRIDAY THE THIRTEENTH---BEWARE!\n");
@@ -209,7 +206,9 @@ async function main()
                     print("FRIDAY.\n");
                 }
                 break;
-            case 7: print("SATURDAY.\n"); break;
+            case 7:
+                print("SATURDAY.\n");
+                break;
         }
         if (normalisedToday !== normalisedDob) {
             let yearsBetweenDates = todayYear - dobYear;
