@@ -78,14 +78,14 @@ const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
  * Reads a date, and extracts the date information.
  * This expects date parts to be comma separated, using US date ordering,
  * i.e. Month,Day,Year.
- * @returns {Promise<{year: number, month: number, day: number}>}
+ * @returns {Promise<DateStruct>}
  */
 async function readDateElements() {
     let dateString = await input();
     const month = parseInt(dateString);
     const day = parseInt(dateString.substr(dateString.indexOf(",") + 1));
     const year = parseInt(dateString.substr(dateString.lastIndexOf(",") + 1));
-    return {year, month, day};
+    return new DateStruct(year, month, day);
 }
 
 /**
