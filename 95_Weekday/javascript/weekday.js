@@ -35,32 +35,66 @@ function tab(space) {
     return str;
 }
 
-// in a non-leap year the day of the week for the first of each month moves by the following amounts.
+class DateStruct {
+    year;
+    month;
+    day;
+
+    /**
+     * Build a DateStruct
+     * @param {number} year
+     * @param {number} month
+     * @param {number} day
+     */
+    constructor(year, month, day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+}
+
+class Duration {
+    years;
+    months;
+    days;
+
+    /**
+     * Build a Duration
+     * @param {number} years
+     * @param {number} months
+     * @param {number} days
+     */
+    constructor(years, months, days) {
+        this.years = years;
+        this.months = months;
+        this.days = days;
+    }
+}
+
+// In a common (non-leap) year the day of the week for the first of each month moves by the following amounts.
 const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
 
 /**
  * Reads a date, and extracts the date information.
  * This expects date parts to be comma separated, using US date ordering,
  * i.e. Month,Day,Year.
- * @returns {Promise<[number,number,number]>} [year, month, dayOfMonth]
+ * @returns {Promise<{year: number, month: number, day: number}>}
  */
 async function readDateElements() {
     let dateString = await input();
     const month = parseInt(dateString);
-    const dayOfMonth = parseInt(dateString.substr(dateString.indexOf(",") + 1));
+    const day = parseInt(dateString.substr(dateString.indexOf(",") + 1));
     const year = parseInt(dateString.substr(dateString.lastIndexOf(",") + 1));
-    return [year, month, dayOfMonth];
+    return {year, month, day};
 }
 
 /**
  * Returns a US formatted date, i.e. Month/Day/Year.
- * @param year
- * @param month
- * @param day
+ * @param {DateStruct} date
  * @returns {string}
  */
-function getFormattedDate(year, month, day) {
-    return month + "/" + day + "/" + year;
+function getFormattedDate(date) {
+    return date.month + "/" + date.day + "/" + date.year;
 }
 
 /**
@@ -68,7 +102,7 @@ function getFormattedDate(year, month, day) {
  * This is a naive calculation which assumes all months are 30 days.
  * @param factor
  * @param dayCount
- * @returns {{years: number, months: number, days: number}}
+ * @returns {Duration}
  */
 function time_spent(factor, dayCount) {
     let totalDays = Math.floor(factor * dayCount);
@@ -76,23 +110,21 @@ function time_spent(factor, dayCount) {
     totalDays -= years * 365;
     const months = Math.floor(totalDays / 30);
     const days = totalDays - (months * 30);
-    return {years, months, days}
+    return new Duration(years, months, days);
 }
 
 /**
- * Print the supplied time
- * @param years
- * @param months
- * @param days
+ * Print the supplied duration.
+ * @param {Duration} duration
  */
-function printTimeSpent({years, months, days}) {
-    print(years + "\t" + months + "\t" + days + "\n");
+function printTimeSpent(duration) {
+    print(duration.years + "\t" + duration.months + "\t" + duration.days + "\n");
 }
 
 /**
  * Adjust unaccounted time by remove years, months and days supplied.
- * @param {{years:number, months:number, days:number}} unaccountedTime
- * @param {{years:number, months:number, days:number}} timeToRemove
+ * @param {Duration} unaccountedTime
+ * @param {Duration} timeToRemove
  */
 function adjustUnaccountedTime(unaccountedTime, timeToRemove) {
     unaccountedTime.years -= timeToRemove.years;
@@ -108,6 +140,11 @@ function adjustUnaccountedTime(unaccountedTime, timeToRemove) {
     }
 }
 
+/**
+ * Determine if the given year is a leap year.
+ * @param year
+ * @returns {boolean}
+ */
 function isLeapYear(year) {
     if ((year % 4) !== 0) {
         return false;
@@ -122,26 +159,25 @@ function isLeapYear(year) {
 /**
  * Determine the day of the week.
  * This calculation returns a number between 1 and 7 where Sunday=1, Monday=2, ..., Saturday=7.
- * First it calculates a known date near the start of the century (defined as a year ending "00").
- * January 1st in "00" years is always one of: Saturday (years divisible by 400), Friday, Wednesday, or Monday.
- * This is a combination of years being 52 weeks and either 1 (non-leap years) or 2 (leap years) days,
- * and years ending "00" only being leap years if they are also divisible by 400.
- * @param year
- * @param month
- * @param day
+ * @param {DateStruct} date
  * @returns {number} Value between 1 and 7 representing Sunday to Saturday.
  */
-function getDayOfWeek(year, month, day) {
-    const centuriesSince1500 = Math.floor((year - 1500) / 100);
+function getDayOfWeek(date) {
+    // Calculate an offset based on the century part of the year.
+    const centuriesSince1500 = Math.floor((date.year - 1500) / 100);
     let centuryOffset = centuriesSince1500 * 5 + (centuriesSince1500 + 3) / 4;
     centuryOffset = Math.floor(centuryOffset % 7);
+
+    // Calculate an offset based on the shortened two digit year.
     // January 1st moves forward by approximately 1.25 days per year
-    const yearInCentury = year % 100;
+    const yearInCentury = date.year % 100;
     const yearInCenturyOffsets = yearInCentury / 4 + yearInCentury;
 
-    let dayOfWeek = centuryOffset +  yearInCenturyOffsets + day + COMMON_YEAR_MONTH_OFFSET[month-1];
+    // combine offsets with day and month
+    let dayOfWeek = centuryOffset +  yearInCenturyOffsets + date.day + COMMON_YEAR_MONTH_OFFSET[date.month-1];
+
     dayOfWeek = Math.floor(dayOfWeek % 7) + 1;
-    if (month <= 2 && isLeapYear(year)) {
+    if (date.month <= 2 && isLeapYear(date.year)) {
         dayOfWeek--;
     }
     if (dayOfWeek === 0) {
@@ -151,15 +187,95 @@ function getDayOfWeek(year, month, day) {
 }
 
 /**
- * The following performs a special hash on the day parts which guarantees
- * that different days will return different numbers, and the numbers returned are in ordered.
- * @param year
- * @param month
- * @param day
- * @returns {*}
+ * Obtain text for the day of the week.
+ * @param {DateStruct} date
+ * @returns {string}
  */
-function getNormalisedDay(year, month, day) {
-    return (year * 12 + month) * 31 + day;
+function getDayOfWeekText(date) {
+    const dayOfWeek = getDayOfWeek(date);
+    let dayOfWeekText = "";
+    switch (dayOfWeek) {
+        case 1:
+            dayOfWeekText = "SUNDAY.";
+            break;
+        case 2:
+            dayOfWeekText = "MONDAY.";
+            break;
+        case 3:
+            dayOfWeekText = "TUESDAY.";
+            break;
+        case 4:
+            dayOfWeekText = "WEDNESDAY.";
+            break;
+        case 5:
+            dayOfWeekText = "THURSDAY.";
+            break;
+        case 6:
+            if (date.day === 13) {
+                dayOfWeekText = "FRIDAY THE THIRTEENTH---BEWARE!";
+            } else {
+                dayOfWeekText = "FRIDAY.";
+            }
+            break;
+        case 7:
+            dayOfWeekText = "SATURDAY.";
+            break;
+    }
+    return dayOfWeekText;
+}
+
+/**
+ * The following performs a hash on the day parts which guarantees that
+ * 1. different days will return different numbers
+ * 2. the numbers returned are ordered.
+ * @param {DateStruct} date
+ * @returns {number}
+ */
+function getNormalisedDay(date) {
+    return (date.year * 12 + date.month) * 31 + date.day;
+}
+
+/**
+ * Determine approximate difference between two dates.
+ * This is a naive calculation which assumes all months are 30 days.
+ * @param {DateStruct} date1
+ * @param {DateStruct} date2
+ * @returns {Duration}
+ */
+function difference(date1, date2) {
+    let years = date1.year - date2.year;
+    let months = date1.month - date2.month;
+    let days = date1.day - date2.day;
+    if (days < 0) {
+        months--;
+        days += 30;
+    }
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
+    return new Duration(years, months, days);
+}
+
+/**
+ * Determine if the supplied date could be a Gregorian date.
+ * Be aware the Gregorian calendar was not introduced in all places at once,
+ * see https://en.wikipedia.org/wiki/Gregorian_calendar
+ * @param {DateStruct} date
+ * @returns {boolean} true if date could be Gregorian; otherwise false.
+ */
+function isGregorianDate(date) {
+    let result = false;
+    if (date.year > 1582) {
+        result = true;
+    } else if (date.year === 1582) {
+        if (date.month > 10) {
+            result = true;
+        } else if (date.month === 10 && date.day >= 15) {
+            result = true;
+        }
+    }
+    return result;
 }
 
 // Main control section
@@ -173,80 +289,43 @@ async function main() {
     print("GIVES FACTS ABOUT A DATE OF INTEREST TO YOU.\n");
     print("\n");
     print("ENTER TODAY'S DATE IN THE FORM: 3,24,1979  ");
-    const [todayYear, todayMonth, todayDayOfMonth] = await readDateElements();
+    const today = await readDateElements();
     // This program determines the day of the week
     //  for a date after 1582
     print("ENTER DAY OF BIRTH (OR OTHER DAY OF INTEREST)");
-    const [dobYear, dobMonth, dobDayOfMonth] = await readDateElements();
+    const dateOfBirth = await readDateElements();
     print("\n");
     // Test for date before current calendar.
-    // Note: this test is unreliable - the Gregorian calendar was introduced on Friday 15 October 1582
-    // and the weekday algorithm fails for dates prior to that
-    if (dobYear - 1582 < 0) {
-        print("NOT PREPARED TO GIVE DAY OF WEEK PRIOR TO MDLXXXII.\n");
+    if (!isGregorianDate(dateOfBirth)) {
+        print("NOT PREPARED TO GIVE DAY OF WEEK PRIOR TO X.XV.MDLXXXII.\n");
     } else {
-        const dayOfWeek = getDayOfWeek(dobYear, dobMonth, dobDayOfMonth);
+        const normalisedToday = getNormalisedDay(today);
+        const normalisedDob = getNormalisedDay(dateOfBirth);
 
-        const normalisedToday = getNormalisedDay(todayYear, todayMonth, todayDayOfMonth);
-        const normalisedDob = getNormalisedDay(dobYear, dobMonth, dobDayOfMonth);
-
+        const dateOfBirthText = getFormattedDate(dateOfBirth);
+        let dayOfWeekText = getDayOfWeekText(dateOfBirth);
         if (normalisedToday < normalisedDob) {
-            print(getFormattedDate(dobYear, dobMonth, dobDayOfMonth) + " WILL BE A ");
+            print(dateOfBirthText + " WILL BE A " + dayOfWeekText + "\n");
         } else if (normalisedToday === normalisedDob) {
-            print(getFormattedDate(dobYear, dobMonth, dobDayOfMonth) + " IS A ");
+            print(dateOfBirthText + " IS A " + dayOfWeekText + "\n");
         } else {
-            print(getFormattedDate(dobYear, dobMonth, dobDayOfMonth) + " WAS A ");
+            print(dateOfBirthText + " WAS A " + dayOfWeekText + "\n");
         }
-        switch (dayOfWeek) {
-            case 1:
-                print("SUNDAY.\n");
-                break;
-            case 2:
-                print("MONDAY.\n");
-                break;
-            case 3:
-                print("TUESDAY.\n");
-                break;
-            case 4:
-                print("WEDNESDAY.\n");
-                break;
-            case 5:
-                print("THURSDAY.\n");
-                break;
-            case 6:
-                if (dobDayOfMonth === 13) {
-                    print("FRIDAY THE THIRTEENTH---BEWARE!\n");
-                } else {
-                    print("FRIDAY.\n");
-                }
-                break;
-            case 7:
-                print("SATURDAY.\n");
-                break;
-        }
+
         if (normalisedToday !== normalisedDob) {
-            let yearsBetweenDates = todayYear - dobYear;
             print("\n");
-            let monthsBetweenDates = todayMonth - dobMonth;
-            let daysBetweenDates = todayDayOfMonth - dobDayOfMonth;
-            if (daysBetweenDates < 0) {
-                monthsBetweenDates--;
-                daysBetweenDates += 30;
-            }
-            if (monthsBetweenDates < 0) {
-                yearsBetweenDates--;
-                monthsBetweenDates += 12;
-            }
-            if (yearsBetweenDates >= 0) {
-                if (daysBetweenDates === 0 && monthsBetweenDates === 0) {
+            let differenceBetweenDates = difference(today, dateOfBirth);
+            if (differenceBetweenDates.years >= 0) {
+                if (differenceBetweenDates.days === 0 && differenceBetweenDates.months === 0) {
                     print("***HAPPY BIRTHDAY***\n");
                 }
                 print("                        \tYEARS\tMONTHS\tDAYS\n");
                 print("                        \t-----\t------\t----\n");
-                print("YOUR AGE (IF BIRTHDATE) \t" + yearsBetweenDates + "\t" + monthsBetweenDates + "\t" + daysBetweenDates + "\n");
-                const approximateDaysBetween = (yearsBetweenDates * 365) + (monthsBetweenDates * 30) + daysBetweenDates + Math.floor(monthsBetweenDates / 2);
+                print("YOUR AGE (IF BIRTHDATE) \t");
+                printTimeSpent(differenceBetweenDates);
+                const approximateDaysBetween = (differenceBetweenDates.years * 365) + (differenceBetweenDates.months * 30) + differenceBetweenDates.days + Math.floor(differenceBetweenDates.months / 2);
                 // Create an object containing time unaccounted for
-                const unaccountedTime = {years: yearsBetweenDates, months: monthsBetweenDates, days: daysBetweenDates};
+                const unaccountedTime = {...differenceBetweenDates};
 
                 // Calculate time spent in the following functions.
                 print("YOU HAVE SLEPT \t\t\t");
@@ -277,7 +356,7 @@ async function main() {
                 print("YOU HAVE RELAXED \t\t");
                 printTimeSpent(unaccountedTime)
 
-                const retirementYear = dobYear + 65;
+                const retirementYear = dateOfBirth.year + 65;
                 print("\n");
                 print(tab(16) + "***  YOU MAY RETIRE IN " + retirementYear + " ***\n");
                 print("\n");
