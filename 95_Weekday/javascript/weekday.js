@@ -51,6 +51,34 @@ class DateStruct {
         this.month = month;
         this.day = day;
     }
+
+    /**
+     * Determine if the date could be a Gregorian date.
+     * Be aware the Gregorian calendar was not introduced in all places at once,
+     * see https://en.wikipedia.org/wiki/Gregorian_calendar
+     * @returns {boolean} true if date could be Gregorian; otherwise false.
+     */
+    isGregorianDate() {
+        let result = false;
+        if (this.year > 1582) {
+            result = true;
+        } else if (this.year === 1582) {
+            if (this.month > 10) {
+                result = true;
+            } else if (this.month === 10 && this.day >= 15) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a US formatted date, i.e. Month/Day/Year.
+     * @returns {string}
+     */
+    getFormattedDate() {
+        return this.month + "/" + this.day + "/" + this.year;
+    }
 }
 
 class Duration {
@@ -86,15 +114,6 @@ async function readDateElements() {
     const day = parseInt(dateString.substr(dateString.indexOf(",") + 1));
     const year = parseInt(dateString.substr(dateString.lastIndexOf(",") + 1));
     return new DateStruct(year, month, day);
-}
-
-/**
- * Returns a US formatted date, i.e. Month/Day/Year.
- * @param {DateStruct} date
- * @returns {string}
- */
-function getFormattedDate(date) {
-    return date.month + "/" + date.day + "/" + date.year;
 }
 
 /**
@@ -257,27 +276,6 @@ function difference(date1, date2) {
     return new Duration(years, months, days);
 }
 
-/**
- * Determine if the supplied date could be a Gregorian date.
- * Be aware the Gregorian calendar was not introduced in all places at once,
- * see https://en.wikipedia.org/wiki/Gregorian_calendar
- * @param {DateStruct} date
- * @returns {boolean} true if date could be Gregorian; otherwise false.
- */
-function isGregorianDate(date) {
-    let result = false;
-    if (date.year > 1582) {
-        result = true;
-    } else if (date.year === 1582) {
-        if (date.month > 10) {
-            result = true;
-        } else if (date.month === 10 && date.day >= 15) {
-            result = true;
-        }
-    }
-    return result;
-}
-
 // Main control section
 async function main() {
     print(tab(32) + "WEEKDAY\n");
@@ -296,13 +294,13 @@ async function main() {
     const dateOfBirth = await readDateElements();
     print("\n");
     // Test for date before current calendar.
-    if (!isGregorianDate(dateOfBirth)) {
+    if (!dateOfBirth.isGregorianDate()) {
         print("NOT PREPARED TO GIVE DAY OF WEEK PRIOR TO X.XV.MDLXXXII.\n");
     } else {
         const normalisedToday = getNormalisedDay(today);
         const normalisedDob = getNormalisedDay(dateOfBirth);
 
-        const dateOfBirthText = getFormattedDate(dateOfBirth);
+        const dateOfBirthText = dateOfBirth.getFormattedDate();
         let dayOfWeekText = getDayOfWeekText(dateOfBirth);
         if (normalisedToday < normalisedDob) {
             print(dateOfBirthText + " WILL BE A " + dayOfWeekText + "\n");
