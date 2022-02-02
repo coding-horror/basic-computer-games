@@ -32,7 +32,9 @@ public class Blackjack {
 		deck.shuffle();
 
 		List<Player> players = new ArrayList<>();
-		// TODO instantiate Player instances and update below to set their current bets. Finish TODOs in Player.java first.
+		for(int i = 0; i < nPlayers; i++) {
+			players.add(new Player(i + 1));
+		}
 
 		while(true) {
 			int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
@@ -41,14 +43,14 @@ public class Blackjack {
 				for(int i = 0; i < nPlayers; i++) {
 					// Note that the bet for player "1" is at index "0" in the bets
 					// array and take care to avoid off-by-one errors.
-					bets[i] = promptInt("#" + (i + 1));
+					bets[i] = promptInt("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
+					Players.get(i).setCurrentBet(bets[i]);
 				}
 			}
 
-			printInitialDeal();
-
 			for(Player player : players){
-				// TODO deal two cards to each player from the deck.
+				player.dealCard(deck.deal());
+				player.dealCard(deck.deal()); //TODO: This could be in a separate loop to more acurrately follow how a game would be dealt, I couldn't figure out of the BASIC version did it
 			}
 
 			// Consider adding a Dealer class to track the dealer's hand and running total.
@@ -57,6 +59,8 @@ public class Blackjack {
 			// TODO deal two cards to the dealer
 
 			// TODO handle 'insurance' if the dealer's card is an Ace.
+
+			printInitialDeal();
 
 			for(Player player : players){
 				play(player, deck);
