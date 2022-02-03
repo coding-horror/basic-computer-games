@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 public class DeckTest {
 
     @Test
-    void testInitOne() {
+    void testInit() {
         // When
-        Deck deck = new Deck(1);
+        Deck deck = new Deck();
 
         // Then
         long nCards = deck.size();
@@ -28,13 +28,4 @@ public class DeckTest {
         
     }
 
-    @Test
-    void testInitTwo() {
-        // When
-        Deck deck = new Deck(2);
-
-        // Then
-        assertEquals(104, deck.size());
-    }
-    
 }

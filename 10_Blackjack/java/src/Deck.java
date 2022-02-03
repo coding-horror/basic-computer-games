@@ -13,13 +13,11 @@ public class Deck {
      * 
      * @param nDecks
      */
-    public Deck(int nDecks) {
+    public Deck() {
         cards = new LinkedList<>();
-        for(int deckIndex = 0; deckIndex < nDecks; deckIndex++) {
-            for(Card.Suit suit : Card.Suit.values()) {
-                for(int value = 1; value < 14; value++) {
-                    cards.add(new Card(value, suit));
-                }
+        for(Card.Suit suit : Card.Suit.values()) {
+            for(int value = 1; value < 14; value++) {
+                cards.add(new Card(value, suit));
             }
         }
     }
