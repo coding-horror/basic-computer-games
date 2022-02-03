@@ -23,6 +23,12 @@ public final class Card {
 	private final Suit suit;
 
 	public Card(int value, Suit suit) {
+        if(value < 1 || value > 13) {
+            throw new IllegalArgumentException("Invalid card value " + value);
+        }
+        if(suit == null) {
+            throw new IllegalArgumentException("Card suit must be non-null");
+        }
 		this.value = value;
 		this.suit = suit;
 	}
@@ -50,5 +56,30 @@ public final class Card {
         // doesn't match the original BASIC behavior.
         // result.append(suit.name().charAt(0));
         return result.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // Overriding 'equals' and 'hashCode' (below) make your class work correctly
+        // with all sorts of methods in the Java API that need to determine the uniqueness
+        // of an instance (like a Set).
+        if(obj.getClass() != Card.class) {
+            return false;
+        }
+        Card other = (Card) obj;
+        return this.getSuit() == other.getSuit() && this.getValue() == other.getValue();
+    }
+
+    @Override
+    public int hashCode() {
+        // This is a fairly standard hashCode implementation for a data object.
+        // The details are beyond the scope of this comment, but most IDEs can generate
+        // this for you.
+
+        // Note that it's a best practice to implement hashCode whenever you implement equals and vice versa.
+        int hash = 7;
+        hash = 31 * hash + (int) value;
+        hash = 31 * hash + suit.hashCode();
+        return hash;
     }
 }
