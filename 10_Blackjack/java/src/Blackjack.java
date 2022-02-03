@@ -44,7 +44,7 @@ public class Blackjack {
 					// Note that the bet for player "1" is at index "0" in the bets
 					// array and take care to avoid off-by-one errors.
 					bets[i] = promptInt("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
-					Players.get(i).setCurrentBet(bets[i]);
+					players.get(i).setCurrentBet(bets[i]);
 				}
 			}
 
@@ -53,14 +53,17 @@ public class Blackjack {
 				player.dealCard(deck.deal()); //TODO: This could be in a separate loop to more acurrately follow how a game would be dealt, I couldn't figure out of the BASIC version did it
 			}
 
+
 			// Consider adding a Dealer class to track the dealer's hand and running total.
 			// Alternately, the dealer could just be a Player instance where currentBet=0 and is ignored.
 			LinkedList<Card> dealerHand = new LinkedList<>();
+			Player dealer = new Player(0); //Dealer is Player 0 - this can be converted into a dealer class later on
+			dealer.dealCard(deck.deal());
 			// TODO deal two cards to the dealer
 
 			// TODO handle 'insurance' if the dealer's card is an Ace.
 
-			printInitialDeal();
+			printInitialDeal(players, dealer);
 
 			for(Player player : players){
 				play(player, deck);
@@ -74,14 +77,32 @@ public class Blackjack {
 		}
 	}
 
-	private static void printInitialDeal() {
-		// TODO implement printInitialDeal()
-		// Print the initial deal in the following format:
+	private static void printInitialDeal(List<Player> players, Player dealer) {
+		// Prints the initial deal in the following format:
 		/*
 		PLAYER 1     2    DEALER
                7    10     4   
                2     A   
 	   */
+		
+        StringBuilder output = new StringBuilder(); 
+		output.append("PLAYERS ");
+		for (Player player : players) {
+			output.append(player.getPlayerNumber() + "\t");
+		}
+		output.append("DEALER\n");
+		//Loop through two rows of cards		
+        for (int j = 0; j < 2; j++) {
+			output.append("\t");
+			for (Player player : players) {
+				output.append(player.getHand().get(j).toString()).append("\t");
+			}
+			if(j == 0 ){
+				output.append(dealer.getHand().get(j).toString());
+			}
+			output.append("\n");
+		}
+		System.out.print(output);
 	}
 
 	/**

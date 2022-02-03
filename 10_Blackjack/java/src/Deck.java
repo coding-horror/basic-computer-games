@@ -25,8 +25,8 @@ public class Deck {
      * @return The card that was dealt.
      */
     public Card deal() {
-        // TODO implement Deck.deal()
-        return null;
+        // TODO implement Deck.deal() -  new Card(10, Card.Suit.CLUBS) added temporarily
+        return new Card(10, Card.Suit.CLUBS); 
     }
 
     /**
@@ -36,5 +36,6 @@ public class Deck {
         // TODO implement Deck.shuffle()
         // Probably just call Collections.shuffle(cards);
     }
+
 
 }
