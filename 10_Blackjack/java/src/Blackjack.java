@@ -27,7 +27,7 @@ public class Blackjack {
 			nPlayers = promptInt("NUMBER OF PLAYERS");
 		}
 
-		Deck deck = new Deck(4); // TODO figure out how many decks the BASIC version uses
+		Deck deck = new Deck();
 		System.out.println("RESHUFFLING");
 		deck.shuffle();
 
