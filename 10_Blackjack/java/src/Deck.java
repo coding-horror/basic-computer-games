@@ -1,8 +1,10 @@
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Deck {
 
-    LinkedList<Card> cards;
+    private LinkedList<Card> cards;
     
     /**
      * Initialize the game deck with the given number of standard decks.
@@ -12,12 +14,14 @@ public class Deck {
      * @param nDecks
      */
     public Deck(int nDecks) {
-        // TODO implement Deck constructor
-        // See line 33 of Blackjack.java for the current version of this code
-        /* for each suit
-         *   for each value 1-13
-         *     add new Card(value, suit) to cards
-         */
+        cards = new LinkedList<>();
+        for(int deckIndex = 0; deckIndex < nDecks; deckIndex++) {
+            for(Card.Suit suit : Card.Suit.values()) {
+                for(int value = 1; value < 14; value++) {
+                    cards.add(new Card(value, suit));
+                }
+            }
+        }
     }
 
     /**
@@ -37,5 +41,20 @@ public class Deck {
         // Probably just call Collections.shuffle(cards);
     }
 
+    /**
+     * Get the number of cards in this deck.
+     * @return The number of cards in this deck. For example, 52 for a single deck.
+     */
+    public int size() {
+        return cards.size();
+    }
 
+    /**
+     * Returns the cards in this deck.
+     * @return An immutable view of the cards in this deck.
+     */
+    public List<Card> getCards() {
+        // The returned list is immutable because we don't want other code messing with the deck.
+        return Collections.unmodifiableList(cards);
+    }
 }
