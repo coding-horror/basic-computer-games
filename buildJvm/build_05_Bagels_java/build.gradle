@@ -1,0 +1,11 @@
+sourceSets {
+    main {
+        java {
+            srcDirs "../../$gameSource"
+        }
+    }
+}
+
+application {
+    mainClass = gameMain
+}

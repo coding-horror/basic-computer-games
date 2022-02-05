@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game.csproj", "{20599300-7C6E-48A2-AB24-EC7CCF224A5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hammurabi", "Hammurabi.csproj", "{2C4407AF-5ED6-4C9F-833E-35461DF7DBBB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{20599300-7C6E-48A2-AB24-EC7CCF224A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20599300-7C6E-48A2-AB24-EC7CCF224A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20599300-7C6E-48A2-AB24-EC7CCF224A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20599300-7C6E-48A2-AB24-EC7CCF224A5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4407AF-5ED6-4C9F-833E-35461DF7DBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4407AF-5ED6-4C9F-833E-35461DF7DBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4407AF-5ED6-4C9F-833E-35461DF7DBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4407AF-5ED6-4C9F-833E-35461DF7DBBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

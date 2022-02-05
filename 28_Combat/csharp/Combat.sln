@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game.csproj", "{054A1718-1B7D-4954-81A7-EEA390713439}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Combat", "Combat.csproj", "{F7CEEC00-CF2C-436C-883B-55A20C21AB93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{054A1718-1B7D-4954-81A7-EEA390713439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{054A1718-1B7D-4954-81A7-EEA390713439}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{054A1718-1B7D-4954-81A7-EEA390713439}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{054A1718-1B7D-4954-81A7-EEA390713439}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7CEEC00-CF2C-436C-883B-55A20C21AB93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7CEEC00-CF2C-436C-883B-55A20C21AB93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7CEEC00-CF2C-436C-883B-55A20C21AB93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7CEEC00-CF2C-436C-883B-55A20C21AB93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

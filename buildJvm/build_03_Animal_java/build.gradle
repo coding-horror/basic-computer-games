@@ -1,0 +1,20 @@
+sourceSets {
+    main {
+        java {
+            srcDirs "../../$gameSource"
+        }
+    }
+    test {
+        java {
+            srcDirs "../../$gameTest"
+        }
+    }
+}
+
+application {
+    mainClass = gameMain
+}
+
+dependencies {
+    testImplementation(project(":build_00_utilities").sourceSets.test.output)
+}

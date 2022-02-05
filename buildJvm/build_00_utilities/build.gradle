@@ -1,0 +1,7 @@
+sourceSets {
+    test {
+        java {
+            srcDirs "../../$testSource"
+        }
+    }
+}

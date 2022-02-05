@@ -10,36 +10,41 @@ function print(str)
 
 function input()
 {
-    var input_element;
-    var input_str;
-    
     return new Promise(function (resolve) {
-                       input_element = document.createElement("INPUT");
+                       const input_element = document.createElement("INPUT");
                        
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
                        document.getElementById("output").appendChild(input_element);
                        input_element.focus();
-                       input_str = undefined;
-                       input_element.addEventListener("keydown", function (event) {
-                                                      if (event.keyCode == 13) {
-                                                      input_str = input_element.value;
-                                                      document.getElementById("output").removeChild(input_element);
-                                                      print(input_str);
-                                                      print("\n");
-                                                      resolve(input_str);
-                                                      }
-                                                      });
+                       input_element.addEventListener("keydown",
+                           function (event) {
+                                      if (event.keyCode === 13) {
+                                          const input_str = input_element.value;
+                                          document.getElementById("output").removeChild(input_element);
+                                          print(input_str);
+                                          print("\n");
+                                          resolve(input_str);
+                                      }
+                                  });
                        });
 }
 
 function tab(space)
 {
-    var str = "";
+    let str = "";
     while (space-- > 0)
         str += " ";
     return str;
+}
+
+function waitNSeconds(n) {
+    return new Promise(resolve => setTimeout(resolve, n*1000));
+}
+
+function scrollToBottom() {
+    window.scrollTo(0, document.body.scrollHeight);
 }
 
 function draw_head()
@@ -52,6 +57,58 @@ function draw_head()
     print("        HHHHHHH\n");
 }
 
+function drawFeelers(feelerCount, character) {
+    for (let z = 1; z <= 4; z++) {
+        print(tab(10));
+        for (let x = 1; x <= feelerCount; x++) {
+            print(character + " ");
+        }
+        print("\n");
+    }
+}
+
+function drawNeck() {
+    for (let z = 1; z <= 2; z++)
+        print("          N N\n");
+}
+
+function drawBody(computerTailCount) {
+    print("     BBBBBBBBBBBB\n");
+    for (let z = 1; z <= 2; z++)
+        print("     B          B\n");
+    if (computerTailCount === 1)
+        print("TTTTTB          B\n");
+    print("     BBBBBBBBBBBB\n");
+}
+
+function drawFeet(computerFeetCount) {
+    for (let z = 1; z <= 2; z++) {
+        print(tab(5));
+        for (let x = 1; x <= computerFeetCount; x++)
+            print(" L");
+        print("\n");
+    }
+}
+
+function drawBug(playerFeelerCount, playerHeadCount, playerNeckCount, playerBodyCount, playerTailCount, playerFeetCount, feelerCharacter) {
+    if (playerFeelerCount !== 0) {
+        drawFeelers(playerFeelerCount, feelerCharacter);
+    }
+    if (playerHeadCount !== 0)
+        draw_head();
+    if (playerNeckCount !== 0) {
+        drawNeck();
+    }
+    if (playerBodyCount !== 0) {
+        drawBody(playerTailCount)
+    }
+    if (playerFeetCount !== 0) {
+        drawFeet(playerFeetCount);
+    }
+    for (let z = 1; z <= 4; z++)
+        print("\n");
+}
+
 // Main program
 async function main()
 {
@@ -60,25 +117,26 @@ async function main()
     print("\n");
     print("\n");
     print("\n");
-    a = 0;
-    b = 0;
-    h = 0;
-    l = 0;
-    n = 0;
-    p = 0;
-    q = 0;
-    r = 0;
-    s = 0;
-    t = 0;
-    u = 0;
-    v = 0;
-    y = 0;
+    let playerFeelerCount = 0;
+    let playerHeadCount = 0;
+    let playerNeckCount = 0;
+    let playerBodyCount = 0;
+    let playerFeetCount = 0;
+    let playerTailCount = 0;
+
+    let computerFeelerCount = 0;
+    let computerHeadCount = 0;
+    let computerNeckCount = 0;
+    let computerBodyCount = 0;
+    let computerTailCount = 0;
+    let computerFeetCount = 0;
+
     print("THE GAME BUG\n");
     print("I HOPE YOU ENJOY THIS GAME.\n");
     print("\n");
     print("DO YOU WANT INSTRUCTIONS");
-    str = await input();
-    if (str != "NO") {
+    const instructionsRequired = await input();
+    if (instructionsRequired.toUpperCase() !== "NO") {
         print("THE OBJECT OF BUG IS TO FINISH YOUR BUG BEFORE I FINISH\n");
         print("MINE. EACH NUMBER STANDS FOR A PART OF THE BUG BODY.\n");
         print("I WILL ROLL THE DIE FOR YOU, TELL YOU WHAT I ROLLED FOR YOU\n");
@@ -98,30 +156,32 @@ async function main()
         print("\n");
         print("\n");
     }
-    while (y == 0) {
-        z = Math.floor(6 * Math.random() + 1);
-        c = 1;
-        print("YOU ROLLED A " + z + "\n");
-        switch (z) {
+
+    let gameInProgress = true;
+    while (gameInProgress) {
+        let dieRoll = Math.floor(6 * Math.random() + 1);
+        let partFound = false;
+        print("YOU ROLLED A " + dieRoll + "\n");
+        switch (dieRoll) {
             case 1:
                 print("1=BODY\n");
-                if (b == 0) {
+                if (playerBodyCount === 0) {
                     print("YOU NOW HAVE A BODY.\n");
-                    b = 1;
-                    c = 0;
+                    playerBodyCount = 1;
+                    partFound = true;
                 } else {
                     print("YOU DO NOT NEED A BODY.\n");
                 }
                 break;
             case 2:
                 print("2=NECK\n");
-                if (n == 0) {
-                    if (b == 0) {
+                if (playerNeckCount === 0) {
+                    if (playerBodyCount === 0) {
                         print("YOU DO NOT HAVE A BODY.\n");
                     } else {
                         print("YOU NOW HAVE A NECK.\n");
-                        n = 1;
-                        c = 0;
+                        playerNeckCount = 1;
+                        partFound = true;
                     }
                 } else {
                     print("YOU DO NOT NEED A NECK.\n");
@@ -129,219 +189,158 @@ async function main()
                 break;
             case 3:
                 print("3=HEAD\n");
-                if (n == 0) {
+                if (playerNeckCount === 0) {
                     print("YOU DO NOT HAVE A NECK.\n");
-                } else if (h == 0) {
+                } else if (playerHeadCount === 0) {
                     print("YOU NEEDED A HEAD.\n");
-                    h = 1;
-                    c = 0;
+                    playerHeadCount = 1;
+                    partFound = true;
                 } else {
                     print("YOU HAVE A HEAD.\n");
                 }
                 break;
             case 4:
                 print("4=FEELERS\n");
-                if (h == 0) {
+                if (playerHeadCount === 0) {
                     print("YOU DO NOT HAVE A HEAD.\n");
-                } else if (a == 2) {
+                } else if (playerFeelerCount === 2) {
                     print("YOU HAVE TWO FEELERS ALREADY.\n");
                 } else {
                     print("I NOW GIVE YOU A FEELER.\n");
-                    a++;
-                    c = 0;
+                    playerFeelerCount ++;
+                    partFound = true;
                 }
                 break;
             case 5:
                 print("5=TAIL\n");
-                if (b == 0) {
+                if (playerBodyCount === 0) {
                     print("YOU DO NOT HAVE A BODY.\n");
-                } else if (t == 1) {
+                } else if (playerTailCount === 1) {
                     print("YOU ALREADY HAVE A TAIL.\n");
                 } else {
                     print("I NOW GIVE YOU A TAIL.\n");
-                    t++;
-                    c = 0;
+                    playerTailCount++;
+                    partFound = true;
                 }
                 break;
             case 6:
                 print("6=LEG\n");
-                if (l == 6) {
+                if (playerFeetCount === 6) {
                     print("YOU HAVE 6 FEET ALREADY.\n");
-                } else if (b == 0) {
+                } else if (playerBodyCount === 0) {
                     print("YOU DO NOT HAVE A BODY.\n");
                 } else {
-                    l++;
-                    c = 0;
-                    print("YOU NOW HAVE " + l + " LEGS.\n");
+                    playerFeetCount++;
+                    partFound = true;
+                    print("YOU NOW HAVE " + playerFeetCount + " LEGS.\n");
                 }
                 break;
         }
-        x = Math.floor(6 * Math.random() + 1) ;
+        dieRoll = Math.floor(6 * Math.random() + 1) ;
         print("\n");
-        date = new Date().valueOf;
-        while (date - new Date().valueOf < 1000000) ;
-        print("I ROLLED A " + x + "\n");
-        switch (x) {
+        scrollToBottom();
+        await waitNSeconds(1);
+
+        print("I ROLLED A " + dieRoll + "\n");
+        switch (dieRoll) {
             case 1:
                 print("1=BODY\n");
-                if (p == 1) {
+                if (computerBodyCount === 1) {
                     print("I DO NOT NEED A BODY.\n");
                 } else {
                     print("I NOW HAVE A BODY.\n");
-                    c = 0;
-                    p = 1;
+                    partFound = true;
+                    computerBodyCount = 1;
                 }
                 break;
             case 2:
                 print("2=NECK\n");
-                if (q == 1) {
+                if (computerNeckCount === 1) {
                     print("I DO NOT NEED A NECK.\n");
-                } else if (p == 0) {
+                } else if (computerBodyCount === 0) {
                     print("I DO NOT HAVE A BODY.\n");
                 } else {
                     print("I NOW HAVE A NECK.\n");
-                    q = 1;
-                    c = 0;
+                    computerNeckCount = 1;
+                    partFound = true;
                 }
                 break;
             case 3:
                 print("3=HEAD\n");
-                if (q == 0) {
+                if (computerNeckCount === 0) {
                     print("I DO NOT HAVE A NECK.\n");
-                } else if (r == 1) {
+                } else if (computerHeadCount === 1) {
                     print("I DO NOT NEED A HEAD.\n");
                 } else {
                     print("I NEEDED A HEAD.\n");
-                    r = 1;
-                    c = 0;
+                    computerHeadCount = 1;
+                    partFound = true;
                 }
                 break;
             case 4:
                 print("4=FEELERS\n");
-                if (r == 0) {
+                if (computerHeadCount === 0) {
                     print("I DO NOT HAVE A HEAD.\n");
-                } else if (s == 2) {
+                } else if (computerFeelerCount === 2) {
                     print("I HAVE 2 FEELERS ALREADY.\n");
                 } else {
                     print("I GET A FEELER.\n");
-                    s++;
-                    c = 0;
+                    computerFeelerCount++;
+                    partFound = true;
                 }
                 break;
             case 5:
                 print("5=TAIL\n");
-                if (p == 0) {
+                if (computerBodyCount === 0) {
                     print("I DO NOT HAVE A BODY.\n");
-                } else if (u == 1) {
+                } else if (computerTailCount === 1) {
                     print("I DO NOT NEED A TAIL.\n");
                 } else {
                     print("I NOW HAVE A TAIL.\n");
-                    u = 1;
-                    c = 0;
+                    computerTailCount = 1;
+                    partFound = true;
                 }
                 break;
             case 6:
                 print("6=LEGS\n");
-                if (v == 6) {
+                if (computerFeetCount === 6) {
                     print("I HAVE 6 FEET.\n");
-                } else if (p == 0) {
+                } else if (computerBodyCount === 0) {
                     print("I DO NOT HAVE A BODY.\n");
                 } else {
-                    v++;
-                    c = 0;
-                    print("I NOW HAVE " + v + " LEGS.\n");
+                    computerFeetCount++;
+                    partFound = true;
+                    print("I NOW HAVE " + computerFeetCount + " LEGS.\n");
                 }
                 break;
         }
-        if (a == 2 && t == 1 && l == 6) {
+        if (playerFeelerCount === 2 && playerTailCount === 1 && playerFeetCount === 6) {
             print("YOUR BUG IS FINISHED.\n");
-            y++;
+            gameInProgress = false;
         }
-        if (s == 2 && p == 1 && v == 6) {
+        if (computerFeelerCount === 2 && computerBodyCount === 1 && computerFeetCount === 6) {
             print("MY BUG IS FINISHED.\n");
-            y += 2;
+            gameInProgress = false;
         }
-        if (c == 1)
+        if (!partFound)
             continue;
         print("DO YOU WANT THE PICTURES");
-        str = await input();
-        if (str == "NO")
+        const showPictures = await input();
+        if (showPictures.toUpperCase() === "NO")
             continue;
         print("*****YOUR BUG*****\n");
         print("\n");
         print("\n");
-        if (a != 0) {
-            for (z = 1; z <= 4; z++) {
-                print(tab(10));
-                for (x = 1; x <= a; x++) {
-                    print("A ");
-                }
-                print("\n");
-            }
-        }
-        if (h != 0)
-            draw_head();
-        if (n != 0) {
-            for (z = 1; z <= 2; z++)
-                print("          N N\n");
-        }
-        if (b != 0) {
-            print("     BBBBBBBBBBBB\n");
-            for (z = 1; z <= 2; z++)
-                print("     B          B\n");
-            if (t == 1)
-                print("TTTTTB          B\n");
-            print("     BBBBBBBBBBBB\n");
-        }
-        if (l != 0) {
-            for (z = 1; z <= 2; z++) {
-                print(tab(5));
-                for (x = 1; x <= l; x++)
-                    print(" L");
-                print("\n");
-            }
-        }
-        for (z = 1; z <= 4; z++)
-            print("\n");
+        drawBug(playerFeelerCount, playerHeadCount, playerNeckCount, playerBodyCount, playerTailCount, playerFeetCount, "A");
         print("*****MY BUG*****\n");
         print("\n");
         print("\n");
-        print("\n");
-        if (s != 0) {
-            for (z = 1; z <= 4; z++) {
-                print(tab(10));
-                for (x = 1; x <= s; x++) {
-                    print("F ");
-                }
-                print("\n");
-            }
-        }
-        if (r != 0)
-            draw_head();
-        if (q != 0) {
-            for (z = 1; z <= 2; z++)
-                print("          N N\n");
-        }
-        if (p != 0) {
-            print("     BBBBBBBBBBBB\n");
-            for (z = 1; z <= 2; z++)
-                print("     B          B\n");
-            if (u == 1)
-                print("TTTTTB          B\n");
-            print("     BBBBBBBBBBBB\n");
-        }
-        if (v != 0) {
-            for (z = 1; z <= 2; z++) {
-                print(tab(5));
-                for (x = 1; x <= v; x++)
-                    print(" L");
-                print("\n");
-            }
-        }
-        for (z = 1; z <= 4; z++)
+        drawBug(computerFeelerCount, computerHeadCount, computerNeckCount, computerBodyCount, computerTailCount, computerFeetCount, "F");
+        for (let z = 1; z <= 4; z++)
             print("\n");
     }
     print("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!\n");
+    scrollToBottom();
 }
 
 main();
