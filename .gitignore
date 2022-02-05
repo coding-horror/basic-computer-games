@@ -1,3 +1,18 @@
+.local/
+.vscode/
+.gradle/
+node_modules/
+buildJvm/bin
+buildJvm/*/build/
+
+.classpath
+.project
+.settings
+.metadata
+*.iml
+*.ipr
+
+*.class
 */.vs
 *.suo
 
@@ -11,6 +26,8 @@ obj/
 out/
 
 *.py[co]
+
 Pipfile
 
 .DS_Store
+.vs/

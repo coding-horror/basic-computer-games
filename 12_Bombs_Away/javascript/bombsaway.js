@@ -45,6 +45,8 @@ function tab(space)
 // Main program
 async function main()
 {
+    s = 0;
+    t = 0;
     while (1) {
         print("YOU ARE A PILOT IN A WORLD WAR II BOMBER.\n");
         while (1) {

@@ -36,7 +36,7 @@ class Deck:
 
     def build(self):
         for suit in ['\u2665', '\u2666', '\u2663', '\u2660']:
-            for rank in range(1, 14):
+            for rank in range(2, 15):
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self):

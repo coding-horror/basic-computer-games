@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game", "Game.csproj", "{8F7C450E-5F3A-45BA-9DB9-329744214931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bullfight", "Bullfight.csproj", "{502A672C-F7D7-4A85-973A-B5EA8761008A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8F7C450E-5F3A-45BA-9DB9-329744214931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F7C450E-5F3A-45BA-9DB9-329744214931}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F7C450E-5F3A-45BA-9DB9-329744214931}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F7C450E-5F3A-45BA-9DB9-329744214931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{502A672C-F7D7-4A85-973A-B5EA8761008A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{502A672C-F7D7-4A85-973A-B5EA8761008A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{502A672C-F7D7-4A85-973A-B5EA8761008A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{502A672C-F7D7-4A85-973A-B5EA8761008A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
