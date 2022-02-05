@@ -20,7 +20,7 @@ func main() {
 	initTurnCounter(&game)
 	printIntro()
 	setSecretNumber(&game)
-	fmt.Println("Secret Number: ", game.secret) //debug
+	//fmt.Println("Secret Number: ", game.secret) //debug
 	playTurn(&game)
 }
 
@@ -99,7 +99,7 @@ func printIntro() {
 }
 
 func userTurn(game *Game) bool {
-	fmt.Printf("Guess #%v	?", game.turnCounter)
+	fmt.Printf("Guess #%v	? ", game.turnCounter)
 	var userGuessString string
 	fmt.Scanln(&userGuessString)
 
