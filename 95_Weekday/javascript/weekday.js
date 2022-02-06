@@ -3,10 +3,18 @@
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
 //
 
+/**
+ * Print given string to the end of the "output" element.
+ * @param str
+ */
 function print(str) {
     document.getElementById("output").appendChild(document.createTextNode(str));
 }
 
+/**
+ * Obtain user input
+ * @returns {Promise<String>}
+ */
 function input() {
     return new Promise(function (resolve) {
         const input_element = document.createElement("INPUT");
@@ -28,13 +36,26 @@ function input() {
     });
 }
 
-function tab(space) {
+/**
+ * Create a string consisting of the given number of spaces
+ * @param spaceCount
+ * @returns {string}
+ */
+function tab(spaceCount) {
     let str = "";
-    while (space-- > 0)
+    while (spaceCount-- > 0)
         str += " ";
     return str;
 }
 
+const MONTHS_PER_YEAR = 12;
+const DAYS_PER_COMMON_YEAR = 365;
+const DAYS_PER_IDEAL_MONTH = 30;
+const MAXIMUM_DAYS_PER_MONTH = 31;
+
+/**
+ * Date representation.
+ */
 class DateStruct {
     #year;
     #month;
@@ -64,17 +85,13 @@ class DateStruct {
         return this.#day;
     }
 
-    clone = () => {
-        return new DateStruct(this.#year, this.#month, this.#day)
-    }
-
     /**
      * Determine if the date could be a Gregorian date.
      * Be aware the Gregorian calendar was not introduced in all places at once,
      * see https://en.wikipedia.org/wiki/Gregorian_calendar
      * @returns {boolean} true if date could be Gregorian; otherwise false.
      */
-    isGregorianDate = function () {
+    isGregorianDate() {
         let result = false;
         if (this.#year > 1582) {
             result = true;
@@ -92,11 +109,15 @@ class DateStruct {
      * Returns a US formatted date, i.e. Month/Day/Year.
      * @returns {string}
      */
-    toString = function () {
+    toString() {
         return this.#month + "/" + this.#day + "/" + this.#year;
     }
 }
 
+/**
+ * Duration representation.
+ * Note: this class only handles positive durations well
+ */
 class Duration {
     #years;
     #months;
@@ -112,6 +133,7 @@ class Duration {
         this.#years = years;
         this.#months = months;
         this.#days = days;
+        this.#fixRanges();
     }
 
     get years() {
@@ -126,8 +148,8 @@ class Duration {
         return this.#days;
     }
 
-    clone = () => {
-        return new Duration(this.#years, this.#months, this.#days)
+    clone() {
+        return new Duration(this.#years, this.#months, this.#days);
     }
 
     /**
@@ -135,21 +157,28 @@ class Duration {
      * This is a naive calculation which assumes all months are 30 days.
      * @param {Duration} timeToRemove
      */
-    remove = (timeToRemove) => {
+    remove(timeToRemove) {
         this.#years -= timeToRemove.years;
         this.#months -= timeToRemove.months;
         this.#days -= timeToRemove.days;
+        this.#fixRanges();
+    }
+
+    /**
+     * Move days and months into expected range.
+     */
+    #fixRanges() {
         if (this.#days < 0) {
-            this.#days += 30;
+            this.#days += DAYS_PER_IDEAL_MONTH;
             this.#months--;
         }
         if (this.#months < 0) {
-            this.#months += 12;
+            this.#months += MONTHS_PER_YEAR;
             this.#years--;
         }
     }
 
-    toString = () => {
+    toString() {
         return this.#years + "/" + this.#months + "/" + this.#days;
     }
 
@@ -164,14 +193,6 @@ class Duration {
         let years = date1.year - date2.year;
         let months = date1.month - date2.month;
         let days = date1.day - date2.day;
-        if (days < 0) {
-            months--;
-            days += 30;
-        }
-        if (months < 0) {
-            years--;
-            months += 12;
-        }
         return new Duration(years, months, days);
     }
 }
@@ -202,10 +223,10 @@ async function readDateElements() {
  */
 function time_spent(factor, dayCount) {
     let totalDays = Math.floor(factor * dayCount);
-    const years = Math.floor(totalDays / 365);
-    totalDays -= years * 365;
-    const months = Math.floor(totalDays / 30);
-    const days = totalDays - (months * 30);
+    const years = Math.floor(totalDays / DAYS_PER_COMMON_YEAR);
+    totalDays -= years * DAYS_PER_COMMON_YEAR;
+    const months = Math.floor(totalDays / DAYS_PER_IDEAL_MONTH);
+    const days = totalDays - (months * DAYS_PER_IDEAL_MONTH);
     return new Duration(years, months, days);
 }
 
@@ -309,7 +330,7 @@ function getDayOfWeekText(date) {
  * @returns {number}
  */
 function getNormalisedDay(date) {
-    return (date.year * 12 + date.month) * 31 + date.day;
+    return (date.year * MONTHS_PER_YEAR + date.month) * MAXIMUM_DAYS_PER_MONTH + date.day;
 }
 
 // Main control section
@@ -356,7 +377,7 @@ async function main() {
                 print("                        \t-----\t------\t----\n");
                 print("YOUR AGE (IF BIRTHDATE) \t");
                 printTimeSpent(differenceBetweenDates);
-                const approximateDaysBetween = (differenceBetweenDates.years * 365) + (differenceBetweenDates.months * 30) + differenceBetweenDates.days + Math.floor(differenceBetweenDates.months / 2);
+                const approximateDaysBetween = (differenceBetweenDates.years * DAYS_PER_COMMON_YEAR) + (differenceBetweenDates.months * DAYS_PER_IDEAL_MONTH) + differenceBetweenDates.days + Math.floor(differenceBetweenDates.months / 2);
                 // Create an object containing time unaccounted for
                 const unaccountedTime = differenceBetweenDates.clone();
 
@@ -372,7 +393,7 @@ async function main() {
 
                 unaccountedTime.remove(eatenTimeSpent);
                 if (unaccountedTime.years <= 3) {
-                    print("YOU HAVE PLAYED \t\t\t");
+                    print("YOU HAVE PLAYED \t\t");
                 } else if (unaccountedTime.years <= 9) {
                     print("YOU HAVE PLAYED/STUDIED \t\t");
                 } else {
@@ -382,12 +403,8 @@ async function main() {
                 printTimeSpent(workPlayTimeSpent);
 
                 unaccountedTime.remove(workPlayTimeSpent);
-                if (unaccountedTime.months === 12) {
-                    unaccountedTime.years++;
-                    unaccountedTime.months = 0;
-                }
                 print("YOU HAVE RELAXED \t\t");
-                printTimeSpent(unaccountedTime)
+                printTimeSpent(unaccountedTime);
 
                 const retirementYear = dateOfBirth.year + 65;
                 print("\n");
