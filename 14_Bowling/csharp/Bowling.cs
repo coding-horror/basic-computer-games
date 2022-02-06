@@ -89,7 +89,7 @@ namespace Bowling
                                 {
                                     Utility.PrintString("STRIKE!!!!!\a\a\a\a");
                                     // No second roll
-                                    ball = 0;
+                                    ball = 0; 
                                     gameResults[player].Results[frame].PinsBall2 = pinsDownAfterRoll;
                                     gameResults[player].Results[frame].Score = FrameResult.Points.Strike;
                                 }
