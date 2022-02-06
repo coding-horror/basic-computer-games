@@ -52,6 +52,8 @@ const MONTHS_PER_YEAR = 12;
 const DAYS_PER_COMMON_YEAR = 365;
 const DAYS_PER_IDEALISED_MONTH = 30;
 const MAXIMUM_DAYS_PER_MONTH = 31;
+// In a common (non-leap) year the day of the week for the first of each month moves by the following amounts.
+const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
 
 /**
  * Date representation.
@@ -121,9 +123,6 @@ class DateStruct {
      * @returns {number} Value between 1 and 7 representing Sunday to Saturday.
      */
     getDayOfWeek() {
-        // In a common (non-leap) year the day of the week for the first of each month moves by the following amounts.
-        const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
-
         // Calculate an offset based on the century part of the year.
         const centuriesSince1500 = Math.floor((this.year - 1500) / 100);
         let centuryOffset = centuriesSince1500 * 5 + (centuriesSince1500 + 3) / 4;
