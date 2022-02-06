@@ -52,8 +52,6 @@ const MONTHS_PER_YEAR = 12;
 const DAYS_PER_COMMON_YEAR = 365;
 const DAYS_PER_IDEALISED_MONTH = 30;
 const MAXIMUM_DAYS_PER_MONTH = 31;
-// In a common (non-leap) year the day of the week for the first of each month moves by the following amounts.
-const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
 
 /**
  * Date representation.
@@ -123,6 +121,9 @@ class DateStruct {
      * @returns {number} Value between 1 and 7 representing Sunday to Saturday.
      */
     getDayOfWeek() {
+        // In a common (non-leap) year the day of the week for the first of each month moves by the following amounts.
+        const COMMON_YEAR_MONTH_OFFSET = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
+
         // Calculate an offset based on the century part of the year.
         const centuriesSince1500 = Math.floor((this.year - 1500) / 100);
         let centuryOffset = centuriesSince1500 * 5 + (centuriesSince1500 + 3) / 4;
@@ -235,6 +236,29 @@ class Duration {
     }
 
     /**
+     * Computes an approximation of the days covered by the duration.
+     * The calculation assumes all years are 365 days, months are 30 days each,
+     * and adds on an extra bit the more months that have passed.
+     * @returns {number}
+     */
+    getApproximateDays() {
+        return (
+            (this.#years * DAYS_PER_COMMON_YEAR)
+            + (this.#months * DAYS_PER_IDEALISED_MONTH)
+            + this.#days
+            + Math.floor(this.#months / 2)
+        );
+    }
+
+    /**
+     * Returns a formatted duration with tab separated values, i.e. Years\tMonths\tDays.
+     * @returns {string}
+     */
+    toString() {
+        return this.#years + "\t" + this.#months + "\t" + this.#days;
+    }
+
+    /**
      * Determine approximate Duration between two dates.
      * This is a naive calculation which assumes all months are 30 days.
      * @param {DateStruct} date1
@@ -263,10 +287,6 @@ class Duration {
         const days = totalDays - (months * DAYS_PER_IDEALISED_MONTH);
         return new Duration(years, months, days);
     }
-
-    toString() {
-        return this.#years + "/" + this.#months + "/" + this.#days;
-    }
 }
 
 // Main control section
@@ -283,14 +303,6 @@ async function main() {
         const day = parseInt(dateString.substr(dateString.indexOf(",") + 1));
         const year = parseInt(dateString.substr(dateString.lastIndexOf(",") + 1));
         return new DateStruct(year, month, day);
-    }
-
-    /**
-     * Print the supplied duration.
-     * @param {Duration} duration
-     */
-    function printTimeSpent(duration) {
-        print(duration.years + "\t" + duration.months + "\t" + duration.days + "\n");
     }
 
     /**
@@ -371,36 +383,34 @@ async function main() {
                 }
                 print("                        \tYEARS\tMONTHS\tDAYS\n");
                 print("                        \t-----\t------\t----\n");
-                print("YOUR AGE (IF BIRTHDATE) \t");
-                printTimeSpent(differenceBetweenDates);
-                const approximateDaysBetween = (differenceBetweenDates.years * DAYS_PER_COMMON_YEAR) + (differenceBetweenDates.months * DAYS_PER_IDEALISED_MONTH) + differenceBetweenDates.days + Math.floor(differenceBetweenDates.months / 2);
-                // Create an object containing time unaccounted for
+                print("YOUR AGE (IF BIRTHDATE) \t" + differenceBetweenDates + "\n");
+
+                const approximateDaysBetween = differenceBetweenDates.getApproximateDays();
                 const unaccountedTime = differenceBetweenDates.clone();
 
-                // Calculate time spent in the following functions.
-                print("YOU HAVE SLEPT \t\t\t");
+                // 35% sleeping
                 const sleepTimeSpent = Duration.fromDays(approximateDaysBetween, 0.35);
-                printTimeSpent(sleepTimeSpent);
-
+                print("YOU HAVE SLEPT \t\t\t" + sleepTimeSpent + "\n");
                 unaccountedTime.remove(sleepTimeSpent);
-                print("YOU HAVE EATEN \t\t\t");
+
+                // 17% eating
                 const eatenTimeSpent = Duration.fromDays(approximateDaysBetween, 0.17);
-                printTimeSpent(eatenTimeSpent);
-
+                print("YOU HAVE EATEN \t\t\t" + eatenTimeSpent + "\n");
                 unaccountedTime.remove(eatenTimeSpent);
-                if (unaccountedTime.years <= 3) {
-                    print("YOU HAVE PLAYED \t\t");
-                } else if (unaccountedTime.years <= 9) {
-                    print("YOU HAVE PLAYED/STUDIED \t");
-                } else {
-                    print("YOU HAVE WORKED/PLAYED \t\t");
-                }
-                const workPlayTimeSpent = Duration.fromDays(approximateDaysBetween, 0.23);
-                printTimeSpent(workPlayTimeSpent);
 
+                // 23% working, studying or playing
+                const workPlayTimeSpent = Duration.fromDays(approximateDaysBetween, 0.23);
+                if (unaccountedTime.years <= 3) {
+                    print("YOU HAVE PLAYED \t\t" + workPlayTimeSpent + "\n");
+                } else if (unaccountedTime.years <= 9) {
+                    print("YOU HAVE PLAYED/STUDIED \t" + workPlayTimeSpent + "\n");
+                } else {
+                    print("YOU HAVE WORKED/PLAYED \t\t" + workPlayTimeSpent + "\n");
+                }
                 unaccountedTime.remove(workPlayTimeSpent);
-                print("YOU HAVE RELAXED \t\t");
-                printTimeSpent(unaccountedTime);
+
+                // Remaining time spent relaxing
+                print("YOU HAVE RELAXED \t\t" + unaccountedTime + "\n");
 
                 const retirementYear = dateOfBirth.year + 65;
                 print("\n");
