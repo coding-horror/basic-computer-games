@@ -7,7 +7,8 @@ public class DeckTest {
     @Test
     void testInit() {
         // When
-        Deck deck = new Deck();
+        Deck deck = new Deck((cards) -> cards);
+        deck.reshuffle();
 
         // Then
         long nCards = deck.size();
