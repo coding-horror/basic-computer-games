@@ -39,11 +39,11 @@ function input() {
 async function askYesOrNo(question) {
     while (1) {
         print(question);
-        const str = await input();
-        if (str == "YES") {
+        const str = (await input()).toUpperCase();
+        if (str === "YES") {
             return true;
         }
-        else if (str == "NO") {
+        else if (str === "NO") {
             return false;
         }
         else {
