@@ -32,63 +32,70 @@ namespace Games.Common.IO
 
         public (Token, bool) Consume(Queue<char> characters)
         {
-            var token = Token.Create();
+            var tokenBuilder = new Token.Builder();
             var state = ITokenizerState.LookForStartOfToken;
 
             while (characters.TryDequeue(out var character))
             {
-                (state, token) = state.Consume(character, token);
-                if (state is AtEndOfTokenState) { return (token, false); }
+                (state, tokenBuilder) = state.Consume(character, tokenBuilder);
+                if (state is AtEndOfTokenState) { return (tokenBuilder.Build(), false); }
             }
 
-            return (token, true);
+            return (tokenBuilder.Build(), true);
         }
 
         private interface ITokenizerState
         {
             public static ITokenizerState LookForStartOfToken { get; } = new LookForStartOfTokenState();
 
-            (ITokenizerState, Token) Consume(char character, Token token);
+            (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder);
         }
 
         private struct LookForStartOfTokenState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) =>
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
                 character switch
                 {
-                    Separator => (new AtEndOfTokenState(), token),
-                    Quote => (new InQuotedTokenState(), Token.CreateQuoted()),
-                    _ when char.IsWhiteSpace(character) => (this, token),
-                    _ => (new InTokenState(), token.Append(character))
+                    Separator => (new AtEndOfTokenState(), tokenBuilder),
+                    Quote => (new InQuotedTokenState(), tokenBuilder.SetIsQuoted()),
+                    _ when char.IsWhiteSpace(character) => (this, tokenBuilder),
+                    _ => (new InTokenState(), tokenBuilder.Append(character))
                 };
         }
 
         private struct InTokenState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) =>
-                character == Separator ? (new AtEndOfTokenState(), token) : (this, token.Append(character));
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
+                character == Separator
+                    ? (new AtEndOfTokenState(), tokenBuilder)
+                    : (this, tokenBuilder.Append(character));
         }
 
         private struct InQuotedTokenState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) =>
-                character == Quote ? (new ExpectSeparatorState(), token) : (this, token.Append(character));
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
+                character == Quote
+                    ? (new ExpectSeparatorState(), tokenBuilder)
+                    : (this, tokenBuilder.Append(character));
         }
 
         private struct ExpectSeparatorState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) =>
-                character == Separator ? (new AtEndOfTokenState(), token) : (new IgnoreRestOfLineState(), token);
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
+                character == Separator
+                    ? (new AtEndOfTokenState(), tokenBuilder)
+                    : (new IgnoreRestOfLineState(), tokenBuilder);
         }
 
         private struct IgnoreRestOfLineState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) => (this, token);
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
+                (this, tokenBuilder);
         }
 
         private struct AtEndOfTokenState : ITokenizerState
         {
-            public (ITokenizerState, Token) Consume(char character, Token token) =>
+            public (ITokenizerState, Token.Builder) Consume(char character, Token.Builder tokenBuilder) =>
                 throw new InvalidOperationException();
         }
     }
