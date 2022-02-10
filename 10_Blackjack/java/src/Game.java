@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.Reader;
-import java.io.Writer;
 
 public class Game {
     
@@ -74,8 +72,10 @@ public class Game {
 
 			printInitialDeal(players, dealer);
 
+			// TODO if dealer has an ACE, prompt "ANY INSURANCE" and deal with insurance
+
 			for(Player player : players){
-				play(player, deck);
+				play(player);
 			}
 
 			// only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
@@ -122,23 +122,72 @@ public class Game {
 	 * @param player
 	 * @param deck
 	 */
-	private void play(Player player, Deck deck) {
-		// TODO implement play(player, deck)
-		// If the player hits, deal another card. If the player stays, return. If the player busts, return.
-		// delegate to evaluateHand(hand) to determine whether the player busted.
-		// Use promptBoolean and promptInt as examples to start with for prompting actions
-		// initially prompt with "PLAYER [x] ?" where x is the player number and accept H, S, D, or /
-		// after hitting, prompt "RECEIVED A  [c]  HIT? " where c is the card received and only accept H or S
-		// handle splitting and doubling down, or feel free to skip implementing
-		// split/double down for now, but leave a todo if that is unfinished
-		// after the first pass.
+	protected void play(Player player) {
+		String action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
+		while(true){
+			if(action.equalsIgnoreCase("H")){ // HIT
+				Card c = deck.deal();
+				player.dealCard(c);
+				if(scoreHand(player.getHand()) > 21){
+					userIo.println("...BUSTED");
+					return;
+				}
+				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
+			} else if(action.equalsIgnoreCase("S")){ // STAY
+				return;
+			} else if(player.getHand().size() == 2 && action.equalsIgnoreCase("D")) { // DOUBLE DOWN
+				player.setCurrentBet(player.getCurrentBet() * 2);
+				player.dealCard(deck.deal());
+				return;
+			} else if(player.getHand().size() == 2 && action.equalsIgnoreCase("/")) { // SPLIT
+				if(player.getHand().get(0).equals(player.getHand().get(1))){
+					// TODO split = split into two hands that play separately. only allowed for pairs
+					// TODO implement player.split that takes one card from 'hand' and adds it to a new 'splitHand' field.
+					// TODO determine if the original code allowed re-splitting, splitting on aces, or doubling down on a split and if it requires cards
+				} else {
+					userIo.println("SPLITTING NOT ALLOWED");
+					action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
+				}
+			} else {
+				if(player.getHand().size() > 2) {
+					action = userIo.prompt("TYPE H, OR S, PLEASE");
+				} else {
+					action = userIo.prompt("TYPE H,S,D, OR /, PLEASE");
+				}
+			}
+		}
+
 	}
 
-	private int evaluateHand(LinkedList<Card> hand){
-		// TODO implement evaluateHand
-		//   'int' is maybe the wrong return type. We need to indicate a bust and somehow communicate the ambiguity of aces.
-		//   OR maybe we stick with 'int' and use -1 for a bust and otherwise determine the value of aces that gives the highest non-bust score.
-		//   but note that we also need a distinction between a natural Blackjack (21 in only 2 cards) and a 21 with more than 2 cards (the natural blackjack wins)
+	/**
+	 * Calculates the value of a hand.
+	 * 
+	 * @param hand the hand to evaluate
+	 * @return The numeric value of a hand.
+	 */
+	protected int scoreHand(LinkedList<Card> hand){
+		int nAces = (int) hand.stream().filter(c -> c.getValue() == 1).count();
+		int value = hand.stream()
+			.mapToInt(Card::getValue)
+			.filter(v -> v != 1) // start without aces
+			.map(v -> v > 10 ? 10 : v) // all face cards are worth 10. The 'expr ? a : b' syntax is called the 'ternary operator'
+			.sum();
+		value += nAces; // start by treating all aces as 1
+		if(nAces > 0 && value <= 11) {
+			value += 10; // We can use one of the aces to an 11
+			// You can never use more than one ace as 11, since that would be 22 and a bust.
+		}
+		return value;
+	}
+
+	/**
+	 * Compares two hands accounting for natural blackjacks
+	 * 
+	 * @param handA hand to compare
+	 * @param handB other hand to compare
+	 * @return a negative integer, zero, or a positive integer as handA is less than, equal to, or greater than handB.
+	 */
+	private int compareHands(LinkedList<Card> handA, LinkedList<Card> handB) {
 		return 0;
 	}
 

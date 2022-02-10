@@ -58,6 +58,11 @@ public class UserIo {
 		}
 	}
 
+	public String prompt(String prompt) {
+		print(prompt + "? ");
+		return readLine();
+	}
+
 	/**
 	 * Prompts the user for a "Yes" or "No" answer.
 	 * @param prompt The prompt to display to the user on STDOUT.
