@@ -1,3 +1,4 @@
+using System.Linq;
 using FluentAssertions;
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Games.Common.IO
         {
             var result = Tokenizer.ParseTokens(input);
 
-            result.Should().BeEquivalentTo(expected);
+            result.Select(t => t.ToString()).Should().BeEquivalentTo(expected);
         }
 
         public static TheoryData<string, string[]> TokenizerTestCases() => new()
@@ -26,8 +27,8 @@ namespace Games.Common.IO
             { "\"\"", new[] { "" } },
             { ",", new[] { "", "" } },
             { " foo  ,bar", new[] { "foo", "bar" } },
-            { "\"\"bc,de", new[] { "", "de" } },
-            { "a\"b,\" c,d\"e, f ,,g", new[] { "a\"b", " c,d", "f", "", "g" } }
+            { "\"a\"bc,de", new[] { "a" } },
+            { "a\"b,\" c,d\", f ,,g", new[] { "a\"b", " c,d", "f", "", "g" } }
         };
     }
 }

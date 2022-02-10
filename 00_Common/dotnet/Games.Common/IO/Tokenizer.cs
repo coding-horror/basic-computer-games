@@ -12,14 +12,14 @@ namespace Games.Common.IO
 
         private Tokenizer(string input) => _characters = new Queue<char>(input);
 
-        public static IEnumerable<string> ParseTokens(string input)
+        public static IEnumerable<Token> ParseTokens(string input)
         {
             if (input is null) { throw new ArgumentNullException(nameof(input)); }
 
             return new Tokenizer(input).ParseTokens();
         }
 
-        private IEnumerable<string> ParseTokens()
+        private IEnumerable<Token> ParseTokens()
         {
             while (true)
             {
@@ -72,13 +72,18 @@ namespace Games.Common.IO
         private struct InQuotedTokenState : ITokenizerState
         {
             public (ITokenizerState, Token) Consume(char character, Token token) =>
-                character == Quote ? (new LookForSeparatorState(), token) : (this, token.Append(character));
+                character == Quote ? (new ExpectSeparatorState(), token) : (this, token.Append(character));
         }
 
-        private struct LookForSeparatorState : ITokenizerState
+        private struct ExpectSeparatorState : ITokenizerState
         {
             public (ITokenizerState, Token) Consume(char character, Token token) =>
-                (character == Separator ? new AtEndOfTokenState() : this, token);
+                character == Separator ? (new AtEndOfTokenState(), token) : (new IgnoreRestOfLineState(), token);
+        }
+
+        private struct IgnoreRestOfLineState : ITokenizerState
+        {
+            public (ITokenizerState, Token) Consume(char character, Token token) => (this, token);
         }
 
         private struct AtEndOfTokenState : ITokenizerState
