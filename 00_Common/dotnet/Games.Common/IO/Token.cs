@@ -4,34 +4,41 @@ namespace Games.Common.IO
 {
     internal class Token
     {
-        protected readonly StringBuilder _builder;
-        private int _trailingWhiteSpaceCount;
+        private readonly string _value;
 
-        private Token()
+        private Token(string value)
         {
-            _builder = new StringBuilder();
+            _value = value;
         }
 
-        public Token Append(char character)
+        public override string ToString() => _value;
+
+        internal class Builder
         {
-            _builder.Append(character);
+            private readonly StringBuilder _builder = new();
+            private bool _isQuoted;
+            private int _trailingWhiteSpaceCount;
 
-            _trailingWhiteSpaceCount = char.IsWhiteSpace(character) ? _trailingWhiteSpaceCount + 1 : 0;
+            public Builder Append(char character)
+            {
+                _builder.Append(character);
 
-            return this;
-        }
+                _trailingWhiteSpaceCount = char.IsWhiteSpace(character) ? _trailingWhiteSpaceCount + 1 : 0;
 
-        public override string ToString() => _builder.ToString(0, _builder.Length - _trailingWhiteSpaceCount);
+                return this;
+            }
 
-        public static Token Create() => new();
+            public Builder SetIsQuoted()
+            {
+                _isQuoted = true;
+                return this;
+            }
 
-        public static Token CreateQuoted() => new QuotedToken();
-
-        public static implicit operator string(Token token) => token.ToString();
-
-        internal class QuotedToken : Token
-        {
-            public override string ToString() => _builder.ToString();
+            public Token Build()
+            {
+                if (!_isQuoted) { _builder.Length -= _trailingWhiteSpaceCount; }
+                return new Token(_builder.ToString());
+            }
         }
     }
 }
