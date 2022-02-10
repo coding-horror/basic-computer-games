@@ -75,11 +75,15 @@ public class Game {
 
 			printInitialDeal(players, dealer);
 
+			// TODO if dealer has an ACE, prompt "ANY INSURANCE"
+			//   if yes, print "INSURANCE BETS" and prompt each player with "# [x] ? " where X is player number
+			//   insurance bets must be equal or less than half the player's regular bet
+
 			// TODO check for dealer blackjack
 			//   if blackjack, print "DEALER HAS A [x] IN THE HOLE\nFOR BLACKJACK" and skip to evaluateRound
+			//     pay 2x insurance bets (insurance bet of 5 pays 10) if applicable
 			//   if not, print "NO DEALER BLACKJACK"
-
-			// TODO if dealer has an ACE, prompt "ANY INSURANCE" and deal with insurance
+			//     collect insurance bets if applicable
 
 			for(Player player : players){
 				play(player);
