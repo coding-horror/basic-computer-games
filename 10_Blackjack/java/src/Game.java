@@ -13,6 +13,9 @@ public class Game {
         this.userIo = userIo;
     }
 
+	/**
+	 * Run the game, running rounds until ended with CTRL+D/CTRL+Z or CTRL+C
+	 */
     public void run() {
 		userIo.println("BLACK JACK", 31);
 		userIo.println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n", 15);
@@ -72,6 +75,10 @@ public class Game {
 
 			printInitialDeal(players, dealer);
 
+			// TODO check for dealer blackjack
+			//   if blackjack, print "DEALER HAS A [x] IN THE HOLE\nFOR BLACKJACK" and skip to evaluateRound
+			//   if not, print "NO DEALER BLACKJACK"
+
 			// TODO if dealer has an ACE, prompt "ANY INSURANCE" and deal with insurance
 
 			for(Player player : players){
@@ -86,6 +93,9 @@ public class Game {
 		}
     }
 
+	/**
+	 * Print the cards for each player and the up card for the dealer.
+	 */
 	private void printInitialDeal(List<Player> players, Player dealer) {
 		// Prints the initial deal in the following format:
 		/*
@@ -111,7 +121,7 @@ public class Game {
 			}
 			output.append("\n");
 		}
-		System.out.print(output);
+		userIo.print(output);
 	}
 
 	/**
@@ -160,10 +170,11 @@ public class Game {
 	}
 
 	/**
-	 * Calculates the value of a hand.
+	 * Calculates the value of a hand. When the hand contains aces, it will
+	 * count one of them as 11 if that does not result in a bust.
 	 * 
 	 * @param hand the hand to evaluate
-	 * @return The numeric value of a hand.
+	 * @return The numeric value of a hand. A value over 21 indicates a bust.
 	 */
 	protected int scoreHand(LinkedList<Card> hand){
 		int nAces = (int) hand.stream().filter(c -> c.getValue() == 1).count();
@@ -188,6 +199,7 @@ public class Game {
 	 * @return a negative integer, zero, or a positive integer as handA is less than, equal to, or greater than handB.
 	 */
 	private int compareHands(LinkedList<Card> handA, LinkedList<Card> handB) {
+		// TODO implement compareHands
 		return 0;
 	}
 
