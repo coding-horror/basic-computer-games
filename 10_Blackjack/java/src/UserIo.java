@@ -32,20 +32,42 @@ public class UserIo {
         this.out = new PrintWriter(out, true);
     }
 
+	/**
+	 * Print the line of text to output including a trailing linebreak.
+	 * 
+	 * @param text the text to print
+	 */
 	public void println(String text) {
 		out.println(text);
 	}
 
+	/**
+	 * Print the given text left padded with spaces.
+	 * 
+	 * @param text The text to print
+	 * @param leftPad The number of spaces to pad with.
+	 */
 	public void println(String text, int leftPad) {
 		IntStream.range(0, leftPad).forEach((i) -> out.print(' '));
 		out.println(text);
 	}
 
+	/**
+	 * Print the given text <i>without</i> a trailing linebreak.
+	 * 
+	 * @param text The text to print.
+	 */
 	public void print(String text) {
 		out.print(text);
 		out.flush();
 	}
 
+	/**
+	 * Reads a line of text from input.
+	 * 
+	 * @return The line entered into input.
+	 * @throws UncheckedIOException if the line is null (CTRL+D or CTRL+Z was pressed)
+	 */
 	private String readLine() {
 		try {
 			String line = in.readLine();
@@ -58,6 +80,12 @@ public class UserIo {
 		}
 	}
 
+	/**
+	 * Prompt the user via input.
+	 * 
+	 * @param prompt The text to display as a prompt. A question mark and space will be added to the end, so if prompt = "EXAMPLE" then the user will see "EXAMPLE? ".
+	 * @return The line read from input.
+	 */
 	public String prompt(String prompt) {
 		print(prompt + "? ");
 		return readLine();
