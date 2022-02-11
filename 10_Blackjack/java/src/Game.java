@@ -47,15 +47,15 @@ public class Game {
 		}
 
 		while(true) {
-			int[] bets = new int[nPlayers]; // empty array initialized with all '0' valuses.
+			double[] bets = new double[nPlayers]; // empty array initialized with all '0' valuses.
 			while(!betsAreValid(bets)){
 				userIo.println("BETS:");
 				for(int i = 0; i < nPlayers; i++) {
 					// Note that the bet for player "1" is at index "0" in the bets
 					// array and take care to avoid off-by-one errors.
 					// TODO the BASIC version allows fractional bets (e.g. '1.5') of arbitrary precision
-					//   We can use a float if we want--the original basic has floating point errors. Or we could use BigDecimal if we really want to fix that.
-					bets[i] = userIo.promptInt("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
+					//   We can use a double if we want--the original basic has doubleing point errors. Or we could use BigDecimal if we really want to fix that.
+					bets[i] = userIo.promptDouble("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
 					players.get(i).setCurrentBet(bets[i]);
 				}
 			}
@@ -244,14 +244,14 @@ public class Game {
 	}
 
 	/**
-	 * Validates that all bets are between 1 and 500 (inclusive).
+	 * Validates that all bets are between 0 (exclusive) and 500 (inclusive). Fractional bets are valid.
 	 * 
 	 * @param bets The array of bets for each player.
 	 * @return true if all bets are valid, false otherwise.
 	 */
-	public boolean betsAreValid(int[] bets) {
+	public boolean betsAreValid(double[] bets) {
 		return Arrays.stream(bets)
-			.allMatch(bet -> bet >= 1 && bet <= 500);
+			.allMatch(bet -> bet > 0 && bet <= 500);
 	}
 
 }

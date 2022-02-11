@@ -132,4 +132,29 @@ public class UserIo {
 			}
 		}
 	}
+
+	/**
+	 * Prompts the user for a double.  As in Vintage Basic, "the optional
+	 * prompt string is followed by a question mark and a space." and if the
+	 * input is non-numeric, "an error will be generated and the user will be
+	 * re-prompted.""
+	 *
+	 * @param prompt The prompt to display to the user.
+	 * @return the number given by the user.
+	 */
+	public double promptDouble(String prompt) {
+		print(prompt + "? ");
+
+		while(true) {
+			String input = readLine();
+			try {
+				return Double.parseDouble(input);
+			} catch(NumberFormatException e) {
+				// Input was not numeric.
+				println("!NUMBER EXPECTED - RETRY INPUT LINE");
+				print("? ");
+				continue;
+			}
+		}
+	}
 }
