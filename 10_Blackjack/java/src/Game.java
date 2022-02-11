@@ -127,7 +127,7 @@ public class Game {
 			}
 			output.append("\n");
 		}
-		userIo.print(output);
+		userIo.print(output.toString());
 	}
 
 	/**
