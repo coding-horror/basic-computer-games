@@ -6,12 +6,14 @@ using FluentAssertions.Execution;
 using Xunit;
 
 using static System.Environment;
-using TwoStrings = System.ValueTuple<string, string>;
 
 namespace Games.Common.IO
 {
     public class TokenReaderTests
     {
+        const string NumberExpected = "!Number expected - retry input line";
+        const string ExtraInput = "!Extra input ignored";
+
         private readonly StringWriter _outputWriter;
 
         public TokenReaderTests()
@@ -22,7 +24,7 @@ namespace Games.Common.IO
         [Fact]
         public void ReadTokens_QuantityNeededZero_ThrowsArgumentException()
         {
-            var sut = CreateTokenReader("");
+            var sut = TokenReader.ForStrings(new TextIO(new StringReader(""), _outputWriter));
 
             Action readTokens = () => sut.ReadTokens("", 0);
 
@@ -34,28 +36,41 @@ namespace Games.Common.IO
 
         [Theory]
         [MemberData(nameof(ReadTokensTestCases))]
-        public void ReadTokens_ReadingValuesHasExpectedPromptsAndResults<T>(
+        public void ReadTokens_ReadingValuesHasExpectedPromptsAndResults(
             string prompt,
             uint tokenCount,
             string input,
             string expectedOutput,
-            T[] expectedResult)
+            string[] expectedResult)
         {
-            var sut = CreateTokenReader(input);
+            var sut = TokenReader.ForStrings(new TextIO(new StringReader(input + NewLine), _outputWriter));
 
             var result = sut.ReadTokens(prompt, tokenCount);
             var output = _outputWriter.ToString();
 
             using var _ = new AssertionScope();
             output.Should().Be(expectedOutput);
-            result.Select(t => t.ToString()).Should().BeEquivalentTo(expectedResult);
+            result.Select(t => t.String).Should().BeEquivalentTo(expectedResult);
         }
 
-        private TokenReader CreateTokenReader(string input) =>
-            new TokenReader(
-                new TextIO(
-                    new StringReader(input + NewLine),
-                    _outputWriter));
+        [Theory]
+        [MemberData(nameof(ReadNumericTokensTestCases))]
+        public void ReadTokens_Numeric_ReadingValuesHasExpectedPromptsAndResults(
+            string prompt,
+            uint tokenCount,
+            string input,
+            string expectedOutput,
+            float[] expectedResult)
+        {
+            var sut = TokenReader.ForNumbers(new TextIO(new StringReader(input + NewLine), _outputWriter));
+
+            var result = sut.ReadTokens(prompt, tokenCount);
+            var output = _outputWriter.ToString();
+
+            using var _ = new AssertionScope();
+            output.Should().Be(expectedOutput);
+            result.Select(t => t.Number).Should().BeEquivalentTo(expectedResult);
+        }
 
         public static TheoryData<string, uint, string, string, string[]> ReadTokensTestCases()
         {
@@ -68,20 +83,26 @@ namespace Games.Common.IO
                     "Foo",
                     6,
                     $"1,2{NewLine}\" a,b \"{NewLine},\"\"c,d{NewLine}d\"x,e,f",
-                    $"Foo? ?? ?? ?? !Extra input ingored{NewLine}",
+                    $"Foo? ?? ?? ?? {ExtraInput}{NewLine}",
                     new[] { "1", "2", " a,b ", "", "", "d\"x" }
                 }
             };
         }
 
-        public static TheoryData<Func<IReadWrite, TwoStrings>, string, string, TwoStrings> Read2StringsTestCases()
+        public static TheoryData<string, uint, string, string, float[]> ReadNumericTokensTestCases()
         {
-            static Func<IReadWrite, TwoStrings> Read2Strings(string prompt) => io => io.Read2Strings(prompt);
-
             return new()
             {
-                { Read2Strings("2 strings"), ",", "2 strings? ", ("", "") },
-                { Read2Strings("Input please"), "aBc ,  DeF ", "Input please? ", ("aBc", "DeF") },
+                { "Age", 1, "23", "Age? ", new[] { 23F } },
+                { "Constants", 2, " 3.141 , 2.71 ", "Constants? ", new[] { 3.141F, 2.71F } },
+                { "Answer", 1, $"Forty-two{NewLine}42 ", $"Answer? {NumberExpected}{NewLine}? ", new[] { 42F } },
+                {
+                    "Foo",
+                    6,
+                    $"1,2{NewLine}\" a,b \"{NewLine}3, 4  {NewLine}5.6,7,a, b",
+                    $"Foo? ?? {NumberExpected}{NewLine}? ?? {ExtraInput}{NewLine}",
+                    new[] { 1, 2, 3, 4, 5.6F, 7 }
+                }
             };
         }
     }
