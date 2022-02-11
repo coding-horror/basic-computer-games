@@ -53,6 +53,8 @@ public class Game {
 				for(int i = 0; i < nPlayers; i++) {
 					// Note that the bet for player "1" is at index "0" in the bets
 					// array and take care to avoid off-by-one errors.
+					// TODO the BASIC version allows fractional bets (e.g. '1.5') of arbitrary precision
+					//   We can use a float if we want--the original basic has floating point errors. Or we could use BigDecimal if we really want to fix that.
 					bets[i] = userIo.promptInt("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
 					players.get(i).setCurrentBet(bets[i]);
 				}
