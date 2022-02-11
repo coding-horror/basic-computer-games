@@ -110,7 +110,7 @@ sub check_for_corners {
 		@precedence=(1,9,7,3,5,2,4,6,8);
 	}
 	else {
-		@precedence=(5,1,9,7,3,2,4,6,8);
+		@precedence=(5,2,4,6,8,1,9,7,3);
 	}
 	foreach my $move (@precedence) {
 		my $validity=&check_occupation($move);
@@ -166,7 +166,7 @@ sub check_occupation {
 
 sub print_board {
 	foreach my $num (1..9) {
-		my $char = &which_char($board{$num});	
+		my $char = &which_char($board{$num});
 		if ($num == 4 || $num == 7) { print "\n---+---+---\n";}
 		print "$char";
 		if ($num % 3 > 0) { print "!" }
