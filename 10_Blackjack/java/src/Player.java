@@ -3,8 +3,8 @@ import java.util.LinkedList;
 public class Player {
 
     private int playerNumber;     // e.g. playerNumber = 1 means "this is Player 1"
-    private int currentBet;
-    private int total;
+    private double currentBet;
+    private double total;
     private LinkedList<Card> hand;
     // TODO we'll need to decide how to deal with a split hand or doubled down bet.
 
@@ -26,11 +26,11 @@ public class Player {
         return this.playerNumber;
     }
     
-    public void setCurrentBet(int currentBet) {
+    public void setCurrentBet(double currentBet) {
         this.currentBet = currentBet;
     }
 
-    public int getCurrentBet() {
+    public double getCurrentBet() {
         return this.currentBet;
     }
 
@@ -52,7 +52,7 @@ public class Player {
      * Returns the total of all bets won.
      * @return Total value
      */
-    public int getTotal() {
+    public double getTotal() {
         return this.total;
     }
 
