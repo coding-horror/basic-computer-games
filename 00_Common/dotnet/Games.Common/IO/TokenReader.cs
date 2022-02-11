@@ -5,14 +5,20 @@ namespace Games.Common.IO
 {
     internal class TokenReader
     {
-        private readonly TextIO _io;
-        private readonly Func<Token, bool> _isTokenValid;
+        private const string NumberExpected = "!Number expected - retry input line";
+        private const string ExtraInput = "!Extra input ignored";
 
-        public TokenReader(TextIO io, Func<Token, bool>? isTokenValid = null)
+        private readonly TextIO _io;
+        private readonly Predicate<Token> _isTokenValid;
+
+        private TokenReader(TextIO io, Predicate<Token> isTokenValid)
         {
             _io = io;
             _isTokenValid = isTokenValid ?? (t => true);
         }
+
+        public static TokenReader ForStrings(TextIO io) => new(io, t => true);
+        public static TokenReader ForNumbers(TextIO io) => new(io, t => t.IsNumber);
 
         public IEnumerable<Token> ReadTokens(string prompt, uint quantityNeeded)
         {
@@ -44,8 +50,9 @@ namespace Games.Common.IO
                 {
                     if (!_isTokenValid(token))
                     {
+                        _io.WriteLine(NumberExpected);
                         tokensValid = false;
-                        prompt = "?";
+                        prompt = "";
                         break;
                     }
 
@@ -64,7 +71,7 @@ namespace Games.Common.IO
             {
                 if (++tokenCount > maxCount)
                 {
-                    _io.WriteLine("!Extra input ingored");
+                    _io.WriteLine(ExtraInput);
                     break;
                 }
 

@@ -1,17 +1,33 @@
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Games.Common.IO
 {
     internal class Token
     {
-        private readonly string _value;
+        private static readonly Regex _numberPattern = new(@"^[+\-]?\d*(\.\d*)?([eE][+\-]?\d*)?");
 
-        private Token(string value)
+        internal Token(string value)
         {
-            _value = value;
+            String = value;
+
+            var match = _numberPattern.Match(String);
+
+            IsNumber = float.TryParse(match.Value, out var number);
+            Number = (IsNumber, number) switch
+            {
+                (false, _) => float.NaN,
+                (true, float.PositiveInfinity) => float.MaxValue,
+                (true, float.NegativeInfinity) => float.MinValue,
+                (true, _) => number
+            };
         }
 
-        public override string ToString() => _value;
+        public string String { get; }
+        public bool IsNumber { get; }
+        public float Number { get; }
+
+        public override string ToString() => String;
 
         internal class Builder
         {
