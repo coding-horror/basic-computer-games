@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
  * Converted from BASIC to Java by Aldrin Misquitta (@aldrinm)
  * The original BASIC program uses an array to maintain the questions and answers and to decide which question to
  * ask next. Updated this Java implementation to use a tree instead of the earlier faulty one based on a list (thanks @patimen).
+ *
+ * Bonus option: TREE --> prints the game decision data as a tree to visualize/debug the state of the game
  */
 public class Animal {
 
