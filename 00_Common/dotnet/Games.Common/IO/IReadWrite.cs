@@ -37,8 +37,8 @@ namespace Games.Common.IO
         /// Read numbers from input to fill an array.
         /// </summary>
         /// <param name="prompt">The text to display to prompt for the values.</param>
-        /// <param name="numbers">A <see cref="float[]" /> to be filled with values from input.</param>
-        void ReadNumbers(string prompt, float[] numbers);
+        /// <param name="values">A <see cref="float[]" /> to be filled with values from input.</param>
+        void ReadNumbers(string prompt, float[] values);
 
         /// <summary>
         /// Reads a <see cref="string" /> value from input.
