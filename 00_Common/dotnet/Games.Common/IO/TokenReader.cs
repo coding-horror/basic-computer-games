@@ -3,79 +3,78 @@ using System.Collections.Generic;
 
 using static Games.Common.IO.Strings;
 
-namespace Games.Common.IO
+namespace Games.Common.IO;
+
+internal class TokenReader
 {
-    internal class TokenReader
+    private readonly TextIO _io;
+    private readonly Predicate<Token> _isTokenValid;
+
+    private TokenReader(TextIO io, Predicate<Token> isTokenValid)
     {
-        private readonly TextIO _io;
-        private readonly Predicate<Token> _isTokenValid;
+        _io = io;
+        _isTokenValid = isTokenValid ?? (t => true);
+    }
 
-        private TokenReader(TextIO io, Predicate<Token> isTokenValid)
+    public static TokenReader ForStrings(TextIO io) => new(io, t => true);
+    public static TokenReader ForNumbers(TextIO io) => new(io, t => t.IsNumber);
+
+    public IEnumerable<Token> ReadTokens(string prompt, uint quantityNeeded)
+    {
+        if (quantityNeeded == 0)
         {
-            _io = io;
-            _isTokenValid = isTokenValid ?? (t => true);
+            throw new ArgumentOutOfRangeException(
+                nameof(quantityNeeded),
+                $"'{nameof(quantityNeeded)}' must be greater than zero.");
         }
 
-        public static TokenReader ForStrings(TextIO io) => new(io, t => true);
-        public static TokenReader ForNumbers(TextIO io) => new(io, t => t.IsNumber);
+        var tokens = new List<Token>();
 
-        public IEnumerable<Token> ReadTokens(string prompt, uint quantityNeeded)
+        while (tokens.Count < quantityNeeded)
         {
-            if (quantityNeeded == 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(quantityNeeded),
-                    $"'{nameof(quantityNeeded)}' must be greater than zero.");
-            }
+            tokens.AddRange(ReadValidTokens(prompt, quantityNeeded - (uint)tokens.Count));
+            prompt = "?";
+        }
 
+        return tokens;
+    }
+
+    private IEnumerable<Token> ReadValidTokens(string prompt, uint maxCount)
+    {
+        while (true)
+        {
+            var tokensValid = true;
             var tokens = new List<Token>();
-
-            while(tokens.Count < quantityNeeded)
+            foreach (var token in ReadLineOfTokens(prompt, maxCount))
             {
-                tokens.AddRange(ReadValidTokens(prompt, quantityNeeded - (uint)tokens.Count));
-                prompt = "?";
-            }
-
-            return tokens;
-        }
-
-        private IEnumerable<Token> ReadValidTokens(string prompt, uint maxCount)
-        {
-            while (true)
-            {
-                var tokensValid = true;
-                var tokens = new List<Token>();
-                foreach (var token in ReadLineOfTokens(prompt, maxCount))
+                if (!_isTokenValid(token))
                 {
-                    if (!_isTokenValid(token))
-                    {
-                        _io.WriteLine(NumberExpected);
-                        tokensValid = false;
-                        prompt = "";
-                        break;
-                    }
-
-                    tokens.Add(token);
-                }
-
-                if (tokensValid) { return tokens; }
-            }
-        }
-
-        private IEnumerable<Token> ReadLineOfTokens(string prompt, uint maxCount)
-        {
-            var tokenCount = 0;
-
-            foreach (var token in Tokenizer.ParseTokens(_io.ReadLine(prompt)))
-            {
-                if (++tokenCount > maxCount)
-                {
-                    _io.WriteLine(ExtraInput);
+                    _io.WriteLine(NumberExpected);
+                    tokensValid = false;
+                    prompt = "";
                     break;
                 }
 
-                yield return token;
+                tokens.Add(token);
             }
+
+            if (tokensValid) { return tokens; }
+        }
+    }
+
+    private IEnumerable<Token> ReadLineOfTokens(string prompt, uint maxCount)
+    {
+        var tokenCount = 0;
+
+        foreach (var token in Tokenizer.ParseTokens(_io.ReadLine(prompt)))
+        {
+            if (++tokenCount > maxCount)
+            {
+                _io.WriteLine(ExtraInput);
+                break;
+            }
+
+            yield return token;
         }
     }
 }
