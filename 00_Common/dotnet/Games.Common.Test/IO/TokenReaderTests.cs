@@ -6,14 +6,12 @@ using FluentAssertions.Execution;
 using Xunit;
 
 using static System.Environment;
+using static Games.Common.IO.Strings;
 
 namespace Games.Common.IO
 {
     public class TokenReaderTests
     {
-        const string NumberExpected = "!Number expected - retry input line";
-        const string ExtraInput = "!Extra input ignored";
-
         private readonly StringWriter _outputWriter;
 
         public TokenReaderTests()

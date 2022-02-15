@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 
+using static Games.Common.IO.Strings;
+
 namespace Games.Common.IO
 {
     internal class TokenReader
     {
-        private const string NumberExpected = "!Number expected - retry input line";
-        private const string ExtraInput = "!Extra input ignored";
-
         private readonly TextIO _io;
         private readonly Predicate<Token> _isTokenValid;
 
