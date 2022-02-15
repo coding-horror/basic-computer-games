@@ -10,6 +10,10 @@ namespace Games.Common.IO;
 /// Implements <see cref="IReadWrite" /> with input read from a <see cref="TextReader" /> and output written to a
 /// <see cref="TextWriter" />.
 /// </summary>
+/// <remarks>
+/// This implementation reproduces the Vintage BASIC input experience, prompting multiple times when partial input
+/// supplied, rejecting non-numeric input as needed, warning about extra input being ignored, etc.
+/// </remarks>
 public class TextIO : IReadWrite
 {
     private readonly TextReader _input;
