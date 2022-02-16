@@ -1,60 +1,79 @@
-use std::io;
-use rand::{Rng, prelude::ThreadRng};
+use rand::{prelude::ThreadRng, Rng};
+use std::{fmt, io, mem};
 
-struct CardsPool {
-    first: u8, 
-    second: u8, 
-    third: u8
-}
-impl CardsPool {
-    fn new(rng: &mut ThreadRng)-> CardsPool{
-        let mut f = rng.gen_range(2..15);
-        let mut s = rng.gen_range(2..15);
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
+struct Card(u8);
 
-        if f > s {
-           let x = f;
-           f = s;
-           s = x;
-        }
-
-        CardsPool{
-            first: f, 
-            second: s,
-            third: rng.gen_range(2..15)
-        }
+impl Card {
+    fn new_random(rng: &mut ThreadRng) -> Card {
+        Card(rng.gen_range(2..15))
     }
 }
 
+impl fmt::Display for Card {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self.0 {
+                11 => String::from("JACK"),
+                12 => String::from("QUEEN"),
+                13 => String::from("KING"),
+                14 => String::from("ACE"),
+                otherwise => otherwise.to_string(),
+            }
+        )
+    }
+}
+
+struct CardsPool(Card, Card, Card);
+
+impl CardsPool {
+    fn new() -> CardsPool {
+        let mut rng = rand::thread_rng();
+        let mut first = Card::new_random(&mut rng);
+        let mut second = Card::new_random(&mut rng);
+        let third = Card::new_random(&mut rng);
+
+        if first > second {
+            mem::swap(&mut first, &mut second);
+        }
+
+        CardsPool(first, second, third)
+    }
+
+    fn is_in_win_range(&self) -> bool {
+        self.0 <= self.2 && self.2 <= self.1
+    }
+}
 
 fn main() {
     hello();
     // user start bank
     let mut user_bank: u16 = 100;
-    let mut rng = rand::thread_rng();
+
     loop {
         println!("YOU NOW HAVE {} DOLLARS.", &mut user_bank);
         println!("HERE ARE YOUR NEXT TWO CARDS:");
-        // get new random cards 
-        let cards = CardsPool::new(&mut rng);
+        // get new random cards
+        let cards = CardsPool::new();
 
-        println!("{}", card_name(cards.first));
-        println!("{}", card_name(cards.second));
+        println!("{}", cards.0);
+        println!("{}", cards.1);
 
-        let mut user_bet: u16;
-        user_bet = get_bet(user_bank);
+        let user_bet: u16 = get_bet(user_bank);
 
         if user_bet == 0 {
             println!("CHICKEN!!!\n");
             continue;
-        }
-        else {
-            println!("THANK YOU! YOUR BET IS {} DOLLARS.", &mut user_bet);
+        } else {
+            println!("THANK YOU! YOUR BET IS {} DOLLARS.", user_bet);
         }
 
         println!("\nTHE THIRD CARD IS:");
-        println!("{}", card_name(cards.third));
+        println!("{}", cards.2);
 
-        if cards.first <= cards.third && cards.third <= cards.second {
+        if cards.is_in_win_range() {
             println!("YOU WIN!!!\n");
             user_bank += user_bet;
         } else {
@@ -62,16 +81,13 @@ fn main() {
             user_bank -= user_bet;
         }
 
-
         if user_bank == 0 {
             println!("\nSORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n");
             println!("TRY AGAIN? (yes OR no)");
             let mut input = String::new();
-            io::stdin()
-                .read_line(&mut input)
-                .expect("Incorrect input");
+            io::stdin().read_line(&mut input).expect("Incorrect input");
 
-            if String::from("yes") == input {
+            if "yes" == input {
                 user_bank = 100;
             } else {
                 println!("O.K., HOPE YOU HAD FUN!");
@@ -92,17 +108,6 @@ fn hello() {
     println!("\n\n\n");
 }
 
-fn card_name(card: u8) -> String {
-    match card {
-        11 => String::from("JACK"),
-        12 => String::from("QUEEN"),
-        13 => String::from("KING"),
-        14 => String::from("ACE"),
-        _  => card.to_string()
-    }
-}
-
-
 fn get_bet(user_bank: u16) -> u16 {
     println!("WHAT IS YOUR BET? ENTER 0 IF YOU DON'T WANT TO BET (CTRL+C TO EXIT)");
     let bet: u16;
@@ -112,6 +117,7 @@ fn get_bet(user_bank: u16) -> u16 {
         .read_line(&mut input)
         .expect("Sorry your input incorrect");
 
+    // XXX: Unhandled input
     bet = input.trim().parse::<u16>().unwrap();
     match bet {
         0 => bet,
@@ -123,4 +129,3 @@ fn get_bet(user_bank: u16) -> u16 {
         }
     }
 }
-
