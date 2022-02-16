@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Games.Common.IO;
 
+/// <summary>
+/// A simple state machine which parses tokens from a line of input.
+/// </summary>
 internal class Tokenizer
 {
     private const char Quote = '"';
