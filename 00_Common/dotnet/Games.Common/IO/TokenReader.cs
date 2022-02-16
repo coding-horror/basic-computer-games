@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using static Games.Common.IO.Strings;
 
 namespace Games.Common.IO;
 
+/// <summary>
+/// Reads from input and assembles a given number of values, or tokens, possibly over a number of input lines.
+/// </summary>
 internal class TokenReader
 {
     private readonly TextIO _io;
@@ -16,9 +19,26 @@ internal class TokenReader
         _isTokenValid = isTokenValid ?? (t => true);
     }
 
+    /// <summary>
+    /// Creates a <see cref="TokenReader" /> which reads string tokens.
+    /// </summary>
+    /// <param name="io">A <see cref="TextIO" /> instance.</param>
+    /// <returns>The new <see cref="TokenReader" /> instance.</returns>
     public static TokenReader ForStrings(TextIO io) => new(io, t => true);
+
+    /// <summary>
+    /// Creates a <see cref="TokenReader" /> which reads tokens and validates that they can be parsed as numbers.
+    /// </summary>
+    /// <param name="io">A <see cref="TextIO" /> instance.</param>
+    /// <returns>The new <see cref="TokenReader" /> instance.</returns>
     public static TokenReader ForNumbers(TextIO io) => new(io, t => t.IsNumber);
 
+    /// <summary>
+    /// Reads valid tokens from one or more input lines and builds a list with the required quantity.
+    /// </summary>
+    /// <param name="prompt">The string used to prompt the user for input.</param>
+    /// <param name="quantityNeeded">The number of tokens required.</param>
+    /// <returns>The sequence of tokens read.</returns>
     public IEnumerable<Token> ReadTokens(string prompt, uint quantityNeeded)
     {
         if (quantityNeeded == 0)
@@ -39,6 +59,12 @@ internal class TokenReader
         return tokens;
     }
 
+    /// <summary>
+    /// Reads a line of tokens, up to <paramref name="maxCount" />, and rejects the line if any are invalid.
+    /// </summary>
+    /// <param name="prompt">The string used to prompt the user for input.</param>
+    /// <param name="maxCount">The maximum number of tokens to read.</param>
+    /// <returns>The sequence of tokens read.</returns>
     private IEnumerable<Token> ReadValidTokens(string prompt, uint maxCount)
     {
         while (true)
@@ -62,6 +88,12 @@ internal class TokenReader
         }
     }
 
+    /// <summary>
+    /// Lazily reads up to <paramref name="maxCount" /> tokens from an input line.
+    /// </summary>
+    /// <param name="prompt">The string used to prompt the user for input.</param>
+    /// <param name="maxCount">The maximum number of tokens to read.</param>
+    /// <returns></returns>
     private IEnumerable<Token> ReadLineOfTokens(string prompt, uint maxCount)
     {
         var tokenCount = 0;
