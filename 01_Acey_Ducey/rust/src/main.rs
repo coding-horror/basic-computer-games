@@ -1,5 +1,4 @@
 use std::io;
-use std::process;
 use rand::{Rng, prelude::ThreadRng};
 
 struct CardsPool {
@@ -9,9 +8,18 @@ struct CardsPool {
 }
 impl CardsPool {
     fn new(rng: &mut ThreadRng)-> CardsPool{
+        let mut f = rng.gen_range(2..15);
+        let mut s = rng.gen_range(2..15);
+
+        if f > s {
+           let x = f;
+           f = s;
+           s = x;
+        }
+
         CardsPool{
-            first: rng.gen_range(2..15), 
-            second: rng.gen_range(2..15), 
+            first: f, 
+            second: s,
             third: rng.gen_range(2..15)
         }
     }
@@ -19,6 +27,7 @@ impl CardsPool {
 
 
 fn main() {
+    hello();
     // user start bank
     let mut user_bank: u16 = 100;
     let mut rng = rand::thread_rng();
@@ -27,16 +36,47 @@ fn main() {
         println!("HERE ARE YOUR NEXT TWO CARDS:");
         // get new random cards 
         let cards = CardsPool::new(&mut rng);
+
         println!("{}", card_name(cards.first));
         println!("{}", card_name(cards.second));
+
         let mut user_bet: u16;
         user_bet = get_bet(user_bank);
+
         if user_bet == 0 {
-            println!("CHICKEN!!!");
+            println!("CHICKEN!!!\n");
             continue;
         }
+        else {
+            println!("THANK YOU! YOUR BET IS {} DOLLARS.", &mut user_bet);
+        }
+
+        println!("\nTHE THIRD CARD IS:");
         println!("{}", card_name(cards.third));
 
+        if cards.first <= cards.third && cards.third <= cards.second {
+            println!("YOU WIN!!!\n");
+            user_bank += user_bet;
+        } else {
+            println!("SORRY, YOU LOSE\n");
+            user_bank -= user_bet;
+        }
+
+
+        if user_bank == 0 {
+            println!("\nSORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n");
+            println!("TRY AGAIN? (yes OR no)");
+            let mut input = String::new();
+            io::stdin()
+                .read_line(&mut input)
+                .expect("Incorrect input");
+
+            if String::from("yes") == input {
+                user_bank = 100;
+            } else {
+                println!("O.K., HOPE YOU HAD FUN!");
+            }
+        }
     }
 }
 
@@ -49,6 +89,7 @@ fn hello() {
     println!("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE");
     println!("A VALUE BETWEEN THE FIRST TWO.");
     println!("IF YOU DO NOT WANT TO BET IN A ROUND, ENTER 0");
+    println!("\n\n\n");
 }
 
 fn card_name(card: u8) -> String {
@@ -64,7 +105,7 @@ fn card_name(card: u8) -> String {
 
 fn get_bet(user_bank: u16) -> u16 {
     println!("WHAT IS YOUR BET? ENTER 0 IF YOU DON'T WANT TO BET (CTRL+C TO EXIT)");
-    let mut bet: u16;
+    let bet: u16;
     let mut input = String::new();
 
     io::stdin()
