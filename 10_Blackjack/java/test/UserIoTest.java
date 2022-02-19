@@ -70,7 +70,7 @@ public class UserIoTest {
     @DisplayName("promptInt should print an error and reprompt if given a non-numeric response")
     public void testPromptIntRepromptsOnNonNumeric() {
         // Given
-        Reader in = new StringReader("foo\n1"); // word, then number
+        Reader in = new StringReader("foo" + System.lineSeparator() +"1"); // word, then number
         StringWriter out = new StringWriter();
         UserIo userIo = new UserIo(in, out);
 
@@ -78,7 +78,7 @@ public class UserIoTest {
         int result = userIo.promptInt("TEST");
 
         // Then
-        assertEquals("TEST? !NUMBER EXPECTED - RETRY INPUT LINE\n? ", out.toString());
+        assertEquals("TEST? !NUMBER EXPECTED - RETRY INPUT LINE" + System.lineSeparator() +"? ", out.toString());
         assertEquals(1, result);
     }
 }
