@@ -198,15 +198,28 @@ public class Game {
 	}
 
 	/**
-	 * Compares two hands accounting for natural blackjacks
+	 * Compares two hands accounting for natural blackjacks using the 
+	 * java.lang.Comparable convention of returning positive or negative integers
 	 * 
 	 * @param handA hand to compare
 	 * @param handB other hand to compare
 	 * @return a negative integer, zero, or a positive integer as handA is less than, equal to, or greater than handB.
 	 */
-	private int compareHands(LinkedList<Card> handA, LinkedList<Card> handB) {
-		// TODO implement compareHands
-		return 0;
+	protected int compareHands(LinkedList<Card> handA, LinkedList<Card> handB) {
+		int scoreA = this.scoreHand(handA);
+		int scoreB = this.scoreHand(handB);
+
+		if(scoreA == 21 && scoreB == 21){
+			if(handA.size() == 2 && handB.size() != 2){
+				return 1; //Hand A wins
+			} else if (handA.size() != 2 && handB.size() == 2) {				
+				return -1; //Hand B wins
+			} else {
+				return 0; //Tie
+			}
+		} else {
+			return Integer.compare(scoreA, scoreB); 
+		}
 	}
 
 	/**

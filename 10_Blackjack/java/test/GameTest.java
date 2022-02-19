@@ -213,4 +213,113 @@ public class GameTest {
         // Then
         assertEquals(13, result);
     }
+
+    @Test
+    @DisplayName("compareHands should return 1 meaning A beat B, 20 to 12")
+    public void compareHandsAWins() {
+
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.SPADES));
+        handA.add(new Card(10, Card.Suit.CLUBS));
+
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(1, Card.Suit.SPADES));
+        handB.add(new Card(1, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(1, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return -1 meaning B beat A, 18 to 4")
+    public void compareHandsBwins() {
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(2, Card.Suit.SPADES));
+        handA.add(new Card(2, Card.Suit.CLUBS));
+
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(5, Card.Suit.SPADES));
+        handB.add(new Card(6, Card.Suit.HEARTS));
+        handB.add(new Card(7, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(-1, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return 1 meaning A beat B, natural Blackjack to Blackjack")
+    public void compareHandsAWinsWithNaturalBlackJack() {
+        //Hand A wins with natural BlackJack, B with Blackjack
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.SPADES));
+        handA.add(new Card(1, Card.Suit.CLUBS));
+
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(6, Card.Suit.SPADES));
+        handB.add(new Card(7, Card.Suit.HEARTS));
+        handB.add(new Card(8, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(1, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return -1 meaning B beat A, natural Blackjack to Blackjack")
+    public void compareHandsBWinsWithNaturalBlackJack() {
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(6, Card.Suit.SPADES));
+        handA.add(new Card(7, Card.Suit.HEARTS));
+        handA.add(new Card(8, Card.Suit.CLUBS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(1, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(-1, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return 0, hand A and B tied with a Blackjack")
+    public void compareHandsTieBothBlackJack() {
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(11, Card.Suit.SPADES));
+        handA.add(new Card(10, Card.Suit.CLUBS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(11, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(0, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return 0, hand A and B tie without a Blackjack")
+    public void compareHandsTieNoBlackJack() {
+        givenStubGame();
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.DIAMONDS));
+        handA.add(new Card(10, Card.Suit.HEARTS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(10, Card.Suit.CLUBS));
+
+        int result = game.compareHands(handA,handB);
+
+        assertEquals(0, result);
+    }
+
+
 }
