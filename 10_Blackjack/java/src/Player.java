@@ -4,9 +4,11 @@ public class Player {
 
     private int playerNumber;     // e.g. playerNumber = 1 means "this is Player 1"
     private double currentBet;
+    private double insuranceBet;
+    private double splitBet;
     private double total;
     private LinkedList<Card> hand;
-    // TODO we'll need to decide how to deal with a split hand or doubled down bet.
+    private LinkedList<Card> splitHand;
 
     /**
     * Represents a player in the game with cards, bets, total and a playerNumber. 
@@ -14,11 +16,14 @@ public class Player {
     public Player(int playerNumber) {
         this.playerNumber = playerNumber;
         currentBet = 0;
+        insuranceBet = 0;
+        splitBet = 0;
         total = 0;
         hand = new LinkedList<>();
+        splitHand = new LinkedList<>();
     }
 
-    public void setPlayerNumber(int playerNumber) { //TODO: Is this needed if set in constructor?
+    public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
 
@@ -32,6 +37,22 @@ public class Player {
 
     public double getCurrentBet() {
         return this.currentBet;
+    }
+
+    public double getSplitBet() {
+        return splitBet;
+    }
+
+    public void setSplitBet(double splitBet) {
+        this.splitBet = splitBet;
+    }
+
+    public double getInsuranceBet() {
+        return insuranceBet;
+    }
+
+    public void setInsuranceBet(double insuranceBet) {
+        this.insuranceBet = insuranceBet;
     }
 
     /**
@@ -60,13 +81,28 @@ public class Player {
     public void dealCard(Card card) {
         hand.add(card);
     }
+    
+    public void dealSplitHandCard(Card card) {
+        splitHand.add(card);
+    }
+    /**
+     * Removes first card from hand to adds it to split hand
+     */
+    public void split() {
+        splitHand.add(hand.pop());
+    }
 
-    //   resetHand resets 'hand' to an empty list
+    //   resetHand resets 'hand' & 'splitHand' to empty lists
     public void resetHand() {
         this.hand = new LinkedList<>();
+        this.splitHand = new LinkedList<>();
     }
 
     public LinkedList<Card> getHand() {
         return this.hand;
+    }
+
+    public LinkedList<Card> getSplitHand() {
+        return this.splitHand;
     }
 }

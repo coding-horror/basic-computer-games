@@ -79,7 +79,7 @@ public class GameTest {
         // Given
         Player player = new Player(1);
         player.dealCard(new Card(10, Card.Suit.HEARTS));
-        player.dealCard(new Card(9, Card.Suit.SPADES));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
 
         givenInput("H\nH\nH\n",
             new Card(1, Card.Suit.SPADES), // 20
@@ -321,5 +321,88 @@ public class GameTest {
         assertEquals(0, result);
     }
 
+    //@Test
+    @DisplayName("playSplit() should end on STAY")
+    public void playSplitEndOnStay(){
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(1, Card.Suit.CLUBS));
+        player.dealCard(new Card(1, Card.Suit.SPADES));
+        givenInput("S\nS\n"); 
+
+        // When
+        game.playSplit(player);
+
+        // Then
+        assertTrue(out.toString().contains("FIRST HAND RECEIVES"));
+        assertTrue(out.toString().contains("SECOND HAND RECEIVES"));
+        assertEquals("PLAYER 1 ? ", out.toString());
+    }
+
+    //@Test
+    @DisplayName("playSplit() should allow HIT until BUST")
+    public void playSplitHitUntilBust() {
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(10, Card.Suit.HEARTS));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+
+        givenInput("H\nH\n",
+            new Card(12, Card.Suit.SPADES), // 20
+            new Card(12, Card.Suit.HEARTS), // Split hand 20
+            new Card(12, Card.Suit.DIAMONDS), // 30
+            new Card(12, Card.Suit.CLUBS)); // Split hand 30
+
+        // When
+        game.playSplit(player);
+
+        // Then
+        assertTrue(out.toString().contains("BUSTED"));
+    }
+
+    //@Test
+    @DisplayName("playSplit should allow double down")
+    public void playSplitDoubleDown(){
+        // Given
+        Player player = new Player(1);
+        player.setCurrentBet(100);
+        player.dealCard(new Card(9, Card.Suit.HEARTS));
+        player.dealCard(new Card(9, Card.Suit.SPADES));
+
+        givenInput("D\nD\n", 
+            new Card(6, Card.Suit.HEARTS),
+            new Card(7, Card.Suit.HEARTS),
+            new Card(6, Card.Suit.CLUBS),
+            new Card(7, Card.Suit.CLUBS));
+
+        // When
+        game.playSplit(player);
+
+        // Then
+        assertTrue(player.getCurrentBet() == 200);
+        assertTrue(player.getSplitBet() == 200);
+        assertTrue(player.getHand().size() == 3);
+        assertTrue(player.getSplitHand().size() == 3);
+    }
+
+    //@Test
+    @DisplayName("playSplit should NOT allow re-splitting")
+    public void playSplitDoubleDownLate(){
+        // Given
+        Player player = new Player(1);
+        player.setCurrentBet(100);
+        player.dealCard(new Card(1, Card.Suit.HEARTS));
+        player.dealCard(new Card(1, Card.Suit.SPADES));
+
+        givenInput("\\\nS\nS\n", 
+            new Card(13, Card.Suit.HEARTS),
+            new Card(13, Card.Suit.SPADES));
+
+        // When
+        game.playSplit(player);
+
+        // Then
+        assertTrue(out.toString().contains("TYPE H, S OR D, PLEASE"));
+    }
 
 }

@@ -136,7 +136,6 @@ public class Game {
 	 * actions. On a hit, prints "RECEIVED A  [x]  HIT? "
 	 * 
 	 * @param player
-	 * @param deck
 	 */
 	protected void play(Player player) {
 		String action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
@@ -156,10 +155,8 @@ public class Game {
 				player.dealCard(deck.deal());
 				return;
 			} else if(player.getHand().size() == 2 && action.equalsIgnoreCase("/")) { // SPLIT
-				if(player.getHand().get(0).equals(player.getHand().get(1))){
-					// TODO split = split into two hands that play separately. only allowed for pairs
-					// TODO implement player.split that takes one card from 'hand' and adds it to a new 'splitHand' field.
-					// TODO determine if the original code allowed re-splitting, splitting on aces, or doubling down on a split and if it requires cards
+				if(player.getHand().get(0).equals(player.getHand().get(1))){					
+					playSplit(player);
 				} else {
 					userIo.println("SPLITTING NOT ALLOWED");
 					action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
@@ -174,6 +171,18 @@ public class Game {
 		}
 
 	}
+	/**
+	 * Splits the players hand and deals a card to each hand then prompts the user to 
+	 * hit (H), stay (S), or double down (D), and then performs those actions.
+	 * 
+	 * @param player
+	 */
+	protected void playSplit(Player player) {
+		player.split();
+		//TODO: Deal cards, and prompt user action
+		//TODO Uncomment playSplit tests and adjust as needed
+	}
+	
 
 	/**
 	 * Calculates the value of a hand. When the hand contains aces, it will
