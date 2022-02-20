@@ -54,7 +54,7 @@ fn main() {
 
     loop {
         println!("YOU NOW HAVE {} DOLLARS.", &mut user_bank);
-        println!("HERE ARE YOUR NEXT TWO CARDS:");
+        println!("\nHERE ARE YOUR NEXT TWO CARDS:");
         // get new random cards
         let cards = CardsPool::new();
 
@@ -74,58 +74,66 @@ fn main() {
         println!("{}", cards.2);
 
         if cards.is_in_win_range() {
-            println!("YOU WIN!!!\n");
+            println!("\nYOU WIN!!!");
             user_bank += user_bet;
         } else {
-            println!("SORRY, YOU LOSE\n");
+            println!("\nSORRY, YOU LOSE");
             user_bank -= user_bet;
         }
 
         if user_bank == 0 {
-            println!("\nSORRY, FRIEND, BUT YOU BLEW YOUR WAD.\n");
-            println!("TRY AGAIN? (yes OR no)");
+            println!("\nSORRY, FRIEND, BUT YOU BLEW YOUR WAD.");
+            println!("\nTRY AGAIN? (YES OR NO)");
             let mut input = String::new();
             io::stdin().read_line(&mut input).expect("Incorrect input");
 
-            if "yes" == input {
+            if input.trim().to_lowercase() == "yes" {
                 user_bank = 100;
+                println!();
             } else {
-                println!("O.K., HOPE YOU HAD FUN!");
+                println!("\nO.K., HOPE YOU HAD FUN!");
+                break;
             }
         }
     }
 }
 
 fn hello() {
-    println!(" 🂡  ACEY DUCEY CARD GAME 🂱");
+    println!("         🂡  ACEY DUCEY CARD GAME 🂱");
     println!("CREATIVE COMPUTING - MORRISTOWN, NEW JERSEY");
-    println!(" ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER");
+    println!("ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER");
     println!("THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP");
     println!("YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING");
     println!("ON WHETHER OR NOT YOU FEEL THE CARD WILL HAVE");
     println!("A VALUE BETWEEN THE FIRST TWO.");
     println!("IF YOU DO NOT WANT TO BET IN A ROUND, ENTER 0");
-    println!("\n\n\n");
+    println!("\n\n");
 }
 
 fn get_bet(user_bank: u16) -> u16 {
-    println!("WHAT IS YOUR BET? ENTER 0 IF YOU DON'T WANT TO BET (CTRL+C TO EXIT)");
-    let bet: u16;
-    let mut input = String::new();
+    loop {
+        println!("\nWHAT IS YOUR BET? ENTER 0 IF YOU DON'T WANT TO BET (CTRL+C TO EXIT)");
+        let bet: u16;
+        let mut input = String::new();
 
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Sorry your input incorrect");
+        io::stdin()
+            .read_line(&mut input)
+            .expect("CANNOT READ INPUT!");
 
-    // XXX: Unhandled input
-    bet = input.trim().parse::<u16>().unwrap();
-    match bet {
-        0 => bet,
-        bet if bet < user_bank => bet,
-        _ => {
-            println!("SORRY, MY FRIEND, BUT YOU BET TOO MUCH.");
-            println!("YOU HAVE ONLY {} DOLLARS TO BET.", user_bank);
-            get_bet(user_bank)
-        }
+        match input.trim().parse::<u16>() {
+            Ok(i) => bet = i,
+            Err(e) => {
+                println!("CHECK YOUR INPUT! {}!", e.to_string().to_uppercase());
+                continue;
+            }
+        };
+
+        match bet {
+            bet if bet <= user_bank => return bet,
+            _ => {
+                println!("\nSORRY, MY FRIEND, BUT YOU BET TOO MUCH.");
+                println!("YOU HAVE ONLY {} DOLLARS TO BET.", user_bank);
+            }
+        };
     }
 }
