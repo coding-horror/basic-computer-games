@@ -18,7 +18,7 @@ checklist = ["game", "csharp", "java", "javascript",
 prev_game = ""
 
 for dirName, subdirList, fileList in os.walk(rootDir):
-    split_dir = dirName.split("/")
+    split_dir = dirName.split(os.path.sep)
 
     if len(split_dir) == 2 and not split_dir[1] in ['.git', '00_Utilities']:
         if prev_game == "":
@@ -46,5 +46,5 @@ sorted_strings = list(map(lambda l: " | ".join(l) + "\n",
 write_string += ''.join(sorted_strings)
 
 
-with open("README.md", "w") as f:
+with open("README.md", "w", encoding='utf-8') as f:
     f.write(write_string)
