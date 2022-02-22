@@ -1,5 +1,8 @@
 """
-BUG
+BUG (overengineered)
+
+Overengineered version of bug game
+Demonstrates function-based Model View Controller pattern
 
 Ported by Peter Sharp
 """
