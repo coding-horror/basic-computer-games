@@ -157,6 +157,7 @@ public class Game {
 			} else if(player.getHand().size() == 2 && action.equalsIgnoreCase("/")) { // SPLIT
 				if(player.getHand().get(0).equals(player.getHand().get(1))){					
 					playSplit(player);
+					return;
 				} else {
 					userIo.println("SPLITTING NOT ALLOWED");
 					action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
@@ -178,8 +179,75 @@ public class Game {
 	 * @param player
 	 */
 	protected void playSplit(Player player) {
+		// TODO refactor to avoid so much logic duplication
+
 		player.split();
-		//TODO: Deal cards, and prompt user action
+		// DEAL CARDS
+		Card card = deck.deal();
+		player.dealCard(card);
+		if(card.getValue() == 1 || card.getValue() == 8) {
+			userIo.println("FIRST HAND RECEIVES AN " + card.toString());
+		} else {
+			userIo.println("FIRST HAND RECEIVES A " + card.toString());
+		}
+		card = deck.deal();
+		player.dealSplitHandCard(card);
+		if(card.getValue() == 1 || card.getValue() == 8) {
+			userIo.println("SECOND HAND RECEIVES AN " + card.toString());
+		} else {
+			userIo.println("SECOND HAND RECEIVES A " + card.toString());
+		}
+
+		// Play hand 1
+		String action = userIo.prompt("HAND 1");
+		while(true){
+			if(action.equalsIgnoreCase("H")){ // HIT
+				Card c = deck.deal();
+				player.dealCard(c);
+				if(scoreHand(player.getHand()) > 21){
+					userIo.println("...BUSTED");
+					break;
+				}
+				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
+			} else if(action.equalsIgnoreCase("S")){ // STAY
+				break;
+			} else if(player.getHand().size() == 2 && action.equalsIgnoreCase("D")) { // DOUBLE DOWN
+				player.setCurrentBet(player.getCurrentBet() * 2);
+				player.dealCard(deck.deal());
+				break;
+			} else {
+				if(player.getHand().size() > 2) {
+					action = userIo.prompt("TYPE H, OR S, PLEASE");
+				} else {
+					action = userIo.prompt("TYPE H, S OR D, PLEASE");
+				}
+			}
+		}
+		// Play hand 2
+		action = userIo.prompt("HAND 2");
+		while(true){
+			if(action.equalsIgnoreCase("H")){ // HIT
+				Card c = deck.deal();
+				player.dealSplitHandCard(card);
+				if(scoreHand(player.getSplitHand()) > 21){
+					userIo.println("...BUSTED");
+					break;
+				}
+				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
+			} else if(action.equalsIgnoreCase("S")){ // STAY
+				break;
+			} else if(player.getSplitHand().size() == 2 && action.equalsIgnoreCase("D")) { // DOUBLE DOWN
+				player.setSplitBet(player.getSplitBet() * 2);
+				player.dealSplitHandCard(card);
+				break;
+			} else {
+				if(player.getSplitHand().size() > 2) {
+					action = userIo.prompt("TYPE H, OR S, PLEASE");
+				} else {
+					action = userIo.prompt("TYPE H, S OR D, PLEASE");
+				}
+			}
+		}
 		//TODO Uncomment playSplit tests and adjust as needed
 	}
 	

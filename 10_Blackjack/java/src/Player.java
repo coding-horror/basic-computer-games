@@ -89,6 +89,7 @@ public class Player {
      * Removes first card from hand to adds it to split hand
      */
     public void split() {
+        this.splitBet = this.currentBet;
         splitHand.add(hand.pop());
     }
 
