@@ -5,11 +5,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * HANGMAN
- *
- * Converted from BASIC to Java by Aldrin Misquitta (@aldrinm)
- */
+
 public class Hangman {
 
 	//50 word list
@@ -32,7 +28,7 @@ public class Hangman {
 		int[] usedWords = new int[50];
 		int roundNumber = 1;
 		int totalWords = words.size();
-		boolean continueGame;
+		boolean continueGame = false;
 
 		do {
 			if (roundNumber > totalWords) {
@@ -53,7 +49,10 @@ public class Hangman {
 				System.out.print("\nWANT ANOTHER WORD? ");
 			}
 			final String anotherWordChoice = scan.next();
-			continueGame = "YES".equals(anotherWordChoice);
+			
+			if (anotherWordChoice.toUpperCase().equals("YES") || anotherWordChoice.toUpperCase().equals("Y")) {
+				continueGame = true;
+			}
 			roundNumber++;
 		} while (continueGame);
 
@@ -99,7 +98,7 @@ public class Hangman {
 
 				System.out.print("WHAT IS YOUR GUESS? ");
 				var tmpRead = scan.next();
-				guessLetter = tmpRead.charAt(0);
+				guessLetter = Character.toUpperCase(tmpRead.charAt(0));
 				if (lettersUsed.contains(guessLetter)) {
 					System.out.println("YOU GUESSED THAT LETTER BEFORE!");
 				} else {
@@ -132,7 +131,7 @@ public class Hangman {
 				printDiscoveredLetters(discoveredLetters);
 				System.out.print("WHAT IS YOUR GUESS FOR THE WORD? ");
 				final String wordGuess = scan.next();
-				if (wordGuess.equals(word)) {
+				if (wordGuess.toUpperCase().equals(word)) {
 					System.out.printf("RIGHT!!  IT TOOK YOU %s GUESSES!", totalWordGuesses);
 					return true;
 				} else {
@@ -241,5 +240,3 @@ public class Hangman {
 	}
 
 }
-
-
