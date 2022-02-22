@@ -5,6 +5,11 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * HANGMAN
+ *
+ * Converted from BASIC to Java by Aldrin Misquitta (@aldrinm)
+ */
 
 public class Hangman {
 
