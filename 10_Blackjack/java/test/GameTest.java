@@ -321,7 +321,7 @@ public class GameTest {
         assertEquals(0, result);
     }
 
-    //@Test
+    @Test
     @DisplayName("playSplit() should end on STAY")
     public void playSplitEndOnStay(){
         // Given
@@ -336,10 +336,9 @@ public class GameTest {
         // Then
         assertTrue(out.toString().contains("FIRST HAND RECEIVES"));
         assertTrue(out.toString().contains("SECOND HAND RECEIVES"));
-        assertEquals("PLAYER 1 ? ", out.toString());
     }
 
-    //@Test
+    @Test
     @DisplayName("playSplit() should allow HIT until BUST")
     public void playSplitHitUntilBust() {
         // Given
@@ -360,7 +359,7 @@ public class GameTest {
         assertTrue(out.toString().contains("BUSTED"));
     }
 
-    //@Test
+    @Test
     @DisplayName("playSplit should allow double down")
     public void playSplitDoubleDown(){
         // Given
@@ -385,7 +384,7 @@ public class GameTest {
         assertTrue(player.getSplitHand().size() == 3);
     }
 
-    //@Test
+    @Test
     @DisplayName("playSplit should NOT allow re-splitting")
     public void playSplitDoubleDownLate(){
         // Given
@@ -394,7 +393,7 @@ public class GameTest {
         player.dealCard(new Card(1, Card.Suit.HEARTS));
         player.dealCard(new Card(1, Card.Suit.SPADES));
 
-        givenInput("\\\nS\nS\n", 
+        givenInput("/\nS\nS\n", 
             new Card(13, Card.Suit.HEARTS),
             new Card(13, Card.Suit.SPADES));
 
