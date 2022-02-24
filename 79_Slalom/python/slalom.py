@@ -76,7 +76,7 @@ def run():
 					print(f"You took {int(time + random())} seconds.")
 					return
 				else:
-					print("You made it!")
+					print("You made it!")
 					time += 1.5
 			else:
 				match opt:
