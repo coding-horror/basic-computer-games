@@ -81,7 +81,7 @@ fn main() {
     while count != width*height + 1 {
         //remove possible directions that are blocked or
         //hit cells already processed
-        let mut possible_directions: HashSet<usize> = vec![Direction::LEFT.val(),Direction::UP.val(),Direction::RIGHT.val(),Direction::DOWN.val()].into_iter().collect();
+        let mut possible_directions: HashSet<usize> = vec![Direction::LEFT.val(),Direction::UP.val(),Direction::RIGHT.val(),Direction::DOWN.val()].into_iter().collect(); //create it as a vector bc that's easy, then convert it to a hashset
         if col==0 || used[row][col-1]!=0 {
             possible_directions.remove(&Direction::LEFT.val());
         }
