@@ -1,6 +1,7 @@
 *.class
 */.vs
 *.suo
+.vscode/
 
 bin/
 obj/
