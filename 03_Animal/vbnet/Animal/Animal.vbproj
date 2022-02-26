@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Animal</RootNamespace>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>16.9</LangVersion>
+    <OptionStrict>On</OptionStrict>
+  </PropertyGroup>
+</Project>

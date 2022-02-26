@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "banner", "banner.vbproj", "{1738D297-A04C-4E6E-8219-D9E72982C39D}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "Banner", "Banner.vbproj", "{091ABE13-3E70-4848-B836-592F725915A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1738D297-A04C-4E6E-8219-D9E72982C39D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1738D297-A04C-4E6E-8219-D9E72982C39D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1738D297-A04C-4E6E-8219-D9E72982C39D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1738D297-A04C-4E6E-8219-D9E72982C39D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{091ABE13-3E70-4848-B836-592F725915A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{091ABE13-3E70-4848-B836-592F725915A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{091ABE13-3E70-4848-B836-592F725915A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{091ABE13-3E70-4848-B836-592F725915A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,15 @@ Each move is indicated by a 3-digit number (digits not separated by commas), wit
 
 This version of 3-D TIC-TAC-TOE is from Dartmouth College.
 
+### Conversion notes
+
+The AI code for TicTacToe2 depends quite heavily on the non-structured GOTO (I can almost hear Dijkstra now) and translation is quite challenging. This code relies very heavily on GOTOs that bind the code tightly together. Comments explain where that happens in the original. 
+
+There are at least two bugs from the original BASIC:
+
+1. Code should only allow player to input valid 3D coordinates where every digit is between 1 and 4, but the original code allows any value between 111 and 444 (such as 297, for instance).
+2. If the player moves first and the game ends in a draw, the original program will still prompt the player for a move instead of calling for a draw.
+
 ---
 
 As published in Basic Computer Games (1978):

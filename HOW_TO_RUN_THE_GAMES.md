@@ -23,21 +23,31 @@ Alternatively, for non-dotnet compatible translations, you will need [Visual Stu
 
 ## java
 
+**TIP:** You can build all the java and kotlin games at once
+using the instructions in the [buildJvm directory](buildJvm/README.md)
+
 The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
 
 To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [Open JDK](https://openjdk.java.net/)).
 
 1. Navigate to the corresponding directory.
 1. Compile the program with `javac`:
-    * eg. `javac AceyDuceyGame.java`
+   * eg. `javac AceyDuceyGame.java`
 1. Run the compiled program with `java`:
-    * eg. `java AceyDuceyGame`
+   * eg. `java AceyDuceyGame`
+
+or if you are **using JDK11 or later** you can now execute a self contained java file that has a main method directly with `java <filename>.java`.
 
 ## javascript
 
 The javascript examples can be run from within your web browser:
 
 1. Simply open the corresponding `.html` file from your web browser.
+
+## kotlin
+
+Use the directions in [buildJvm](buildJvm/README.md) to build for kotlin. You can also use those directions to
+build java games.
 
 ## pascal
 
@@ -46,7 +56,7 @@ The pascal examples can be run using [Free Pascal](https://www.freepascal.org/).
 The pascal examples include both *simple* (single-file) and *object-oriented* (in the `/object-pascal`directories) examples.
 
 1. You can compile the program from the command line with the `fpc` command.
-    * eg. `fpc amazing.pas`
+   * eg. `fpc amazing.pas`
 1. The output is an executable file that can be run directly.
 
 ## perl
@@ -55,7 +65,7 @@ The perl translations can be run using a perl interpreter (a copy can be downloa
 
 1. From the command-line, navigate to the corresponding directory.
 1. Invoke with the `perl` command.
-    * eg. `perl aceyducey.pl`
+   * eg. `perl aceyducey.pl`
 
 ## python
 
@@ -63,8 +73,8 @@ The python translations can be run from the command line by using the `py` inter
 
 1. From the command-line, navigate to the corresponding directory.
 1. Invoke with the `py` or `python` interpreter (depending on your python version).
-    * eg. `py acey_ducey_oo.py`
-    * eg. `python aceyducey.py`
+   * eg. `py acey_ducey_oo.py`
+   * eg. `python aceyducey.py`
 
 **Note**
 
@@ -78,7 +88,7 @@ If you don't already have a ruby interpreter, you can download it from the [ruby
 
 1. From the command-line, navigate to the corresponding directory.
 1. Invoke with the `ruby` tool.
-    * eg. `ruby aceyducey.rb`
+   * eg. `ruby aceyducey.rb`
 
 ## vbnet
 
