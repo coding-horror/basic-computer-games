@@ -1,19 +1,20 @@
-plugins {
-    id 'application'
-}
-
 sourceSets {
     main {
         java {
-            srcDirs '../../03_Animal/java'
+            srcDirs "../../$gameSource"
+        }
+    }
+    test {
+        java {
+            srcDirs "../../$gameTest"
         }
     }
 }
 
-repositories {
-    mavenCentral()
+application {
+    mainClass = gameMain
 }
 
-application {
-    mainClass = 'Animal'
+dependencies {
+    testImplementation(project(":build_00_utilities").sourceSets.test.output)
 }
