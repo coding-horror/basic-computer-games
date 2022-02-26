@@ -1,6 +1,19 @@
 use rand::{Rng, prelude::thread_rng};
 use std::{io};
 
+/**
+ * todo list:
+ * 
+ * make a 2 player game functional
+ * 
+ * add more players
+ * 
+ * use a 3 deck pool of cards instead of an infinite amount
+ * 
+ * keep track of player bets
+ */
+
+
 //DATA
 struct CARD {
     name: String,
@@ -24,6 +37,12 @@ struct DECK {
 }
 struct PLAYER {
     hand: HAND,
+    balance: usize,
+}
+impl PLAYER {
+    fn new() -> PLAYER {
+
+    }
 }
 
 struct GAME {
@@ -35,7 +54,7 @@ struct GAME {
     discard_pile: DECK,
 }
 impl GAME {
-    fn start(num_players:u8) {
+    fn start(num_players:u8) -> GAME {
         //ask user how many players there should be, not including them
         let num_players = loop {
             //input loop
@@ -57,6 +76,12 @@ impl GAME {
                 }
             };
         };
+
+
+
+
+        //return a game
+        return GAME { human_player: PLAYER::new(), computer_players: (), dealer: (), deck: (), discard_pile: () }
 
 
     }
