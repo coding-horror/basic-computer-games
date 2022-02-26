@@ -15,7 +15,6 @@ buildJvm/*/build/
 *.class
 */.vs
 *.suo
-.vscode/
 
 bin/
 obj/
