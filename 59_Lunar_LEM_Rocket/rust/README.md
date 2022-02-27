@@ -2,5 +2,11 @@ README.md
 
 Original source downloaded from Vintage Basic
 
-Conversion to Rust
+This folder for chapter #59 contains three different games.  Three folders here contain the three games:
+
+ - Rocket
+ - LEM
+ - lunar
+
+Conversion to [Rust](https://www.rust-lang.org)
 
