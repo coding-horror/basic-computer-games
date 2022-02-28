@@ -1,12 +1,10 @@
 use rand::{prelude::{thread_rng, SliceRandom}};
-use std::{io, collections::HashSet};
+use std::{io, io::{stdout, Write}};
 
 /**
  * todo list:
  * 
  * allow splitting
- * 
- * keep track of player bets
  * 
  * allow doubling down
  */
@@ -17,6 +15,14 @@ use std::{io, collections::HashSet};
 enum PlayerType {
     Player,
     Dealer,
+}
+impl ToString for PlayerType {
+    fn to_string(&self) -> String {
+        match self {
+            &PlayerType::Dealer => return String::from("Dealer"),
+            &PlayerType::Player => return String::from("Player"),
+        }
+    }
 }
 enum Play {
     Stand,
@@ -181,16 +187,36 @@ impl<'a> DECKS<'a> {
 
 struct PLAYER<'a> {
     hand: HAND<'a>,
-    _balance: usize,
+    balance: usize,
+    bet: usize,
     wins: usize,
     player_type: PlayerType,
+    index: usize,
+
 }
 impl<'a> PLAYER<'a> {
     /**
      * creates a new player of the given type
      */
-    fn new(player_type: PlayerType) -> PLAYER<'a> {
-        return PLAYER { hand: HAND::new(), _balance: STARTING_BALANCE, wins: 0, player_type: player_type};
+    fn new(player_type: PlayerType, index: usize) -> PLAYER<'a> {
+        return PLAYER { hand: HAND::new(), balance: STARTING_BALANCE, bet: 0, wins: 0, player_type: player_type, index: index};
+    }
+
+    fn get_name(&self) -> String {
+        format!("{}{}", self.player_type.to_string(),self.index)
+    }
+
+    /**
+     * gets a bet from the player
+     */
+    fn get_bet(&mut self) {
+        if let PlayerType::Player = self.player_type {
+            if self.balance < 1 {
+                println!("{} is out of money :(", self.get_name());
+                self.bet = 0;
+            }
+            self.bet = get_number_from_user_input(format!("{}\tBet?",self.get_name()).as_str(), 1, self.balance);
+        }
     }
 
     /**
@@ -199,7 +225,7 @@ impl<'a> PLAYER<'a> {
      * if player is a dealer, returns the first card in the hand followed by *'s for every other card
      * if player is a player, returns every card and the total
      */
-    fn print_hand(&self, hide_dealer:bool) -> String {
+    fn hand_as_string(&self, hide_dealer:bool) -> String {
         if !hide_dealer {
             return format!(
                 "{}\n\ttotal points = {}", //message
@@ -213,34 +239,35 @@ impl<'a> PLAYER<'a> {
                 self.hand.get_total() //total points in hand
             );
         }
-
-        match &self.player_type {
-            &PlayerType::Dealer =>  { //if this is a dealer
-                return format!(
-                    "{}*",//message 
-                    { //*'s for other cards
-                        let mut s:String = String::new();
-                        let mut cards_in_hand = self.hand.cards.iter();
-                        cards_in_hand.next();//consume first card drawn
-                        for c in cards_in_hand.rev() {
-                            s += format!("{}\t", c.name).as_str();
+        else {
+            match &self.player_type {
+                &PlayerType::Dealer =>  { //if this is a dealer
+                    return format!(
+                        "{}*",//message 
+                        { //*'s for other cards
+                            let mut s:String = String::new();
+                            let mut cards_in_hand = self.hand.cards.iter();
+                            cards_in_hand.next();//consume first card drawn
+                            for c in cards_in_hand.rev() {
+                                s += format!("{}\t", c.name).as_str();
+                            }
+                            s
                         }
-                        s
-                    }
-                );
-            },
-            &PlayerType::Player => { //if this is a player
-                return format!(
-                    "{}\n\ttotal points = {}", //message
-                    { //cards in hand
-                        let mut s:String = String::new();
-                        for cards_in_hand in self.hand.cards.iter().rev() {
-                            s += format!("{}\t", cards_in_hand.name).as_str();
-                        }
-                        s
-                    },
-                    self.hand.get_total() //total points in hand
-                );
+                    );
+                },
+                &PlayerType::Player => { //if this is a player
+                    return format!(
+                        "{}\n\ttotal points = {}", //message
+                        { //cards in hand
+                            let mut s:String = String::new();
+                            for cards_in_hand in self.hand.cards.iter().rev() {
+                                s += format!("{}\t", cards_in_hand.name).as_str();
+                            }
+                            s
+                        },
+                        self.hand.get_total() //total points in hand
+                    );
+                }
             }
         }
     }
@@ -277,7 +304,6 @@ impl<'a> PLAYER<'a> {
 struct GAME<'a> {
     players: Vec<PLAYER<'a>>, //last item in this is the dealer
     decks: DECKS<'a>,
-    rounds:usize,
     games_played:usize,
 }
 impl<'a> GAME<'a> {
@@ -289,11 +315,11 @@ impl<'a> GAME<'a> {
         let mut players: Vec<PLAYER> = Vec::new();
 
         //add dealer
-        players.push(PLAYER::new(PlayerType::Dealer));
+        players.push(PLAYER::new(PlayerType::Dealer,0));
         //create human player(s) (at least one)
-        players.push(PLAYER::new(PlayerType::Player));
-        for _i in 1..num_players { //one less than num_players players
-            players.push(PLAYER::new(PlayerType::Player));
+        players.push(PLAYER::new(PlayerType::Player,1));
+        for i in 2..=num_players { //one less than num_players players
+            players.push(PLAYER::new(PlayerType::Player,i));
         }
 
         //ask if they want instructions
@@ -303,98 +329,102 @@ impl<'a> GAME<'a> {
         println!();
 
         //return a game
-        return GAME { players: players, decks: DECKS::new(), rounds: 0, games_played: 0}
+        return GAME { players: players, decks: DECKS::new(), games_played: 0}
     }
 
     /**
      * prints the score of every player
      */
-    fn print_wins(&self) {
-        println!("Scores:");
-        for player in self.players.iter().enumerate() {
-            match player.1.player_type {
-                PlayerType::Player => println!("Player{} wins:\t{}", player.0, player.1.wins),
-                PlayerType::Dealer => println!("Dealer  wins:\t{}", player.1.wins)
-            }
-        }
+    fn _print_stats(&self) {
+        println!("{}", self.stats_as_string());
+    }
+
+    /**
+     * returns a string of the wins, balance, and bets of every player
+     */
+    fn stats_as_string(&self) -> String {
+        format!("Scores:\n{}",{
+            let mut s = String::new();
+            self.players.iter().for_each(|p| {
+                //format the presentation of player stats
+                match p.player_type {
+                    PlayerType::Player => s+= format!("{} Wins:\t{}\t\tBalance:\t{}\t\tBet\t{}\n",p.get_name(),p.wins,p.balance,p.bet).as_str(),
+                    PlayerType::Dealer => s+= format!("{} Wins:\t{}\n",p.get_name(),p.wins).as_str()
+                }
+            });
+            s
+        })
     }
 
     /**
      * plays a round of blackjack
      */
     fn play_game(&mut self) {
-        //print score of every user
-        self.print_wins();
-
+        //DATA
+        let scores;
+        let game = self.games_played; //save it here so we don't have borrowing issues
+        let mut player_hands_message: String = String::new();//cache it here so we don't have borrowing issues
+        
         //deal cards to each player
         for _i in 0..2 { // do this twice
             //draw card for each player
             self.players.iter_mut().for_each(|player| {player.hand.add_card( self.decks.draw_card() );});
         }
 
-        //keep track of player who haven't busted or stood yet
-        let mut players_playing: HashSet<usize> = HashSet::new(); // the numbers presenting each player still active in the round
-        for i in 0..self.players.len() { //runs number of players times
-            players_playing.insert(i);
-        }
-        //round loop (each player either hits or stands)
-        loop {
-            //increment rounds
-            self.rounds += 1;
+        //get everyones bets
+        self.players.iter_mut().for_each(|player| player.get_bet());
+        scores = self.stats_as_string(); //save it here so we don't have borrowing issues later
+        
+        //play game for each player
+        for player in self.players.iter_mut() {
+            //turn loop, ends when player finishes their turn
+            loop{
+                //clear screen
+                clear();
+                //print welcome
+                welcome();
+                //print game state
+                println!("\n\t\t\tGame {}", game);
+                //print scores
+                println!("{}",scores);
+                //print hands of all players
+                print!("{}", player_hands_message);
+                println!("{} Hand:\t{}", player.get_name(), player.hand_as_string(true));
 
-            //print game state
-            println!("\n\t\t\tGame {}\tRound {}", self.games_played, self.rounds);
-
-            self.players.iter().enumerate().for_each(|player| {
-                match player.1.player_type {
-                    PlayerType::Player => println!("Player{} Hand:\t{}", player.0, player.1.print_hand(true)),
-                    PlayerType::Dealer => println!("Dealer Hand:\t{}", player.1.print_hand(true))
-                }
-            });
-
-            print!("\n"); //empty line
-
-            //get the moves of all remaining players
-            for player in self.players.iter_mut().enumerate() {
-                match player.1.player_type {//print the player name
-                    PlayerType::Player => print!("Player{}:", player.0),
-                    PlayerType::Dealer => print!("Dealer:"),
+                if player.bet == 0 { //player is out of money
+                    break; //exit turn loop
                 }
 
+                //play through turn
                 //check their hand value for a blackjack(21) or bust
-                let score = player.1.hand.get_total();
+                let score = player.hand.get_total();
                 if score >= 21 {
                     if score == 21 { // == 21
-                        println!("\tBlackjack (21 points)");
+                        println!("\tBlackjack! (21 points)");
                     } else { // > 21
                         println!("\tBust      ({} points)", score);
                     }
-                    players_playing.remove(&player.0);//remove player from playing list
-                    continue;
+                    break; //end turn
                 }
 
-                //check if player is still playing
-                if !players_playing.contains(&player.0) {print!("\n");continue;}//print a line and skip to the next iteration of the loop
-
-                //get play
-                let play = player.1.get_play();
-
+                //get player move
+                let play = player.get_play();
                 //process play
                 match play {
                     Play::Stand => {
-                        println!("\t{}s", play.to_string());
-                        players_playing.remove(&player.0);//remove player from playing list
+                        println!("\t{}", play.to_string());
+                        break; //end turn
                     },
                     Play::Hit => {
-                        println!("\t{}s", play.to_string());
+                        println!("\t{}", play.to_string());
                         //give them a card
-                        player.1.hand.add_card( self.decks.draw_card() );
+                        player.hand.add_card( self.decks.draw_card() );
                     },
                 }
             }
-
-            //loop end condition
-            if players_playing.is_empty() {break;}
+            
+            //add player to score cache thing
+            player_hands_message += format!("{} Hand:\t{}\n", player.get_name(), player.hand_as_string(true)).as_str();
         }
 
         //determine winner
@@ -410,34 +440,25 @@ impl<'a> GAME<'a> {
             }
         }
 
-        //print everyones hand
-        println!("");
-        self.players.iter().enumerate().for_each(|player| {
-            match player.1.player_type {
-                PlayerType::Player => println!("Player{} Hand:\t{}", player.0, player.1.print_hand(false)),
-                PlayerType::Dealer => println!("Dealer Hand:\t{}", player.1.print_hand(false))
-            }
-        });
-        println!("");
-        //for each player with the top score
-        self.players.iter_mut().enumerate().filter(|x|->bool{x.1.hand.get_total()==top_score}).for_each(|x| {
-            match x.1.player_type {
-                PlayerType::Player => print!("Player{}\t", x.0),
-                PlayerType::Dealer => print!("Dealer\t"),
-            }
-            //increment their wins
-            x.1.wins += 1;
+        //print winner(s)
+        self.players.iter_mut().filter(|x|->bool{x.hand.get_total()==top_score}).for_each(|x| {//for each player with the top score
+            print!("{} ", x.get_name());//print name
+            x.wins += 1;//increment their wins
         });
         if num_winners > 1 {println!("all tie with {}\n\n\n", top_score);} 
         else {println!("wins with {}!\n\n\n",top_score);}
+
+        //handle bets
+        //remove money from losers
+        self.players.iter_mut().filter(|p| p.hand.get_total()!=top_score).for_each( |p| p.balance -= p.bet); //for every player who didn't get the winning score, remove their bet from their balance
+        //add money to winner
+        self.players.iter_mut().filter(|p| p.hand.get_total()==top_score).for_each(|p| p.balance += p.bet); //for each player who got the winning score, add their bet to their balance
 
         //discard hands
         self.players.iter_mut().for_each(|player| {player.hand.discard_hand(&mut self.decks);});
 
         //increment games_played
         self.games_played += 1;
-        //reset rounds
-        self.rounds = 0;
     }
 
 
@@ -476,10 +497,10 @@ fn main() {
  */
 fn welcome() {
     //welcome message
-    println!("
+    print!("
                             BLACK JACK
               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY    
-    \n\n\n");
+    \n\n");
 }
 
 /**
@@ -502,7 +523,10 @@ fn instructions() {
     NUMBER OF PLAYERS
 
     NOTE: Currently only H and S are implemented properly
+    
+    PRESS ENTER TO CONTINUE
     ");
+    io::stdin().read_line(&mut String::new()).expect("Failed to read line");
 }
 
 /**
@@ -515,7 +539,7 @@ fn get_number_from_user_input(prompt: &str, min:usize, max:usize) -> usize {
 
         //print prompt
         println!("{}", prompt);
-
+        stdout().flush().expect("Failed to flush to stdout.");
         //read user input from standard input, and store it to raw_input
         //raw_input.clear(); //clear input
         io::stdin().read_line(&mut raw_input).expect( "CANNOT READ INPUT!");
@@ -524,11 +548,10 @@ fn get_number_from_user_input(prompt: &str, min:usize, max:usize) -> usize {
         match raw_input.trim().parse::<usize>() {
             Ok(i) => {
                 if i < min || i > max { //input out of desired range
-                    println!("INPUT OUT OF VALID RANGE.  TRY AGAIN.");
+                    println!("INPUT OUT OF VALID RANGE.  TRY AGAIN.  {}-{}",min,max);
                     continue; // run the loop again
                 } 
                 else {
-                    println!();
                     break i;// this escapes the loop, returning i 
                 }
             },
@@ -551,7 +574,7 @@ fn get_char_from_user_input(prompt: &str, valid_results: &Vec<char>) -> char {
 
         //print prompt
         println!("{}", prompt);
-
+        stdout().flush().expect("Failed to flush to stdout.");
         //read user input from standard input, and store it to raw_input
         //raw_input.clear(); //clear input
         io::stdin().read_line(&mut raw_input).expect( "CANNOT READ INPUT!");
@@ -573,4 +596,11 @@ fn get_char_from_user_input(prompt: &str, valid_results: &Vec<char>) -> char {
             }
         };
     };
+}
+
+/**
+ * clear std out
+ */
+fn clear() {
+    println!("\x1b[2J\x1b[0;0H");
 }
