@@ -131,7 +131,6 @@ fn main() {
                 if used[row][col] != 0 {break;}
             }
         }
-
     }
     // Add a random exit
     col=rng.gen_range(0..width);
@@ -163,6 +162,10 @@ fn main() {
         }
         println!(".");
     }
+
+    //stops the program from ending until you give input, useful when running a compiled .exe
+    println!("\n\npress ENTER to exit");
+    io::stdin().read_line(&mut String::new()).expect("closing");
 }
 
 fn get_user_input(prompt: &str) -> usize {
