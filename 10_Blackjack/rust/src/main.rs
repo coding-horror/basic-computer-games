@@ -5,8 +5,6 @@ use std::{io, io::{stdout, Write}};
  * todo list:
  * 
  * allow splitting
- * 
- * allow doubling down
  */
 
 
@@ -544,7 +542,7 @@ fn instructions() {
     BLACKJACK, THE INITIAL RESPONSE SHOULD BE 'S'.
     NUMBER OF PLAYERS
 
-    NOTE: Currently only H and S are implemented properly
+    NOTE:'/' (splitting) is not currently implemented, and does nothing
     
     PRESS ENTER TO CONTINUE
     ");
