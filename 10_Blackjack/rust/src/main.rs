@@ -27,12 +27,16 @@ impl ToString for PlayerType {
 enum Play {
     Stand,
     Hit,
+    DoubleDown,
+    Split,
 }
 impl ToString for Play {
     fn to_string(&self) -> String {
         match self {
             &Play::Hit => return String::from("Hit"),
             &Play::Stand => return String::from("Stand"),
+            &Play::DoubleDown => return String::from("Double Down"),
+            &Play::Split => return String::from("Split")
         }
     }
 }
@@ -290,10 +294,12 @@ impl<'a> PLAYER<'a> {
                 }
             },
             &PlayerType::Player => {
-                let play = get_char_from_user_input("\tWhat is your play?", &vec!['s','S','h','H']);
+                let play = get_char_from_user_input("\tWhat is your play?", &vec!['s','S','h','H','d','D','/']);
                 match play {
                     's' | 'S' => return Play::Stand,
                     'h' | 'H' => return Play::Hit,
+                    'd' | 'D' => return Play::DoubleDown,
+                    '/'       => return Play::Split,
                     _ => panic!("get_char_from_user_input() returned invalid character"),
                 }
             },
@@ -419,6 +425,22 @@ impl<'a> GAME<'a> {
                         println!("\t{}", play.to_string());
                         //give them a card
                         player.hand.add_card( self.decks.draw_card() );
+                    },
+                    Play::DoubleDown => {
+                        println!("\t{}", play.to_string());
+
+                        //double their balance if there's enough money, othewise go all-in
+                        if player.bet * 2 < player.balance { 
+                            player.bet *= 2;
+                        }
+                        else {
+                            player.bet = player.balance;
+                        }
+                        //give them a card
+                        player.hand.add_card( self.decks.draw_card() );
+                    },
+                    Play::Split => {
+
                     },
                 }
             }
