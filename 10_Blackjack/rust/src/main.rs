@@ -401,8 +401,10 @@ impl<'a> GAME<'a> {
                 print!("{}", player_hands_message);
                 println!("{} Hand:\t{}", player.get_name(), player.hand_as_string(true));
 
-                if player.bet == 0 { //player is out of money
-                    break; //exit turn loop
+                if let PlayerType::Player = player.player_type { //player isn't the dealer
+                    if player.bet == 0 {//player is out of money
+                        break;//exit turn loop
+                    }
                 }
 
                 //play through turn
