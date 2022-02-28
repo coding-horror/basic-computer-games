@@ -1,0 +1,9 @@
+[package]
+name = "rock_scissors_paper"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+text_io = "0.1.10"
+#num-integer = "0.1"
+rand = "0.8.5"
