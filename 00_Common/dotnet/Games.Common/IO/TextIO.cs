@@ -67,10 +67,6 @@ public class TextIO : IReadWrite
                 nameof(quantity),
                 $"'{nameof(quantity)}' must be greater than zero.");
 
-    public void Write(string value) => _output.Write(value);
-
-    public void WriteLine(string value) => _output.WriteLine(value);
-
     public string ReadString(string prompt)
     {
         return ReadStrings(prompt, 1)[0];
@@ -90,4 +86,14 @@ public class TextIO : IReadWrite
         Write(prompt + "? ");
         return _input.ReadLine();
     }
+
+    public void Write(string value) => _output.Write(value);
+
+    public void WriteLine(string value) => _output.WriteLine(value);
+
+    public void Write(float value) => _output.Write(GetString(value));
+
+    public void WriteLine(float value) => _output.WriteLine(GetString(value));
+
+    private string GetString(float value) => value < 0 ? $"{value} " : $" {value} ";
 }
