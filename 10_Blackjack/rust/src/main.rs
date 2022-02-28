@@ -292,7 +292,13 @@ impl<'a> PLAYER<'a> {
                 }
             },
             &PlayerType::Player => {
-                let play = get_char_from_user_input("\tWhat is your play?", &vec!['s','S','h','H','d','D','/']);
+                let valid_results:Vec<char>;
+                if self.hand.cards.len() > 2 {//if there are more than 2 cards in the hand, at least one turn has happened, so splitting and doubling down are not allowed
+                    valid_results = vec!['s','S','h','H'];
+                } else {
+                    valid_results = vec!['s','S','h','H','d','D','/'];
+                }
+                let play = get_char_from_user_input("\tWhat is your play?", &valid_results);
                 match play {
                     's' | 'S' => return Play::Stand,
                     'h' | 'H' => return Play::Hit,
