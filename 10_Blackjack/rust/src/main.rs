@@ -323,12 +323,16 @@ impl<'a> GAME<'a> {
      * plays a round of blackjack
      */
     fn play_game(&mut self) {
+        //print score of every user
+        self.print_wins();
+
         //deal cards to each player
         for _i in 0..2 { // do this twice
             //draw card for each player
             self.players.iter_mut().for_each(|player| {player.hand.add_card( self.decks.draw_card() );});
         }
 
+        //keep track of player who haven't busted or stood yet
         let mut players_playing: HashSet<usize> = HashSet::new(); // the numbers presenting each player still active in the round
         for i in 0..self.players.len() { //runs number of players times
             players_playing.insert(i);
@@ -368,6 +372,9 @@ impl<'a> GAME<'a> {
                     players_playing.remove(&player.0);//remove player from playing list
                     continue;
                 }
+
+                //check if player is still playing
+                if !players_playing.contains(&player.0) {print!("\n");continue;}//print a line and skip to the next iteration of the loop
 
                 //get play
                 let play = player.1.get_play();
@@ -429,6 +436,8 @@ impl<'a> GAME<'a> {
 
         //increment games_played
         self.games_played += 1;
+        //reset rounds
+        self.rounds = 0;
     }
 
 
@@ -450,9 +459,6 @@ fn main() {
 
     //game loop, play game until user wants to stop
     loop {
-        //print score of every user
-        game.print_wins();
-
         //play round
         game.play_game();
 
