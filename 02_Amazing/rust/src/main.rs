@@ -163,12 +163,6 @@ fn main() {
         }
         println!(".");
     }
-
-    
-    
-
-
-
 }
 
 fn get_user_input(prompt: &str) -> usize {
@@ -187,7 +181,15 @@ fn get_user_input(prompt: &str) -> usize {
 
         //from input, try to read a number
         match raw_input.trim().parse::<usize>() {
-            Ok(i) => break i, // this escapes the loop, returning i 
+            Ok(i) => {
+                if i>1 { //min size 1
+                    break i; // this escapes the loop, returning i 
+                }
+                else {
+                    println!("INPUT OUT OF RANGE.  TRY AGAIN.");
+                    continue;// run the loop again
+                }
+            }
             Err(e) => {
                 println!("MEANINGLESS DIMENSION.  TRY AGAIN.  {}", e.to_string().to_uppercase());
                 continue; // run the loop again
