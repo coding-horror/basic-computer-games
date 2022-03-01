@@ -131,7 +131,6 @@ fn main() {
                 if used[row][col] != 0 {break;}
             }
         }
-
     }
     // Add a random exit
     col=rng.gen_range(0..width);
@@ -164,11 +163,9 @@ fn main() {
         println!(".");
     }
 
-    
-    
-
-
-
+    //stops the program from ending until you give input, useful when running a compiled .exe
+    println!("\n\npress ENTER to exit");
+    io::stdin().read_line(&mut String::new()).expect("closing");
 }
 
 fn get_user_input(prompt: &str) -> usize {
@@ -187,7 +184,15 @@ fn get_user_input(prompt: &str) -> usize {
 
         //from input, try to read a number
         match raw_input.trim().parse::<usize>() {
-            Ok(i) => break i, // this escapes the loop, returning i 
+            Ok(i) => {
+                if i>1 { //min size 1
+                    break i; // this escapes the loop, returning i 
+                }
+                else {
+                    println!("INPUT OUT OF RANGE.  TRY AGAIN.");
+                    continue;// run the loop again
+                }
+            }
             Err(e) => {
                 println!("MEANINGLESS DIMENSION.  TRY AGAIN.  {}", e.to_string().to_uppercase());
                 continue; // run the loop again
