@@ -10,6 +10,7 @@
  * this is a good candidate for immutability.
  *
  */
+// TODO consider making this a Record
 public final class Card {
 
 	public enum Suit {
