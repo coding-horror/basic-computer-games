@@ -1,4 +1,6 @@
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Player {
 
@@ -20,31 +22,23 @@ public class Player {
         splitBet = 0;
         total = 0;
         hand = new LinkedList<>();
-        splitHand = new LinkedList<>();
-    }
-
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
+        splitHand = null;
     }
 
     public int getPlayerNumber() {
         return this.playerNumber;
     }
     
-    public void setCurrentBet(double currentBet) {
-        this.currentBet = currentBet;
-    }
-
     public double getCurrentBet() {
         return this.currentBet;
     }
 
-    public double getSplitBet() {
-        return splitBet;
+    public void setCurrentBet(double currentBet) {
+        this.currentBet = currentBet;
     }
 
-    public void setSplitBet(double splitBet) {
-        this.splitBet = splitBet;
+    public double getSplitBet() {
+        return splitBet;
     }
 
     public double getInsuranceBet() {
@@ -79,31 +73,81 @@ public class Player {
 
     //   dealCard adds the given card to the player's hand
     public void dealCard(Card card) {
-        hand.add(card);
+        dealCard(card, 1);
     }
     
-    public void dealSplitHandCard(Card card) {
-        splitHand.add(card);
+    public void dealCard(Card card, int handNumber) {
+        if(handNumber == 1) {
+            hand.add(card);
+        } else if (handNumber == 2) {
+            splitHand.add(card);
+        } else {
+            throw new IllegalArgumentException("Invalid hand number " + handNumber);
+        }
     }
+
+    public boolean canSplit() {
+        if(isSplit()) {
+            // Can't split twice
+            return false;
+        } else {
+            boolean isPair = this.hand.get(0).getValue() == this.hand.get(1).getValue();
+            return isPair;
+        }
+    }
+
+    public boolean isSplit() {
+        return this.splitHand != null;
+    }
+
     /**
-     * Removes first card from hand to adds it to split hand
+     * Removes first card from hand to add it to new split hand
      */
     public void split() {
         this.splitBet = this.currentBet;
+        this.splitHand = new LinkedList<>();
         splitHand.add(hand.pop());
+    }
+
+    public boolean canDoubleDown(int handNumber) {
+        if(handNumber == 1){
+            return this.hand.size() == 2;
+        } else if(handNumber == 2){
+            return this.splitHand.size() == 2;
+        } else {
+            throw new IllegalArgumentException("Invalid hand number " + handNumber);
+        }
+    }
+
+    public void doubleDown(Card card, int handNumber) {
+        if(handNumber == 1){
+            this.currentBet = this.currentBet * 2;
+        } else if(handNumber == 2){
+            this.splitBet = this.splitBet * 2;
+        } else {
+            throw new IllegalArgumentException("Invalid hand number " + handNumber);
+        }
+        this.dealCard(card, handNumber);
     }
 
     //   resetHand resets 'hand' & 'splitHand' to empty lists
     public void resetHand() {
         this.hand = new LinkedList<>();
-        this.splitHand = new LinkedList<>();
+        this.splitHand = null;
     }
 
-    public LinkedList<Card> getHand() {
-        return this.hand;
+    public List<Card> getHand() {
+        return getHand(1);
     }
 
-    public LinkedList<Card> getSplitHand() {
-        return this.splitHand;
+    public List<Card> getHand(int handNumber) {
+        if(handNumber == 1){
+            return Collections.unmodifiableList(this.hand);
+        } else if(handNumber == 2){
+            return Collections.unmodifiableList(this.splitHand);
+        } else {
+            throw new IllegalArgumentException("Invalid hand number " + handNumber);
+        }
     }
+
 }
