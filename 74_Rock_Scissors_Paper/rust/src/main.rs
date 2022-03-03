@@ -3,7 +3,7 @@
  * Originally from the wonderful book: _Basic Computer Games_
  * Port to Rust By David Lotts
 */
-use rand::{prelude::ThreadRng, Rng};  //Large code. Switch to https://crates.io/crates/oorandom
+use nanorand::{tls::TlsWyRand, Rng};
 use std::io::{self, Write};
 use strum::EnumCount;
 use strum_macros::{Display, EnumCount, FromRepr};
@@ -11,11 +11,11 @@ use text_io::try_read;
 fn main() {
     let mut computer_wins = 0;
     let mut human_wins = 0;
-    let mut rng = rand::thread_rng();
+    let mut rng = nanorand::tls_rng();
     println!("{:>21}", "GAME OF ROCK, SCISSORS, PAPER");
     println!("{:>15}", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
     print!("\n\n\n");
-    // pass by reference in rust! input() modifies num_games_q.
+    // pass by reference in rust! input() modifies this variable.
     let mut qty_games = 0;
     loop {
         input_int("HOW MANY GAMES", &mut qty_games);
@@ -27,7 +27,6 @@ fn main() {
     for game_number in 1..=qty_games {
         println!();
         println!("GAME NUMBER {}", game_number);
-        //let my_choice: i32 = rng.gen_range(1..=3); // basic: X=INT(RND(1)*3+1)
         let mut your_choice = 0;
         loop {
             println!("3=ROCK...2=SCISSORS...1=PAPER");
@@ -39,23 +38,28 @@ fn main() {
             println!("INVALID.");
         }
         // Convert number to enum.  Note the type change.  Really it is a new variable.
-        let your_choice =  Choice::from_repr((your_choice-1) as usize).unwrap();
+        let your_choice = Choice::from_repr((your_choice - 1) as usize).unwrap();
         let my_choice = Choice::new_random(&mut rng);
 
         println!("THIS IS MY CHOICE...");
         println!("...{}", my_choice.to_string());
         let winner = Winner::decide_winner(my_choice, your_choice);
-        println!("{}", match winner {
-            Winner::Tie => {
-                "TIE GAME.  NO WINNER."
+        println!(
+            "{}",
+            match winner {
+                Winner::Tie => {
+                    "TIE GAME.  NO WINNER."
+                }
+                Winner::Computer => {
+                    computer_wins = computer_wins + 1;
+                    "WOW!  I WIN!!!"
+                }
+                Winner::Human => {
+                    human_wins = human_wins + 1;
+                    "YOU WIN!!!"
+                }
             }
-            Winner::Computer => {
-                computer_wins = computer_wins + 1; "WOW!  I WIN!!!"
-            }
-            Winner::Human => {
-                human_wins = human_wins + 1; "YOU WIN!!!"
-            }
-        })
+        )
     }
     println!();
     println!("HERE IS THE FINAL GAME SCORE:");
@@ -70,7 +74,7 @@ fn main() {
 }
 
 #[derive(FromRepr, Debug, PartialEq, EnumCount, Display)]
-enum Choice {
+pub enum Choice {
     PAPER,
     SCISSORS,
     ROCK,
@@ -78,8 +82,8 @@ enum Choice {
 
 impl Choice {
     /// Returns randomly selected paper..rock.
-    fn new_random(rng: &mut ThreadRng) -> Choice {
-        Choice::from_repr((rng).gen_range(0..Choice::COUNT)).unwrap()
+    fn new_random(rng: &mut TlsWyRand) -> Choice {
+        Choice::from_repr(rng.generate_range(0..Choice::COUNT)).unwrap()
     }
 }
 
@@ -94,19 +98,19 @@ impl Winner {
     /// take opponent's choices and decide the winner
     // I really learned alot about enums here, and now you can too!
     // Originally I broke this out for auto testing.
-    fn decide_winner(my_choice: Choice, your_choice: Choice) -> Winner {
+    pub fn decide_winner(my_choice: Choice, your_choice: Choice) -> Winner {
         let my_choice = my_choice as u8;
         let your_choice = your_choice as u8;
-        if my_choice == your_choice  {
+        if my_choice == your_choice {
             return Winner::Tie;
         }
         // wordy but clear way:
         //    if (my_choice == 1 && your_choice == 3) || (my_choice > your_choice)
         // consice but opaque way:
         if 1 == (3 + my_choice - your_choice) % 3 {
-            return Winner::Computer
+            return Winner::Computer;
         }
-        return Winner::Human
+        return Winner::Human;
     }
 }
 
@@ -116,28 +120,28 @@ fn input_int(prompt: &str, number: &mut i32) {
         print!("{} ? ", prompt);
         io::stdout().flush().unwrap();
         if let Ok(n) = try_read!() {
-                *number = n;
-                return;
+            *number = n;
+            return;
         }
     }
 }
 
-// TODO break out the winner decider and test it.
+/// Test winner decider for every case.
 #[cfg(test)]
 mod tests {
     #[test]
     fn winner_test() {
-        use super::*; 
-        use Winner::*;
-        use Choice::*;   //decide_winner(my_choice=computer, your_choice=human)
-        assert_eq!(Winner::decide_winner(PAPER   ,PAPER   ), Tie);
-        assert_eq!(Winner::decide_winner(PAPER   ,SCISSORS), Human);
-        assert_eq!(Winner::decide_winner(PAPER   ,ROCK),     Computer);
-        assert_eq!(Winner::decide_winner(SCISSORS,PAPER   ), Computer);
-        assert_eq!(Winner::decide_winner(SCISSORS,SCISSORS), Tie);
-        assert_eq!(Winner::decide_winner(SCISSORS,ROCK),     Human);
-        assert_eq!(Winner::decide_winner(ROCK    ,PAPER   ), Human);
-        assert_eq!(Winner::decide_winner(ROCK    ,SCISSORS), Computer);
-        assert_eq!(Winner::decide_winner(ROCK    ,ROCK),     Tie);
+        use super::*;
+        use Choice::*;
+        use Winner::*; //decide_winner(my_choice=computer, your_choice=human)
+        assert_eq!(Winner::decide_winner(PAPER, PAPER), Tie);
+        assert_eq!(Winner::decide_winner(PAPER, SCISSORS), Human);
+        assert_eq!(Winner::decide_winner(PAPER, ROCK), Computer);
+        assert_eq!(Winner::decide_winner(SCISSORS, PAPER), Computer);
+        assert_eq!(Winner::decide_winner(SCISSORS, SCISSORS), Tie);
+        assert_eq!(Winner::decide_winner(SCISSORS, ROCK), Human);
+        assert_eq!(Winner::decide_winner(ROCK, PAPER), Human);
+        assert_eq!(Winner::decide_winner(ROCK, SCISSORS), Computer);
+        assert_eq!(Winner::decide_winner(ROCK, ROCK), Tie);
     }
 }
