@@ -212,7 +212,7 @@ public class Game {
 	 * @param hand the hand to evaluate
 	 * @return The numeric value of a hand. A value over 21 indicates a bust.
 	 */
-	protected int scoreHand(LinkedList<Card> hand){
+	protected int scoreHand(List<Card> hand){
 		int nAces = (int) hand.stream().filter(c -> c.getValue() == 1).count();
 		int value = hand.stream()
 			.mapToInt(Card::getValue)
@@ -235,15 +235,15 @@ public class Game {
 	 * @param handB other hand to compare
 	 * @return a negative integer, zero, or a positive integer as handA is less than, equal to, or greater than handB.
 	 */
-	protected int compareHands(LinkedList<Card> handA, LinkedList<Card> handB) {
+	protected int compareHands(List<Card> handA, List<Card> handB) {
 		int scoreA = this.scoreHand(handA);
 		int scoreB = this.scoreHand(handB);
 
 		if(scoreA == 21 && scoreB == 21){
 			if(handA.size() == 2 && handB.size() != 2){
-				return 1; //Hand A wins
+				return 1; //Hand A wins with a natural blackjack
 			} else if (handA.size() != 2 && handB.size() == 2) {				
-				return -1; //Hand B wins
+				return -1; //Hand B wins with a natural blackjack
 			} else {
 				return 0; //Tie
 			}
