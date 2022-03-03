@@ -33,13 +33,15 @@ while(true) {
 				d = move(c + 3);
 				computerMoves(d);
 				s = readYourMove();
-				if (s != move(d + 4)) {
+				if (s == move(d + 4)) {
+					e = move(d + 6);
+					computerMoves(e);
+					Console.WriteLine("THE GAME IS A DRAW.");
+				} else {
 					e = move(d + 4);
 					computerMoves(e);
+					Console.WriteLine("AND WINS ********");
 				}
-				e = move(d + 6);
-				computerMoves(e);
-				Console.WriteLine("THE GAME IS A DRAW.");
 			} else {
 				d = move(c + 7);
 				computerMoves(d);
