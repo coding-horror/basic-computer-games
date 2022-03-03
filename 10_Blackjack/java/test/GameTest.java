@@ -20,6 +20,15 @@ public class GameTest {
     private StringWriter out;
     private Game game;
 
+    // TODO See if it's possible to initialize test data in a more readable way.
+    // e.g.
+    //   playerGets(Card)
+    //   playerGets(Card)
+    //   playerDoes(String)
+    //   playerGets(Card)
+    //   playerDoes(String)
+    //   initGame(g) // Creates the deck and initializes 'in' based on values accumulated from prior calls to playerGets and playerDoes.
+
     private void givenStubGame() {
         in = new StringReader("");
         out = new StringWriter();
