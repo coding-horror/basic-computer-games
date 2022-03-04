@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,16 +48,11 @@ public class Game {
 		}
 
 		while(true) {
-			double[] bets = new double[nPlayers]; // empty array initialized with all '0' valuses.
-			while(!betsAreValid(bets)){
+			while(!betsAreValid(players)){
 				userIo.println("BETS:");
 				for(int i = 0; i < nPlayers; i++) {
-					// Note that the bet for player "1" is at index "0" in the bets
-					// array and take care to avoid off-by-one errors.
-					// TODO the BASIC version allows fractional bets (e.g. '1.5') of arbitrary precision
-					//   We can use a double if we want--the original basic has doubleing point errors. Or we could use BigDecimal if we really want to fix that.
-					bets[i] = userIo.promptDouble("#" + (i + 1));  //TODO: If there isn't a need for a separate Bets in the future, combine these two lines and convert to enhanced FOR loop
-					players.get(i).setCurrentBet(bets[i]);
+					double bet = userIo.promptDouble("#" + (i + 1)); // 1st player is "Player 1" not "Player 0"
+					players.get(i).setCurrentBet(bet);
 				}
 			}
 
@@ -246,11 +242,12 @@ public class Game {
 	/**
 	 * Validates that all bets are between 0 (exclusive) and 500 (inclusive). Fractional bets are valid.
 	 * 
-	 * @param bets The array of bets for each player.
+	 * @param players The players with their current bet set.
 	 * @return true if all bets are valid, false otherwise.
 	 */
-	public boolean betsAreValid(double[] bets) {
-		return Arrays.stream(bets)
+	public boolean betsAreValid(Collection<Player> players) {
+		return players.stream()
+			.map(Player::getCurrentBet)
 			.allMatch(bet -> bet > 0 && bet <= 500);
 	}
 
