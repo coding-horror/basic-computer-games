@@ -44,7 +44,9 @@ public final class Card {
 
     public String toString() {
         StringBuilder result = new StringBuilder(2); 
-        if(value < 11) {
+        if(value == 1) {
+            result.append("A");
+        } else if(value < 11) {
             result.append(value);
         } else if(value == 11) {
             result.append('J');
