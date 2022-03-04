@@ -1,5 +1,4 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
 // Print text on the screen with 30 spaces before text
 Console.WriteLine("TIC TAC TOE".PadLeft(30));
 // Print text on screen with 15 spaces before text
