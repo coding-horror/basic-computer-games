@@ -193,7 +193,7 @@ public class Game {
 						userIo.println("SECOND HAND RECEIVES A " + card.toString());
 					}
 					play(player, 2);
-					break;
+					return; // Don't fall out of the while loop and print another total
 				} else {
 					userIo.println("SPLITTING NOT ALLOWED");
 					action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
@@ -206,7 +206,7 @@ public class Game {
 				}
 			}
 		}
-
+		userIo.println("TOTAL IS " + scoreHand(player.getHand(handNumber)));
 	}
 
 	/**
