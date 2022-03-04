@@ -56,15 +56,15 @@ def play_a_game
     lower, upper = get_guesses("Guess ##{i+1}?")
 
     case
-    when lower == upper && lower == n
-      puts "You got it!!!"
-      return
     when n < lower
       puts "My number is smaller than your trap numbers."
     when n > upper
       puts "My number is larger than your trap numbers."
-    else
+    when lower != upper
       puts "You have trapped my number."
+    else
+      puts "You got it!!!"
+      return
     end
   end
 
