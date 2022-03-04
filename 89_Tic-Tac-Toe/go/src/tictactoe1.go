@@ -6,14 +6,12 @@ import (
 )
 
 func main() {
-	fmt.Printf("Hello, World!\n")
 	// Print text on the screen with 30 spaces before text
 	fmt.Printf("%30s\n", "TIC TAC TOE")
 	// Print text on screen with 15 spaces before text
 	// And print three lines break on screen
 	fmt.Printf("%15s\n\n\n\n", "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
 	// THIS PROGRAM PLAYS TIC TAC TOE
-	// THE MACHINE GOES FIRST
 	fmt.Printf("THE GAME BOARD IS NUMBERED:\n\n")
 	fmt.Println("1  2  3")
 	fmt.Println("8  9  4")
@@ -27,6 +25,7 @@ func main() {
 		)
 		a = 9
 		fmt.Printf("\n\n")
+		// THE MACHINE GOES FIRST
 		computerMoves(a)
 		p = readYourMove()
 		b = move(p + 1)
