@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,38 +22,32 @@ public class GameTest {
     private StringWriter out;
     private Game game;
 
-    // TODO See if it's possible to initialize test data in a more readable way.
-    // e.g.
-    //   playerGets(Card)
-    //   playerGets(Card)
-    //   playerDoes(String)
-    //   playerGets(Card)
-    //   playerDoes(String)
-    //   initGame(g) // Creates the deck and initializes 'in' based on values accumulated from prior calls to playerGets and playerDoes.
+    private StringBuilder playerActions;
+    private LinkedList<Card> cards;
 
-    private void givenStubGame() {
-        in = new StringReader("");
-        out = new StringWriter();
-        UserIo userIo = new UserIo(in, out);
-        Deck deck = new Deck((cards) -> cards);
-        game = new Game(deck, userIo);
+    @BeforeEach
+    public void resetIo() {
+        in = null;
+        out = null;
+        game = null;
+        playerActions = new StringBuilder();
+        cards = new LinkedList<>();
     }
 
-    private void givenInput(String input) {
-        in = new StringReader(input);
-        out = new StringWriter();
-        UserIo userIo = new UserIo(in, out);
-        Deck deck = new Deck((cards) -> cards);
-        game = new Game(deck, userIo);
+    private void playerGets(int value, Card.Suit suit) {
+        cards.add(new Card(value, suit));
     }
 
-    private void givenInput(String input, Card... customCards) {
-        in = new StringReader(input);
+    private void playerSays(String action) {
+        playerActions.append(action).append(System.lineSeparator());
+    }
+
+    private void initGame() {
+        System.out.printf("Running game with input: %s\tand cards: %s\n",playerActions.toString(), cards);
+        in = new StringReader(playerActions.toString());
         out = new StringWriter();
         UserIo userIo = new UserIo(in, out);
-        LinkedList<Card> cardList = new LinkedList<>();
-        cardList.addAll(Arrays.asList(customCards));
-        Deck deck = new Deck((cards) -> cardList);
+        Deck deck = new Deck((c) -> cards);
         game = new Game(deck, userIo);
     }
 
@@ -63,7 +59,8 @@ public class GameTest {
     @Test
     public void shouldQuitOnCtrlD() {
         // Given
-        givenInput("\u2404"); // U+2404 is "End of Transmission" sent by CTRL+D (or CTRL+Z on Windows)
+        playerSays("\u2404"); // U+2404 is "End of Transmission" sent by CTRL+D (or CTRL+Z on Windows)
+        initGame();
 
         // When
         Exception e = assertThrows(UncheckedIOException.class, game::run);
@@ -80,7 +77,8 @@ public class GameTest {
         Player player = new Player(1);
         player.dealCard(new Card(3, Card.Suit.CLUBS));
         player.dealCard(new Card(2, Card.Suit.SPADES));
-        givenInput("S\n"); // "I also like to live dangerously."
+        playerSays("S"); // "I also like to live dangerously."
+        initGame();
 
         // When
         game.play(player);
@@ -97,10 +95,13 @@ public class GameTest {
         player.dealCard(new Card(10, Card.Suit.HEARTS));
         player.dealCard(new Card(10, Card.Suit.SPADES));
 
-        givenInput("H\nH\nH\n",
-            new Card(1, Card.Suit.SPADES), // 20
-            new Card(1, Card.Suit.HEARTS), // 21
-            new Card(1, Card.Suit.CLUBS)); // 22 - D'oh!
+        playerSays("H");
+        playerGets(1, Card.Suit.SPADES); // 20
+        playerSays("H");
+        playerGets(1, Card.Suit.HEARTS); // 21
+        playerSays("H");
+        playerGets(1, Card.Suit.CLUBS); // 22 - D'oh!
+        initGame();
 
         // When
         game.play(player);
@@ -112,13 +113,16 @@ public class GameTest {
     @Test
     @DisplayName("Should allow double down on initial turn")
     public void playDoubleDown(){
+        System.out.println("Here");
         // Given
         Player player = new Player(1);
         player.setCurrentBet(100);
         player.dealCard(new Card(10, Card.Suit.HEARTS));
         player.dealCard(new Card(4, Card.Suit.SPADES));
 
-        givenInput("D\n", new Card(7, Card.Suit.SPADES));
+        playerSays("D");
+        playerGets(7, Card.Suit.SPADES);
+        initGame();
 
         // When
         game.play(player);
@@ -137,7 +141,11 @@ public class GameTest {
         player.dealCard(new Card(10, Card.Suit.HEARTS));
         player.dealCard(new Card(2, Card.Suit.SPADES));
 
-        givenInput("H\nD\nS\n", new Card(7, Card.Suit.SPADES));
+        playerSays("H");
+        playerGets(7, Card.Suit.SPADES);
+        playerSays("D");
+        playerSays("S");
+        initGame();
 
         // When
         game.play(player);
@@ -150,11 +158,12 @@ public class GameTest {
     @DisplayName("scoreHand should sum non-ace values normally")
     public void scoreHandNormally() {
         // Given
-        givenStubGame();
         LinkedList<Card> hand = new LinkedList<>();
         hand.add(new Card(4, Card.Suit.SPADES));
         hand.add(new Card(6, Card.Suit.SPADES));
         hand.add(new Card(10, Card.Suit.SPADES));
+
+        initGame();
 
         // When
         int result = game.scoreHand(hand);
@@ -167,11 +176,12 @@ public class GameTest {
     @DisplayName("scoreHand should treat face cards as 10")
     public void scoreHandFaceCards() {
         // Given
-        givenStubGame();
         LinkedList<Card> hand = new LinkedList<>();
         hand.add(new Card(11, Card.Suit.SPADES));
         hand.add(new Card(12, Card.Suit.SPADES));
         hand.add(new Card(13, Card.Suit.SPADES));
+
+        initGame();
 
         // When
         int result = game.scoreHand(hand);
@@ -184,10 +194,11 @@ public class GameTest {
     @DisplayName("scoreHand should score aces as 11 when possible")
     public void scoreHandSoftAce() {
         // Given
-        givenStubGame();
         LinkedList<Card> hand = new LinkedList<>();
         hand.add(new Card(10, Card.Suit.SPADES));
         hand.add(new Card(1, Card.Suit.SPADES));
+
+        initGame();
 
         // When
         int result = game.scoreHand(hand);
@@ -200,11 +211,12 @@ public class GameTest {
     @DisplayName("scoreHand should score aces as 1 when using 11 would bust")
     public void scoreHandHardAce() {
         // Given
-        givenStubGame();
         LinkedList<Card> hand = new LinkedList<>();
         hand.add(new Card(10, Card.Suit.SPADES));
         hand.add(new Card(9, Card.Suit.SPADES));
         hand.add(new Card(1, Card.Suit.SPADES));
+
+        initGame();
 
         // When
         int result = game.scoreHand(hand);
@@ -217,11 +229,12 @@ public class GameTest {
     @DisplayName("scoreHand should score 3 aces as 13")
     public void scoreHandMultipleAces() {
         // Given
-        givenStubGame();
         LinkedList<Card> hand = new LinkedList<>();
         hand.add(new Card(1, Card.Suit.SPADES));
         hand.add(new Card(1, Card.Suit.CLUBS));
         hand.add(new Card(1, Card.Suit.HEARTS));
+
+        initGame();
 
         // When
         int result = game.scoreHand(hand);
@@ -233,8 +246,6 @@ public class GameTest {
     @Test
     @DisplayName("compareHands should return 1 meaning A beat B, 20 to 12")
     public void compareHandsAWins() {
-
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(10, Card.Suit.SPADES));
         handA.add(new Card(10, Card.Suit.CLUBS));
@@ -242,6 +253,8 @@ public class GameTest {
         LinkedList<Card> handB = new LinkedList<>();
         handB.add(new Card(1, Card.Suit.SPADES));
         handB.add(new Card(1, Card.Suit.CLUBS));
+
+        initGame();
 
         int result = game.compareHands(handA,handB);
 
@@ -251,7 +264,6 @@ public class GameTest {
     @Test
     @DisplayName("compareHands should return -1 meaning B beat A, 18 to 4")
     public void compareHandsBwins() {
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(2, Card.Suit.SPADES));
         handA.add(new Card(2, Card.Suit.CLUBS));
@@ -260,6 +272,8 @@ public class GameTest {
         handB.add(new Card(5, Card.Suit.SPADES));
         handB.add(new Card(6, Card.Suit.HEARTS));
         handB.add(new Card(7, Card.Suit.CLUBS));
+
+        initGame();
 
         int result = game.compareHands(handA,handB);
 
@@ -270,7 +284,6 @@ public class GameTest {
     @DisplayName("compareHands should return 1 meaning A beat B, natural Blackjack to Blackjack")
     public void compareHandsAWinsWithNaturalBlackJack() {
         //Hand A wins with natural BlackJack, B with Blackjack
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(10, Card.Suit.SPADES));
         handA.add(new Card(1, Card.Suit.CLUBS));
@@ -280,6 +293,8 @@ public class GameTest {
         handB.add(new Card(7, Card.Suit.HEARTS));
         handB.add(new Card(8, Card.Suit.CLUBS));
 
+        initGame();
+
         int result = game.compareHands(handA,handB);
 
         assertEquals(1, result);
@@ -288,7 +303,6 @@ public class GameTest {
     @Test
     @DisplayName("compareHands should return -1 meaning B beat A, natural Blackjack to Blackjack")
     public void compareHandsBWinsWithNaturalBlackJack() {
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(6, Card.Suit.SPADES));
         handA.add(new Card(7, Card.Suit.HEARTS));
@@ -298,6 +312,8 @@ public class GameTest {
         handB.add(new Card(10, Card.Suit.SPADES));
         handB.add(new Card(1, Card.Suit.CLUBS));
 
+        initGame();
+
         int result = game.compareHands(handA,handB);
 
         assertEquals(-1, result);
@@ -306,7 +322,6 @@ public class GameTest {
     @Test
     @DisplayName("compareHands should return 0, hand A and B tied with a Blackjack")
     public void compareHandsTieBothBlackJack() {
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(11, Card.Suit.SPADES));
         handA.add(new Card(10, Card.Suit.CLUBS));
@@ -314,6 +329,8 @@ public class GameTest {
         LinkedList<Card> handB = new LinkedList<>();
         handB.add(new Card(10, Card.Suit.SPADES));
         handB.add(new Card(11, Card.Suit.CLUBS));
+
+        initGame();
 
         int result = game.compareHands(handA,handB);
 
@@ -323,7 +340,6 @@ public class GameTest {
     @Test
     @DisplayName("compareHands should return 0, hand A and B tie without a Blackjack")
     public void compareHandsTieNoBlackJack() {
-        givenStubGame();
         LinkedList<Card> handA = new LinkedList<>();
         handA.add(new Card(10, Card.Suit.DIAMONDS));
         handA.add(new Card(10, Card.Suit.HEARTS));
@@ -331,6 +347,8 @@ public class GameTest {
         LinkedList<Card> handB = new LinkedList<>();
         handB.add(new Card(10, Card.Suit.SPADES));
         handB.add(new Card(10, Card.Suit.CLUBS));
+
+        initGame();
 
         int result = game.compareHands(handA,handB);
 
@@ -344,7 +362,13 @@ public class GameTest {
         Player player = new Player(1);
         player.dealCard(new Card(1, Card.Suit.CLUBS));
         player.dealCard(new Card(1, Card.Suit.SPADES));
-        givenInput("/\nS\nS\n"); 
+
+        playerSays("/");
+        playerGets(2, Card.Suit.SPADES); // First hand
+        playerSays("S");
+        playerGets(2, Card.Suit.SPADES); // Second hand
+        playerSays("S");
+        initGame();
 
         // When
         game.play(player);
@@ -362,10 +386,13 @@ public class GameTest {
         player.dealCard(new Card(10, Card.Suit.HEARTS));
         player.dealCard(new Card(10, Card.Suit.SPADES));
 
-        givenInput("/\nH\nS\n",
-            new Card(12, Card.Suit.SPADES), // First hand has 20. Player hits.
-            new Card(12, Card.Suit.HEARTS), // First hand busted
-            new Card(10, Card.Suit.HEARTS)); // Second hand gets a 10. Player stays.
+        playerSays("/");
+        playerGets(12, Card.Suit.SPADES); // First hand has 20
+        playerSays("H");
+        playerGets(12, Card.Suit.HEARTS); // First hand busted
+        playerGets(10, Card.Suit.HEARTS); // Second hand gets a 10
+        playerSays("S");
+        initGame();
 
         // When
         game.play(player);
@@ -382,10 +409,14 @@ public class GameTest {
         player.dealCard(new Card(10, Card.Suit.HEARTS));
         player.dealCard(new Card(10, Card.Suit.SPADES));
 
-        givenInput("/\nS\nH\nH\n",
-            new Card(1, Card.Suit.CLUBS), // Dealt to first split hand. Player stays.
-            new Card(12, Card.Suit.SPADES), // Split hand = 20
-            new Card(12, Card.Suit.HEARTS)); // Split hand busted
+        playerSays("/");
+        playerGets(1, Card.Suit.CLUBS); // First hand is 21
+        playerSays("S");
+        playerGets(12, Card.Suit.SPADES); // Second hand is 20
+        playerSays("H");
+        playerGets(12, Card.Suit.HEARTS); // Busted
+        playerSays("H");
+        initGame();
 
         // When
         game.play(player);
@@ -403,10 +434,14 @@ public class GameTest {
         player.dealCard(new Card(9, Card.Suit.HEARTS));
         player.dealCard(new Card(9, Card.Suit.SPADES));
 
-        givenInput("/\nD\nD\n", 
-            new Card(5, Card.Suit.DIAMONDS),
-            new Card(6, Card.Suit.HEARTS),
-            new Card(7, Card.Suit.CLUBS));
+        playerSays("/");
+        playerGets(5, Card.Suit.DIAMONDS); // First hand is 14
+        playerSays("D");
+        playerGets(6, Card.Suit.HEARTS); // First hand is 20
+        playerGets(7, Card.Suit.CLUBS); // Second hand is 16
+        playerSays("D");
+        playerGets(4, Card.Suit.CLUBS); // Second hand is 20
+        initGame();
 
         // When
         game.play(player);
@@ -429,9 +464,13 @@ public class GameTest {
         player.dealCard(new Card(1, Card.Suit.HEARTS));
         player.dealCard(new Card(1, Card.Suit.SPADES));
 
-        givenInput("/\n/\nS\nS\n",
-            new Card(13, Card.Suit.CLUBS),
-            new Card(13, Card.Suit.SPADES));
+        playerSays("/");
+        playerGets(13, Card.Suit.CLUBS); // First hand
+        playerSays("/"); // Not allowed
+        playerSays("S");
+        playerGets(13, Card.Suit.SPADES); // Second hand
+        playerSays("S");
+        initGame();
 
         // When
         game.play(player);
@@ -449,9 +488,13 @@ public class GameTest {
         player.dealCard(new Card(1, Card.Suit.HEARTS));
         player.dealCard(new Card(1, Card.Suit.SPADES));
 
-        givenInput("/\nS\n/\nS\n", 
-            new Card(13, Card.Suit.SPADES),
-            new Card(13, Card.Suit.SPADES));
+        playerSays("/");
+        playerGets(13, Card.Suit.CLUBS); // First hand
+        playerSays("S");
+        playerGets(13, Card.Suit.SPADES); // Second hand
+        playerSays("/"); // Not allowed
+        playerSays("S");
+        initGame();
 
         // When
         game.play(player);
