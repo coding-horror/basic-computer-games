@@ -157,7 +157,7 @@ public class Game {
 				}
 				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
 			} else if(action.equalsIgnoreCase("S")){ // STAY
-				return;
+				break;
 			} else if(action.equalsIgnoreCase("D") && player.canDoubleDown(handNumber)) { // DOUBLE DOWN
 				Card c = deck.deal();
 				player.doubleDown(c, handNumber);
