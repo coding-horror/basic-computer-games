@@ -142,8 +142,6 @@ public class Game {
 	}
 
 	private void play(Player player, int handNumber) {
-		List<Card> hand = player.getHand(handNumber);
-
 		String action;
 		if(player.isSplit()){
 			action = userIo.prompt("HAND #" + handNumber);
@@ -154,16 +152,22 @@ public class Game {
 			if(action.equalsIgnoreCase("H")){ // HIT
 				Card c = deck.deal();
 				player.dealCard(c, handNumber);
-				if(scoreHand(hand) > 21){
+				if(scoreHand(player.getHand(handNumber)) > 21){
 					userIo.println("...BUSTED");
-					return;
+					break;
 				}
 				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
 			} else if(action.equalsIgnoreCase("S")){ // STAY
 				return;
 			} else if(action.equalsIgnoreCase("D") && player.canDoubleDown(handNumber)) { // DOUBLE DOWN
-				player.doubleDown(deck.deal(), handNumber);
-				return;
+				Card c = deck.deal();
+				player.doubleDown(c, handNumber);
+				if(scoreHand(player.getHand(handNumber)) > 21){
+					userIo.println("...BUSTED");
+					break;
+				}
+				userIo.println("RECEIVED A " + c.toString());
+				break;
 			} else if(action.equalsIgnoreCase("/")) { // SPLIT
 				if(player.isSplit()) {
 					// The original basic code printed different output
@@ -189,7 +193,7 @@ public class Game {
 						userIo.println("SECOND HAND RECEIVES A " + card.toString());
 					}
 					play(player, 2);
-					return;
+					break;
 				} else {
 					userIo.println("SPLITTING NOT ALLOWED");
 					action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
