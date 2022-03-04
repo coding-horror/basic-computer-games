@@ -12,24 +12,21 @@ NUMBER_UPPER_BOUND = 100
 # want to be able to refer to methods before declaring them,
 # so the code reads nicely from top to bottom.
 def main
-  print_banner
-  print_instructions
+  print_banner_and_instructions
 
   loop do
     play_a_game
-    break unless yes?("\nTry again?")
+    break unless yes?("Try again?")
   end
 end
 
-def print_banner
+def print_banner_and_instructions
   banner = "Creative Computing -- Morristown, New Jersey"
 
   puts "Trap!".center(banner.size)
   puts banner
-  3.times { puts }
-end
+  2.times { puts }
 
-def print_instructions
   return unless yes?("Instructions?")
 
   puts <<~"END"
@@ -93,7 +90,7 @@ def get_guesses(prompt)
 end
 
 def yes?(prompt)
-  print "#{prompt} "
+  print "\n#{prompt} "
   answer = gets
   return answer.downcase.start_with?("y")
 end
