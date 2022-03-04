@@ -20,6 +20,12 @@ def main
   end
 end
 
+def yes?(prompt)
+  print "\n#{prompt} "
+  answer = gets
+  return answer.downcase.start_with?("y")
+end
+
 def print_banner_and_instructions
   banner = "Creative Computing -- Morristown, New Jersey"
 
@@ -87,12 +93,6 @@ def get_guesses(prompt)
       return numbers.sort
     end
   end
-end
-
-def yes?(prompt)
-  print "\n#{prompt} "
-  answer = gets
-  return answer.downcase.start_with?("y")
 end
 
 main
