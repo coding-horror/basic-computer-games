@@ -64,7 +64,7 @@ def play_a_game
     when n > upper
       puts "My number is larger than your trap numbers."
     else
-      puts "You have trapped my number"
+      puts "You have trapped my number."
     end
   end
 
