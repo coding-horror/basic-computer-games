@@ -84,7 +84,7 @@ public class GameTest {
         game.play(player);
 
         // Then
-        assertEquals("PLAYER 1 ? ", out.toString());
+        assertTrue(out.toString().startsWith("PLAYER 1 ? TOTAL IS 5"));
     }
 
     @Test
