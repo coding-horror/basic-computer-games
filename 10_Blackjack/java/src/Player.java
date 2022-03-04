@@ -64,6 +64,17 @@ public class Player {
         total = total - currentBet;
         currentBet = 0;
     }
+
+    public void recordInsuranceWin() {
+        total = total + (insuranceBet * 2);
+        insuranceBet = 0;
+    }
+
+    public void recordInsuranceLoss() {
+        total = total - insuranceBet;
+        insuranceBet = 0;
+    }
+
     /**
      * Returns the total of all bets won.
      * @return Total value

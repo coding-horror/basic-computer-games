@@ -70,29 +70,44 @@ public class Game {
 			LinkedList<Card> dealerHand = new LinkedList<>();
 			Player dealer = new Player(0); //Dealer is Player 0 - this can be converted into a dealer class later on
 			dealer.dealCard(deck.deal());
-			// TODO deal two cards to the dealer
-
-			// TODO handle 'insurance' if the dealer's card is an Ace.
+			dealer.dealCard(deck.deal());
 
 			printInitialDeal(players, dealer);
 
-			// TODO if dealer has an ACE, prompt "ANY INSURANCE"
-			//   if yes, print "INSURANCE BETS" and prompt each player with "# [x] ? " where X is player number
-			//   insurance bets must be equal or less than half the player's regular bet
-
-			// TODO check for dealer blackjack
-			//   if blackjack, print "DEALER HAS A [x] IN THE HOLE\nFOR BLACKJACK" and skip to evaluateRound
-			//     pay 2x insurance bets (insurance bet of 5 pays 10) if applicable
-			//   if not, print "NO DEALER BLACKJACK"
-			//     collect insurance bets if applicable
-
-			for(Player player : players){
-				play(player);
+			if(dealer.getHand().get(0).getValue() == 1) {
+				boolean isInsurance = userIo.promptBoolean("ANY INSURANCE");
+				if(isInsurance) {
+					userIo.println("INSURANCE BETS");
+					for(Player player : players) {
+						while(true) {
+							double insuranceBet = userIo.promptDouble("# " + player.getPlayerNumber() + " ");
+							// 0 indicates no insurance for that player.
+							if(insuranceBet >= 0 && insuranceBet <= player.getCurrentBet()) {
+								player.setInsuranceBet(insuranceBet);
+								break;
+							}
+						}
+					}
+				}
 			}
 
-			// only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
-			// otherwise, just print the dealer's concealed card
-			dealerHand = playDealer(dealerHand, deck);
+			if(ScoringUtils.scoreHand(dealer.getHand()) == 21) {
+				userIo.println("DEALER HAS A " + dealer.getHand().get(1).toString() + " IN THE HOLE");
+				userIo.println("FOR BLACKJACK");
+			} else {
+				Card dealerFirstCard = dealer.getHand().get(0);
+				if(dealerFirstCard.getValue() == 1 || dealerFirstCard.getValue() > 9) {
+					userIo.println("");
+					userIo.println("NO DEALER BLACKJACK.");
+				} // else dealer blackjack is imposible
+				for(Player player : players){
+					play(player);
+				}
+
+				// TODO only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
+				// otherwise, just print the dealer's concealed card
+				dealerHand = playDealer(dealerHand, deck);
+			}
 
 			evaluateRound(players, dealerHand);
 		}
@@ -236,6 +251,8 @@ public class Game {
 		PLAYER 1 LOSES   100 TOTAL=-100 
 		PLAYER 2  WINS   150 TOTAL= 150
 		DEALER'S TOTAL= 200
+		// In "WINS X TOTAL= Y" the value of 'X' combines normal and insurance bets. e.g. if you bet 100 and get 5 insurance,
+		// then win the hand but lose insurance, it will say "WINS 95"
 		*/
 		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
 		// currentBets of each player are added/subtracted from the dealer total depending on whether they win/lose (accounting for doubling down, insurance etc.)
