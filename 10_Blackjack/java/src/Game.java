@@ -152,7 +152,7 @@ public class Game {
 			if(action.equalsIgnoreCase("H")){ // HIT
 				Card c = deck.deal();
 				player.dealCard(c, handNumber);
-				if(scoreHand(player.getHand(handNumber)) > 21){
+				if(ScoringUtils.scoreHand(player.getHand(handNumber)) > 21){
 					userIo.println("...BUSTED");
 					break;
 				}
@@ -162,7 +162,7 @@ public class Game {
 			} else if(action.equalsIgnoreCase("D") && player.canDoubleDown(handNumber)) { // DOUBLE DOWN
 				Card c = deck.deal();
 				player.doubleDown(c, handNumber);
-				if(scoreHand(player.getHand(handNumber)) > 21){
+				if(ScoringUtils.scoreHand(player.getHand(handNumber)) > 21){
 					userIo.println("...BUSTED");
 					break;
 				}
@@ -206,54 +206,7 @@ public class Game {
 				}
 			}
 		}
-		userIo.println("TOTAL IS " + scoreHand(player.getHand(handNumber)));
-	}
-
-	/**
-	 * Calculates the value of a hand. When the hand contains aces, it will
-	 * count one of them as 11 if that does not result in a bust.
-	 * 
-	 * @param hand the hand to evaluate
-	 * @return The numeric value of a hand. A value over 21 indicates a bust.
-	 */
-	protected int scoreHand(List<Card> hand){
-		int nAces = (int) hand.stream().filter(c -> c.getValue() == 1).count();
-		int value = hand.stream()
-			.mapToInt(Card::getValue)
-			.filter(v -> v != 1) // start without aces
-			.map(v -> v > 10 ? 10 : v) // all face cards are worth 10. The 'expr ? a : b' syntax is called the 'ternary operator'
-			.sum();
-		value += nAces; // start by treating all aces as 1
-		if(nAces > 0 && value <= 11) {
-			value += 10; // We can use one of the aces to an 11
-			// You can never use more than one ace as 11, since that would be 22 and a bust.
-		}
-		return value;
-	}
-
-	/**
-	 * Compares two hands accounting for natural blackjacks using the 
-	 * java.lang.Comparable convention of returning positive or negative integers
-	 * 
-	 * @param handA hand to compare
-	 * @param handB other hand to compare
-	 * @return a negative integer, zero, or a positive integer as handA is less than, equal to, or greater than handB.
-	 */
-	protected int compareHands(List<Card> handA, List<Card> handB) {
-		int scoreA = this.scoreHand(handA);
-		int scoreB = this.scoreHand(handB);
-
-		if(scoreA == 21 && scoreB == 21){
-			if(handA.size() == 2 && handB.size() != 2){
-				return 1; //Hand A wins with a natural blackjack
-			} else if (handA.size() != 2 && handB.size() == 2) {				
-				return -1; //Hand B wins with a natural blackjack
-			} else {
-				return 0; //Tie
-			}
-		} else {
-			return Integer.compare(scoreA, scoreB); 
-		}
+		userIo.println("TOTAL IS " + ScoringUtils.scoreHand(player.getHand(handNumber)));
 	}
 
 	/**
