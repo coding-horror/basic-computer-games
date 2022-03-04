@@ -56,11 +56,14 @@ public class Game {
 				}
 			}
 
-			for(Player player : players){
-				player.dealCard(deck.deal());
-				player.dealCard(deck.deal()); //TODO: This could be in a separate loop to more acurrately follow how a game would be dealt, I couldn't figure out of the BASIC version did it
+			// It doesn't *really* matter whether we deal two cards at once to each player
+			// or one card to each and then a second card to each, but this technically
+			// mimics the way a deal works in real life.
+			for(int i = 0; i < 2; i++){
+				for(Player player : players){
+					player.dealCard(deck.deal());
+				}
 			}
-
 
 			// Consider adding a Dealer class to track the dealer's hand and running total.
 			// Alternately, the dealer could just be a Player instance where currentBet=0 and is ignored.
