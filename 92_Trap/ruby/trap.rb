@@ -37,7 +37,7 @@ def print_banner_and_instructions
 
   puts <<~"END"
     I am thinking of a number between 1 and #{NUMBER_UPPER_BOUND}.
-    Try to guess my numbrer. On each guess,
+    Try to guess my number. On each guess,
     you are to enter 2 numbers, trying to trap
     my number between the two numbers. I will
     tell you if you have trapped my number, if my
