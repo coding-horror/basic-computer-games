@@ -35,7 +35,7 @@ fn main() {
                 if t < num_tries-1 { // user has tries left
                     println!("NO, COUNT THE SPOTS AND GIVE ANOTHER ANSWER.");
                     println!("   =");
-                } 
+                }
                 else { //this is their last try
                     println!("NO, THE ANSWER IS {}", dice_1+dice_2);
                 }
@@ -49,7 +49,7 @@ fn main() {
         //play again
         println!("\nThe dice roll again....");
     }
-    
+
 }
 
 /**
@@ -68,7 +68,7 @@ fn welcome() {
 }
 
 /**
- * print the dice, 
+ * print the dice,
  */
 fn print_dice(dice_value:u8) {
     //data
@@ -120,9 +120,9 @@ fn get_number_from_user_input(prompt: &str, error_message: &str, min:u8, max:u8)
                 if i < min || i > max { //input out of desired range
                     println!("{}  ({}-{})", error_message, min,max);
                     continue; // run the loop again
-                } 
+                }
                 else {
-                    break i;// this escapes the loop, returning i 
+                    break i;// this escapes the loop, returning i
                 }
             },
             Err(e) => {

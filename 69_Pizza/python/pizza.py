@@ -121,7 +121,7 @@ def deliver_to(customer_index, customer_name, player_name):
     print(f"  DRIVER TO {player_name}:  WHERE DOES {customer_name} LIVE?")
 
     coords = input()
-    xc, yc = [int(c) for c in coords.split(",")]
+    xc, yc = (int(c) for c in coords.split(","))
     delivery_index = calculate_customer_index(xc, yc)
     if delivery_index == customer_index:
         print(f"HELLO {player_name}.  THIS IS {customer_name}, THANKS FOR THE PIZZA.")

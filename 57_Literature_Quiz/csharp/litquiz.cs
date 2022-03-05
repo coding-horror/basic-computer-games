@@ -5,7 +5,7 @@ namespace litquiz
     class litquiz
     {
         public static int Score = 0;
-      
+
 
         public static void Main(string[] args)
         {
@@ -27,7 +27,7 @@ namespace litquiz
             Console.WriteLine();
             One();
 
-   
+
 
         }
 
@@ -49,7 +49,7 @@ namespace litquiz
                 Console.WriteLine("SORRY...FIGARO WAS HIS NAME.");
                 Two();
             }
-            
+
         }
 
         public static void Two()
@@ -84,7 +84,7 @@ namespace litquiz
 
             string answerThree;
             answerThree = Console.ReadLine();
-            
+
             if(answerThree == "4")
             {
                 Console.WriteLine("YEA!  YOU'RE A REAL LITERATURE GIANT.");

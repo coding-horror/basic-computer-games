@@ -146,7 +146,7 @@ Module Banner
             ' numSections decides how many 'sections' need to be printed
             ' for a given line of each character
             Dim numSections(7) As Integer
-            ' fillInSection decides whether each 'section' of the 
+            ' fillInSection decides whether each 'section' of the
             ' character gets filled in with the character Or with blanks
             Dim fillInSection(9) As Integer
 

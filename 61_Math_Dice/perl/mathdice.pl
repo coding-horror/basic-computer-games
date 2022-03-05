@@ -48,7 +48,7 @@ sub game_play {
 			    else {
 					print "N0, THE ANSWER IS $sum\n";
 				}
-				
+
 			}
 		}
 	}

@@ -40,7 +40,7 @@ own fork this will be `https://github.com/YOURNAMEHERE/basic-computer-games.git`
    2. Choose a directory for the clone to live in
 3. Click `Clone`
 
-The project will open, and eventually you will get a little alert box in the bottom right corner saying "Gradle build script found". 
+The project will open, and eventually you will get a little alert box in the bottom right corner saying "Gradle build script found".
 
 Click the "Load" link in the alert box, to load the gradle project.
 
@@ -58,7 +58,7 @@ local clone to point to your new forked project.
 These are build scripts for all JVM games contributed so far.
 New games can be added:
 - Create a new `build_NUMBER_NAME_[java/kotlin]` directory
-- Add a `build.gradle` file to that directory. 
+- Add a `build.gradle` file to that directory.
 All `build.gradle` files under `build_NUMBER_*`  are identical.
 - Add a `gradle.properties` file to that directory, defining the source
 directory for the java or kotlin file, and the class that contains the `main` method.
@@ -121,7 +121,7 @@ dependencies {
 }
 ```
 
-The gradle.properties needs an additional directory name for the tests, as `gameTest` : 
+The gradle.properties needs an additional directory name for the tests, as `gameTest` :
 ```
 gameSource=03_Animal/java/src
 gameTest=03_Animal/java/test
@@ -155,11 +155,11 @@ class AnimalJavaTest : ConsoleTest() {
 ```
 
 Curly brackets are the expected user input.
-Note - this is actually just a way of defining the expected input as "PAUL" and "YES" 
+Note - this is actually just a way of defining the expected input as "PAUL" and "YES"
 and not that the input happens at the exact prompt position. Thus this is equivalent:
 ```kotlin
 """
-{PAUL} {YES} WHAT'S YOUR NAME? 
+{PAUL} {YES} WHAT'S YOUR NAME?
 YOUR NAME IS PAUL?
 THANKS FOR PLAYING
 """

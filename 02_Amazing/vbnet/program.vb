@@ -145,7 +145,7 @@ Module Program
                 Return SelectRandomDirection(Directions.Up, Directions.Down)
             ElseIf SolutionCompleted Then 'We're on the bottom row, can only go up
                 Return GoUp()
-            Else 'We're on the bottom row, can only go up, but there's no solution 
+            Else 'We're on the bottom row, can only go up, but there's no solution
                 Return SelectRandomDirection(Directions.Up, Directions.SolveAndReset)
             End If
             '== Definitely can go Up and Right ==

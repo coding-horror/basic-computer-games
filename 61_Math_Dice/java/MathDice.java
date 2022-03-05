@@ -35,9 +35,9 @@ public class MathDice {
                     in.nextLine();
                 }
 
-                if(guess == 0) 
+                if(guess == 0)
                     System.exit(0);
-                
+
                 tries++;
             }
 

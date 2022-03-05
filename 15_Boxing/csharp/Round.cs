@@ -2,14 +2,14 @@
 
 class Round
 {
-    
+
     private readonly Boxer _player;
     private readonly Boxer _opponent;
     private readonly int _round;
     private Stack<Action> _work = new();
     private readonly PlayerAttackStrategy _playerAttackStrategy;
     private readonly OpponentAttackStrategy _opponentAttackStrategy;
-    
+
     public bool GameEnded { get; private set; }
 
     public Round(Boxer player, Opponent opponent, int round)
@@ -34,7 +34,7 @@ class Round
             // This delay does not exist in the VB code but it makes a bit easier to follow the game.
             // I assume the computers at the time were slow enough
             // so that they did not need this delay...
-            Thread.Sleep(300); 
+            Thread.Sleep(300);
             action();
         }
     }
@@ -47,7 +47,7 @@ class Round
             GameEnded = true;
         }
     }
-    
+
     public void CheckPlayerWin()
     {
         if (_player.IsWinner)
@@ -63,7 +63,7 @@ class Round
         _opponent.ResetForNewRound();
         _work.Push(RoundBegins);
     }
-    
+
     private void RoundBegins()
     {
         Console.WriteLine();

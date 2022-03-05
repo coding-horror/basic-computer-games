@@ -1,7 +1,7 @@
 ﻿Public Class AceyDucey
     ''' <summary>
-    ''' Create a single instance of the Random class to be used 
-    ''' throughout the program. 
+    ''' Create a single instance of the Random class to be used
+    ''' throughout the program.
     ''' </summary>
     Private ReadOnly Property Rnd As New Random()
 
@@ -10,7 +10,7 @@
     ''' Defaults to 0
     ''' </summary>
     ''' <remarks>
-    ''' Since <see cref="Integer"/> is a value type, and no value 
+    ''' Since <see cref="Integer"/> is a value type, and no value
     ''' has been explicitly set, the default value of the type is used.
     ''' </remarks>
     Private _balance As Integer
@@ -51,7 +51,7 @@
     ''' Play one turn of Acey Ducey
     ''' </summary>
     ''' <remarks>
-    ''' A turn consists of displaying to cards, making a wager 
+    ''' A turn consists of displaying to cards, making a wager
     ''' and determining the result (win/lose)
     ''' </remarks>
     Private Sub PlayTurn()
@@ -80,11 +80,11 @@
         '''
         '''The use of AndAlso is used to short-circuit the evaluation of the IF condition.
         '''Short-circuiting means that both sides of the condition do not need to be
-        '''evaluated. In this case, if the left criteria returns FALSE, the right criteria 
+        '''evaluated. In this case, if the left criteria returns FALSE, the right criteria
         '''is ignored and the evaluation result is returned as FALSE.
         '''
-        '''This works because AndAlso requires both condition to return TRUE  in order to be 
-        '''evaluated as TRUE. If the first condition is FALSE we already know the evaluation result. 
+        '''This works because AndAlso requires both condition to return TRUE  in order to be
+        '''evaluated as TRUE. If the first condition is FALSE we already know the evaluation result.
         If finalCard >= cards.First() AndAlso finalCard <= cards.Last() Then
             Console.WriteLine("YOU WIN!!!")
             _balance += wager 'Condensed version of _balance = _balance + wager
@@ -99,14 +99,14 @@
     ''' </summary>
     ''' <remarks>
     ''' The original version generates two cards (A and B)
-    ''' If A is greater than or equal to B, both cards are regenerated. 
-    ''' <br/><br/> 
-    ''' This version generates the two cards, but only regenerates A 
+    ''' If A is greater than or equal to B, both cards are regenerated.
+    ''' <br/><br/>
+    ''' This version generates the two cards, but only regenerates A
     ''' if A is equal to B. The cards are then returned is ascending order,
     ''' ensuring that A is less than B (maintaining the original end result)
     ''' </remarks>
     Private Function GetOrderedCards() As Integer()
-        '''When declaring fixed size arrays in VB.NET you declare the MAX INDEX of the array 
+        '''When declaring fixed size arrays in VB.NET you declare the MAX INDEX of the array
         '''and NOT the SIZE (number of elements) of the array.
         '''As such, card(1) gives you and array with index 0 and index 1, which means
         '''the array stores two elements and not one
@@ -133,7 +133,7 @@
     End Function
 
     ''' <summary>
-    ''' Display the face value of the card 
+    ''' Display the face value of the card
     ''' </summary>
     Private Sub DisplayCard(card As Integer)
         Dim output As String
@@ -221,7 +221,7 @@
     ''' Display the opening title and instructions
     ''' </summary>
     ''' <remarks>
-    ''' Refer to 
+    ''' Refer to
     ''' <see href="https://docs.microsoft.com/en-us/dotnet/visual-basic/programming-guide/language-features/strings/interpolated-strings">
     '''     Interpolated Strings
     ''' </see> documentation for the use of $ and { } with strings

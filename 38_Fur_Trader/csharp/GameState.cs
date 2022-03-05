@@ -8,11 +8,11 @@ namespace FurTrader
     {
         internal bool GameOver { get; set; }
 
-        internal double Savings { get; set; }        
+        internal double Savings { get; set; }
 
-        internal int ExpeditionCount { get; set; }        
+        internal int ExpeditionCount { get; set; }
 
-        internal int UnasignedFurCount { get; set; }        
+        internal int UnasignedFurCount { get; set; }
 
         internal int[] Pelts { get; private set; }
 

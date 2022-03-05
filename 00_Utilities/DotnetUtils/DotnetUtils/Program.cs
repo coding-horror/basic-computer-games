@@ -180,7 +180,7 @@ void generateMissingSlns() {
 void generateMissingProjs() {
     foreach (var item in infos.Where(x => x.Projs.None())) {
         // We can't use the dotnet command to create a new project using the built-in console template, because part of that template
-        // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and 
+        // is a Program.cs / Program.vb file. If there already are code files, there's no need to add a new empty one; and
         // if there's already such a file, it might try to overwrite it.
 
         var projText = item.Lang switch {

@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -48,7 +48,7 @@ var ta = [];
 function show_towers()
 {
     var z;
-    
+
     for (var k = 1; k <= 7; k++) {
         z = 10;
         str = "";

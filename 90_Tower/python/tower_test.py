@@ -1,5 +1,7 @@
 import unittest
+
 import tower
+
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
@@ -43,7 +45,8 @@ class MyTestCase(unittest.TestCase):
         t.add(d3)
 
         f = t.vertical_format(6, 3)
-        self.assertEqual(f, ['      ', '[ 3 ] ', '[ 5 ] '])
+        self.assertEqual(f, ["      ", "[ 3 ] ", "[ 5 ] "])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

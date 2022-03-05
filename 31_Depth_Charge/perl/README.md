@@ -14,4 +14,3 @@ Perl makes life easy.
  * We use ternarys to generate the message if you miss the sub.
    * We use join to stitch the pieces of the string together.
    * If we have a ternary where we don't want to return anything we return an empty list rather than an empty string - if you return the latter you still get the padding spaces.
-

@@ -10,29 +10,29 @@ import java.util.Scanner;
  * <p>
  * Note:  The idea was to create a version of the 1970's BASIC game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
- * 
+ *
  * Converted from BASIC to Java by Darren Cardenas.
  */
- 
-public class Orbit {  
+
+public class Orbit {
 
   private final Scanner scan;  // For user input
-  
+
   public Orbit() {
-    
+
     scan = new Scanner(System.in);
-    
-  }  // End of constructor Orbit 
+
+  }  // End of constructor Orbit
 
   public void play() {
-    
+
     showIntro();
     startGame();
-    
-  }  // End of method play  
-    
+
+  }  // End of method play
+
   private static void showIntro() {
-    
+
     System.out.println(" ".repeat(32) + "ORBIT");
     System.out.println(" ".repeat(14) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
     System.out.println("\n\n");
@@ -57,13 +57,13 @@ public class Orbit {
     System.out.println("ANGLE (BETWEEN 0 AND 360) AND A DISTANCE IN UNITS OF");
     System.out.println("100 MILES (BETWEEN 100 AND 300), AFTER WHICH YOUR BOMB'S");
     System.out.println("DISTANCE FROM THE ENEMY SHIP WILL BE GIVEN.");
-    System.out.println(""); 
+    System.out.println("");
     System.out.println("AN EXPLOSION WITHIN 5,000 MILES OF THE ROMULAN SHIP");
     System.out.println("WILL DESTROY IT.");
     System.out.println("");
     System.out.println("BELOW IS A DIAGRAM TO HELP YOU VISUALIZE YOUR PLIGHT.");
     System.out.println("");
-    System.out.println("");    
+    System.out.println("");
     System.out.println("                          90");
     System.out.println("                    0000000000000");
     System.out.println("                 0000000000000000000");
@@ -94,58 +94,58 @@ public class Orbit {
     System.out.println("WITHOUT SUFFICIENT POWER THE ROMULAN SHIP'S ALTITUDE");
     System.out.println("AND ORBITAL RATE WILL REMAIN CONSTANT.");
     System.out.println("");
-    System.out.println("GOOD LUCK.  THE FEDERATION IS COUNTING ON YOU.");    
-    
-  }  // End of method showIntro        
-  
+    System.out.println("GOOD LUCK.  THE FEDERATION IS COUNTING ON YOU.");
+
+  }  // End of method showIntro
+
   private void startGame() {
 
-    double bombDistance = 0;    
+    double bombDistance = 0;
     int bombAltitude = 0;
     int bombAngle = 0;
     int deltaAngle = 0;
     int hour = 0;
     int shipAltitude = 0;
     int shipAngle = 0;
-    int shipRate = 0;        
-    String userResponse = "";       
+    int shipRate = 0;
+    String userResponse = "";
 
     // Begin outer while loop
-    while (true) {      
+    while (true) {
       shipAngle = (int) (361 * Math.random());
       shipAltitude = (int) (201 * Math.random() + 200);
       shipRate = (int) (21 * Math.random() + 10);
 
       hour = 0;
-      
+
       // Begin time limit loop
       while (hour < 7) {
 
         System.out.println("");
         System.out.println("");
         System.out.println("THIS IS HOUR " + (hour + 1) + ", AT WHAT ANGLE DO YOU WISH TO SEND");
-        System.out.print("YOUR PHOTON BOMB? ");        
+        System.out.print("YOUR PHOTON BOMB? ");
         bombAngle = Integer.parseInt(scan.nextLine());
-        
+
         System.out.print("HOW FAR OUT DO YOU WISH TO DETONATE IT? ");
         bombAltitude = Integer.parseInt(scan.nextLine());
-        
+
         System.out.println("");
         System.out.println("");
-        
+
         // Update ship position
         shipAngle += shipRate;
 
         // Handle full revolutions
-        if (shipAngle >= 360) {         
+        if (shipAngle >= 360) {
           shipAngle -= 360;
         }
-        
+
         deltaAngle = Math.abs(shipAngle - bombAngle);
 
         // Keep angle in upper quadrants
-        if (deltaAngle >= 180) {          
-          deltaAngle = 360 - deltaAngle;          
+        if (deltaAngle >= 180) {
+          deltaAngle = 360 - deltaAngle;
         }
 
         bombDistance = Math.sqrt(shipAltitude * shipAltitude + bombAltitude * bombAltitude - 2 * shipAltitude
@@ -153,22 +153,22 @@ public class Orbit {
 
         System.out.format("YOUR PHOTON BOMB EXPLODED " + "%.5f" + "*10^2 MILES FROM THE\n", bombDistance);
         System.out.println("ROMULAN SHIP.");
-        
+
         // Win condition
-        if (bombDistance <= 50) {          
+        if (bombDistance <= 50) {
           System.out.println("YOU HAVE SUCCESSFULLY COMPLETED YOUR MISSION.");
-          break;          
-        } 
-   
+          break;
+        }
+
         hour++;
-   
+
       }  // End time limit loop
 
       // Lose condition
-      if (hour == 7) {              
-        System.out.println("YOU HAVE ALLOWED THE ROMULANS TO ESCAPE.");                
-      }        
-      
+      if (hour == 7) {
+        System.out.println("YOU HAVE ALLOWED THE ROMULANS TO ESCAPE.");
+      }
+
       System.out.println("ANOTHER ROMULAN SHIP HAS GONE INTO ORBIT.");
       System.out.print("DO YOU WISH TO TRY TO DESTROY IT? ");
       userResponse = scan.nextLine();
@@ -176,17 +176,17 @@ public class Orbit {
       if (!userResponse.toUpperCase().equals("YES")) {
         System.out.println("GOOD BYE.");
         break;
-      }           
-      
-    }  // End outer while loop      
-    
-  }  // End of method startGame  
+      }
+
+    }  // End outer while loop
+
+  }  // End of method startGame
 
   public static void main(String[] args) {
-    
+
     Orbit game = new Orbit();
     game.play();
-    
+
   }  // End of method main
-    
+
 }  // End of class Orbit

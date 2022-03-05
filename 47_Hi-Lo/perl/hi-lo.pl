@@ -25,7 +25,7 @@ do {
 			} else {
 			print "YOUR GUESS IS TOO LOW.\n";
 			}
-		print "\n"; 
+		print "\n";
 		}
 
 	if ($A==$Y) {
@@ -41,5 +41,3 @@ do {
 	} until (uc($A) ne "YES");
 print "\n"; print "SO LONG. HOPE YOU ENJOYED YOURSELF!!!\n";
 exit;
-
-

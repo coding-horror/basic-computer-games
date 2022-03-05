@@ -145,15 +145,15 @@ sealed class YearOutcome {
             // The misspelling of "successfully" is in the original code.
             println(
                 """
-        
+
                 CONGRATULATIONS!!!!!!!!!!!!!!!!!!
                 YOU HAVE SUCCESFULLY COMPLETED YOUR $yearsRequired YEAR TERM
                 OF OFFICE. YOU WERE, OF COURSE, EXTREMELY LUCKY, BUT
                 NEVERTHELESS, IT'S QUITE AN ACHIEVEMENT. GOODBYE AND GOOD
                 LUCK - YOU'LL PROBABLY NEED IT IF YOU'RE THE TYPE THAT
                 PLAYS THIS GAME.
-        
-                
+
+
             """.trimIndent()
             )
         }
@@ -180,8 +180,8 @@ sealed class YearOutcome {
         override fun displayConsequences() {
             println(
                 """
-            
-            
+
+
             OVER ONE THIRD OF THE POPULTATION HAS DIED SINCE YOU
             WERE ELECTED TO OFFICE. THE PEOPLE (REMAINING)
             HATE YOUR GUTS.

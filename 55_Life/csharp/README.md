@@ -10,7 +10,7 @@ This program requires you to install [.NET 6 SDK](https://dotnet.microsoft.com/e
 
 ## Know more about Conway's Game of Life
 
-You can find more about Conway's Game of Life on this page of the [Cornell Math Explorers' Club](http://pi.math.cornell.edu/~lipa/mec/lesson6.html), alongside many examples of patterns you can try. 
+You can find more about Conway's Game of Life on this page of the [Cornell Math Explorers' Club](http://pi.math.cornell.edu/~lipa/mec/lesson6.html), alongside many examples of patterns you can try.
 
 ### Optional parameters
 

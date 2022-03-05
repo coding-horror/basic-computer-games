@@ -120,9 +120,9 @@ public class SuperStarTrekGame {
                                              '-------- --'      / /
                                                  ,---' '-------/ /--,
                                                   '----------------'
-                                                  
+
                                             THE USS ENTERPRISE --- NCC-1701"
-                                
+
                         """
         );
     }

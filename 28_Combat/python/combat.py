@@ -44,17 +44,21 @@ def attackFirst():
     while True:
         print("YOU ATTACK FIRST. TYPE (1) FOR ARMY; (2) FOR NAVY;")
         print("AND (3) FOR AIR FORCE.")
-        print("?", end=' ')
+        print("?", end=" ")
         unitType = int(input())
         if not (unitType < 1 or unitType > 3):
             break
 
     while True:
         print("HOW MANY MEN")
-        print("?", end=' ')
+        print("?", end=" ")
         numUnits = int(input())
-        if not ((numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or (
-                (unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir))):
+        if not (
+            (numUnits < 0)
+            or ((unitType == 1) and (numUnits > usrArmy))
+            or ((unitType == 2) and (numUnits > usrNavy))
+            or ((unitType == 3) and (numUnits > usrAir))
+        ):
             break
 
     if unitType == 1:
@@ -62,7 +66,12 @@ def attackFirst():
             print("YOU LOST " + str(numUnits) + " MEN FROM YOUR ARMY.")
             usrArmy = usrArmy - numUnits
         elif numUnits < (2 * usrArmy / 3):
-            print("YOU LOST " + str(int(numUnits / 3)) + " MEN, BUT I LOST " + str(int(2 * cpuArmy / 3)))
+            print(
+                "YOU LOST "
+                + str(int(numUnits / 3))
+                + " MEN, BUT I LOST "
+                + str(int(2 * cpuArmy / 3))
+            )
             usrArmy = int(usrArmy - (numUnits / 3))
             cpuArmy = 0
         else:
@@ -123,39 +132,44 @@ def attackSecond():
         unitType = int(input())
         if not ((unitType < 1) or (unitType > 3)):
             break
-        
+
     while True:
         print("HOW MANY MEN")
         print("? ", end="")
         numUnits = int(input())
-        if not((numUnits < 0) or ((unitType == 1) and (numUnits > usrArmy)) or ((unitType == 2) and (numUnits > usrNavy)) or ((unitType == 3) and (numUnits > usrAir))):
+        if not (
+            (numUnits < 0)
+            or ((unitType == 1) and (numUnits > usrArmy))
+            or ((unitType == 2) and (numUnits > usrNavy))
+            or ((unitType == 3) and (numUnits > usrAir))
+        ):
             break
 
     if unitType == 1:
-        if numUnits < (cpuArmy/2):
+        if numUnits < (cpuArmy / 2):
             print("I WIPED OUT YOUR ATTACK!")
             usrArmy = usrArmy - numUnits
         else:
             print("YOU DESTROYED MY ARMY!")
             cpuArmy = 0
     elif unitType == 2:
-        if numUnits < (cpuNavy/2):
+        if numUnits < (cpuNavy / 2):
             print("I SUNK TWO OF YOUR BATTLESHIPS, AND MY AIR FORCE")
             print("WIPED OUT YOUR UNGUARDED CAPITOL.")
-            usrArmy = int(usrArmy/4)
-            usrNavy = int(usrNavy/2)
+            usrArmy = int(usrArmy / 4)
+            usrNavy = int(usrNavy / 2)
         else:
             print("YOUR NAVY SHOT DOWN THREE OF MY XIII PLANES,")
             print("AND SUNK THREE BATTLESHIPS.")
-            cpuAir = int(2*cpuAir/3)
-            cpuNavy = int(cpuNavy/2)
+            cpuAir = int(2 * cpuAir / 3)
+            cpuNavy = int(cpuNavy / 2)
     elif unitType == 3:
-        if numUnits > (cpuAir/2):
+        if numUnits > (cpuAir / 2):
             print("MY NAVY AND AIR FORCE IN A COMBINED ATTACK LEFT")
             print("YOUR COUNTRY IN SHAMBLES.")
-            usrArmy = int(usrArmy/3)
-            usrNavy = int(usrNavy/3)
-            usrAir = int(usrAir/3)
+            usrArmy = int(usrArmy / 3)
+            usrNavy = int(usrNavy / 3)
+            usrAir = int(usrAir / 3)
         else:
             print("ONE OF YOUR PLANES CRASHED INTO MY HOUSE. I AM DEAD.")
             print("MY COUNTRY FELL APART.")
@@ -165,9 +179,11 @@ def attackSecond():
         print("")
         print("FROM THE RESULTS OF BOTH OF YOUR ATTACKS,")
 
-    if (planeCrashWin == True) or ((usrArmy + usrNavy + usrAir) > (int(3/2*(cpuArmy + cpuNavy + cpuAir)))):
+    if (planeCrashWin == True) or (
+        (usrArmy + usrNavy + usrAir) > (int(3 / 2 * (cpuArmy + cpuNavy + cpuAir)))
+    ):
         print("YOU WON, OH! SHUCKS!!!!")
-    elif (usrArmy + usrNavy + usrAir) < int(2/3*(cpuArmy + cpuNavy + cpuAir)):
+    elif (usrArmy + usrNavy + usrAir) < int(2 / 3 * (cpuArmy + cpuNavy + cpuAir)):
         print("YOU LOST-I CONQUERED YOUR COUNTRY.  IT SERVES YOU")
         print("RIGHT FOR PLAYING THIS STUPID GAME!!!")
     else:
@@ -180,6 +196,7 @@ def main():
     getForces()
     attackFirst()
     attackSecond()
-    
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()

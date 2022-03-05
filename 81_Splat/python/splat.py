@@ -137,7 +137,7 @@ def jump():
             #    here, the displacement is just a function of the terminal
             #    velocity and the time passed after having reached terminal
             #    velocity: d2 = v * (t - t_reached_term_vel)
-            d1 = (v ** 2) / (2 * a)
+            d1 = (v**2) / (2 * a)
             d2 = v * (t - (v / a))
             altitude = initial_altitude - (d1 + d2)
             if altitude <= 0:
@@ -160,7 +160,7 @@ def jump():
             #    From the second equation of motion,
             #    d = v_0 * t + 0.5 * a * t^2, with v_0 = 0, we can get
             #    the displacement using d1 = a / 2 * t^2
-            d1 = (a / 2) * (t ** 2)
+            d1 = (a / 2) * (t**2)
             altitude = initial_altitude - d1
             if altitude <= 0:
                 # Time taken for an object to fall to the ground given that
@@ -206,7 +206,7 @@ def jump_stats(previous_jumps, chute_altitude):
     the current jump is better.
     """
     n_previous_jumps = len(previous_jumps)
-    n_better = sum([1 for pj in previous_jumps if chute_altitude < pj])
+    n_better = sum(1 for pj in previous_jumps if chute_altitude < pj)
     return n_previous_jumps, n_better
 
 

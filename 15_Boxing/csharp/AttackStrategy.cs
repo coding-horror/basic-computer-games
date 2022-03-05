@@ -21,7 +21,7 @@ public abstract class AttackStrategy
         {
             Other.DamageTaken += 2;
         }
-        
+
         Work.Push(punch.Punch switch
         {
             Punch.FullSwing => FullSwing,
@@ -36,7 +36,7 @@ public abstract class AttackStrategy
     protected abstract void Hook();
     protected abstract void Uppercut();
     protected abstract void Jab();
-    
+
     protected void RegisterKnockout(string knockoutMessage)
     {
         Work.Clear();

@@ -1,5 +1,6 @@
 import sys
 
+
 class Disk:
     def __init__(self, size):
         self.__size = size
@@ -9,6 +10,7 @@ class Disk:
 
     def print(self):
         print("[ %s ]" % self.size())
+
 
 class Tower:
     def __init__(self):
@@ -27,7 +29,9 @@ class Tower:
         if not self.empty():
             t = self.top()
             if disk.size() > t.size():
-                raise Exception("YOU CAN'T PLACE A LARGER DISK ON TOP OF A SMALLER ONE, IT MIGHT CRUSH IT!")
+                raise Exception(
+                    "YOU CAN'T PLACE A LARGER DISK ON TOP OF A SMALLER ONE, IT MIGHT CRUSH IT!"
+                )
         self.__disks.append(disk)
 
     def pop(self):
@@ -40,8 +44,8 @@ class Tower:
         print(r)
 
 
-
-print("""
+print(
+    """
 IN THIS PROGRAM, WE SHALL REFER TO DISKS BY NUMERICAL CODE.
 3 WILL REPRESENT THE SMALLEST DISK, 5 THE NEXT SIZE,
 7 THE NEXT, AND SO ON, UP TO 15.  IF YOU DO THE PUZZLE WITH
@@ -53,9 +57,8 @@ TO NEEDLE 3.
 
 GOOD LUCK!
 
-""")
-
-
+"""
+)
 
 
 class Game:
@@ -63,7 +66,7 @@ class Game:
         # use fewer sizes to make debugging easier
         # self.__sizes = [3, 5, 7]  # ,9,11,13,15]
         self.__sizes = [3, 5, 7, 9, 11, 13, 15]
-        
+
         self.__sizes.sort()
 
         self.__towers = []
@@ -113,7 +116,9 @@ class Game:
             needle = int(input("PLACE DISK ON WHICH NEEDLE\n"))
             tower = self.__towers[needle - 1]
         except:
-            print("I'LL ASSUME YOU HIT THE WRONG KEY THIS TIME.  BUT WATCH IT,\nI ONLY ALLOW ONE MISTAKE.\n")
+            print(
+                "I'LL ASSUME YOU HIT THE WRONG KEY THIS TIME.  BUT WATCH IT,\nI ONLY ALLOW ONE MISTAKE.\n"
+            )
             return None
         else:
             return tower
@@ -133,11 +138,12 @@ class Game:
 
         disk = from_tower.pop()
         try:
-            to_tower.add( disk )
+            to_tower.add(disk)
             self.__moves += 1
         except Exception as err:
             print(err)
             from_tower.add(disk)
+
 
 game = Game()
 while True:
@@ -146,7 +152,10 @@ while True:
     game.take_turn()
 
     if game.winner():
-        print("CONGRATULATIONS!!\nYOU HAVE PERFORMED THE TASK IN %s MOVES.\n" % game.moves())
+        print(
+            "CONGRATULATIONS!!\nYOU HAVE PERFORMED THE TASK IN %s MOVES.\n"
+            % game.moves()
+        )
         while True:
             yesno = input("TRY AGAIN (YES OR NO)\n")
             if yesno.upper() == "YES":

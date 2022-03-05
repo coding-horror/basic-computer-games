@@ -31,5 +31,3 @@ if (uc($D) eq "YES") {
 print "\n"; print "I REALLY ENJOYED MEETING YOU $A.\n";
 print "HAVE A NICE DAY!\n";
 exit;
-
-

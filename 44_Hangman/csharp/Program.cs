@@ -44,7 +44,7 @@ namespace Hangman
                 words.Remove(word);
 
                 GameLoop(word);
-                
+
                 // Game finished. Ask if player wants another one.
                 Console.WriteLine("WANT ANOTHER WORD? ");
                 var response = Console.ReadLine();
@@ -106,7 +106,7 @@ namespace Hangman
                     if (displayedWord.Contains('-'))
                     {
                         Console.WriteLine(displayedWord);
-                        
+
                         // Give the player a chance to guess the whole word.
                         var wordGuess = GetWordFromPlayer();
                         if (word == wordGuess)
@@ -161,7 +161,7 @@ namespace Hangman
                 Console.WriteLine("WHAT IS YOUR GUESS?");
                 var guess = char.ToUpper(Console.ReadKey().KeyChar);
                 Console.WriteLine();
-                
+
                 if (usedLetters.Contains(guess))
                 {
                     // After this the loop will continue.
@@ -244,7 +244,7 @@ namespace Hangman
                     }
                     graphic.Print();
         }
-        
+
         /// <summary>
         /// Get a list of words to use in the game.
         /// </summary>
