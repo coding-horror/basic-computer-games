@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +15,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GameTest {
 
@@ -71,6 +74,114 @@ public class GameTest {
     }
 
     @Test
+    @DisplayName("collectInsurance() should not prompt on N")
+    public void collectInsuranceNo(){
+        // Given
+        List<Player> players = Collections.singletonList(new Player(1));
+        playerSays("N");
+        initGame();
+
+        // When
+        game.collectInsurance(players);
+
+        // Then
+        assertAll(
+            () -> assertTrue(out.toString().contains("ANY INSURANCE")),
+            () -> assertFalse(out.toString().contains("INSURANCE BETS"))
+        );
+    }
+
+    @Test
+    @DisplayName("collectInsurance() should collect on Y")
+    public void collectInsuranceYes(){
+        // Given
+        List<Player> players = Collections.singletonList(new Player(1));
+        players.get(0).setCurrentBet(100);
+        playerSays("Y");
+        playerSays("50");
+        initGame();
+
+        // When
+        game.collectInsurance(players);
+
+        // Then
+        assertAll(
+            () -> assertTrue(out.toString().contains("ANY INSURANCE")),
+            () -> assertTrue(out.toString().contains("INSURANCE BETS")),
+            () -> assertEquals(50, players.get(0).getInsuranceBet())
+        );
+    }
+
+    @Test
+    @DisplayName("collectInsurance() should not allow more than 50% of current bet")
+    public void collectInsuranceYesTooMuch(){
+        // Given
+        List<Player> players = Collections.singletonList(new Player(1));
+        players.get(0).setCurrentBet(100);
+        playerSays("Y");
+        playerSays("51");
+        playerSays("50");
+        initGame();
+
+        // When
+        game.collectInsurance(players);
+
+        // Then
+        assertAll(
+            () -> assertEquals(50, players.get(0).getInsuranceBet()),
+            () -> assertTrue(out.toString().contains("# 1 ? # 1 ?"))
+        );
+    }
+
+    @Test
+    @DisplayName("collectInsurance() should not allow negative bets")
+    public void collectInsuranceYesNegative(){
+        // Given
+        List<Player> players = Collections.singletonList(new Player(1));
+        players.get(0).setCurrentBet(100);
+        playerSays("Y");
+        playerSays("-1");
+        playerSays("1");
+        initGame();
+
+        // When
+        game.collectInsurance(players);
+
+        // Then
+        assertAll(
+            () -> assertEquals(1, players.get(0).getInsuranceBet()),
+            () -> assertTrue(out.toString().contains("# 1 ? # 1 ?"))
+        );
+    }
+
+    @Test
+    @DisplayName("collectInsurance() should prompt all players")
+    public void collectInsuranceYesTwoPlayers(){
+        // Given
+        List<Player> players = Arrays.asList(
+            new Player(1),
+            new Player(2)
+        );
+        players.get(0).setCurrentBet(100);
+        players.get(1).setCurrentBet(100);
+
+        playerSays("Y");
+        playerSays("50");
+        playerSays("25");
+        initGame();
+
+        // When
+        game.collectInsurance(players);
+
+        // Then
+        assertAll(
+            () -> assertEquals(50, players.get(0).getInsuranceBet()),
+            () -> assertEquals(25, players.get(1).getInsuranceBet()),
+            () -> assertTrue(out.toString().contains("# 1 ? # 2 ?"))
+        );
+    }
+
+    @Test
     @DisplayName("play() should end on STAY")
     public void playEndOnStay(){
         // Given
@@ -113,7 +224,6 @@ public class GameTest {
     @Test
     @DisplayName("Should allow double down on initial turn")
     public void playDoubleDown(){
-        System.out.println("Here");
         // Given
         Player player = new Player(1);
         player.setCurrentBet(100);

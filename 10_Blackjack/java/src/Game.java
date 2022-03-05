@@ -75,20 +75,7 @@ public class Game {
 			printInitialDeal(players, dealer);
 
 			if(dealer.getHand().get(0).getValue() == 1) {
-				boolean isInsurance = userIo.promptBoolean("ANY INSURANCE");
-				if(isInsurance) {
-					userIo.println("INSURANCE BETS");
-					for(Player player : players) {
-						while(true) {
-							double insuranceBet = userIo.promptDouble("# " + player.getPlayerNumber() + " ");
-							// 0 indicates no insurance for that player.
-							if(insuranceBet >= 0 && insuranceBet <= player.getCurrentBet()) {
-								player.setInsuranceBet(insuranceBet);
-								break;
-							}
-						}
-					}
-				}
+				collectInsurance(players);
 			}
 
 			if(ScoringUtils.scoreHand(dealer.getHand()) == 21) {
@@ -112,6 +99,23 @@ public class Game {
 			evaluateRound(players, dealerHand);
 		}
     }
+
+	protected void collectInsurance(Iterable<Player> players) {
+		boolean isInsurance = userIo.promptBoolean("ANY INSURANCE");
+		if(isInsurance) {
+			userIo.println("INSURANCE BETS");
+			for(Player player : players) {
+				while(true) {
+					double insuranceBet = userIo.promptDouble("# " + player.getPlayerNumber() + " ");
+					// 0 indicates no insurance for that player.
+					if(insuranceBet >= 0 && insuranceBet <= (player.getCurrentBet() / 2)) {
+						player.setInsuranceBet(insuranceBet);
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Print the cards for each player and the up card for the dealer.
