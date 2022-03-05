@@ -1,39 +1,43 @@
 ﻿using System;
 using System.Reflection;
+using Games.Common.IO;
+using Games.Common.Randomness;
 
 namespace Target
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            DisplayTitleAndInstructions();
+            var io = new ConsoleIO();
+            var game = new Game(io, new FiringRange(new RandomNumberGenerator()));
 
-            var firingRange = new FiringRange();
+            Play(game, io, () => true);
+        }
 
-            while (true)
+        public static void Play(Game game, TextIO io, Func<bool> playAgain)
+        {
+            DisplayTitleAndInstructions(io);
+
+            while (playAgain())
             {
-                Game.Play(firingRange);
+                game.Play();
 
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("Next target...");
-                Console.WriteLine();
-
-                firingRange.NextTarget();
+                io.WriteLine();
+                io.WriteLine();
+                io.WriteLine();
+                io.WriteLine();
+                io.WriteLine();
+                io.WriteLine("Next target...");
+                io.WriteLine();
             }
         }
 
-        private static void DisplayTitleAndInstructions()
+        private static void DisplayTitleAndInstructions(TextIO io)
         {
             using var stream = Assembly.GetExecutingAssembly()
                 .GetManifestResourceStream("Target.Strings.TitleAndInstructions.txt");
-            using var stdout = Console.OpenStandardOutput();
-
-            stream.CopyTo(stdout);
+            io.Write(stream);
         }
     }
 }

@@ -1,25 +1,23 @@
-using System;
+using Games.Common.Randomness;
 
 namespace Target
 {
     internal class FiringRange
     {
-        private readonly Random random;
+        private readonly IRandom _random;
+        private Point _targetPosition;
 
-        public FiringRange()
+        public FiringRange(IRandom random)
         {
-            random = new Random();
-            NextTarget();
+            _random = random;
         }
 
-        public Point TargetPosition { get; private set; }
-
-        public void NextTarget() =>  TargetPosition = random.NextPosition();
+        public Point NextTarget() =>  _targetPosition = _random.NextPosition();
 
         public Explosion Fire(Angle angleFromX, Angle angleFromZ, float distance)
         {
             var explosionPosition = new Point(angleFromX, angleFromZ, distance);
-            var targetOffset = explosionPosition - TargetPosition;
+            var targetOffset = explosionPosition - _targetPosition;
             return new (explosionPosition, targetOffset);
         }
     }

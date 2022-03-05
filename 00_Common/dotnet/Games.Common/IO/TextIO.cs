@@ -89,11 +89,20 @@ public class TextIO : IReadWrite
 
     public void Write(string value) => _output.Write(value);
 
-    public void WriteLine(string value) => _output.WriteLine(value);
+    public void WriteLine(string value = "") => _output.WriteLine(value);
 
     public void Write(float value) => _output.Write(GetString(value));
 
     public void WriteLine(float value) => _output.WriteLine(GetString(value));
+
+    public void Write(Stream stream)
+    {
+        using var reader = new StreamReader(stream);
+        while (!reader.EndOfStream)
+        {
+            _output.WriteLine(reader.ReadLine());
+        }
+    }
 
     private string GetString(float value) => value < 0 ? $"{value} " : $" {value} ";
 }
