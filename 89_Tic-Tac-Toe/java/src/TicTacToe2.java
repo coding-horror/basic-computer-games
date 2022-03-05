@@ -33,6 +33,7 @@ public class TicTacToe2 {
                     } else if (input == 'O' || input == 'o') {
                         yourChar = 'O';
                         compChar = 'X';
+                        break;
                     } else {
                         System.out.println("THATS NOT 'X' OR 'O', TRY AGAIN");
                         in.nextLine();
