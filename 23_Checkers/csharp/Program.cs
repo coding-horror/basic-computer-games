@@ -19,7 +19,7 @@
  *    Nullables
  *    IEnumerable (yield return / yield break) 
  *    
- * The original had multiple implementations of logic, like determining second jump locations.
+ * The original had multiple implementations of logic, like determining valid jump locations.
  * This has been refactored to reduce unnecessary code duplication.
  *********************************************************************************/
 #region Display functions
