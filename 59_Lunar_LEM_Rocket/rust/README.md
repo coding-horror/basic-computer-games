@@ -9,4 +9,3 @@ This folder for chapter #59 contains three different games.  Three folders here 
  - lunar
 
 Conversion to [Rust](https://www.rust-lang.org)
-

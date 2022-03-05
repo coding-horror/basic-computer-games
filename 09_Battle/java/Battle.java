@@ -155,7 +155,7 @@ public class Battle {
 
                                 System.out.println("\n****************************\n");
                             }
-                        }       
+                        }
                     }
                 }
             }

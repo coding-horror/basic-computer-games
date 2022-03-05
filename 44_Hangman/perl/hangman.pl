@@ -175,7 +175,7 @@ PLAY: while (1) {
             }
             if ($hangCount == 7) {
                 print "Now we put up a hand.\n";
-                addchar(2,10,"\\"); 
+                addchar(2,10,"\\");
             }
             if ($hangCount == 8) {
                 print "Next the other hand.\n";
@@ -188,7 +188,7 @@ PLAY: while (1) {
             }
             if ($hangCount == 10) {
                 print "Here's the other foot -- you're hung!!\n";
-                addchar(11,2,"-"); 
+                addchar(11,2,"-");
                 addchar(11,3, "/");
             }
 
@@ -208,7 +208,7 @@ PLAY: while (1) {
 } # PLAY block
 
 # This block is reached either by the player winning (see the "next PLAY")
-# statement) or by the user losing (as the PLAY block is complete and 
+# statement) or by the user losing (as the PLAY block is complete and
 # execution naturally comes to this continue block).
 continue {
     print "Want another word ? ";

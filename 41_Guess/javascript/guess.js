@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -61,7 +61,7 @@ async function main()
         print("OF A NUMBER BETWEEN 1 AND ANY LIMIT YOU WANT.\n");
         print("THEN YOU HAVE TO GUESS WHAT IT IS.\n");
         print("\n");
-        
+
         print("WHAT LIMIT DO YOU WANT");
         l = parseInt(await input());
         print("\n");

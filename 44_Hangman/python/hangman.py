@@ -7,7 +7,7 @@ import random
 
 
 class Canvas:
-    """ For drawing text-based figures """
+    """For drawing text-based figures"""
 
     def __init__(self, width=12, height=12, fill=" "):
         self._buffer = []
@@ -26,7 +26,7 @@ class Canvas:
 
     def render(self):
         lines = []
-        for line  in self._buffer:
+        for line in self._buffer:
             # Joining by the empty string ("") smooshes all of the
             # individual characters together as one line.
             lines.append("".join(line))
@@ -114,19 +114,62 @@ PHASES = (
     ("Now we put up a hand.", draw_left_hand),
     ("Next the other hand.", draw_right_hand),
     ("Now we draw one foot", draw_left_foot),
-    ("Here's the other foot -- you're hung!!", draw_right_foot)
+    ("Here's the other foot -- you're hung!!", draw_right_foot),
 )
 
 
-words = ["GUM", "SIN", "FOR", "CRY", "LUG", "BYE", "FLY",
-         "UGLY", "EACH", "FROM", "WORK", "TALK", "WITH", "SELF",
-         "PIZZA", "THING", "FEIGN", "FIEND", "ELBOW", "FAULT", "DIRTY",
-         "BUDGET", "SPIRIT", "QUAINT", "MAIDEN", "ESCORT", "PICKAX",
-         "EXAMPLE", "TENSION", "QUININE", "KIDNEY", "REPLICA", "SLEEPER",
-         "TRIANGLE", "KANGAROO", "MAHOGANY", "SERGEANT", "SEQUENCE",
-         "MOUSTACHE", "DANGEROUS", "SCIENTIST", "DIFFERENT", "QUIESCENT",
-         "MAGISTRATE", "ERRONEOUSLY", "LOUDSPEAKER", "PHYTOTOXIC",
-         "MATRIMONIAL", "PARASYMPATHOMIMETIC", "THIGMOTROPISM"]
+words = [
+    "GUM",
+    "SIN",
+    "FOR",
+    "CRY",
+    "LUG",
+    "BYE",
+    "FLY",
+    "UGLY",
+    "EACH",
+    "FROM",
+    "WORK",
+    "TALK",
+    "WITH",
+    "SELF",
+    "PIZZA",
+    "THING",
+    "FEIGN",
+    "FIEND",
+    "ELBOW",
+    "FAULT",
+    "DIRTY",
+    "BUDGET",
+    "SPIRIT",
+    "QUAINT",
+    "MAIDEN",
+    "ESCORT",
+    "PICKAX",
+    "EXAMPLE",
+    "TENSION",
+    "QUININE",
+    "KIDNEY",
+    "REPLICA",
+    "SLEEPER",
+    "TRIANGLE",
+    "KANGAROO",
+    "MAHOGANY",
+    "SERGEANT",
+    "SEQUENCE",
+    "MOUSTACHE",
+    "DANGEROUS",
+    "SCIENTIST",
+    "DIFFERENT",
+    "QUIESCENT",
+    "MAGISTRATE",
+    "ERRONEOUSLY",
+    "LOUDSPEAKER",
+    "PHYTOTOXIC",
+    "MATRIMONIAL",
+    "PARASYMPATHOMIMETIC",
+    "THIGMOTROPISM",
+]
 
 
 def play_game(guess_target):
@@ -158,7 +201,9 @@ def play_game(guess_target):
         guess_list.append(guess_letter)
         guess_count += 1
         if guess_letter in guess_target:
-            indices = [i for i, letter in enumerate(guess_target) if letter == guess_letter]
+            indices = [
+                i for i, letter in enumerate(guess_target) if letter == guess_letter
+            ]
             for i in indices:
                 guess_progress[i] = guess_letter
             if guess_progress == guess_target:
@@ -207,11 +252,12 @@ def main():
             print("You did all the words!!")
             keep_playing = False
         else:
-            keep_playing = input("Want another word? (yes or no) ").lower().startswith("y")
+            keep_playing = (
+                input("Want another word? (yes or no) ").lower().startswith("y")
+            )
 
     print("It's been fun! Bye for now.")
 
 
 if __name__ == "__main__":
     main()
-

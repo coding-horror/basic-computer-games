@@ -55,7 +55,7 @@ namespace Batnum
         /// <returns>A message to be displayed to the player</returns>
         public string TakeTurn()
         {
-            //Edge condition - can occur when minTake is more > 1 
+            //Edge condition - can occur when minTake is more > 1
             if (pileSize < minTake)
             {
                 pileSize = 0;

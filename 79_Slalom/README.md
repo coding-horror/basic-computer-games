@@ -17,8 +17,7 @@ http://www.vintage-basic.net/games.html
 
 ### Bugs
 
-- In the original version, the data pointer doesn't reset after a race is completed. This causes subsequent races to 
+- In the original version, the data pointer doesn't reset after a race is completed. This causes subsequent races to
 error at some future point at line 540,
 
       540    READ Q
-

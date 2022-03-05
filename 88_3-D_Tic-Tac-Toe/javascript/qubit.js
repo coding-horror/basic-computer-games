@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -357,9 +357,9 @@ async function main()
             } while (++i <= 76) ;
             if (i <= 76)
                 continue;
-            
+
             process_board();
-            
+
             i = 1;
             do {
                 la[i] = xa[ma[i][1]] + xa[ma[i][2]] + xa[ma[i][3]] + xa[ma[i][4]];
@@ -387,7 +387,7 @@ async function main()
             } while (++i <= 76) ;
             if (i <= 76)
                 continue;
-            
+
             for (k = 1; k <= 18; k++) {
                 p = 0;
                 for (i = 4 * k - 3; i <= 4 * k; i++) {

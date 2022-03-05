@@ -155,7 +155,7 @@ NOW THEN, ';
    # and $guns_hit_rate here because the original BASIC code did not reset
    # the associated variables (respectively T and S) at every mission, thus
    # leaking state from one mission to the following ones.
-   # 
+   #
    # In particular, both are leaked to the Japan mission(s), and
    # $guns_hit_rate is leaked to future "multiple()" missions that have
    # missiles only.

@@ -1,5 +1,4 @@
-from random import random
-from random import seed
+from random import random, seed
 
 
 def gen_random():
@@ -36,12 +35,12 @@ def b_input(promptstring):  # emulate BASIC input. It rejects non-numeric values
 
 seed()
 title = "HAMURABI"
-title = title.rjust(32, ' ')
+title = title.rjust(32, " ")
 print(title)
 attribution = "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
 attribution = attribution.rjust(15, " ")
 print(attribution)
-print('\n\n\n')
+print("\n\n\n")
 print("TRY YOUR HAND AT GOVERNING ANCIENT SUMERIA")
 print("FOR A TEN-YEAR TERM OF OFFICE.\n")
 
@@ -164,11 +163,11 @@ while Z < 11:  # line 270. main loop. while the year is less than 11
     C = int(Q / 20)
     # REM *** HORROS, A 15% CHANCE OF PLAGUE
     # yeah, should be HORRORS, but left it
-    Q = int(10 * (2 * random() - .3))
+    Q = int(10 * (2 * random() - 0.3))
     if P >= C and Z != 99:  # if there are some people without full bellies...
         # REM *** STARVE ENOUGH FOR IMPEACHMENT?
         D = P - C
-        if D > .45 * P:
+        if D > 0.45 * P:
             print("\nYOU STARVED", D, "PEOPLE IN ONE YEAR!!!")
             national_fink()
             Z = 99  # exit the loop
@@ -191,13 +190,13 @@ if Z != 99:
         print("FRANKLY, HATE YOUR GUTS!!")
     elif P1 > 3 or L < 10:
         print("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT")
-        print("REALLY WASN'T TOO BAD AT ALL. ", int(P * .8 * random()), "PEOPLE")
+        print("REALLY WASN'T TOO BAD AT ALL. ", int(P * 0.8 * random()), "PEOPLE")
         print("WOULD DEARLY LIKE TO SEE YOU ASSASSINATED BUT WE ALL HAVE OUR")
         print("TRIVIAL PROBLEMS.")
     else:
         print("A FANTASTIC PERFORMANCE!!!  CHARLEMANGE, DISRAELI, AND")
         print("JEFFERSON COMBINED COULD NOT HAVE DONE BETTER!\n")
     for N in range(1, 10):
-        print('\a')
+        print("\a")
 
 print("\nSO LONG FOR NOW.\n")

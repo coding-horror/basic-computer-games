@@ -48,5 +48,3 @@ sub ENTERS { #GOSUB 70
 		}
 	return;
 	}
-
-

@@ -149,4 +149,3 @@ begin
   until not TryAgain;
   WriteLN('O.K., HOPE YOU HAD FUN!');
 end.
-

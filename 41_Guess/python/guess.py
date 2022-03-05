@@ -62,7 +62,7 @@ while True:
     won = False
     my_guess = int(limit * random() + 1)
 
-    print("I'm thinking of a number between 1 and {}".format(limit))
+    print(f"I'm thinking of a number between 1 and {limit}")
     print("Now you try to guess what it is.")
 
     while still_guessing:
@@ -79,7 +79,7 @@ while True:
             print("Too high. Try a smaller answer")
             guess_count += 1
         else:
-            print("That's it! You got it in {} tries".format(guess_count))
+            print(f"That's it! You got it in {guess_count} tries")
             won = True
             still_guessing = False
 
@@ -89,7 +89,7 @@ while True:
         elif guess_count == limit_goal:
             print("Good.")
         else:
-            print("You should have been able to get it in only {}".format(limit_goal))
+            print(f"You should have been able to get it in only {limit_goal}")
         insert_whitespaces()
     else:
         insert_whitespaces()

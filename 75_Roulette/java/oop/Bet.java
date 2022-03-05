@@ -16,7 +16,7 @@ public class Bet {
         return ((target > 0) && (target <= 50) &&
                 (amount >= 5) && (amount <= 500));
     }
-        
+
     /* utility to return either the odds amount in the case of a win, or zero for a loss */
     private int m(boolean isWon, int odds) {
         return isWon? odds: 0;

@@ -116,7 +116,7 @@ namespace FurTrader
         private void PlayTurn(GameState state)
         {
             state.UnasignedFurCount = 190;      /// start with 190 furs each turn
-            
+
             // provide current status to user
             Console.WriteLine(new string('_', 70));
             Console.WriteLine("");
@@ -134,7 +134,7 @@ namespace FurTrader
             state.UnasignedFurCount -= state.MinkPelts;
             Console.WriteLine("");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"You have {state.UnasignedFurCount} furs remaining for distribution");            
+            Console.WriteLine($"You have {state.UnasignedFurCount} furs remaining for distribution");
             Console.Write("How many Beaver pelts do you have? ");
             state.BeaverPelts = GetPelts(state.UnasignedFurCount);
             state.UnasignedFurCount -= state.BeaverPelts;
@@ -149,7 +149,7 @@ namespace FurTrader
             Console.WriteLine($"You have {state.UnasignedFurCount} furs remaining for distribution");
             Console.Write("How many Fox pelts do you have? ");
             state.FoxPelts = GetPelts(state.UnasignedFurCount);
-            state.UnasignedFurCount -= state.FoxPelts;            
+            state.UnasignedFurCount -= state.FoxPelts;
 
             // get input on which fort to trade with; user gets an opportunity to evaluate and re-select fort after selection until user confirms selection
             do
@@ -273,7 +273,7 @@ namespace FurTrader
                     beaverPrice = RandomPriceGenerator(0.2d , 1.00d);
                     foxPrice =    RandomPriceGenerator(0.25d, 1.10d);
                     erminePrice = RandomPriceGenerator(0.2d , 0.95d);
-                    minkPrice =   RandomPriceGenerator(0.15d, 1.05d); 
+                    minkPrice =   RandomPriceGenerator(0.15d, 1.05d);
                     fortname = "Fort New York";
                     suppliesCost = 80.0d;
                     travelExpenses = 25.0d;
@@ -418,7 +418,7 @@ namespace FurTrader
         private int GetPelts(int furCount)
         {
             int peltCount;
-            
+
             // loop until the user enters a valid value
             do
             {
@@ -432,7 +432,7 @@ namespace FurTrader
                     // invalid entry; message back to user
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Sorry, I didn't understand. Please enter the number of pelts.");
-                    
+
                     // continue looping
                     continue;
                 }
@@ -443,7 +443,7 @@ namespace FurTrader
                     // too many pelts selected
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"You may not have that many furs. Do not try to cheat. I can add.");
-                    
+
                     // continue looping
                     continue;
                 }
@@ -479,7 +479,7 @@ namespace FurTrader
                     // no, invalid data
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Sorry, I didn't understand. Please answer 1, 2, or 3.");
-                    
+
                     // continue looping
                     continue;
                 }
@@ -490,7 +490,7 @@ namespace FurTrader
                     // no, invalid for selected
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Please answer 1, 2, or 3.");
-                    
+
                     // continue looping
                     continue;
                 }

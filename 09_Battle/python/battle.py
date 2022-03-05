@@ -40,8 +40,9 @@ def place_ship(sea: SeaType, size: int, code: int) -> None:
             point = add_vector(point, vector)
             points.append(point)
 
-        if (not all([is_within_sea(point, sea) for point in points]) or
-                any([value_at(point, sea) for point in points])):
+        if not all([is_within_sea(point, sea) for point in points]) or any(
+            [value_at(point, sea) for point in points]
+        ):
             # ship out of bounds or crosses other ship, trying again
             continue
 
@@ -54,7 +55,7 @@ def place_ship(sea: SeaType, size: int, code: int) -> None:
 
 def print_encoded_sea(sea: SeaType) -> None:
     for x in range(len(sea)):
-        print(' '.join([str(sea[y][x]) for y in range(len(sea) - 1, -1, -1)]))
+        print(" ".join([str(sea[y][x]) for y in range(len(sea) - 1, -1, -1)]))
 
 
 def is_within_sea(point: PointType, sea: SeaType) -> bool:
@@ -70,18 +71,18 @@ def count_sunk(sea: SeaType, *codes: int) -> int:
 
 
 def value_at(point: PointType, sea: SeaType) -> int:
-    return sea[point[1] - 1][point[0] -1]
+    return sea[point[1] - 1][point[0] - 1]
 
 
 def set_value_at(value: int, point: PointType, sea: SeaType) -> None:
-    sea[point[1] - 1][point[0] -1] = value
+    sea[point[1] - 1][point[0] - 1] = value
 
 
 def get_next_target(sea: SeaType) -> PointType:
     while True:
         try:
-            guess = input('? ')
-            point = guess.split(',')
+            guess = input("? ")
+            point = guess.split(",")
 
             if len(point) != 2:
                 raise ValueError()
@@ -93,7 +94,9 @@ def get_next_target(sea: SeaType) -> PointType:
 
             return point
         except ValueError:
-            print(f'INVALID. SPECIFY TWO NUMBERS FROM 1 TO {len(sea)}, SEPARATED BY A COMMA.')
+            print(
+                f"INVALID. SPECIFY TWO NUMBERS FROM 1 TO {len(sea)}, SEPARATED BY A COMMA."
+            )
 
 
 def setup_ships(sea: SeaType):
@@ -106,23 +109,27 @@ def setup_ships(sea: SeaType):
 
 
 def main() -> None:
-    sea = tuple(([0 for _ in range(SEA_WIDTH)] for _ in range(SEA_WIDTH)))
+    sea = tuple([0 for _ in range(SEA_WIDTH)] for _ in range(SEA_WIDTH))
     setup_ships(sea)
-    print(f'''
+    print(
+        f"""
                 BATTLE
 CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
 
 THE FOLLOWING CODE OF THE BAD GUYS' FLEET DISPOSITION
 HAS BEEN CAPTURED BUT NOT DECODED:
 
-''')
+"""
+    )
     print_encoded_sea(sea)
-    print('''
+    print(
+        """
 
 DE-CODE IT AND USE IT IF YOU CAN
 BUT KEEP THE DE-CODING METHOD A SECRET.
 
-START GAME''')
+START GAME"""
+    )
     splashes = 0
     hits = 0
 
@@ -131,33 +138,39 @@ START GAME''')
         target_value = value_at(target, sea)
 
         if target_value < 0:
-            print(f'YOU ALREADY PUT A HOLE IN SHIP NUMBER {abs(target_value)} AT THAT POINT.')
+            print(
+                f"YOU ALREADY PUT A HOLE IN SHIP NUMBER {abs(target_value)} AT THAT POINT."
+            )
 
         if target_value <= 0:
-            print('SPLASH! TRY AGAIN.')
+            print("SPLASH! TRY AGAIN.")
             splashes += 1
             continue
 
-        print(f'A DIRECT HIT ON SHIP NUMBER {target_value}')
+        print(f"A DIRECT HIT ON SHIP NUMBER {target_value}")
         hits += 1
         set_value_at(-target_value, target, sea)
 
         if not has_ship(sea, target_value):
-            print('AND YOU SUNK IT. HURRAH FOR THE GOOD GUYS.')
-            print('SO FAR, THE BAD GUYS HAVE LOST')
-            print(f'{count_sunk(sea, 1, 2)} DESTROYER(S),',
-                  f'{count_sunk(sea, 3, 4)} CRUISER(S),',
-                  f'AND {count_sunk(sea, 5, 6)} AIRCRAFT CARRIER(S).')
+            print("AND YOU SUNK IT. HURRAH FOR THE GOOD GUYS.")
+            print("SO FAR, THE BAD GUYS HAVE LOST")
+            print(
+                f"{count_sunk(sea, 1, 2)} DESTROYER(S),",
+                f"{count_sunk(sea, 3, 4)} CRUISER(S),",
+                f"AND {count_sunk(sea, 5, 6)} AIRCRAFT CARRIER(S).",
+            )
 
         if any(has_ship(sea, code) for code in range(1, 7)):
-            print(f'YOUR CURRENT SPLASH/HIT RATIO IS {splashes}/{hits}')
+            print(f"YOUR CURRENT SPLASH/HIT RATIO IS {splashes}/{hits}")
             continue
 
-        print('YOU HAVE TOTALLY WIPED OUT THE BAD GUYS\' FLEET '
-              f'WITH A FINAL SPLASH/HIT RATIO OF {splashes}/{hits}')
+        print(
+            "YOU HAVE TOTALLY WIPED OUT THE BAD GUYS' FLEET "
+            f"WITH A FINAL SPLASH/HIT RATIO OF {splashes}/{hits}"
+        )
 
         if not splashes:
-            print('CONGRATULATIONS -- A DIRECT HIT EVERY TIME.')
+            print("CONGRATULATIONS -- A DIRECT HIT EVERY TIME.")
 
         print("\n****************************")
         break

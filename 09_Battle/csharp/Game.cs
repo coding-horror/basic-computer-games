@@ -305,7 +305,7 @@ namespace Battle
 
                 var shipType = (shipNum - 1) / 2 + 1;
                 lost[shipType] = lost[shipType] + 1;
-    
+
                 Print("AND YOU SUNK IT.  HURRAH FOR THE GOOD GUYS.");
                 Print("SO FAR, THE BAD GUYS HAVE LOST");
                 Write($"{lost[1]} DESTROYER(S), {lost[2]} CRUISER(S), AND ");

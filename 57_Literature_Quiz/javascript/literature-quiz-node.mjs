@@ -11,7 +11,7 @@ async function input(prompt = "") {
         rl.setPrompt(prompt)
         // show user the question
         rl.prompt()
-        // listen for user answer, 
+        // listen for user answer,
         // callback is triggered as soon as user hits enter key
         rl.on('line', answer => {
             rl.close()
@@ -52,12 +52,12 @@ async function main(){
     println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY", "center")
     println();println();println()
 
-    score += await evaluateQuestion("IN PINOCCHIO, WHAT WAS THE NAME OF THE CAT?", 
+    score += await evaluateQuestion("IN PINOCCHIO, WHAT WAS THE NAME OF THE CAT?",
         "1)TIGGER, 2)CICERO, 3)FIGARO, 4)GUIPETTO", 3,
         "VERY GOOD!  HERE'S ANOTHER.", "SORRY...FIGARO WAS HIS NAME.")
     println()
 
-    score += await evaluateQuestion("FROM WHOSE GARDEN DID BUGS BUNNY STEAL THE CARROTS?", 
+    score += await evaluateQuestion("FROM WHOSE GARDEN DID BUGS BUNNY STEAL THE CARROTS?",
         "1)MR. NIXON'S, 2)ELMER FUDD'S, 3)CLEM JUDD'S, 4)STROMBOLI'S", 2,
         "PRETTY GOOD!", "TOO BAD...IT WAS ELMER FUDD'S GARDEN.")
     println()

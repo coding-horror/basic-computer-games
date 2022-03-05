@@ -8,7 +8,7 @@ use warnings;
 sub main {
 	&print_intro;
 	&game_play;
-} 
+}
 
 sub game_play {
 	my $marbles = 27;
@@ -26,7 +26,7 @@ sub game_play {
 			$computer_total = $computer_total + $computer_choice;
 			print "MY TOTAL IS $computer_total\n";
 
-			print "TOTAL= $marbles\n";	
+			print "TOTAL= $marbles\n";
 
 			if ($marbles == 0) {&determine_winner($computer_total,$player_total)};
 
@@ -35,7 +35,7 @@ sub game_play {
 			$player_total = $player_total + $player_choice;
 			print "YOUR TOTAL IS $player_total\n";
 			$turn++;
-			print "TOTAL= $marbles\n";	
+			print "TOTAL= $marbles\n";
 			if ($marbles == 0) {&determine_winner($computer_total,$player_total)};
 		}
 	}
@@ -48,8 +48,8 @@ sub game_play {
 			$turn++;
 			print "YOUR TOTAL IS $player_total\n";
 
-			print "TOTAL= $marbles\n";	
-			
+			print "TOTAL= $marbles\n";
+
 			if ($marbles == 0) {&determine_winner($computer_total,$player_total)};
 
 			my $computer_choice = &computer_select($marbles,$turn,$player_total);
@@ -57,7 +57,7 @@ sub game_play {
 			$computer_total = $computer_total + $computer_choice;
 			print "MY TOTAL IS $computer_total\n";
 
-			print "TOTAL= $marbles\n";	
+			print "TOTAL= $marbles\n";
 
 			if ($marbles == 0) {&determine_winner($computer_total,$player_total)};
 
@@ -123,7 +123,7 @@ sub computer_select {
 	else {
 		until ($validity eq "valid") {
 			my $R=$marbles-6*int(($marbles/6));
-			
+
 			if (int($player_total/2) == $player_total/2) {
 				if ($R < 1.5 || $R > 5.3) {
 					$num = 1;
@@ -132,7 +132,7 @@ sub computer_select {
 					$num = $R - 1;
 				}
 			}
-			 
+
 			elsif ($marbles < 4.2) {
 				$num = $marbles;
 			}

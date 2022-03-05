@@ -80,7 +80,7 @@ namespace CrapsTester
             }
 
             // We'll assume that a variation of 10% in rolls for the different numbers is random enough.
-            // Perfectly random rolling would produce 100000 rolls per side, +/- 5% of this gives the 
+            // Perfectly random rolling would produce 100000 rolls per side, +/- 5% of this gives the
             // range 90000..110000.
             const int minRolls = 95000;
             const int maxRolls = 105000;

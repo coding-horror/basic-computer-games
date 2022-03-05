@@ -35,7 +35,7 @@ public class UserInterface implements Runnable {
 			final Supplier<String> buzzwords) {
 		this.input = input;
 		this.output = output;
-		this.buzzwords = buzzwords;		
+		this.buzzwords = buzzwords;
 	}
 
 	@Override

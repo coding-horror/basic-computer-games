@@ -48,12 +48,10 @@ do {
 		}
 
 	for (my $I=1; $I<=$N; $I++) {
-		if ($S[$I]>=200) { $M= $M+1; $W[$M]= $I; } 
+		if ($S[$I]>=200) { $M= $M+1; $W[$M]= $I; }
 		}
 	} until ($M!=0);
 
 print "\n"; print "WE HAVE A WINNER!!\n\n";
 for (my $I=1; $I<=$M; $I++) { print $A[$W[$I]]." SCORED ".$S[$W[$I]]." POINTS.\n"; }
 print "\n"; print "THANKS FOR THE GAME.\n"; exit;
-
-

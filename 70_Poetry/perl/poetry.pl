@@ -77,5 +77,3 @@ goto Line215;
 Line270:
 print "\n"; $U=0; $K=0; goto Line110;
 exit;
-
-

@@ -22,21 +22,53 @@
 
 import random
 
-
-WORDS = [ ["Ability", "Basal", "Behavioral", "Child-centered",
-           "Differentiated", "Discovery", "Flexible", "Heterogeneous",
-           "Homogenous", "Manipulative", "Modular", "Tavistock",
-           "Individualized"],
-            
-          ["learning", "evaluative", "objective", "cognitive",
-           "enrichment", "scheduling", "humanistic", "integrated",
-           "non-graded", "training", "vertical age", "motivational",
-           "creative"] ,
-            
-          ["grouping", "modification", "accountability", "process",
-           "core curriculum", "algorithm", "performance",
-           "reinforcement", "open classroom", "resource", "structure",
-           "facility","environment"] ]
+WORDS = [
+    [
+        "Ability",
+        "Basal",
+        "Behavioral",
+        "Child-centered",
+        "Differentiated",
+        "Discovery",
+        "Flexible",
+        "Heterogeneous",
+        "Homogenous",
+        "Manipulative",
+        "Modular",
+        "Tavistock",
+        "Individualized",
+    ],
+    [
+        "learning",
+        "evaluative",
+        "objective",
+        "cognitive",
+        "enrichment",
+        "scheduling",
+        "humanistic",
+        "integrated",
+        "non-graded",
+        "training",
+        "vertical age",
+        "motivational",
+        "creative",
+    ],
+    [
+        "grouping",
+        "modification",
+        "accountability",
+        "process",
+        "core curriculum",
+        "algorithm",
+        "performance",
+        "reinforcement",
+        "open classroom",
+        "resource",
+        "structure",
+        "facility",
+        "environment",
+    ],
+]
 
 
 # Display intro text
@@ -55,21 +87,20 @@ while still_running:
     for section in WORDS:
         if len(phrase) > 0:
             phrase += " "
-        phrase += section[random.randint(0, len(section)-1)]
-        
+        phrase += section[random.randint(0, len(section) - 1)]
+
     print(phrase)
     print("")
-    
+
     response = input("? ")
     try:
-        if response.upper()[0] != 'Y':
+        if response.upper()[0] != "Y":
             still_running = False
     except:
         still_running = False
 
 
 print("Come back when you need help with another report!\n")
-
 
 
 ######################################################################
@@ -93,7 +124,7 @@ print("Come back when you need help with another report!\n")
 #   newsletter named "EDU" that focused on using computers in an
 #   educational setting.  No surprise, then, that the buzzwords in
 #   this program were targeted towards educators!
-#   
+#
 #
 # Ideas for Modifications
 #
@@ -104,10 +135,3 @@ print("Come back when you need help with another report!\n")
 #   choose a field and pick the buzzwords accordingly.
 #
 ######################################################################
-
-
-            
-        
-    
-
-    

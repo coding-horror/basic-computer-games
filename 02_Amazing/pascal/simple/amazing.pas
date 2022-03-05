@@ -281,4 +281,3 @@ begin
   //DebugWalls;
   PrintMaze;
 end.
-

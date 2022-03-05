@@ -50,7 +50,7 @@ Module Word
     ' <param name="progress">A string showing which specific letters have already been guessed</param>
     ' <returns>The integer value showing the number of character matches between guess and target</returns>
     Private Function check_guess(guess As String, target As String, progress As StringBuilder) As Integer
-        ' Go through each letter of the guess And see which 
+        ' Go through each letter of the guess And see which
         ' letters match up to the target word.
         ' For each position that matches, update the progress
         ' to reflect the guess
