@@ -3,68 +3,84 @@ import random
 
 
 def tab(n):
-    return " "*n
+    return " " * n
 
 
-battles = [["JULY 21, 1861.  GEN. BEAUREGARD, COMMANDING THE SOUTH, MET",
-            "UNION FORCES WITH GEN. MCDOWELL IN A PREMATURE BATTLE AT",
-            "BULL RUN. GEN. JACKSON HELPED PUSH BACK THE UNION ATTACK."],
-
-           ["APRIL 6-7, 1862.  THE CONFEDERATE SURPRISE ATTACK AT",
-            "SHILOH FAILED DUE TO POOR ORGANIZATION."],
-
-           ["JUNE 25-JULY 1, 1862.  GENERAL LEE (CSA) UPHELD THE",
-            "OFFENSIVE THROUGHOUT THE BATTLE AND FORCED GEN. MCCLELLAN",
-            "AND THE UNION FORCES AWAY FROM RICHMOND."],
-
-           ["AUG 29-30, 1862.  THE COMBINED CONFEDERATE FORCES UNDER LEE",
-            "AND JACKSON DROVE THE UNION FORCES BACK INTO WASHINGTON."],
-
-           ["SEPT 17, 1862.  THE SOUTH FAILED TO INCORPORATE MARYLAND",
-            "INTO THE CONFEDERACY."],
-
-           ["DEC 13, 1862.  THE CONFEDERACY UNDER LEE SUCCESSFULLY",
-            "REPULSED AN ATTACK BY THE UNION UNDER GEN. BURNSIDE."],
-
-           ["DEC 31, 1862.  THE SOUTH UNDER GEN. BRAGG WON A CLOSE BATTLE."],
-
-           ["MAY 1-6, 1863.  THE SOUTH HAD A COSTLY VICTORY AND LOST",
-            "ONE OF THEIR OUTSTANDING GENERALS, 'STONEWALL' JACKSON."],
-
-           ["JULY 4, 1863.  VICKSBURG WAS A COSTLY DEFEAT FOR THE SOUTH",
-            "BECAUSE IT GAVE THE UNION ACCESS TO THE MISSISSIPPI."],
-
-           ["JULY 1-3, 1863.  A SOUTHERN MISTAKE BY GEN. LEE AT GETTYSBURG",
-            "COST THEM ONE OF THE MOST CRUCIAL BATTLES OF THE WAR."],
-
-           ["SEPT. 15, 1863. CONFUSION IN A FOREST NEAR CHICKAMAUGA LED",
-            "TO A COSTLY SOUTHERN VICTORY."],
-
-           ["NOV. 25, 1863. AFTER THE SOUTH HAD SIEGED GEN. ROSENCRANS'",
-            "ARMY FOR THREE MONTHS, GEN. GRANT BROKE THE SIEGE."],
-
-           ["MAY 5, 1864.  GRANT'S PLAN TO KEEP LEE ISOLATED BEGAN TO",
-            "FAIL HERE, AND CONTINUED AT COLD HARBOR AND PETERSBURG."],
-
-           ["AUGUST, 1864.  SHERMAN AND THREE VETERAN ARMIES CONVERGED",
-            "ON ATLANTA AND DEALT THE DEATH BLOW TO THE CONFEDERACY."]]
+battles = [
+    [
+        "JULY 21, 1861.  GEN. BEAUREGARD, COMMANDING THE SOUTH, MET",
+        "UNION FORCES WITH GEN. MCDOWELL IN A PREMATURE BATTLE AT",
+        "BULL RUN. GEN. JACKSON HELPED PUSH BACK THE UNION ATTACK.",
+    ],
+    [
+        "APRIL 6-7, 1862.  THE CONFEDERATE SURPRISE ATTACK AT",
+        "SHILOH FAILED DUE TO POOR ORGANIZATION.",
+    ],
+    [
+        "JUNE 25-JULY 1, 1862.  GENERAL LEE (CSA) UPHELD THE",
+        "OFFENSIVE THROUGHOUT THE BATTLE AND FORCED GEN. MCCLELLAN",
+        "AND THE UNION FORCES AWAY FROM RICHMOND.",
+    ],
+    [
+        "AUG 29-30, 1862.  THE COMBINED CONFEDERATE FORCES UNDER LEE",
+        "AND JACKSON DROVE THE UNION FORCES BACK INTO WASHINGTON.",
+    ],
+    [
+        "SEPT 17, 1862.  THE SOUTH FAILED TO INCORPORATE MARYLAND",
+        "INTO THE CONFEDERACY.",
+    ],
+    [
+        "DEC 13, 1862.  THE CONFEDERACY UNDER LEE SUCCESSFULLY",
+        "REPULSED AN ATTACK BY THE UNION UNDER GEN. BURNSIDE.",
+    ],
+    ["DEC 31, 1862.  THE SOUTH UNDER GEN. BRAGG WON A CLOSE BATTLE."],
+    [
+        "MAY 1-6, 1863.  THE SOUTH HAD A COSTLY VICTORY AND LOST",
+        "ONE OF THEIR OUTSTANDING GENERALS, 'STONEWALL' JACKSON.",
+    ],
+    [
+        "JULY 4, 1863.  VICKSBURG WAS A COSTLY DEFEAT FOR THE SOUTH",
+        "BECAUSE IT GAVE THE UNION ACCESS TO THE MISSISSIPPI.",
+    ],
+    [
+        "JULY 1-3, 1863.  A SOUTHERN MISTAKE BY GEN. LEE AT GETTYSBURG",
+        "COST THEM ONE OF THE MOST CRUCIAL BATTLES OF THE WAR.",
+    ],
+    [
+        "SEPT. 15, 1863. CONFUSION IN A FOREST NEAR CHICKAMAUGA LED",
+        "TO A COSTLY SOUTHERN VICTORY.",
+    ],
+    [
+        "NOV. 25, 1863. AFTER THE SOUTH HAD SIEGED GEN. ROSENCRANS'",
+        "ARMY FOR THREE MONTHS, GEN. GRANT BROKE THE SIEGE.",
+    ],
+    [
+        "MAY 5, 1864.  GRANT'S PLAN TO KEEP LEE ISOLATED BEGAN TO",
+        "FAIL HERE, AND CONTINUED AT COLD HARBOR AND PETERSBURG.",
+    ],
+    [
+        "AUGUST, 1864.  SHERMAN AND THREE VETERAN ARMIES CONVERGED",
+        "ON ATLANTA AND DEALT THE DEATH BLOW TO THE CONFEDERACY.",
+    ],
+]
 
 historical_data = [
     [],
     ["BULL RUN", 18000, 18500, 1967, 2708, 1],
-    ["SHILOH", 40000., 44894., 10699, 13047, 3],
-    ["SEVEN DAYS", 95000., 115000., 20614, 15849, 3],
-    ["SECOND BULL RUN", 54000., 63000., 10000, 14000, 2],
-    ["ANTIETAM", 40000., 50000., 10000, 12000, 3],
-    ["FREDERICKSBURG", 75000., 120000., 5377, 12653, 1],
-    ["MURFREESBORO", 38000., 45000., 11000, 12000, 1],
-    ["CHANCELLORSVILLE", 32000, 90000., 13000, 17197, 2],
-    ["VICKSBURG", 50000., 70000., 12000, 19000, 1],
-    ["GETTYSBURG", 72500., 85000., 20000, 23000, 3],
-    ["CHICKAMAUGA", 66000., 60000., 18000, 16000, 2],
-    ["CHATTANOOGA", 37000., 60000., 36700., 5800, 2],
-    ["SPOTSYLVANIA", 62000., 110000., 17723, 18000, 2],
-    ["ATLANTA", 65000., 100000., 8500, 3700, 1]]
+    ["SHILOH", 40000.0, 44894.0, 10699, 13047, 3],
+    ["SEVEN DAYS", 95000.0, 115000.0, 20614, 15849, 3],
+    ["SECOND BULL RUN", 54000.0, 63000.0, 10000, 14000, 2],
+    ["ANTIETAM", 40000.0, 50000.0, 10000, 12000, 3],
+    ["FREDERICKSBURG", 75000.0, 120000.0, 5377, 12653, 1],
+    ["MURFREESBORO", 38000.0, 45000.0, 11000, 12000, 1],
+    ["CHANCELLORSVILLE", 32000, 90000.0, 13000, 17197, 2],
+    ["VICKSBURG", 50000.0, 70000.0, 12000, 19000, 1],
+    ["GETTYSBURG", 72500.0, 85000.0, 20000, 23000, 3],
+    ["CHICKAMAUGA", 66000.0, 60000.0, 18000, 16000, 2],
+    ["CHATTANOOGA", 37000.0, 60000.0, 36700.0, 5800, 2],
+    ["SPOTSYLVANIA", 62000.0, 110000.0, 17723, 18000, 2],
+    ["ATLANTA", 65000.0, 100000.0, 8500, 3700, 1],
+]
 sa = {}
 da = {}
 fa = {}
@@ -87,7 +103,7 @@ d = -1  # number of players in the game
 print()
 while True:
     X = input("DO YOU WANT INSTRUCTIONS? ")
-    if (X == "YES" or X == "NO"):
+    if X == "YES" or X == "NO":
         break
     print("YES OR NO -- ")
 
@@ -192,12 +208,14 @@ while True:
         i1 = 10 + (l - w) * 2
         i2 = 10 + (w - l) * 2
         # Money available
-        da[1] = 100 * math.floor((m1 * (100 - i1) / 2000)
-                                 * (1 + (r1 - q1) / (r1 + 1)) + 0.5)
+        da[1] = 100 * math.floor(
+            (m1 * (100 - i1) / 2000) * (1 + (r1 - q1) / (r1 + 1)) + 0.5
+        )
         da[2] = 100 * math.floor(m2 * (100 - i2) / 2000 + 0.5)
         if bs == "YES":
-            da[2] = 100 * math.floor((m2 * (100 - i2) / 2000)
-                                     * (1 + (r2 - q2) / (r2 + 1)) + 0.5)
+            da[2] = 100 * math.floor(
+                (m2 * (100 - i2) / 2000) * (1 + (r2 - q2) / (r2 + 1)) + 0.5
+            )
         # Men available
         m5 = math.floor(m1 * (1 + (p1 - t1) / (m3 + 1)))
         m6 = math.floor(m2 * (1 + (p2 - t2) / (m4 + 1)))
@@ -209,7 +227,7 @@ while True:
         print()
         print(f"THIS IS THE BATTLE OF {cs}")
         if xs != "NO":
-            print("\n".join(battles[a-1]))
+            print("\n".join(battles[a - 1]))
 
     else:
         print(cs + " INSTANT REPLAY")
@@ -222,7 +240,7 @@ while True:
     print()
     # ONLY IN PRINTOUT IS CONFED INFLATION = I1 + 15 %
     # IF TWO GENERALS, INPUT CONFED, FIRST
-    for i in range(1, d+1):
+    for i in range(1, d + 1):
         if bs == "YES" and i == 1:
             print("CONFEDERATE GENERAL---", end="")
         print("HOW MUCH DO YOU WISH TO SPEND FOR")
@@ -256,15 +274,14 @@ while True:
             break
         print("UNION GENERAL---", end="")
 
-    for z in range(1, d+1):
+    for z in range(1, d + 1):
         if bs == "YES":
             if z == 1:
                 print("CONFEDERATE ", end="")
             else:
                 print("      UNION ", end="")
         # Find morale
-        o = ((2 * math.pow(fa[z], 2) +
-             math.pow(ha[z], 2)) / math.pow(f1, 2) + 1)
+        o = (2 * math.pow(fa[z], 2) + math.pow(ha[z], 2)) / math.pow(f1, 2) + 1
         if o >= 10:
             print("MORALE IS HIGH")
         elif o >= 5:
@@ -291,7 +308,7 @@ while True:
     if bs != "YES":
         while True:
             y = int(input("YOUR STRATEGY "))
-            if (abs(y - 3) < 3):
+            if abs(y - 3) < 3:
                 break
             print(f"STRATEGY {y} NOT ALLOWED.")
         if y == 5:
@@ -317,7 +334,7 @@ while True:
             print(y2)
     else:
         for i in range(1, 3):
-            if (i == 1):
+            if i == 1:
                 print("CONFEDERATE STRATEGY ? ", end="")
             while True:
                 y = int(input())
@@ -325,10 +342,10 @@ while True:
                     break
                 print(f"STRATEGY {y} NOT ALLOWED.")
                 print("YOUR STRATEGY ? ", end="")
-            if (i == 2):
+            if i == 2:
                 y2 = y
                 y = y1
-                if (y2 != 5):
+                if y2 != 5:
                     break
             else:
                 y1 = y
@@ -356,36 +373,42 @@ while True:
         e = 7 * c5 / 13
         u = 1
 
-    if (d == 1):
+    if d == 1:
         c6 = math.floor(17 * c2 * c1 / (c5 * 20))
         e2 = 5 * o
 
     print("CASUALTIES\t" + str(c5) + "\t\t" + str(c6))
     print("DESERTIONS\t" + str(math.floor(e)) + "\t\t" + str(math.floor(e2)))
     print()
-    if (bs == "YES"):
+    if bs == "YES":
         print("COMPARED TO THE ACTUAL CASUALTIES AT " + str(cs))
-        print("CONFEDERATE: " + str(math.floor(100 *
-              (c5 / c1) + 0.5)) + "% OF THE ORIGINAL")
-        print("UNION:       " + str(math.floor(100 *
-              (c6 / c2) + 0.5)) + "% OF THE ORIGINAL")
+        print(
+            "CONFEDERATE: "
+            + str(math.floor(100 * (c5 / c1) + 0.5))
+            + "% OF THE ORIGINAL"
+        )
+        print(
+            "UNION:       "
+            + str(math.floor(100 * (c6 / c2) + 0.5))
+            + "% OF THE ORIGINAL"
+        )
 
     print()
     # Find who won
-    if (u == 1 and u2 == 1 or (u != 1 and u2 != 1 and c5 + e == c6 + e2)):
+    if u == 1 and u2 == 1 or (u != 1 and u2 != 1 and c5 + e == c6 + e2):
         print("BATTLE OUTCOME UNRESOLVED")
         w0 += 1
-    elif (u == 1 or (u != 1 and u2 != 1 and c5 + e > c6 + e2)):
+    elif u == 1 or (u != 1 and u2 != 1 and c5 + e > c6 + e2):
         print("THE UNION WINS " + str(cs))
         if a != 0:
             l += 1
     else:
         print("THE CONFEDERACY WINS " + str(cs))
-        if (a != 0):
+        if a != 0:
             w += 1
 
     # Lines 2530 to 2590 from original are unreachable.
-    if (a != 0):
+    if a != 0:
         t1 += c5 + e
         t2 += c6 + e2
         p1 += c1
@@ -402,7 +425,7 @@ while True:
         s = 3
         s0 = 0
         for i in range(1, 5):
-            if (sa[i] <= 5):
+            if sa[i] <= 5:
                 continue
             sa[i] -= 5
             s0 += s
@@ -420,12 +443,12 @@ print()
 print()
 print()
 print(f"THE CONFEDERACY HAS WON {w} BATTLES AND LOST {l}")
-if (y == 5 or (y2 != 5 and w <= l)):
+if y == 5 or (y2 != 5 and w <= l):
     print("THE UNION HAS WON THE WAR")
 else:
     print("THE CONFEDERACY HAS WON THE WAR")
 print()
-if (r1 > 0):
+if r1 > 0:
     print(f"FOR THE {w + l + w0} BATTLES FOUGHT (EXCLUDING RERUNS)")
     print(" \t \t ")
     print("CONFEDERACY\t UNION")
@@ -433,8 +456,9 @@ if (r1 > 0):
     print(f"SIMULATED LOSSES\t{math.floor(t1 + 0.5)}\t{math.floor(t2 + 0.5)}")
     print()
     print(
-        f"    % OF ORIGINAL\t{math.floor(100 * (t1 / p1) + 0.5)}\t{math.floor(100 * (t2 / p2) + 0.5)}")
-    if (bs != "YES"):
+        f"    % OF ORIGINAL\t{math.floor(100 * (t1 / p1) + 0.5)}\t{math.floor(100 * (t2 / p2) + 0.5)}"
+    )
+    if bs != "YES":
         print()
         print("UNION INTELLIGENCE SUGGEST THAT THE SOUTH USED")
         print("STRATEGIES 1, 2, 3, 4 IN THE FOLLOWING PERCENTAGES")

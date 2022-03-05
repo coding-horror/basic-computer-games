@@ -33,7 +33,7 @@ namespace Bowling
             Utility.PrintString();
         }
         private static void MaybeShowInstructions()
-        { 
+        {
             Utility.PrintString("THE INSTRUCTIONS (Y/N)");
             if (Utility.InputString() == "N") return;
             Utility.PrintString("THE GAME OF BOWLING TAKES MIND AND SKILL.DURING THE GAME");
@@ -89,7 +89,7 @@ namespace Bowling
                                 {
                                     Utility.PrintString("STRIKE!!!!!\a\a\a\a");
                                     // No second roll
-                                    ball = 0; 
+                                    ball = 0;
                                     gameResults[player].Results[frame].PinsBall2 = pinsDownAfterRoll;
                                     gameResults[player].Results[frame].Score = FrameResult.Points.Strike;
                                 }

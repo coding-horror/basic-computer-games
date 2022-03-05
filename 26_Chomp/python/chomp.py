@@ -5,7 +5,7 @@
 
 
 class Canvas:
-    """ For drawing the cookie """
+    """For drawing the cookie"""
 
     def __init__(self, width=9, height=9, fill="*"):
         self._buffer = []
@@ -83,8 +83,12 @@ def play_game():
             player_column = -1
             while player_row == -1 or player_column == -1:
                 try:
-                    coordinates = [int(item) for item in input(
-                        "Coordinates of chomp (Row, Column) ").split(",")]
+                    coordinates = [
+                        int(item)
+                        for item in input("Coordinates of chomp (Row, Column) ").split(
+                            ","
+                        )
+                    ]
                     player_row = coordinates[0]
                     player_column = coordinates[1]
 

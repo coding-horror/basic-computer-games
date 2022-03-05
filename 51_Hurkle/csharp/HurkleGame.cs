@@ -25,7 +25,7 @@ namespace hurkle
                 X = _random.Next(0, gridSize),
                 Y = _random.Next(0, gridSize)
             };
-            
+
             for(var K=1;K<=guesses;K++)
             {
                 var guessPoint = _view.GetGuess(new GuessViewModel{CurrentGuessNumber = K});
@@ -41,7 +41,7 @@ namespace hurkle
                         continue;
                 }
             }
-            
+
             _view.ShowLoss(new LossViewModel{MaxGuesses = guesses, HurkleLocation = hurklePoint } );
         }
     }

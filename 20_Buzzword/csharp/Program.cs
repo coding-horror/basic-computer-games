@@ -75,7 +75,7 @@ namespace Buzzword
         }
 
         /// <summary>
-        /// Handles user input. On wrong input it displays information about 
+        /// Handles user input. On wrong input it displays information about
         /// valid keys in infinite loop.
         /// </summary>
         /// <returns>True if user pressed 'Y', false if 'N'.</returns>

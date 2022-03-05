@@ -24,7 +24,7 @@ def play_game():
             mine = []
             while True:
                 mine = mine_position()
-                if not(mine in mines or mine == [1, 1, 1] or mine == [3, 3, 3]):
+                if not (mine in mines or mine == [1, 1, 1] or mine == [3, 3, 3]):
                     break
             mines.append(mine)
         wager = -1
@@ -42,19 +42,26 @@ def play_game():
             move = [-1, -1, -1]
             while move == [-1, -1, -1]:
                 try:
-                    coordinates = [int(item)
-                                   for item in input(prompt).split(",")]
+                    coordinates = [int(item) for item in input(prompt).split(",")]
                     if len(coordinates) == 3:
                         move = coordinates
                     else:
                         raise ValueError
                 except (ValueError, IndexError):
                     print("Please enter valid coordinates.")
-            if (abs(move[0]-position[0]) + abs(move[1]-position[1]) + abs(move[2]-position[2])) > 1:
+            if (
+                abs(move[0] - position[0])
+                + abs(move[1] - position[1])
+                + abs(move[2] - position[2])
+            ) > 1:
                 print("\nIllegal move. You lose")
                 money = money - wager
                 break
-            elif not move[0] in [1, 2, 3] or not move[1] in [1, 2, 3] or not move[2] in [1, 2, 3]:
+            elif (
+                not move[0] in [1, 2, 3]
+                or not move[1] in [1, 2, 3]
+                or not move[2] in [1, 2, 3]
+            ):
                 print("\nIllegal move. You lose")
                 money = money - wager
                 break
@@ -106,8 +113,7 @@ def main():
     keep_playing = True
     while keep_playing:
         play_game()
-        keep_playing = input(
-            "\nPlay again? (yes or no) ").lower().startswith("y")
+        keep_playing = input("\nPlay again? (yes or no) ").lower().startswith("y")
 
 
 if __name__ == "__main__":

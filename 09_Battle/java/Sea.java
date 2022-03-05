@@ -1,4 +1,4 @@
-// Track the content of the sea 
+// Track the content of the sea
 class Sea {
     // the sea is a square grid of tiles. It is a one-dimensional array, and this
     // class maps x and y coordinates to an array index
@@ -20,11 +20,11 @@ class Sea {
     public String encodedDump() {
         StringBuilder out = new StringBuilder();
         for (int x = 0; x < size; ++x) {
-            for (int y = 0; y < size; ++y) 
+            for (int y = 0; y < size; ++y)
                 out.append(Integer.toString(get(x, y)));
             out.append('\n');
         }
-        return out.toString();   
+        return out.toString();
     }
 
     /* return true if x,y is in the sea and empty

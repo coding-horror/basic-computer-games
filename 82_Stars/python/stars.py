@@ -56,8 +56,7 @@ def get_guess():
         if guess.isdigit():
             valid_response = True
             guess = int(guess)
-    return(guess)
-    
+    return guess
 
 
 # Display intro text
@@ -69,7 +68,7 @@ print("\n\n")
 response = input("Do you want instructions? ")
 if response.upper()[0] == "Y":
     print_instructions()
-          
+
 still_playing = True
 while still_playing:
 
@@ -82,33 +81,32 @@ while still_playing:
     player_has_won = False
     while (guess_number < MAX_GUESSES) and not player_has_won:
 
-         print("")
-         guess = get_guess()
-         guess_number += 1
+        print("")
+        guess = get_guess()
+        guess_number += 1
 
-         if guess == secret_number:
-             # "*** We have a winner"
-             player_has_won = True
-             print("*************************" +
-                   "*************************!!!")
-             print("You got it in %d guesses!!!" % guess_number)
+        if guess == secret_number:
+            # "*** We have a winner"
+            player_has_won = True
+            print("*************************" + "*************************!!!")
+            print("You got it in %d guesses!!!" % guess_number)
 
-         else:
-             print_stars(secret_number, guess)
+        else:
+            print_stars(secret_number, guess)
 
-         # End of guess loop
+        # End of guess loop
 
     # "*** Did not guess in [MAX_GUESS] guesses"
     if not player_has_won:
-        print("\nSorry, that's %d guesses, number was %d" %
-              (guess_number, secret_number))
+        print(
+            "\nSorry, that's %d guesses, number was %d" % (guess_number, secret_number)
+        )
 
     # Keep playing?
     response = input("\nPlay again? ")
     if response.upper()[0] != "Y":
         still_playing = False
 
-    
 
 ######################################################################
 #
@@ -132,10 +130,3 @@ while still_playing:
 #       Hard   = 6 guesses, 1 to 200
 #
 ######################################################################
-
-
-            
-        
-    
-
-    

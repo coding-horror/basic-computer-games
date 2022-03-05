@@ -30,9 +30,9 @@
             // Set up a BASIC-ish data object
             BasicData data = new (bunnyData);
 
-            // Get the first five data values into an array. 
+            // Get the first five data values into an array.
             // These are the characters we are going to print.
-            // Unlike the original program, we are only converting 
+            // Unlike the original program, we are only converting
             // them to ASCII once.
             var a = new char[5];
             for (var i = 0; i < 5; ++i)

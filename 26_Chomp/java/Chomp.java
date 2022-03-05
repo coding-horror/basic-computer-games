@@ -88,7 +88,7 @@ public class Chomp{
 
 	private void move(int player){
 		System.out.println(String.format("Player %d",(player+1)));
-			
+
 		String input;
 		String [] coordinates;
 		int x=-1,y=-1;

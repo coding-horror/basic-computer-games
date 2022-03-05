@@ -6,9 +6,9 @@ WriteLine(new string('\t', 33) + "BOXING");
 WriteLine(new string('\t', 15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
 WriteLine("{0}{0}{0}BOXING OLYMPIC STYLE (3 ROUNDS -- 2 OUT OF 3 WINS){0}", Environment.NewLine);
 
-var opponent = new Opponent(); 
+var opponent = new Opponent();
 opponent.SetName("WHAT IS YOUR OPPONENT'S NAME"); // J$
-var player = new Boxer(); 
+var player = new Boxer();
 player.SetName("INPUT YOUR MAN'S NAME"); // L$
 
 PrintPunchDescription();

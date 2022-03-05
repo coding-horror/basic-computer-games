@@ -38,10 +38,10 @@ public class Input {
                 System.out.println("Need two coordinates separated by ','");
                 continue;
             }
-            
+
             coords = new int[2];
             boolean error = false;
-            // each field should contain an integer from 1 to the size of the sea 
+            // each field should contain an integer from 1 to the size of the sea
             try {
                 for (int c = 0 ; c < 2; ++c ) {
                     int val = Integer.parseInt(fields[c].strip());

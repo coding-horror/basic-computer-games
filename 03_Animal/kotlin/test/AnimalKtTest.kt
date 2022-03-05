@@ -28,16 +28,16 @@ class AnimalKtTest : ConsoleTest() {
             DOES IT SWIM? {NO}
             IS IT A BIRD? {NO}
             THE ANIMAL YOU WERE THINKING OF WAS A? {COW}
-            PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A 
+            PLEASE TYPE IN A QUESTION THAT WOULD DISTINGUISH A
             COW FROM A BIRD
             ? {DOES IT EAT GRASS}
             FOR A COW THE ANSWER WOULD BE? {YES}
             ARE YOU THINKING OF AN ANIMAL? {YES}
             DOES IT SWIM? {NO}
-            DOES IT EAT GRASS? {YES} 
+            DOES IT EAT GRASS? {YES}
             IS IT A COW? {YES}
             WHY NOT TRY ANOTHER ANIMAL?
-            ARE YOU THINKING OF AN ANIMAL? {QUIT} 
+            ARE YOU THINKING OF AN ANIMAL? {QUIT}
         """
         ) {
             main()
@@ -47,9 +47,8 @@ class AnimalKtTest : ConsoleTest() {
     private val title = """
                                         ANIMAL
                       CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-        
+
         PLAY 'GUESS THE ANIMAL'
         THINK OF AN ANIMAL AND THE COMPUTER WILL TRY TO GUESS IT.
     """
 }
-

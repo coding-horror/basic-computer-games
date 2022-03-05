@@ -290,7 +290,7 @@ EOD
             say "You guessed it in $guess_num moves.";
             return $guess_num;
         }
-            
+
         say "You have $rslt->{black} blacks and $rslt->{white} whites.";
 
     }

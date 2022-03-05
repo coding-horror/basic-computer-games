@@ -55,7 +55,7 @@ void main()
             {
                 writeln("YOU WIN!!!");
                 cash += bet;
-            } 
+            }
             else
             {
                 writeln("Sorry, you lose.");

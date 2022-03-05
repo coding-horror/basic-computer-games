@@ -29,7 +29,7 @@ direction to go to look for the Hurkle.
 HERE
 
 # The PLAY block is a complete game from start
-# to finish. The continue block prints the 
+# to finish. The continue block prints the
 # "let's play again" message and then a new
 # game is started.
 PLAY: while (1) {
@@ -42,11 +42,11 @@ PLAY: while (1) {
         my($G1,$G2);
         # The CHECK loop will execute while we
         # attempt to collect valid input from
-        # the player 
+        # the player
         CHECK: while (1) {
 
             chomp(my $in = <STDIN>);
-            # Use a regex to attempt to parse out 
+            # Use a regex to attempt to parse out
             # two integers separated by a comma.
             if ($in =~ m{(\d+)\s*,\s*(\d+)}) {
                 $G1 = $1; $G2 = $2;

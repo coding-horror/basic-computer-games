@@ -10,7 +10,7 @@ namespace Batnum
     {
         /// <summary>
         /// Ask the user a question and expects a comma separated pair of numbers representing a number range in response
-        /// the range provided must have a maximum which is greater than the minimum 
+        /// the range provided must have a maximum which is greater than the minimum
         /// </summary>
         /// <param name="question">The question to ask</param>
         /// <param name="minimum">The minimum value expected</param>

@@ -14,7 +14,7 @@ namespace Craps
 
             ui.Intro();
 
-            do 
+            do
             {
 	            var bet = ui.PlaceBet();
                 var result = game.Play(out int diceRoll);
