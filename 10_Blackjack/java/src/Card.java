@@ -61,6 +61,19 @@ public final class Card {
         return result.toString();
     }
 
+    /**
+     * Returns the value of {@link #toString()} preceded by either "AN " or "A " depending on which is gramatically correct.
+     * 
+     * @return "AN [x]" when [x] is "an" ace or "an" 8, and "A [X]" otherwise.
+     */
+    public String toProseString() {
+		if(value == 1 || value == 8) {
+            return "AN " + toString();
+        } else {
+            return "A " + toString();
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         // Overriding 'equals' and 'hashCode' (below) make your class work correctly
