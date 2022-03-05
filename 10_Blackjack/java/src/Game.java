@@ -81,7 +81,7 @@ public class Game {
 			}
 
 			if(ScoringUtils.scoreHand(dealer.getHand()) == 21) {
-				userIo.println("DEALER HAS A " + dealer.getHand().get(1).toString() + " IN THE HOLE");
+				userIo.println("DEALER HAS " + dealer.getHand().get(1).toProseString() + " IN THE HOLE");
 				userIo.println("FOR BLACKJACK");
 			} else {
 				Card dealerFirstCard = dealer.getHand().get(0);
@@ -176,7 +176,7 @@ public class Game {
 					userIo.println("...BUSTED");
 					break;
 				}
-				action = userIo.prompt("RECEIVED A " + c.toString() + " HIT");
+				action = userIo.prompt("RECEIVED " + c.toProseString() + " HIT");
 			} else if(action.equalsIgnoreCase("S")){ // STAY
 				break;
 			} else if(action.equalsIgnoreCase("D") && player.canDoubleDown(handNumber)) { // DOUBLE DOWN
@@ -186,7 +186,7 @@ public class Game {
 					userIo.println("...BUSTED");
 					break;
 				}
-				userIo.println("RECEIVED A " + c.toString());
+				userIo.println("RECEIVED " + c.toProseString());
 				break;
 			} else if(action.equalsIgnoreCase("/")) { // SPLIT
 				if(player.isSplit()) {
@@ -198,20 +198,11 @@ public class Game {
 					player.split();
 					Card card = deck.deal();
 					player.dealCard(card, 1);
-					// TODO move the "a" vs "an" logic to userIo or Card 
-					if(card.getValue() == 1 || card.getValue() == 8) {
-						userIo.println("FIRST HAND RECEIVES AN " + card.toString());
-					} else {
-						userIo.println("FIRST HAND RECEIVES A " + card.toString());
-					}
+					userIo.println("FIRST HAND RECEIVES " + card.toProseString());
 					play(player, 1);
 					card = deck.deal();
 					player.dealCard(card, 2);
-					if(card.getValue() == 1 || card.getValue() == 8) {
-						userIo.println("SECOND HAND RECEIVES AN " + card.toString());
-					} else {
-						userIo.println("SECOND HAND RECEIVES A " + card.toString());
-					}
+					userIo.println("SECOND HAND RECEIVES " + card.toProseString());
 					play(player, 2);
 					return; // Don't fall out of the while loop and print another total
 				} else {
