@@ -1,9 +1,11 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * This is the primary class that runs the game itself.
+ */
 public class Game {
     
     private Deck deck;
