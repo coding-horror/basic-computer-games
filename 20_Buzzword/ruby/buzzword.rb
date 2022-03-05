@@ -23,12 +23,12 @@ WORDS = [["Ability", "Basal", "Behavioral", "Child-centered",
            "Differentiated", "Discovery", "Flexible", "Heterogeneous",
            "Homogenous", "Manipulative", "Modular", "Tavistock",
            "Individualized"],
-            
+
           ["learning", "evaluative", "objective", "cognitive",
            "enrichment", "scheduling", "humanistic", "integrated",
            "non-graded", "training", "vertical age", "motivational",
            "creative"] ,
-            
+
           ["grouping", "modification", "accountability", "process",
            "core curriculum", "algorithm", "performance",
            "reinforcement", "open classroom", "resource", "structure",
@@ -54,13 +54,13 @@ loop do
     phrase << prefix[rand(prefix.length)]
     phrase << body[rand(body.length)]
     phrase << postfix[rand(postfix.length)]
-            
+
     puts phrase.join(' ')
     puts "\n"
-    
+
     print "?"
     response = gets
-    
+
     break unless response.upcase.start_with?('Y')
 end
 
@@ -75,7 +75,7 @@ puts "Come back when you need help with another report!\n"
 #   built the buzzword phrases by randomly sampling from each of the
 #   three regions of the array (1-13, 14-26, and 27-39).
 #
-#   Instead, we're storing the words for each section in three 
+#   Instead, we're storing the words for each section in three
 #   separate arrays. That makes it easy to loop through the sections
 #   to stitch the phrase together, and it easily accomodates adding
 #   (or removing) elements from any section.  They don't all need to
@@ -88,7 +88,7 @@ puts "Come back when you need help with another report!\n"
 #   newsletter named "EDU" that focused on using computers in an
 #   educational setting.  No surprise, then, that the buzzwords in
 #   this program were targeted towards educators!
-#   
+#
 #
 # Ideas for Modifications
 #

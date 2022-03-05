@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 /**
  * Converted FROM BASIC to Java by Nahid Mondol.
- * 
+ *
  * Based on Trevor Hobsons approach.
  */
 public class War {
@@ -77,7 +77,7 @@ public class War {
             invalidInput = true;
             while (invalidInput) {
                 if (endedEarly()) {
-                    // Player ended game early. 
+                    // Player ended game early.
                     // Break out of game loop and show end game output.
                     gameEndedEarly = true;
                     break outerloop;
@@ -90,7 +90,7 @@ public class War {
 
     /**
      * Outputs the winner of the current round.
-     * 
+     *
      * @param playerCard   Players card.
      * @param computerCard Computers card.
      */
@@ -153,7 +153,7 @@ public class War {
 
     /**
      * Show output based on if the game was ended early or not.
-     * 
+     *
      * @param endedEarly true if the game was ended early, false otherwise.
      */
     private static void endGameOutput(boolean endedEarly) {

@@ -67,7 +67,7 @@ char printBoard() {
 				Console.Write("\n");
 			}
 		} else {
-			Console.Write("!");			
+			Console.Write("!");
 		}
 	}
 	// horizontal check
@@ -145,7 +145,7 @@ int computerMove(int lastMove) {
 			return 6;
 		}
 		// check cross
-		int crossIndex = boardMap[getIndex(index + 4)]; 
+		int crossIndex = boardMap[getIndex(index + 4)];
 		if (board[crossIndex] == ' ') {
 			return crossIndex;
 		}
@@ -214,7 +214,7 @@ int computerMove(int lastMove) {
 			if (board[stepBackward3] == ' ') {
 				return stepBackward3;
 			}
-					int crossIndex = boardMap[getIndex(index + 4)]; 
+					int crossIndex = boardMap[getIndex(index + 4)];
 			if (board[crossIndex] == ' ') {
 				return crossIndex;
 			}

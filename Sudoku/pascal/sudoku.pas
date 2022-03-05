@@ -156,7 +156,7 @@ else
 goto repeatative2
 end;
 goto randoms
-end;   
+end;
 end;
 end;
 
@@ -333,7 +333,7 @@ case x of
 -2 : x:=4;
 58 : x:=52;
 end;
-    
+
 gotoxy(x,y);
 
 v:=true;

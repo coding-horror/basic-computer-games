@@ -17,7 +17,7 @@ class Ship {
     private boolean placed;           // whether this ship is in the sea yet
     private boolean sunk;             // whether this ship has been sunk
     private ArrayList<Boolean> hits;  // which tiles of the ship have been hit
-        
+
     private int startX;               // starting position coordinates
     private int startY;
     private int orientX;              // x and y deltas from each tile occupied to the next

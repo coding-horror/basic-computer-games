@@ -53,7 +53,7 @@ if __name__ == "__main__":
             # read coordinates in `X, Y` format, split the string
             # at `,`, and then parse the coordinates to `int` and
             # store them in `X` and `Y` respectively.
-            [ X, Y ] = [int(c) for c in input("X,Y? ").split(",")]
+            [X, Y] = [int(c) for c in input("X,Y? ").split(",")]
 
             if abs(X - A) + abs(Y - B) == 0:
                 print("\nYOU FOUND HIM IN", k + 1, "GUESSES!")

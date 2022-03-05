@@ -7,9 +7,11 @@ Just the instructions for SUPERSTARTREK
 Ported by Dave LeCompte
 """
 
+
 def get_yes_no(prompt):
     response = input(prompt).upper()
-    return response[0] != 'N'
+    return response[0] != "N"
+
 
 def print_header():
     for i in range(12):
@@ -24,6 +26,7 @@ def print_header():
     print(t10 + "*************************************")
     for i in range(8):
         print()
+
 
 def print_instructions():
     # Back in the 70s, at this point, the user would be prompted to
@@ -60,7 +63,7 @@ def print_instructions():
     print("     WAY BETWEEN 1 AND 2                      ...")
     print("                                             . . .")
     print("     VALUES MAY APPROACH 9.0, WHICH         6  7  8")
-    print("     ITSELF IS EQUIVALENT TO 1.0"         )
+    print("     ITSELF IS EQUIVALENT TO 1.0")
     print("                                            COURSE")
     print("     ONE WARP FACTOR IS THE SIZE OF ")
     print("     ONE QUADTANT.  THEREFORE, TO GET")
@@ -134,14 +137,14 @@ def print_instructions():
     print("     OPTION 5 = GALACTIC /REGION NAME/ MAP")
     print("        THIS OPTION PRINTS THE NAMES OF THE SIXTEEN MAJOR ")
     print("        GALACTIC REGIONS REFERRED TO IN THE GAME.")
-    
-    
+
 
 def main():
     print_header()
     if not get_yes_no("DO YOU NEED INSTRUCTIONS (Y/N)? "):
         return
     print_instructions()
+
 
 if __name__ == "__main__":
     main()

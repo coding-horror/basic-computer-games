@@ -59,7 +59,7 @@ do
             startNewGame = true;
         }
 
-        
+
         if (moveIndex == 0)
         {
             // To reset the line to all X, same game
@@ -83,8 +83,8 @@ do
 
             do
             {
-                moveIndex = equalToLastMove 
-                    ? GetMoveIndexWhenEqualeLastMove(moveIndex, gameEntropyRate) 
+                moveIndex = equalToLastMove
+                    ? GetMoveIndexWhenEqualeLastMove(moveIndex, gameEntropyRate)
                     : GetMoveIndex(moveIndex, gameEntropyRate);
 
                 board[moveIndex] = board[moveIndex] == "O" ? "X" : "O";

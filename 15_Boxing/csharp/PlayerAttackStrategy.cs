@@ -6,7 +6,7 @@ public class PlayerAttackStrategy : AttackStrategy
 {
     private readonly Boxer _player;
 
-    public PlayerAttackStrategy(Boxer player, Opponent opponent, Action notifyGameEnded, Stack<Action> work) 
+    public PlayerAttackStrategy(Boxer player, Opponent opponent, Action notifyGameEnded, Stack<Action> work)
         : base(opponent, work, notifyGameEnded) => _player = player;
 
     protected override AttackPunch GetPunch()

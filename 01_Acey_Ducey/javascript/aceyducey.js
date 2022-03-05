@@ -99,7 +99,7 @@ async function main() {
                 }
             }
         }
-        if (bet == 0) 
+        if (bet == 0)
         {
             // User chose not to bet.
             print('CHICKEN!!');

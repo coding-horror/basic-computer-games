@@ -24,7 +24,7 @@
 use rand::Rng;
 use std::io;
 use std::cmp::Ordering;
-// Rust haven't log2 in the standard library so I added fn log_2 
+// Rust haven't log2 in the standard library so I added fn log_2
 const fn num_bits<T>() -> usize { std::mem::size_of::<T>() * 8 }
 
 fn main() {
@@ -94,7 +94,7 @@ fn set_limit() -> i64 {
 
     if inp >= 2 {
         inp
-    } 
+    }
     else {
         set_limit()
     }

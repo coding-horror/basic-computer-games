@@ -61,7 +61,7 @@ def run_simulation(delta_t, v0, coeff_rest):
         t[i] = v0 * coeff_rest ** (i - 1) / 16
 
     # Draw the trajectory of the bouncing ball, one slice of height at a time
-    h = int(-16 * (v0 / 32) ** 2 + v0 ** 2 / 32 + 0.5)
+    h = int(-16 * (v0 / 32) ** 2 + v0**2 / 32 + 0.5)
     while h >= 0:
         line = ""
         if int(h) == h:
@@ -72,14 +72,14 @@ def run_simulation(delta_t, v0, coeff_rest):
             while tm <= t[i]:
                 l += delta_t
                 if (
-                    abs(h - (0.5 * (-32) * tm ** 2 + v0 * coeff_rest ** (i - 1) * tm))
+                    abs(h - (0.5 * (-32) * tm**2 + v0 * coeff_rest ** (i - 1) * tm))
                     <= 0.25
                 ):
                     line = print_at_tab(line, int(l / delta_t), "0")
                 tm += delta_t
             tm = t[i + 1] / 2
 
-            if -16 * tm ** 2 + v0 * coeff_rest ** (i - 1) * tm < h:
+            if -16 * tm**2 + v0 * coeff_rest ** (i - 1) * tm < h:
                 break
         print(line)
         h = h - 0.5

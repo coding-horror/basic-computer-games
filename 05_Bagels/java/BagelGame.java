@@ -16,34 +16,34 @@ import java.util.Random;
 import java.util.Set;
 
 public class BagelGame {
-  
+
   public static final String CORRECT = "FERMI FERMI FERMI";
   public static final int MAX_GUESSES = 20;
-  
+
   enum GameState {
       RUNNING,
       WON,
       LOST
     }
-    
+
   private GameState      state = GameState.RUNNING;
   private List<Integer>  secretNum;
   private int            guessNum = 1;
-  
+
   public BagelGame() {
     // No-arg constructor for when you don't need to set the seed
     this(new Random());
   }
-  
+
   public BagelGame(long seed) {
     // Setting the seed as a long value
     this(new Random(seed));
   }
-  
+
   public BagelGame(Random rand) {
     // This is the "real" constructor, which expects an instance of
     // Random to use for shuffling the digits of the secret number.
-    
+
     // Since the digits cannot repeat in our "number", we can't just
     // pick three random 0-9 integers. Instead, we'll treat it like
     // a deck of ten cards, numbered 0-9.
@@ -57,23 +57,23 @@ public class BagelGame {
     // uses a fresh Random class PRNG, but we're supplying our own
     // to give us controll over whether or not we set the seed
     Collections.shuffle(digits, rand);
-    
+
     // Just take the first three digits
     secretNum = digits.subList(0, 3);
   }
-  
+
   public boolean isOver() {
     return state != GameState.RUNNING;
   }
-  
+
   public boolean isWon() {
     return state == GameState.WON;
   }
-    
+
   public int getGuessNum() {
     return guessNum;
   }
-  
+
   public String getSecretAsString() {
     // Convert the secret number to a three-character string
     String secretString = "";
@@ -82,7 +82,7 @@ public class BagelGame {
     }
     return secretString;
   }
-  
+
   @Override
   public String toString() {
     // Quick report of game state for debugging purposes
@@ -91,13 +91,13 @@ public class BagelGame {
     s += "Secret Number: " + secretNum;
     return s;
   }
-  
+
   public String validateGuess(String guess) {
     // Checks the passed string and returns null if it's a valid guess
     // (i.e., exactly three numeric characters)
     // If not valid, returns an "error" string to display to user.
     String error = "";
-    
+
     if (guess.length() == 3) {
       // Correct length. Are all the characters numbers?
       try {
@@ -122,20 +122,20 @@ public class BagelGame {
 
     return error;
   }
-  
+
   public String makeGuess(String s) throws IllegalArgumentException {
     // Processes the passed guess string (which, ideally, should be
     // validated by previously calling validateGuess)
     // Return a response string (PICO, FERMI, etc.) if valid
     // Also sets game state accordingly (sets win state or increments
     // number of guesses)
-    
+
     // Convert string to integer list, just to keep things civil
     List<Integer> guess = new ArrayList<Integer>(3);
     for (int i = 0; i < 3; i++) {
       guess.add((int)s.charAt(i) - 48);
     }
-    
+
     // Build response string...
     String response = "";
     // Correct digit, but in wrong place?
@@ -177,5 +177,5 @@ public class BagelGame {
     }
     return response;
   }
-    
+
 }

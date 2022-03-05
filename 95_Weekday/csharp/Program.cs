@@ -187,7 +187,7 @@ namespace Weekday
             TodaysDate = PromptForADate("Enter today's date in the form: 3,24,1978  ? ");
             BirthDate = PromptForADate("Enter day of birth (or other day of interest)? ");
 
-            DisplayOutput(TodaysDate, BirthDate);   
+            DisplayOutput(TodaysDate, BirthDate);
 
         }
     }

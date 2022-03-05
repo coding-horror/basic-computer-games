@@ -139,5 +139,3 @@ namespace Craps
         }
     }
 }
-
-

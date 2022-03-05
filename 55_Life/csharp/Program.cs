@@ -47,12 +47,12 @@ void PrintHeader()
         Console.Write(new string(' ', spaceCount));
         Console.WriteLine(text);
     }
-    
+
     PrintCentered("LIFE");
     PrintCentered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY");
     Console.WriteLine();
     Console.WriteLine();
-    Console.WriteLine();    
+    Console.WriteLine();
 }
 
 Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
@@ -65,7 +65,7 @@ Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
         {
             if (pattern.Content[x][y] == ' ')
                 continue;
-            
+
             matrixToInitialize[minX + x, minY + y] = CellState.Stable;
             newSimulation.IncreasePopulation();
         }
@@ -77,7 +77,7 @@ Simulation InitializeSimulation(Pattern pattern, Matrix matrixToInitialize) {
 TimeSpan GetPauseBetweenIterations()
 {
     if (args.Length != 2) return TimeSpan.Zero;
-    
+
     var parameter = args[0].ToLower();
     if (parameter.Contains("wait"))
     {
@@ -93,17 +93,17 @@ void ProcessSimulation()
 {
     var pauseBetweenIterations = GetPauseBetweenIterations();
     var isInvalid = false;
-    
+
     while (true)
     {
         var invalidText = isInvalid ? "INVALID!" : "";
         Console.WriteLine($"GENERATION: {simulation.Generation}\tPOPULATION: {simulation.Population} {invalidText}");
-        
+
         simulation.StartNewGeneration();
 
-        var nextMinX = maxHeight - 1; 
+        var nextMinX = maxHeight - 1;
         var nextMinY = maxWidth - 1;
-        var nextMaxX = 0; 
+        var nextMaxX = 0;
         var nextMaxY = 0;
 
         var matrixOutput = new StringBuilder();
@@ -114,7 +114,7 @@ void ProcessSimulation()
             matrixOutput.AppendLine();
         }
 
-        // refreshes the matrix and updates search area 
+        // refreshes the matrix and updates search area
         for (var x = minX; x <= maxX; x++)
         {
             var printedLine = Enumerable.Repeat(' ', maxWidth).ToList();
@@ -161,13 +161,13 @@ void ProcessSimulation()
 
             const int limitX = 21;
             const int limitY = 67;
-            
+
             if (minX < 2)
             {
                 minX = 2;
                 isInvalid = true;
             }
-            
+
             if (maxX > limitX)
             {
                 maxX = limitX;
@@ -227,12 +227,12 @@ void ProcessSimulation()
             }
         }
 
-        // expands search area to accommodate new cells 
+        // expands search area to accommodate new cells
         minX--;
         minY--;
         maxX++;
         maxY++;
-        
+
         if (pauseBetweenIterations > TimeSpan.Zero)
             Thread.Sleep(pauseBetweenIterations);
     }
@@ -305,7 +305,7 @@ class Matrix
         get => _matrix[x, y];
         set => _matrix[x, y] = value;
     }
-    
+
     public override string ToString()
     {
         var stringBuilder = new StringBuilder();

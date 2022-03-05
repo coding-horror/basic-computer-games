@@ -91,7 +91,7 @@ while true
     else
         # valid bet, continue
         tenBells # ding
-        
+
         # assign a random value from the array to each of the three reels
         reel1 = reelArray[rand(5)]
         reel2 = reelArray[rand(5)]

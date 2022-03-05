@@ -114,7 +114,7 @@ namespace Slalom
                     {
                         Success = true;
                     }
-                    else 
+                    else
                     {
                         Console.WriteLine("The bounds are 1-3");
                     }
@@ -157,7 +157,7 @@ namespace Slalom
 
             return Option;
         }
-        
+
         private string PromptForCommand()
         {
             bool Success = false;
@@ -204,7 +204,7 @@ namespace Slalom
                 }
                 else
                 {
-                    if (rand.NextDouble() < 0.5) 
+                    if (rand.NextDouble() < 0.5)
                     {
                         Console.WriteLine("snagged a flag!");
                     }
@@ -217,11 +217,11 @@ namespace Slalom
 
                     return false;
                 }
-            }   
+            }
             else if (MPH > (MaxGateSpeed - 1))
             {
                 Console.WriteLine("Close one!");
-            }         
+            }
 
             return true;
         }
@@ -234,7 +234,7 @@ namespace Slalom
             double MaxGateSpeed = 0; // Q
             double PreviousMPH = 0;
             double Medals = 0;
-            
+
             Console.WriteLine("The starter counts down...5...4...3...2...1...GO!");
 
             MPH = rand.NextDouble() * (18-9)+9;
@@ -253,7 +253,7 @@ namespace Slalom
                 PreviousMPH = MPH;
 
                 Option = PromptForOption();
-                while (Option == 0) 
+                while (Option == 0)
                 {
                     Console.WriteLine("You've taken {0:N2} seconds.", Time);
                     Option = PromptForOption();

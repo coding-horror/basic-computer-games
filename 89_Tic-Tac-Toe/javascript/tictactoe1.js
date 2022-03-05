@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -78,19 +78,19 @@ async function main()
         print("\n");
         a = 9;
         m = a;
-        
+
         computer_moves();
         print("YOUR MOVE");
         m = parseInt(await input());
-        
+
         p = m;
         b = mf(p + 1);
         m = b;
-        
+
         computer_moves();
         print("YOUR MOVE");
         m = parseInt(await input());
-        
+
         q = m;
         if (q != mf(b + 4)) {
             c = mf(b + 4);
@@ -99,7 +99,7 @@ async function main()
             print("AND WINS ********\n");
             continue;
         }
-        
+
         c = mf(b + 2);
         m = c;
 
@@ -115,7 +115,7 @@ async function main()
             print("AND WINS ********\n");
             continue;
         }
-        
+
         if (p % 2 == 0) {
             d = mf(c + 7);
             m = d;
@@ -123,14 +123,14 @@ async function main()
             print("AND WINS ********\n");
             continue;
         }
-        
+
         d = mf(c + 3);
         m = d;
-        
+
         computer_moves();
         print("YOUR MOVE");
         m = parseInt(await input());
-        
+
         s = m;
         if (s != mf(d + 4)) {
             e = mf(d + 4);

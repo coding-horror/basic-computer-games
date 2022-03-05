@@ -105,7 +105,7 @@ impl GAME {
 fn main() {
     //print welcome message
     welcome();
-    
+
     //game loop
     let mut game = GAME::new();
     loop {

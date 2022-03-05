@@ -10,7 +10,7 @@ my(@MUGWUMP) = ();
 
 # init_mugwump: pick the random places for the Mugwumps
 sub init_mugwump() {
-    @MUGWUMP = (); 
+    @MUGWUMP = ();
     for (1 .. 4) {
         push @MUGWUMP, [ int(rand 10), int(rand 10) ];
     }
@@ -44,7 +44,7 @@ HERE
 PLAY: while (1) {
 
     init_mugwump();
-    TURN: for my $turn (1 .. 10) { 
+    TURN: for my $turn (1 .. 10) {
 
         printf("\nTurn no %d -- what is your guess ? ", $turn);
 
@@ -88,9 +88,8 @@ PLAY: while (1) {
         printf("Mugwump %d is at (%d, %d)\n", $i+1, $MUGWUMP[$i]->[0], $MUGWUMP[$i]->[1])
             if $MUGWUMP[$i]->[0] != -1;
     }
-} 
+}
 continue {
     print "\nThat was fun! Let's play again.......\n";
     print "Four more Mugwumps are now in hiding.\n\n";
 }
-

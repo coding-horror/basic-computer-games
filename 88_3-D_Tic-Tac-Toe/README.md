@@ -8,7 +8,7 @@ This version of 3-D TIC-TAC-TOE is from Dartmouth College.
 
 ### Conversion notes
 
-The AI code for TicTacToe2 depends quite heavily on the non-structured GOTO (I can almost hear Dijkstra now) and translation is quite challenging. This code relies very heavily on GOTOs that bind the code tightly together. Comments explain where that happens in the original. 
+The AI code for TicTacToe2 depends quite heavily on the non-structured GOTO (I can almost hear Dijkstra now) and translation is quite challenging. This code relies very heavily on GOTOs that bind the code tightly together. Comments explain where that happens in the original.
 
 There are at least two bugs from the original BASIC:
 

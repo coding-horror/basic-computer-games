@@ -49,7 +49,7 @@ def get_coordinates(prompt):
             continue
 
         try:
-            x, y = [int(c) for c in response.split(",")]
+            x, y = (int(c) for c in response.split(","))
         except ValueError as ve:
             print(err_msg)
             continue

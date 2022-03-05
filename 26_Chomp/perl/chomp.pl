@@ -13,7 +13,7 @@ sub main {
 }
 
 sub game_play {
-	
+
 	# the initial game set up
 	&print_intro;
 	my ($players,$rows,$cols) = &get_user_info;
@@ -24,7 +24,7 @@ sub game_play {
 
 	# continuous loop until the poison pill is swallowed
 	until ($game_over == 1) {
-		if ($player > ($players-1)) {		#checks to make sure we're just looping thru valid players 
+		if ($player > ($players-1)) {		#checks to make sure we're just looping thru valid players
 			$player = 0;
 		}
 		$player++;
@@ -39,7 +39,7 @@ sub game_play {
 		&modify_gameboard($rows,$cols,$user_row,$user_col);
 		&print_gameboard($rows,$cols);
 	}
-	
+
 }
 
 sub get_player_row_col {
@@ -136,7 +136,7 @@ sub modify_gameboard {
 	my ($rows,$cols,$user_row,$user_col) = @_;
 	foreach my $row ($user_row..($rows)) {
 		foreach my $col ($user_col..($cols)) {
-			$cookie[$row][$col]="  ";	
+			$cookie[$row][$col]="  ";
 		}
 	}
 }

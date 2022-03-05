@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -70,7 +70,7 @@ n = animals.length;
 
 function show_animals() {
     var x;
-    
+
     print("\n");
     print("ANIMALS I ALREADY KNOW ARE:\n");
     str = "";
@@ -108,7 +108,7 @@ async function main()
             if (str[0] == "Y")
                 break;
         }
-        
+
         k = 0;
         do {
             // Subroutine to print questions
@@ -119,7 +119,7 @@ async function main()
                     if (q[z] == "\\")
                         break;
                     str += q[z];
-                }	
+                }
                 print(str);
                 c = await input();
                 if (c[0] == "Y" || c[0] == "N")
@@ -127,9 +127,9 @@ async function main()
             }
             t = "\\" + c[0];
             x = q.indexOf(t);
-            k = parseInt(q.substr(x + 2));	
+            k = parseInt(q.substr(x + 2));
         } while (animals[k].substr(0,2) == "\\Q") ;
-        
+
         print("IS IT A " + animals[k].substr(2));
         a = await input();
         if (a[0] == "Y") {

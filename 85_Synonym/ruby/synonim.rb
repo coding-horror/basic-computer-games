@@ -49,13 +49,13 @@ synonym_words = [
     ["PAIN", "SUFFERING", "HURT", "MISERY", "DISTRESS", "ACHE", "DISCOMFORT"],
 ]
 
-synonym_words.shuffle.each {|words_ar| 
+synonym_words.shuffle.each {|words_ar|
 
 }
 
 
-synonym_words.each {|words_ar| 
-    answer = false 
+synonym_words.each {|words_ar|
+    answer = false
     keyword = words_ar.shift
 
     while not answer and words_ar.length != 0

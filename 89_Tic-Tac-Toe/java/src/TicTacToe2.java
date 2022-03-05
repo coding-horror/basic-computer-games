@@ -148,9 +148,9 @@ public class TicTacToe2 {
                             System.out.println("THATS NOT 'Y' OR 'N', TRY AGAIN");
                             in.nextLine();
                         }
-                    } 
+                    }
                     break;
-                } 
+                }
 
             }
         }

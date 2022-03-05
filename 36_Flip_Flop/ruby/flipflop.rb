@@ -49,7 +49,7 @@ def print_starting_message
 
   1 2 3 4 5 6 7 8 9 10
   X X X X X X X X X X
-  
+
   EOS
 end
 
@@ -75,7 +75,7 @@ def shuffle_board(game, index, shuffle_function)
 end
 
 #Shuffle logic copied from original BASIC code
-def shuffle_function1(game, index) 
+def shuffle_function1(game, index)
   r = Math.tan(game.seed + index / game.seed - index) - Math.sin(game.seed / index) + 336 * Math.sin(8 * index)
   n = r - r.floor
   (10 * n).floor
@@ -132,9 +132,9 @@ def play_game
     game.guesses += 1
     puts '1 2 3 4 5 6 7 8 9 10'
     puts game.state.join(' ')
-    
+
     if game.state.all? { |x| x == 'O' }
-      if game.guesses > 12 
+      if game.guesses > 12
         puts "TRY HARDER NEXT TIME. IT TOOK YOU #{game.guesses} GUESSES."
       else
         puts "VERY GOOD.  YOU GUESSED IT IN ONLY #{game.guesses} GUESSES."

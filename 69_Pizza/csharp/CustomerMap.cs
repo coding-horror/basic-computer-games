@@ -25,7 +25,7 @@ namespace Pizza
             {
                 return string.Empty;
             }
-                        
+
             return _customerMap[y, x];
         }
 
@@ -74,8 +74,8 @@ namespace Pizza
         /// <returns>True if position is out of range otherwise false.</returns>
         private bool IsPositionOutOfRange(int x, int y)
         {
-            return 
-                x < 0 || x > _mapSize - 1 || 
+            return
+                x < 0 || x > _mapSize - 1 ||
                 y < 0 || y > _mapSize - 1;
         }
 

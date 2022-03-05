@@ -57,7 +57,7 @@ namespace hurkle
                     Console.WriteLine("THANKS FOR PLAYING!");
                     break;
                 }
-                
+
             }
         }
     }

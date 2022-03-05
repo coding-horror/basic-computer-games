@@ -9,7 +9,7 @@ public record PortInfo(
     string LangPath, string Lang, string Ext, string ProjExt,
     string[] CodeFiles, string[] Slns, string[] Projs
 ) {
-    
+
     private static readonly EnumerationOptions enumerationOptions = new() {
         RecurseSubdirectories = true,
         MatchType = MatchType.Simple,
@@ -34,7 +34,7 @@ public record PortInfo(
             int.TryParse(parts[0], out var n) && n > 0 ? // ignore utilities folder
                 n :
                 (int?)null,
-            specialGameNames.TryGetValue(parts[1], out var specialName) ? 
+            specialGameNames.TryGetValue(parts[1], out var specialName) ?
                 specialName :
                 parts[1].Replace("_", "").Replace("-", "")
         );

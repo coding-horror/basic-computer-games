@@ -21,7 +21,7 @@ do {
 
 	my $V= $D*$T/($C-$T);
 	my $E= int(abs(($V-$A)*100/$A)+.5);
-	if ($E>5) { 
+	if ($E>5) {
 		print "SORRY.  YOU WERE OFF BY $E PERCENT.\n";
 		} else {
 		print "GOOD! ANSWER WITHIN $E PERCENT.\n";

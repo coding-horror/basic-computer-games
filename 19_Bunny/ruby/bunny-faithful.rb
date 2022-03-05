@@ -19,7 +19,7 @@
 #           * 0,2 draws letters between columns 0 and 2
 #           * 45,50 draws letters between columns 45 and 50
 #           * -1 starts a new line
-# 
+#
 # ...and so on.
 #
 # We keep the data statements as they are and redraw the image using
@@ -33,7 +33,7 @@
 # the data always draws from left to right so we just keep track of
 # the last column written to and then add some spaces to advance to
 # where we need to be.
-# 
+#
 
 
 # Do the thing.  (We put it in a function to keep from spewing global
@@ -51,7 +51,7 @@ def main
   # The positions to write; this is ripped from the BASIC program's
   # DATA statements.
   positions = [
-    1,2,-1,0,2,45,50,-1,0,5,43,52,-1,0,7,41,52,-1,    
+    1,2,-1,0,2,45,50,-1,0,5,43,52,-1,0,7,41,52,-1,
     1,9,37,50,-1,2,11,36,50,-1,3,13,34,49,-1,4,14,32,48,-1,
     5,15,31,47,-1,6,16,30,45,-1,7,17,29,44,-1,8,19,28,43,-1,
     9,20,27,41,-1,10,21,26,40,-1,11,22,25,38,-1,12,22,24,36,-1,
@@ -80,7 +80,7 @@ def main
       puts
       last_pos = 0
       next
-    end      
+    end
 
     # Advance to start of the range
     print ' '*(first - last_pos)
