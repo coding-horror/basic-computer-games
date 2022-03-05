@@ -9,4 +9,8 @@
     <EmbeddedResource Include="Strings\TitleAndInstructions.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\00_Common\dotnet\Games.Common\Games.Common.csproj" />
+  </ItemGroup>
+
 </Project>

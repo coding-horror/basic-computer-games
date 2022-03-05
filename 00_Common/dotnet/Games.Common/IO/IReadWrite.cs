@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Games.Common.IO;
 
@@ -66,7 +67,7 @@ public interface IReadWrite
     /// Writes a <see cref="string" /> to output, followed by a new-line.
     /// </summary>
     /// <param name="message">The <see cref="string" /> to be written.</param>
-    void WriteLine(string message);
+    void WriteLine(string message = "");
 
     /// <summary>
     /// Writes a <see cref="float" /> to output, formatted per the BASIC interpreter, with leading and trailing spaces.
@@ -80,4 +81,10 @@ public interface IReadWrite
     /// </summary>
     /// <param name="value">The <see cref="float" /> to be written.</param>
     void WriteLine(float value);
+
+    /// <summary>
+    /// Writes the contents of a <see cref="Stream" /> to output.
+    /// </summary>
+    /// <param name="stream">The <see cref="Stream" /> to be written.</param>
+    void Write(Stream stream);
 }
