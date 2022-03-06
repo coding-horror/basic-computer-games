@@ -52,7 +52,7 @@ class Card(NamedTuple):
 class Hand(NamedTuple):
     cards: List[Card]
 
-    def add_card(self, card: Card):
+    def add_card(self, card: Card) -> None:
         """add a passed card to this hand"""
         self.cards.append(card)
 
@@ -69,7 +69,7 @@ class Hand(NamedTuple):
 
         return total
 
-    def discard_hand(self, deck: "Decks"):
+    def discard_hand(self, deck: "Decks") -> None:
         """adds the cards in hand into the discard pile"""
         _len = len(self.cards)
         for _i in range(_len):
@@ -83,7 +83,7 @@ class Decks(NamedTuple):
     discard_pile: List[Card]
 
     @classmethod
-    def new(cls):
+    def new(cls) -> "Decks":
         """creates a new full and shuffled deck, and an empty discard pile"""
         # returns a number of full decks of 52 cards, shuffles them
         deck = Decks(deck=[], discard_pile=[])
@@ -100,7 +100,7 @@ class Decks(NamedTuple):
         deck.shuffle()
         return deck
 
-    def shuffle(self):
+    def shuffle(self) -> None:
         """shuffles the deck"""
         random.shuffle(self.deck)
 
@@ -153,7 +153,7 @@ class Player:
     def get_name(self) -> str:
         return f"{self.player_type}{self.index}"
 
-    def get_bet(self):
+    def get_bet(self) -> None:
         """gets a bet from the player"""
         if PlayerType.Player == self.player_type:
             if self.balance < 1:
@@ -247,7 +247,7 @@ class Game:
 
         return Game(players=players, decks=Decks.new(), games_played=0)
 
-    def _print_stats(self):
+    def _print_stats(self) -> None:
         """prints the score of every player"""
         print(f"{self.stats_as_string()}")
 
@@ -264,7 +264,7 @@ class Game:
                 s += f"Balance:\t{p.balance}\t\tBet\t{p.bet}\n"
         return f"Scores:\n{s}"
 
-    def play_game(self):
+    def play_game(self) -> None:
         """plays a round of blackjack"""
         game = self.games_played
         player_hands_message: str = ""
@@ -406,7 +406,7 @@ CARD_NAMES: List[str] = [
 STARTING_BALANCE: int = 100
 
 
-def main():
+def main() -> None:
     game: Game
 
     welcome()
@@ -423,7 +423,7 @@ def main():
         char = get_char_from_user_input("Play Again?", ["y", "n"])
 
 
-def welcome():
+def welcome() -> None:
     """prints the welcome screen"""
     # welcome message
     print(
@@ -434,7 +434,7 @@ def welcome():
     )
 
 
-def instructions():
+def instructions() -> None:
     """prints the instructions"""
     print(
         """
@@ -487,7 +487,7 @@ def get_char_from_user_input(prompt: str, valid_results: List[str]) -> str:
     return user_input
 
 
-def clear():
+def clear() -> None:
     """clear std out"""
     print("\x1b[2J\x1b[0;0H")
 
