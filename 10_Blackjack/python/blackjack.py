@@ -409,7 +409,6 @@ STARTING_BALANCE: int = 100
 def main():
     game: Game
 
-    # print welcome message
     welcome()
 
     # create game
@@ -418,18 +417,10 @@ def main():
     )
 
     # game loop, play game until user wants to stop
-    while True:
-        # play round
+    char = "y"
+    while char == "y":
         game.play_game()
-
-        # ask if they want to play again
-        char = None
-        while char not in ["y", "n"]:
-            char = input("Play Again? (y/n)").lower()
-        if char == "y":
-            continue
-        else:
-            break
+        char = get_char_from_user_input("Play Again?", ["y", "n"])
 
 
 def welcome():
