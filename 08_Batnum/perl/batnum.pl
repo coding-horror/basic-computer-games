@@ -13,6 +13,7 @@ my %START_OPTIONS = (
     "PLAYER_FIRST" => 2,
 );
 
+
 sub run {
     my $pile_size = undef;
     my $min_select = undef;
@@ -20,15 +21,18 @@ sub run {
     my $win_option = undef;
     my $start_option = undef;
 
-    # while (1) {
+    while (1) {
         write_intro();
 
         ($pile_size, $min_select, $max_select, $win_option, $start_option) 
             = &get_user_input();
 
         play($pile_size, $min_select, $max_select, $win_option, $start_option);
-    # }
+
+        printf "\n";
+    }
 }
+
 
 sub write_intro {
     printf "%33s", "BATNUM\n";
@@ -48,7 +52,7 @@ sub write_intro {
     printf "%s", "\n";
 }
 
-# TODO: check input
+
 sub get_user_input {
     my $pile_size = 0;
     my $min_select = 0;
@@ -58,26 +62,28 @@ sub get_user_input {
 
     while ($pile_size < 1) {
         printf "%s", "ENTER PILE SIZE: ";
-        $pile_size = <>;
-        $pile_size *= 1;
+        $pile_size = <STDIN>;
+    }
+
+    while ($min_select < 1 || $max_select < 1 || $min_select > $max_select) {
+        printf "%s", "ENTER MIN AND MAX: ";
+        my $raw_input = <STDIN>;
+        ($min_select, $max_select) = split(' ', $raw_input);
     }
 
     while ($win_option eq $WIN_OPTIONS{ "UNDEFINED" }) {
         printf "%s", "ENTER WIN OPTION - 1 TO TAKE LAST, 2 TO AVOID LAST: ";
-        $win_option = <>;
-        $win_option *= 1;
+        $win_option = <STDIN>;
     }
-
-    # get min select max select
 
     while ($start_option eq $START_OPTIONS{ "UNDEFINED" }) {
         printf "%s", "ENTER START OPTION - 1 COMPUTER FIRST, 2 YOU FIRST: ";
-        $start_option = <>;
-        $start_option *= 1;
+        $start_option = <STDIN>;
     }
 
     return ($pile_size, $min_select, $max_select, $win_option, $start_option);
 }
+
 
 sub play {
     my $pile_size = shift;
@@ -86,8 +92,103 @@ sub play {
     my $win_option = shift;
     my $start_option = shift;
 
-    print("pile_size: $pile_size\n");
-    print("win_option: $win_option\n");
+    my $game_over = 0;
+    my $players_turn = $start_option eq $START_OPTIONS{ "PLAYER_FIRST" } ? 1 : 0;
+
+    while (!$game_over) {
+        if ($players_turn) {
+            ($game_over, $pile_size) = players_move(
+                $pile_size, $min_select, $max_select, $win_option);
+            
+            $players_turn = 0;
+
+            if ($game_over) {
+                return;
+            }
+        } else {
+            ($game_over, $pile_size) = computers_move(
+                $pile_size, $min_select, $max_select, $win_option);
+            
+            $players_turn = 1;
+        }
+    }
+
+    return;
 }
+
+
+sub players_move {
+    my $pile_size = shift;
+    my $min_select = shift;
+    my $max_select = shift;
+    my $win_option = shift;
+
+    my $finished = 0;
+
+    while (!$finished) {
+        my $remove_amount = undef;
+
+        printf "%s", "YOUR MOVE: ";
+        $remove_amount = <>;
+
+        if ($remove_amount eq 0) {
+            printf "%s", "I TOLD YOU NOT TO USE ZERO!  COMPUTER WINS BY FORFEIT.";
+            return (1, $pile_size);
+        } elsif ($remove_amount > $max_select || $remove_amount < $min_select) {
+            printf "%s", "ILLEGAL MOVE, TRY AGAIN.\n";
+            next;
+        } else {
+            $pile_size -= $remove_amount;
+            $finished = 1;
+        }
+
+        if ($pile_size <= 0) {
+            if ($win_option eq $WIN_OPTIONS{ "AVOID_LAST" }) {
+                printf "%s", "TOUGH LUCK, YOU LOSE.\n";
+            } else {
+                printf "%s", "CONGRATULATIONS, YOU WIN.\n";
+            }
+            return (1, $pile_size);
+        }
+    }
+    
+    return (0, $pile_size);
+}
+
+
+sub computers_move {
+    my $pile_size = shift;
+    my $min_select = shift;
+    my $max_select = shift;
+    my $win_option = shift;
+
+    if ($win_option eq $WIN_OPTIONS{ "TAKE_LAST" } && $pile_size <= $max_select) {
+        printf "COMPUTER TAKES %d AND WINS.\n", $pile_size;
+        return (1, $pile_size);
+    }
+
+    if ($win_option eq $WIN_OPTIONS{ "AVOID_LAST" } && $pile_size <= $min_select) {
+        printf "COMPUTER TAKES %d AND LOSES.\n", $pile_size;
+        return (1, $pile_size);
+    }
+
+    my $remove_amount = get_computer_remove_amount($min_select, $max_select);
+
+    $pile_size -= $remove_amount;
+
+    printf "COMPUTER TAKES %d AND LEAVES %d.\n", $remove_amount, $pile_size;
+
+    return (0, $pile_size);
+
+}
+
+
+sub get_computer_remove_amount {
+    my $min_select = shift;
+    my $max_select = shift;
+
+    return (int(rand($max_select - $min_select)) + $min_select);
+}
+
 
 run();
