@@ -237,7 +237,12 @@ sub computers_move {
 
     $pile_size -= $remove_amount;
 
-    printf "COMPUTER TAKES %d AND LEAVES %d.\n", $remove_amount, $pile_size;
+    if ($pile_size <= 0) {
+        printf "COMPUTER TAKES %d AND WINS.\n", $remove_amount;
+        return (1, $pile_size);
+    } else {
+        printf "COMPUTER TAKES %d AND LEAVES %d.\n", $remove_amount, $pile_size;
+    }
 
     return (0, $pile_size);
 }
