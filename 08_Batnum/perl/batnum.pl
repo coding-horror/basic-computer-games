@@ -35,6 +35,10 @@ sub run {
         ($pile_size, $min_select, $max_select, $win_option, $start_option) 
             = &get_user_input();
 
+        if ($pile_size < 0) {
+            last;
+        }
+
         play($pile_size, $min_select, $max_select, $win_option, $start_option);
 
         printf "\n";
@@ -93,6 +97,9 @@ sub get_user_input {
     while ($pile_size < 1) {
         printf "%s", "ENTER PILE SIZE: ";
         $pile_size = <STDIN>;
+        if ($pile_size < 0) {
+            return ($pile_size);
+        }
     }
 
     while ($min_select < 1 || $max_select < 1 || $min_select > $max_select) {
@@ -263,6 +270,7 @@ sub get_computer_remove_amount {
 
     return (int(rand($max_select - $min_select)) + $min_select);
 }
+
 
 # start the game
 run();
