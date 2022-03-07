@@ -11,41 +11,43 @@
 #
 ######################################################
 
+from typing import List
+
 
 class Card:
-    def __init__(self, suit, rank):
+    def __init__(self, suit: str, rank: int):
         self.suit = suit
         self.rank = rank
 
-    def __str__(self):
-        r = self.rank
-        if r == 11:
+    def __str__(self) -> str:
+        r = str(self.rank)
+        if r == "11":
             r = "J"
-        elif r == 12:
+        elif r == "12":
             r = "Q"
-        elif r == 13:
+        elif r == "13":
             r = "K"
-        elif r == 14:
+        elif r == "14":
             r = "A"
         return f"{r}{self.suit}"
 
 
 class Deck:
     def __init__(self):
-        self.cards = []
+        self.cards: List[Card] = []
         self.build()
 
-    def build(self):
+    def build(self) -> None:
         for suit in ["\u2665", "\u2666", "\u2663", "\u2660"]:
             for rank in range(2, 15):
                 self.cards.append(Card(suit, rank))
 
-    def shuffle(self):
+    def shuffle(self) -> None:
         import random
 
         random.shuffle(self.cards)
 
-    def deal(self):
+    def deal(self) -> Card:
         return self.cards.pop()
 
 
@@ -58,7 +60,7 @@ class Game:
         self.money = 100
         self.not_done = True
 
-    def play(self):
+    def play(self) -> None:
         while self.not_done:
             while self.money > 0:
                 card_a = self.card_a
@@ -90,9 +92,9 @@ class Game:
                     print("Chicken!")
                     print(f"Your deal should have been: {player_card}")
                     if card_a.rank < player_card.rank < card_b.rank:
-                        print(f"You could have won!")
+                        print("You could have won!")
                     else:
-                        print(f"You would lose, so it was wise of you to chicken out!")
+                        print("You would lose, so it was wise of you to chicken out!")
 
                     self.not_done = False
                     break

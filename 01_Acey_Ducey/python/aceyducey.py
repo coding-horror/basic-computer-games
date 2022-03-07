@@ -30,13 +30,13 @@ import random
 #  to start with more or less than $100."
 DEFAULT_BANKROLL = 100
 
-# functions
-def deal_card_num():
+
+def deal_card_num() -> int:
     """Get card number"""
     return random.randint(0, 12)
 
 
-def get_card_name(number):
+def get_card_name(number: int) -> str:
     """Get card name"""
     card_names = (
         " 2",
@@ -56,7 +56,7 @@ def get_card_name(number):
     return card_names[number]
 
 
-def display_bankroll(bank_roll):
+def display_bankroll(bank_roll: int) -> None:
     """Print current bankroll"""
     if BANK_ROLL > 0:
         print("You now have %s dollars\n" % bank_roll)
@@ -103,9 +103,9 @@ while KEEP_PLAYING:
         # Get and handle player bet choice
         BET_IS_VALID = False
         while not BET_IS_VALID:
-            curr_bet = input("What is your bet? ")
+            curr_bet_str = input("What is your bet? ")
             try:
-                curr_bet = int(curr_bet)
+                curr_bet = int(curr_bet_str)
             except ValueError:
                 # Bad input? Just loop back up and ask again...
                 pass
