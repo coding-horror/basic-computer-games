@@ -36,7 +36,7 @@ public class Wheel {
             pocket = random.nextInt(38) + 1;
         } while (random.nextInt(4) > 0); // keep spinning until it stops
     }
-    
+
     // The string representation of the number; 1-36, 0, or 00
     public String value() {
         if (pocket == 37) return "0";

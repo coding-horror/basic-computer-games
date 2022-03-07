@@ -8,4 +8,3 @@ Functional changes from Original
 - handle edge condition for end game where the minimum draw amount is greater than the number of items remaining in the pile
 - Takes into account the width of the console
 - Mulilingual Support (English/French currently)
-

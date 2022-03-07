@@ -91,7 +91,7 @@ The relation between the Historical and Standard nomenclatures is shown in the s
 ---
 #### Bugs
 
-Many of the programs in this book and this collection have bugs in the original code. 
+Many of the programs in this book and this collection have bugs in the original code.
 
 @jkboyce has done a great job of discovering and fixing a number of bugs in the [original code](superstartrek.bas), as part of his [python implementation](python/superstartrek.py), which should be noted by other implementers:
 

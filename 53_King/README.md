@@ -27,7 +27,7 @@ A quick fix for this bug in the original code would be
 
     1450 V3=ABS(INT(V1-V2))
     1451 A=INT(A+V3)
-    
+
 ...judging from the description of tourist income on basic line 1410
 
     1410 PRINT " YOU MADE";ABS(INT(V1-V2));"RALLODS FROM TOURIST TRADE."

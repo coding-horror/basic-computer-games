@@ -8,7 +8,7 @@ my $LN= "Line";
 my $Pedantic= 0;
 my $Indent= 0;
 
-my %Vars;  # num | str | anm | ast 
+my %Vars;  # num | str | anm | ast
 my @Data;
 my %Code;
 open(FH, $File);
@@ -278,7 +278,7 @@ sub PRINT {
 		push @Out, $Par;
 		}
 
-	my $Out= join(". ", @Out);	
+	my $Out= join(". ", @Out);
 	if ($Enter) { $Out.= qq|. "\\n"|; }
 	return "print ".$Out;
 	}
@@ -347,7 +347,7 @@ sub FORMULA {
 		if ($Vars{$Key}!~ /^a/) { next; }
 		$Str=~ s/\$$Key\((.*?)\)/\$$Key\[$1\]/g;
 		}
-	
+
 	if ($Cond==1) {
 		$Str=~ s/<>/ ne /g;
 		$Str=~ s/=/ eq /g;
@@ -357,7 +357,7 @@ sub FORMULA {
 
 
 sub SMARPLIT {
-	my ($Str, $Sep, $Nin)= @_;	
+	my ($Str, $Sep, $Nin)= @_;
 	my @Parts;
 	my $Text= "";
 	my $Flag= 0;
@@ -373,8 +373,5 @@ sub SMARPLIT {
 		$Text.= $Char;
 		}
 	if ($Text) { push @Parts, &TRIM($Text); }
-	return @Parts;	
+	return @Parts;
 	}
-
-
-

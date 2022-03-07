@@ -2,7 +2,7 @@ import random
 
 
 def print_n_whitespaces(n: int):
-    print(" "*n, end="")
+    print(" " * n, end="")
 
 
 def print_n_newlines(n: int):
@@ -75,10 +75,10 @@ if Z != "NO":
         ["3", "HEAD", "1"],
         ["4", "FEELERS", "2"],
         ["5", "TAIL", "1"],
-        ["6", "LEGS", "6"]
+        ["6", "LEGS", "6"],
     ]
     for row in table:
-        print("{:<16}{:<16}{:<20}".format(row[0], row[1], row[2]))
+        print(f"{row[0]:<16}{row[1]:<16}{row[2]:<20}")
     print_n_newlines(2)
 
 A = 0

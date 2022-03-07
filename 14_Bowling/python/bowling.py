@@ -16,12 +16,12 @@ def calculate_score(rolls):
         score += pins
         if b == 1:
             if pins == 10:  # strike
-                score += sum(rolls[index + 1:index + 3])
+                score += sum(rolls[index + 1 : index + 3])
                 frame += 1
             else:
                 b = 2
         else:
-            if sum(rolls[index - 1:index + 1]) == 10:  # spare
+            if sum(rolls[index - 1 : index + 1]) == 10:  # spare
                 score += rolls[index + 1]
             b = 1
             frame += 1
@@ -46,7 +46,7 @@ class Player:
             self.show(pins)
             pin_count = score - prev_score
             self.rolls.append(pin_count)  # log the number of pins toppled this roll
-            print(f'{pin_count} for {self.name}')
+            print(f"{pin_count} for {self.name}")
             if score - prev_score == 0:
                 print("GUTTER!!!")
             if ball == 0:
@@ -63,7 +63,7 @@ class Player:
 
             prev_score = score  # remember previous pins to distinguish ...
         if frame == 9 and extra > 0:
-            print(f'Extra rolls for {self.name}')
+            print(f"Extra rolls for {self.name}")
             pins = [0] * 10  # reset the pins
             score = 0
             for ball in range(extra):
@@ -74,48 +74,48 @@ class Player:
                 self.rolls.append(score)
 
     def __str__(self):
-        return f'{self.name}: {self.rolls}, total:{calculate_score(self.rolls)}'
+        return f"{self.name}: {self.rolls}, total:{calculate_score(self.rolls)}"
 
     def show(self, pins):
         pins_iter = iter(pins)
         print()
         for row in range(4):
-            print(' ' * row, end='')
+            print(" " * row, end="")
             for _ in range(4 - row):
                 p = next(pins_iter)
-                print('O ' if p else '+ ', end='')
+                print("O " if p else "+ ", end="")
             print()
 
 
 def centreText(text, width):
     t = len(text)
-    return (' ' * ((width - t) // 2)) + text
+    return (" " * ((width - t) // 2)) + text
 
 
 def main():
-    print(centreText('Bowl', 80))
-    print(centreText('CREATIVE COMPUTING MORRISTOWN, NEW JERSEY', 80))
+    print(centreText("Bowl", 80))
+    print(centreText("CREATIVE COMPUTING MORRISTOWN, NEW JERSEY", 80))
     print()
-    print('WELCOME TO THE ALLEY.')
-    print('BRING YOUR FRIENDS.')
+    print("WELCOME TO THE ALLEY.")
+    print("BRING YOUR FRIENDS.")
     print("OKAY LET'S FIRST GET ACQUAINTED.")
 
     while True:
         print()
-        if input('THE INSTRUCTIONS (Y/N)? ') in 'yY':
-            print('THE GAME OF BOWLING TAKES MIND AND SKILL. DURING THE GAME')
-            print('THE COMPUTER WILL KEEP SCORE. YOU MAY COMPETE WITH')
-            print('OTHER PLAYERS[UP TO FOUR]. YOU WILL BE PLAYING TEN FRAMES.')
+        if input("THE INSTRUCTIONS (Y/N)? ") in "yY":
+            print("THE GAME OF BOWLING TAKES MIND AND SKILL. DURING THE GAME")
+            print("THE COMPUTER WILL KEEP SCORE. YOU MAY COMPETE WITH")
+            print("OTHER PLAYERS[UP TO FOUR]. YOU WILL BE PLAYING TEN FRAMES.")
             print("ON THE PIN DIAGRAM 'O' MEANS THE PIN IS DOWN...'+' MEANS THE")
-            print('PIN IS STANDING. AFTER THE GAME THE COMPUTER WILL SHOW YOUR')
-            print('SCORES.')
+            print("PIN IS STANDING. AFTER THE GAME THE COMPUTER WILL SHOW YOUR")
+            print("SCORES.")
 
-        total_players = int(input('FIRST OF ALL...HOW MANY ARE PLAYING? '))
+        total_players = int(input("FIRST OF ALL...HOW MANY ARE PLAYING? "))
         player_names = []
         print()
-        print('VERY GOOD...')
+        print("VERY GOOD...")
         for index in range(total_players):
-            player_names.append(Player(input(f'Enter name for player {index + 1}: ')))
+            player_names.append(Player(input(f"Enter name for player {index + 1}: ")))
 
         for frame in range(10):
             for player in player_names:
@@ -124,11 +124,11 @@ def main():
         for player in player_names:
             print(player)
 
-        if input('DO YOU WANT ANOTHER GAME? ') not in 'yY':
+        if input("DO YOU WANT ANOTHER GAME? ") not in "yY":
             break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 

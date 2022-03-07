@@ -63,7 +63,7 @@ struct Board
                            (" 6_         │   │   │   │        ").to!(dchar[]),
                            ("            ├───┼───┼───┤        ").to!(dchar[]),
                            (" 7_         │   │   │   │        ").to!(dchar[]),
-                           ("            └───┴───┴───┘        ").to!(dchar[])]; 
+                           ("            └───┴───┴───┘        ").to!(dchar[])];
         foreach (y, row; state)
             foreach (x, field; row)
                 if (field == taken)

@@ -142,5 +142,3 @@ public class Target {
 		double distance;
 	}
 }
-
-

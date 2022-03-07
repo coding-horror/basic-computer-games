@@ -121,7 +121,7 @@
 
            # Otherwise, consider u,v
            if s(u,v)=0 then gosub 910
-       endif           
+       endif
 870  return
 
      # Evaluate jumping (x,y) to (u,v).

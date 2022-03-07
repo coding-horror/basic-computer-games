@@ -3,7 +3,7 @@
     /// <summary>
     /// Data in this class was originally given by the following DATA section in
     /// the BASIC program:
-    /// 
+    ///
     /// 2030 DATA 1,49,52,4,13,61,64,16,22,39,23,38,26,42,27,43
     /// 2040 DATA 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
     /// 2050 DATA 21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38
@@ -24,7 +24,7 @@
     /// 2200 DATA 1,18,35,52,5,22,39,56,9,26,43,60,13,30,47,64
     /// 2210 DATA 49,34,19,4,53,38,23,8,57,42,27,12,61,46,31,16
     /// 2220 DATA 1,22,43,64,16,27,38,49,4,23,42,61,13,26,39,52
-    /// 
+    ///
     /// In short, each number is an index into the board. The data in this class
     /// is zero-indexed, as opposed to the original data which was one-indexed.
     /// </summary>
@@ -33,9 +33,9 @@
         /// <summary>
         /// The corners and centers of the Qubic board. They correspond to the
         ///  following coordinates:
-        /// 
+        ///
         /// [
-        ///     111, 411, 414, 114, 141, 441, 444, 144, 
+        ///     111, 411, 414, 114, 141, 441, 444, 144,
         ///     222, 323, 223, 322, 232, 332, 233, 333
         /// ]
         /// </summary>
@@ -57,7 +57,7 @@
            //                 ( )      ( )      ( )      ( )
 
            //     (X)      ( )      ( )      (X)
-           //         ( )      ( )      ( )      ( )      
+           //         ( )      ( )      ( )      ( )
            //             ( )      ( )      ( )      ( )
            //                 (X)      ( )      ( )      (X)
 
@@ -68,13 +68,13 @@
         /// A list of all "winning" rows in the Qubic board; that is, sets of
         ///  four spaces that, if filled entirely by the player (or machine),
         ///  would result in a win.
-        /// 
+        ///
         /// Each group of four rows in the list corresponds to a plane in the
         ///  cube, and each plane is organized so that the first and last rows
         ///  are on the plane's edges, while the second and third rows are in
         ///  the middle of the plane. The only exception is the last group of
         ///  rows, which contains the corners and centers rather than a plane.
-        ///  
+        ///
         /// The order of the rows in this list is key to how the Qubic AI
         ///  decides its next move.
         /// </summary>
@@ -123,7 +123,7 @@
            //     ( )      ( )      ( )      ( )
            //         ( )      ( )      ( )      ( )
            //             ( )      ( )      ( )      ( )
-           //                 ( )      ( )      ( )      ( )      
+           //                 ( )      ( )      ( )      ( )
 
            { 16,17,18,19, },
            { 20,21,22,23, },
@@ -297,7 +297,7 @@
 
            //     (4)      ( )      ( )      ( )
            //         (4)      ( )      ( )      ( )
-           //             (4)      ( )      ( )      ( )      
+           //             (4)      ( )      ( )      ( )
            //                 (4)      ( )      ( )      ( )
 
            { 0, 4, 8, 12, },
@@ -463,7 +463,7 @@
            //     ( )      ( )      ( )      ( )
            //         ( )      ( )      ( )      ( )
            //             (1)      (2)      (3)      (4)
-           //                 ( )      ( )      ( )      ( )      
+           //                 ( )      ( )      ( )      ( )
 
            //     ( )      ( )      ( )      ( )
            //         (1)      (2)      (3)      (4)
@@ -531,7 +531,7 @@
            { 60,45,30,15, },
 
            //     (1)      ( )      ( )      (3)
-           //         ( )      ( )      ( )      ( )      
+           //         ( )      ( )      ( )      ( )
            //             ( )      ( )      ( )      ( )
            //                 (4)      ( )      ( )      (2)
 

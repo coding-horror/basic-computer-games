@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -103,7 +103,7 @@ async function main()
             y = parseInt(await input());
         } while (y < 0 || y > 25) ;
         if (y == c || y == d || y == e || y == f) {
-            
+
             // The original game has a bug. You can shoot the same outpost
             // several times. This solves it.
             if (y == c)

@@ -114,7 +114,7 @@ def print_bunny_text(text)
     # Bonus hackery: we could replace the above with this one-liner,
     # but it's kind of hard to understand so it may or may not be wise
     # to use it.
-    # 
+    #
     #   line.gsub!(/(\S)/) {|m| bunny[$~.begin(0) % bunny.size] }
 
     puts line

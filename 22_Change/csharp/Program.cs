@@ -25,7 +25,7 @@ namespace Change
         /// </summary>
         /// <returns>
         /// False if any input can't be parsed to double. Price and payment returned would be 0.
-        /// True if it was possible to parse inputs into doubles. Price and payment returned 
+        /// True if it was possible to parse inputs into doubles. Price and payment returned
 	    /// would be as provided by the user.
 	    /// </returns>
         static (bool status, double price, double payment) GetInput()

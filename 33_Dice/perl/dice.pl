@@ -38,5 +38,3 @@ do {
 	print "? "; chomp($Z = <STDIN>);
 	} until (uc($Z) ne "YES");
 exit;
-
-

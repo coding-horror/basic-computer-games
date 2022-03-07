@@ -8,7 +8,6 @@ Ported by Dave LeCompte
 
 import random
 
-
 PAGE_WIDTH = 64
 
 

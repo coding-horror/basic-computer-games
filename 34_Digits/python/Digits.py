@@ -1,5 +1,6 @@
 import random
 
+
 def printIntro():
     print("                                DIGITS")
     print("              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
@@ -45,6 +46,7 @@ def read10Numbers():
 
     return numbers
 
+
 def readContinueChoice():
     print("\nDO YOU WANT TO TRY AGAIN (1 FOR YES, 0 FOR NO) ? ")
     try:
@@ -53,7 +55,8 @@ def readContinueChoice():
     except (ValueError, TypeError) as m:
         return False
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     printIntro()
     if readInstructionChoice():
         printInstructions()
@@ -90,7 +93,10 @@ if __name__ == '__main__':
                         validNumbers = False
                         break
 
-            print("\n%-14s%-14s%-14s%-14s" % ("MY GUESS", "YOUR NO.", "RESULT", "NO. RIGHT"))
+            print(
+                "\n%-14s%-14s%-14s%-14s"
+                % ("MY GUESS", "YOUR NO.", "RESULT", "NO. RIGHT")
+            )
 
             for number in numbers:
                 s = 0
@@ -118,7 +124,9 @@ if __name__ == '__main__':
                     k[int(z2)][number] = k[int(z2)][number] + 1
                     z = z - (z / 9) * 9
                     z = 3 * z + number
-                print("\n%-14d%-14d%-14s%-14d" % (myGuess, number, result, runningCorrect))
+                print(
+                    "\n%-14d%-14d%-14s%-14d" % (myGuess, number, result, runningCorrect)
+                )
 
                 z1 = z - (z / 9) * 9
                 z2 = number
@@ -128,7 +136,7 @@ if __name__ == '__main__':
         if runningCorrect > 10:
             print()
             print("I GUESSED MORE THAN 1/3 OF YOUR NUMBERS.")
-            print("I WIN." + u"\u0007")
+            print("I WIN." + "\u0007")
         elif runningCorrect < 10:
             print("I GUESSED LESS THAN 1/3 OF YOUR NUMBERS.")
             print("YOU BEAT ME.  CONGRATULATIONS *****")

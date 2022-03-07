@@ -20,7 +20,7 @@ sub yes_input {
 print ' 'x32; print "Bagels\n";
 print ' 'x14; print "Creative Computing  Morristown, New Jersey\n\n";
 
-# Provide instructions if requested 
+# Provide instructions if requested
 print "Would you like the rules (yes or no)? ";
 if (yes_input()) {
 
@@ -39,7 +39,7 @@ HERE
 # There are three code loops here. The outermost one, labeled 'PLAY',
 # performs one game start to finish every time it runs.
 # The next loop is a for loop that implements the required 20 guesses.
-# And the innermost loop, labeled 'CHECK', does the game logic of 
+# And the innermost loop, labeled 'CHECK', does the game logic of
 # checking the user's guess to make sure it's valid, figuring out
 # the response, and rewarding the user if they won.
 
@@ -59,7 +59,7 @@ PLAY: while (1) {
 
         # Note that the CHECK loop will automatically loop to ask
         # for the user's input, and it's only with the 'next' and
-        # 'last' statements that this loop is exited. So if the 
+        # 'last' statements that this loop is exited. So if the
         # user's input is somehow invalid, we just print out an
         # appropriate message. Execution will by default return
         # to the start of the loop, and only leaves the loop if
@@ -75,15 +75,15 @@ PLAY: while (1) {
             if ($A !~ m{^(\d)(\d)(\d)$}) {
                 print "What?\n";
                 # Program execution will now pass through the rest
-                # of the logic below and loop back to the start 
+                # of the logic below and loop back to the start
                 # of the CHECK loop.
             } else {
 
-                # As a side effect of the regex match above, the 
+                # As a side effect of the regex match above, the
                 # $1, $2, and $3 variables are each of the digits
                 # of the user's guess. Perl treats numbers and
                 # strings interchangably, so we will not have to
-                # use the ASC() conversion functions required 
+                # use the ASC() conversion functions required
                 # by the BASIC program.
                 my @B = ($1,$2,$3);
 
@@ -134,11 +134,11 @@ PLAY: while (1) {
 
                     # Print out the clues. The 'x' operator
                     # prints out the string the indicated number
-                    # of times. The "BAGELS" line uses Perl's 
-                    # ternary operator to print the word if 
+                    # of times. The "BAGELS" line uses Perl's
+                    # ternary operator to print the word if
                     # the expression ($C + $D) is equal to 0.
 
-                    printf("%s%s%s\n", 
+                    printf("%s%s%s\n",
                         "PICO " x$C,
                         "FERMI "x$D,
                         ($C+$D==0 ? "BAGELS" : '')
@@ -152,11 +152,11 @@ PLAY: while (1) {
             } # end of regex match else block
 
             # If program execution reaches this particular point,
-            # then the user's input has not been accepted (the 
+            # then the user's input has not been accepted (the
             # only ways out of this loop are the "next PLAY" statement
             # when the user wins, and the "last CHECK" statement
             # when the user's input is successfully parsed).
-            # So the program execution goes back to the top of the 
+            # So the program execution goes back to the top of the
             # CHECK loop, printing the request for user input
             # again.
 
@@ -183,7 +183,7 @@ continue {
 
     # This 'continue' loop is reached either when the PLAY loop has completed
     # or via the 'next PLAY' statement when the user wins a game. In either
-    # case we ask if the player wants to go again, and use the 'last' 
+    # case we ask if the player wants to go again, and use the 'last'
     # statement to exit the loop if the response is not yes.
     print "Play again (yes or no) ? ";
     last unless yes_input();

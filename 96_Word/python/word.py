@@ -5,8 +5,20 @@
 
 import random
 
-words = ["DINKY", "SMOKE", "WATER", "GRASS", "TRAIN", "MIGHT", "FIRST",
-         "CANDY", "CHAMP", "WOULD", "CLUMP", "DOPEY"]
+words = [
+    "DINKY",
+    "SMOKE",
+    "WATER",
+    "GRASS",
+    "TRAIN",
+    "MIGHT",
+    "FIRST",
+    "CANDY",
+    "CHAMP",
+    "WOULD",
+    "CLUMP",
+    "DOPEY",
+]
 
 
 def play_game():
@@ -41,13 +53,17 @@ def play_game():
                         common_letters = common_letters + guess_word[i]
                         if i == j:
                             guess_progress[j] = guess_word[i]
-            print("There were", matches,
-                  "matches and the common letters were... " + common_letters)
             print(
-                "From the exact letter matches, you know............ " + "".join(guess_progress))
+                "There were",
+                matches,
+                "matches and the common letters were... " + common_letters,
+            )
+            print(
+                "From the exact letter matches, you know............ "
+                + "".join(guess_progress)
+            )
             if "".join(guess_progress) == guess_word:
-                print("\nYou have guessed the word. It took",
-                      guess_count, "guesses!")
+                print("\nYou have guessed the word. It took", guess_count, "guesses!")
                 break
             elif matches == 0:
                 print("\nIf you give up, type '?' for you next guess.")
@@ -63,8 +79,7 @@ def main():
     keep_playing = True
     while keep_playing:
         play_game()
-        keep_playing = input(
-            "\nWant to play again? ").lower().startswith("y")
+        keep_playing = input("\nWant to play again? ").lower().startswith("y")
 
 
 if __name__ == "__main__":

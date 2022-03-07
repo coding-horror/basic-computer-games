@@ -9,7 +9,7 @@ namespace AceyDucey
     /// </summary>
     internal class GameState
     {
-        
+
         /// <summary>
         /// How much money does the player have at the moment?
         /// </summary>

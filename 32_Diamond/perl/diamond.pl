@@ -33,5 +33,3 @@ for (my $J=1; $J<$Wid; $J++) {
 	}
 
 exit;
-
-

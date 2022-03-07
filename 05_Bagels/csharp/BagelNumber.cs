@@ -54,7 +54,7 @@ namespace BasicComputerGames.Bagels
 
 			_digits = number.Select(d => d - '0').ToArray();
 		}
-			
+
 		//public BagelNumber(long number)
 		//{
 		//	var digits = new List<int>();

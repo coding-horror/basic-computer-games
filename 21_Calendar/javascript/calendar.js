@@ -63,7 +63,7 @@ for (n = 1; n <= 12; n++) {
 	print("\n");
 	str = "";
 	for (i = 1; i <= 59; i++)
-		str += "*";    
+		str += "*";
 	for (week = 1; week <= 6; week++) {
 		print(str + "\n");
 		str = "    ";
@@ -83,7 +83,7 @@ for (n = 1; n <= 12; n++) {
 			d += g;
 			break;
 		}
-	} 
+	}
 	d -= g;
 	print(str + "\n");
 }

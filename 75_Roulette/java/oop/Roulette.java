@@ -17,7 +17,7 @@ public class Roulette {
 
     private BufferedReader reader;
     private PrintStream writer;
-    
+
     private int house;      // how much money does the house have
     private int player;     // how much money does the player have
     private Wheel wheel = new Wheel();
@@ -156,7 +156,7 @@ public class Roulette {
         HashSet<Integer> betsMade = new HashSet<>(); // Bet targets already made, so we can spot repeats
         ArrayList<Bet> bets = new ArrayList<>();     // All the bets for this round
 
-        while (bets.size() < betCount) { 
+        while (bets.size() < betCount) {
             Bet bet = new Bet(0, 0);                 // an invalid bet to hold the place
             while (!bet.isValid()) {                 // keep asking until it is valid
                 try {

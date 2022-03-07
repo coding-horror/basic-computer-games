@@ -3,7 +3,7 @@ use std::{io, io::{stdout, Write}};
 
 /**
  * todo list:
- * 
+ *
  * allow splitting
  */
 
@@ -89,9 +89,9 @@ impl<'a> HAND<'a> {
     fn new() -> HAND<'a> {
         return HAND { cards: Vec::new()};
     }
-    
+
     /**
-     * add a passed card to this hand 
+     * add a passed card to this hand
      */
     fn add_card(&mut self, card: CARD<'a>) {
         self.cards.push(card);
@@ -136,7 +136,7 @@ impl<'a> DECKS<'a> {
         //returns a number of full decks of 52 cards, shuffles them
         //DATA
         let mut deck = DECKS{deck: Vec::new(), discard_pile: Vec::new()};
-        let number_of_decks = 3; 
+        let number_of_decks = 3;
 
         //fill deck
         for _n in 0..number_of_decks { //fill deck with number_of_decks decks worth of cards
@@ -223,7 +223,7 @@ impl<'a> PLAYER<'a> {
 
     /**
      * returns a string of the players hand
-     * 
+     *
      * if player is a dealer, returns the first card in the hand followed by *'s for every other card
      * if player is a player, returns every card and the total
      */
@@ -245,7 +245,7 @@ impl<'a> PLAYER<'a> {
             match &self.player_type {
                 &PlayerType::Dealer =>  { //if this is a dealer
                     return format!(
-                        "{}*",//message 
+                        "{}*",//message
                         { //*'s for other cards
                             let mut s:String = String::new();
                             let mut cards_in_hand = self.hand.cards.iter();
@@ -274,7 +274,7 @@ impl<'a> PLAYER<'a> {
         }
     }
 
-    /** 
+    /**
      * get the players 'play'
      */
     fn get_play(&self) -> Play {
@@ -283,7 +283,7 @@ impl<'a> PLAYER<'a> {
          if it's a dealer, use an algorithm to determine the play
          if it's a player, ask user for input
          */
-        match &self.player_type { 
+        match &self.player_type {
             &PlayerType::Dealer => {
                 if self.hand.get_total() > 16 { // if total value of hand is greater than 16, stand
                     return Play::Stand;
@@ -374,7 +374,7 @@ impl<'a> GAME<'a> {
         let scores;
         let game = self.games_played; //save it here so we don't have borrowing issues
         let mut player_hands_message: String = String::new();//cache it here so we don't have borrowing issues
-        
+
         //deal cards to each player
         for _i in 0..2 { // do this twice
             //draw card for each player
@@ -384,7 +384,7 @@ impl<'a> GAME<'a> {
         //get everyones bets
         self.players.iter_mut().for_each(|player| player.get_bet());
         scores = self.stats_as_string(); //save it here so we don't have borrowing issues later
-        
+
         //play game for each player
         for player in self.players.iter_mut() {
             //turn loop, ends when player finishes their turn
@@ -436,7 +436,7 @@ impl<'a> GAME<'a> {
                         println!("\t{}", play.to_string());
 
                         //double their balance if there's enough money, othewise go all-in
-                        if player.bet * 2 < player.balance { 
+                        if player.bet * 2 < player.balance {
                             player.bet *= 2;
                         }
                         else {
@@ -450,7 +450,7 @@ impl<'a> GAME<'a> {
                     },
                 }
             }
-            
+
             //add player to score cache thing
             player_hands_message += format!("{} Hand:\t{}\n", player.get_name(), player.hand_as_string(true)).as_str();
         }
@@ -473,7 +473,7 @@ impl<'a> GAME<'a> {
             print!("{} ", x.get_name());//print name
             x.wins += 1;//increment their wins
         });
-        if num_winners > 1 {println!("all tie with {}\n\n\n", top_score);} 
+        if num_winners > 1 {println!("all tie with {}\n\n\n", top_score);}
         else {println!("wins with {}!\n\n\n",top_score);}
 
         //handle bets
@@ -503,7 +503,7 @@ fn main() {
     //print welcome message
     welcome();
 
-    //create game    
+    //create game
     game = GAME::new( get_number_from_user_input("How many players should there be (at least 1)?", 1, 7) );
 
     //game loop, play game until user wants to stop
@@ -527,7 +527,7 @@ fn welcome() {
     //welcome message
     print!("
                             BLACK JACK
-              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY    
+              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
     \n\n");
 }
 
@@ -551,7 +551,7 @@ fn instructions() {
     NUMBER OF PLAYERS
 
     NOTE:'/' (splitting) is not currently implemented, and does nothing
-    
+
     PRESS ENTER TO CONTINUE
     ");
     io::stdin().read_line(&mut String::new()).expect("Failed to read line");
@@ -578,9 +578,9 @@ fn get_number_from_user_input(prompt: &str, min:usize, max:usize) -> usize {
                 if i < min || i > max { //input out of desired range
                     println!("INPUT OUT OF VALID RANGE.  TRY AGAIN.  {}-{}",min,max);
                     continue; // run the loop again
-                } 
+                }
                 else {
-                    break i;// this escapes the loop, returning i 
+                    break i;// this escapes the loop, returning i
                 }
             },
             Err(e) => {
@@ -613,9 +613,9 @@ fn get_char_from_user_input(prompt: &str, valid_results: &Vec<char>) -> char {
                 if !valid_results.contains(&i) { //input out of desired range
                     println!("INPUT IS NOT VALID CHARACTER.  TRY AGAIN.");
                     continue; // run the loop again
-                } 
+                }
                 else {
-                    break i;// this escapes the loop, returning i 
+                    break i;// this escapes the loop, returning i
                 }
             },
             None => {

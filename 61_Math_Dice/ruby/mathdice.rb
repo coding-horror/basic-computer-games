@@ -18,7 +18,7 @@ def game_play
     roll = rand(6) + 1
     print_dice(roll)
     sum = sum + roll
-    if num == 1 
+    if num == 1
       print "\n   +\n\n"
     end
     if num == 2

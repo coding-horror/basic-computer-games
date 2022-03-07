@@ -23,4 +23,3 @@ bool UserWantsToPlayAgain(IUserInterface ui)
 
     return result;
 }
-

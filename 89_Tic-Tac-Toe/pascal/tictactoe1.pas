@@ -86,14 +86,14 @@ begin
     		        writeln('AND WINS ********');
     			end
 			end
-    		else 
+    		else
     		begin
     			d := move(c + 4);
     			computerMoves(d);
     		writeln('AND WINS ********');
     		end
 		end
-    	else 
+    	else
     	begin
     		c := move(b + 4);
     		computerMoves(c);
