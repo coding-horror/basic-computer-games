@@ -23,7 +23,7 @@ cards = {
 }
 
 
-def play_game():
+def play_game() -> None:
     """Play the game"""
     cash = 100
     while cash > 0:
@@ -63,7 +63,7 @@ def play_game():
     print("Sorry, friend, but you blew your wad")
 
 
-def main():
+def main() -> None:
     """Main"""
     keep_playing = True
 
