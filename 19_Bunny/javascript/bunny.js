@@ -52,7 +52,7 @@ for (var pos = 0; bunny_data[pos] < 128; pos++) {
 	}
 	while (str.length < bunny_data[pos])
 		str += " ";
-	for (var i = bunny_data[pos]; i <= bunny_data[pos + 1]; i++) 
+	for (var i = bunny_data[pos]; i <= bunny_data[pos + 1]; i++)
 		str += bunny_string[i % 5];
 	pos++;
 }

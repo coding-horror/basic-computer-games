@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             PrintIntro();
-        
+
             string keepPlaying = "Y";
 
             while (keepPlaying == "Y") {
@@ -43,7 +43,7 @@
                     Console.WriteLine($"TOTAL ROUNDS EXPENDED WERE:{totalAttempts}");
 
                     if (amountOfGames < 4) {
-                        Console.WriteLine("THE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY...");                    
+                        Console.WriteLine("THE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY...");
                     } else {
                         if (totalAttempts > 18) {
                             PrintReturnToBase();
@@ -111,7 +111,7 @@
             return elevation;
         }
 
-        static void PrintIntro() 
+        static void PrintIntro()
         {
             Console.WriteLine(new String(' ', 30) + "GUNNER");
             Console.WriteLine(new String(' ', 15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY" + Environment.NewLine + Environment.NewLine + Environment.NewLine);

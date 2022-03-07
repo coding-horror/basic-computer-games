@@ -49,7 +49,7 @@ public void Play()
         }
     }
     else if(x == y)
-    {       
+    {
         if(y == Slot.BAR)
         {
             DoubleBar(bet);
@@ -57,7 +57,7 @@ public void Play()
         else
         {
             Double(bet);
-        }        
+        }
     }
     else if(x == z)
     {

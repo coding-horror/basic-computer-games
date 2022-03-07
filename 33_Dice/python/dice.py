@@ -28,7 +28,6 @@
 
 import random
 
-
 # We'll track counts of roll outcomes in a 13-element list.
 # The first two indices (0 & 1) are ignored, leaving just
 # the indices that match the roll values (2 through 12).
@@ -66,14 +65,12 @@ while still_playing:
     # Keep playing?
     print("")
     response = input("Try again? ")
-    if len(response) > 0 and response.upper()[0] == 'Y':
+    if len(response) > 0 and response.upper()[0] == "Y":
         # Clear out the frequency list
-        freq = [0]*13
+        freq = [0] * 13
     else:
         # Exit the game loop
         still_playing = False
-    
-
 
 
 ########################################################
@@ -114,10 +111,3 @@ while still_playing:
 #   rolled each time?
 #
 ########################################################
-
-
-            
-        
-    
-
-    

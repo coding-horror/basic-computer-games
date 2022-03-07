@@ -21,8 +21,8 @@
 # The original author of this game was
 # Michael Kass of New Hyde Park, New
 # York.
-import random
 import math
+import random
 from typing import Callable, List, Tuple
 
 flip_dict = {"X": "O", "O": "X"}

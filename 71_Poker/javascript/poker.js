@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -254,7 +254,7 @@ function evaluate_hand()
 function get_prompt(question, def)
 {
     var str;
-    
+
     str = window.prompt(question, def);
     print(question + "? " + str + "\n");
     return str;
@@ -339,7 +339,7 @@ function computer_low_in_money()
 function ask_for_bet()
 {
     var forced;
-    
+
     if (t != Math.floor(t)) {
         if (k != 0 || g != 0 || t != 0.5) {
             print("NO SMALL CHANGE, PLEASE.\n");

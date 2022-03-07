@@ -15,8 +15,8 @@ public class AceyDucey17 {
     System.out.println("""
                                         ACEY DUCEY CARD GAME
                              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-                             
-                             
+
+
               ACEY-DUCEY IS PLAYED IN THE FOLLOWING MANNER
               THE DEALER (COMPUTER) DEALS TWO CARDS FACE UP
               YOU HAVE AN OPTION TO BET OR NOT BET DEPENDING

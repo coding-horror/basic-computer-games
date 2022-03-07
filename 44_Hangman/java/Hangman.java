@@ -54,7 +54,7 @@ public class Hangman {
 				System.out.print("\nWANT ANOTHER WORD? ");
 			}
 			final String anotherWordChoice = scan.next();
-			
+
 			if (anotherWordChoice.toUpperCase().equals("YES") || anotherWordChoice.toUpperCase().equals("Y")) {
 				continueGame = true;
 			}

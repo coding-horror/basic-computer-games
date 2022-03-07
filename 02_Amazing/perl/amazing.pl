@@ -79,7 +79,7 @@ sub input_dimensions {
         print 'WHAT ARE YOUR WIDTH AND LENGTH? ';
 
         ($w, $h) = <STDIN> =~ / \d+ /xg;
-        
+
         if ($w < 1 || $h < 1) {
             say "MEANINGLESS DIMENSIONS.  TRY AGAIN."
         }

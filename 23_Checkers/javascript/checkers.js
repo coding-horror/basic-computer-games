@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -112,7 +112,7 @@ var s = [];
 
 for (x = 0; x <= 7; x++)
     s[x] = [];
-    
+
 var g = -1;
 var data = [1, 0, 1, 0, 0, 0, -1, 0, 0, 1, 0, 0, 0, -1, 0, -1, 15];
 var p = 0;

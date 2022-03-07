@@ -31,15 +31,15 @@
 #
 ########################################################
 
-from random import choices
-from collections import Counter
 import sys
+from collections import Counter
+from random import choices
 
 
 def initial_message():
-    print(" "*30 + "Slots")
-    print(" "*15 + "Creative Computing Morrison, New Jersey")
-    print("\n"*3)
+    print(" " * 30 + "Slots")
+    print(" " * 15 + "Creative Computing Morrison, New Jersey")
+    print("\n" * 3)
     print("You are in the H&M Casino, in front of one of our")
     print("one-arm Bandits. Bet from $1 to $100.")
     print("To pull the arm, punch the return key after making your bet.")
@@ -65,7 +65,7 @@ def beeping():
     # Function to produce a beep sound.
     # In the original program is the subroutine at line 1270
     for _ in range(5):
-        sys.stdout.write('\a')
+        sys.stdout.write("\a")
         sys.stdout.flush()
 
 
@@ -89,10 +89,10 @@ def adjust_profits(wheel, m, profits):
 
         if fruit == "Bar":
             print("\n***Jackpot***")
-            profits = (((100*m)+m)+profits)
+            profits = ((100 * m) + m) + profits
         else:
             print("\n**Top Dollar**")
-            profits = (((10*m)+m)+profits)
+            profits = ((10 * m) + m) + profits
 
         print("You Won!")
     elif len(s) == 2:
@@ -103,10 +103,10 @@ def adjust_profits(wheel, m, profits):
 
         if fruit == "Bar":
             print("\n*Double Bar*")
-            profits = (((5*m)+m)+profits)
+            profits = ((5 * m) + m) + profits
         else:
             print("\nDouble!!")
-            profits = (((2*m)+m)+profits)
+            profits = ((2 * m) + m) + profits
 
         print("You Won!")
     else:
@@ -135,7 +135,7 @@ while keep_betting:
     w = spin_wheels()
     profits = adjust_profits(w, m, profits)
 
-    print("Your standings are ${}".format(profits))
+    print(f"Your standings are ${profits}")
     answer = input("Again?")
 
     try:

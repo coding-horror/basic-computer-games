@@ -124,15 +124,15 @@ const cards = [
 async function main() {
     printTitle();
     await askAboutInstructions();
-    
+
     let computerScore = 0;
     let playerScore = 0;
-    
+
     // Generate a random deck
     const gameSize = cards.length;    // Number of cards to shuffle into the game deck.  Can be <= cards.length.
     const deck = createGameDeck(cards, gameSize);
     let shouldContinuePlaying = true;
-    
+
     while (deck.length > 0 && shouldContinuePlaying) {
         const playerCard = deck.shift();    // Take a card
         const computerCard = deck.shift();    // Take a card

@@ -38,7 +38,7 @@ fn main() {
         println!();println!();
         println!("SEC  FEET      SPEED     FUEL     PLOT OF DISTANCE");
         println!();
-        let mut T=0;let mut H:i32=1000;let mut V=50;let mut F=150; 
+        let mut T=0;let mut H:i32=1000;let mut V=50;let mut F=150;
         let D:i32; let mut V1:i32; let mut B:i32;
         'falling: loop {
             println!(" {:<4}{:<11}{:<10}{:<8}I{capsule:>high$}", T,H,V,F,high=(H/15) as usize,capsule="*");
@@ -76,7 +76,7 @@ fn main() {
             println!("CONGRATULATIONS! A PERFECT LANDING!!");
             println!("YOUR LICENSE WILL BE RENEWED.......LATER.");
         }
-        if V1.abs()>=2 { 
+        if V1.abs()>=2 {
             println!("***** SORRY, BUT YOU BLEW IT!!!!");
             println!("APPROPRIATE CONDOLENCES WILL BE SENT TO YOUR NEXT OF KIN.");
         }
@@ -90,7 +90,7 @@ fn main() {
 
 fn input(prompt:&str) -> String {
     loop {
-        print!("{} ? ",prompt);io::stdout().flush().unwrap();    
+        print!("{} ? ",prompt);io::stdout().flush().unwrap();
         let innn:String=read!("{}\n");
         let out:String = innn.trim().to_string();
         if out!="" {return out}
@@ -98,10 +98,10 @@ fn input(prompt:&str) -> String {
 }
 fn input_int(prompt:&str) -> i32 {
     loop {
-        print!("{} ? ",prompt);io::stdout().flush().unwrap();    
+        print!("{} ? ",prompt);io::stdout().flush().unwrap();
         match try_read!() {
             Ok(n) => return n,
             Err(_) => println!("Enter a number 0-30"),
         }
     }
-} 
+}

@@ -35,7 +35,7 @@ import java.util.Scanner;
 public class Bagels {
 
   public static void main(String[] args) {
-    
+
     int gamesWon = 0;
 
     // Intro text
@@ -43,7 +43,7 @@ public class Bagels {
     System.out.println("Creative Computing  Morristown, New Jersey");
     System.out.println("\n\n");
     System.out.print("Would you like the rules (Yes or No)? ");
-    
+
     // Need instructions?
     Scanner scan = new Scanner(System.in);
     String s = scan.nextLine();
@@ -55,15 +55,15 @@ public class Bagels {
       System.out.println("   FERMI  - One digit correct and in the right position");
       System.out.println("   BAGELS - No digits correct");
     }
-    
+
     // Loop for playing multiple games
     boolean stillPlaying = true;
     while(stillPlaying) {
-      
+
       // Set up a new game
       BagelGame game = new BagelGame();
       System.out.println("\nO.K.  I have a number in mind.");
-    
+
       // Loop guess and responsses until game is over
       while (!game.isOver()) {
         String guess = getValidGuess(game);
@@ -73,7 +73,7 @@ public class Bagels {
           System.out.println(response);
         }
       }
-    
+
       // Game is over. But did we win or lose?
       if (game.isWon()) {
         System.out.println("You got it!!!\n");
@@ -83,24 +83,24 @@ public class Bagels {
         System.out.print("That's " + BagelGame.MAX_GUESSES + " guesses.  ");
         System.out.println("My number was " + game.getSecretAsString());
       }
-      
+
       stillPlaying = getReplayResponse();
     }
-    
+
     // Print goodbye message
     if (gamesWon > 0) {
       System.out.println("\nA " + gamesWon + " point Bagels buff!!");
     }
     System.out.println("Hope you had fun.  Bye.\n");
   }
-  
+
   private static String getValidGuess(BagelGame game) {
     // Keep asking for a guess until valid
     Scanner scan = new Scanner(System.in);
     boolean valid = false;
     String guess = "";
     String error;
-    
+
     while (!valid) {
       System.out.print("Guess # " + game.getGuessNum() + "     ? ");
       guess = scan.nextLine().trim();
@@ -113,7 +113,7 @@ public class Bagels {
     }
     return guess;
   }
-  
+
   private static boolean getReplayResponse() {
     // keep asking for response until valid
     Scanner scan = new Scanner(System.in);
@@ -126,8 +126,5 @@ public class Bagels {
       }
     }
   }
-  
+
 }
-
-
-

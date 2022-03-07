@@ -15,4 +15,3 @@ public class PlayerBug extends Insect {
 
 
 }
-

@@ -14,5 +14,3 @@ You will then proceed to shoot at the target until it is
 destroyed!
 
 Good luck!!
-
-

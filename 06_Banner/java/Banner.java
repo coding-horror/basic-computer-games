@@ -11,21 +11,21 @@ import java.lang.Math;
  * <p>
  * Note:  The idea was to create a version of the 1970's BASIC game in Java, without introducing
  * new features - no additional text, error checking, etc has been added.
- * 
+ *
  * Converted from BASIC to Java by Darren Cardenas.
  */
- 
-public class Banner {  
+
+public class Banner {
 
   private final Scanner scan;  // For user input
-  
-  public Banner() {
-    
-    scan = new Scanner(System.in);
-    
-  }  // End of constructor Banner   
 
-  public void play() {    
+  public Banner() {
+
+    scan = new Scanner(System.in);
+
+  }  // End of constructor Banner
+
+  public void play() {
 
     int bitIndex = 0;
     int centerFlag = 0;
@@ -38,19 +38,19 @@ public class Banner {
     int vertical = 0;
     int vIndex = 0;
     int writeIndex = 0;
-    
+
     int[] writerMap = new int[10];
-    int[] writeLimit = new int[10];   
-    
+    int[] writeLimit = new int[10];
+
     String centerResponse = "";
     String characters = "";
     String letter = "";
-    String lineContent = ""; 
+    String lineContent = "";
     String setPage = "";
     String statement = "";
     String token = "";  // Print token
-    
-    Map<String, int[]> symbolData = new HashMap<String, int[]>();  
+
+    Map<String, int[]> symbolData = new HashMap<String, int[]>();
     symbolData.put(" ", new int[]{0,0,0,0,0,0,0,0              });
     symbolData.put("A", new int[]{0,505,37,35,34,35,37,505     });
     symbolData.put("G", new int[]{0,125,131,258,258,290,163,101});
@@ -92,133 +92,133 @@ public class Banner {
     symbolData.put("=", new int[]{0,41,41,41,41,41,41,41       });
     symbolData.put("!", new int[]{0,1,1,1,384,1,1,1            });
     symbolData.put("0", new int[]{0,57,69,131,258,131,69,57    });
-    symbolData.put(".", new int[]{0,1,1,129,449,129,1,1        });    
+    symbolData.put(".", new int[]{0,1,1,129,449,129,1,1        });
 
-    System.out.print("HORIZONTAL? "); 
+    System.out.print("HORIZONTAL? ");
     horizontal = Integer.parseInt(scan.nextLine());
 
-    System.out.print("VERTICAL? "); 
-    vertical = Integer.parseInt(scan.nextLine());   
-    
-    System.out.print("CENTERED? "); 
+    System.out.print("VERTICAL? ");
+    vertical = Integer.parseInt(scan.nextLine());
+
+    System.out.print("CENTERED? ");
     centerResponse = scan.nextLine().toUpperCase();
-    
+
     centerFlag = 0;
-    
+
     // Lexicographical comparison
     if (centerResponse.compareTo("P") > 0) {
-      centerFlag = 1;      
+      centerFlag = 1;
     }
-    
-    System.out.print("CHARACTER (TYPE 'ALL' IF YOU WANT CHARACTER BEING PRINTED)? "); 
+
+    System.out.print("CHARACTER (TYPE 'ALL' IF YOU WANT CHARACTER BEING PRINTED)? ");
     characters = scan.nextLine().toUpperCase();
-    
+
     System.out.print("STATEMENT? ");
     statement = scan.nextLine().toUpperCase();
-    
+
     // Initiates the print
     System.out.print("SET PAGE? ");
-    setPage = scan.nextLine();  
-    
+    setPage = scan.nextLine();
+
     // Begin loop through statement letters
-    for (letterIndex = 1; letterIndex <= statement.length(); letterIndex++) {        
-      
+    for (letterIndex = 1; letterIndex <= statement.length(); letterIndex++) {
+
       // Extract a letter
       letter = String.valueOf(statement.charAt(letterIndex - 1));
-      
-      // Begin loop through all symbol data 
-      for (String symbolString: symbolData.keySet()) {   
-       
+
+      // Begin loop through all symbol data
+      for (String symbolString: symbolData.keySet()) {
+
         // Begin letter handling
-        if (letter.equals(" ")) {       
-          for (index = 1; index <= (7 * horizontal); index++) {                 
+        if (letter.equals(" ")) {
+          for (index = 1; index <= (7 * horizontal); index++) {
             System.out.println("");
-          }                  
+          }
           break;
-          
-        } else if (letter.equals(symbolString)) {          
+
+        } else if (letter.equals(symbolString)) {
           token = characters;
 
-          if (characters.equals("ALL")) {                      
+          if (characters.equals("ALL")) {
             token = symbolString;
-          }   
-         
+          }
+
           for (dataIndex = 1; dataIndex <= 7; dataIndex++) {
-            
+
             // Avoid overwriting symbol data
             tempVal = symbolData.get(symbolString)[dataIndex];
-            
+
             for (bitIndex = 8; bitIndex >= 0; bitIndex--) {
 
               if (Math.pow(2, bitIndex) < tempVal) {
                 writerMap[9 - bitIndex] = 1;
                 tempVal -= Math.pow(2, bitIndex);
 
-                if (tempVal == 1) {                   
-                  writeLimit[dataIndex] = 9 - bitIndex;                    
+                if (tempVal == 1) {
+                  writeLimit[dataIndex] = 9 - bitIndex;
                   break;
                 }
-                
+
               } else {
-                
-                writerMap[9 - bitIndex] = 0;               
+
+                writerMap[9 - bitIndex] = 0;
               }
             }  // End of bitIndex loop
-            
+
             for (hIndex = 1; hIndex <= horizontal; hIndex++) {
-            
-              // Add whitespace for centering 
+
+              // Add whitespace for centering
               lineContent = " ".repeat((int)((63 - 4.5 * vertical) * centerFlag / token.length()));
-              
+
               for (writeIndex = 1; writeIndex <= writeLimit[dataIndex]; writeIndex++) {
-                
-                if (writerMap[writeIndex] == 0) {                                 
-                
-                  for (vIndex = 1; vIndex <= vertical; vIndex++) {                    
-                  
-                    for (index = 1; index <= token.length(); index++) {                              
-                      lineContent += " ";                              
-                    }                            
-                  }                       
-                  
+
+                if (writerMap[writeIndex] == 0) {
+
+                  for (vIndex = 1; vIndex <= vertical; vIndex++) {
+
+                    for (index = 1; index <= token.length(); index++) {
+                      lineContent += " ";
+                    }
+                  }
+
                 } else {
-                  
-                  for (vIndex = 1; vIndex <= vertical; vIndex++) {                    
+
+                  for (vIndex = 1; vIndex <= vertical; vIndex++) {
                     lineContent += token;
-                  }                                                                             
+                  }
                 }
 
               }  // End of writeIndex loop
 
               System.out.println(lineContent);
-              
-            }  // End of hIndex loop            
+
+            }  // End of hIndex loop
 
           }  // End of dataIndex loop
-          
+
           // Add padding between letters
-          for (index = 1; index <= 2 * horizontal; index++) {            
+          for (index = 1; index <= 2 * horizontal; index++) {
             System.out.println("");
           }
-          
+
         }  // End letter handling
 
       }  // End loop through all symbol data
-      
+
     }  // End loop through statement letters
 
     // Add extra length to the banner
-    for (index = 1; index <= 75; index++) {    
+    for (index = 1; index <= 75; index++) {
       System.out.println("");
-    }  
+    }
 
-  }  // End of method play     
-  
+  }  // End of method play
+
   public static void main(String[] args) {
-    
+
     Banner game = new Banner();
     game.play();
-    
+
   }  // End of method main
-    
+
 }  // End of class Banner

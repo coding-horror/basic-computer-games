@@ -55,4 +55,3 @@ foreach my $drill ( shuffle @synonyms ) {
 }
 
 say "\nSynonym drill completed.";
-

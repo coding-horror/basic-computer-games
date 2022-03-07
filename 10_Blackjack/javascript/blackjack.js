@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -217,7 +217,7 @@ async function main()
     // --ta[i] IS THE TOTAL FOR PLAYER I, sa[i] IS THE TOTAL THIS HAND FOR
     // --PLAYER I, ba[i] IS TH BET FOR HAND I
     // --ra[i] IS THE LENGTH OF pa[I,*]
-    
+
     // --Program starts here
     // --Initialize
     for (i = 1; i <= 15; i++)
@@ -416,7 +416,7 @@ async function main()
                     if (pa[i][1] != 1) {
                         // --Now play the two hands
                         do {
-                            
+
                             print("HAND " + (i > d1 ? 2 : 1) + " ");
                             h1 = 5;
                             while (1) {
@@ -472,7 +472,7 @@ async function main()
                 if (aa <= 16) {
                     print("DRAWS");
                     do {
-                        
+
                         x = get_card();
                         alt_card_print(x);
                         add_card_to_row(i, x);

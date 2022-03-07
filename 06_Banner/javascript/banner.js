@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -107,7 +107,7 @@ async function main()
     as = await input();
     print("SET PAGE");	// This means to prepare printer, just press Enter
     os = await input();
-    
+
     for (t = 0; t < as.length; t++) {
         ps = as.substr(t, 1);
         for (o = 0; o < 50 * 8; o += 8) {
@@ -156,13 +156,13 @@ async function main()
                                 str += xs;
                         }
                     }
-                    print(str + "\n");	
+                    print(str + "\n");
                 }
             }
-            for (h = 1; h <= 2 * x; h++) 
+            for (h = 1; h <= 2 * x; h++)
                 print("\n");
         }
-    }    
+    }
 }
 
 main();

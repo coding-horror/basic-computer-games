@@ -56,7 +56,5 @@ while (1) {
 	print "TRY AGAIN.\n";
 	print "\n";
 	}
-	
+
 exit;
-
-

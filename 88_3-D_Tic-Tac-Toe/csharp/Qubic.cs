@@ -35,7 +35,7 @@ namespace ThreeDTicTacToe
         private const double MACHINE = 5.0;
         private const double POTENTIAL = 0.125;
         private const double EMPTY = 0.0;
-        
+
         // The X variable in the original BASIC. This is the Qubic board,
         //  flattened into a 1D array.
         private readonly double[] Board = new double[64];
@@ -51,7 +51,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Run the Qubic game.
-        /// 
+        ///
         /// Show the title, prompt for instructions, then begin the game loop.
         /// </summary>
         public void Run()
@@ -68,7 +68,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Display title and attribution.
-        /// 
+        ///
         /// Original BASIC: 50-120
         /// </summary>
         private static void Title()
@@ -82,7 +82,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Prompt user for game instructions.
-        /// 
+        ///
         /// Original BASIC: 210-313
         /// </summary>
         private static void Instructions()
@@ -113,7 +113,7 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Prompt player for whether they would like to move first, or allow
         ///  the machine to make the first move.
-        ///  
+        ///
         /// Original BASIC: 440-490
         /// </summary>
         /// <returns>true if the player wants to move first</returns>
@@ -191,7 +191,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Prompt the user to try another game.
-        /// 
+        ///
         /// Original BASIC: 1490-1560
         /// </summary>
         /// <returns>true if the user wants to play again</returns>
@@ -252,7 +252,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Make the player's move based on their input.
-        /// 
+        ///
         /// Original BASIC: 500-620
         /// </summary>
         /// <returns>Whether the player moved or quit the program.</returns>
@@ -295,7 +295,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Read a player move from the terminal. Move can be any integer.
-        /// 
+        ///
         /// Original BASIC: 510-520
         /// </summary>
         /// <returns>the move inputted</returns>
@@ -307,9 +307,9 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Read an integer from the terminal.
-        /// 
+        ///
         /// Original BASIC: 520
-        /// 
+        ///
         /// Unlike the basic, this code will not accept any string that starts
         ///  with a number; only full number strings are allowed.
         /// </summary>
@@ -335,7 +335,7 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Display the board to the player. Spaces taken by the player are
         ///  marked with "Y", while machine spaces are marked with "M".
-        ///  
+        ///
         /// Original BASIC: 2550-2740
         /// </summary>
         private void ShowBoard()
@@ -375,9 +375,9 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Check all rows for a player win.
-        /// 
+        ///
         /// A row indicates a player win if its sum = PLAYER * 4.
-        /// 
+        ///
         /// Original BASIC: 720-780
         /// </summary>
         /// <returns>whether the player won in any row</returns>
@@ -401,10 +401,10 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Check all rows for a row that the machine could move to to win
         ///  immediately.
-        /// 
+        ///
         /// A row indicates a player could win immediately if it has three
         ///  machine moves already; that is, sum = MACHINE * 3.
-        /// 
+        ///
         /// Original Basic: 790-920
         /// </summary>
         /// <returns></returns>
@@ -471,9 +471,9 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Machine decides where to move on the board, and ends the game if
         ///  appropriate.
-        ///  
+        ///
         /// The machine's AI tries to take the following actions (in order):
-        /// 
+        ///
         ///  1. If the player has a row that will get them the win on their
         ///     next turn, block that row.
         ///  2. If the machine can trap the player (create two different rows
@@ -486,10 +486,10 @@ namespace ThreeDTicTacToe
         ///     moves, and take a space in the first such plane.
         ///  5. Find the first open corner or center and move there.
         ///  6. Find the first open space and move there.
-        /// 
+        ///
         /// If none of these actions are possible, then the board is entirely
         ///  full, and the game results in a draw.
-        ///  
+        ///
         /// Original BASIC: start at 930
         /// </summary>
         /// <returns>the action the machine took</returns>
@@ -528,7 +528,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Block a row with three spaces already taken by the player.
-        /// 
+        ///
         /// Original BASIC: 930-1010
         /// </summary>
         /// <returns>
@@ -565,13 +565,13 @@ namespace ThreeDTicTacToe
         ///  three MACHINE spaces, with the remaining space not shared between
         ///  the two rows. The player can only block one of these traps, so the
         ///  machine will win.
-        ///  
+        ///
         /// If a player trap is not possible, but a row is found that is
         ///  particularly advantageous for the machine to move to, the machine
         ///  will try and move to a plane edge in that row.
-        ///  
+        ///
         /// Original BASIC: 1300-1480
-        /// 
+        ///
         /// Lines 1440/50 of the BASIC call 2360 (MovePlaneEdge). Because it
         ///  goes to this code only after it has found an open space marked as
         ///  potential, it cannot reach line 2440 of that code, as that is only
@@ -640,13 +640,13 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Block a trap that the player could create for the machine on their
         ///  next turn.
-        ///  
+        ///
         /// If there are no player traps to block, but a row is found that is
         ///  particularly advantageous for the player to move to, the machine
         ///  will try and move to a plane edge in that row.
-        ///  
+        ///
         /// Original BASIC: 1030-1190
-        /// 
+        ///
         /// Lines 1160/1170 of the BASIC call 2360 (MovePlaneEdge). As with
         ///  MakePlayerTrap, because it goes to this code only after it has
         ///  found an open space marked as potential, it cannot reach line 2440
@@ -713,10 +713,10 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Either make a trap for the player or block a trap the player could
         ///  create on their next turn.
-        ///  
+        ///
         /// Unclear how this method could possibly end with a concession; it
         ///  seems it can only be called if the row contains a potential move.
-        ///  
+        ///
         /// Original BASIC: 2230-2350
         /// </summary>
         /// <param name="row">the row containing the space to move to</param>
@@ -757,15 +757,15 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Find a satisfactory plane on the board and move to one if that
         ///  plane's plane edges.
-        ///  
+        ///
         /// A plane on the board is satisfactory if it meets the following
         ///  conditions:
         ///     1. Player has made exactly 4 moves on the plane.
         ///     2. Machine has made either 0 or one moves on the plane.
         ///  Such a plane is one that the player could likely use to form traps.
-        /// 
+        ///
         /// Original BASIC: 1830-2020
-        /// 
+        ///
         /// Line 1990 of the original basic calls 2370 (MovePlaneEdge). Only on
         ///  this call to MovePlaneEdge can line 2440 of that method be reached,
         ///  which surves to help this method iterate through the rows of a
@@ -786,7 +786,7 @@ namespace ThreeDTicTacToe
                 const double P4 = PLAYER * 4;
                 const double P4_M1 = (PLAYER * 4) + MACHINE;
                 if (
-                    (planeSum >= P4 && planeSum < P4 + 1) || 
+                    (planeSum >= P4 && planeSum < P4 + 1) ||
                     (planeSum >= P4_M1 && planeSum < P4_M1 + 1)
                 )
                 {
@@ -822,19 +822,19 @@ namespace ThreeDTicTacToe
         /// Given a row, move to the first space in that row that:
         ///  1. is a plane edge, and
         ///  2. has the given value in Board
-        ///  
+        ///
         /// Plane edges are any spaces on a plane with one face exposed. The AI
         ///  prefers to move to these spaces before others, presumably
         ///  because they are powerful moves: a plane edge is contained on 3-4
         ///  winning rows of the cube.
-        ///  
+        ///
         /// Original BASIC: 2360-2490
-        /// 
+        ///
         /// In the original BASIC, this code is pointed to from three different
-        ///  locations by GOTOs: 
-        ///  - 1440/50, or MakePlayerTrap; 
+        ///  locations by GOTOs:
+        ///  - 1440/50, or MakePlayerTrap;
         ///  - 1160/70, or BlockMachineTrap; and
-        ///  - 1990, or MoveByPlane. 
+        ///  - 1990, or MoveByPlane.
         /// At line 2440, this code jumps back to line 2000, which is in
         ///  MoveByPlane. This makes it appear as though calling MakePlayerTrap
         ///  or BlockPlayerTrap in the BASIC could jump into the middle of the
@@ -871,12 +871,12 @@ namespace ThreeDTicTacToe
             //
             // The plane edge pieces have their row indices marked. The pattern
             // above shows that:
-            // 
+            //
             //  if row == 0 | 3, plane edge spaces = [1, 2]
             //  if row == 1 | 2, plane edge spaces = [0, 3]
 
             // The below condition replaces the following BASIC code (2370):
-            //  
+            //
             //  I-(INT(I/4)*4)>1
             //
             // which in C# would be:
@@ -918,9 +918,9 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Find the first open corner or center in the board and move there.
-        /// 
+        ///
         /// Original BASIC: 1200-1290
-        /// 
+        ///
         /// This is the only place where the Z variable from the BASIC code is
         ///  used; here it is implied in the for loop.
         /// </summary>
@@ -968,7 +968,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Draw the game in the event that there are no open spaces.
-        /// 
+        ///
         /// Original BASIC: 1810-1820
         /// </summary>
         /// <returns>End</returns>
@@ -987,22 +987,22 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Attempt to transform a cube coordinate to an index into Board.
-        /// 
+        ///
         /// A valid cube coordinate is a three-digit number, where each digit
         ///  of the number X satisfies 1 <= X <= 4.
-        ///  
+        ///
         /// Examples:
         ///  111 -> 0
         ///  444 -> 63
         ///  232 -> 35
-        ///  
+        ///
         /// If the coord provided is not valid, the transformation fails.
-        /// 
+        ///
         /// The conversion from coordinate to index is essentially a conversion
         ///  between base 4 and base 10.
-        ///  
+        ///
         /// Original BASIC: 525-580
-        /// 
+        ///
         /// This method fixes a bug in the original BASIC (525-526), which only
         ///  checked whether the given coord satisfied 111 <= coord <= 444. This
         ///  allows invalid coordinates such as 199 and 437, whose individual
@@ -1037,15 +1037,15 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Transform a Board index into a valid cube coordinate.
-        ///  
+        ///
         /// Examples:
         ///  0 -> 111
         ///  63 -> 444
         ///  35 -> 232
-        /// 
+        ///
         /// The conversion from index to coordinate is essentially a conversion
         ///  between base 10 and base 4.
-        ///  
+        ///
         /// Original BASIC: 1570-1610
         /// </summary>
         /// <param name="index">Board index</param>
@@ -1072,7 +1072,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Refresh the values in RowSums to account for any changes.
-        /// 
+        ///
         /// Original BASIC: 1640-1710
         /// </summary>
         private void RefreshRowSums()
@@ -1101,7 +1101,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Calculate the sum of spaces in one of the 18 cube planes in RowSums.
-        /// 
+        ///
         /// Original BASIC: 1840-1890
         /// </summary>
         /// <param name="plane">the desired plane</param>
@@ -1122,14 +1122,14 @@ namespace ThreeDTicTacToe
         /// <summary>
         /// Check whether the board is in a draw state, that is all spaces are
         ///  full and neither the player nor the machine has won.
-        ///  
+        ///
         /// The original BASIC contains a bug that if the player moves first, a
         ///  draw will go undetected. An example series of player inputs
         ///  resulting in such a draw (assuming player goes first):
-        ///  
+        ///
         ///  114, 414, 144, 444, 122, 221, 112, 121,
-        ///  424, 332, 324, 421, 231, 232, 244, 311, 
-        ///  333, 423, 331, 134, 241, 243, 143, 413, 
+        ///  424, 332, 324, 421, 231, 232, 244, 311,
+        ///  333, 423, 331, 134, 241, 243, 143, 413,
         ///  142, 212, 314, 341, 432, 412, 431, 442
         /// </summary>
         /// <returns>whether the game is a draw</returns>
@@ -1160,7 +1160,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Reset POTENTIAL spaces in Board to EMPTY.
-        /// 
+        ///
         /// Original BASIC: 2500-2540
         /// </summary>
         private void ClearPotentialMoves()
@@ -1176,7 +1176,7 @@ namespace ThreeDTicTacToe
 
         /// <summary>
         /// Reset all spaces in Board to EMPTY.
-        /// 
+        ///
         /// Original BASIC: 400-420
         /// </summary>
         private void ClearBoard()

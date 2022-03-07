@@ -18,7 +18,7 @@ end
 
 def ask_for_number_of_games
   loop do
-    puts "HOW MANY GAMES" 
+    puts "HOW MANY GAMES"
     response = STDIN.gets.to_i
     return response if response > 0 and response < 11
     puts "SORRY, BUT WE AREN'T ALLOWED TO PLAY THAT MANY."
@@ -58,7 +58,7 @@ number_of_games.times do |game_number|
   human_move = ask_for_human_move
   puts "THIS IS MY CHOICE..."
   puts "...#{MOVE_WORDS[computer_move]}"
-  
+
   case calculate_result(human_move, computer_move)
   when 'WIN'
     puts "YOU WIN!!!"
@@ -77,4 +77,3 @@ puts "I HAVE WON #{games_lost} GAME(S)."
 puts "YOU HAVE WON #{games_won} GAME(S)."
 puts "AND #{number_of_games - (games_lost + games_won)} GAME(S) ENDED IN A TIE."
 puts "THANKS FOR PLAYING!!"
-

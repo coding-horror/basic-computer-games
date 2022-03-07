@@ -2,25 +2,24 @@
 import random
 import textwrap
 
-
 NUMCNT = 9  # How many numbers are we playing with?
 
 
 def play():
-    print('REVERSE'.center(72))
-    print('CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY'.center(72))
+    print("REVERSE".center(72))
+    print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY".center(72))
     print()
     print()
-    print('REVERSE -- A GAME OF SKILL')
+    print("REVERSE -- A GAME OF SKILL")
     print()
 
-    if not input('DO YOU WANT THE RULES? (yes/no) ').lower().startswith('n'):
+    if not input("DO YOU WANT THE RULES? (yes/no) ").lower().startswith("n"):
         rules()
 
     while True:
         game_loop()
 
-        if not input('TRY AGAIN? (yes/no) ').lower().startswith('y'):
+        if not input("TRY AGAIN? (yes/no) ").lower().startswith("y"):
             return
 
 
@@ -32,13 +31,13 @@ def game_loop():
 
     # Print original list and start the game
     print()
-    print('HERE WE GO ... THE LIST IS:')
+    print("HERE WE GO ... THE LIST IS:")
     print_list(numbers)
 
     turns = 0
     while True:
         try:
-            howmany = int(input('HOW MANY SHALL I REVERSE? '))
+            howmany = int(input("HOW MANY SHALL I REVERSE? "))
             assert howmany >= 0
         except (ValueError, AssertionError):
             continue
@@ -47,7 +46,7 @@ def game_loop():
             return
 
         if howmany > NUMCNT:
-            print('OOPS! WRONG! I CAN REVERSE AT MOST', NUMCNT)
+            print("OOPS! WRONG! I CAN REVERSE AT MOST", NUMCNT)
             continue
 
         turns += 1
@@ -62,19 +61,20 @@ def game_loop():
 
         # Check for a win
         if all(numbers[i] == i + 1 for i in range(NUMCNT)):
-            print('YOU WON IT IN {} MOVES!'.format(turns))
+            print(f"YOU WON IT IN {turns} MOVES!")
             print()
             return
 
 
 def print_list(numbers):
     """Print out the list"""
-    print(' '.join(map(str, numbers)))
+    print(" ".join(map(str, numbers)))
 
 
 def rules():
     """Print out the rules"""
-    help = textwrap.dedent("""
+    help = textwrap.dedent(
+        """
         THIS IS THE GAME OF "REVERSE".  TO WIN, ALL YOU HAVE
         TO DO IS ARRANGE A LIST OF NUMBERS (1 THROUGH {})
         IN NUMERICAL ORDER FROM LEFT TO RIGHT.  TO MOVE, YOU
@@ -93,12 +93,15 @@ def rules():
 
         NO DOUBT YOU WILL LIKE THIS GAME, BUT
         IF YOU WANT TO QUIT, REVERSE 0 (ZERO).
-        """.format(NUMCNT))
+        """.format(
+            NUMCNT
+        )
+    )
     print(help)
     print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         play()
     except KeyboardInterrupt:

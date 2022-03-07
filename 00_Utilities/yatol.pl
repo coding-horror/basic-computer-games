@@ -19,7 +19,7 @@ printf("%$Tab\s", "BAS");
 
 foreach my $Dir (@Langs) {
 	printf("%$Tab\s", $Dir);
-	}	
+	}
 print "\n";
 
 my $Count;
@@ -39,7 +39,7 @@ foreach my $Lin (@Ret) {
 		if ($Ret>1) { printf("%$Tab\s", "YES"); $Sum{$Dir}++; }
 			else { printf("%$Tab\s", " ");}
 		}
-	print "\n";	
+	print "\n";
 	}
 
 
@@ -57,4 +57,3 @@ foreach my $Dir (@Dirs) {
 	printf("%$Tab\s", "$Per");
 	}
 print "\n";
-

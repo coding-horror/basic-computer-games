@@ -3,7 +3,7 @@ import random
 
 
 def print_n_whitespaces(n: int):
-    print(" "*n, end="")
+    print(" " * n, end="")
 
 
 def print_n_newlines(n: int):
@@ -12,18 +12,18 @@ def print_n_newlines(n: int):
 
 
 def subroutine_1610():
-    B = 3/A*random.random()
-    if (B < 0.37):
+    B = 3 / A * random.random()
+    if B < 0.37:
         C = 0.5
-    elif (B < 0.5):
+    elif B < 0.5:
         C = 0.4
-    elif (B < 0.63):
+    elif B < 0.63:
         C = 0.3
-    elif (B < 0.87):
+    elif B < 0.87:
         C = 0.2
     else:
         C = 0.1
-    T = math.floor(10*C+0.2)
+    T = math.floor(10 * C + 0.2)
     print(f"THE {AS}{BS} DID A {LS[T]} JOB.")
     if T >= 4:
         if T == 5:
@@ -44,8 +44,9 @@ def subroutine_1610():
 
 
 def FNC():
-    Q = (4.5+L/6-(D[1]+D[2])*2.5+4*D[4]+2 *
-         D[5]-(D[3] ** 2)/120-A)*random.random()
+    Q = (
+        4.5 + L / 6 - (D[1] + D[2]) * 2.5 + 4 * D[4] + 2 * D[5] - (D[3] ** 2) / 120 - A
+    ) * random.random()
     return Q
 
 
@@ -103,7 +104,7 @@ D[2] = C
 print_n_newlines(2)
 D[3] = 0
 while True:
-    D[3] = D[3] + 1 # 660
+    D[3] = D[3] + 1  # 660
     print(f"PASS NUMBER {D[3]}")
     if D[3] >= 3:
         while True:  # 1930
@@ -133,7 +134,7 @@ while True:
             # goto 1130
             pass
     gore = 0
-    if Z1 != 1: # NO
+    if Z1 != 1:  # NO
         while True:
             E = float(input())
             if E != float(int(abs(E))):
@@ -147,11 +148,11 @@ while True:
         else:
             M = 0.5
         L = L + M
-        F = (6-A+M/10)*random.random()/((D[1]+D[2]+D[3]/10)*5)
+        F = (6 - A + M / 10) * random.random() / ((D[1] + D[2] + D[3] / 10) * 5)
         if F < 0.51:
             continue
         gore = 1
-    else: # YES
+    else:  # YES
         print()
         print("IT IS THE MOMENT OF TRUTH.")
         print()
@@ -161,7 +162,7 @@ while True:
             gore = 2
             # goto 970
         else:
-            K=(6-A)*10*random.random()/((D[1]+D[2])*5*D[3])
+            K = (6 - A) * 10 * random.random() / ((D[1] + D[2]) * 5 * D[3])
             if H == 4:
                 if K > 0.8:
                     gore = 1
@@ -177,7 +178,7 @@ while True:
             print("THE BULL HAS GORED YOU!")
         death = False
         while True:
-            _ = random.randint(1, 2) # 970
+            _ = random.randint(1, 2)  # 970
             if _ == 1:
                 print("YOU ARE DEAD.")
                 D[4] = 1.5
@@ -213,7 +214,7 @@ while True:
                     death = True
                     break
 
-        if death==True:
+        if death == True:
             break
 # 1310
 print_n_newlines(3)

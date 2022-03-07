@@ -108,18 +108,18 @@ namespace Hangman
         {
             _graphic[2, 2] = '/';
         }
-        
+
         public void AddLeftHand()
         {
             _graphic[2, 10] = '\\';
         }
-        
+
         public void AddRightFoot()
         {
             _graphic[11, 9] = '\\';
             _graphic[11, 10] = '-';
         }
-        
+
         public void AddLeftFoot()
         {
             _graphic[11, 3] = '/';

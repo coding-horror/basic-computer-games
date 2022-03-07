@@ -37,7 +37,6 @@ import random
 MAX_GUESSES = 20
 
 
-
 def print_rules():
     print("\nI am thinking of a three-digit number.  Try to guess")
     print("my number and I will give you clues as follows:")
@@ -46,16 +45,14 @@ def print_rules():
     print("   BAGELS - No digits correct")
 
 
-
 def pick_number():
     # Note that this returns a list of individual digits
     # as separate strings, not a single integer or string
     numbers = [i for i in range(10)]
     random.shuffle(numbers)
     num = numbers[0:3]
-    num = [str(i) for i in num] 
+    num = [str(i) for i in num]
     return num
-
 
 
 def get_valid_guess():
@@ -71,8 +68,9 @@ def get_valid_guess():
                 if len(set(guess)) == 3:
                     valid = True
                 else:
-                    print("Oh, I forgot to tell you that " +
-                          "the number I have in mind")
+                    print(
+                        "Oh, I forgot to tell you that " + "the number I have in mind"
+                    )
                     print("has no two digits the same.")
             else:
                 print("What?")
@@ -82,16 +80,15 @@ def get_valid_guess():
     return guess
 
 
-
 def build_result_string(num, guess):
 
     result = ""
 
     # Correct digits in wrong place
     for i in range(2):
-        if num[i] == guess[i+1]:
+        if num[i] == guess[i + 1]:
             result += "PICO "
-        if num[i+1] == guess[i]:
+        if num[i + 1] == guess[i]:
             result += "PICO "
     if num[0] == guess[2]:
         result += "PICO "
@@ -110,8 +107,6 @@ def build_result_string(num, guess):
     return result
 
 
-
-
 ######################################################################
 
 
@@ -123,7 +118,7 @@ print("\n\n")
 # Anything other than N* will show the rules
 response = input("Would you like the rules (Yes or No)? ")
 if len(response) > 0:
-    if response.upper()[0] != 'N':
+    if response.upper()[0] != "N":
         print_rules()
 else:
     print_rules()
@@ -134,7 +129,7 @@ while still_running:
 
     # New round
     num = pick_number()
-    num_str = ''.join(num)
+    num_str = "".join(num)
     guesses = 1
 
     print("\nO.K.  I have a number in mind.")
@@ -147,15 +142,13 @@ while still_running:
             print("You got it!!!\n")
             games_won += 1
             guessing = False
-        else: 
+        else:
             print(build_result_string(num, guess))
             guesses += 1
             if guesses > MAX_GUESSES:
                 print("Oh well")
-                print(f"That's {MAX_GUESSES} guesses.  " +
-                      "My number was " + num_str)
-                guessing = False   
-
+                print(f"That's {MAX_GUESSES} guesses.  " + "My number was " + num_str)
+                guessing = False
 
     valid_response = False
     while not valid_response:
@@ -172,7 +165,6 @@ if games_won > 0:
 print("Hope you had fun.  Bye.\n")
 
 
-
 ######################################################################
 #
 # Porting Notes
@@ -180,7 +172,7 @@ print("Hope you had fun.  Bye.\n")
 #   The original program did an unusually good job of validating the
 #   player's input (compared to many of the other programs in the
 #   book). Those checks and responses have been exactly reproduced.
-#   
+#
 #
 # Ideas for Modifications
 #
@@ -192,10 +184,3 @@ print("Hope you had fun.  Bye.\n")
 #   that creates the "result" string?
 #
 ######################################################################
-
-
-            
-        
-    
-
-    

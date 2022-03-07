@@ -47,7 +47,7 @@ namespace Number
         {
             Random rand = new Random();
 
-            // Get a unique set of random numbers between 1 and 5 
+            // Get a unique set of random numbers between 1 and 5
             // I assume this is what the original BASIC  FNR(X)=INT(5*RND(1)+1) is doing
             Random1 = (int)(5 * rand.NextDouble() + 1);
             do
@@ -77,10 +77,10 @@ namespace Number
             int Guess = 0;
 
             GetRandomNumbers(out Random1, out Random2, out Random3, out Random4, out Random5);
-        
+
             while (!Win)
             {
-                
+
                 Guess = PromptForGuess();
 
                 if (Guess == Random1)
@@ -96,7 +96,7 @@ namespace Number
                     Points += 1;
                 else if (Guess == Random5)
                     Points -= (int)(Points * 0.5);
-                
+
                 if (Points > 500)
                 {
                     Console.WriteLine("!!!!You Win!!!! with {0} points.", Points);

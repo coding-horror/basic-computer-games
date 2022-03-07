@@ -35,5 +35,3 @@ print "YOU WIN!!!!!\n";
 print "LET SOMEONE ELSE BLOW HIS BRAINS OUT.\n";
 goto Line10;
 exit;
-
-

@@ -18,7 +18,7 @@ namespace Bombardment
         private List<int> computerPositions = new List<int>();
         private List<int> playerPositions = new List<int>();
         private List<int> computerGuesses = new List<int>();
-        
+
         private void PrintStartingMessage()
         {
             Console.WriteLine("{0}BOMBARDMENT", new string(' ', 33));
@@ -26,7 +26,7 @@ namespace Bombardment
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-        
+
             Console.WriteLine("YOU ARE ON A BATTLEFIELD WITH 4 PLATOONS AND YOU");
             Console.WriteLine("HAVE 25 OUTPOSTS AVAILABLE WHERE THEY MAY BE PLACED.");
             Console.WriteLine("YOU CAN ONLY PLACE ONE PLATOON AT ANY ONE OUTPOST.");
@@ -51,9 +51,9 @@ namespace Bombardment
             {
                 // The token replacement can be padded by using the format {tokenPosition, padding}
                 // Negative values for the padding cause the output to be left-aligned.
-                Console.WriteLine("{0,-3}{1,-3}{2,-3}{3,-3}{4,-3}", i, i + 1, i + 2, i + 3, i + 4);                
+                Console.WriteLine("{0,-3}{1,-3}{2,-3}{3,-3}{4,-3}", i, i + 1, i + 2, i + 3, i + 4);
             }
-            
+
             Console.WriteLine("\n");
         }
 

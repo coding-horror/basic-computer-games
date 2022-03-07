@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -65,7 +65,7 @@ function show_number(number)
 function show_board()
 {
     var i;
-    
+
     print("\n");
     print("   ");
     for (i = 12; i >= 7; i--)
@@ -184,12 +184,12 @@ async function main()
         e = 0;
         for (i = 0; i <= 12; i++)
             b[i] = 3;
-        
+
         c = 0;
         f[n] = 0;
         b[13] = 0;
         b[6] = 0;
-        
+
         while (1) {
             show_board();
             print("YOUR MOVE");

@@ -6,7 +6,7 @@ namespace hurkle
         public int Y {get;init;}
 
         public CardinalDirection GetDirectionTo(GamePoint target)
-        {   
+        {
             if(X == target.X)
             {
                 if(Y > target.Y)

@@ -8,4 +8,3 @@ startup with the disks on needle 1, and attempt to move them
 to needle 3.
 
 Good luck!
-

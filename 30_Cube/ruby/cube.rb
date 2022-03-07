@@ -38,7 +38,7 @@ def greeting
         puts "When stating the amount of a wager, enter only the number"
         puts "of dollars (example: 250)  You are automatically started with"
         puts "500 dollars in your account."
-        puts 
+        puts
         puts "Good luck!"
     end
 end
@@ -225,7 +225,7 @@ def gameLoop betAmount
         puts ""
         print "IT'S YOUR MOVE:  "
         # allow only integers: strip anything else from input
-        moveToLocation = gets.strip.tr('^0-9', '') 
+        moveToLocation = gets.strip.tr('^0-9', '')
 
         # test for illegal moves
         # can only change one variable per move
@@ -258,4 +258,3 @@ end
 greeting
 initializePot
 gameLoop startGame
-

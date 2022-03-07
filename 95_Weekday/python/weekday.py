@@ -29,7 +29,7 @@ def get_date_from_user(prompt):
         print(prompt)
         date_str = input()
         try:
-            month_num, day_num, year_num = [int(x) for x in date_str.split(",")]
+            month_num, day_num, year_num = (int(x) for x in date_str.split(","))
         except Exception as e:
             print("I COULDN'T UNDERSTAND THAT. TRY AGAIN.")
         return month_num, day_num, year_num
