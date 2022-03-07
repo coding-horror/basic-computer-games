@@ -1,5 +1,5 @@
 use rand::{Rng, prelude::{thread_rng, ThreadRng}};
-use std::{io, fmt::Display, str::FromStr, iter::OnceWith};
+use std::{io, fmt::Display, str::FromStr};
 
 //DATA
 const COLORS: [&str;8] = ["Black ", "White ","Red ","Green ","Orange ","Yellow ", "Purple ", "Tan "]; //all available colors
@@ -11,19 +11,45 @@ struct CODE {
 }
 impl CODE {
     /**
+     * create generic, empty code
+     */
+    fn new() -> CODE {
+        return CODE{code: Vec::new()};
+    }
+    /**
      * generates and returns a random CODE with the given parameters
      */
-    fn new_random(rng: &mut ThreadRng, num_colors: &usize, num_positions: &usize) -> CODE {
+    fn new_random(rng: &mut ThreadRng, num_colors: usize, num_positions: usize) -> CODE {
         //data
         let mut code = CODE{code: Vec::new()};
         //generate random combination of colors
-        for _i in 0..*num_positions {
-            code.code.push(rng.gen_range(0..*num_colors));
+        for _i in 0..num_positions {
+            code.code.push(rng.gen_range(0..num_colors));
         } 
         return code;
     }
     /**
-     * returns a code from the parsed string
+     * converts input_int from base 10 to base num_colors to generate the code
+     * input_int must be between 0 and num_colors.pow(num_positions)
+     */
+    fn new_from_int(mut input_int: usize, num_colors: usize, num_positions: usize) -> CODE {
+        //DATA
+        let mut converted_number:Vec<_> = Vec::new();
+        assert!(2 <= num_colors && num_colors <= 36); //if num_colors is outside of this range, things break later on
+
+        //convert input_int into a code by effectively converting input_int from base 10 to base n where n is num_colors, uses some fancy stuff to do this
+        loop {
+            converted_number.push(std::char::from_digit((input_int % num_colors) as u32, num_colors as u32).unwrap()); //
+            input_int /= num_colors;
+            if input_int == 0 {break}
+        }
+
+        while converted_number.len() < num_positions {converted_number.push('0');} // fill remaining space with zero's
+        let converted_number: Vec<_> = converted_number.iter().rev().map(|e| e.to_digit(num_colors as u32).unwrap() as usize).collect(); //reverse the vector and convert it to integers
+        return CODE{code: converted_number};
+    }
+    /**
+     * returns a code parsed from the passed string
      */
     fn new_from_string(input_string: String, num_colors: usize) -> Option<CODE> {
         let valid_chars = &LETTERS[0..num_colors];
@@ -70,23 +96,29 @@ impl GUESS {
      * evaulates itself for the number of black and white pegs it should have for a given answer
      */
     fn evaluate(&mut self, answer:&CODE) {
+        //data
+        let mut consumed = vec![false;answer.code.len()];
+
         if self.code.code.len() != answer.code.len() {
             panic!("only codes of the same length can be compared");
         }
-        let tmp_code = self.code.code.clone(); //copy the our code so we can modify it without changing the actual code
-        let mut tmp_answer: Vec<_> = answer.code.clone().iter().map(|x| Some(*x)).collect(); //copy the our code so we can modify it without changing the actual code, also wrap it for reasons
-        //same value same position O(N)
-        let trimmed_code: Vec<usize> =  tmp_code.iter().enumerate().filter_map(|e| 
-            if Some(e.1) != answer.code.get(e.0) {
-                Some(*e.1)
+
+        for i in 0..answer.code.len() {
+            if self.code.code[i] == answer.code[i] { //correct value correct place
+                self.blacks += 1;
+                consumed[i] = true;
             }
             else {
-                tmp_answer[e.0] = None;
-                None
-            }).collect(); //filters tmp_code, removing all values that are in the same position as in the answer
-        self.blacks = self.code.code.len() - trimmed_code.len();
-        //same value, wrong position
-        self.whites = trimmed_code.iter().filter(|i| tmp_answer.contains(&Some(**i))).count();
+                //check for correct value incorrect place, don't count positions that are already exact matches
+                for j in 0..answer.code.len() {
+                    if !consumed[j] && self.code.code[i] == answer.code[j] && self.code.code[j] != answer.code[j] {
+                        self.whites += 1;
+                        consumed[j] = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -96,12 +128,8 @@ fn main() {
     let num_colors: usize;
     let num_positions: usize;
     let num_rounds: usize;
+    let num_guesses: usize;
     let total_posibilities: usize;
-
-    let mut num_moves: usize = 1;
-    let mut answer: CODE;
-    let mut guess: GUESS;
-    let mut guesses: Vec<GUESS> = Vec::new();
 
     let mut human_score: usize = 0;
     let mut computer_score: usize = 0;
@@ -111,8 +139,10 @@ fn main() {
 
     //ask user for a number of colors, positions, and rounds
     num_colors = get_number_from_user_input("NUMBER OF COLORS", "", 1, COLORS.len());
-    num_positions = get_number_from_user_input("NUMBER OF POSITIONS", "", 1, 10);
+    num_positions = get_number_from_user_input("NUMBER OF POSITIONS", "", 2, 10);
     num_rounds = get_number_from_user_input("NUMBER OF ROUNDS", "", 1, 10);
+    num_guesses = get_number_from_user_input("NUMBER OF GUESSES", "", 10, 0);
+
 
     //print number of posibilities
     total_posibilities = num_colors.pow(num_positions as u32);
@@ -123,25 +153,32 @@ fn main() {
 
     //game loop
     for round_num in 1..=num_rounds {
+        //data    
+        let mut num_moves: usize = 1;
+        let mut answer: CODE;
+        let mut guess: GUESS;
+        let mut guesses: Vec<GUESS> = Vec::new();
+        let mut all_possibilities = vec![true; total_posibilities];
+
+
         //print round number
         println!("\n\nROUND NUMBER: {}", round_num);
 
-
         //human player is code-breaker, computer is code-maker
         //generate a combination
-        answer = CODE::new_random(&mut rng, &num_colors, &num_positions);
-        println!("CODE: {:?}", answer._as_human_readible_chars()); //this is for troubleshooting, prints the code converted back into characters
+        answer = CODE::new_random(&mut rng, num_colors, num_positions);
+        //println!("CODE: {:?}", answer._as_human_readible_chars()); //this is for troubleshooting, prints the code converted back into characters
 
         //round loop
         loop {
             //loop condition
-            if num_moves > 10 {
+            if num_moves > num_guesses {
                 println!("YOU RAN OUT OF MOVES!  THAT'S ALL YOU GET!");
                 println!("THE ACTUAL COMBINATION WAS: {}", answer._as_human_readible_chars());
                 human_score += num_moves;
+                print_scores(human_score,computer_score);
                 break;
             }
-
 
             //input loop
             guess = GUESS::new(loop {
@@ -189,6 +226,7 @@ fn main() {
             if blacks >= num_positions { //guessed it correctly
                 println!("YOU GUESSED IT IN {} MOVES!", num_moves);
                 human_score += num_moves;
+                print_scores(human_score,computer_score);
                 break; //break from loop
             } else { //didn't
                 println!("YOU HAVE {} BLACKS AND {} WHITES.", blacks, whites);
@@ -197,11 +235,6 @@ fn main() {
             }
         }
 
-        //reset some things in preparation for computer play
-        let mut possibilities = vec![true; total_posibilities];
-        guesses.clear();
-        num_moves = 0;
-
         //computer is code-breaker, human player is code-maker
         println!("\nNOW I GUESS.  THINK OF A COMBINATION.\nHIT RETURN WHEN READY: ");
         //prompt user to give a valid combination #730
@@ -209,33 +242,103 @@ fn main() {
         answer = loop {
             let mut raw_input = String::new(); //temp variable to store user input
             io::stdin().read_line(&mut raw_input).expect("CANNOT READ INPUT!"); //read user input from standard input and store it to raw_input
-            if let Some(code) = CODE::new_from_string(raw_input, LETTERS.len()) {break code;} //attempt to create a code from the user input, if successful break the loop returning the code
+
+            //attempt to create a code from the user input, if successful break the loop returning the code
+            if let Some(code) = CODE::new_from_string(raw_input, num_colors) { 
+                if code.code.len() == num_positions {break code;} //exit loop with code
+                else {println!("CODE MUST HAVE {} POSITIONS", num_positions);continue;} //tell them to try again
+            } 
+
             println!("INVALID CODE.  TRY AGAIN"); //if unsuccessful, this is printed and the loop runs again
         };
-        //println!("CODE: {:?}", answer._as_human_readible_chars()); //this is for troubleshooting, prints the code converted back into characters
-        //println!("CODE: {:?}", answer._as_human_readible_words()); //this is for troubleshooting, prints the code converted back into words
+        
+        //reset some things in preparation for computer play
+        guesses.clear();
+        num_moves = 0;
+        //let num_colors = *answer.code.iter().max().unwrap(); //figure out the number of colors from the code | Commented bc we're enforcing that the computer cracks the same size code as the human
+        //let num_positions = answer.code.len(); //figure out the number of positions from the code | Commented bc we're enforcing that the computer cracks the same size code as the human
 
         //round loop
-        for computer_move in 1..=10 {
-            //randomly generate a guess //770
+        loop {
+            //loop condition
+            if num_moves > num_guesses {
+                println!("I USED UP ALL MY MOVES!");
+                println!("I GUESS MY CPU IS JUST HAVING AN OFF DAY.");
+                computer_score += num_moves;
+                print_scores(human_score,computer_score);
+                break;
+            }
 
+            //randomly generate a guess //770
+            let mut guess_int = rng.gen_range(0..total_posibilities);
+            guess = GUESS::new(CODE::new());
             //if it's possible, use it //780
-            //if it's not possible: 
-            //  search all possibilities after guess, use first valid one //790
-            //  search all possibilities before guess, use first valid one //820
-            // if none where found, tell the user and start over #850
-            
+            if all_possibilities[guess_int] {
+                guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
+            }
+            else {//if it's not possible: 
+                //  search all possibilities after guess, use first valid one //790
+                for g in guess_int..total_posibilities {
+                    if all_possibilities[g] { 
+                        guess_int=g;
+                        guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
+                        break; 
+                    }
+                }
+                //if none was found
+                //  search all possibilities before guess, use first valid one //820
+                if guess.code.code.is_empty() { 
+                    for g in (0..guess_int).rev() {
+                        if all_possibilities[g] { 
+                            guess_int=g;
+                            guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
+                            break; 
+                        }
+                    }
+                }
+                // if none where found, tell the user and start over #850
+                if guess.code.code.is_empty() { 
+                    println!("YOU HAVE GIVEN ME INCONSISTENT INFORMATION.");
+                    println!("PLAY AGAIN, AND THIS TIME PLEASE BE MORE CAREFUL.");
+                    return; //exit game
+                };
+            }
+
             //convert guess into something readible #890
             //print it #940
+            println!("MY GUESS IS: {}", guess.code._as_human_readible_chars());
             //ask user for feedback, #980
+            let blacks=get_number_from_user_input("BLACKS: ", "", 0, num_positions);
+            let whites=get_number_from_user_input("WHITES: ", "", 0, num_positions);
 
             //if we got it, end #990
-            //if we didn't, eliminate the combinations that don't work
+            if blacks >= num_positions { //guessed it correctly
+                println!("I GOT IT IN {} MOVES!", num_moves);
+                computer_score += num_moves;
+                print_scores(human_score,computer_score);
+                break; //break from loop
+            } else { //didn't
+                all_possibilities[guess_int] = false;
+                //if we didn't, eliminate the combinations that don't work
+                //we know the number of black and white pegs for a valid answer, so eleminate all that get different amounts
+                all_possibilities.iter_mut().enumerate().for_each(|b| {
+                    if *b.1 { //filter out ones we already know aren't possible
+                        let mut tmp_guess = GUESS::new(CODE::new_from_int(b.0, num_colors, num_positions));
+                        tmp_guess.evaluate(&answer);
+                        if blacks > tmp_guess.blacks || whites > tmp_guess.whites { //if number of blacks/whites is different, set it to false
+                            *b.1 = false;
+                        }
+                    }
+                });
+
+                //increment moves
+                num_moves += 1;
+            }
+
 
         }
 
     }
-
 }
 
 /**
@@ -248,6 +351,13 @@ fn welcome() {
     
     
     ");
+}
+
+/**
+ * print scores
+ */
+fn print_scores(human_score:usize, computer_score:usize) {
+    println!("SCORE\n\tCOMPUTER: {}\n\tHUMAN: {}", computer_score, human_score);
 }
 
 /**
