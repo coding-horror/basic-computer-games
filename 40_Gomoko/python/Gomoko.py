@@ -2,7 +2,7 @@ import random
 
 
 def print_n_whitespaces(n: int):
-    print(" "*n, end="")
+    print(" " * n, end="")
 
 
 def print_board():
@@ -79,21 +79,21 @@ while True:
         elif check_move(I, J, N) == False:
             print("ILLEGAL MOVE.  TRY AGAIN...")
         else:
-            if A[I-1][J-1] != 0:
+            if A[I - 1][J - 1] != 0:
                 print("SQUARE OCCUPIED.  TRY AGAIN...")
             else:
-                A[I-1][J-1] = 1
+                A[I - 1][J - 1] = 1
                 # COMPUTER TRIES AN INTELLIGENT MOVE
                 SkipEFLoop = False
                 for E in range(-1, 2):
                     for F in range(-1, 2):
-                        if E+F-E*F == 0 or SkipEFLoop:
+                        if E + F - E * F == 0 or SkipEFLoop:
                             continue
                         X = I + F
                         Y = J + F
                         if check_move(X, Y, N) == False:
                             continue
-                        if A[X-1][Y-1] == 1:
+                        if A[X - 1][Y - 1] == 1:
                             SkipEFLoop = True
                             X = I - E
                             Y = J - F
@@ -101,21 +101,21 @@ while True:
                                 while True:  # 610
                                     X = random.randint(1, N)
                                     Y = random.randint(1, N)
-                                    if check_move(X, Y, N) and A[X-1][Y-1] == 0:
-                                        A[X-1][Y-1] = 2
+                                    if check_move(X, Y, N) and A[X - 1][Y - 1] == 0:
+                                        A[X - 1][Y - 1] = 2
                                         print_board()
                                         break
                             else:
-                                if A[X-1][Y-1] != 0:
+                                if A[X - 1][Y - 1] != 0:
                                     while True:
                                         X = random.randint(1, N)
                                         Y = random.randint(1, N)
-                                        if check_move(X, Y, N) and A[X-1][Y-1] == 0:
-                                            A[X-1][Y-1] = 2
+                                        if check_move(X, Y, N) and A[X - 1][Y - 1] == 0:
+                                            A[X - 1][Y - 1] = 2
                                             print_board()
                                             break
                                 else:
-                                    A[X-1][Y-1] = 2
+                                    A[X - 1][Y - 1] = 2
                                     print_board()
     print()
     print("THANKS FOR THE GAME!!")

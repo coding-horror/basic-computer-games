@@ -17,7 +17,7 @@ public static class GameUtils
         }
         return result;
     }
-    
+
     public static Func<int, int> Roll { get;  } =  upperLimit => (int) (upperLimit * Rnd.NextSingle()) + 1;
 
     public static bool RollSatisfies(int upperLimit, Predicate<int> predicate) => predicate(Roll(upperLimit));

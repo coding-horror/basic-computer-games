@@ -36,7 +36,7 @@ def get_num_charges():
 
 def ask_for_new_game():
     answer = input("Another game (Y or N): ")
-    if answer.lower().strip()[0] == 'y':
+    if answer.lower().strip()[0] == "y":
         start_new_game()
     else:
         print("OK. Hope you enjoyed yourself")
@@ -58,7 +58,7 @@ def show_shot_result(shot, location):
 
     if shot[2] > location[2]:
         result += "too low."
-    elif shot[2] < location [2]:
+    elif shot[2] < location[2]:
         result += "too high."
     else:
         result += "depth OK."
@@ -76,7 +76,7 @@ def get_shot_input():
             print(f"Example: 3 2 1")
             continue
         try:
-            x, y, z = [int(num) for num in [x, y, z]]
+            x, y, z = (int(num) for num in [x, y, z])
             return x, y, z
         except ValueError:
             print("Please enter whole numbers only")
@@ -92,7 +92,7 @@ def play_game(search_area, num_charges):
     print("\nGood luck!\n")
 
     # Generate position for submarine
-    a, b, c = [random.randint(0, search_area) for _ in range(3)]
+    a, b, c = (random.randint(0, search_area) for _ in range(3))
 
     # Get inputs until win or lose
     for i in range(num_charges):
@@ -116,5 +116,5 @@ def start_new_game():
     play_game(search_area, num_charges)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     start_new_game()

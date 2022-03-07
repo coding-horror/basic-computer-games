@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -178,7 +178,7 @@ async function main()
             }
             print("SUPPLIES AT FORT STADACONA COST $125.00.\n");
             print("YOUR TRAVEL EXPENSES TO STADACONA WERE $15.00.\n");
-            
+
             d1 = Math.floor((0.2 * Math.random() + 0.8) * Math.pow(10, 2) + 0.5) / Math.pow(10, 2);
         } else if (b == 3) {
             i -= 105;

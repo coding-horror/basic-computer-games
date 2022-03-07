@@ -11,6 +11,7 @@
 #
 ######################################################
 
+
 class Card:
     def __init__(self, suit, rank):
         self.suit = suit
@@ -19,14 +20,14 @@ class Card:
     def __str__(self):
         r = self.rank
         if r == 11:
-            r = 'J'
+            r = "J"
         elif r == 12:
-            r = 'Q'
+            r = "Q"
         elif r == 13:
-            r = 'K'
+            r = "K"
         elif r == 14:
-            r = 'A'
-        return f'{r}{self.suit}'
+            r = "A"
+        return f"{r}{self.suit}"
 
 
 class Deck:
@@ -35,12 +36,13 @@ class Deck:
         self.build()
 
     def build(self):
-        for suit in ['\u2665', '\u2666', '\u2663', '\u2660']:
+        for suit in ["\u2665", "\u2666", "\u2663", "\u2660"]:
             for rank in range(2, 15):
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self):
         import random
+
         random.shuffle(self.cards)
 
     def deal(self):
@@ -69,34 +71,34 @@ class Game:
                     self.card_b = self.deck.deal()
                     card_b = self.card_b
 
-                print(f'You have:\t ${self.money} ')
-                print(f'Your cards:\t {card_a} {card_b}')
+                print(f"You have:\t ${self.money} ")
+                print(f"Your cards:\t {card_a} {card_b}")
 
-                bet = int(input('What is your bet? '))
+                bet = int(input("What is your bet? "))
                 player_card = self.deck.deal()
                 if 0 < bet <= self.money:
 
-                    print(f'Your deal:\t {player_card}')
+                    print(f"Your deal:\t {player_card}")
                     if card_a.rank < player_card.rank < card_b.rank:
-                        print('You Win!')
+                        print("You Win!")
                         self.money += bet
                     else:
-                        print('You Lose!')
+                        print("You Lose!")
                         self.money -= bet
                         self.not_done = False
                 else:
-                    print('Chicken!')
-                    print(f'Your deal should have been: {player_card}')
+                    print("Chicken!")
+                    print(f"Your deal should have been: {player_card}")
                     if card_a.rank < player_card.rank < card_b.rank:
-                        print(f'You could have won!')
+                        print(f"You could have won!")
                     else:
-                        print(f'You would lose, so it was wise of you to chicken out!')
+                        print(f"You would lose, so it was wise of you to chicken out!")
 
                     self.not_done = False
                     break
 
                 if len(self.deck.cards) <= 3:
-                    print('You ran out of cards. Game over.')
+                    print("You ran out of cards. Game over.")
                     self.not_done = False
                     break
 
@@ -107,22 +109,24 @@ class Game:
             self.not_done = False
 
 
-if __name__ == '__main__':
-    print(''' 
+if __name__ == "__main__":
+    print(
+        """
     Acey Ducey is a card game where you play against the computer.
     The Dealer(computer) will deal two cards facing up.
-    You have an option to bet or not bet depending on whether or not you 
+    You have an option to bet or not bet depending on whether or not you
     feel the card will have a value between the first two.
     If you do not want to bet input a 0
-    ''')
+    """
+    )
     GAME_OVER = False
 
     while not GAME_OVER:
         game = Game()
         game.play()
-        print(f'You have ${game.money} left')
-        print('Would you like to play again? (y/n)')
-        if input() == 'n':
+        print(f"You have ${game.money} left")
+        print("Would you like to play again? (y/n)")
+        if input() == "n":
             GAME_OVER = True
 
-    print('\nThanks for playing!')
+    print("\nThanks for playing!")

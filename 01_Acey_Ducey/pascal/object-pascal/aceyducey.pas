@@ -16,4 +16,3 @@ begin
   Acey_Ducey:= TGame.Create;
   Acey_Ducey.Run;
 end.
-

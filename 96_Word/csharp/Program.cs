@@ -58,7 +58,7 @@ namespace word
         /// <returns>The integer value showing the number of character matches between guess and target</returns>
         private int check_guess(string guess, string target, StringBuilder progress)
         {
-            // Go through each letter of the guess and see which 
+            // Go through each letter of the guess and see which
             // letters match up to the target word.
             // For each position that matches, update the progress
             // to reflect the guess

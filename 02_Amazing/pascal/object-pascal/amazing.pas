@@ -14,4 +14,3 @@ begin
   AmazingApp:= TAmazingApplication.Create;
   AmazingApp.Run;
 end.
-

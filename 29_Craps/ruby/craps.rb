@@ -81,7 +81,7 @@ class CRAPSGAME
 
     def play
         displayHeading
-        
+
         while true do
             wagerAmount = placeBet
             roll = rollDice
@@ -122,4 +122,3 @@ end
 
 craps = CRAPSGAME.new
 craps.play
-

@@ -112,7 +112,7 @@ namespace Splat
             else
             {
                 int JumpPosition = DistanceLog.IndexOf(Distance);
-                
+
 
                 if (ArrayLength - JumpPosition <= .1 * ArrayLength)
                 {
@@ -155,13 +155,13 @@ namespace Splat
         {
             bool InputSuccess = false;
             Random rand = new Random();
-            double Velocity = 0;                                    
-            double TerminalVelocity = 0;                            
-            double Acceleration = 0;                                
-            double AccelerationInput = 0;                           
-            double Altitude = ((9001 * rand.NextDouble()) + 1000);  
-            double SecondsTimer = 0;                                
-            double Distance = 0;                                      
+            double Velocity = 0;
+            double TerminalVelocity = 0;
+            double Acceleration = 0;
+            double AccelerationInput = 0;
+            double Altitude = ((9001 * rand.NextDouble()) + 1000);
+            double SecondsTimer = 0;
+            double Distance = 0;
             bool TerminalVelocityReached = false;
 
             Console.WriteLine("");
@@ -177,7 +177,7 @@ namespace Splat
                     InputSuccess = double.TryParse(Input, out TerminalVelocity);
                     if (!InputSuccess)
                         Console.WriteLine("*** Please enter a valid number ***");
-                 }   
+                 }
             }
             else
             {
@@ -203,7 +203,7 @@ namespace Splat
                     InputSuccess = double.TryParse(Input, out AccelerationInput);
                     if (!InputSuccess)
                         Console.WriteLine("*** Please enter a valid number ***");
-                 }   
+                 }
             }
             else
             {
@@ -232,7 +232,7 @@ namespace Splat
                 InputSuccess = double.TryParse(Input, out SecondsTimer);
                 if (!InputSuccess)
                     Console.WriteLine("*** Please enter a valid number ***");
-            }   
+            }
 
             // Begin the drop!
             Console.WriteLine("Here we go.");
@@ -240,9 +240,9 @@ namespace Splat
 
             WriteColumnOutput("Time (sec)", "Dist to Fall (ft)");
             WriteColumnOutput("==========", "=================");
-            
+
             // Loop through the number of seconds stepping by 8 intervals
-            for (double i = 0; i < SecondsTimer; i+=(SecondsTimer/8)) 
+            for (double i = 0; i < SecondsTimer; i+=(SecondsTimer/8))
             {
                 if (i > (Velocity / Acceleration))
                 {
@@ -294,17 +294,17 @@ namespace Splat
 
                 // Store succesful jump and write out a fun message
                 WriteSuccessfulResults(Distance);
-            }    
+            }
 
         }
 
         public void PlayTheGame()
         {
             bool ContinuePlay = false;
-            
+
             DisplayIntro();
 
-            do 
+            do
             {
                 PlayOneRound();
 

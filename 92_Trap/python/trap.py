@@ -20,8 +20,10 @@ def play_game():
         user_guess = [-1, -1]
         while user_guess == [-1, -1]:
             try:
-                user_input = [int(item) for item in input(
-                    "\nGuess # " + str(turn) + " ? ").split(",")]
+                user_input = [
+                    int(item)
+                    for item in input("\nGuess # " + str(turn) + " ? ").split(",")
+                ]
                 if len(user_input) == 2:
                     if sum(1 < x < number_max for x in user_input) == 2:
                         user_guess = user_input
@@ -65,8 +67,7 @@ def main():
     keep_playing = True
     while keep_playing:
         play_game()
-        keep_playing = input(
-            "\nTry again. ").lower().startswith("y")
+        keep_playing = input("\nTry again. ").lower().startswith("y")
 
 
 if __name__ == "__main__":

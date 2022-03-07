@@ -24,7 +24,7 @@ for (my $G=1; $G<=$Q; $G++) {
 	do {
 		print "3=ROCK...2=SCISSORS...1=PAPER\n";
 		print "1...2...3...WHAT'S YOUR CHOICE? "; chomp($K = <STDIN>);
-		if (($K-1)*($K-2)*($K-3)!=0) { print "INVALID.\n"; $K=0; } 
+		if (($K-1)*($K-2)*($K-3)!=0) { print "INVALID.\n"; $K=0; }
 		} until ($K!=0);
 
 
@@ -52,5 +52,3 @@ print "YOU HAVE WON $H GAME(S).\n";
 print "AND ".($Q-($C+$H))." GAME(S) ENDED IN A TIE.\n";
 print "\n"; print "THANKS FOR PLAYING!!\n";
 exit;
-
-

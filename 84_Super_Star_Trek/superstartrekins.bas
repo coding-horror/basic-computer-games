@@ -44,7 +44,7 @@
 440 PRINT"     WAY BETWEEN 1 AND 2                      ..."
 450 PRINT"                                             . . ."
 460 PRINT"     VALUES MAY APPROACH 9.0, WHICH         6  7  8"
-470 PRINT"     ITSELF IS EQUIVALENT TO 1.0"         
+470 PRINT"     ITSELF IS EQUIVALENT TO 1.0"
 480 PRINT"                                            COURSE"
 490 PRINT"     ONE WARP FACTOR IS THE SIZE OF "
 500 PRINT"     ONE QUADTANT.  THEREFORE, TO GET"

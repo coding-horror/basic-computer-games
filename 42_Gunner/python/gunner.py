@@ -15,7 +15,7 @@ def gunner():
     S1 = 0
 
     while True:
-        T = int(R * (.1 + .8 * random()))
+        T = int(R * (0.1 + 0.8 * random()))
         S = 0
 
         print("\nDISTANCE TO THE TARGET IS", T, "YARDS.")
@@ -39,8 +39,10 @@ def gunner():
                 X = T - I
                 E = int(X)
 
-                if (abs(E) < 100):
-                    print("*** TARGET DESTROYED *** ", S, "ROUNDS OF AMMUNITION EXPENDED.")
+                if abs(E) < 100:
+                    print(
+                        "*** TARGET DESTROYED *** ", S, "ROUNDS OF AMMUNITION EXPENDED."
+                    )
                     S1 += S
                     if Z == 4:
                         print("\n\nTOTAL ROUNDS EXPENDED WERE: ", S1)
@@ -52,7 +54,9 @@ def gunner():
                             return
                     else:
                         Z += 1
-                        print("\nTHE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY...")
+                        print(
+                            "\nTHE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY..."
+                        )
                         break
                 else:
                     if E > 100:
@@ -80,6 +84,6 @@ if __name__ == "__main__":
         gunner()
 
         Y = input("TRY AGAIN (Y OR N)? ")
-        if (Y != "Y"):
+        if Y != "Y":
             print("\nOK.  RETURN TO BASE CAMP.")
             break

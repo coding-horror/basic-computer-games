@@ -12,4 +12,3 @@ is distance above homebase.
 
 You get 10 tries.  After each try, I will tell
 you how far you are from each wugwump.
-

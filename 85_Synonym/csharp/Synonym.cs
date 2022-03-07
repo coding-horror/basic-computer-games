@@ -80,7 +80,7 @@ namespace Synonym
                 {
                     // Randomly display one of the five correct answer exclamations
                     Console.WriteLine(GetAnAffirmation());
-                    
+
                     return true;
                 }
                 else
@@ -109,7 +109,7 @@ namespace Synonym
             foreach (string[] WordList in Words)
             {
                 int WordIndex = rand.Next(WordList.Length);  // random word position in the current list of words
-                string WordName = WordList[WordIndex];       // what is that actual word 
+                string WordName = WordList[WordIndex];       // what is that actual word
                 bool Success = false;
 
                 while (!Success)
@@ -117,7 +117,7 @@ namespace Synonym
                     // Ask for the synonym of the current word
                     string LineInput = PromptForSynonym(WordName);
 
-                    // Check the response 
+                    // Check the response
                     Success = CheckTheResponse(WordName, WordIndex, LineInput, WordList);
 
                     // Add extra line space for formatting

@@ -9,7 +9,6 @@ Ported by Dave LeCompte
 import collections
 import math
 
-
 PAGE_WIDTH = 64
 
 COLUMN_WIDTH = 2
@@ -122,7 +121,7 @@ def show_landing(sim_clock, capsule):
 def show_out_of_fuel(sim_clock, capsule):
     print(f"FUEL OUT AT {sim_clock.elapsed_time} SECONDS")
     delta_t = (
-        -capsule.v + math.sqrt(capsule.v ** 2 + 2 * capsule.a * capsule.g)
+        -capsule.v + math.sqrt(capsule.v**2 + 2 * capsule.a * capsule.g)
     ) / capsule.g
     capsule.v += capsule.g * delta_t
     sim_clock.advance(delta_t)
@@ -186,17 +185,17 @@ class Capsule:
         new_velocity = (
             self.v
             + self.g * delta_t
-            + self.z * (-q - q ** 2 / 2 - q ** 3 / 3 - q ** 4 / 4 - q ** 5 / 5)
+            + self.z * (-q - q**2 / 2 - q**3 / 3 - q**4 / 4 - q**5 / 5)
         )
 
         # new altitude
         new_altitude = (
             self.a
-            - self.g * delta_t ** 2 / 2
+            - self.g * delta_t**2 / 2
             - self.v * delta_t
             + self.z
             * delta_t
-            * (q / 2 + q ** 2 / 6 + q ** 3 / 12 + q ** 4 / 20 + q ** 5 / 30)
+            * (q / 2 + q**2 / 6 + q**3 / 12 + q**4 / 20 + q**5 / 30)
         )
 
         return PhysicalState(altitude=new_altitude, velocity=new_velocity)
@@ -246,7 +245,7 @@ def process_final_tick(delta_t, sim_clock, capsule):
         average_vel = (
             capsule.v
             + math.sqrt(
-                capsule.v ** 2
+                capsule.v**2
                 + 2
                 * capsule.a
                 * (capsule.g - capsule.z * capsule.fuel_per_second / capsule.m)
@@ -274,7 +273,7 @@ def handle_flyaway(sim_clock, capsule):
             / (
                 capsule.z
                 * capsule.fuel_per_second
-                * math.sqrt(w ** 2 + capsule.v / capsule.z)
+                * math.sqrt(w**2 + capsule.v / capsule.z)
             )
         ) + 0.05
 

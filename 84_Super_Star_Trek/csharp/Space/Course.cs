@@ -46,7 +46,7 @@ namespace SuperStarTrek.Space
         }
 
         internal float DeltaX { get; }
-        
+
         internal float DeltaY { get; }
 
         internal IEnumerable<Coordinates> GetSectorsFrom(Coordinates start)

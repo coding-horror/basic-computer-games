@@ -50,5 +50,3 @@ foreach my $Size (@Data) {
 
 for (my $I=1; $I<10; $I++) { print "\n"; }
 exit;
-
-

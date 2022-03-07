@@ -1,11 +1,13 @@
-from datetime import date
 import random
+from datetime import date
 
 global RED_NUMBERS
 RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 
+
 def print_instructions():
-    print("""
+    print(
+        """
 THIS IS THE BETTING LAYOUT
   (*=RED)
 
@@ -53,7 +55,9 @@ WHEN I ASK FOR A BET.
 
 THE MINIMUM BET IS $5, THE MAXIMUM IS $500.
 
-    """)
+    """
+    )
+
 
 def query_bets():
     """Queries the user to input their bets"""
@@ -68,10 +72,10 @@ def query_bets():
     bet_Values = [0] * betCount
 
     for i in range(betCount):
-        while(bet_IDs[i] == -1):
+        while bet_IDs[i] == -1:
             try:
-                inString = input("NUMBER " + str(i + 1) + "? ").split(',')
-                id,val = int(inString[0]),int(inString[1])
+                inString = input("NUMBER " + str(i + 1) + "? ").split(",")
+                id, val = int(inString[0]), int(inString[1])
 
                 # check other bet_IDs
                 for j in range(i):
@@ -85,12 +89,14 @@ def query_bets():
                     bet_Values[i] = val
             except:
                 ...
-    return bet_IDs,bet_Values
+    return bet_IDs, bet_Values
 
-def bet_results(bet_IDs,bet_Values,result):
+
+def bet_results(bet_IDs, bet_Values, result):
     """Computes the results, prints them, and returns the total net winnings"""
     total_winnings = 0
-    def get_modifier(id,num):
+
+    def get_modifier(id, num):
         if id == 37 and num <= 12:
             return 2
         elif id == 38 and num > 12 and num <= 24:
@@ -121,7 +127,7 @@ def bet_results(bet_IDs,bet_Values,result):
             return -1
 
     for i in range(len(bet_IDs)):
-        winnings = bet_Values[i] * get_modifier(bet_IDs[i],result)
+        winnings = bet_Values[i] * get_modifier(bet_IDs[i], result)
         total_winnings += winnings
 
         if winnings >= 0:
@@ -131,13 +137,14 @@ def bet_results(bet_IDs,bet_Values,result):
 
     return winnings
 
+
 def print_check(amount):
     """Prints a check of a given amount"""
     name = input("TO WHOM SHALL I MAKE THE CHECK? ")
 
     print("-" * 72)
     print()
-    print(" " * 40 + "CHECK NO. " + str(random.randint(0,100)))
+    print(" " * 40 + "CHECK NO. " + str(random.randint(0, 100)))
     print(" " * 40 + str(date.today()))
     print()
     print("PAY TO THE ORDER OF -----" + name + "----- $" + str(amount))
@@ -146,6 +153,7 @@ def print_check(amount):
     print(" " * 40 + "THE COMPUTER")
     print(" " * 40 + "----------X-----")
     print("-" * 72)
+
 
 def main():
     player_balance = 1000
@@ -161,13 +169,13 @@ def main():
         print_instructions()
 
     while True:
-        bet_IDs,bet_Values = query_bets()
+        bet_IDs, bet_Values = query_bets()
 
         print("SPINNING")
         print()
         print()
 
-        val = random.randint(0,38)
+        val = random.randint(0, 38)
         if val == 38:
             print("0")
         elif val == 37:
@@ -178,7 +186,7 @@ def main():
             print(str(val) + " BLACK")
 
         print()
-        total_winnings = bet_results(bet_IDs,bet_Values,val)
+        total_winnings = bet_results(bet_IDs, bet_Values, val)
         player_balance += total_winnings
         host_balance -= total_winnings
 
@@ -196,7 +204,6 @@ def main():
         if not stringtobool(input("PLAY AGAIN? ")):
             break
 
-
     if player_balance <= 0:
         print("THANKS FOR YOUR MONEY")
         print("I'LL USE IT TO BUY A SOLID GOLD ROULETTE WHEEL")
@@ -207,7 +214,8 @@ def main():
 
 def stringtobool(string):
     """Converts a string to a bool"""
-    return string.lower() in ("yes","y","true","t","yes")
+    return string.lower() in ("yes", "y", "true", "t", "yes")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

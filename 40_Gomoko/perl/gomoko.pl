@@ -112,10 +112,8 @@ sub ValidMove {
 	if ($Board[$X][$Y]!=0) {
 		if ($Val==1) { print "SQUARE OCCUPIED. TRY AGAIN...\n"; }
 		return 0;
-		}	
+		}
 
 	#$Board[$X][$Y]= $Val;
 	return 1;
 	}
-
-

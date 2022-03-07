@@ -76,8 +76,7 @@ def main():
 
         play_game()
 
-        keep_playing = input(
-            "Play again? (yes or no) ").lower().startswith("y")
+        keep_playing = input("Play again? (yes or no) ").lower().startswith("y")
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ begin
     else
         writeln( 'I * * I' );
 
-    if ( ( face_value = 2 ) or ( face_value = 4 ) ) then 
+    if ( ( face_value = 2 ) or ( face_value = 4 ) ) then
         writeln( 'I     I' )
     else if ( face_value = 6 ) then
         writeln( 'I * * I' )
@@ -33,7 +33,7 @@ begin
         writeln( 'I   * I' )
     else
         writeln( 'I * * I' );
-        
+
     writeln( ' ----- ' );
 end;
 
@@ -61,7 +61,7 @@ begin
     input_error := 1;
     while ( input_error <> 0 ) do
     begin
-        readln( player_input ); 
+        readln( player_input );
 
         val( player_input, player_answer, input_error );
 
@@ -126,4 +126,3 @@ begin
         writeln( 'THE DICE ROLL AGAIN...' );
     end;
 end.
-

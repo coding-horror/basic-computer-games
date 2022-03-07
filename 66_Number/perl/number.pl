@@ -35,5 +35,3 @@ sub FNR {
 	my ($X)= @_; #Useless...
 	return int(5*rand(1)+1);
 	}
-
-

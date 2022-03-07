@@ -6,7 +6,7 @@ fun main() {
         winnings += playGame()
         println("YOUR TOTAL WINNINGS ARE NOW $winnings DOLLARS")
     } while(playAgain())
-    
+
     println("SO LONG.  HOPE YOU ENJOYED YOURSELF!!!")
 }
 
@@ -37,10 +37,10 @@ fun playAgain():Boolean {
 val introText = """
     HI LO
     CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-    
-    
+
+
     THIS IS THE GAME OF HI LO.
-    
+
     YOU WILL HAVE 6 TRIES TO GUESS THE AMOUNT OF MONEY IN THE
     HI LO JACKPOT, WHICH IS BETWEEN 1 AND 100 DOLLARS.  IF YOU
     GUESS THE AMOUNT, YOU WIN ALL THE MONEY IN THE JACKPOT!

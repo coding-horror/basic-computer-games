@@ -7,9 +7,9 @@
  * <p>
  */
 public class Boxing {
-    
+
     private static final Basic.Console console = new Basic.Console();
-    
+
     private GameSession session;
 
     public void play() {

@@ -124,8 +124,8 @@ def play_game():
         rom_angle = (rom_angle + rom_angular_velocity) % 360
         angular_difference = rom_angle - bomb_angle
         c = math.sqrt(
-            rom_distance ** 2
-            + bomb_distance ** 2
+            rom_distance**2
+            + bomb_distance**2
             - 2
             * rom_distance
             * bomb_distance
