@@ -269,6 +269,8 @@ async function main()
                 print("YOU GUESSED IT IN " + m + " MOVES!\n");
                 break;
             }
+            //tell human results
+            print("YOU HAVE " + b + " BLACKS AND " + w + " WHITES.")
             // Save all this stuff for board printout later
             ss[m] = str;
             sa[m] = [];
