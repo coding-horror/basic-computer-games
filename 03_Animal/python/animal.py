@@ -42,20 +42,26 @@
 #
 ########################################################
 
+from typing import Optional
+
 
 class Node:
     """
     Node of the binary tree of questions.
     """
 
-    def __init__(self, text, yes_node, no_node):
+    def __init__(
+        self, text: str, yes_node: Optional["Node"], no_node: Optional["Node"]
+    ):
         # the nodes that are leafs have as text the animal's name, otherwise
         # a yes/no question
         self.text = text
         self.yes_node = yes_node
         self.no_node = no_node
 
-    def update_node(self, new_question, answer_new_ques, new_animal):
+    def update_node(
+        self, new_question: str, answer_new_ques: str, new_animal: str
+    ) -> None:
         # update the leaf with a question
         old_animal = self.text
         # we replace the animal with a new question
@@ -69,13 +75,13 @@ class Node:
             self.no_node = Node(new_animal, None, None)
 
     # the leafs have as children None
-    def is_leaf(self):
-        return self.yes_node == None and self.no_node == None
+    def is_leaf(self) -> bool:
+        return self.yes_node is None and self.no_node is None
 
 
-def list_known_animals(root_node):
+def list_known_animals(root_node: Optional[Node]) -> None:
     # Traversing the tree by recursion until we reach the leafs
-    if root_node == None:
+    if root_node is None:
         return
 
     if root_node.is_leaf():
@@ -89,91 +95,93 @@ def list_known_animals(root_node):
         list_known_animals(root_node.no_node)
 
 
-def parse_input(message, check_list, root_node):
-    # only accepts yes or no inputs and recognizes list operation
-    correct_input = False
-    while not correct_input:
-        try:
-            inp = input(message)
+def parse_input(message: str, check_list: bool, root_node: Optional[Node]) -> str:
+    """only accepts yes or no inputs and recognizes list operation"""
+    token = ""
+    while token not in ["y", "n"]:
+        inp = input(message)
 
-            if check_list and inp.lower() == "list":
-                print("Animals I already know are:")
-                list_known_animals(root_node)
-                print("\n")
+        if check_list and inp.lower() == "list":
+            print("Animals I already know are:")
+            list_known_animals(root_node)
+            print("\n")
 
+        if len(inp) > 0:
             token = inp[0].lower()
-            if token == "y" or token == "n":
-                correct_input = True
-        except IndexError:
-            pass
+        else:
+            token = ""
 
     return token
 
 
-def avoid_void_input(message):
+def avoid_void_input(message: str) -> str:
     answer = ""
     while answer == "":
         answer = input(message)
     return answer
 
 
-def initial_message():
+def initial_message() -> None:
     print(" " * 32 + "Animal")
     print(" " * 15 + "Creative Computing Morristown, New Jersey\n")
     print("Play ´Guess the Animal´")
     print("Think of an animal and the computer will try to guess it.\n")
 
 
-# Initial tree
-yes_child = Node("Fish", None, None)
-no_child = Node("Bird", None, None)
-root = Node("Does it swim?", yes_child, no_child)
+def main() -> None:
+    # Initial tree
+    yes_child = Node("Fish", None, None)
+    no_child = Node("Bird", None, None)
+    root = Node("Does it swim?", yes_child, no_child)
 
-# Main loop of game
-initial_message()
-keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
-while keep_playing:
-    keep_asking = True
-    # Start traversing the tree by the root
-    actual_node = root
-
-    while keep_asking:
-
-        if not actual_node.is_leaf():
-            # we have to keep asking i.e. traversing nodes
-            answer = parse_input(actual_node.text, False, None)
-
-            if answer == "y":
-                actual_node = actual_node.yes_node
-            else:
-                actual_node = actual_node.no_node
-        else:
-            # we have reached a possible answer
-            answer = parse_input(f"Is it a {actual_node.text}? ", False, None)
-            if answer == "n":
-                # add the new animal to the tree
-                new_animal = avoid_void_input(
-                    "The animal you were thinking of was a ? "
-                )
-                new_question = avoid_void_input(
-                    "Please type in a question that would distinguish a {} from a {}: ".format(
-                        new_animal, actual_node.text
-                    )
-                )
-                answer_new_question = parse_input(
-                    f"for a {new_animal} the answer would be: ", False, None
-                )
-
-                actual_node.update_node(
-                    new_question + "?", answer_new_question, new_animal
-                )
-
-            else:
-                print("Why not try another animal?")
-
-            keep_asking = False
-
+    # Main loop of game
+    initial_message()
     keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
+    while keep_playing:
+        keep_asking = True
+        # Start traversing the tree by the root
+        actual_node: Node = root
+
+        while keep_asking:
+
+            if not actual_node.is_leaf():
+
+                # we have to keep asking i.e. traversing nodes
+                answer = parse_input(actual_node.text, False, None)
+
+                # As this is an inner node, both children are not None
+                if answer == "y":
+                    assert actual_node.yes_node is not None
+                    actual_node = actual_node.yes_node
+                else:
+                    assert actual_node.no_node is not None
+                    actual_node = actual_node.no_node
+            else:
+                # we have reached a possible answer
+                answer = parse_input(f"Is it a {actual_node.text}? ", False, None)
+                if answer == "n":
+                    # add the new animal to the tree
+                    new_animal = avoid_void_input(
+                        "The animal you were thinking of was a ? "
+                    )
+                    new_question = avoid_void_input(
+                        "Please type in a question that would distinguish a "
+                        f"{new_animal} from a {actual_node.text}: "
+                    )
+                    answer_new_question = parse_input(
+                        f"for a {new_animal} the answer would be: ", False, None
+                    )
+
+                    actual_node.update_node(
+                        new_question + "?", answer_new_question, new_animal
+                    )
+
+                else:
+                    print("Why not try another animal?")
+
+                keep_asking = False
+
+        keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
 
 
 ########################################################
@@ -193,3 +201,6 @@ while keep_playing:
 #   function  (Lines 120 to 130, 135, 158, 160, 168, 173)
 
 ########################################################
+
+if __name__ == "__main__":
+    main()
