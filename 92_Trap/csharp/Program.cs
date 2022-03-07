@@ -79,7 +79,7 @@ namespace trap_cs
       }
     }
     static void Print(string stringToPrint)
-    { 
+    {
       Console.WriteLine(stringToPrint);
     }
     static void Print()

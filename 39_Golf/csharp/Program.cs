@@ -1,10 +1,10 @@
 ﻿//
-//          8""""8 8"""88 8     8"""" 
-//          8    " 8    8 8     8     
-//          8e     8    8 8e    8eeee 
-//          88  ee 8    8 88    88    
-//          88   8 8    8 88    88    
-//          88eee8 8eeee8 88eee 88    
+//          8""""8 8"""88 8     8""""
+//          8    " 8    8 8     8
+//          8e     8    8 8e    8eeee
+//          88  ee 8    8 88    88
+//          88   8 8    8 88    88
+//          88eee8 8eeee8 88eee 88
 //
 // GOLF
 //
@@ -20,7 +20,7 @@
 //
 // Windows compile:
 // dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true
-// 
+//
 //
 // INDEX
 // ----------------- methods
@@ -62,79 +62,79 @@
 // ToDegrees360
 // Odds
 //
-//  Despite being a text based game, the code uses simple geometry to simulate a course. 
+//  Despite being a text based game, the code uses simple geometry to simulate a course.
 //  Fairways are 40 yard wide rectangles, surrounded by 5 yards of rough around the perimeter.
-//  The green is a circle of 10 yards radius around the cup. 
-//  The cup is always at point (0,0). 
+//  The green is a circle of 10 yards radius around the cup.
+//  The cup is always at point (0,0).
 //
 //  Using basic trigonometry we can plot the ball's location using the distance of the stroke and
-//  and the angle of deviation (hook/slice). 
+//  and the angle of deviation (hook/slice).
 //
-//  The stroke distances are based on real world averages of different club types. 
+//  The stroke distances are based on real world averages of different club types.
 //  Lots of randomization, "business rules", and luck influence the game play.
-//  Probabilities are commented in the code. 
+//  Probabilities are commented in the code.
 //
 //  note: 'courseInfo', 'clubs', & 'scoreCard' arrays each include an empty object so indexing
 //  can begin at 1. Like all good programmers we count from zero, but in this context,
 //  it's more natural when hole number one is at index one
 //
-//            
-//     |-----------------------------|   
+//
+//     |-----------------------------|
 //     |            rough            |
-//     |   ----------------------    | 
-//     |   |                     |   | 
-//     | r |        =  =         | r | 
-//     | o |     =        =      | o | 
-//     | u |    =    .     =     | u | 
-//     | g |    =   green  =     | g |  
-//     | h |     =        =      | h | 
-//     |   |        =  =         |   | 
-//     |   |                     |   | 
-//     |   |                     |   | 
-//     |   |      Fairway        |   | 
-//     |   |                     |   | 
+//     |   ----------------------    |
+//     |   |                     |   |
+//     | r |        =  =         | r |
+//     | o |     =        =      | o |
+//     | u |    =    .     =     | u |
+//     | g |    =   green  =     | g |
+//     | h |     =        =      | h |
+//     |   |        =  =         |   |
+//     |   |                     |   |
+//     |   |                     |   |
+//     |   |      Fairway        |   |
+//     |   |                     |   |
 //     |   |               ------    |
 //     |   |            --        -- |
 //     |   |           --  hazard  --|
 //     |   |            --        -- |
 //     |   |               ------    |
-//     |   |                     |   | 
+//     |   |                     |   |
 //     |   |                     |   |   out
 //     |   |                     |   |   of
 //     |   |                     |   |   bounds
 //     |   |                     |   |
-//     |   |                     |   |     
-//     |            tee              |  
-//                  
+//     |   |                     |   |
+//     |            tee              |
+//
 //
 //  Typical green size: 20-30 yards
-//  Typical golf course fairways are 35 to 45 yards wide          
+//  Typical golf course fairways are 35 to 45 yards wide
 //  Our fairway extends 5 yards past green
 //  Our rough is a 5 yard perimeter around fairway
-//  
+//
 //  We calculate the new position of the ball given the ball's point, the distance
 //  of the stroke, and degrees off line (hook or slice).
 //
 //  Degrees off (for a right handed golfer):
-//  Slice: positive degrees = ball goes right 
+//  Slice: positive degrees = ball goes right
 //  Hook: negative degrees = left goes left
-//  
+//
 //  The cup is always at point: 0,0.
 //  We use atan2 to compute the angle between the cup and the ball.
-//  Setting the cup's vector to 0,-1 on a 360 circle is equivalent to: 
+//  Setting the cup's vector to 0,-1 on a 360 circle is equivalent to:
 //  0 deg = 12 o'clock;  90 deg = 3 o'clock;  180 deg = 6 o'clock;  270 = 9 o'clock
 //  The reverse angle between the cup and the ball is a difference of PI (using radians).
 //
 //  Given the angle and stroke distance (hypotenuse), we use cosine to compute
 //  the opposite and adjacent sides of the triangle, which, is the ball's new position.
-//    
+//
 //           0
 //           |
 //    270 - cup - 90
 //           |
 //          180
-//    
-//    
+//
+//
 //          cup
 //           |
 //           |
@@ -147,19 +147,19 @@
 //           |/
 //          tee
 //
-//    <- hook    slice ->  
+//    <- hook    slice ->
 //
 //
 //  Given the large number of combinations needed to describe a particular stroke / ball location,
-//  we use the technique of "bitwise masking" to describe stroke results. 
+//  we use the technique of "bitwise masking" to describe stroke results.
 //  With bit masking, multiple flags (bits) are combined into a single binary number that can be
 //  tested by applying a mask. A mask is another binary number that isolates a particular bit that
 //  you are interested in. You can then apply your language's bitwise opeartors to test or
-//  set a flag. 
+//  set a flag.
 //
 //  Game design by Jason Bonthron, 2021
 //  www.bonthron.com
-//  for my father, Raymond Bonthron, an avid golfer 
+//  for my father, Raymond Bonthron, an avid golfer
 //
 //  Inspired by the 1978 "Golf" from "Basic Computer Games"
 //  by Steve North, who modified an existing golf game by an unknown author
@@ -176,7 +176,7 @@ namespace Golf
 {
     using Ball = Golf.CircleGameObj;
     using Hazard = Golf.CircleGameObj;
-    
+
     // --------------------------------------------------------------------------- Program
     class Program
     {
@@ -186,7 +186,7 @@ namespace Golf
         }
     }
 
-    
+
     // --------------------------------------------------------------------------- Golf
     public class Golf
     {
@@ -209,7 +209,7 @@ namespace Golf
 
         List<List<Ball>> ScoreCard = new List<List<Ball>> { new List<Ball>() };
 
-        static void w(string s) { Console.WriteLine(s); } // WRITE        
+        static void w(string s) { Console.WriteLine(s); } // WRITE
         Random RANDOM = new Random();
 
 
@@ -238,7 +238,7 @@ namespace Golf
             Wait((z) =>
             {
                 w(" ");
-                w("              YOUR BAG");                
+                w("              YOUR BAG");
                 ReviewBag();
                 w("Type BAG at any time to review the clubs in your bag.");
                 w(" ");
@@ -246,7 +246,7 @@ namespace Golf
                 Wait((zz) =>
                 {
                     w(" ");
-                    
+
                     Ask("PGA handicaps range from 0 to 30.\nWhat is your handicap?", 0, 30, (i) =>
                     {
                         Handicap = i;
@@ -342,7 +342,7 @@ namespace Golf
             };
         }
 
-        
+
         // -------------------------------------------------------- bitwise Flags
         int dub         = 0b00000000000001;
         int hook        = 0b00000000000010;
@@ -412,24 +412,24 @@ namespace Golf
             };
 
             // beginner's luck !
-            // If handicap is greater than 15, there's a 10% chance of avoiding all errors 
+            // If handicap is greater than 15, there's a 10% chance of avoiding all errors
             if ((Handicap > 15) && (Odds(10))) { flags |= luck; };
 
             // ace
-            // there's a 10% chance of an Ace on a par 3           
+            // there's a 10% chance of an Ace on a par 3
             if (CourseInfo[HOLE_NUM].Par == 3 && Odds(10) && STROKE_NUM == 1) { flags |= ace; };
 
             // distance:
             // If handicap is < 15, there a 50% chance of reaching club average,
-            // a 25% of exceeding it, and a 25% of falling short 
+            // a 25% of exceeding it, and a 25% of falling short
             // If handicap is > 15, there's a 25% chance of reaching club average,
             // and 75% chance of falling short
             // The greater the handicap, the more the ball falls short
-            // If poor distance is a known playerDifficulty, then reduce distance by 10% 
+            // If poor distance is a known playerDifficulty, then reduce distance by 10%
 
             double distance;
             int rnd = RANDOM.Next(1, 101);
-             
+
             if (Handicap < 15)
             {
                 if (rnd <= 25)
@@ -465,7 +465,7 @@ namespace Golf
             if ((flags & luck) == luck) { distance = clubAmt; }
 
             // angle
-            // For all strokes, there's a possible "drift" of 4 degrees 
+            // For all strokes, there's a possible "drift" of 4 degrees
             // a hooks or slice increases the angle between 5-10 degrees, hook uses negative degrees
             int angle = RANDOM.Next(0, 5);
             if ((flags & slice) == slice) { angle = RANDOM.Next(5, 11); };
@@ -614,7 +614,7 @@ namespace Golf
             TeeUp();
         }
 
-        
+
         // --------------------------------------------------------------- ReportCurrentScore
         void ReportCurrentScore()
         {
@@ -624,18 +624,18 @@ namespace Golf
             if (ScoreCard[HOLE_NUM].Count == (par - 1)) { w("A birdie! One below par."); };
             if (ScoreCard[HOLE_NUM].Count == (par - 2)) { w("An Eagle! Two below par."); };
             if (ScoreCard[HOLE_NUM].Count == (par - 3)) { w("Double Eagle! Unbelievable."); };
-            
+
             int totalPar = 0;
             for (var i = 1; i <= HOLE_NUM; i++) { totalPar += CourseInfo[i].Par; };
 
             w(" ");
-            w("-----------------------------------------------------");            
+            w("-----------------------------------------------------");
             Console.WriteLine(" Total par for {0} hole{1} is: {2}. Your total is: {3}.",
                               HOLE_NUM,
-                              ((HOLE_NUM > 1) ? "s" : ""), //plural    
+                              ((HOLE_NUM > 1) ? "s" : ""), //plural
                               totalPar,
                               ScoreCardGetTotal());
-            w("-----------------------------------------------------");            
+            w("-----------------------------------------------------");
             w(" ");
 
             if (HOLE_NUM == 18)
@@ -649,7 +649,7 @@ namespace Golf
             };
         }
 
-        
+
         // --------------------------------------------------------------- FindBall
         int FindBall(Ball ball, int flags)
         {
@@ -660,7 +660,7 @@ namespace Golf
             if (IsInHazard(ball, GameObjType.WATER)) { flags |= inWater; }
             if (IsInHazard(ball, GameObjType.TREES)) { flags |= inTrees; }
             if (IsInHazard(ball, GameObjType.SAND))  { flags |= inSand;  }
-            
+
             if (ball.Y < 0) { flags |= passedCup; }
 
             // less than 2, it's in the cup
@@ -671,14 +671,14 @@ namespace Golf
             return flags;
         }
 
-        
+
         // --------------------------------------------------------------- IsOnFairway
         bool IsOnFairway(Ball ball)
         {
             return IsInRectangle(ball, holeGeometry.Fairway);
         }
 
-        
+
         // --------------------------------------------------------------- IsOngreen
         bool IsOnGreen(Ball ball)
         {
@@ -687,7 +687,7 @@ namespace Golf
             return d < holeGeometry.Green.Radius;
         }
 
-        
+
         // --------------------------------------------------------------- IsInHazard
         bool IsInHazard(Ball ball, GameObjType hazard)
         {
@@ -700,7 +700,7 @@ namespace Golf
             return result;
         }
 
-        
+
         // --------------------------------------------------------------- IsInRough
         bool IsInRough(Ball ball)
         {
@@ -708,7 +708,7 @@ namespace Golf
                 (IsInRectangle(ball, holeGeometry.Fairway) == false);
         }
 
-        
+
         // --------------------------------------------------------------- IsOutOfBounds
         bool IsOutOfBounds(Ball ball)
         {
@@ -723,7 +723,7 @@ namespace Golf
         }
 
 
-        // --------------------------------------------------------------- ScoreCardRecordStroke 
+        // --------------------------------------------------------------- ScoreCardRecordStroke
         void ScoreCardRecordStroke(Ball ball)
         {
             var clone = new Ball(ball.X, ball.Y, 0, GameObjType.BALL);
@@ -783,7 +783,7 @@ namespace Golf
         void Wait(Action<int> callback)
         {
             w("Press any key to continue.");
-            
+
             ConsoleKeyInfo keyinfo;
             do { keyinfo = Console.ReadKey(true); }
             while (keyinfo.KeyChar < 0);
@@ -828,10 +828,10 @@ namespace Golf
         {
             var net = ScoreCardGetTotal() - Handicap;
             w("Good game!");
-            w("Your net score is: " + net);            
+            w("Your net score is: " + net);
             w("Let's visit the pro shop...");
             w(" ");
-            Wait((z) => { });            
+            Wait((z) => { });
             return;
         }
 
@@ -840,8 +840,8 @@ namespace Golf
         // ======================================================== Clubs
         (string, int)[] Clubs = new (string, int)[] {
             ("",0),
-                
-                // name, average yardage                
+
+                // name, average yardage
                 ("Driver", 250),
                 ("3 Wood", 225),
                 ("5 Wood", 200),
@@ -861,7 +861,7 @@ namespace Golf
         HoleInfo[] CourseInfo = new HoleInfo[]{
             new HoleInfo(0, 0, 0, new Hazard[]{}, ""), // include a blank so index 1 == hole 1
 
-            
+
             // -------------------------------------------------------- front 9
             // hole, yards, par, hazards, (description)
 
@@ -927,8 +927,8 @@ namespace Golf
                              new Hazard(-30, 180, 20, GameObjType.TREES),
                              new Hazard( 14,  -8,  5, GameObjType.SAND)
                          },
-                         ""), 
-            
+                         ""),
+
             // -------------------------------------------------------- back 9
             // hole, yards, par, hazards, (description)
 
@@ -999,7 +999,7 @@ namespace Golf
                          "There is a water hazard near the green.")
         };
 
-        
+
         // -------------------------------------------------------- HoleInfo
         class HoleInfo
         {
@@ -1114,7 +1114,7 @@ namespace Golf
                     (pt.Y < rect.Y + rect.Length));
         }
 
-        
+
         // -------------------------------------------------------- ToRadians
         double ToRadians(double angle) { return angle * (Math.PI / 180.0); }
 

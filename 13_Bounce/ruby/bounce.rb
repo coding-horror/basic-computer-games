@@ -108,7 +108,7 @@ def plot_bouncing_ball(strobbing_time, v0, c)
                 # skipped by line 98
                 plot_width += 1 if plotted_height == 0
             }
-            
+
             if heighest_position_in_next_bounce(time_in_bounce, v0, i, c) < plotted_height then
                 # If we got no more ball positions at or above current height in the next bounce,
                 # we can skip the rest of the bounces and move down to the next height to plot

@@ -78,5 +78,3 @@ if ($R<2) {
 print "NOT BAD, BUT YOU MIGHT SPEND A LITTLE MORE TIME\n";
 print "READING THE NURSERY GREATS.\n";
 exit;
-
-

@@ -21,16 +21,17 @@
 #
 ########################################################
 
-import math, time
+import math
+import time
 
 # Constants
-STRINGS = ('Creative', 'Computing') # Text to display
+STRINGS = ("Creative", "Computing")  # Text to display
 MAX_LINES = 160
-STEP_SIZE = 0.25 # Number of radians to increase at each
-                 # line. Controls speed of horizontal
-                 # printing movement.
-CENTER = 26      # Controls left edge of "middle" string
-DELAY = 0.05     # Amount of seconds to wait between lines
+STEP_SIZE = 0.25  # Number of radians to increase at each
+# line. Controls speed of horizontal
+# printing movement.
+CENTER = 26  # Controls left edge of "middle" string
+DELAY = 0.05  # Amount of seconds to wait between lines
 
 
 # Display "intro" text
@@ -46,10 +47,10 @@ width = CENTER - 1
 
 # "Start long loop"
 for line_num in range(MAX_LINES):
-    
+
     # Get string to display on this line
     curr_string = STRINGS[string_index]
-    
+
     # Calculate how far over to print the text
     sine = math.sin(radians)
     padding = int(CENTER + width * sine)
@@ -63,7 +64,6 @@ for line_num in range(MAX_LINES):
 
     # Make sure the text doesn't fly by too fast...
     time.sleep(DELAY)
-
 
 
 ########################################################
@@ -106,10 +106,3 @@ for line_num in range(MAX_LINES):
 #   What happens? Why? How would you fix it?
 #
 ########################################################
-
-
-            
-        
-    
-
-    

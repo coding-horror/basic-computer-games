@@ -9,15 +9,15 @@ public class Messages {
     public static final String INTRO = """
                                           23 MATCHES
                           CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-                        
-                        
-                        
+
+
+
              THIS IS A GAME CALLED '23 MATCHES'.
-                        
+
             WHEN IT IS YOUR TURN, YOU MAY TAKE ONE, TWO, OR THREE
             MATCHES. THE OBJECT OF THE GAME IS NOT TO HAVE TO TAKE
             THE LAST MATCH.
-                        
+
             LET'S FLIP A COIN TO SEE WHO GOES FIRST.
             IF IT COMES UP HEADS, I WILL WIN THE TOSS.
             """;
@@ -25,7 +25,7 @@ public class Messages {
     public static final String HEADS = """
             HEADS! I WIN! HA! HA!
             PREPARE TO LOSE, MEATBALL-NOSE!!
-                      
+
             I TAKE 2 MATCHES
             """;
 
@@ -35,7 +35,7 @@ public class Messages {
 
     public static final String MATCHES_LEFT = """
             THE NUMBER OF MATCHES IS NOW %d
-            
+
             YOUR TURN -- YOU MAY TAKE 1, 2 OR 3 MATCHES.
             """;
 
@@ -64,7 +64,7 @@ public class Messages {
     public static final String LOSE = """
             YOU POOR BOOB! YOU TOOK THE LAST MATCH! I GOTCHA!!
             HA ! HA ! I BEAT YOU !!!
-                      
+
             GOOD BYE LOSER!
             """;
 }

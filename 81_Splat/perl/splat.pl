@@ -21,7 +21,7 @@ print <<'EOD';
 
 
 Welcome to 'Splat' -- the game that simulates a parachute
-jump.  Try to open your chute at the last possible 
+jump.  Try to open your chute at the last possible
 moment without going splat.
 EOD
 
@@ -115,8 +115,8 @@ EOD
             if ( $fractile <= 0.1 ) {
                 print <<"EOD";
 Wow!  That's some jumping.  Of the $jumps successful jumps
-before yours, only $better opened their chutes lower than 
-you did. 
+before yours, only $better opened their chutes lower than
+you did.
 EOD
             } elsif ( $fractile <= 0.25 ) {
                 print <<"EOD";
@@ -126,7 +126,7 @@ opened.
 EOD
             } elsif ( $fractile <= 0.5 ) {
                 print <<"EOD";
-Not bad.  There have been $jumps successful jumps before yours. 
+Not bad.  There have been $jumps successful jumps before yours.
 You were beaten out by $better of them.
 EOD
             } elsif ( $fractile <= 0.75 ) {
@@ -136,7 +136,7 @@ $jumps successful jumps before yours.
 EOD
             } elsif ( $fractile <= 0.9 ) {
                 print <<"EOD";
-Humph!  Don't you have any sporting blood?  There were 
+Humph!  Don't you have any sporting blood?  There were
 $jumps successful jumps before yours and you came in $worse jumps
 better than the worst.  Shape up!!!
 EOD

@@ -42,5 +42,3 @@ while (1) {
 	print "LET'S TRY ANOTHER.\n";
 	} #goto Line20;
 exit;
-
-

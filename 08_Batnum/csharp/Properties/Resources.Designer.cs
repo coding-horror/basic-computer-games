@@ -10,8 +10,8 @@
 
 namespace Batnum.Properties {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace Batnum.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Batnum.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace Batnum.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to COMPUTER TAKES {0} AND LEAVES {1}.
         /// </summary>
@@ -68,7 +68,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("COMPTURN", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to COMPUTER TAKES {0} AND LOSES.
         /// </summary>
@@ -77,7 +77,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("END_COMPLOSE", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to COMPUTER TAKES {0} AND WINS.
         /// </summary>
@@ -86,7 +86,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("END_COMPWIN", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ITS A DRAW, THERE ARE ONLY {0} PIECES LEFT.
         /// </summary>
@@ -95,7 +95,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("END_DRAW", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to TOUGH LUCK, YOU LOSE..
         /// </summary>
@@ -104,7 +104,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("END_PLAYERLOSE", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to CONGRATULATIONS, YOU WIN..
         /// </summary>
@@ -113,7 +113,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("END_PLAYERWIN", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to BATNUM.
         /// </summary>
@@ -122,7 +122,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("GAME_NAME", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ILLEGAL MOVE, RENETER IT.
         /// </summary>
@@ -131,7 +131,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INPUT_ILLEGAL", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to YOUR MOVE ?.
         /// </summary>
@@ -140,7 +140,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INPUT_TURN", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to I TOLD YOU NOT TO USE ZERO! COMPUTER WINS BY FORFEIT..
         /// </summary>
@@ -149,7 +149,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INPUT_ZERO", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to CREATIVE COMPUTING MORRISTOWN, NEW JERSEY.
         /// </summary>
@@ -158,7 +158,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INTRO_HEADER", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to THIS PROGRAM IS A &apos;BATTLE&apos; OF NUMBERS GAME, WHERE THE COMPUTER IS YOUR OPPONENT.
         /// </summary>
@@ -167,7 +167,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INTRO_PART1", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to THE GAME STARTS WITH AN ASSUMED PILE OF OBJECTS. YOU AND YOUR OPPONENT ALTERNATELY REMOVE OBJECTS FROM THE PILE. WINNNING IS DEFINED IN ADVANCE AS TAKING THE LAST OBJECT OR NOT. YOU CAN ALSO SPECIFY SOME OTHER BEGINING CONDITIONS. DON&apos;T USER ZERO, HOWWEVER, IN PLAYING THE GAME..
         /// </summary>
@@ -176,7 +176,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("INTRO_PART2", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ENTER MIN AND MAX ?.
         /// </summary>
@@ -185,7 +185,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("START_QUESTION_DRAWMINMAX", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ENTER PILE SIZE ?.
         /// </summary>
@@ -194,7 +194,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("START_QUESTION_PILESIZE", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ENTER START OPTION - 1 COMPUTER FIRST, 2 YOU FIRST ?.
         /// </summary>
@@ -203,7 +203,7 @@ namespace Batnum.Properties {
                 return ResourceManager.GetString("START_QUESTION_WHOSTARTS", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to ENTER WIN OPTION - 1 TO TAKE LAST, 2 TO AVOID LAST: ?.
         /// </summary>

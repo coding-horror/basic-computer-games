@@ -6,7 +6,7 @@ def introduction():
     print(
         """The object of this game is to find 4 mugwumps
 hidden on a 10*10 grid.  Homebase is position 0,0.
-Any guess you make must be two numbers with each 
+Any guess you make must be two numbers with each
 number between 0 and 9 inclusive.  First number
 is distance to right of homebase, and second number
 is the distance above homebase."""
@@ -37,6 +37,7 @@ def calculate_distance(guess, mugwump):
     d = sqrt(((mugwump[0] - guess[0]) ** 2) + ((mugwump[1] - guess[1]) ** 2))
     return d
 
+
 def play_again():
     print("THAT WAS FUN! LET'S PLAY AGAIN.......")
     choice = input("Press Enter to play again, any other key then Enter to quit.")
@@ -44,6 +45,7 @@ def play_again():
         print("Four more mugwumps are now in hiding.")
     else:
         exit()
+
 
 def play_round():
     mugwumps = generate_mugwumps()

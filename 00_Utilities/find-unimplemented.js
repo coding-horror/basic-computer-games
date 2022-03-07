@@ -1,9 +1,9 @@
 /**
- * Program to show unimplemented games by language, optionally filtered by 
+ * Program to show unimplemented games by language, optionally filtered by
  * language
- * 
+ *
  * Usage: node find-unimplemented.js [[[lang1] lang2] ...]
- * 
+ *
  * Adapted from find-missing-implementtion.js
  */
 

@@ -57,7 +57,9 @@ while play_again:
                 winnings -= wager
             elif roll_2 == roll_1:
                 print(f"{roll_1} - a winner.........congrats!!!!!!!!")
-                print(f"{roll_1} at 2 to 1 odds pays you...let me see... {2 * wager} dollars")
+                print(
+                    f"{roll_1} at 2 to 1 odds pays you...let me see... {2 * wager} dollars"
+                )
                 winnings += 2 * wager
             else:
                 print(f"{roll_2} - no point. I will roll again")
@@ -69,7 +71,7 @@ while play_again:
         print(f"You are now ahead ${winnings}")
     else:
         print("You are now even at 0")
-    play_again = (m == "5")
+    play_again = m == "5"
 
 if winnings < 0:
     print(f"Too bad, you are in the hole. Come again.")

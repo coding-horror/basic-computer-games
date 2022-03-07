@@ -32,10 +32,10 @@ def parse_input():
     correct_input = False
     while not correct_input:
         try:
-            i = int(input('? '))
+            i = int(input("? "))
             correct_input = True
         except ValueError:
-            print('Number expected...')
+            print("Number expected...")
     return i
 
 
@@ -43,8 +43,8 @@ initial_message()
 while True:
     dead = False
     n = 0
-    print("Type \'1\' to Spin chamber and pull trigger")
-    print("Type \'2\' to Give up")
+    print("Type '1' to Spin chamber and pull trigger")
+    print("Type '2' to Give up")
     print("Go")
     while not dead:
         i = parse_input()

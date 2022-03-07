@@ -6,13 +6,13 @@ import java.util.Scanner;
  */
 public class Craps {
   public static final Random random = new Random();
-  
+
   public static void main(String[] args) {
     System.out.println("""
                                                             CRAPS
                                           CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-                                              
-                                              
+
+
                            2,3,12 ARE LOSERS; 4,5,6,8,9,10 ARE POINTS; 7,11 ARE NATURAL WINNERS.
                            """);
     double winnings = 0.0;

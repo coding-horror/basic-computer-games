@@ -77,8 +77,7 @@ def print_banner():
     g1 = 0
     if input("Centered ").lower().startswith("y"):
         g1 = 1
-    mStr = input(
-        "Character (type 'ALL' if you want character being printed) ").upper()
+    mStr = input("Character (type 'ALL' if you want character being printed) ").upper()
     aStr = input("Statement ")
     # This means to prepare printer, just press Enter
     oStr = input("Set page ")
@@ -92,11 +91,11 @@ def print_banner():
         else:
             for u in range(0, 7):
                 for k in range(8, -1, -1):
-                    if 2 ** k >= s[u]:
+                    if 2**k >= s[u]:
                         j[8 - k] = 0
                     else:
                         j[8 - k] = 1
-                        s[u] = s[u] - 2 ** k
+                        s[u] = s[u] - 2**k
                         if s[u] == 1:
                             f[u] = 8 - k
                             break

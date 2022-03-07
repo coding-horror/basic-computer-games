@@ -30,14 +30,14 @@ namespace _21_calendar
             // the usage of Write*Line* means we do not have to specify a newline (\n)
             Console.WriteLine(Tab(32) + "CALENDAR");
             Console.WriteLine(Tab(15) + "CREATE COMPUTING  MORRISTOWN, NEW JERSEY");
-            //give us some space. 
+            //give us some space.
             Console.WriteLine("");
             Console.WriteLine("");
             Console.WriteLine("");
 
             //establish some variables needed to print out a calculator
 
-            //the length of each month in days. On a leap year, the start of this would be 
+            //the length of each month in days. On a leap year, the start of this would be
             // 0, 31, 29 to account for Feb. the 0 at the start is for days elapsed to work right in Jan.
             int[] monthLengths = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // m in original source
 
@@ -89,9 +89,9 @@ namespace _21_calendar
                 }
                 header += "  ";
                 // how many days left till the year's over?
-                header += (365 - elapsed) + " **"; // on leap years 366 
+                header += (365 - elapsed) + " **"; // on leap years 366
                 Console.WriteLine(header);
-                //dates 
+                //dates
                 Console.WriteLine("     S       M       T       W       T       F       S");
                 Console.WriteLine(" ");
 
@@ -107,7 +107,7 @@ namespace _21_calendar
                 for (int week = 1; week <= 6; week++)
                 {
                     Console.WriteLine(weekOutput);
-                    weekOutput = "    "; 
+                    weekOutput = "    ";
                     for (g = 1; g <= 7; g++)
                     {
                         //add one to the day

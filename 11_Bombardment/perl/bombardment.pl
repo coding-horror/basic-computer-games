@@ -54,7 +54,7 @@ sub computer_turn {
 				else {
 					print "YOU'RE DEAD. YOUR LAST OUTPOST WAS AT $target. HA, HA, HA.\nBETTER LUCK NEXT TIME\n";
 				}
-				
+
 			}
 			else {
 				print "I MISSED YOU, YOU DIRTY RAT. I PICKED $target. YOUR TURN:\n";

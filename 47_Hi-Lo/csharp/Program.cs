@@ -80,4 +80,3 @@ static int ReadInt(string question)
         Console.WriteLine("!Invalid Number Entered.");
     }
 }
-

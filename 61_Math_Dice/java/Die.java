@@ -21,15 +21,15 @@ public class Die {
         this.faceValue = 1 + generator.nextInt(sides);
     }
 
-    
-    /** 
+
+    /**
      * @return the faceValue
      */
     public int getFaceValue() {
         return faceValue;
     }
 
-    
+
     public void printDie() {
         throwDie();
         int x = this.getFaceValue();

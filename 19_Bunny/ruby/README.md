@@ -8,4 +8,3 @@ There are two versions of this program here:
   BASIC program.
 * `bunny-modern.rb` takes more advantage of the features of modern
   tools and languages.
-

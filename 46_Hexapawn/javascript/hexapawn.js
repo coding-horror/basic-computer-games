@@ -12,10 +12,10 @@ function input()
 {
     var input_element;
     var input_str;
-    
+
     return new Promise(function (resolve) {
                        input_element = document.createElement("INPUT");
-                       
+
                        print("? ");
                        input_element.setAttribute("type", "text");
                        input_element.setAttribute("length", "50");
@@ -199,12 +199,12 @@ async function main()
                     print("ILLEGAL CO-ORDINATES.\n");
                 }
             }
-            
+
             // Move player's pawn
             s[m1] = 0;
             s[m2] = 1;
             show_board();
-            
+
             // Find computer pawns
             for (i = 1; i <= 9; i++) {
                 if (s[i] == -1)
@@ -313,7 +313,7 @@ async function main()
                     if (s[i - 2] == -1 || s[i - 4] == -1)
                         break;
                 }
-                
+
             }
             if (i > 9) {
                 print("YOU CAN'T MOVE, SO ");

@@ -55,7 +55,7 @@ def reverseIt (howManyToReverse, triesSoFar)
     # extract and reverse the first howManyToReverse elements of the array
     subArray = $digitArray.take(howManyToReverse)
     subArray.reverse!
-    
+
     # get the remaining elements of the original array
     endArray = $digitArray.slice(howManyToReverse, ARRAYSIZE)
     # append those elements to the reversed elements
@@ -108,4 +108,3 @@ while r != 0 do # zero will end the game
     end
     r = askHowManyToReverse
 end
-
