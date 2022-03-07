@@ -269,6 +269,8 @@ async function main()
                 print("YOU GUESSED IT IN " + m + " MOVES!\n");
                 break;
             }
+            //tell human results
+            print("YOU HAVE " + b + " BLACKS AND " + w + " WHITES.")
             // Save all this stuff for board printout later
             ss[m] = str;
             sa[m] = [];
@@ -341,7 +343,7 @@ async function main()
                     copy_hs();
                     convert_qa();
                     get_number();
-                    if (b1 != b || w1 != w)
+                    if (b1 > b || w1 > w)
                         ia[x] = 0;
                 }
             }
