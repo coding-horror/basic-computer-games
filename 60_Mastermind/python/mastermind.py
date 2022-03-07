@@ -133,7 +133,7 @@ def main():
                             human_readable_possibility = make_human_readable(numeric_possibility) #4000
                             comparison = compare_two_positions(human_readable_possibility, human_readable_guess)
                             print(comparison)
-                            if ((blacks != comparison[1]) or (whites != comparison[2])):
+                            if ((blacks > comparison[1]) or (whites > comparison[2])):
                                 all_possibilities[i] = 0
             if not turn_over: # COMPUTER DID NOT GUESS
                 print("I USED UP ALL MY MOVES!")
