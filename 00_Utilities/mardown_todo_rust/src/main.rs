@@ -98,12 +98,13 @@ fn main() {
         for g in root_folders.into_iter() {
             let game = g.clone();
             output_string += format!(
-                "{}\n\t{}\n", //message format
+                "### {}\n\n{}\n", //message format
                 g.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(),//get the game name
                 {
                     let mut s:String = String::new();
                     //every language + ✅/⬜️
                     LANGUAGES.iter().for_each(|lang| {
+                        s+="- ";
                         s += lang.0;
                         // + ✅/⬜️
                         let paths:Vec<_> = list_files(&game).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
@@ -117,7 +118,7 @@ fn main() {
                             s+="✅";
                         } else {s += "⬜️";}
 
-                        s += "\n\t";
+                        s += "\n";
                     });
                     s
                 }
@@ -130,7 +131,7 @@ fn main() {
         //      every game + ✅/⬜️
         for lang in LANGUAGES.iter() {
             output_string += format!(
-                "{}\n\t{}\n", //message format
+                "### {}\n\n{}\n", //message format
                 lang.0,
                 {
                     let mut s:String = String::new();
@@ -147,6 +148,7 @@ fn main() {
                         }).collect(); //get all the extensions
 
                         //add game name
+                        s+="- ";
                         s+= game_name.as_str();
 
                         //every game + ✅/⬜️
@@ -154,7 +156,7 @@ fn main() {
                             s+="✅";
                         } else {s += "⬜️";}
 
-                        s += "\n\t";
+                        s += "\n";
                     }
                     s
                 }
