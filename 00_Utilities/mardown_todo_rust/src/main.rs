@@ -1,13 +1,13 @@
 use std::ffi::{OsString, OsStr};
+use std::{fs, io};
+use std::fs::metadata;
+use std::path::{Path, PathBuf};
 /**
  * todo list generator for this repository, coded in rust
  * 
  * @author Anthony Rubick 
  */
 
-use std::fs;
-use std::fs::metadata;
-use std::path::{Path, PathBuf};
 
 
 //DATA
@@ -29,19 +29,29 @@ const OUTPUT_PATH: &str = "../../todo.md";
 fn main() {
     //DATA
     let mut root_folders:Vec<PathBuf>;
-    let mut output_string_1: String = String::new();
+    let mut output_string: String = String::new();
+    let format_game_first: bool;
     //let mut game_list:Vec<_>;
 
     //print language - extension table
     print_lang_extension_table();
+
+    //ask user how they want the todo list formatted
+    println!("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format?");
+    let mut raw_input = String::new();
+    io::stdin().read_line(&mut raw_input).expect("Failed to read input");
+    //parse raw input
+    raw_input = raw_input.as_str().to_ascii_lowercase().to_string();
+    match &raw_input[0..1] {
+        "y" => format_game_first = true,
+        _ => format_game_first = false,
+    }
 
     //prompt user to input the file extensions of the languages they want the todo-lists for printed to console
     /*
     println!("\na todo list with all the languages will be put into todo-list.md");
     println!("enter the file extensions from the table above for the languages you want a todo-list printed to standard output");
     println!("File extensions: (separated by spaces)");
-    let mut raw_input = String::new();
-    io::stdin().read_line(&mut raw_input).expect("Failed to read input");
     //parse input for valid languages, store them in langs_to_print
     let raw_input = raw_input.as_str().trim().chars().filter(|c| c.is_ascii_alphabetic() || c.is_whitespace()).collect::<String>();//filter out everything but ascii letters and spaces
     langs_to_print =  raw_input.split(' ')//create an iterator with all the words
@@ -81,40 +91,79 @@ fn main() {
         }
     }).collect();
 
-    //being forming output string
-    // for every game
-    //      every language + ✅/⬜️
-    for g in root_folders.into_iter() {
-        let game = g.clone();
-        output_string_1 += format!(
-            "{}\n{}\n", //message format
-            g.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(),//get the game name
-            {
-                let mut s:String = String::new();
-                //every language + ✅/⬜️
-                LANGUAGES.iter().for_each(|lang| {
-                    s += lang.0;
-                    // + ✅/⬜️
-                    let paths = list_files(&game).into_iter().map(|path| path.into_os_string().into_string().unwrap());
-                    let paths:Vec<String> = paths.into_iter().filter_map(|s| {
-                        match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
-                            None => None,
-                            Some(s) => Some(s.to_string()),
-                        }
-                    }).collect(); //get all the extensions
-                    if paths.into_iter().any(|f| f.eq(lang.1)) {//list_files(&game).iter().map(|path| path.into_os_string().into_string().unwrap()).any(|s| LANGUAGES.iter().map(|tup| Some(tup.1)).collect::<Vec<_>>().contains(&s.split('.').next())) {
-                        s+="✅";
-                    } else {s += "⬜️";}
+    if format_game_first {
+        //being forming output string
+        // for every game
+        //      every language + ✅/⬜️
+        for g in root_folders.into_iter() {
+            let game = g.clone();
+            output_string += format!(
+                "{}\n\t{}\n", //message format
+                g.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(),//get the game name
+                {
+                    let mut s:String = String::new();
+                    //every language + ✅/⬜️
+                    LANGUAGES.iter().for_each(|lang| {
+                        s += lang.0;
+                        // + ✅/⬜️
+                        let paths:Vec<_> = list_files(&game).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
+                        let paths:Vec<String> = paths.into_iter().filter_map(|s| {
+                            match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
+                                None => None,
+                                Some(s) => Some(s.to_string()),
+                            }
+                        }).collect(); //get all the extensions
+                        if paths.into_iter().any(|f| f.eq(lang.1)) {//list_files(&game).iter().map(|path| path.into_os_string().into_string().unwrap()).any(|s| LANGUAGES.iter().map(|tup| Some(tup.1)).collect::<Vec<_>>().contains(&s.split('.').next())) {
+                            s+="✅";
+                        } else {s += "⬜️";}
 
-                    s += "\n";
-                });
-                s
-            }
-        ).as_str();
+                        s += "\n\t";
+                    });
+                    s
+                }
+            ).as_str();
+        }
+    }
+    else {
+        //being forming output string
+        // for every language
+        //      every game + ✅/⬜️
+        for lang in LANGUAGES.iter() {
+            output_string += format!(
+                "{}\n\t{}\n", //message format
+                lang.0,
+                {
+                    let mut s:String = String::new();
+                    for g in (&root_folders).into_iter() {
+                        //data
+                        let game = g.clone();
+                        let game_name = game.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(); //get the game name
+                        let paths:Vec<_> = list_files(g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect(); //all subpaths of game
+                        let paths:Vec<String> = paths.into_iter().filter_map(|s| {
+                            match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
+                                None => None,
+                                Some(s) => Some(s.to_string()),
+                            }
+                        }).collect(); //get all the extensions
+
+                        //add game name
+                        s+= game_name.as_str();
+
+                        //every game + ✅/⬜️
+                        if paths.into_iter().any(|f| f.eq(lang.1)) {
+                            s+="✅";
+                        } else {s += "⬜️";}
+
+                        s += "\n\t";
+                    }
+                    s
+                }
+            ).as_str();
+        }
     }
     //print output, and write output to file
-    println!("\n\n{}", output_string_1);
-    fs::write(OUTPUT_PATH, output_string_1).expect("failed to write todo list");
+    println!("\n\n{}", output_string);
+    fs::write(OUTPUT_PATH, output_string).expect("failed to write todo list");
 }
 
 /**
