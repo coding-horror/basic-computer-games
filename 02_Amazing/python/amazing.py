@@ -40,6 +40,7 @@ def build_maze(width: int, length: int) -> Maze:
     #   Set to 1 if there is an exit down
     #   Set to 2 if there is an exit right
     #   Set to 3 if there are exits down and right
+    assert width >= 2 and length >= 2
 
     used = []
     walls = []
