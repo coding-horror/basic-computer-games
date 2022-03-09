@@ -37,12 +37,12 @@ fn main() {
                              Markdown TODO list maker
                by Anthony Rubick for the basic-computer-games repo
 
-               
+
     ");
 
     
     //ask user how they want the todo list formatted
-    format_game_first = get_yn_from_user("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format? (y/n)");
+    format_game_first = get_yn_from_user("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format? (y/n | default No) ");
 
     //get all folders in ROOT_DIR
     root_folders = Vec::new();
@@ -209,8 +209,14 @@ fn get_str_from_user(prompt:&str) -> String {
  * gets a boolean from user
  */
 fn get_yn_from_user(prompt:&str) -> bool {
+    //DATA
+    let input = get_str_from_user(prompt);
+
+    //default in case of error
+    if input.is_empty() {return false;}
+    
     //get and parse input
-    match &get_str_from_user(prompt)[0..1] { //get first character
+    match &input[0..1] { //get first character
         "y" | "Y" => return true,
         _ => return false,
     }
