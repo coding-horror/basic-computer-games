@@ -83,6 +83,9 @@ I propose to ignore this last behaviour - the interpreter crash - and instead tr
 of a quoted value.  There are some additional behaviours to those shown above which can be seen in the unit tests for
 the C# implementation of the library.
 
+Note also that BASIC numeric variables store a single-precision floating point value, so numeric input functions should
+return a value of that type.
+
 ### Implementation Notes
 
 The usage of the `INPUT` command in the BASIC code of the games was analysed, with the variables used designated as
