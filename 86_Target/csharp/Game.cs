@@ -1,39 +1,41 @@
 using System;
+using Games.Common.IO;
 
 namespace Target
 {
     internal class Game
     {
+        private readonly IReadWrite _io;
         private readonly FiringRange _firingRange;
         private int _shotCount;
 
-        private Game(FiringRange firingRange)
+        public Game(IReadWrite io, FiringRange firingRange)
         {
+            _io = io;
             _firingRange = firingRange;
         }
 
-        public static void Play(FiringRange firingRange) => new Game(firingRange).Play();
-
-        private void Play()
+        public void Play()
         {
-            var target = _firingRange.TargetPosition;
-            Console.WriteLine(target.GetBearing());
-            Console.WriteLine($"Target sighted: approximate coordinates:  {target}");
+            _shotCount = 0;
+            var target = _firingRange.NextTarget();
+            _io.WriteLine(target.GetBearing());
+            _io.WriteLine($"Target sighted: approximate coordinates:  {target}");
 
             while (true)
             {
-                Console.WriteLine($"     Estimated distance: {target.EstimateDistance()}");
-                Console.WriteLine();
+                _io.WriteLine($"     Estimated distance: {target.EstimateDistance()}");
+                _io.WriteLine();
 
                 var explosion = Shoot();
 
                 if (explosion.IsTooClose)
                 {
-                    Console.WriteLine("You blew yourself up!!");
+                    _io.WriteLine("You blew yourself up!!");
                     return;
                 }
 
-                Console.WriteLine(explosion.GetBearing());
+                _io.WriteLine(explosion.GetBearing());
 
                 if (explosion.IsHit)
                 {
@@ -47,31 +49,32 @@ namespace Target
 
         private Explosion Shoot()
         {
-            var input = Input.ReadNumbers("Input angle deviation from X, angle deviation from Z, distance", 3);
+            var (xDeviation, zDeviation, distance) = _io.Read3Numbers(
+                "Input angle deviation from X, angle deviation from Z, distance");
             _shotCount++;
-            Console.WriteLine();
+            _io.WriteLine();
 
-            return _firingRange.Fire(Angle.InDegrees(input[0]), Angle.InDegrees(input[1]), input[2]);
+            return _firingRange.Fire(Angle.InDegrees(xDeviation), Angle.InDegrees(zDeviation), distance);
         }
 
         private void ReportHit(float distance)
         {
-            Console.WriteLine();
-            Console.WriteLine($" * * * HIT * * *   Target is non-functional");
-            Console.WriteLine();
-            Console.WriteLine($"Distance of explosion from target was {distance} kilometers.");
-            Console.WriteLine();
-            Console.WriteLine($"Mission accomplished in {_shotCount} shots.");
+            _io.WriteLine();
+            _io.WriteLine($" * * * HIT * * *   Target is non-functional");
+            _io.WriteLine();
+            _io.WriteLine($"Distance of explosion from target was {distance} kilometers.");
+            _io.WriteLine();
+            _io.WriteLine($"Mission accomplished in {_shotCount} shots.");
         }
 
         private void ReportMiss(Explosion explosion)
         {
             ReportMiss(explosion.FromTarget);
-            Console.WriteLine($"Approx position of explosion:  {explosion.Position}");
-            Console.WriteLine($"     Distance from target = {explosion.DistanceToTarget}");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+            _io.WriteLine($"Approx position of explosion:  {explosion.Position}");
+            _io.WriteLine($"     Distance from target = {explosion.DistanceToTarget}");
+            _io.WriteLine();
+            _io.WriteLine();
+            _io.WriteLine();
         }
 
         private void ReportMiss(Offset targetOffset)
@@ -82,7 +85,7 @@ namespace Target
         }
 
         private void ReportMiss(float delta, string positiveText, string negativeText) =>
-            Console.WriteLine(delta >= 0 ? GetOffsetText(positiveText, delta) : GetOffsetText(negativeText, -delta));
+            _io.WriteLine(delta >= 0 ? GetOffsetText(positiveText, delta) : GetOffsetText(negativeText, -delta));
 
         private static string GetOffsetText(string text, float distance) => $"Shot {text} target {distance} kilometers.";
     }
