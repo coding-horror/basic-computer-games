@@ -31,6 +31,15 @@ fn main() {
     let mut root_folders:Vec<PathBuf>;
     let mut output_string: String = String::new();
     let format_game_first: bool;
+
+    //print welcome message
+    println!("
+                             Markdown TODO list maker
+               by Anthony Rubick for the basic-computer-games repo
+
+               
+    ");
+
     
     //ask user how they want the todo list formatted
     format_game_first = get_yn_from_user("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format? (y/n)");
