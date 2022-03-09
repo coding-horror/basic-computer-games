@@ -110,7 +110,7 @@ int Previous(this IRandom random, int inclusiveMinimum, int exclusiveMaximum);
 ### Add Project Reference
 
 Add the `Games.Common` project as a reference to the game project. For example, here's the reference from the C\# port
-of `86_Tower`:
+of `86_Target`:
 
 ```xml
 <ItemGroup>
