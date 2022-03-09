@@ -11,35 +11,31 @@
 #
 ######################################################
 
-from typing import List
+from typing import List, Literal, TypeAlias, get_args
+
+Suit: TypeAlias = Literal["\u2665", "\u2666", "\u2663", "\u2660"]
+Rank: TypeAlias = Literal[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 
 class Card:
-    def __init__(self, suit: str, rank: int):
+    def __init__(self, suit: Suit, rank: Rank) -> None:
         self.suit = suit
         self.rank = rank
 
     def __str__(self) -> str:
         r = str(self.rank)
-        if r == "11":
-            r = "J"
-        elif r == "12":
-            r = "Q"
-        elif r == "13":
-            r = "K"
-        elif r == "14":
-            r = "A"
+        r = {"11": "J", "12": "Q", "13": "K", "14": "A"}.get(r, r)
         return f"{r}{self.suit}"
 
 
 class Deck:
-    def __init__(self):
+    def __init__(self) -> None:
         self.cards: List[Card] = []
         self.build()
 
     def build(self) -> None:
-        for suit in ["\u2665", "\u2666", "\u2663", "\u2660"]:
-            for rank in range(2, 15):
+        for suit in get_args(Suit):
+            for rank in get_args(Rank):
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self) -> None:
@@ -52,7 +48,7 @@ class Deck:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         self.deck = Deck()
         self.deck.shuffle()
         self.card_a = self.deck.deal()
