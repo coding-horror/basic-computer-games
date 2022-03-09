@@ -31,6 +31,7 @@ Originally, after guessing and getting feedback, the computer would look through
 this was discussed in more detail in [issue #611](https://github.com/coding-horror/basic-computer-games/issues/611)
 
 additionally, it's recommended that you have the computer elimate it's previous guess as possible unless that guess was correct. (the rust port does this)
+
 ---
 
 As published in Basic Computer Games (1978):
