@@ -4,4 +4,3 @@ As published in Basic Computer Games (1978), as found at Annarchive:
 
 Conversion to Lua
 - [Lua.org](https://www.lua.org)
-

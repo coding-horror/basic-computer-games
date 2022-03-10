@@ -6,85 +6,69 @@ An ancient African game (see also Kalah, Mancala).
 Ported by Dave LeCompte
 """
 
-"""
-
-PORTING NOTES
-
-This game started out as 70 lines of BASIC, and I have ported it
-before. I find it somewhat amazing how efficient (densely packed) the
-original code is. Of course, the original code has fairly cryptic
-variable names (as was forced by BASIC's limitation on long (2+
-character) variable names). I have done my best here to interpret what
-each variable is doing in context, and rename them appropriately.
-
-I have endeavored to leave the logic of the code in place, as it's
-interesting to see a 2-ply game tree evaluation written in BASIC,
-along with what a reader in 2021 would call "machine learning".
-
-As each game is played, the move history is stored as base-6
-digits stored losing_book[game_number]. If the human player wins or
-draws, the computer increments game_number, effectively "recording"
-that loss to be referred to later. As the computer evaluates moves, it
-checks the potential game state against these losing game records, and
-if the potential move matches with the losing game (up to the current
-number of moves), that move is evaluated at a two point penalty.  
-
-Compare this, for example with MENACE, a mechanical device for
-"learning" tic-tac-toe:
-https://en.wikipedia.org/wiki/Matchbox_Educable_Noughts_and_Crosses_Engine
-
-The base-6 representation allows game history to be VERY efficiently
-represented. I considered whether to rewrite this representation to be
-easier to read, but I elected to TRY to document it, instead.
-
-Another place where I have made a difficult decision between accuracy
-and correctness is inside the "wrapping" code where it considers
-"while human_move_end > 13". The original BASIC code reads:
-
-830 IF L>13 THEN L=L-14:R=1:GOTO 830
-
-I suspect that the intention is not to assign 1 to R, but to increment
-R. I discuss this more in a porting note comment next to the
-translated code. If you wish to play a more accurate version of the
-game as written in the book, you can convert the increment back to an
-assignment.
-
-
-I continue to be impressed with this jewel of a game; as soon as I had
-the AI playing against me, it was beating me. I've been able to score
-a few wins against the computer, but even at its 2-ply lookahead, it
-beats me nearly always. I would like to become better at this game to
-explore the effectiveness of the "losing book" machine learning.
-
-
-EXERCISES FOR THE READER
-One could go many directions with this game:
-
-- change the initial number of stones in each pit
-
-- change the number of pits
-
-- only allow capturing if you end on your side of the board
-
-- don't allow capturing at all
-
-- don't drop a stone into the enemy "home"
-
-- go clockwise, instead
-
-- allow the player to choose to go clockwise or counterclockwise
-
-- instead of a maximum of two moves, allow each move that ends on the
-  "home" to be followed by a free move.
-
-- increase the AI lookahead
-
-- make the scoring heuristic a little more nuanced
-
-- store history to a file on disk (or in the cloud!) to allow the AI
-  to learn over more than a single session
-
-"""
+# PORTING NOTES
+#
+# This game started out as 70 lines of BASIC, and I have ported it
+# before. I find it somewhat amazing how efficient (densely packed) the
+# original code is. Of course, the original code has fairly cryptic
+# variable names (as was forced by BASIC's limitation on long (2+
+# character) variable names). I have done my best here to interpret what
+# each variable is doing in context, and rename them appropriately.
+#
+# I have endeavored to leave the logic of the code in place, as it's
+# interesting to see a 2-ply game tree evaluation written in BASIC,
+# along with what a reader in 2021 would call "machine learning".
+#
+# As each game is played, the move history is stored as base-6
+# digits stored losing_book[game_number]. If the human player wins or
+# draws, the computer increments game_number, effectively "recording"
+# that loss to be referred to later. As the computer evaluates moves, it
+# checks the potential game state against these losing game records, and
+# if the potential move matches with the losing game (up to the current
+# number of moves), that move is evaluated at a two point penalty.
+#
+# Compare this, for example with MENACE, a mechanical device for
+# "learning" tic-tac-toe:
+# https://en.wikipedia.org/wiki/Matchbox_Educable_Noughts_and_Crosses_Engine
+#
+# The base-6 representation allows game history to be VERY efficiently
+# represented. I considered whether to rewrite this representation to be
+# easier to read, but I elected to TRY to document it, instead.
+#
+# Another place where I have made a difficult decision between accuracy
+# and correctness is inside the "wrapping" code where it considers
+# "while human_move_end > 13". The original BASIC code reads:
+#
+# 830 IF L>13 THEN L=L-14:R=1:GOTO 830
+#
+# I suspect that the intention is not to assign 1 to R, but to increment
+# R. I discuss this more in a porting note comment next to the
+# translated code. If you wish to play a more accurate version of the
+# game as written in the book, you can convert the increment back to an
+# assignment.
+#
+# I continue to be impressed with this jewel of a game; as soon as I had
+# the AI playing against me, it was beating me. I've been able to score
+# a few wins against the computer, but even at its 2-ply lookahead, it
+# beats me nearly always. I would like to become better at this game to
+# explore the effectiveness of the "losing book" machine learning.
+#
+#
+# EXERCISES FOR THE READER
+# One could go many directions with this game:
+# - change the initial number of stones in each pit
+# - change the number of pits
+# - only allow capturing if you end on your side of the board
+# - don't allow capturing at all
+# - don't drop a stone into the enemy "home"
+# - go clockwise, instead
+# - allow the player to choose to go clockwise or counterclockwise
+# - instead of a maximum of two moves, allow each move that ends on the
+#   "home" to be followed by a free move.
+# - increase the AI lookahead
+# - make the scoring heuristic a little more nuanced
+# - store history to a file on disk (or in the cloud!) to allow the AI
+#   to learn over more than a single session
 
 
 game_number = 0

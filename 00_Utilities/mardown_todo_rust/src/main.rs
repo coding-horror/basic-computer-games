@@ -4,8 +4,8 @@ use std::fs::metadata;
 use std::path::{Path, PathBuf};
 /**
  * todo list generator for this repository, coded in rust
- * 
- * @author Anthony Rubick 
+ *
+ * @author Anthony Rubick
  */
 
 
@@ -40,7 +40,7 @@ fn main() {
 
     ");
 
-    
+
     //ask user how they want the todo list formatted
     format_game_first = get_yn_from_user("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format? (y/n | default No) ");
 
@@ -214,7 +214,7 @@ fn get_yn_from_user(prompt:&str) -> bool {
 
     //default in case of error
     if input.is_empty() {return false;}
-    
+
     //get and parse input
     match &input[0..1] { //get first character
         "y" | "Y" => return true,
@@ -243,4 +243,3 @@ fn _list_files(vec: &mut Vec<PathBuf>, path: &Path) {
         }
     }
 }
-

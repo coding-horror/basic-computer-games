@@ -25,7 +25,7 @@ impl CODE {
         //generate random combination of colors
         for _i in 0..num_positions {
             code.code.push(rng.gen_range(0..num_colors));
-        } 
+        }
         return code;
     }
     /**
@@ -55,7 +55,7 @@ impl CODE {
         let valid_chars = &LETTERS[0..num_colors];
         //DATA
         let new_code = CODE{
-            code: 
+            code:
             input_string.to_ascii_uppercase().chars() //get an iterator with all the chars in input string converted to uppercase
             .filter( |c| { valid_chars.contains(*c)}) //remove chars that aren't in LETTERS
             .map( |x| -> usize {valid_chars.find(x).expect("invalid character")})//convert all the chars into usizes representing their index in LETTERS
@@ -153,7 +153,7 @@ fn main() {
 
     //game loop
     for round_num in 1..=num_rounds {
-        //data    
+        //data
         let mut num_moves: usize = 1;
         let mut answer: CODE;
         let mut guess: GUESS;
@@ -189,16 +189,16 @@ fn main() {
                 io::stdin().read_line(&mut raw_input).expect("CANNOT READ INPUT!"); //read user input from standard input and store it to raw_input
 
                 //attempt to parse input
-                if raw_input.trim().eq_ignore_ascii_case("board") { 
+                if raw_input.trim().eq_ignore_ascii_case("board") {
                     //print the board state
                     print_board(&guesses);
                     continue; //run loop again
                 }
-                else if raw_input.trim().eq_ignore_ascii_case("quit") { 
+                else if raw_input.trim().eq_ignore_ascii_case("quit") {
                     //quit the game
                     println!("QUITTER!  MY COMBINATION WAS: {}\nGOOD BYE", answer._as_human_readible_words());
                     return; //exit the game
-                } 
+                }
                 else {
                     //parse input for a code
                     match CODE::new_from_string(raw_input, num_colors) {
@@ -244,14 +244,14 @@ fn main() {
             io::stdin().read_line(&mut raw_input).expect("CANNOT READ INPUT!"); //read user input from standard input and store it to raw_input
 
             //attempt to create a code from the user input, if successful break the loop returning the code
-            if let Some(code) = CODE::new_from_string(raw_input, num_colors) { 
+            if let Some(code) = CODE::new_from_string(raw_input, num_colors) {
                 if code.code.len() == num_positions {break code;} //exit loop with code
                 else {println!("CODE MUST HAVE {} POSITIONS", num_positions);continue;} //tell them to try again
-            } 
+            }
 
             println!("INVALID CODE.  TRY AGAIN"); //if unsuccessful, this is printed and the loop runs again
         };
-        
+
         //reset some things in preparation for computer play
         guesses.clear();
         num_moves = 0;
@@ -276,28 +276,28 @@ fn main() {
             if all_possibilities[guess_int] {
                 guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
             }
-            else {//if it's not possible: 
+            else {//if it's not possible:
                 //  search all possibilities after guess, use first valid one //790
                 for g in guess_int..total_posibilities {
-                    if all_possibilities[g] { 
+                    if all_possibilities[g] {
                         guess_int=g;
                         guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
-                        break; 
+                        break;
                     }
                 }
                 //if none was found
                 //  search all possibilities before guess, use first valid one //820
-                if guess.code.code.is_empty() { 
+                if guess.code.code.is_empty() {
                     for g in (0..guess_int).rev() {
-                        if all_possibilities[g] { 
+                        if all_possibilities[g] {
                             guess_int=g;
                             guess = GUESS::new(CODE::new_from_int(guess_int, num_colors, num_positions)); //create guess
-                            break; 
+                            break;
                         }
                     }
                 }
                 // if none where found, tell the user and start over #850
-                if guess.code.code.is_empty() { 
+                if guess.code.code.is_empty() {
                     println!("YOU HAVE GIVEN ME INCONSISTENT INFORMATION.");
                     println!("PLAY AGAIN, AND THIS TIME PLEASE BE MORE CAREFUL.");
                     return; //exit game
@@ -348,8 +348,8 @@ fn welcome() {
     println!("
                              MASTERMIND
               CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
-    
-    
+
+
     ");
 }
 
