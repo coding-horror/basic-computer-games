@@ -31,34 +31,18 @@ fn main() {
     let mut root_folders:Vec<PathBuf>;
     let mut output_string: String = String::new();
     let format_game_first: bool;
-    //let mut game_list:Vec<_>;
 
-    //print language - extension table
-    print_lang_extension_table();
+    //print welcome message
+    println!("
+                             Markdown TODO list maker
+               by Anthony Rubick for the basic-computer-games repo
 
+
+    ");
+
+    
     //ask user how they want the todo list formatted
-    println!("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format?");
-    let mut raw_input = String::new();
-    io::stdin().read_line(&mut raw_input).expect("Failed to read input");
-    //parse raw input
-    raw_input = raw_input.as_str().to_ascii_lowercase().to_string();
-    match &raw_input[0..1] {
-        "y" => format_game_first = true,
-        _ => format_game_first = false,
-    }
-
-    //prompt user to input the file extensions of the languages they want the todo-lists for printed to console
-    /*
-    println!("\na todo list with all the languages will be put into todo-list.md");
-    println!("enter the file extensions from the table above for the languages you want a todo-list printed to standard output");
-    println!("File extensions: (separated by spaces)");
-    //parse input for valid languages, store them in langs_to_print
-    let raw_input = raw_input.as_str().trim().chars().filter(|c| c.is_ascii_alphabetic() || c.is_whitespace()).collect::<String>();//filter out everything but ascii letters and spaces
-    langs_to_print =  raw_input.split(' ')//create an iterator with all the words
-    .filter(|s| LANGUAGES.iter().any(|tup| tup.1.eq_ignore_ascii_case(*s))) //filter out words that aren't valid extensions (in languages)
-    .collect(); //collect words into vector
-    println!("\nwill print: {:?}", langs_to_print);
-    */
+    format_game_first = get_yn_from_user("\n\t---====FORMATS====---\ngame first:\n\tGame\n\t\tLanguage ✅/⬜️\n\nlang first:\n\tLanguage\n\t\tGame ✅/⬜️\n\nmake todo list using the game first format? (y/n | default No) ");
 
     //get all folders in ROOT_DIR
     root_folders = Vec::new();
@@ -91,15 +75,16 @@ fn main() {
         }
     }).collect();
 
+    //create todo list
     if format_game_first {
         //being forming output string
         // for every game
         //      every language + ✅/⬜️
         for g in root_folders.into_iter() {
-            let game = g.clone();
+            let game = g.clone().into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>();//get the game name
             output_string += format!(
                 "### {}\n\n{}\n", //message format
-                g.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(),//get the game name
+                game,
                 {
                     let mut s:String = String::new();
                     //every language + ✅/⬜️
@@ -107,7 +92,7 @@ fn main() {
                         s+="- ";
                         s += lang.0;
                         // + ✅/⬜️
-                        let paths:Vec<_> = list_files(&game).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
+                        let paths:Vec<_> = list_files(&g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
                         let paths:Vec<String> = paths.into_iter().filter_map(|s| {
                             match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
                                 None => None,
@@ -124,8 +109,26 @@ fn main() {
                 }
             ).as_str();
         }
+        //print the whole list
+        println!("\n\n{}", output_string);
     }
     else {
+        //figure out what langauges the user wants printed
+
+        //print language - extension table
+        println!("\n\t---====LANGUAGES TO PRINT====---\na complete todo list will be output to todo-list.md\n");
+        print_lang_extension_table();
+
+        //prompt user to input the file extensions of the languages they want the todo-lists for printed to console
+        //parse input for valid languages, store them in langs_to_print
+        let langs_to_print = get_str_from_user("\nenter the file extensions, from the table above,\nfor the languages you want printed to standard output\nFile extensions: (separated by spaces)")
+        .chars().filter(|c| c.is_ascii_alphabetic() || c.is_whitespace()).collect::<String>();//filter out everything but ascii letters and spaces
+        let langs_to_print: Vec<_> = langs_to_print.split(' ')//create an iterator with all the words
+        .filter(|s| LANGUAGES.iter().any(|tup| tup.1.eq_ignore_ascii_case(*s))) //filter out words that aren't valid extensions (in languages)
+        .collect(); //collect words into vector
+        println!("\nwill print: {:#?}\n\n", langs_to_print);
+
+
         //being forming output string
         // for every language
         //      every game + ✅/⬜️
@@ -158,13 +161,17 @@ fn main() {
 
                         s += "\n";
                     }
+                    //print desired languages only
+                    if langs_to_print.contains(&lang.1) {
+                        print!("### {}\n\n{}",lang.0,s);
+                    }
                     s
                 }
             ).as_str();
         }
     }
-    //print output, and write output to file
-    println!("\n\n{}", output_string);
+
+    //write output to file
     fs::write(OUTPUT_PATH, output_string).expect("failed to write todo list");
 }
 
@@ -179,6 +186,39 @@ fn print_lang_extension_table() {
             "javascript" => println!("{}\t{}", tup.0,tup.1), //long ones
             _ => println!("{}\t\t{}", tup.0,tup.1),
         };
+    }
+}
+
+/**
+ * gets a string from user input
+ */
+fn get_str_from_user(prompt:&str) -> String {
+    //DATA
+    let mut raw_input = String::new();
+
+    //print prompt
+    println!("{}",prompt);
+
+    //get input and trim whitespaces
+    io::stdin().read_line(&mut raw_input).expect("Failed to read input");
+
+    //return raw input
+    return raw_input.trim().to_string();
+}
+/**
+ * gets a boolean from user
+ */
+fn get_yn_from_user(prompt:&str) -> bool {
+    //DATA
+    let input = get_str_from_user(prompt);
+
+    //default in case of error
+    if input.is_empty() {return false;}
+    
+    //get and parse input
+    match &input[0..1] { //get first character
+        "y" | "Y" => return true,
+        _ => return false,
     }
 }
 
