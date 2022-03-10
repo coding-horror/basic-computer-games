@@ -99,7 +99,7 @@ public class Game {
 				 dealerHand = playDealer(dealerHand, deck);
 			}
 
-			evaluateRound(players, dealer.getHand());//TODO: User dealerHand once playHeader implemented
+			evaluateRound(players, dealer);//TODO: User dealerHand once playHeader implemented
 		} 
     }
 
@@ -242,22 +242,19 @@ public class Game {
 	 * @param players
 	 * @param dealerHand
 	 */
-	protected void evaluateRound(List<Player> players, List<Card> dealerHand) {
-		// TODO implement evaluateRound
-		//   print something like:
+	protected void evaluateRound(List<Player> players, Player dealer) {
 		/*
 		PLAYER 1 LOSES   100 TOTAL=-100 
 		PLAYER 2  WINS   150 TOTAL= 150
 		DEALER'S TOTAL= 200
-		// In "WINS X TOTAL= Y" the value of 'X' combines normal and insurance bets. e.g. if you bet 100 and get 5 insurance,
-		// then win the hand but lose insurance, it will say "WINS 95"
 		*/
 		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
 		// currentBets of each player are added/subtracted from the dealer total depending on whether they win/lose (accounting for doubling down, insurance etc.)
 		// remember to handle a "PUSH" when the dealer ties and the bet is returned.
 
+		DecimalFormat formatter = new DecimalFormat("0.#"); //Removes trailing zeros
 		for(Player player : players){
-			int result = ScoringUtils.compareHands(player.getHand(), dealerHand);
+			int result = ScoringUtils.compareHands(player.getHand(), dealer.getHand());
 			double totalBet = 0;
 			if(result > 0){
 				totalBet += player.getCurrentBet();
@@ -265,7 +262,7 @@ public class Game {
 				totalBet -= player.getCurrentBet();
 			}
 			if(player.isSplit()) {
-				int splitResult = ScoringUtils.compareHands(player.getHand(2), dealerHand);
+				int splitResult = ScoringUtils.compareHands(player.getHand(2), dealer.getHand());
 				if(splitResult > 0){
 					totalBet += player.getSplitBet();
 				} else if(splitResult < 0){
@@ -273,8 +270,8 @@ public class Game {
 				} 
 			}
 			if(player.getInsuranceBet() != 0){
-				int dealerResult = ScoringUtils.scoreHand(dealerHand);
-				if(dealerResult == 21 && dealerHand.size() == 2){
+				int dealerResult = ScoringUtils.scoreHand(dealer.getHand());
+				if(dealerResult == 21 && dealer.getHand().size() == 2){
 					totalBet += (player.getInsuranceBet() * 2);
 				} else {
 					totalBet -= player.getInsuranceBet();
@@ -290,11 +287,11 @@ public class Game {
 				userIo.print(" PUSHES");
 			}
 			player.recordRound(totalBet);
-			DecimalFormat formatter = new DecimalFormat("0.#"); //Removes trailing zeros
+			dealer.recordRound(totalBet*-1);
 			userIo.println(String.format("%6s", formatter.format(Math.abs(totalBet))) + " TOTAL= " + formatter.format(player.getTotal()));
 			player.resetHand();
 		}
-
+		userIo.println("DEALER'S TOTAL= " + formatter.format(dealer.getTotal()));
 	}
 
 	/**
