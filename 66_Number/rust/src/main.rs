@@ -4,7 +4,7 @@ use std::io;
 fn main() {
     //DATA
     let mut points: usize = 100;
-    let mut rng = thread_rng(); 
+    let mut rng = thread_rng();
     let mut number:u8;
 
     //print welcome message
@@ -39,7 +39,7 @@ fn main() {
         println!("YOU HAVE {} POINTS.", points);
     }
 
-    //print 
+    //print
 }
 
 /**
@@ -57,7 +57,6 @@ fn welcome() {
 
     YOU OCCASIONALLY WILL GET A JACKPOT WHICH WILL DOUBLE(!)
     YOUR POINT COUNT.  YOU WIN WHEN YOU GET 500 POINTS
-    
+
     ");
 }
-

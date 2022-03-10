@@ -6,13 +6,11 @@ Math exercise/demonstration
 Ported by Dave LeCompte
 """
 
-"""
-PORTING NOTE
-
-The title, as printed ingame, is "NICOMA", hinting at a time when
-filesystems weren't even 8.3, but could only support 6 character
-filenames.
-"""
+# PORTING NOTE
+#
+# The title, as printed ingame, is "NICOMA", hinting at a time when
+# filesystems weren't even 8.3, but could only support 6 character
+# filenames.
 
 import time
 

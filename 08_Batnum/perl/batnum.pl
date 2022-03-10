@@ -16,9 +16,9 @@ my %START_OPTIONS = (
 
 sub run {
     # input:        no input perameters
-    # 
+    #
     # output:       nothing returned
-    # 
+    #
     # description:  This is the primary game loop. Once a game is concluded
     #               another will begin right away until the exeecution
     #               is terminated.
@@ -32,7 +32,7 @@ sub run {
     while (1) {
         write_intro();
 
-        ($pile_size, $min_select, $max_select, $win_option, $start_option) 
+        ($pile_size, $min_select, $max_select, $win_option, $start_option)
             = &get_user_input();
 
         if ($pile_size < 0) {
@@ -48,9 +48,9 @@ sub run {
 
 sub write_intro {
     # input:        no input perameters
-    # 
+    #
     # output:       nothing returned
-    # 
+    #
     # description:  This subroutine prints the intro and rules.
 
     printf "%33s", "BATNUM\n";
@@ -73,15 +73,15 @@ sub write_intro {
 
 sub get_user_input {
     # input:        no input perameters
-    # 
+    #
     # output:       (int) pile_size
     #               (int) min_select
     #               (int) max_select
     #               (int) win_option
     #               (int) start_option
-    # 
+    #
     # description:  This subroutine gets the necessary perametes from the player.
-    # 
+    #
     #               pile_size (int > 0)
     #               min_select (int > 0) max_select (int > 0)
     #                   -> min/max, space delimated
@@ -128,9 +128,9 @@ sub play {
     #               (int) max_select
     #               (int) win_option
     #               (int) start_option
-    # 
+    #
     # output:       nothing returned
-    # 
+    #
     # description:  This is where the game logic lives. The player and computer
     #               both take turns until the current game is over.
 
@@ -147,7 +147,7 @@ sub play {
         if ($players_turn) {
             ($game_over, $pile_size) = players_move(
                 $pile_size, $min_select, $max_select, $win_option);
-            
+
             $players_turn = 0;
 
             if ($game_over) {
@@ -156,7 +156,7 @@ sub play {
         } else {
             ($game_over, $pile_size) = computers_move(
                 $pile_size, $min_select, $max_select, $win_option);
-            
+
             $players_turn = 1;
         }
     }
@@ -170,10 +170,10 @@ sub players_move {
     #               (int) min_select
     #               (int) max_select
     #               (int) win_option
-    # 
+    #
     # output:       (boolean) game is over
     #               (int) new pile_size
-    # 
+    #
     # description:  This subroutine handles the players move.
 
     my $pile_size = shift;
@@ -209,7 +209,7 @@ sub players_move {
             return (1, $pile_size);
         }
     }
-    
+
     return (0, $pile_size);
 }
 
@@ -219,10 +219,10 @@ sub computers_move {
     #               (int) min_select
     #               (int) max_select
     #               (int) win_option
-    # 
+    #
     # output:       (boolean) game is over
     #               (int) new pile_size
-    # 
+    #
     # description:  This subroutine handles the computers move.
 
     my $pile_size = shift;
@@ -258,10 +258,10 @@ sub computers_move {
 sub get_computer_remove_amount {
     # input:        (int) min_select
     #               (int) max_select
-    # 
-    # output:       (int) random number (x) where, 
+    #
+    # output:       (int) random number (x) where,
     #               min_select <= x <= max_select
-    # 
+    #
     # description:  This subroutine generates the amount of items the computer
     #               will remove.
 

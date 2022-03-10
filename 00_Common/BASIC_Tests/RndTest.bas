@@ -2,5 +2,3 @@
 20 PRINT "2: ";RND(-2);RND(1);RND(1);RND(1)
 30 PRINT "3: ";RND(-5);RND(1);RND(1);RND(1)
 40 PRINT "4: ";RND(-2);RND(1);RND(1);RND(1)
-
-

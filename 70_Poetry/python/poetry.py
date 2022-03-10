@@ -6,14 +6,12 @@ A poetry generator
 Ported by Dave LeCompte
 """
 
-"""
-PORTING EDITORIAL NOTE:
-
-The original code is a pretty convoluted mesh of GOTOs and global
-state. This adaptation pulls things apart into phrases, but I have
-left the variables as globals, which makes goes against decades of
-wisdom that global state is bad.
-"""
+# PORTING EDITORIAL NOTE:
+#
+# The original code is a pretty convoluted mesh of GOTOs and global
+# state. This adaptation pulls things apart into phrases, but I have
+# left the variables as globals, which makes goes against decades of
+# wisdom that global state is bad.
 
 PAGE_WIDTH = 64
 
