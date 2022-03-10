@@ -362,12 +362,12 @@ def human_has_move(board):
 
 
 def get_board_spaces():
-    """ generates the space names (1-9)"""
+    """generates the space names (1-9)"""
     yield from range(1, 10)
 
 
 def get_board_spaces_with(board, val):
-    """ generates spaces containing pieces of type val"""
+    """generates spaces containing pieces of type val"""
     for i in get_board_spaces():
         if board_contents(board, i) == val:
             yield i
