@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.text.DecimalFormat;
 
 /**
  * This is the primary class that runs the game itself.
@@ -95,11 +96,11 @@ public class Game {
 
 				// TODO only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
 				// otherwise, just print the dealer's concealed card
-				dealerHand = playDealer(dealerHand, deck);
+				 dealerHand = playDealer(dealerHand, deck);
 			}
 
-			evaluateRound(players, dealerHand);
-		}
+			evaluateRound(players, dealer.getHand());//TODO: User dealerHand once playHeader implemented
+		} 
     }
 
 	protected void collectInsurance(Iterable<Player> players) {
@@ -173,7 +174,7 @@ public class Game {
 				Card c = deck.deal();
 				player.dealCard(c, handNumber);
 				if(ScoringUtils.scoreHand(player.getHand(handNumber)) > 21){
-					userIo.println("...BUSTED");
+					userIo.println("RECEIVED " + c.toProseString() + "  ...BUSTED");
 					break;
 				}
 				action = userIo.prompt("RECEIVED " + c.toProseString() + " HIT");
@@ -183,7 +184,7 @@ public class Game {
 				Card c = deck.deal();
 				player.doubleDown(c, handNumber);
 				if(ScoringUtils.scoreHand(player.getHand(handNumber)) > 21){
-					userIo.println("...BUSTED");
+					userIo.println("RECEIVED " + c.toProseString() + "  ...BUSTED");
 					break;
 				}
 				userIo.println("RECEIVED " + c.toProseString());
@@ -241,7 +242,7 @@ public class Game {
 	 * @param players
 	 * @param dealerHand
 	 */
-	private void evaluateRound(List<Player> players, LinkedList<Card> dealerHand) {
+	protected void evaluateRound(List<Player> players, List<Card> dealerHand) {
 		// TODO implement evaluateRound
 		//   print something like:
 		/*
@@ -254,6 +255,46 @@ public class Game {
 		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
 		// currentBets of each player are added/subtracted from the dealer total depending on whether they win/lose (accounting for doubling down, insurance etc.)
 		// remember to handle a "PUSH" when the dealer ties and the bet is returned.
+
+		for(Player player : players){
+			int result = ScoringUtils.compareHands(player.getHand(), dealerHand);
+			double totalBet = 0;
+			if(result > 0){
+				totalBet += player.getCurrentBet();
+			} else if(result < 0){
+				totalBet -= player.getCurrentBet();
+			}
+			if(player.isSplit()) {
+				int splitResult = ScoringUtils.compareHands(player.getHand(2), dealerHand);
+				if(splitResult > 0){
+					totalBet += player.getSplitBet();
+				} else if(splitResult < 0){
+					totalBet -= player.getSplitBet();
+				} 
+			}
+			if(player.getInsuranceBet() != 0){
+				int dealerResult = ScoringUtils.scoreHand(dealerHand);
+				if(dealerResult == 21 && dealerHand.size() == 2){
+					totalBet += (player.getInsuranceBet() * 2);
+				} else {
+					totalBet -= player.getInsuranceBet();
+				}
+			}
+			
+			userIo.print("PLAYER " + player.getPlayerNumber());
+			if(totalBet < 0) {
+				userIo.print(" LOSES "); 
+			} else if(totalBet > 0) {
+				userIo.print("  WINS "); 
+			} else {
+				userIo.print(" PUSHES");
+			}
+			player.recordRound(totalBet);
+			DecimalFormat formatter = new DecimalFormat("0.#"); //Removes trailing zeros
+			userIo.println(String.format("%6s", formatter.format(Math.abs(totalBet))) + " TOTAL= " + formatter.format(player.getTotal()));
+			player.resetHand();
+		}
+
 	}
 
 	/**
