@@ -28,6 +28,7 @@ out/
 *.py[co]
 .python-version
 Pipfile
+venv/
 
 .DS_Store
 .vs/
