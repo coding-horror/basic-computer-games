@@ -53,35 +53,14 @@ public class Player {
     }
 
     /**
-    * RecordWin adds 'currentBet' to 'total' and then sets 'currentBet' to zero
+    * RecordRound adds input paramater 'totalBet' to 'total' and then 
+    * sets 'currentBet', 'splitBet', and 'insuranceBet' to zero
     */
-    public void recordWin() {
-        this.total = this.total + this.currentBet;
+    public void recordRound(double totalBet) {
+        this.total = this.total + totalBet;
         this.currentBet = 0;
-    }
-
-    /**
-    * RecordLoss subtracts 'currentBet' to 'total' and then sets 'currentBet' to zero
-    */
-    public void recordLoss() {
-        total = total - currentBet;
-        currentBet = 0;
-    }
-
-    /**
-     * Adds 2x the insurance bet to the players total and resets the insurance bet to zero.
-     */
-    public void recordInsuranceWin() {
-        total = total + (insuranceBet * 2);
-        insuranceBet = 0;
-    }
-
-    /**
-     * Subtracts the insurance bet from the players total and resets the insurance bet to zero.
-     */
-    public void recordInsuranceLoss() {
-        total = total - insuranceBet;
-        insuranceBet = 0;
+        this.splitBet = 0;
+        this.insuranceBet = 0;
     }
 
     /**

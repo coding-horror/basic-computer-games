@@ -411,4 +411,77 @@ public class GameTest {
         // Then
         assertTrue(out.toString().contains("TYPE H, S OR D, PLEASE"));
     }
+
+    @Test
+    @DisplayName("evaluateRound() should total both hands when split")
+    public void evaluateRoundWithSplitHands(){
+        // Given
+        Player dealer = new Player(0); //Dealer
+        dealer.dealCard(new Card(1, Card.Suit.HEARTS));
+        dealer.dealCard(new Card(1, Card.Suit.SPADES));
+
+        Player player = new Player(1);
+        player.recordRound(200);//Set starting total
+        player.setCurrentBet(50);
+        player.dealCard(new Card(1, Card.Suit.HEARTS));
+        player.dealCard(new Card(1, Card.Suit.SPADES));
+
+        playerSays("/");
+        playerGets(13, Card.Suit.CLUBS); // First hand
+        playerSays("S");
+        playerGets(13, Card.Suit.SPADES); // Second hand
+        playerSays("S");
+        initGame();
+
+        // When
+        game.play(player);
+        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+
+        // Then
+        assertTrue(out.toString().contains("PLAYER 1  WINS    100 TOTAL= 300"));
+    }
+
+    @Test
+    @DisplayName("evaluateRound() should total add twice insurance bet")
+    public void evaluateRoundWithInsurance(){
+        // Given
+        Player dealer = new Player(0); //Dealer
+        dealer.dealCard(new Card(10, Card.Suit.HEARTS));
+        dealer.dealCard(new Card(1, Card.Suit.SPADES));
+
+        Player player = new Player(1);
+        player.setCurrentBet(50);
+        player.setInsuranceBet(10);
+        player.dealCard(new Card(2, Card.Suit.HEARTS));
+        player.dealCard(new Card(1, Card.Suit.SPADES));
+        initGame();
+
+        // When
+        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+
+        // Then
+        // Loses current bet (50) and wins 2*10 for total -30
+        assertTrue(out.toString().contains("PLAYER 1 LOSES     30 TOTAL= -30"));
+    }
+
+    @Test
+    @DisplayName("evaluateRound() should push with no total change")
+    public void evaluateRoundWithPush(){
+        // Given
+        Player dealer = new Player(0);
+        dealer.dealCard(new Card(10, Card.Suit.HEARTS));
+        dealer.dealCard(new Card(8, Card.Suit.SPADES)); 
+
+        Player player = new Player(1);
+        player.setCurrentBet(10);
+        player.dealCard(new Card(9, Card.Suit.HEARTS));
+        player.dealCard(new Card(9, Card.Suit.SPADES));
+        initGame();
+
+        // When (Dealer and Player both have 19)
+        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+
+        // Then
+        assertTrue(out.toString().contains("PLAYER 1 PUSHES     0 TOTAL= 0"));
+    }
 }
