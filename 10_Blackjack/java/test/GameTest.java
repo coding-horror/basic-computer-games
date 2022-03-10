@@ -435,10 +435,13 @@ public class GameTest {
 
         // When
         game.play(player);
-        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+        game.evaluateRound(Arrays.asList(player), dealer);
 
         // Then
-        assertTrue(out.toString().contains("PLAYER 1  WINS    100 TOTAL= 300"));
+        assertAll(
+            () -> assertTrue(out.toString().contains("PLAYER 1  WINS    100 TOTAL= 300")),
+            () -> assertTrue(out.toString().contains("DEALER'S TOTAL= -100"))
+        );
     }
 
     @Test
@@ -457,11 +460,14 @@ public class GameTest {
         initGame();
 
         // When
-        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+        game.evaluateRound(Arrays.asList(player), dealer);
 
         // Then
         // Loses current bet (50) and wins 2*10 for total -30
-        assertTrue(out.toString().contains("PLAYER 1 LOSES     30 TOTAL= -30"));
+        assertAll(
+            () -> assertTrue(out.toString().contains("PLAYER 1 LOSES     30 TOTAL= -30")),
+            () -> assertTrue(out.toString().contains("DEALER'S TOTAL= 30"))
+        );
     }
 
     @Test
@@ -479,9 +485,12 @@ public class GameTest {
         initGame();
 
         // When (Dealer and Player both have 19)
-        game.evaluateRound(Arrays.asList(player), dealer.getHand());
+        game.evaluateRound(Arrays.asList(player), dealer);
 
-        // Then
-        assertTrue(out.toString().contains("PLAYER 1 PUSHES     0 TOTAL= 0"));
+        // Then        
+        assertAll(
+            () -> assertTrue(out.toString().contains("PLAYER 1 PUSHES     0 TOTAL= 0")),
+            () -> assertTrue(out.toString().contains("DEALER'S TOTAL= 0"))
+        );
     }
 }
