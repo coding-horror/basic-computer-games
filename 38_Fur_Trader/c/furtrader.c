@@ -110,10 +110,10 @@ char getYesOrNo()
 
 
 
-/* 
+/*
  * Show the player the choices of Fort, get their input, if the
  * input is a valid choice (1,2,3) return it, otherwise keep
- * prompting the user. 
+ * prompting the user.
  */
 int getFortChoice()
 {
@@ -140,7 +140,7 @@ int getFortChoice()
 
 
 /*
- * Print the description for the fort 
+ * Print the description for the fort
  */
 void showFortComment( int which_fort )
 {
@@ -172,10 +172,10 @@ void showFortComment( int which_fort )
         exit( 1 );  /* you have a bug */
     }
     print( "" );
-}        
+}
 
 
-/*    
+/*
  * Prompt the player for how many of each fur type they want.
  * Accept numeric inputs, re-prompting on incorrect input values
  */
@@ -193,7 +193,7 @@ void getFursPurchase( int *furs )
         furs[i] = getNumericInput();
     }
 }
-        
+
 
 /*
  * (Re)Set the player's inventory to zero
@@ -209,7 +209,7 @@ void zeroInventory( int *player_fur_count )
 
 
 /*
- * Tally the player's inventory 
+ * Tally the player's inventory
  */
 int sumInventory( int *player_fur_count )
 {
@@ -225,7 +225,7 @@ int sumInventory( int *player_fur_count )
 
 
 /*
- * Return a random number between a & b 
+ * Return a random number between a & b
  * Ref: https://stackoverflow.com/a/686376/1730895
  */
 float randomAB(float a, float b)
@@ -255,7 +255,7 @@ int main( void )
     char  yes_or_no;
     int   event_picker;
     int   which_fort;
-    
+
     /* what part of the game is in play */
     int   game_state = STATE_STARTING;
 
@@ -294,12 +294,12 @@ int main( void )
                 exit( 0 );                 /* STOP */
             game_state = STATE_TRADING;
         }
-        
+
         else if ( game_state == STATE_TRADING )
         {
             print( "" );
             printf( "YOU HAVE $ %1.2f IN SAVINGS\n", player_funds );
-            printf( "AND %d FURS TO BEGIN THE EXPEDITION\n", MAX_FURS ); 
+            printf( "AND %d FURS TO BEGIN THE EXPEDITION\n", MAX_FURS );
             getFursPurchase( player_furs );
 
             if ( sumInventory( player_furs ) > MAX_FURS )
@@ -392,7 +392,7 @@ int main( void )
                 beaver_price = ( ( 0.25 * randFloat() + 1.00 ) * 100 + 0.5 ) / 100;
                 if ( fox_price < 0 )
                 {
-                    /* Original Bug?  There is no Fox price generated for New York, 
+                    /* Original Bug?  There is no Fox price generated for New York,
                        it will use any previous "D1" price.
                        So if there was no previous value, make one up */
                     fox_price = ( ( 0.25 * randFloat() + 1.05 ) * 100 + 0.5 ) / 100; /* not in orginal code */
@@ -447,7 +447,7 @@ int main( void )
             fox_value    = fox_price    * player_furs[ FUR_FOX ];
             ermine_value = ermine_price * player_furs[ FUR_ERMINE ];
             mink_value   = mink_price   * player_furs[ FUR_MINK ];
-         
+
             print( "" );
             printf( "YOUR BEAVER SOLD FOR $%6.2f\n", beaver_value );
             printf( "YOUR FOX SOLD FOR    $%6.2f\n", fox_value );
@@ -472,4 +472,3 @@ int main( void )
 
     return 0; /* exit OK */
 }
-

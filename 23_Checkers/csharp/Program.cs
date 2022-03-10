@@ -1,24 +1,24 @@
 ﻿/*********************************************************************************
  * CHECKERS
  * ported from BASIC https://www.atariarchives.org/basicgames/showpage.php?page=41
- * 
+ *
  * Porting philosophy
  * 1) Adhere to the original as much as possible
  * 2) Attempt to be understandable by Novice progammers
- * 
+ *
  * There are no classes or Object Oriented design patterns used in this implementation.
  * Everything is written procedurally, using only top-level functions. Hopefully, this
  * will be approachable for someone who wants to learn C# syntax without experience with
  * Object Oriented concepts. Similarly, basic data structures have been chosen over more
  * powerful collection types.  Linq/lambda syntax is also excluded.
- * 
+ *
  * C# Concepts contained in this example:
  *    Loops (for, foreach, while, and do)
  *    Multidimensional arrays
  *    Tuples
  *    Nullables
- *    IEnumerable (yield return / yield break) 
- *    
+ *    IEnumerable (yield return / yield break)
+ *
  * The original had multiple implementations of logic, like determining valid jump locations.
  * This has been refactored to reduce unnecessary code duplication.
  *********************************************************************************/
@@ -259,7 +259,7 @@ int[,] CrownKingPieces(int[,] state)
     if (state[to.x, to.y] != 0)
         // space already occupied by another piece
         return null;
-    
+
     return to;
 }
 /// <summary>
@@ -290,7 +290,7 @@ int RankMove(int[,] state, (int x, int y) from, (int x, int y) to)
         // move to edge of board
         rank += 1;
     }
-    // look to the row in front of the potential destination for 
+    // look to the row in front of the potential destination for
     for (int c = -1; c <=1; c+=2)
     {
         var inFront = GetLocation(to, (c, -1));
@@ -307,7 +307,7 @@ int RankMove(int[,] state, (int x, int y) from, (int x, int y) to)
         {
             continue;
         }
-        if ((state[inFront.x, inFront.y] > 0) && 
+        if ((state[inFront.x, inFront.y] > 0) &&
             (state[inBack.x, inBack.y] == 0) || (inBack == from))
         {
             // the player can jump us
@@ -388,7 +388,7 @@ IEnumerable<(int x, int y)> GetPossibleMoves(int[,] state, (int x, int y) from)
 /// </summary>
 ((int x, int y) from, (int x, int y) to)? CalculateMove(int[,] state)
 {
-    var possibleMoves = new List<((int x, int y) from, (int x, int y) to)>(); 
+    var possibleMoves = new List<((int x, int y) from, (int x, int y) to)>();
     for (int x = 0; x < 8; x++)
     {
         for (int y = 0; y < 8; y++)
@@ -477,7 +477,7 @@ IEnumerable<(int x, int y)> GetPossibleMoves(int[,] state, (int x, int y) from)
 /// <summary>
 /// Get the move from the player.
 /// return a tuple of "from" and "to" representing a valid move
-/// 
+///
 /// </summary>
 ((int x, int y) from, (int x,int y) to) GetPlayerMove(int[,] state)
 {
@@ -498,8 +498,8 @@ IEnumerable<(int x, int y)> GetPossibleMoves(int[,] state, (int x, int y) from)
     // 3)  Select a TO location
     // 4)  If TO is invalid or the implied move is invalid,
     //     return to step 1
-    
-    
+
+
     // There is still currently no way for the player to indicate that no move can be made
     // This matches the original logic, but is a candidate for a refactor
 
@@ -585,9 +585,9 @@ int [,] PlayerTurn(int[,] state)
 #endregion
 
 /*****************************************************************************
- * 
+ *
  * Main program starts here
- * 
+ *
  ****************************************************************************/
 
 WriteIntroduction();
@@ -596,14 +596,14 @@ WriteIntroduction();
 // set player pieces to 1, computer pieces to -1
 // turn your head to the right to visualize the board.
 // kings will be represented by -2 (for computer) and 2 (for player)
-int[,] state = new int[8, 8] { 
+int[,] state = new int[8, 8] {
     { 1, 0, 1, 0, 0, 0,-1, 0 },
     { 0, 1, 0, 0, 0,-1, 0,-1 },
-    { 1, 0, 1, 0, 0, 0,-1, 0 }, 
+    { 1, 0, 1, 0, 0, 0,-1, 0 },
     { 0, 1, 0, 0, 0,-1, 0,-1 },
     { 1, 0, 1, 0, 0, 0,-1, 0 },
     { 0, 1, 0, 0, 0,-1, 0,-1 },
-    { 1, 0, 1, 0, 0, 0,-1, 0 }, 
+    { 1, 0, 1, 0, 0, 0,-1, 0 },
     { 0, 1, 0, 0, 0,-1, 0,-1 },
 };
 

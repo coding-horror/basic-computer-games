@@ -25,15 +25,15 @@ fn main() {
     /*
     vector of:
         vectors of:
-            integers 
-                Initially set to 0, unprocessed cells. 
+            integers
+                Initially set to 0, unprocessed cells.
                 Filled in with consecutive non-zero numbers as cells are processed
     */
     let mut used; //2d vector
     /*
     vector of:
         vectors of:
-            integers 
+            integers
                 Remains 0 if there is no exit down or right
                 Set to 1 if there is an exit down
                 Set to 2 if there is an exit right
@@ -43,11 +43,11 @@ fn main() {
     let width;
     let height;
     let entrance_column; //rng, column of entrance
-    let mut row; 
+    let mut row;
     let mut col;
     let mut count;
 
-    
+
 
     //print welcome message
     println!("
@@ -171,13 +171,13 @@ fn main() {
 fn get_user_input(prompt: &str) -> usize {
     //DATA
     let mut raw_input = String::new(); // temporary variable for user input that can be parsed later
-    
+
     //input loop
     return loop {
-        
+
         //print prompt
         println!("{}", prompt);
-        
+
         //read user input from standard input, and store it to raw_input
         raw_input.clear(); //clear input
         io::stdin().read_line(&mut raw_input).expect( "CANNOT READ INPUT!");
@@ -186,7 +186,7 @@ fn get_user_input(prompt: &str) -> usize {
         match raw_input.trim().parse::<usize>() {
             Ok(i) => {
                 if i>1 { //min size 1
-                    break i; // this escapes the loop, returning i 
+                    break i; // this escapes the loop, returning i
                 }
                 else {
                     println!("INPUT OUT OF RANGE.  TRY AGAIN.");
