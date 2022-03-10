@@ -4,47 +4,45 @@ HEXAPAWN
 A machine learning game, an interpretation of HEXAPAWN game as
 presented in Martin Gardner's "The Unexpected Hanging and Other
 Mathematical Diversions", Chapter Eight: A Matchbox Game-Learning
-Machine. 
+Machine.
 
-Original version for H-P timeshare system by R.A. Kaapke 5/5/76 
-Instructions by Jeff Dalton 
+Original version for H-P timeshare system by R.A. Kaapke 5/5/76
+Instructions by Jeff Dalton
 Conversion to MITS BASIC by Steve North
 
 
 Port to Python by Dave LeCompte
 """
 
-"""
-PORTING NOTES:
-
-I printed out the BASIC code and hand-annotated what each little block
-of code did, which feels amazingly retro.
-
-I encourage other porters that have a complex knot of GOTOs and
-semi-nested subroutines to do hard-copy hacking, it might be a
-different perspective that helps.
-
-A spoiler - the objective of the game is not documented, ostensibly to
-give the human player a challenge. If a player (human or computer)
-advances a pawn across the board to the far row, that player wins. If
-a player has no legal moves (either by being blocked, or all their
-pieces having been captured), that player loses.
-
-The original BASIC had 2 2-dimensional tables stored in DATA at the
-end of the program. This encoded all 19 different board configurations
-(Hexapawn is a small game), with reflections in one table, and then in
-a parallel table, for each of the 19 rows, a list of legal moves was
-encoded by turning them into 2-digit decimal numbers. As gameplay
-continued, the AI would overwrite losing moves with 0 in the second
-array.
-
-My port takes this "parallel array" structure and turns that
-information into a small Python class, BoardLayout. BoardLayout stores
-the board description and legal moves, but stores the moves as (row,
-column) 2-tuples, which is easier to read. The logic for checking if a
-BoardLayout matches the current board, as well as removing losing move
-have been moved into methods of this class.
-"""
+# PORTING NOTES:
+#
+# I printed out the BASIC code and hand-annotated what each little block
+# of code did, which feels amazingly retro.
+#
+# I encourage other porters that have a complex knot of GOTOs and
+# semi-nested subroutines to do hard-copy hacking, it might be a
+# different perspective that helps.
+#
+# A spoiler - the objective of the game is not documented, ostensibly to
+# give the human player a challenge. If a player (human or computer)
+# advances a pawn across the board to the far row, that player wins. If
+# a player has no legal moves (either by being blocked, or all their
+# pieces having been captured), that player loses.
+#
+# The original BASIC had 2 2-dimensional tables stored in DATA at the
+# end of the program. This encoded all 19 different board configurations
+# (Hexapawn is a small game), with reflections in one table, and then in
+# a parallel table, for each of the 19 rows, a list of legal moves was
+# encoded by turning them into 2-digit decimal numbers. As gameplay
+# continued, the AI would overwrite losing moves with 0 in the second
+# array.
+#
+# My port takes this "parallel array" structure and turns that
+# information into a small Python class, BoardLayout. BoardLayout stores
+# the board description and legal moves, but stores the moves as (row,
+# column) 2-tuples, which is easier to read. The logic for checking if a
+# BoardLayout matches the current board, as well as removing losing move
+# have been moved into methods of this class.
 
 import collections
 import random
@@ -84,7 +82,7 @@ HEXAPAWN IS PLAYED WITH CHESS PAWNS ON A 3 BY 3 BOARD.
 THE PAWNS ARE MOVED AS IN CHESS - ONE SPACE FORWARD TO
 AN EMPTY SPACE OR ONE SPACE FORWARD AND DIAGONALLY TO
 CAPTURE AN OPPOSING MAN.  ON THE BOARD, YOUR PAWNS
-ARE 'O', THE COMPUTER'S PAWNS ARE 'X', AND EMPTY 
+ARE 'O', THE COMPUTER'S PAWNS ARE 'X', AND EMPTY
 SQUARES ARE '.'.  TO ENTER A MOVE, TYPE THE NUMBER OF
 THE SQUARE YOU ARE MOVING FROM, FOLLOWED BY THE NUMBER
 OF THE SQUARE YOU WILL MOVE TO.  THE NUMBERS MUST BE
@@ -238,7 +236,7 @@ def get_coordinates():
         try:
             print("YOUR MOVE?")
             response = input()
-            m1, m2 = [int(c) for c in response.split(",")]
+            m1, m2 = (int(c) for c in response.split(","))
             return m1, m2
         except ValueError as ve:
             print_illegal()
@@ -362,12 +360,12 @@ def human_has_move(board):
 
 
 def get_board_spaces():
-    """ generates the space names (1-9)"""
+    """generates the space names (1-9)"""
     yield from range(1, 10)
 
 
 def get_board_spaces_with(board, val):
-    """ generates spaces containing pieces of type val"""
+    """generates spaces containing pieces of type val"""
     for i in get_board_spaces():
         if board_contents(board, i) == val:
             yield i

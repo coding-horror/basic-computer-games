@@ -6,15 +6,14 @@ Math exercise/demonstration
 Ported by Dave LeCompte
 """
 
-"""
-PORTING NOTE
-
-The title, as printed ingame, is "NICOMA", hinting at a time when
-filesystems weren't even 8.3, but could only support 6 character
-filenames.
-"""
+# PORTING NOTE
+#
+# The title, as printed ingame, is "NICOMA", hinting at a time when
+# filesystems weren't even 8.3, but could only support 6 character
+# filenames.
 
 import time
+
 
 def print_with_tab(spaces_count, msg):
     if spaces_count > 0:
@@ -22,6 +21,7 @@ def print_with_tab(spaces_count, msg):
     else:
         spaces = ""
     print(spaces + msg)
+
 
 def get_yes_or_no():
     while True:
@@ -59,7 +59,7 @@ def play_game():
         print("I FEEL YOUR ARITHMETIC IS IN ERROR.")
     print()
     print("LET'S TRY ANOTHER")
-    
+
 
 def main():
     print_with_tab(33, "NICOMA")
@@ -67,12 +67,12 @@ def main():
     print()
     print()
     print()
-    
+
     print("BOOMERANG PUZZLE FROM ARITHMETICA OF NICOMACHUS -- A.D. 90!")
     print()
     while True:
         play_game()
-        
+
 
 if __name__ == "__main__":
     main()
