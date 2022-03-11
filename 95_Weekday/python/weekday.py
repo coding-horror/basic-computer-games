@@ -265,8 +265,7 @@ def test_weekday_calc(year, month, day):
 
     basic_weekday = calculate_day_of_week(year, month, day)  # Sunday = 1, Saturday = 7
 
-    test = ((python_weekday + 2) % 7) == (basic_weekday % 7)
-    if test == False:
+    if ((python_weekday + 2) % 7) != (basic_weekday % 7):
         print(f"testing yr {year} month {month} day {day}")
         print(f"python says {python_weekday}")
         print(f"BASIC says {basic_weekday}")
