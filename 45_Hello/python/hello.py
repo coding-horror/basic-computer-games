@@ -32,7 +32,6 @@ def get_yes_or_no():
 def ask_enjoy_question(user_name):
     print(f"HI THERE, {user_name}, ARE YOU ENJOYING YOURSELF HERE?")
 
-    has_answer = False
     while True:
         valid, value, msg = get_yes_or_no()
 

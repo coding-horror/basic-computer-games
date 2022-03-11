@@ -238,7 +238,7 @@ def get_coordinates():
             response = input()
             m1, m2 = (int(c) for c in response.split(","))
             return m1, m2
-        except ValueError as ve:
+        except ValueError:
             print_illegal()
 
 
@@ -385,7 +385,6 @@ def get_computer_spaces(board):
 
 def has_computer_move(board):
     for i in get_computer_spaces(board):
-        found_move = False
         if board_contents(board, i + 3) == EMPTY_SPACE:
             # can move forward (down)
             return True

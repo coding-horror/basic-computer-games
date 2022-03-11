@@ -51,8 +51,6 @@ letters = {
 
 
 def print_banner():
-    """Print the banner"""
-
     f = [0] * 7
     j = [0] * 9
 
@@ -80,7 +78,7 @@ def print_banner():
     mStr = input("Character (type 'ALL' if you want character being printed) ").upper()
     aStr = input("Statement ")
     # This means to prepare printer, just press Enter
-    oStr = input("Set page ")
+    input("Set page ")
     for lStr in aStr:
         s = letters[lStr].copy()
         xStr = mStr
@@ -100,21 +98,19 @@ def print_banner():
                             f[u] = 8 - k
                             break
                 for t1 in range(1, x + 1):
-                    lineStr = " " * int((63 - 4.5 * y) * g1 / len(xStr) + 1)
+                    line_str = " " * int((63 - 4.5 * y) * g1 / len(xStr) + 1)
                     for b in range(0, f[u] + 1):
                         if j[b] == 0:
                             for i in range(1, y + 1):
-                                lineStr = lineStr + " " * len(xStr)
+                                line_str = line_str + " " * len(xStr)
                         else:
-                            lineStr = lineStr + xStr * y
-                    print(lineStr)
+                            line_str = line_str + xStr * y
+                    print(line_str)
             print("\n" * (2 * x - 1))
     # print("\n" * 75)  # Feed some more paper from the printer
 
 
 def main():
-    """Main"""
-
     print_banner()
 
 

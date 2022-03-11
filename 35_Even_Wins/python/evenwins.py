@@ -27,9 +27,12 @@ human_marbles = -1
 computer_marbles = -1
 whose_turn = ""
 
-# Only called during development for serious errors that are due to mistakes
-# in the program. Should never be called during a regular game.
+
 def serious_error(msg):
+    """
+    Only call this function during development for serious errors that are due
+    to mistakes in the program. Should never be called during a regular game.
+    """
     print("serious_error: " + msg)
     exit(1)
 

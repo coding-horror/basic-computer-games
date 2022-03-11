@@ -66,7 +66,6 @@ def add_ljust(line, s, pos):
     # adds a new field to a line left justified starting at pos
 
     s = str(s)
-    slen = len(s)
     if len(line) > pos:
         line = line[:pos]
     if len(line) < pos:
