@@ -1,4 +1,13 @@
-"""Implementation of queen.bas to Python."""
+#!/usr/bin/env python3
+"""
+Implementation of Queens game in Python 3.
+
+Original game in BASIC by David Ahl in _BASIC Comuter Games_, published in 1978,
+as reproduced here:
+    https://www.atariarchives.org/basicgames/showpage.php?page=133
+
+Port to Python 3 by Christopher L. Phan <cphan@chrisphan.com>
+"""
 
 from typing import Final, Optional
 from random import random
