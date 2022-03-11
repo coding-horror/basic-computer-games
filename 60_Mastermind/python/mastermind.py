@@ -94,7 +94,7 @@ def main():
             num_moves = 1
             inconsistent_information = False
             print("NOW I GUESS. THINK OF A COMBINATION.")
-            player_ready = input("HIT RETURN WHEN READY: ")
+            input("HIT RETURN WHEN READY: ")
             while num_moves < 10 and not turn_over and not inconsistent_information:
                 found_guess = False
                 computer_guess = int(possibilities * random.random())

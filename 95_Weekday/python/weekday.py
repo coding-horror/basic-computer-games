@@ -30,7 +30,7 @@ def get_date_from_user(prompt):
         date_str = input()
         try:
             month_num, day_num, year_num = (int(x) for x in date_str.split(","))
-        except Exception as e:
+        except Exception:
             print("I COULDN'T UNDERSTAND THAT. TRY AGAIN.")
         return month_num, day_num, year_num
 
@@ -186,11 +186,9 @@ def main():
     target_day_value = calc_day_value(year, month, day)
 
     is_today = False
-    is_future = False
 
     if today_day_value < target_day_value:
         label = "WILL BE A"
-        is_future = False
     elif today_day_value == target_day_value:
         label = "IS A"
         is_today = True
