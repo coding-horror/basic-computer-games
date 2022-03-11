@@ -214,7 +214,7 @@ while True:
                     death = True
                     break
 
-        if death == True:
+        if death:
             break
 # 1310
 print_n_newlines(3)
