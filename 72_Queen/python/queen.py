@@ -6,11 +6,13 @@ Original game in BASIC by David Ahl in _BASIC Comuter Games_, published in 1978,
 as reproduced here:
     https://www.atariarchives.org/basicgames/showpage.php?page=133
 
-Port to Python 3 by Christopher L. Phan <cphan@chrisphan.com>
+Port to Python 3 by Christopher L. Phan <https://chrisphan.com>
+
+Supports Python version 3.8 or later.
 """
 
-from typing import Final, Optional
 from random import random
+from typing import Final, FrozenSet, Optional, Tuple
 
 
 ########################################################################################
@@ -77,7 +79,7 @@ THANKS FOR PLAYING.
 """
 
 
-def loc_to_num(location: tuple[int, int], fix_align: bool = False) -> str:
+def loc_to_num(location: Tuple[int, int], fix_align: bool = False) -> str:
     """Convert a position given by row, column into a space number."""
     row, col = location
     out_str: str = f"{row + 8 - col}{row + 1}"
@@ -97,7 +99,7 @@ GAME_BOARD: Final[str] = (
 )
 
 
-def num_to_loc(num: int) -> tuple[int, int]:
+def num_to_loc(num: int) -> Tuple[int, int]:
     """Convert a space number into a position given by row, column."""
     row: int = num % 10 - 1
     col: int = row + 8 - (num - row - 1) // 10
@@ -105,11 +107,11 @@ def num_to_loc(num: int) -> tuple[int, int]:
 
 
 # The win location
-WIN_LOC: Final[tuple[int, int]] = (7, 0)
+WIN_LOC: Final[Tuple[int, int]] = (7, 0)
 
 # These are the places (other than the win condition) that the computer will always
 # try to move into.
-COMPUTER_SAFE_SPOTS: Final[frozenset[tuple[int, int]]] = frozenset(
+COMPUTER_SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = frozenset(
     [
         (2, 3),
         (4, 5),
@@ -120,12 +122,12 @@ COMPUTER_SAFE_SPOTS: Final[frozenset[tuple[int, int]]] = frozenset(
 
 # These are the places that the computer will always try to move into.
 COMPUTER_PREF_MOVES: Final[
-    frozenset[tuple[int, int]]
+    FrozenSet[Tuple[int, int]]
 ] = COMPUTER_SAFE_SPOTS | frozenset([WIN_LOC])
 
 # These are the locations (not including the win location) from which either player can
 # force a win (but the computer will always choose one of the COMPUTER_PREF_MOVES).
-SAFE_SPOTS: Final[frozenset[tuple[int, int]]] = COMPUTER_SAFE_SPOTS | frozenset(
+SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = COMPUTER_SAFE_SPOTS | frozenset(
     [
         (0, 4),
         (3, 7),
@@ -149,7 +151,7 @@ def intro():
         print(INSTR_TXT)
 
 
-def get_move(current_loc: Optional[tuple[int, int]]) -> tuple[int, int]:
+def get_move(current_loc: Optional[Tuple[int, int]]) -> Tuple[int, int]:
     """Get the next move from the player."""
     prompt: str
     player_resp: str
@@ -193,7 +195,7 @@ def get_move(current_loc: Optional[tuple[int, int]]) -> tuple[int, int]:
             prompt = "!NUMBER EXPECTED - RETRY INPUT LINE\n? "
 
 
-def random_computer_move(location: tuple[int, int]) -> tuple[int, int]:
+def random_computer_move(location: Tuple[int, int]) -> Tuple[int, int]:
     """Make a random move."""
     row, col = location
     if (z := random()) > 0.6:
@@ -207,7 +209,7 @@ def random_computer_move(location: tuple[int, int]) -> tuple[int, int]:
         return row, col - 1
 
 
-def computer_move(location: tuple[int, int]) -> tuple[int, int]:
+def computer_move(location: Tuple[int, int]) -> Tuple[int, int]:
     """Get the computer's move."""
     # If the player has made an optimal move, then choose a random move
     if location in SAFE_SPOTS:
@@ -236,7 +238,7 @@ def computer_move(location: tuple[int, int]) -> tuple[int, int]:
 def main_game() -> None:
     """Execute the main game."""
     game_over: bool = False
-    location: Optional[tuple[int, int]] = None  # Indicate it is the first turn
+    location: Optional[Tuple[int, int]] = None  # Indicate it is the first turn
     while not game_over:
         location = get_move(location)
         if location == (8, 8):  # (8, 8) is returned when the player enters 0
