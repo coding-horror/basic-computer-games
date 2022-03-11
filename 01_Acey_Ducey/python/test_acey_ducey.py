@@ -7,7 +7,11 @@ from acey_ducey import play_game
 @mock.patch("random.shuffle")
 def test_play_game_lose(mock_random_shuffle, monkeypatch, capsys) -> None:
     monkeypatch.setattr("sys.stdin", io.StringIO("100\n100"))
-    mock_random_shuffle = lambda n: n
+
+    def identity(x):
+        return x
+
+    mock_random_shuffle = identity  # noqa: F841
     play_game()
     captured = capsys.readouterr()
     assert captured.out == (
