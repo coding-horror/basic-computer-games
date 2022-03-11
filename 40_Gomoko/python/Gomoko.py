@@ -76,7 +76,7 @@ while True:
             continue
         if I == -1:
             break
-        elif check_move(I, J, N) == False:
+        elif not check_move(I, J, N):
             print("ILLEGAL MOVE.  TRY AGAIN...")
         else:
             if A[I - 1][J - 1] != 0:
@@ -91,13 +91,13 @@ while True:
                             continue
                         X = I + F
                         Y = J + F
-                        if check_move(X, Y, N) == False:
+                        if not check_move(X, Y, N):
                             continue
                         if A[X - 1][Y - 1] == 1:
                             SkipEFLoop = True
                             X = I - E
                             Y = J - F
-                            if check_move(X, Y, N) == False:  # 750
+                            if not check_move(X, Y, N):  # 750
                                 while True:  # 610
                                     X = random.randint(1, N)
                                     Y = random.randint(1, N)
