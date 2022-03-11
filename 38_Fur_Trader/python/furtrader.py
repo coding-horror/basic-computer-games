@@ -3,12 +3,12 @@
 import random  # for generating random numbers
 import sys  # for system function, like exit()
 
-### global variables for storing player's status
+# global variables for storing player's status
 player_funds = 0  # no money
 player_furs = [0, 0, 0, 0]  # no furs
 
 
-### Constants
+# Constants
 FUR_MINK = 0
 FUR_BEAVER = 1
 FUR_ERMINE = 2
@@ -22,13 +22,13 @@ FORT_NEWYORK = 3
 FORT_NAMES = ["HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"]
 
 
-def printAtColumn(column: int, words: str):
+def print_at_column(column: int, words: str):
     """Print the words at the specified column"""
     spaces = " " * column  # make a fat string of spaces
     print(spaces + words)
 
 
-def showIntroduction():
+def show_introduction():
     """Show the player the introductory message"""
     print("YOU ARE THE LEADER OF A FRENCH FUR TRADING EXPEDITION IN ")
     print("1776 LEAVING THE LAKE ONTARIO AREA TO SELL FURS AND GET")
@@ -39,7 +39,7 @@ def showIntroduction():
     print("")
 
 
-def getFortChoice():
+def get_fort_choice():
     """Show the player the choices of Fort, get their input, if the
     input is a valid choice (1,2,3) return it, otherwise keep
     prompting the user."""
@@ -68,7 +68,7 @@ def getFortChoice():
     return result
 
 
-def showFortComment(which_fort):
+def show_fort_comment(which_fort):
     """Print the description for the fort"""
     print("")
     if which_fort == FORT_MONTREAL:
@@ -92,7 +92,7 @@ def showFortComment(which_fort):
     print("")
 
 
-def getYesOrNo():
+def get_yes_or_no():
     """Prompt the player to enter 'YES' or 'NO'. Keep prompting until
     valid input is entered.  Accept various spellings by only
     checking the first letter of input.
@@ -109,7 +109,7 @@ def getYesOrNo():
     return result
 
 
-def getFursPurchase():
+def get_furs_purchase():
     """Prompt the player for how many of each fur type they want.
     Accept numeric inputs, re-prompting on incorrect input values"""
     results = []
@@ -130,15 +130,11 @@ def getFursPurchase():
     return results
 
 
-###
-### MAIN
-###
-
 if __name__ == "__main__":
 
-    printAtColumn(31, "FUR TRADER")
-    printAtColumn(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    printAtColumn(15, "(Ported to Python Oct 2012 krt@krt.com.au)")
+    print_at_column(31, "FUR TRADER")
+    print_at_column(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print_at_column(15, "(Ported to Python Oct 2012 krt@krt.com.au)")
     print("\n\n\n")
 
     game_state = "starting"
@@ -147,13 +143,13 @@ if __name__ == "__main__":
     while True:
 
         if game_state == "starting":
-            showIntroduction()
+            show_introduction()
 
             player_funds = 600  # Initial player start money
             player_furs = [0, 0, 0, 0]  # Player fur inventory
 
             print("DO YOU WISH TO TRADE FURS?")
-            should_trade = getYesOrNo()
+            should_trade = get_yes_or_no()
             if should_trade == "N":
                 sys.exit(0)  # STOP
             game_state = "trading"
@@ -162,7 +158,7 @@ if __name__ == "__main__":
             print("")
             print("YOU HAVE $ %1.2f IN SAVINGS" % (player_funds))
             print("AND " + str(MAX_FURS) + " FURS TO BEGIN THE EXPEDITION")
-            player_furs = getFursPurchase()
+            player_furs = get_furs_purchase()
 
             if sum(player_furs) > MAX_FURS:
                 print("")
@@ -174,10 +170,10 @@ if __name__ == "__main__":
                 game_state = "choosing fort"
 
         elif game_state == "choosing fort":
-            which_fort = getFortChoice()
-            showFortComment(which_fort)
+            which_fort = get_fort_choice()
+            show_fort_comment(which_fort)
             print("DO YOU WANT TO TRADE AT ANOTHER FORT?")
-            change_fort = getYesOrNo()
+            change_fort = get_yes_or_no()
             if change_fort == "N":
                 game_state = "travelling"
 
@@ -315,7 +311,7 @@ if __name__ == "__main__":
 
             print("")
             print("DO YOU WANT TO TRADE FURS NEXT YEAR?")
-            should_trade = getYesOrNo()
+            should_trade = get_yes_or_no()
             if should_trade == "N":
                 sys.exit(0)  # STOP
             else:

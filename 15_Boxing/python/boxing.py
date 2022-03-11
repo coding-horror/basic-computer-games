@@ -26,7 +26,7 @@ def play():
 
     print("DIFFERENT PUNCHES ARE 1 FULL SWING 2 HOOK 3 UPPERCUT 4 JAB")
     print("WHAT IS YOUR MAN'S BEST", end=QUESTION_PROMPT)
-    player_best = int(input())
+    player_best = int(input())  # noqa: TODO - this likely is a bug!
 
     print("WHAT IS HIS VULNERABILITY", end=QUESTION_PROMPT)
     player_weakness = int(input())
