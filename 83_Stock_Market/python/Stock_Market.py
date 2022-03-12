@@ -81,7 +81,7 @@ class Stock_Market:
 
         print("\nWHAT IS YOUR TRANSACTION IN")
         flag = False
-        while flag != True:
+        while not flag:
             new_holdings = []
             for stock in self.data.keys():
                 try:
