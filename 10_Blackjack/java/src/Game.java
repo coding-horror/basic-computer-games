@@ -94,12 +94,14 @@ public class Game {
 					play(player);
 				}
 
-				// TODO only play the dealer if at least one player has not busted or gotten a natural blackjack (21 in the first two cards)
-				// otherwise, just print the dealer's concealed card
-				 dealerHand = playDealer(dealerHand, deck);
+				if(shouldPlayDealer(players)){
+					playDealer(dealer);
+				} else {
+					userIo.println("DEALER HAD " + dealer.getHand().get(1).toProseString() + " CONCEALED.");
+				}
 			}
 
-			evaluateRound(players, dealer);//TODO: User dealerHand once playHeader implemented
+			evaluateRound(players, dealer);
 		} 
     }
 
@@ -165,7 +167,7 @@ public class Game {
 	private void play(Player player, int handNumber) {
 		String action;
 		if(player.isSplit()){
-			action = userIo.prompt("HAND #" + handNumber);
+			action = userIo.prompt("HAND " + handNumber);
 		} else {
 			action = userIo.prompt("PLAYER " + player.getPlayerNumber() + " ");
 		}
@@ -200,11 +202,13 @@ public class Game {
 					Card card = deck.deal();
 					player.dealCard(card, 1);
 					userIo.println("FIRST HAND RECEIVES " + card.toProseString());
-					play(player, 1);
 					card = deck.deal();
 					player.dealCard(card, 2);
-					userIo.println("SECOND HAND RECEIVES " + card.toProseString());
-					play(player, 2);
+					userIo.println("SECOND HAND RECEIVES " + card.toProseString());					
+					if(player.getHand().get(0).getValue() > 1){ //Can't play after splitting aces
+						play(player, 1);
+						play(player, 2);
+					}
 					return; // Don't fall out of the while loop and print another total
 				} else {
 					userIo.println("SPLITTING NOT ALLOWED");
@@ -218,8 +222,37 @@ public class Game {
 				}
 			}
 		}
-		userIo.println("TOTAL IS " + ScoringUtils.scoreHand(player.getHand(handNumber)));
+		int total = ScoringUtils.scoreHand(player.getHand(handNumber));
+		if(total == 21) {
+			userIo.println("BLACKJACK");
+		} else {
+			userIo.println("TOTAL IS " + total);
+		}
 	}
+
+	/**
+	 * Check the Dealer's hand should be played out. If every player has either busted or won with natural Blackjack,
+	 * the Dealer doesn't need to play.
+	 * 
+	 * @param players
+	 * @return boolean whether the dealer should play
+	 */
+
+	protected boolean shouldPlayDealer(List<Player> players){
+		for(Player player : players){
+			int score = ScoringUtils.scoreHand(player.getHand());
+			if(score < 21 || (score == 21 && player.getHand().size() > 2)){
+				return true;
+			}
+			if(player.isSplit()){				
+				int splitScore = ScoringUtils.scoreHand(player.getHand(2));
+				if(splitScore < 21 || (splitScore == 21 && player.getHand(2).size() > 2)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}	
 
 	/**
 	 * Play the dealer's hand. The dealer draws until they have >=17 or busts. Prints each draw as in the following example:
@@ -232,9 +265,25 @@ public class Game {
 	 * @param dealerHand
 	 * @return
 	 */
-	private LinkedList<Card> playDealer(LinkedList<Card> dealerHand, Deck deck) {
-		// TODO implement playDealer
-		return null;
+	protected void playDealer(Player dealer) {
+		int score = ScoringUtils.scoreHand(dealer.getHand());
+		userIo.println("DEALER HAS " + dealer.getHand().get(1).toProseString() + " CONCEALED FOR A TOTAL OF " + score);
+
+		if(score < 17){
+			userIo.print("DRAWS ");
+		}
+		while(score < 17) {
+			Card dealtCard = deck.deal();
+			dealer.dealCard(dealtCard);
+			score = ScoringUtils.scoreHand(dealer.getHand());
+			userIo.print(dealtCard.toString() + " ");
+		}
+		
+		if(score > 21) {
+			userIo.println("...BUSTED\n");
+		} else {
+			userIo.println("---TOTAL IS " + score + "\n");
+		}
 	}
 
 	/**
@@ -280,18 +329,18 @@ public class Game {
 			
 			userIo.print("PLAYER " + player.getPlayerNumber());
 			if(totalBet < 0) {
-				userIo.print(" LOSES "); 
+				userIo.print(" LOSES " + String.format("%6s", formatter.format(Math.abs(totalBet)))); 
 			} else if(totalBet > 0) {
-				userIo.print("  WINS "); 
+				userIo.print("  WINS  " + String.format("%6s", formatter.format(totalBet))); 
 			} else {
-				userIo.print(" PUSHES");
+				userIo.print(" PUSHES      ");
 			}
 			player.recordRound(totalBet);
 			dealer.recordRound(totalBet*-1);
-			userIo.println(String.format("%6s", formatter.format(Math.abs(totalBet))) + " TOTAL= " + formatter.format(player.getTotal()));
+			userIo.println(" TOTAL= " + formatter.format(player.getTotal()));
 			player.resetHand();
 		}
-		userIo.println("DEALER'S TOTAL= " + formatter.format(dealer.getTotal()));
+		userIo.println("DEALER'S TOTAL= " + formatter.format(dealer.getTotal()) + "\n");	
 	}
 
 	/**
