@@ -227,7 +227,7 @@ class Basketball:
             print("Incorrect answer. Retype it. Your shot? ", end="")
             try:
                 self.shot = int(input())
-            except:
+            except Exception:
                 continue
 
         if self.time < 100 or random.random() < 0.5:

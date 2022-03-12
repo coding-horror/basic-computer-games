@@ -324,6 +324,10 @@ def long_range_scan():
         return
 
     print(f"LONG RANGE SCAN FOR QUADRANT {q1 + 1} , {q2 + 1}")
+    print_scan_results(q1, q2)
+
+
+def print_scan_results(q1: int, q2: int) -> None:
     sep = "-------------------"
     print(sep)
     for i in (q1 - 1, q1, q1 + 1):
@@ -335,11 +339,11 @@ def long_range_scan():
                 z[i][j] = g[i][j]
 
         line = ": "
-        for l in range(3):
-            if n[l] < 0:
+        for line_index in range(3):
+            if n[line_index] < 0:
                 line += "*** : "
             else:
-                line += str(n[l] + 1000).rjust(4, " ")[-3:] + " : "
+                line += str(n[line_index] + 1000).rjust(4, " ")[-3:] + " : "
         print(line)
         print(sep)
 
@@ -364,9 +368,9 @@ def phaser_control():
     x = 0
     while True:
         while True:
-            xs = input("NUMBER OF UNITS TO FIRE? ")
-            if len(xs) > 0:
-                x = int(xs)
+            units_to_fire = input("NUMBER OF UNITS TO FIRE? ")
+            if len(units_to_fire) > 0:
+                x = int(units_to_fire)
                 break
         if x <= 0:
             return
@@ -422,9 +426,9 @@ def photon_torpedoes():
         return
 
     while True:
-        c1s = input("PHOTON TORPEDO COURSE (1-9)? ")
-        if len(c1s) > 0:
-            c1 = float(c1s)
+        torpedo_course = input("PHOTON TORPEDO COURSE (1-9)? ")
+        if len(torpedo_course) > 0:
+            c1 = float(torpedo_course)
             break
     if c1 == 9:
         c1 = 1
@@ -530,9 +534,11 @@ def shield_control():
         return
 
     while True:
-        xs = input(f"ENERGY AVAILABLE = {e + s} NUMBER OF UNITS TO SHIELDS? ")
-        if len(xs) > 0:
-            x = int(xs)
+        energy_to_shield = input(
+            f"ENERGY AVAILABLE = {e + s} NUMBER OF UNITS TO SHIELDS? "
+        )
+        if len(energy_to_shield) > 0:
+            x = int(energy_to_shield)
             break
 
     if x < 0 or s == x:
@@ -577,7 +583,7 @@ def damage_control():
         d3 = 0.9
     print("\nTECHNICIANS STANDING BY TO EFFECT REPAIRS TO YOUR SHIP;")
     print("ESTIMATED TIME TO REPAIR: " f"{round(0.01 * int(100 * d3), 2)} STARDATES")
-    if input("WILL YOU AUTHORIZE THE " "REPAIR ORDER (Y/N)? ").upper().strip() != "Y":
+    if input("WILL YOU AUTHORIZE THE REPAIR ORDER (Y/N)? ").upper().strip() != "Y":
         return
 
     for i in range(8):
@@ -595,11 +601,11 @@ def computer():
         return
 
     while True:
-        coms = input("COMPUTER ACTIVE AND AWAITING COMMAND? ")
-        if len(coms) == 0:
+        command = input("COMPUTER ACTIVE AND AWAITING COMMAND? ")
+        if len(command) == 0:
             com = 6
         else:
-            com = int(coms)
+            com = int(command)
         if com < 0:
             return
 
@@ -691,15 +697,15 @@ def computer():
             print(f"YOU ARE AT QUADRANT {q1+1} , {q2+1} SECTOR " f"{s1+1} , {s2+1}")
             print("PLEASE ENTER")
             while True:
-                ins = input("  INITIAL COORDINATES (X,Y)? ").split(",")
-                if len(ins) == 2:
-                    from1, from2 = int(ins[0]) - 1, int(ins[1]) - 1
+                coordinates = input("  INITIAL COORDINATES (X,Y)? ").split(",")
+                if len(coordinates) == 2:
+                    from1, from2 = int(coordinates[0]) - 1, int(coordinates[1]) - 1
                     if 0 <= from1 <= 7 and 0 <= from2 <= 7:
                         break
             while True:
-                ins = input("  FINAL COORDINATES (X,Y)? ").split(",")
-                if len(ins) == 2:
-                    to1, to2 = int(ins[0]) - 1, int(ins[1]) - 1
+                coordinates = input("  FINAL COORDINATES (X,Y)? ").split(",")
+                if len(coordinates) == 2:
+                    to1, to2 = int(coordinates[0]) - 1, int(coordinates[1]) - 1
                     if 0 <= to1 <= 7 and 0 <= to2 <= 7:
                         break
             print_direction(from1, from2, to1, to2)
