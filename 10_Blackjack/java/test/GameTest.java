@@ -370,8 +370,8 @@ public class GameTest {
         // Given
         Player player = new Player(1);
         player.setCurrentBet(100);
-        player.dealCard(new Card(1, Card.Suit.HEARTS));
-        player.dealCard(new Card(1, Card.Suit.SPADES));
+        player.dealCard(new Card(2, Card.Suit.HEARTS));
+        player.dealCard(new Card(2, Card.Suit.SPADES));
 
         playerSays("/");
         playerGets(13, Card.Suit.CLUBS); // First hand
@@ -394,8 +394,8 @@ public class GameTest {
         // Given
         Player player = new Player(1);
         player.setCurrentBet(100);
-        player.dealCard(new Card(1, Card.Suit.HEARTS));
-        player.dealCard(new Card(1, Card.Suit.SPADES));
+        player.dealCard(new Card(10, Card.Suit.HEARTS));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
 
         playerSays("/");
         playerGets(13, Card.Suit.CLUBS); // First hand
@@ -425,7 +425,7 @@ public class GameTest {
         player.setCurrentBet(50);
         player.dealCard(new Card(1, Card.Suit.HEARTS));
         player.dealCard(new Card(1, Card.Suit.SPADES));
-
+        
         playerSays("/");
         playerGets(13, Card.Suit.CLUBS); // First hand
         playerSays("S");
@@ -439,7 +439,7 @@ public class GameTest {
 
         // Then
         assertAll(
-            () -> assertTrue(out.toString().contains("PLAYER 1  WINS    100 TOTAL= 300")),
+            () -> assertTrue(out.toString().contains("PLAYER 1  WINS     100 TOTAL= 300")),
             () -> assertTrue(out.toString().contains("DEALER'S TOTAL= -100"))
         );
     }
@@ -489,8 +489,134 @@ public class GameTest {
 
         // Then        
         assertAll(
-            () -> assertTrue(out.toString().contains("PLAYER 1 PUSHES     0 TOTAL= 0")),
+            () -> assertTrue(out.toString().contains("PLAYER 1 PUSHES       TOTAL= 0")),
             () -> assertTrue(out.toString().contains("DEALER'S TOTAL= 0"))
         );
     }
+
+    @Test
+    @DisplayName("shouldPlayDealer() return false when players bust")
+    public void shouldPlayDealerBust(){
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+        player.split();
+        player.dealCard(new Card(5, Card.Suit.SPADES));
+        player.dealCard(new Card(8, Card.Suit.SPADES));//First hand Busted
+
+        player.dealCard(new Card(5, Card.Suit.SPADES),2);
+        player.dealCard(new Card(8, Card.Suit.SPADES),2);//Second hand Busted
+
+        Player playerTwo = new Player(2);
+        playerTwo.dealCard(new Card(7, Card.Suit.HEARTS));
+        playerTwo.dealCard(new Card(8, Card.Suit.HEARTS));
+        playerTwo.dealCard(new Card(9, Card.Suit.HEARTS));
+        initGame();
+
+        // When 
+        boolean result = game.shouldPlayDealer(Arrays.asList(player,playerTwo));
+
+        // Then        
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("shouldPlayDealer() return false when players bust")
+    public void ShouldPlayer(){
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+        player.split();
+        player.dealCard(new Card(5, Card.Suit.SPADES));
+        player.dealCard(new Card(8, Card.Suit.SPADES));//First hand Busted
+
+        player.dealCard(new Card(5, Card.Suit.SPADES),2);
+        player.dealCard(new Card(8, Card.Suit.SPADES),2);//Second hand Busted
+
+        Player playerTwo = new Player(2);
+        playerTwo.dealCard(new Card(7, Card.Suit.HEARTS));
+        playerTwo.dealCard(new Card(8, Card.Suit.HEARTS));
+        playerTwo.dealCard(new Card(9, Card.Suit.HEARTS));
+        initGame();
+
+        // When 
+        boolean result = game.shouldPlayDealer(Arrays.asList(player,playerTwo));
+
+        // Then        
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("shouldPlayDealer() return true when player has non-natural blackjack")
+    public void shouldPlayDealerNonNaturalBlackjack(){
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(5, Card.Suit.SPADES));
+        player.dealCard(new Card(6, Card.Suit.DIAMONDS));
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+
+        initGame();
+
+        // When 
+        boolean result = game.shouldPlayDealer(Arrays.asList(player));
+
+        // Then        
+        assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("shouldPlayDealer() return true when player doesn't have blackjack")
+    public void shouldPlayDealerNonBlackjack(){
+        // Given
+        Player player = new Player(1);
+        player.dealCard(new Card(10, Card.Suit.SPADES));
+        player.dealCard(new Card(6, Card.Suit.DIAMONDS));
+        initGame();
+
+        // When 
+        boolean result = game.shouldPlayDealer(Arrays.asList(player));
+
+        // Then        
+        assertTrue(result);
+    }
+
+
+    @Test
+    @DisplayName("playDealer() should DRAW on less than 17 intial deal")
+    public void playDealerLessThanSeventeen(){
+        // Given
+        Player dealer = new Player(0);
+        dealer.dealCard(new Card(10, Card.Suit.SPADES));
+        dealer.dealCard(new Card(6, Card.Suit.DIAMONDS));
+        playerGets(11, Card.Suit.DIAMONDS);
+        initGame();
+
+        // When 
+       game.playDealer(dealer);
+
+        // Then        
+        assertTrue(out.toString().contains("DRAWS"));
+        assertTrue(out.toString().contains("BUSTED"));
+    }
+
+    @Test
+    @DisplayName("playDealer() should stay on more than 17 intial deal")
+    public void playDealerMoreThanSeventeen(){
+        // Given
+        Player dealer = new Player(0);
+        dealer.dealCard(new Card(10, Card.Suit.SPADES));
+        dealer.dealCard(new Card(8, Card.Suit.DIAMONDS));
+        initGame();
+
+        // When 
+       game.playDealer(dealer);
+
+        // Then        
+        assertFalse(out.toString().contains("DRAWS"));
+        assertFalse(out.toString().contains("BUSTED"));
+        assertTrue(out.toString().contains("---TOTAL IS"));
+    }
+
 }

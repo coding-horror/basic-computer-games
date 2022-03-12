@@ -140,4 +140,54 @@ public class ScoringUtilsTest {
         assertEquals(0, result);
     }
 
+    @Test
+    @DisplayName("compareHands should return 0, hand A and B tie when both bust")
+    public void compareHandsTieBust() {
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.DIAMONDS));
+        handA.add(new Card(10, Card.Suit.HEARTS));
+        handA.add(new Card(3, Card.Suit.HEARTS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(11, Card.Suit.SPADES));
+        handB.add(new Card(4, Card.Suit.SPADES));
+
+        int result = ScoringUtils.compareHands(handA,handB);
+
+        assertEquals(0, result);
+    }
+    @Test
+    @DisplayName("compareHands should return -1, meaning B beat A, A busted")
+    public void compareHandsABusted() {
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.DIAMONDS));
+        handA.add(new Card(10, Card.Suit.HEARTS));
+        handA.add(new Card(3, Card.Suit.HEARTS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(10, Card.Suit.SPADES));
+
+        int result = ScoringUtils.compareHands(handA,handB);
+
+        assertEquals(-1, result);
+    }
+
+    @Test
+    @DisplayName("compareHands should return 1, meaning A beat B, B busted")
+    public void compareHandsBBusted() {
+        LinkedList<Card> handA = new LinkedList<>();
+        handA.add(new Card(10, Card.Suit.DIAMONDS));
+        handA.add(new Card(3, Card.Suit.HEARTS));
+        
+        LinkedList<Card> handB = new LinkedList<>();
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(10, Card.Suit.SPADES));
+        handB.add(new Card(5, Card.Suit.SPADES));
+
+        int result = ScoringUtils.compareHands(handA,handB);
+
+        assertEquals(1, result);
+    }
 }
