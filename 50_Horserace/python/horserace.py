@@ -166,12 +166,12 @@ def print_race_state(total_distance, race_pos):
     basic_print("XXXXSTARTXXXX")
 
     # print all 28 lines/unit of the race course
-    for l in range(28):
+    for line in range(28):
 
         # ensure we still have a horse to print and if so, check if the
         # next horse to print is not the current line
         # needs iteration, since multiple horses can share the same line
-        while next_pos is not None and l == total_distance[next_pos]:
+        while next_pos is not None and line == total_distance[next_pos]:
             basic_print(f"{next_pos} ", end="")
             next_pos = next(race_pos_iter, None)
         else:
@@ -209,8 +209,8 @@ def simulate_race(odds):
         # in the original implementation, race_pos is reset for each
         # simulation step, so we keep this behaviour here
         race_pos = list(range(num_horses))
-        for l in range(num_horses):
-            for i in range(num_horses - 1 - l):
+        for line in range(num_horses):
+            for i in range(num_horses - 1 - line):
                 if total_distance[race_pos[i]] < total_distance[race_pos[i + 1]]:
                     continue
                 race_pos[i], race_pos[i + 1] = race_pos[i + 1], race_pos[i]
