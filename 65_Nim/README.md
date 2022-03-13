@@ -16,6 +16,10 @@ The winning strategy can be mathematically defined, however, rather than present
 
 This game of NIM is from Dartmouth College and allows you to specify any starting size for the four piles and also a win option. To play traditional NIM, you would simply specify 7,5,3 and 1, and win option 1.
 
+### Porting Notes
+
+This can be a real challenge to port because of all the `GOTO`s going out of loops down to code. You may need breaks and continues, or other techniques.
+
 ---
 
 As published in Basic Computer Games (1978):
