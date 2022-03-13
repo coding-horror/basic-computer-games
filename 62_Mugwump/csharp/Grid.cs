@@ -1,40 +1,40 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Mugwump
+namespace Mugwump;
+
+internal class Grid
 {
-    internal class Grid
+    private readonly TextIO _io;
+    private readonly List<Mugwump> _mugwumps;
+
+    public Grid(TextIO io, IRandom random)
     {
-        private readonly List<Mugwump> _mugwumps;
+        _io = io;
+        _mugwumps = Enumerable.Range(1, 4).Select(id => new Mugwump(id, random.NextPosition(10, 10))).ToList();
+    }
 
-        public Grid(IEnumerable<Mugwump> mugwumps)
+    public bool Check(Position guess)
+    {
+        foreach (var mugwump in _mugwumps.ToList())
         {
-            _mugwumps = mugwumps.ToList();
+            var (found, distance) = mugwump.FindFrom(guess);
+
+            _io.WriteLine(found ? $"You have found {mugwump}" : $"You are {distance} units from {mugwump}");
+            if (found)
+            {
+                _mugwumps.Remove(mugwump);
+            }
         }
 
-        public bool Check(Position guess)
+        return _mugwumps.Count == 0;
+    }
+
+    public void Reveal()
+    {
+        foreach (var mugwump in _mugwumps)
         {
-            foreach (var mugwump in _mugwumps.ToList())
-            {
-                var (found, distance) = mugwump.FindFrom(guess);
-
-                Console.WriteLine(found ? $"You have found {mugwump}" : $"You are {distance} units from {mugwump}");
-                if (found)
-                {
-                    _mugwumps.Remove(mugwump);
-                }
-            }
-
-            return _mugwumps.Count == 0;
-        }
-
-        public void Reveal()
-        {
-            foreach (var mugwump in _mugwumps.ToList())
-            {
-                Console.WriteLine(mugwump.Reveal());
-            }
+            _io.WriteLine(mugwump.Reveal());
         }
     }
 }
