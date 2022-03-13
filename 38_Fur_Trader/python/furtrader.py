@@ -61,7 +61,7 @@ def get_fort_choice():
         # try to convert the player's string input into an integer
         try:
             result = int(player_choice)  # string to integer
-        except:
+        except Exception:
             # Whatever the player typed, it could not be interpreted as a number
             pass
 
@@ -124,7 +124,7 @@ def get_furs_purchase():
         try:
             count = int(count_str)
             results.append(count)
-        except:
+        except Exception:
             # invalid input, prompt again by re-looping
             i -= 1
     return results

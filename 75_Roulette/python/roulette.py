@@ -65,7 +65,7 @@ def query_bets():
     while betCount <= 0:
         try:
             betCount = int(input("HOW MANY BETS? "))
-        except:
+        except Exception:
             ...
 
     bet_IDs = [-1] * betCount
@@ -87,7 +87,7 @@ def query_bets():
                 if id > 0 and id <= 50 and val >= 5 and val <= 500:
                     bet_IDs[i] = id
                     bet_Values[i] = val
-            except:
+            except Exception:
                 ...
     return bet_IDs, bet_Values
 

@@ -34,7 +34,7 @@ def read_10_numbers():
     print("TEN NUMBERS, PLEASE ? ")
     numbers = []
 
-    for i in range(10):
+    for _ in range(10):
         valid_input = False
         while not valid_input:
             try:
@@ -56,7 +56,21 @@ def read_continue_choice():
         return False
 
 
-if __name__ == "__main__":
+def print_summary_report(running_correct: int):
+    print()
+    if running_correct > 10:
+        print()
+        print("I GUESSED MORE THAN 1/3 OF YOUR NUMBERS.")
+        print("I WIN." + "\u0007")
+    elif running_correct < 10:
+        print("I GUESSED LESS THAN 1/3 OF YOUR NUMBERS.")
+        print("YOU BEAT ME.  CONGRATULATIONS *****")
+    else:
+        print("I GUESSED EXACTLY 1/3 OF YOUR NUMBERS.")
+        print("IT'S A TIE GAME.")
+
+
+def main():
     print_intro()
     if read_instruction_choice():
         print_instructions()
@@ -65,9 +79,9 @@ if __name__ == "__main__":
     b = 1
     c = 3
 
-    m = [[1] * 3 for i in range(27)]
-    k = [[9] * 3 for i in range(3)]
-    l = [[3] * 3 for i in range(9)]
+    m = [[1] * 3 for _ in range(27)]
+    k = [[9] * 3 for _ in range(3)]
+    l = [[3] * 3 for _ in range(9)]  # noqa: E741
 
     continue_game = True
     while continue_game:
@@ -79,7 +93,7 @@ if __name__ == "__main__":
         z2 = 2
         running_correct = 0
 
-        for t in range(1, 4):
+        for round in range(1, 4):
             valid_numbers = False
             numbers = []
             while not valid_numbers:
@@ -132,19 +146,11 @@ if __name__ == "__main__":
                 z1 = z - (z / 9) * 9
                 z2 = number
 
-        # print summary report
-        print()
-        if running_correct > 10:
-            print()
-            print("I GUESSED MORE THAN 1/3 OF YOUR NUMBERS.")
-            print("I WIN." + "\u0007")
-        elif running_correct < 10:
-            print("I GUESSED LESS THAN 1/3 OF YOUR NUMBERS.")
-            print("YOU BEAT ME.  CONGRATULATIONS *****")
-        else:
-            print("I GUESSED EXACTLY 1/3 OF YOUR NUMBERS.")
-            print("IT'S A TIE GAME.")
-
+        print_summary_report(running_correct)
         continue_game = read_continue_choice()
 
     print("\nTHANKS FOR THE GAME.")
+
+
+if __name__ == "__main__":
+    main()
