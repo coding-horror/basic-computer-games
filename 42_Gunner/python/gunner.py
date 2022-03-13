@@ -7,44 +7,46 @@ from random import random
 
 
 def gunner():
-    R = int(40000 * random() + 20000)
+    gun_range = int(40000 * random() + 20000)
 
-    print("\nMAXIMUM RANGE OF YOUR GUN IS", R, "YARDS.")
+    print("\nMAXIMUM RANGE OF YOUR GUN IS", gun_range, "YARDS.")
 
-    Z = 0
+    killed_enemies = 0
     S1 = 0
 
     while True:
-        T = int(R * (0.1 + 0.8 * random()))
-        S = 0
+        target_distance = int(gun_range * (0.1 + 0.8 * random()))
+        shots = 0
 
-        print("\nDISTANCE TO THE TARGET IS", T, "YARDS.")
+        print("\nDISTANCE TO THE TARGET IS", target_distance, "YARDS.")
 
         while True:
-            B = float(input("\n\nELEVATION? "))
+            elevation = float(input("\n\nELEVATION? "))
 
-            if B > 89:
+            if elevation > 89:
                 print("MAXIMUM ELEVATION IS 89 DEGREES.")
                 continue
 
-            if B < 1:
+            if elevation < 1:
                 print("MINIMUM ELEVATION IS ONE DEGREE.")
                 continue
 
-            S += 1
+            shots += 1
 
-            if S < 6:
-                B2 = 2 * B / 57.3
-                I = R * sin(B2)
-                X = T - I
-                E = int(X)
+            if shots < 6:
+                B2 = 2 * elevation / 57.3
+                shot_impact = gun_range * sin(B2)
+                shot_proximity = target_distance - shot_impact
+                shot_proximity_int = int(shot_proximity)
 
-                if abs(E) < 100:
+                if abs(shot_proximity_int) < 100:
                     print(
-                        "*** TARGET DESTROYED *** ", S, "ROUNDS OF AMMUNITION EXPENDED."
+                        "*** TARGET DESTROYED *** ",
+                        shots,
+                        "ROUNDS OF AMMUNITION EXPENDED.",
                     )
-                    S1 += S
-                    if Z == 4:
+                    S1 += shots
+                    if killed_enemies == 4:
                         print("\n\nTOTAL ROUNDS EXPENDED WERE: ", S1)
                         if S1 > 18:
                             print("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")
@@ -53,16 +55,16 @@ def gunner():
                             print("NICE SHOOTING !!")
                             return
                     else:
-                        Z += 1
+                        killed_enemies += 1
                         print(
                             "\nTHE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY..."
                         )
                         break
                 else:
-                    if E > 100:
-                        print("SHORT OF TARGET BY", abs(E), "YARDS.")
+                    if shot_proximity_int > 100:
+                        print("SHORT OF TARGET BY", abs(shot_proximity_int), "YARDS.")
                     else:
-                        print("OVER TARGET BY", abs(E), "YARDS.")
+                        print("OVER TARGET BY", abs(shot_proximity_int), "YARDS.")
             else:
                 print("\nBOOM !!!!   YOU HAVE JUST BEEN DESTROYED BY THE ENEMY.\n\n\n")
                 print("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")

@@ -96,7 +96,7 @@ while still_running:
     try:
         if response.upper()[0] != "Y":
             still_running = False
-    except:
+    except Exception:
         still_running = False
 
 

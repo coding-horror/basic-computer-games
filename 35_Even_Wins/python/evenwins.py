@@ -90,7 +90,7 @@ def to_int(s):
     try:
         n = int(s)
         return True, n
-    except:
+    except Exception:
         return False, 0
 
 

@@ -86,7 +86,7 @@ class Stock_Market:
             for stock in self.data.keys():
                 try:
                     new_holdings.append(int(input(f"{stock}? ")))
-                except:
+                except Exception:
                     print("\nINVALID ENTRY, TRY AGAIN\n")
                     break
             if len(new_holdings) == 5:
