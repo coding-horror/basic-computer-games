@@ -14,6 +14,7 @@
 
 import random
 from math import sqrt
+from typing import Any, List
 
 # -------------------------------------------------------------------------
 #  Utility functions
@@ -317,17 +318,19 @@ def short_range_scan():
 
 def long_range_scan():
     # Print a long range scan.
-    global z
+    global z, g
 
     if d[2] < 0:
         print("LONG RANGE SENSORS ARE INOPERABLE")
         return
 
     print(f"LONG RANGE SCAN FOR QUADRANT {q1 + 1} , {q2 + 1}")
-    print_scan_results(q1, q2)
+    print_scan_results(q1, q2, g, z)
 
 
-def print_scan_results(q1: int, q2: int) -> None:
+def print_scan_results(
+    q1: int, q2: int, g: List[List[Any]], z: List[List[Any]]
+) -> None:
     sep = "-------------------"
     print(sep)
     for i in (q1 - 1, q1, q1 + 1):
