@@ -1,8 +1,16 @@
+/*
+ * Nim
+ * Originally from the wonderful book: _Basic Computer Games_
+ * Port to Rust By David Lotts
+*/
 use nanorand::{tls::TlsWyRand, Rng};
 use std::io::{self, Write};
 use text_io::{read, try_read};
 
-/// Play Nim on the command line!
+/// Play Nim
+// line numbers from the orginal Basic program are in the end of line comments. 
+// If you see two number comments: the first one is a 
+// GOTO or THEN destination, second is the current line. Example: // 800 //210
 fn main() {
     let mut rng = nanorand::tls_rng();
     println!("{:>37}", "NIM"); //100
