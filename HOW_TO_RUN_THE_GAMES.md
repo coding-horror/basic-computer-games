@@ -2,6 +2,16 @@
 
 The games in this repository have been translated into a number of different languages. How to run them depends on the target language.
 
+## bash
+
+On **Linux** and **MacOS** you can just execute the `*.sh` script inside the `bash` folder of the selected game.
+
+```bash
+. ./74_Rock_Scissors_Paper/bash/rockscissors.sh
+```
+
+On **windows** you need to install a linux bash shell first.
+
 ## csharp
 
 ### dotnet command-line
