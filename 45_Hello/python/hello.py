@@ -73,16 +73,16 @@ def solve_sex_problem(user_name):
         valid, too_much = prompt_too_much_or_too_little()
         if valid:
             if too_much:
-                print(f"YOU CALL THAT A PROBLEM?!!  I SHOULD HAVE SUCH PROBLEMS!")
+                print("YOU CALL THAT A PROBLEM?!!  I SHOULD HAVE SUCH PROBLEMS!")
                 print(f"IF IT BOTHERS YOU, {user_name}, TAKE A COLD SHOWER.")
             else:
                 print(f"WHY ARE YOU HERE IN SUFFERN, {user_name}?  YOU SHOULD BE")
-                print(f"IN TOKYO OR NEW YORK OR AMSTERDAM OR SOMEPLACE WITH SOME")
-                print(f"REAL ACTION.")
+                print("IN TOKYO OR NEW YORK OR AMSTERDAM OR SOMEPLACE WITH SOME")
+                print("REAL ACTION.")
             return
         else:
             print(f"DON'T GET ALL SHOOK, {user_name}, JUST ANSWER THE QUESTION")
-            print(f"WITH 'TOO MUCH' OR 'TOO LITTLE'.  WHICH IS IT?")
+            print("WITH 'TOO MUCH' OR 'TOO LITTLE'.  WHICH IS IT?")
 
 
 def solve_money_problem(user_name):
@@ -140,7 +140,7 @@ def ask_question_loop(user_name):
 def ask_for_fee(user_name):
     print()
     print(f"THAT WILL BE $5.00 FOR THE ADVICE, {user_name}.")
-    print(f"PLEASE LEAVE THE MONEY ON THE TERMINAL.")
+    print("PLEASE LEAVE THE MONEY ON THE TERMINAL.")
     time.sleep(4)
     print()
     print()

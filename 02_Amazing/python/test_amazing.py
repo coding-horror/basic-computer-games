@@ -3,7 +3,7 @@ from amazing import build_maze, welcome_header
 
 
 def test_welcome_header(capsys):
-    assert welcome_header() == None
+    assert welcome_header() is None
     out, err = capsys.readouterr()
     assert out == (
         "                            AMAZING PROGRAM\n"

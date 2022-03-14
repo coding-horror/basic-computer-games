@@ -1,12 +1,12 @@
 import random
-from typing import List, Tuple
+from typing import Any, List, Tuple
 
 
 def print_n_whitespaces(n: int) -> None:
     print(" " * n, end="")
 
 
-def print_board():
+def print_board(A: List[List[Any]], n):
     """PRINT THE BOARD"""
     for i in range(n):
         print(" ", end="")
@@ -128,7 +128,7 @@ def main():
                                             and board[X - 1][Y - 1] == 0
                                         ):
                                             board[X - 1][Y - 1] = 2
-                                            print_board()
+                                            print_board(board, n)
                                             break
                                 else:
                                     if board[X - 1][Y - 1] != 0:
@@ -140,11 +140,11 @@ def main():
                                                 and board[X - 1][Y - 1] == 0
                                             ):
                                                 board[X - 1][Y - 1] = 2
-                                                print_board()
+                                                print_board(board, n)
                                                 break
                                     else:
                                         board[X - 1][Y - 1] = 2
-                                        print_board()
+                                        print_board(board, n)
         print()
         print("THANKS FOR THE GAME!!")
         repeat = input("PLAY AGAIN (1 FOR YES, 0 FOR NO)? ")
