@@ -919,7 +919,7 @@ def end_game(won=False, quit=True, enterprise_killed=False):
             print(f"IT IS STARDATE {round(t, 1)}")
 
         print(f"THERE WERE {k9} KLINGON BATTLE CRUISERS LEFT AT")
-        print(f"THE END OF YOUR MISSION.\n\n")
+        print("THE END OF YOUR MISSION.\n\n")
 
         if b9 == 0:
             exit()

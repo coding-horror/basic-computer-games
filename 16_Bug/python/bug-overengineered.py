@@ -133,7 +133,7 @@ def update_game(data, action):
                 # the new part depends on and doesn't have enough of the part already
                 overMaxParts = part_type.count < part_count + 1
                 missingPartDep = (
-                    part_type.depends != None and parts[part_type.depends] == 0
+                    part_type.depends is not None and parts[part_type.depends] == 0
                 )
 
                 if not overMaxParts and not missingPartDep:

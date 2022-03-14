@@ -112,7 +112,7 @@ def main() -> None:
     sea = tuple([0 for _ in range(SEA_WIDTH)] for _ in range(SEA_WIDTH))
     setup_ships(sea)
     print(
-        f"""
+        """
                 BATTLE
 CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
 

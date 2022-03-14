@@ -205,13 +205,13 @@ class TicTacToe3D:
                     return event(i)
 
         m = self.markAndMove(80, 88, 43)
-        if m != None:
+        if m is not None:
             return m
 
         self.clearStrategyMarks()
 
         m = self.markAndMove(16, 24, 11)
-        if m != None:
+        if m is not None:
             return m
 
         for k in range(18):
@@ -223,7 +223,7 @@ class TicTacToe3D:
                 for s in [1, 0]:
                     for i in range(4 * k, 4 * k + 4):
                         m = self.moveDiagonals(i, s)
-                        if m != None:
+                        if m is not None:
                             return m
 
         self.clearStrategyMarks()

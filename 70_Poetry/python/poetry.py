@@ -12,10 +12,10 @@ Ported by Dave LeCompte
 # state. This adaptation pulls things apart into phrases, but I have
 # left the variables as globals, which makes goes against decades of
 # wisdom that global state is bad.
+import random
 
 PAGE_WIDTH = 64
 
-import random
 
 # globals
 u = 0
