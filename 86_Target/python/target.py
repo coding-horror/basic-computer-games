@@ -6,7 +6,6 @@ Weapon targeting simulation / 3d trigonometry practice
 Ported by Dave LeCompte
 """
 
-import collections
 import math
 import random
 
@@ -129,9 +128,9 @@ def do_shot_loop(p1, x, y, z):
             print()
             print(" * * * HIT * * *   TARGET IS NON FUNCTIONAL")
             print()
-            print(f"DISTANCE OF EXPLOSION FROM TARGET WAS {d:.4f} KILOMETERS")
+            print(f"DISTANCE OF EXPLOSION FROM TARGET WAS {distance:.4f} KILOMETERS")
             print()
-            print(f"MISSION ACCOMPLISHED IN {r} SHOTS.")
+            print(f"MISSION ACCOMPLISHED IN {shot_count} SHOTS.")
 
             return
         else:

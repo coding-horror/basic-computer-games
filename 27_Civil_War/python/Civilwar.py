@@ -190,20 +190,21 @@ def main():
     union_strategy_index = 0
     u = 0
     u2 = 0
+    random_nb = 0
     while True:
         print()
         print()
         print()
-        a = int(input("WHICH BATTLE DO YOU WISH TO SIMULATE? "))
-        if a < 1 or a > 14:
+        simulated_battle_index = int(input("WHICH BATTLE DO YOU WISH TO SIMULATE? "))
+        if simulated_battle_index < 1 or simulated_battle_index > 14:
             break
-        if a != 0 or r == 0:
-            cs = historical_data[a][0]
-            m1 = historical_data[a][1]
-            m2 = historical_data[a][2]
-            c1 = historical_data[a][3]
-            c2 = historical_data[a][4]
-            m = historical_data[a][5]
+        if simulated_battle_index != 0 or random_nb == 0:
+            cs = historical_data[simulated_battle_index][0]
+            m1 = historical_data[simulated_battle_index][1]
+            m2 = historical_data[simulated_battle_index][2]
+            c1 = historical_data[simulated_battle_index][3]
+            c2 = historical_data[simulated_battle_index][4]
+            m = historical_data[simulated_battle_index][5]
             u = 0
             # Inflation calc
             i1 = 10 + (line - w) * 2
@@ -228,7 +229,7 @@ def main():
             print()
             print(f"THIS IS THE BATTLE OF {cs}")
             if xs != "NO":
-                print("\n".join(battles[a - 1]))
+                print("\n".join(battles[simulated_battle_index - 1]))
 
         else:
             print(cs + " INSTANT REPLAY")
@@ -318,7 +319,7 @@ def main():
                 print("THE CONFEDERACY HAS SURRENDERED.")
                 break
             # Union strategy is computer chosen
-            if a == 0:
+            if simulated_battle_index == 0:
                 while True:
                     union_strategy_index = int(input("UNION STRATEGY IS "))
                     if union_strategy_index > 0 and union_strategy_index < 5:
@@ -326,12 +327,12 @@ def main():
                     print("ENTER 1, 2, 3, OR 4 (USUALLY PREVIOUS UNION STRATEGY)")
             else:
                 s0 = 0
-                r = math.random() * 100
+                random_nb = math.random() * 100
                 for i in range(1, 5):
                     s0 += sa[i]
                     # If actual strategy info is in program data statements
                     # then r-100 is extra weight given to that strategy.
-                    if r < s0:
+                    if random_nb < s0:
                         break
                 union_strategy_index = i
                 print(union_strategy_index)
@@ -347,7 +348,7 @@ def main():
                     print("YOUR STRATEGY ? ", end="")
                 if i == 2:
                     union_strategy_index = strategy_index
-                    strategy_index = previous_strategy
+                    strategy_index = previous_strategy  # noqa: F821
                     if union_strategy_index != 5:
                         break
                 else:
@@ -407,15 +408,15 @@ def main():
             w0 += 1
         elif u == 1 or (u != 1 and u2 != 1 and c5 + e > c6 + e2):
             print("THE UNION WINS " + str(cs))
-            if a != 0:
+            if simulated_battle_index != 0:
                 line += 1
         else:
             print("THE CONFEDERACY WINS " + str(cs))
-            if a != 0:
+            if simulated_battle_index != 0:
                 w += 1
 
         # Lines 2530 to 2590 from original are unreachable.
-        if a != 0:
+        if simulated_battle_index != 0:
             t1 += c5 + e
             t2 += c6 + e2
             p1 += c1

@@ -19,8 +19,6 @@
 # more structured style.
 #
 
-import random
-
 # global variables
 marbles_in_middle = -1
 human_marbles = -1
