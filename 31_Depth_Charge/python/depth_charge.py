@@ -73,7 +73,7 @@ def get_shot_input():
             x, y, z = raw_guess.split()
         except ValueError:
             print("Please enter coordinates separated by spaces")
-            print(f"Example: 3 2 1")
+            print("Example: 3 2 1")
             continue
         try:
             x, y, z = (int(num) for num in [x, y, z])
