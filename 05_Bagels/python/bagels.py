@@ -68,9 +68,7 @@ def get_valid_guess():
                 if len(set(guess)) == 3:
                     valid = True
                 else:
-                    print(
-                        "Oh, I forgot to tell you that " + "the number I have in mind"
-                    )
+                    print("Oh, I forgot to tell you that the number I have in mind")
                     print("has no two digits the same.")
             else:
                 print("What?")
@@ -147,7 +145,7 @@ while still_running:
             guesses += 1
             if guesses > MAX_GUESSES:
                 print("Oh well")
-                print(f"That's {MAX_GUESSES} guesses.  " + "My number was " + num_str)
+                print(f"That's {MAX_GUESSES} guesses.  My number was {num_str}")
                 guessing = False
 
     valid_response = False

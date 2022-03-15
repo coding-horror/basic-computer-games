@@ -14,7 +14,6 @@ Supports Python version 3.8 or later.
 from random import random
 from typing import Final, FrozenSet, Optional, Tuple
 
-
 ########################################################################################
 #                                  Optional configs
 ########################################################################################
@@ -178,8 +177,8 @@ def get_move(current_loc: Optional[Tuple[int, int]]) -> Tuple[int, int]:
                 else:
                     prompt = (
                         "PLEASE READ THE DIRECTIONS AGAIN.\n"
-                        + "YOU HAVE BEGUN ILLEGALLY.\n\n"
-                        + "WHERE WOULD YOU LIKE TO START? "
+                        "YOU HAVE BEGUN ILLEGALLY.\n\n"
+                        "WHERE WOULD YOU LIKE TO START? "
                     )
             else:
                 if (
