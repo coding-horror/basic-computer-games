@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+</head>
+
+<body>
+    <div id="elm-app-is-loaded-here" />
+    <script src="app.js"></script>
+    <script>
+        var app = Elm.Main.init({
+            node: document.getElementById("elm-app-is-loaded-here"),
+            flags: {}
+        });
+    </script>
+</body>
+
+</html>
