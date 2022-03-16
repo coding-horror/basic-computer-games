@@ -1,1 +1,0 @@
-Illegal entry... You may only type 3, 5, 7, 9, 11, 13, or 15.

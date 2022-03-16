@@ -1,3 +1,0 @@
-﻿using Letter;
-
-Game.Play();

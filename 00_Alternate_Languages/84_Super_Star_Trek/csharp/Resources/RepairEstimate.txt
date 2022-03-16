@@ -1,2 +1,0 @@
-Technicians standing by to effect repairs to your ship;
-Estimated time to repair: {0} stardates.

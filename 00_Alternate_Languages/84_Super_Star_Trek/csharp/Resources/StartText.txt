@@ -1,4 +1,0 @@
-
-
-Your mission begins with your starship located
-in the galactic quadrant, '{0}'.

@@ -1,2 +1,0 @@
-
-Now entering {0} quadrant . . .

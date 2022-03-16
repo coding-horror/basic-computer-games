@@ -1,3 +1,0 @@
-Is is stardate {0}.
-There were {1} Klingon battle cruisers left at
-the end of your mission.

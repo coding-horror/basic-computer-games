@@ -1,6 +1,0 @@
-
-Towers of Hanoi puzzle.
-
-You must transfer the disks from the left to the right
-tower, one at a time, never putting a larger dish on a
-smaller disk.
