@@ -14,7 +14,7 @@ I have moved all [the original BASIC source code](http://www.vintage-basic.net/g
 
 > I've included all the games here for your tinkering pleasure. I've tested and tweaked each one of them to make sure they'll run with Vintage BASIC, though you may see a few oddities. That's part of the fun of playing with BASIC: it never works quite the same on two machines. The games will play better if you keep CAPS LOCK on, as they were designed to be used with capital-letter input.
 
-Each project has subfolders corresponding to the languages we'd like to see the games ported to. This is based on the [February 2021 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _**memory safe**_ and _**general purpose scripting languages**_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
+Each project has subfolders corresponding to the languages we'd like to see the games ported to. This is based on the [2022 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _**memory safe**_ and _**general purpose scripting languages**_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
 
 - Java / Kotlin
 - Python
@@ -26,7 +26,7 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 - Rust
 - Lua
 
-> 📢 Note that we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE and is both a scripting language and memory safe.
+> 📢 Note that we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE (as of 2022) and is both a scripting language and memory safe.
 
 
 ### Project goals
