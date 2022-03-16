@@ -23,8 +23,9 @@ class Basketball:
         print("Υou will be Dartmouth captain and playmaker.")
         print("Call shots as follows:")
         print(
-            "1. Long (30ft.) Jump Shot; 2. Short (15 ft.) Jump Shot; "
-            + "3. Lay up; 4. Set Shot"
+            "1. Long (30ft.) Jump Shot; "
+            "2. Short (15 ft.) Jump Shot; "
+            "3. Lay up; 4. Set Shot"
         )
         print("Both teams will use the same defense. Call Defense as follows:")
         print("6. Press; 6.5 Man-to-Man; 7. Zone; 7.5 None.")

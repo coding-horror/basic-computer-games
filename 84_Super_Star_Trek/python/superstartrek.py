@@ -117,9 +117,7 @@ def navigation():
     if warp == 0:
         return
     if warp < 0 or warp > 8:
-        print(
-            "   CHIEF ENGINEER SCOTT REPORTS 'THE ENGINES WON'T TAKE " f"WARP {warp}!'"
-        )
+        print(f"   CHIEF ENGINEER SCOTT REPORTS 'THE ENGINES WON'T TAKE WARP {warp}!'")
         return
 
     n = round(warp * 8)
@@ -160,9 +158,7 @@ def navigation():
             print(f"DAMAGE CONTROL REPORT:   {devices[r1]} DAMAGED\n")
         else:
             d[r1] += random.random() * 3 + 1
-            print(
-                f"DAMAGE CONTROL REPORT:   {devices[r1]} STATE OF " "REPAIR IMPROVED\n"
-            )
+            print(f"DAMAGE CONTROL REPORT:   {devices[r1]} STATE OF REPAIR IMPROVED\n")
 
     # begin moving starship
     insert_marker(int(s1), int(s2), "   ")
@@ -204,7 +200,7 @@ def navigation():
                 q2 = s2 = 7
             if hit_edge:
                 print("LT. UHURA REPORTS MESSAGE FROM STARFLEET COMMAND:")
-                print("  'PERMISSION TO ATTEMPT CROSSING OF GALACTIC " "PERIMETER")
+                print("  'PERMISSION TO ATTEMPT CROSSING OF GALACTIC PERIMETER")
                 print("  IS HEREBY *DENIED*. SHUT DOWN YOUR ENGINES.'")
                 print("CHIEF ENGINEER SCOTT REPORTS  'WARP ENGINES SHUT DOWN")
                 print(
@@ -392,14 +388,10 @@ def phaser_control():
 
         h = int((h1 / fnd(i)) * (random.random() + 2))
         if h <= 0.15 * k[i][2]:
-            print(
-                "SENSORS SHOW NO DAMAGE TO ENEMY AT " f"{k[i][0] + 1} , {k[i][1] + 1}"
-            )
+            print(f"SENSORS SHOW NO DAMAGE TO ENEMY AT {k[i][0] + 1} , {k[i][1] + 1}")
         else:
             k[i][2] -= h
-            print(
-                f" {h} UNIT HIT ON KLINGON AT SECTOR " f"{k[i][0] + 1} , {k[i][1] + 1}"
-            )
+            print(f" {h} UNIT HIT ON KLINGON AT SECTOR {k[i][0] + 1} , {k[i][1] + 1}")
             if k[i][2] <= 0:
                 print("*** KLINGON DESTROYED ***")
                 k3 -= 1
@@ -515,9 +507,7 @@ def klingons_fire():
         h = int((k[i][2] / fnd(i)) * (random.random() + 2))
         s -= h
         k[i][2] /= random.random() + 3
-        print(
-            f" {h} UNIT HIT ON ENTERPRISE FROM SECTOR " f"{k[i][0] + 1} , {k[i][1] + 1}"
-        )
+        print(f" {h} UNIT HIT ON ENTERPRISE FROM SECTOR {k[i][0] + 1} , {k[i][1] + 1}")
         if s <= 0:
             end_game(won=False, quit=False, enterprise_killed=True)
             return
@@ -525,7 +515,7 @@ def klingons_fire():
         if h >= 20 and random.random() < 0.60 and h / s > 0.02:
             r1 = fnr()
             d[r1] -= h / s + 0.5 * random.random()
-            print(f"DAMAGE CONTROL REPORTS  '{devices[r1]} DAMAGED " "BY THE HIT'")
+            print(f"DAMAGE CONTROL REPORTS  '{devices[r1]} DAMAGED BY THE HIT'")
 
 
 def shield_control():
@@ -585,7 +575,7 @@ def damage_control():
     if d3 >= 1:
         d3 = 0.9
     print("\nTECHNICIANS STANDING BY TO EFFECT REPAIRS TO YOUR SHIP;")
-    print("ESTIMATED TIME TO REPAIR: " f"{round(0.01 * int(100 * d3), 2)} STARDATES")
+    print(f"ESTIMATED TIME TO REPAIR: {round(0.01 * int(100 * d3), 2)} STARDATES")
     if input("WILL YOU AUTHORIZE THE REPAIR ORDER (Y/N)? ").upper().strip() != "Y":
         return
 
@@ -676,9 +666,7 @@ def computer():
                 )
                 return
 
-            print(
-                "FROM ENTERPRISE TO KLINGON BATTLE " f"CRUISER{'S' if k3 > 1 else ''}"
-            )
+            print(f"FROM ENTERPRISE TO KLINGON BATTLE CRUISER{'S' if k3 > 1 else ''}")
 
             for i in range(3):
                 if k[i][2] > 0:
@@ -697,7 +685,7 @@ def computer():
             return
         elif com == 4:
             print("DIRECTION/DISTANCE CALCULATOR:")
-            print(f"YOU ARE AT QUADRANT {q1+1} , {q2+1} SECTOR " f"{s1+1} , {s2+1}")
+            print(f"YOU ARE AT QUADRANT {q1+1} , {q2+1} SECTOR {s1+1} , {s2+1}")
             print("PLEASE ENTER")
             while True:
                 coordinates = input("  INITIAL COORDINATES (X,Y)? ").split(",")
@@ -908,7 +896,7 @@ def end_game(won=False, quit=True, enterprise_killed=False):
     if won:
         print("CONGRATULATIONS, CAPTAIN! THE LAST KLINGON BATTLE CRUISER")
         print("MENACING THE FEDERATION HAS BEEN DESTROYED.\n")
-        print("YOUR EFFICIENCY RATING IS " f"{round(1000 * (k7 / (t - t0))**2, 4)}\n\n")
+        print(f"YOUR EFFICIENCY RATING IS {round(1000 * (k7 / (t - t0))**2, 4)}\n\n")
     else:
         if not quit:
             if enterprise_killed:
@@ -926,7 +914,7 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 
     print("THE FEDERATION IS IN NEED OF A NEW STARSHIP COMMANDER")
     print("FOR A SIMILAR MISSION -- IF THERE IS A VOLUNTEER,")
-    if input("LET HIM STEP FORWARD AND " "ENTER 'AYE'? ").upper().strip() != "AYE":
+    if input("LET HIM STEP FORWARD AND ENTER 'AYE'? ").upper().strip() != "AYE":
         exit()
     restart = True
 

@@ -19,16 +19,11 @@ def print_lightning_bolt():
 
 def print_solution(n):
 
-    print(
-        "\n{} plus 3 gives {}. This Divided by 5 equals {}".format(
-            n, n + 3, (n + 3) / 5
-        )
-    )
+    print(f"\n{n} plus 3 gives {n + 3}. This Divided by 5 equals {(n + 3) / 5}")
     print(f"This times 8 gives {((n + 3) / 5) * 8}. If we divide 5 and add 5.")
     print(
-        "We get {}, which, minus 1 equals {}".format(
-            (((n + 3) / 5) * 8) / 5 + 5, ((((n + 3) / 5) * 8) / 5 + 5) - 1
-        )
+        f"We get {(((n + 3) / 5) * 8) / 5 + 5}, "
+        f"which, minus 1 equals {((((n + 3) / 5) * 8) / 5 + 5) - 1}"
     )
 
 
