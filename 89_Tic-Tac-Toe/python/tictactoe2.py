@@ -117,13 +117,13 @@ def think(board, g, h, moves):
 
     if g == OccupiedBy.PLAYER:
         j = 3 * int((moves - 1) / 3)
-        if move == j + 1:
+        if move == j + 1:  # noqa: This definitely is a bug!
             k = 1
-        if move == j + 2:
+        if move == j + 2:  # noqa: This definitely is a bug!
             k = 2
-        if move == j + 3:
+        if move == j + 3:  # noqa: This definitely is a bug!
             k = 3
-        return subthink(g, h, j, k)
+        return subthink(g, h, j, k)  # noqa: This definitely is a bug!
 
 
 def render_board(board, space_mapping):

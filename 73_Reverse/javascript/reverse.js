@@ -94,9 +94,9 @@ async function main()
         a[i] = 0;
     // *** N=NUMBER OF NUMBER
     n = 9;
-    print("DO YOU WANT THE RULES");
+    print("DO YOU WANT THE RULES? (YES OR NO)");
     str = await input();
-    if (str != "NO")
+    if (str.toUpperCase() === "YES" || str.toUpperCase() === "Y")
         print_rules();
     while (1) {
         // *** Make a random list a(1) to a(n)
@@ -123,7 +123,7 @@ async function main()
                     break;
                 if (r <= n)
                     break;
-                print("OOPS! TOO MANY! I CAN REVERSE AT MOST " + n + "\n");
+                print("OOPS! WRONG! I CAN REVERSE AT MOST " + n + "\n");
             }
             if (r == 0)
                 break;
@@ -147,9 +147,9 @@ async function main()
             }
         }
         print("\n");
-        print("TRY AGAIN (YES OR NO)");
+        print("TRY AGAIN? (YES OR NO)");
         str = await input();
-        if (str != "YES")
+        if (str.toUpperCase() === "NO" || str.toUpperCase() === "N")
             break;
     }
     print("\n");

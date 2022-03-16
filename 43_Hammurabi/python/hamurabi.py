@@ -46,143 +46,165 @@ def main():
 
     D1 = 0
     P1 = 0
-    Z = 0  # year
-    P = 95  # population
-    S = 2800  # grain stores
+    year = 0
+    population = 95
+    grain_stores = 2800
     H = 3000
-    E = H - S  # rats eaten
-    Y = 3  # yield (amount of production from land). Reused as price per acre
-    A = H / Y  # acres of land
-    I = 5  # immigrants
-    Q = 1  # boolean for plague, also input for buy/sell land
-    D = 0  # people
+    eaten_rats = H - grain_stores
+    bushels_per_acre = (
+        3  # yield (amount of production from land). Reused as price per acre
+    )
+    acres = H / bushels_per_acre  # acres of land
+    immigrants = 5
+    plague = 1  # boolean for plague, also input for buy/sell land
+    people = 0
 
-    while Z < 11:  # line 270. main loop. while the year is less than 11
+    while year < 11:  # line 270. main loop. while the year is less than 11
         print("\n\n\nHAMURABI:  I BEG TO REPORT TO YOU")
-        Z = Z + 1  # year
-        print("IN YEAR", Z, ",", D, "PEOPLE STARVED,", I, "CAME TO THE CITY,")
-        P = P + I
+        year = year + 1  # year
+        print(
+            "IN YEAR",
+            year,
+            ",",
+            people,
+            "PEOPLE STARVED,",
+            immigrants,
+            "CAME TO THE CITY,",
+        )
+        population = population + immigrants
 
-        if Q == 0:
-            P = int(P / 2)
+        if plague == 0:
+            population = int(population / 2)
             print("A HORRIBLE PLAGUE STRUCK!  HALF THE PEOPLE DIED.")
 
-        print("POPULATION IS NOW", P)
-        print("THE CITY NOW OWNS", A, "ACRES.")
-        print("YOU HARVESTED", Y, "BUSHELS PER ACRE.")
-        print("THE RATS ATE", E, "BUSHELS.")
-        print("YOU NOW HAVE ", S, "BUSHELS IN STORE.\n")
+        print("POPULATION IS NOW", population)
+        print("THE CITY NOW OWNS", acres, "ACRES.")
+        print("YOU HARVESTED", bushels_per_acre, "BUSHELS PER ACRE.")
+        print("THE RATS ATE", eaten_rats, "BUSHELS.")
+        print("YOU NOW HAVE ", grain_stores, "BUSHELS IN STORE.\n")
         C = int(10 * random())  # random number between 1 and 10
-        Y = C + 17
-        print("LAND IS TRADING AT", Y, "BUSHELS PER ACRE.")
+        bushels_per_acre = C + 17
+        print("LAND IS TRADING AT", bushels_per_acre, "BUSHELS PER ACRE.")
 
-        Q = -99  # dummy value to track status
-        while Q == -99:  # always run the loop once
-            Q = b_input("HOW MANY ACRES DO YOU WISH TO BUY? ")
-            if Q < 0:
-                Q = -1  # to avoid the corner case of Q=-99
+        plague = -99  # dummy value to track status
+        while plague == -99:  # always run the loop once
+            plague = b_input("HOW MANY ACRES DO YOU WISH TO BUY? ")
+            if plague < 0:
+                plague = -1  # to avoid the corner case of Q=-99
                 bad_input_850()
-                Z = 99  # jump out of main loop and exit
-            elif Y * Q > S:  # can't afford it
-                bad_input_710(S)
-                Q = -99  # give'm a second change to get it right
-            elif Y * Q <= S:  # normal case, can afford it
-                A = A + Q  # increase the number of acres by Q
-                S = S - Y * Q  # decrease the amount of grain in store to pay for it
+                year = 99  # jump out of main loop and exit
+            elif bushels_per_acre * plague > grain_stores:  # can't afford it
+                bad_input_710(grain_stores)
+                plague = -99  # give'm a second change to get it right
+            elif (
+                bushels_per_acre * plague <= grain_stores
+            ):  # normal case, can afford it
+                acres = acres + plague  # increase the number of acres by Q
+                grain_stores = (
+                    grain_stores - bushels_per_acre * plague
+                )  # decrease the amount of grain in store to pay for it
                 C = 0  # WTF is C for?
 
-        if Q == 0 and Z != 99:  # maybe you want to sell some land?
-            Q = -99
-            while Q == -99:
-                Q = b_input("HOW MANY ACRES DO YOU WISH TO SELL? ")
-                if Q < 0:
+        if plague == 0 and year != 99:  # maybe you want to sell some land?
+            plague = -99
+            while plague == -99:
+                plague = b_input("HOW MANY ACRES DO YOU WISH TO SELL? ")
+                if plague < 0:
                     bad_input_850()
-                    Z = 99  # jump out of main loop and exit
-                elif Q <= A:  # normal case
-                    A = A - Q  # reduce the acres
-                    S = S + Y * Q  # add to grain stores
+                    year = 99  # jump out of main loop and exit
+                elif plague <= acres:  # normal case
+                    acres = acres - plague  # reduce the acres
+                    grain_stores = (
+                        grain_stores + bushels_per_acre * plague
+                    )  # add to grain stores
                     C = 0  # still don't know what C is for
                 else:  # Q>A error!
-                    bad_input_720(A)
-                    Q = -99  # reloop
+                    bad_input_720(acres)
+                    plague = -99  # reloop
             print("\n")
 
-        Q = -99
-        while Q == -99 and Z != 99:
-            Q = b_input("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? ")
-            if Q < 0:
+        plague = -99
+        while plague == -99 and year != 99:
+            plague = b_input("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? ")
+            if plague < 0:
                 bad_input_850()
-                Z = 99  # jump out of main loop and exit
+                year = 99  # jump out of main loop and exit
             # REM *** TRYING TO USE MORE GRAIN THAN IS IN SILOS?
-            elif Q > S:
-                bad_input_710(S)
-                Q = -99  # try again!
+            elif plague > grain_stores:
+                bad_input_710(grain_stores)
+                plague = -99  # try again!
             else:  # we're good. do the transaction
-                S = S - Q  # remove the grain from the stores
+                grain_stores = grain_stores - plague  # remove the grain from the stores
                 C = 1  # set the speed of light to 1. jk
 
         print("\n")
-        D = -99  # dummy value to force at least one loop
-        while D == -99 and Z != 99:
-            D = b_input("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED? ")
-            if D < 0:
+        people = -99  # dummy value to force at least one loop
+        while people == -99 and year != 99:
+            people = b_input("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED? ")
+            if people < 0:
                 bad_input_850()
-                Z = 99  # jump out of main loop and exit
-            elif D > 0:
-                if D > A:
+                year = 99  # jump out of main loop and exit
+            elif people > 0:
+                if people > acres:
                     # REM *** TRYING TO PLANT MORE ACRES THAN YOU OWN?
-                    bad_input_720(A)
-                    D = -99
-                elif int(D / 2) > S:
+                    bad_input_720(acres)
+                    people = -99
+                elif int(people / 2) > grain_stores:
                     # REM *** ENOUGH GRAIN FOR SEED?
-                    bad_input_710(S)
-                    D = -99
-                elif D > 10 * P:
+                    bad_input_710(grain_stores)
+                    people = -99
+                elif people > 10 * population:
                     # REM *** ENOUGH PEOPLE TO TEND THE CROPS?
                     print(
-                        "BUT YOU HAVE ONLY", P, "PEOPLE TO TEND THE FIELDS!  NOW THEN,"
+                        "BUT YOU HAVE ONLY",
+                        population,
+                        "PEOPLE TO TEND THE FIELDS!  NOW THEN,",
                     )
-                    D = -99
+                    people = -99
                 else:  # we're good. decrement the grain store
-                    S = S - int(D / 2)
+                    grain_stores = grain_stores - int(people / 2)
 
         C = gen_random()
         # REM *** A BOUNTIFUL HARVEST!
-        Y = C
-        H = D * Y
-        E = 0
+        bushels_per_acre = C
+        H = people * bushels_per_acre
+        eaten_rats = 0
 
         C = gen_random()
         if int(C / 2) == C / 2:  # even number. 50/50 chance
             # REM *** RATS ARE RUNNING WILD!!
-            E = int(S / C)  # calc losses due to rats, based on previous random number
+            eaten_rats = int(
+                grain_stores / C
+            )  # calc losses due to rats, based on previous random number
 
-        S = S - E + H  # deduct losses from stores
+        grain_stores = grain_stores - eaten_rats + H  # deduct losses from stores
 
         C = gen_random()
         # REM *** LET'S HAVE SOME BABIES
-        I = int(C * (20 * A + S) / P / 100 + 1)
+        immigrants = int(C * (20 * acres + grain_stores) / population / 100 + 1)
         # REM *** HOW MANY PEOPLE HAD FULL TUMMIES?
-        C = int(Q / 20)
+        C = int(plague / 20)
         # REM *** HORROS, A 15% CHANCE OF PLAGUE
         # yeah, should be HORRORS, but left it
-        Q = int(10 * (2 * random() - 0.3))
-        if P >= C and Z != 99:  # if there are some people without full bellies...
+        plague = int(10 * (2 * random() - 0.3))
+        if (
+            population >= C and year != 99
+        ):  # if there are some people without full bellies...
             # REM *** STARVE ENOUGH FOR IMPEACHMENT?
-            D = P - C
-            if D > 0.45 * P:
-                print("\nYOU STARVED", D, "PEOPLE IN ONE YEAR!!!")
+            people = population - C
+            if people > 0.45 * population:
+                print("\nYOU STARVED", people, "PEOPLE IN ONE YEAR!!!")
                 national_fink()
-                Z = 99  # exit the loop
-            P1 = ((Z - 1) * P1 + D * 100 / P) / Z
-            P = C
-            D1 = D1 + D
+                year = 99  # exit the loop
+            P1 = ((year - 1) * P1 + people * 100 / population) / year
+            population = C
+            D1 = D1 + people
 
-    if Z != 99:
+    if year != 99:
         print("IN YOUR 10-YEAR TERM OF OFFICE,", P1, "PERCENT OF THE")
         print("POPULATION STARVED PER YEAR ON THE AVERAGE, I.E. A TOTAL OF")
         print(D1, "PEOPLE DIED!!")
-        L = A / P
+        L = acres / population
         print("YOU STARTED WITH 10 ACRES PER PERSON AND ENDED WITH")
         print(L, "ACRES PER PERSON.\n")
         if P1 > 33 or L < 7:
@@ -193,7 +215,11 @@ def main():
             print("FRANKLY, HATE YOUR GUTS!!")
         elif P1 > 3 or L < 10:
             print("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT")
-            print("REALLY WASN'T TOO BAD AT ALL. ", int(P * 0.8 * random()), "PEOPLE")
+            print(
+                "REALLY WASN'T TOO BAD AT ALL. ",
+                int(population * 0.8 * random()),
+                "PEOPLE",
+            )
             print("WOULD DEARLY LIKE TO SEE YOU ASSASSINATED BUT WE ALL HAVE OUR")
             print("TRIVIAL PROBLEMS.")
         else:
