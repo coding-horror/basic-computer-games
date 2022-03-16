@@ -99,7 +99,7 @@ class Game:
         while which is None:
             try:
                 which = self.which_disk()
-            except:
+            except Exception:
                 print("ILLEGAL ENTRY... YOU MAY ONLY TYPE 3,5,7,9,11,13, OR 15.\n")
 
         valids = [t for t in self.__towers if t.top() and t.top().size() == which]
@@ -115,7 +115,7 @@ class Game:
         try:
             needle = int(input("PLACE DISK ON WHICH NEEDLE\n"))
             tower = self.__towers[needle - 1]
-        except:
+        except Exception:
             print(
                 "I'LL ASSUME YOU HIT THE WRONG KEY THIS TIME.  BUT WATCH IT,\nI ONLY ALLOW ONE MISTAKE.\n"
             )

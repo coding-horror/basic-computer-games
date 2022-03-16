@@ -61,7 +61,7 @@ def get_fort_choice():
         # try to convert the player's string input into an integer
         try:
             result = int(player_choice)  # string to integer
-        except:
+        except Exception:
             # Whatever the player typed, it could not be interpreted as a number
             pass
 
@@ -124,7 +124,7 @@ def get_furs_purchase():
         try:
             count = int(count_str)
             results.append(count)
-        except:
+        except Exception:
             # invalid input, prompt again by re-looping
             i -= 1
     return results
@@ -249,7 +249,7 @@ if __name__ == "__main__":
                 beaver_price = (
                     int((0.25 * random.random() + 1.00) * 100 + 0.5) / 100
                 )  # INT((.25*RND(1)+1.00)*10^2+.5)/10^2
-                if fox_price == None:
+                if fox_price is None:
                     # Original Bug?  There is no Fox price generated for New York, it will use any previous "D1" price
                     # So if there was no previous value, make one up
                     fox_price = (

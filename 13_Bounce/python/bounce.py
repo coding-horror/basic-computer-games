@@ -51,14 +51,14 @@ def print_at_tab(line, tab, s):
 
 
 def run_simulation(delta_t, v0, coeff_rest):
-    t = [0] * 20  # time of each bounce
+    bounce_time = [0] * 20  # time of each bounce
 
     print("FEET")
     print()
 
     sim_dur = int(70 / (v0 / (16 * delta_t)))
     for i in range(1, sim_dur + 1):
-        t[i] = v0 * coeff_rest ** (i - 1) / 16
+        bounce_time[i] = v0 * coeff_rest ** (i - 1) / 16
 
     # Draw the trajectory of the bouncing ball, one slice of height at a time
     h = int(-16 * (v0 / 32) ** 2 + v0**2 / 32 + 0.5)
@@ -66,32 +66,32 @@ def run_simulation(delta_t, v0, coeff_rest):
         line = ""
         if int(h) == h:
             line += str(int(h))
-        l = 0
+        total_time = 0
         for i in range(1, sim_dur + 1):
             tm = 0
-            while tm <= t[i]:
-                l += delta_t
+            while tm <= bounce_time[i]:
+                total_time += delta_t
                 if (
                     abs(h - (0.5 * (-32) * tm**2 + v0 * coeff_rest ** (i - 1) * tm))
                     <= 0.25
                 ):
-                    line = print_at_tab(line, int(l / delta_t), "0")
+                    line = print_at_tab(line, int(total_time / delta_t), "0")
                 tm += delta_t
-            tm = t[i + 1] / 2
+            tm = bounce_time[i + 1] / 2
 
             if -16 * tm**2 + v0 * coeff_rest ** (i - 1) * tm < h:
                 break
         print(line)
         h = h - 0.5
 
-    print("." * (int((l + 1) / delta_t) + 1))
+    print("." * (int((total_time + 1) / delta_t) + 1))
     print
     line = " 0"
-    for i in range(1, int(l + 0.9995) + 1):
+    for i in range(1, int(total_time + 0.9995) + 1):
         line = print_at_tab(line, int(i / delta_t), str(i))
     print(line)
     print()
-    print(print_at_tab("", int((l + 1) / (2 * delta_t) - 2), "SECONDS"))
+    print(print_at_tab("", int((total_time + 1) / (2 * delta_t) - 2), "SECONDS"))
     print()
 
 

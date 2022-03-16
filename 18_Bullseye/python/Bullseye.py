@@ -41,77 +41,77 @@ print_n_whitespaces(45)
 print("ANYTHING")
 print()
 
-M = 0
-R = 0
+nb_winners = 0
+round = 0
 
-W = {}
-for I in range(1, 11):
-    W[I] = 0
+winners = {}
+for i in range(1, 11):
+    winners[i] = 0
 
-S = {}
-for I in range(1, 21):
-    S[I] = 0
+total_score = {}
+for i in range(1, 21):
+    total_score[i] = 0
 
-N = int(input("HOW MANY PLAYERS? "))
-A = {}
-for I in range(1, N + 1):
-    Name = input("NAME OF PLAYER #")
-    A[I] = Name
+nb_players = int(input("HOW MANY PLAYERS? "))
+player_names = {}
+for i in range(1, nb_players + 1):
+    player_name = input("NAME OF PLAYER #")
+    player_names[i] = player_name
 
-while M == 0:
-    R = R + 1
+while nb_winners == 0:
+    round = round + 1
     print()
-    print(f"ROUND {R}---------")
-    for I in range(1, N + 1):
+    print(f"ROUND {round}---------")
+    for i in range(1, nb_players + 1):
         print()
         while True:
-            T = int(input(f"{A[I]}'S THROW? "))
-            if T < 1 or T > 3:
+            throw = int(input(f"{player_names[i]}'S THROW? "))
+            if throw not in [1, 2, 3]:
                 print("INPUT 1, 2, OR 3!")
             else:
                 break
-        if T == 1:
+        if throw == 1:
             P1 = 0.65
             P2 = 0.55
             P3 = 0.5
             P4 = 0.5
-        elif T == 2:
+        elif throw == 2:
             P1 = 0.99
             P2 = 0.77
             P3 = 0.43
             P4 = 0.01
-        elif T == 3:
+        elif throw == 3:
             P1 = 0.95
             P2 = 0.75
             P3 = 0.45
             P4 = 0.05
-        U = random.random()
-        if U >= P1:
+        throwing_luck = random.random()
+        if throwing_luck >= P1:
             print("BULLSEYE!!  40 POINTS!")
-            B = 40
-        elif U >= P2:
+            points = 40
+        elif throwing_luck >= P2:
             print("30-POINT ZONE!")
-            B = 30
-        elif U >= P3:
+            points = 30
+        elif throwing_luck >= P3:
             print("20-POINT ZONE")
-            B = 20
-        elif U >= P4:
+            points = 20
+        elif throwing_luck >= P4:
             print("WHEW!  10 POINTS.")
-            B = 10
+            points = 10
         else:
             print("MISSED THE TARGET!  TOO BAD.")
-            B = 0
-        S[I] = S[I] + B
-        print(f"TOTAL SCORE = {S[I]}")
-    for I in range(1, N + 1):
-        if S[I] > 200:
-            M = M + 1
-            W[M] = I
+            points = 0
+        total_score[i] = total_score[i] + points
+        print(f"TOTAL SCORE = {total_score[i]}")
+    for player_index in range(1, nb_players + 1):
+        if total_score[player_index] > 200:
+            nb_winners = nb_winners + 1
+            winners[nb_winners] = player_index
 
 print()
 print("WE HAVE A WINNER!!")
 print()
-for I in range(1, M + 1):
-    print(f"{A[W[I]]} SCORED {S[W[I]]} POINTS.")
+for i in range(1, nb_winners + 1):
+    print(f"{player_names[winners[i]]} SCORED {total_score[winners[i]]} POINTS.")
 print()
 print("THANKS FOR THE GAME.")

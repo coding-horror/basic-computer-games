@@ -74,8 +74,8 @@ while play_again:
     play_again = m == "5"
 
 if winnings < 0:
-    print(f"Too bad, you are in the hole. Come again.")
+    print("Too bad, you are in the hole. Come again.")
 elif winnings > 0:
-    print(f"Congratulations---you came out a winner. Come again.")
+    print("Congratulations---you came out a winner. Come again.")
 else:
-    print(f"Congratulations---you came out even, not bad for an amateur")
+    print("Congratulations---you came out even, not bad for an amateur")
