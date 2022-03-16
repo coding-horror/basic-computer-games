@@ -61,7 +61,7 @@ def print_summary_report(running_correct: int):
     if running_correct > 10:
         print()
         print("I GUESSED MORE THAN 1/3 OF YOUR NUMBERS.")
-        print("I WIN." + "\u0007")
+        print("I WIN.\u0007")
     elif running_correct < 10:
         print("I GUESSED LESS THAN 1/3 OF YOUR NUMBERS.")
         print("YOU BEAT ME.  CONGRATULATIONS *****")
