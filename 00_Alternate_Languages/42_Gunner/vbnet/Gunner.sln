@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Gunner", "Gunner.vbproj", "{CC347B04-B99C-4F77-BFCF-2DDFBB4A135D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC347B04-B99C-4F77-BFCF-2DDFBB4A135D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC347B04-B99C-4F77-BFCF-2DDFBB4A135D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC347B04-B99C-4F77-BFCF-2DDFBB4A135D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC347B04-B99C-4F77-BFCF-2DDFBB4A135D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
