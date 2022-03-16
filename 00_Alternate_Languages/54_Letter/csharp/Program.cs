@@ -1,0 +1,3 @@
+﻿using Letter;
+
+Game.Play();
