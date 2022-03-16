@@ -1,0 +1,16 @@
+{
+  "name": "01_Acey_Ducey",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/auryn31/01_Acey_Ducey.git",
+  "author": "Auryn Engel <auryn.engel@sap.com>",
+  "license": "MIT",
+  "scripts": {
+    "live": "elm-live src/Main.elm --proxy-prefix=/api --proxy-host=http://localhost:8080/api --open --start-page=resources/index.html -- --output=app.js",
+    "build": "elm make src/Main.elm --optimize --output docs/app.js && cp -R resources/ docs/"
+  },
+  "devDependencies": {
+    "elm-live": "^4.0.2",
+    "uglify-js": "^3.15.3"
+  }
+}
