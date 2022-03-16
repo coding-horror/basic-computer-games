@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Train</RootNamespace>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>16.9</LangVersion>
-  </PropertyGroup>
-</Project>

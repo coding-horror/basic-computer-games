@@ -1,4 +1,0 @@
-Congratulations, Captain!  The last Klingon battle cruiser
-menacing the Federation has been destroyed.
-
-Your efficiency rating is {0}.

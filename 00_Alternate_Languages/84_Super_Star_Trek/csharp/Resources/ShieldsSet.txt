@@ -1,2 +1,0 @@
-Deflector control room report:
-  'Shields now at {0} units per your command.'

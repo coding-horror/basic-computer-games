@@ -1,5 +1,0 @@
-Lt. Uhura report message from Starfleet Command:
-  'Permission to attempt crossing of galactic perimeter
-  is hereby *Denied*. Shut down your engines.'
-Chief Engineer Scott reports, 'Warp engines shut down
-  at sector {0} of quadrant {1}.'
