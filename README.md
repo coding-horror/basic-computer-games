@@ -16,7 +16,7 @@ I have moved all [the original BASIC source code](http://www.vintage-basic.net/g
 
 Each project has subfolders corresponding to the languages we'd like to see the games ported to. This is based on the [February 2021 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _memory safe_ and _general purpose scripting language_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
 
-- Java
+- Java / Kotlin
 - Python
 - C#
 - VB.NET
