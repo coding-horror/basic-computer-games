@@ -16,18 +16,22 @@ I have moved all [the original BASIC source code](http://www.vintage-basic.net/g
 
 Each project has subfolders corresponding to the languages we'd like to see the games ported to. This is based on the [2022 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _**memory safe**_ and _**general purpose scripting languages**_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
 
-- Java / Kotlin
-- Python
-- C#
-- VB.NET
-- JavaScript
-- Ruby
-- Perl
-- Rust
-- Lua
+1. C# 
+2. Java
+3. JavaScript
+4. Kotlin
+5. Lua
+6. Perl
+7. Python
+8. Ruby
+9. Rust
+10. VB.NET
 
-> 📢 Note that we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE (as of 2022) and is both a scripting language and memory safe.
+> 📢 Note that in March 2022 we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE (as of 2022) and it is both memory safe and a scripting language. The Pascal ports were moved to the alternate languages folder.
 
+### Alternate Languages
+
+If you wish to port one of the programs to a language not in our list -- that is, a language which is either not memory safe, or not a general purpose scripting language, you can do so via the `00_Alternate_Languages` folder. Place your port in the appropriate game subfolder, in a subfolder named for the language. Please note that these ports are appreciated, but they will not count toward the donation total at the end of the project.
 
 ### Project goals
 
@@ -57,4 +61,4 @@ Please note that on the back of the Basic Computer Games book it says **Microsof
 
 Thank you for taking part in this project to update a classic programming book -- one of the most influential programming books in computing history -- for 2022 and beyond!
 
-NOTE: per [the official blog post announcement](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/), I will be **donating $5 for each contributed program in the 8 agreed upon languages to [Girls Who Code](https://girlswhocode.com/)**.
+NOTE: per [the official blog post announcement](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/), I will be **donating $5 for each contributed program in the 10 agreed upon languages to [Girls Who Code](https://girlswhocode.com/)**.
