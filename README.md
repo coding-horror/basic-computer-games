@@ -26,7 +26,7 @@ Each project has subfolders corresponding to the languages we'd like to see the 
 - Rust
 - Lua
 
-> 📢 Note that we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE.
+> 📢 Note that we removed Pascal / Object Pascal and replaced it with Rust as we couldn't determine if Pascal is effectively memory safe. We've also added Lua, as it made the top 20 in TIOBE and is both a scripting language and memory safe.
 
 
 ### Project goals
