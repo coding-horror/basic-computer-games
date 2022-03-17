@@ -83,8 +83,20 @@ public interface IReadWrite
     void WriteLine(float value);
 
     /// <summary>
+    /// Writes an <see cref="object" /> to output.
+    /// </summary>
+    /// <param name="value">The <see cref="object" /> to be written.</param>
+    void Write(object value);
+
+    /// <summary>
+    /// Writes an <see cref="object" /> to output.
+    /// </summary>
+    /// <param name="value">The <see cref="object" /> to be written.</param>
+    void WriteLine(object value);
+
+    /// <summary>
     /// Writes the contents of a <see cref="Stream" /> to output.
     /// </summary>
     /// <param name="stream">The <see cref="Stream" /> to be written.</param>
-    void Write(Stream stream);
+    void Write(Stream stream, bool keepOpen = false);
 }
