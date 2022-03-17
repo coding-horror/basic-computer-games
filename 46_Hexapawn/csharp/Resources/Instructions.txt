@@ -1,0 +1,30 @@
+
+This program plays the game of Hexapawn.
+Hexapawn is played with Chess pawns on a 3 by 3 board.
+The pawns are move as in Chess - one space forward to
+an empty space, or one space forward and diagonally to
+capture an opposing man.  On the board, your pawns
+are 'O', the computer's pawns are 'X', and empty
+squares are '.'.  To enter a move, type the number of
+the square you are moving from, followed by the number
+of the square you will move to.  The numbers must be
+separated by a comma.
+
+The computer starts a series of games knowing only when
+the game is won (a draw is impossible) and how to move.
+It has no strategy at first and just moves randomly.
+However, it learns from each game.  Thus winning becomes
+more and more difficult.  Also, to help offset your
+initial advantage, you will not be told how to win the
+game but must learn this by playing.
+
+The numbering of the board is as follows:
+          123
+          456
+          789
+
+For example, to move your rightmost pawn forward,
+you would type 9,6 in response to the question
+'Your move ?'.  Since I'm a good sport, you'll always
+go first.
+

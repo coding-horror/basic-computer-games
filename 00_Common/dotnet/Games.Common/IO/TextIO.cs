@@ -95,13 +95,19 @@ public class TextIO : IReadWrite
 
     public void WriteLine(float value) => _output.WriteLine(GetString(value));
 
-    public void Write(Stream stream)
+    public void Write(object value) => _output.Write(value.ToString());
+
+    public void WriteLine(object value) => _output.WriteLine(value.ToString());
+
+    public void Write(Stream stream, bool keepOpen = false)
     {
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream)
         {
             _output.WriteLine(reader.ReadLine());
         }
+
+        if (!keepOpen) { stream?.Dispose(); }
     }
 
     private string GetString(float value) => value < 0 ? $"{value} " : $" {value} ";
