@@ -4,6 +4,8 @@
  * 
  * Call this from the root of the project with 
  *  `node ./00_Utilities/build-index.js`
+ * 
+ * @author Alexander Wunschik <https://github.com/mojoaxel>
  */
 
 const fs = require('fs');
@@ -13,33 +15,65 @@ const TITLE = 'BASIC Computer Games';
 const JAVASCRIPT_FOLDER = 'javascript';
 const IGNORE_FOLDERS_START_WITH = ['.', '00_', 'buildJvm', 'Sudoku'];
 
-function createIndexHtml(title, games) {
-	const listEntries = games.map(game => 
-		`<li><a href="${game.htmlFile}">${game.name}</a></li>`
-	).map(entry => `\t\t\t${entry}`).join('\n');
-
-	return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>${title}</title>
-</head>
-<body>
-	<header>
-		<h1>${title}</h1>
-	</header>
-	<main>
-		<ul>
-${listEntries}
-		</ul>
-	</main>
-</body>
-</html>
-	`.replace(/\t/g, '  ').trim();
+function createGameLinks(game) {
+	if (game.htmlFiles.length > 1) {
+		const entries = game.htmlFiles.map(htmlFile => {
+			const name = path.basename(htmlFile).replace('.html', '');
+			return `
+				<li>
+					<a href="${htmlFile}">${name}</a>
+				</li>
+			`;
+		});
+		return `
+			<li>
+				<span>${game.name}</span>
+				<ul>${entries.map(e => `\t\t\t${e}`).join('\n')}</ul>
+			</li>
+		`;
+	} else {
+		return `<li><a href="${game.htmlFiles}">${game.name}</a></li>`;
+	}
 }
 
-function findHtmlFileInFolder(folder) {
+function createIndexHtml(title, games) {
+	const listEntries = games.map(game => 
+		createGameLinks(game)
+	).map(entry => `\t\t\t${entry}`).join('\n');
+
+	const head = `
+		<head>
+			<meta charset="UTF-8">
+			<title>${title}</title>
+			<link rel="stylesheet" href="./00_Utilities/javascript/style_terminal.css" />
+		</head>
+	`;
+
+	const body = `
+		<body>
+			<article id="output">
+				<header>
+					<h1>${title}</h1>
+				</header>
+				<main>
+					<ul>
+						${listEntries}
+					</ul>
+				</main>
+			</article>
+		</body>
+	`;
+
+	return `
+		<!DOCTYPE html>
+		<html lang="en">
+		${head}
+		${body}
+		</html>
+	`.trim().replace(/\s\s+/g, '');
+}
+
+function findHtmlFilesInFolder(folder) {
 	// filter folders that do not include a subfolder called "javascript"
 	const hasJavascript = fs.existsSync(`${folder}/${JAVASCRIPT_FOLDER}`);
 	if (!hasJavascript) {
@@ -54,11 +88,9 @@ function findHtmlFileInFolder(folder) {
 
 	if (htmlFiles.length == 0) {
 		throw new Error(`Game "${folder}" is missing a html file in the "${folder}/${JAVASCRIPT_FOLDER}" folder`);
-	} else if (htmlFiles.length > 1) {
-		console.warn(`Game "${folder}" has multible html files. I'm just taking the first one "${htmlFiles[0]}"`);
 	}
 
-	return path.join(folder, JAVASCRIPT_FOLDER, htmlFiles[0]);
+	return htmlFiles.map(htmlFile => path.join(folder, JAVASCRIPT_FOLDER, htmlFile));
 }
 
 function main() {
@@ -79,10 +111,10 @@ function main() {
 	// get name and javascript file from folder
 	const games = folders.map(folder => {
 		const name = folder.replace('_', ' ');
-		let htmlFile;
+		let htmlFiles;
 		
 		try {
-			htmlFile = findHtmlFileInFolder(folder);
+			htmlFiles = findHtmlFilesInFolder(folder);
 		} catch (error) {
 			console.warn(`Game "${name}" is missing a javascript implementation: ${error.message}`);
 			return null;
@@ -90,7 +122,7 @@ function main() {
 
 		return {
 			name,
-			htmlFile
+			htmlFiles
 		}
 	}).filter(game => game !== null);
 
