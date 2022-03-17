@@ -45,6 +45,9 @@ public class Game {
 
 		deck.reshuffle();
 
+		Player dealer = new Player(0); //Dealer is Player 0 - this can be converted into a dealer class later on
+
+		
 		List<Player> players = new ArrayList<>();
 		for(int i = 0; i < nPlayers; i++) {
 			players.add(new Player(i + 1));
@@ -66,14 +69,8 @@ public class Game {
 				for(Player player : players){
 					player.dealCard(deck.deal());
 				}
+				dealer.dealCard(deck.deal());
 			}
-
-			// Consider adding a Dealer class to track the dealer's hand and running total.
-			// Alternately, the dealer could just be a Player instance where currentBet=0 and is ignored.
-			LinkedList<Card> dealerHand = new LinkedList<>();
-			Player dealer = new Player(0); //Dealer is Player 0 - this can be converted into a dealer class later on
-			dealer.dealCard(deck.deal());
-			dealer.dealCard(deck.deal());
 
 			printInitialDeal(players, dealer);
 
@@ -305,7 +302,7 @@ public class Game {
 		for(Player player : players){
 			int result = ScoringUtils.compareHands(player.getHand(), dealer.getHand());
 			double totalBet = 0;
-			if(result > 0){
+			if(result > 0) {
 				totalBet += player.getCurrentBet();
 			} else if(result < 0){
 				totalBet -= player.getCurrentBet();
@@ -336,11 +333,12 @@ public class Game {
 				userIo.print(" PUSHES      ");
 			}
 			player.recordRound(totalBet);
-			dealer.recordRound(totalBet*-1);
+			dealer.recordRound(totalBet * (-1));
 			userIo.println(" TOTAL= " + formatter.format(player.getTotal()));
 			player.resetHand();
 		}
-		userIo.println("DEALER'S TOTAL= " + formatter.format(dealer.getTotal()) + "\n");	
+		userIo.println("DEALER'S TOTAL= " + formatter.format(dealer.getTotal()) + "\n");
+		dealer.resetHand();
 	}
 
 	/**
