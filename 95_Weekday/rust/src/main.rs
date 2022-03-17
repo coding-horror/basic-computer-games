@@ -51,6 +51,30 @@ impl DATE {
         //return date
         return date
     }
+    /**
+     * create a new date from a number of days
+     */
+    fn new_from_days(days:u32) -> DATE{
+        let mut days_remaining = days;
+        let d;
+        let m;
+        let y;
+
+        //get the years
+        y=(days_remaining as f64 / 365.25) as u32;
+        //deduct
+        days_remaining = (days_remaining as f64 % 365.25) as u32;
+
+        //get months
+        m=(days_remaining as f64 / 30.437) as u32;
+        //deduct
+        days_remaining = (days_remaining as f64 % 30.437) as u32;
+
+        //get days
+        d = days_remaining;
+
+        return DATE { month: m, day: d, year: y, day_of_week: 0 }
+    }
 
     /**
      * caluclates the day of the week (1-7)
@@ -89,20 +113,34 @@ impl DATE {
     /**
      * calculates the day value, number of days the date represents
      */
-    fn calc_day_value(&self) -> u32 {
-        return (self.year*12 + self.month)*31 + self.day;
+    fn calc_days(&self) -> u32 {
+        return (self.year as f64 * 365.25)as u32 + self.month*30 + self.day + self.month/2;
     }
 
     /**
-     * returns true if passed date is before this date, false otherwise
+     * calculates the time difference between self and the passed date,
      */
-    fn is_after(&self,other:&DATE) -> bool {
-        if self.calc_day_value() > other.calc_day_value() {
-            return true;
+    fn time_since(&self, other: &DATE) -> Option<DATE> {
+        //DATA
+        // /*
+        let diff = self.calc_days()as i32 - other.calc_days()as i32;
+        if diff < 0 { 
+            return None;
+        } else {
+            return Some(DATE::new_from_days(diff as u32));
         }
-        else {
-            return false;
-        }
+    }
+
+    /**
+     * formats the date in a different format, used for time table
+     */
+    fn format_ymd(&self, spacer:&str) -> String {
+        return format!(
+            "{}{}{}{}{}",
+            self.year, spacer,
+            self.month, spacer,
+            self.day,
+        );
     }
 }
 impl ToString for DATE {
@@ -143,8 +181,8 @@ fn main() {
     }
 
     //do some calculations
-    today_value = today_date.calc_day_value();
-    other_day_value = other_date.calc_day_value();
+    today_value = today_date.calc_days();
+    other_day_value = other_date.calc_days();
 
     //print the other date in a nice format
     println!(
@@ -152,24 +190,19 @@ fn main() {
         other_date.to_string(),
         { //use proper tense of To Be
             if today_value < other_day_value {"WILL BE"}
-            else if today_value == other_day_value {other_is_today=true;"IS A"}
-            else {"WAS A"}
+            else if today_value == other_day_value {other_is_today=true;"IS"}
+            else {"WAS"}
         },
         other_date.day_of_week,
     );
 
-    //do nothing if both days are the same, or if the other date is after the first
-    if other_is_today || other_date.is_after(&today_date) {
+    //end if both days are the same
+    if other_is_today {
         return;
     } 
 
     //create date representing the difference between the two dates
-    delta_date = DATE::new( //OVERFLOW ERROR, FIX LATER
-        today_date.month - other_date.month,
-        today_date.day - other_date.day,
-        today_date.year - other_date.year,
-        0
-    );
+    delta_date = if let Some(d) = today_date.time_since(&other_date) {d} else {return;};
 
     //print happy birthday message
     if delta_date.month == 0 && delta_date.day == 0 {
@@ -177,13 +210,39 @@ fn main() {
     }
 
     //print report
-    print!("
+    println!("
                       \tYEARS\tMONTHS\tDAYS
-                      \t-----\t------\t----
-    ");
-    println!("YOUR AGE (IF BIRTHDATE)\t{}\t{}\t{}", delta_date.year,delta_date.month,delta_date.day);
+                      \t-----\t------\t----"
+    );
+    println!("YOUR AGE (IF BIRTHDATE)\t{}", delta_date.format_ymd("\t"));
+    
+    //how much have they slept
+    println!(
+        "YOU HAVE SLEPT\t\t{}",
+        DATE::new_from_days( (0.35 * delta_date.calc_days() as f64) as u32).format_ymd("\t"), //35% of their life
+    );
 
+    //how much they have eaten
+    println!(
+        "YOU HAVE EATEN\t\t{}",
+        DATE::new_from_days( (0.17 * delta_date.calc_days() as f64) as u32).format_ymd("\t"), //17% of their life
+    );
 
+    //how much they have worked
+    println!(
+        "YOU HAVE {}\t{}",
+        {
+            if delta_date.year <= 3 {"PLAYED"}
+            else if delta_date.year <= 9 {"PLAYED/STUDIED"}
+            else {"WORKED/PLAYED"}
+        },
+        DATE::new_from_days( (0.23 * delta_date.calc_days() as f64) as u32).format_ymd("\t"), //23% of their life
+    );
+    //how much they have relaxed
+    println!(
+        "YOU HAVE RELAXED\t{}",
+        DATE::new_from_days( ( (1.0-0.35-0.17-0.23) * delta_date.calc_days() as f64) as u32).format_ymd("\t"), //remaining% of their life
+    );
 
 }
 
