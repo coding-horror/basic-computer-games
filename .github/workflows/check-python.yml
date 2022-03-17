@@ -22,7 +22,7 @@ jobs:
         pip install -r 00_Utilities/python/ci-requirements.txt
     - name: Test with pytest
       run: |
-        pytest 01_Acey_Ducey/python 02_Amazing/python
+        pytest 01_Acey_Ducey/python 02_Amazing/python 39_Golf/python
     - name: Test with mypy
       run: |
         mypy . --exclude 79_Slalom --exclude 27_Civil_War --exclude 38_Fur_Trader --exclude 81_Splat --exclude 09_Battle --exclude 40_Gomoko --exclude 36_Flip_Flop --exclude 43_Hammurabi --exclude 04_Awari --exclude 78_Sine_Wave --exclude 77_Salvo --exclude 34_Digits --exclude 17_Bullfight --exclude 16_Bug

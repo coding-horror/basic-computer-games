@@ -29,6 +29,7 @@ out/
 .python-version
 Pipfile
 venv/
+.coverage
 
 .DS_Store
 .vs/
