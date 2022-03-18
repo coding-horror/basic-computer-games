@@ -122,9 +122,8 @@ def main():
                     if s < s1:
                         s = s1
                         my_guess = j
-                    elif s1 == s:
-                        if random.random() >= 0.5:
-                            my_guess = j
+                    elif s1 == s and random.random() >= 0.5:
+                        my_guess = j
 
                 result = ""
 

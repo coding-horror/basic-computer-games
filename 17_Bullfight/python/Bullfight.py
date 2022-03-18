@@ -81,9 +81,7 @@ if Z != "NO":
     print("THE BETTER YOUR CHANCES ARE.")
 print_n_newlines(2)
 
-D = {}
-D[5] = 1
-D[4] = 1
+D = {4: 1, 5: 1}
 LS = ["", "SUPERB", "GOOD", "FAIR", "POOR", "AWFUL"]
 A = random.randint(1, 5)
 print(f"YOU HAVE DRAWN A {LS[A]} BULL.")

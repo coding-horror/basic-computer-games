@@ -297,25 +297,17 @@ def do_move(m, home, board):
         if m > 13:
             m = m - 14
         board[m] += 1
-    if board[m] == 1:
-        # capture
-        if (m != 6) and (m != 13) and (board[12 - m] != 0):
-            do_capture(m, home, board)
+    if board[m] == 1 and (m != 6) and (m != 13) and (board[12 - m] != 0):
+        do_capture(m, home, board)
     return m
 
 
 def player_has_stones(board):
-    for i in range(6):
-        if board[i] > 0:
-            return True
-    return False
+    return any(board[i] > 0 for i in range(6))
 
 
 def computer_has_stones(board):
-    for i in range(7, 13):
-        if board[i] > 0:
-            return True
-    return False
+    return any(board[i] > 0 for i in range(7, 13))
 
 
 def execute_move(move, home, board):

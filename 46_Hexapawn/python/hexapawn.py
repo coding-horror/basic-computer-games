@@ -138,10 +138,10 @@ class BoardLayout:
         self.moves = move_list
 
     def _check_match_no_mirror(self, cell_list):
-        for space_index, board_contents in enumerate(self.cells):
-            if board_contents != cell_list[space_index]:
-                return False
-        return True
+        return all(
+            board_contents == cell_list[space_index]
+            for space_index, board_contents in enumerate(self.cells)
+        )
 
     def _check_match_with_mirror(self, cell_list):
         for space_index, board_contents in enumerate(self.cells):
@@ -286,17 +286,11 @@ def is_legal_human_move(board, m1, m2):
 
 
 def player_piece_on_back_row(board):
-    for space in range(1, 4):
-        if board_contents(board, space) == HUMAN_PIECE:
-            return True
-    return False
+    return any(board_contents(board, space) == HUMAN_PIECE for space in range(1, 4))
 
 
 def computer_piece_on_front_row(board):
-    for space in range(7, 10):
-        if board_contents(board, space) == COMPUTER_PIECE:
-            return True
-    return False
+    return any(board_contents(board, space) == COMPUTER_PIECE for space in range(7, 10))
 
 
 def all_human_pieces_captured(board):
