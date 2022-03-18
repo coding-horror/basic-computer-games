@@ -882,7 +882,7 @@ def new_quadrant():
     if b3 > 0:
         b4, b5 = find_empty_place()  # position of starbase (sector)
         insert_marker(b4, b5, ">!<")
-    for i in range(s3):
+    for _ in range(s3):
         r1, r2 = find_empty_place()
         insert_marker(r1, r2, " * ")
 

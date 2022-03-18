@@ -14,7 +14,7 @@ def get_yes_no(prompt):
 
 
 def print_header():
-    for i in range(12):
+    for _ in range(12):
         print()
     t10 = " " * 10
     print(t10 + "*************************************")
@@ -24,7 +24,7 @@ def print_header():
     print(t10 + "*                                   *")
     print(t10 + "*                                   *")
     print(t10 + "*************************************")
-    for i in range(8):
+    for _ in range(8):
         print()
 
 

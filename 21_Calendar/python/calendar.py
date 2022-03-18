@@ -109,9 +109,9 @@ def calendar(weekday, leap_year):
         print(days)
         print(sep)
 
-        for w in range(1, 7):
+        for _ in range(1, 7):
             print("\n")
-            for g in range(1, 8):
+            for g in range(1, 8):  # noqa
                 d += 1
                 d2 = d - days_count
 

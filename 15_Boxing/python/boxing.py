@@ -48,7 +48,7 @@ def play():
         if opponent_score >= 2 or player_score >= 2:
             break
 
-        for action in range(7):
+        for _action in range(7):
             if random.randint(1, 10) > 5:
                 # opponent swings
                 punch = random.randint(1, 4)

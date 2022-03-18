@@ -93,7 +93,7 @@ def main():
         z2 = 2
         running_correct = 0
 
-        for round in range(1, 4):
+        for _round in range(1, 4):
             valid_numbers = False
             numbers = []
             while not valid_numbers:
