@@ -98,9 +98,8 @@ def play_game():
         else:
             print("Tie. No score change.")
         cards_left -= 2
-        if cards_left > 2:
-            if input("Do you want to continue ").lower().startswith("n"):
-                break
+        if cards_left > 2 and input("Do you want to continue ").lower().startswith("n"):
+            break
     if cards_left == 0:
         print(
             "\nWe have run out of cards. Final score: You:",

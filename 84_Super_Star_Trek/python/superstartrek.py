@@ -260,14 +260,13 @@ def short_range_scan():
     docked = False
     for i in (s1 - 1, s1, s1 + 1):
         for j in (s2 - 1, s2, s2 + 1):
-            if 0 <= i <= 7 and 0 <= j <= 7:
-                if compare_marker(i, j, ">!<"):
-                    docked = True
-                    cs = "DOCKED"
-                    e, p = e0, p0
-                    print("SHIELDS DROPPED FOR DOCKING PURPOSES")
-                    s = 0
-                    break
+            if 0 <= i <= 7 and 0 <= j <= 7 and compare_marker(i, j, ">!<"):
+                docked = True
+                cs = "DOCKED"
+                e, p = e0, p0
+                print("SHIELDS DROPPED FOR DOCKING PURPOSES")
+                s = 0
+                break
         else:
             continue
         break

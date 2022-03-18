@@ -140,8 +140,6 @@ def get_distance(odd):
         return 4
     elif d < s + 77:
         return 5
-    elif d < s + 77:
-        return 5
     elif d < s + 92:
         return 6
     else:
@@ -233,12 +231,10 @@ def print_race_results(race_positions, odds, bets, player_names):
 
     # print the race positions first
     basic_print("THE RACE RESULTS ARE:")
-    position = 1
-    for horse_idx in reversed(race_positions):
+    for position, horse_idx in enumerate(reversed(race_positions), start=1):
         line = f"{position} PLACE HORSE NO. {horse_idx} AT {odds[horse_idx]}:1"
         basic_print("")
         basic_print(line)
-        position += 1
 
     # followed by the amount the players won
     winning_horse_idx = race_positions[-1]

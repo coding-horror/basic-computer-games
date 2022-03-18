@@ -26,7 +26,7 @@ def main(states, data):
     """
 
     while True:
-        if "exit" == data["state"]:
+        if data["state"] == "exit":
             break
         view, control, model = states[data["state"]]
         cmd = view(data)
@@ -112,7 +112,7 @@ def update_game(data, action):
     # stores logs of what happened during a particular round
     logs = []
 
-    if "pictures" == action:
+    if action == "pictures":
         data["state"] = "pictures"
     else:
         part_added = False
@@ -178,18 +178,18 @@ def print_game(data):
         code, part_idx, player, *logdata = log
         part_type = data["partTypes"][part_idx]
 
-        if "rolled" == code:
+        if code == "rolled":
             print()
             print(f"{player} ROLLED A {part_idx + 1}")
             print(f"{part_idx + 1}={part_type.name}")
 
-        elif "added" == code:
-            if "YOU" == player:
+        elif code == "added":
+            if player == "YOU":
                 if part_type.name in ["FEELERS", "LEGS", "TAIL"]:
                     print(f"I NOW GIVE YOU A {part_type.name.replace('s', '')}.")
                 else:
                     print(f"YOU NOW HAVE A {part_type.name}.")
-            elif "I" == player:
+            elif player == "I":
                 if part_type.name in ["BODY", "NECK", "TAIL"]:
                     print(f"I NOW HAVE A {part_type.name}.")
                 elif part_type.name == "FEELERS":
@@ -200,19 +200,19 @@ def print_game(data):
                     f"{player} NOW HAVE {data['players'][player][part_idx]} {part_type.name}"
                 )
 
-        elif "missingDep" == code:
+        elif code == "missingDep":
             (dep_idx,) = logdata
             dep = data["partTypes"][dep_idx]
             print(
                 f"YOU DO NOT HAVE A {dep.name}"
-                if "YOU" == player
+                if player == "YOU"
                 else f"I NEEDED A {dep.name}"
             )
 
-        elif "overMax" == code:
+        elif code == "overMax":
             (part_count,) = logdata
             if part_count > 1:
-                num = "TWO" if 2 == part_count else part_count
+                num = "TWO" if part_count == 2 else part_count
                 maxMsg = f"HAVE {num} {part_type.name}S ALREADY"
             else:
                 maxMsg = f"ALREADY HAVE A {part_type.name}"
@@ -228,7 +228,7 @@ def print_pictures(data):
     typeIxs = {part_type.name: idx for idx, part_type in enumerate(data["partTypes"])}
     PIC_WIDTH = 22
     for player, parts in data["players"].items():
-        print(f"*****{'YOUR' if 'YOU' == player else 'MY'} BUG*****")
+        print(f"*****{'YOUR' if player == 'YOU' else 'MY'} BUG*****")
         print()
         print()
         if parts[typeIxs["BODY"]] > 0:
@@ -276,7 +276,7 @@ def print_winner(data):
     Displays the winning message
     """
     for player in data["finished"]:
-        print(f"{'YOUR' if 'YOU' == player else 'MY'} BUG IS FINISHED.")
+        print(f"{'YOUR' if player == 'YOU' else 'MY'} BUG IS FINISHED.")
     print("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!")
 
 

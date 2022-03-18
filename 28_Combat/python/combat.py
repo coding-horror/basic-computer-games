@@ -30,7 +30,7 @@ def get_forces():
         usr_navy = int(input())
         print("A. F.          " + str(cpu_air) + "        ? ", end="")
         usr_air = int(input())
-        if not ((usr_army + usr_navy + usr_air) > MAX_UNITS):
+        if (usr_army + usr_navy + usr_air) <= MAX_UNITS:
             break
 
 

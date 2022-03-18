@@ -97,29 +97,23 @@ def bet_results(bet_IDs, bet_Values, result):
     total_winnings = 0
 
     def get_modifier(id, num):
-        if id == 37 and num <= 12:
+        if (
+            (id == 37 and num <= 12)
+            or (id == 38 and num > 12 and num <= 24)
+            or (id == 39 and num > 24 and num < 37)
+            or (id == 40 and num < 37 and num % 3 == 1)
+            or (id == 41 and num < 37 and num % 3 == 2)
+            or (id == 42 and num < 37 and num % 3 == 0)
+        ):
             return 2
-        elif id == 38 and num > 12 and num <= 24:
-            return 2
-        elif id == 39 and num > 24 and num < 37:
-            return 2
-        elif id == 40 and num < 37 and num % 3 == 1:
-            return 2
-        elif id == 41 and num < 37 and num % 3 == 2:
-            return 2
-        elif id == 42 and num < 37 and num % 3 == 0:
-            return 2
-        elif id == 43 and num <= 18:
-            return 1
-        elif id == 44 and num > 18 and num <= 36:
-            return 1
-        elif id == 45 and num % 2 == 0:
-            return 1
-        elif id == 46 and num % 2 == 1:
-            return 1
-        elif id == 47 and num in RED_NUMBERS:
-            return 1
-        elif id == 48 and num not in RED_NUMBERS:
+        elif (
+            (id == 43 and num <= 18)
+            or (id == 44 and num > 18 and num <= 36)
+            or (id == 45 and num % 2 == 0)
+            or (id == 46 and num % 2 == 1)
+            or (id == 47 and num in RED_NUMBERS)
+            or (id == 48 and num not in RED_NUMBERS)
+        ):
             return 1
         elif id < 37 and id == num:
             return 35

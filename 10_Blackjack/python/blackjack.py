@@ -290,10 +290,8 @@ class Game:
                 print(player_hands_message)
                 print(f"{player.get_name()} Hand:\t{player.hand_as_string(True)}")
 
-                if PlayerType.Player == player.player_type:
-                    # player isn't the dealer
-                    if player.bet == 0:  # player is out of money
-                        break
+                if PlayerType.Player == player.player_type and player.bet == 0:
+                    break
 
                 # play through turn
                 # check their hand value for a blackjack(21) or bust

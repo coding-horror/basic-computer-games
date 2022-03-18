@@ -96,7 +96,7 @@ U = 0
 V = 0
 Y = 0
 
-while not (Y > 0):
+while Y <= 0:
     Z = random.randint(1, 6)
     print()
     C = 1

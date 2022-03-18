@@ -91,8 +91,7 @@ class Game:
         w = int(input("WHICH DISK WOULD YOU LIKE TO MOVE\n"))
         if w in self.__sizes:
             return w
-        else:
-            raise Exception()
+        raise Exception()
 
     def pick_disk(self):
         which = None

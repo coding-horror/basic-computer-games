@@ -42,11 +42,7 @@ class NIM:
         return pile, num
 
     def _command_integrity(self, num, pile):
-        if pile <= 4 and pile >= 1:
-            if num <= self.piles[pile]:
-                return True
-
-        return False
+        return pile <= 4 and pile >= 1 and num <= self.piles[pile]
 
     def print_pegs(self):
         for pile, peg in self.piles.items():
@@ -71,11 +67,7 @@ class NIM:
         for v in self.piles.values():
             sum += v
 
-        if sum == 0:
-            return True
-
-        else:
-            return False
+        return sum == 0
 
 
 def main():

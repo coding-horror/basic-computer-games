@@ -595,19 +595,21 @@ class Golf:
 
         # if you're in the rough, or sand, you really should be using a wedge
         if (
-            self.is_in_rough(self.BALL)
-            or self.is_in_hazard(self.BALL, GameObjType.SAND)
-        ) and not (clubIndex == 8 or clubIndex == 9):
-            if odds(40):
-                flags |= dub
+            (
+                self.is_in_rough(self.BALL)
+                or self.is_in_hazard(self.BALL, GameObjType.SAND)
+            )
+            and not (clubIndex == 8 or clubIndex == 9)
+            and odds(40)
+        ):
+            flags |= dub
 
         # trap difficulty
         if (
             self.is_in_hazard(self.BALL, GameObjType.SAND)
             and self.player_difficulty == 4
-        ):
-            if odds(20):
-                flags |= dub
+        ) and odds(20):
+            flags |= dub
 
         # hook/slice
         # There's 10% chance of a hook or slice
@@ -675,9 +677,8 @@ class Golf:
             else:
                 distance = clubAmt
 
-        if self.player_difficulty == 3:  # poor distance
-            if odds(80):
-                distance = distance * 0.80
+        if self.player_difficulty == 3 and odds(80):  # poor distance
+            distance = distance * 0.80
 
         if (flags & luck) == luck:
             distance = clubAmt
@@ -696,9 +697,8 @@ class Golf:
 
         plot = self.plot_ball(self.BALL, distance, angle)
         # calculate a new location
-        if (flags & luck) == luck:
-            if plot.Y > 0:
-                plot.Y = 2
+        if (flags & luck) == luck and plot.Y > 0:
+            plot.Y = 2
 
         flags = self.find_ball(
             Ball(plot.X, plot.Y, plot.Offline, GameObjType.BALL), flags
