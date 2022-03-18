@@ -10,9 +10,9 @@ public final class ScoringUtils {
 	 * @return The numeric value of a hand. A value over 21 indicates a bust.
 	 */
 	public static final int scoreHand(List<Card> hand) {
-		int nAces = (int) hand.stream().filter(c -> c.getValue() == 1).count();
+		int nAces = (int) hand.stream().filter(c -> c.value() == 1).count();
 		int value = hand.stream()
-				.mapToInt(Card::getValue)
+				.mapToInt(Card::value)
 				.filter(v -> v != 1) // start without aces
 				.map(v -> v > 10 ? 10 : v) // all face cards are worth 10. The 'expr ? a : b' syntax is called the
 											// 'ternary operator'
