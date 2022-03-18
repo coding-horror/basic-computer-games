@@ -68,7 +68,7 @@ class NIM:
 
     def check_for_win(self):
         sum = 0
-        for k, v in self.piles.items():
+        for v in self.piles.values():
             sum += v
 
         if sum == 0:

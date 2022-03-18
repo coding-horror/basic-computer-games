@@ -209,7 +209,7 @@ def generate_ship_coordinates(ship):
     coords = [(start_x, start_y)]
     x_coord = start_x
     y_coord = start_y
-    for i in range(ship_len):
+    for _ in range(ship_len):
         x_coord = x_coord + d_x
         y_coord = y_coord + d_y
         coords.append((x_coord, y_coord))
@@ -356,7 +356,7 @@ def initialize_game():
     for ship in SHIPS:
         print(ship[0])
         list = []
-        for i in range(ship[1]):
+        for _ in range(ship[1]):
             x, y = input_coord()
             list.append((x, y))
         ship_coords.append(list)
@@ -443,7 +443,7 @@ def execute_turn(turn):
         num_shots = num_player_shots
 
     shots = []
-    for shot in range(num_shots):
+    for _shot in range(num_shots):
         valid_shot = False
         x = -1
         y = -1

@@ -55,7 +55,7 @@ def prompt():
 
 
 def next_target():
-    for i in range(5):
+    for _ in range(5):
         print()
     print("NEXT TARGET...")
     print()

@@ -292,7 +292,7 @@ def do_move(m, home, board):
     move_stones = board[m]
     board[m] = 0
 
-    for stones in range(move_stones, 0, -1):
+    for _stones in range(move_stones, 0, -1):
         m = m + 1
         if m > 13:
             m = m - 14

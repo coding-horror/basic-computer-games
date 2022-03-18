@@ -66,7 +66,7 @@ class Player:
             print(f"Extra rolls for {self.name}")
             pins = [0] * 10  # reset the pins
             score = 0
-            for ball in range(extra):
+            for _ball in range(extra):
                 if score == 10:
                     pins = [0] * 10
                 simulateRoll(pins)
