@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.text.DecimalFormat;
 
@@ -45,8 +44,7 @@ public class Game {
 
 		deck.reshuffle();
 
-		Player dealer = new Player(0); //Dealer is Player 0 - this can be converted into a dealer class later on
-
+		Player dealer = new Player(0); //Dealer is Player 0
 		
 		List<Player> players = new ArrayList<>();
 		for(int i = 0; i < nPlayers; i++) {
@@ -121,15 +119,14 @@ public class Game {
 
 	/**
 	 * Print the cards for each player and the up card for the dealer.
+	 * Prints the initial deal in the following format:
+	 *		
+	 *	PLAYER 1     2    DEALER
+     *         7    10     4   
+     *         2     A   
 	 */
 	private void printInitialDeal(List<Player> players, Player dealer) {
-		// Prints the initial deal in the following format:
-		/*
-		PLAYER 1     2    DEALER
-               7    10     4   
-               2     A   
-	   */
-		
+	
         StringBuilder output = new StringBuilder(); 
 		output.append("PLAYERS ");
 		for (Player player : players) {
@@ -234,7 +231,6 @@ public class Game {
 	 * @param players
 	 * @return boolean whether the dealer should play
 	 */
-
 	protected boolean shouldPlayDealer(List<Player> players){
 		for(Player player : players){
 			int score = ScoringUtils.scoreHand(player.getHand());
@@ -256,24 +252,21 @@ public class Game {
 	 * 
 	 * DEALER HAS A  5 CONCEALED FOR A TOTAL OF 11 
 	 * DRAWS 10   ---TOTAL IS 21
-	 * 
-	 * TODO find out if the dealer draws on a "soft" 17 (17 using an ace as 11) or not in the original basic code.
-	 * 
+	 *  
 	 * @param dealerHand
-	 * @return
 	 */
 	protected void playDealer(Player dealer) {
 		int score = ScoringUtils.scoreHand(dealer.getHand());
 		userIo.println("DEALER HAS " + dealer.getHand().get(1).toProseString() + " CONCEALED FOR A TOTAL OF " + score);
 
 		if(score < 17){
-			userIo.print("DRAWS ");
+			userIo.print("DRAWS");
 		}
 		while(score < 17) {
 			Card dealtCard = deck.deal();
 			dealer.dealCard(dealtCard);
 			score = ScoringUtils.scoreHand(dealer.getHand());
-			userIo.print(dealtCard.toString() + " ");
+			userIo.print("  " + String.format("%-4s", dealtCard.toString()));
 		}
 		
 		if(score > 21) {
@@ -285,19 +278,15 @@ public class Game {
 
 	/**
 	 * Evaluates the result of the round, prints the results, and updates player/dealer totals.
+	 * 
+	 *	PLAYER 1 LOSES   100 TOTAL=-100 
+	 *	PLAYER 2  WINS   150 TOTAL= 150
+	 *	DEALER'S TOTAL= 200
+	  *
 	 * @param players
 	 * @param dealerHand
 	 */
 	protected void evaluateRound(List<Player> players, Player dealer) {
-		/*
-		PLAYER 1 LOSES   100 TOTAL=-100 
-		PLAYER 2  WINS   150 TOTAL= 150
-		DEALER'S TOTAL= 200
-		*/
-		// this should probably take in a "Dealer" instance instead of just the dealer hand so we can update the dealer's total.
-		// currentBets of each player are added/subtracted from the dealer total depending on whether they win/lose (accounting for doubling down, insurance etc.)
-		// remember to handle a "PUSH" when the dealer ties and the bet is returned.
-
 		DecimalFormat formatter = new DecimalFormat("0.#"); //Removes trailing zeros
 		for(Player player : players){
 			int result = ScoringUtils.compareHands(player.getHand(), dealer.getHand());
@@ -328,7 +317,7 @@ public class Game {
 			if(totalBet < 0) {
 				userIo.print(" LOSES " + String.format("%6s", formatter.format(Math.abs(totalBet)))); 
 			} else if(totalBet > 0) {
-				userIo.print("  WINS  " + String.format("%6s", formatter.format(totalBet))); 
+				userIo.print("  WINS " + String.format("%6s", formatter.format(totalBet))); 
 			} else {
 				userIo.print(" PUSHES      ");
 			}
@@ -352,5 +341,4 @@ public class Game {
 			.map(Player::getCurrentBet)
 			.allMatch(bet -> bet > 0 && bet <= 500);
 	}
-
 }

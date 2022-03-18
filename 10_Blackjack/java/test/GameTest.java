@@ -439,7 +439,7 @@ public class GameTest {
 
         // Then
         assertAll(
-            () -> assertTrue(out.toString().contains("PLAYER 1  WINS     100 TOTAL= 300")),
+            () -> assertTrue(out.toString().contains("PLAYER 1  WINS    100 TOTAL= 300")),
             () -> assertTrue(out.toString().contains("DEALER'S TOTAL= -100"))
         );
     }
