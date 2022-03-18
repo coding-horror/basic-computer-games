@@ -368,9 +368,8 @@ class Qubit:
             ]
 
             while True:
-                if not skipHuman:
-                    if not self.humanMove(board):
-                        break
+                if not skipHuman and not self.humanMove(board):
+                    break
                 skipHuman = False
 
                 m = board.machineMove()

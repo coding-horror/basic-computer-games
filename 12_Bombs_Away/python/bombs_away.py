@@ -186,4 +186,4 @@ if __name__ == "__main__":
     again = True
     while again:
         play_game()
-        again = True if input("ANOTHER MISSION? (Y OR N): ").upper() == "Y" else False
+        again = input("ANOTHER MISSION? (Y OR N): ").upper() == "Y"

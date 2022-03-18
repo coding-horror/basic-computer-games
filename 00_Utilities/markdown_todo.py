@@ -34,7 +34,7 @@ prev_game = ""
 for dirName, subdirList, fileList in os.walk(rootDir):
     split_dir = dirName.split(os.path.sep)
 
-    if len(split_dir) == 2 and not split_dir[1] in [".git", "00_Utilities"]:
+    if len(split_dir) == 2 and split_dir[1] not in [".git", "00_Utilities"]:
         if prev_game == "":
             prev_game = split_dir[1]
             checklist[0] = split_dir[1]
@@ -55,13 +55,12 @@ for dirName, subdirList, fileList in os.walk(rootDir):
             ]
             prev_game = split_dir[1]
 
-    elif len(split_dir) == 3 and split_dir[1] != ".git":
-        if split_dir[2] in lang_pos.keys():
-            if len(fileList) > 1 or len(subdirList) > 0:
-                # there is more files than the readme
-                checklist[lang_pos[split_dir[2]]] = "✅"
-            else:
-                checklist[lang_pos[split_dir[2]]] = "⬜️"
+    elif len(split_dir) == 3 and split_dir[1] != ".git" and split_dir[2] in lang_pos:
+        if len(fileList) > 1 or len(subdirList) > 0:
+            # there is more files than the readme
+            checklist[lang_pos[split_dir[2]]] = "✅"
+        else:
+            checklist[lang_pos[split_dir[2]]] = "⬜️"
 
 
 sorted_strings = list(
