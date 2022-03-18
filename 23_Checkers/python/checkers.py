@@ -237,11 +237,11 @@ class Board:
                 if self.spaces[landing_x][landing_y] == COMPUTER_PIECE:
                     for delta_x in (-2, 2):
                         test_record = self.try_extend(landing_x, landing_y, delta_x, -2)
-                        if not (move_record is None):
-                            if (best_move is None) or (
-                                move_record.quality > best_move.quality
-                            ):
-                                best_move = test_record
+                        if (move_record is not None) and (
+                            (best_move is None)
+                            or (move_record.quality > best_move.quality)
+                        ):
+                            best_move = test_record
                 else:
                     assert self.spaces[landing_x][landing_y] == COMPUTER_KING
                     for delta_x in (-2, 2):

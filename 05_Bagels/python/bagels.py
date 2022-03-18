@@ -48,7 +48,7 @@ def print_rules():
 def pick_number():
     # Note that this returns a list of individual digits
     # as separate strings, not a single integer or string
-    numbers = [i for i in range(10)]
+    numbers = list(range(10))
     random.shuffle(numbers)
     num = numbers[0:3]
     num = [str(i) for i in num]

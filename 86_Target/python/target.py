@@ -44,7 +44,7 @@ def print_instructions():
 def prompt():
     while True:
         response = input("INPUT ANGLE DEVIATION FROM X, DEVIATION FROM Z, DISTANCE? ")
-        if not ("," in response):
+        if "," not in response:
             continue
 
         terms = response.split(",")

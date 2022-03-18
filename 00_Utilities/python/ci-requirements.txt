@@ -12,7 +12,10 @@ flake8==4.0.1
     # via
     #   -r ci-requirements.in
     #   flake8-bugbear
+    #   flake8-comprehensions
 flake8-bugbear==22.1.11
+    # via -r ci-requirements.in
+flake8-comprehensions==3.8.0
     # via -r ci-requirements.in
 iniconfig==1.1.1
     # via pytest

@@ -28,4 +28,4 @@ jobs:
         mypy . --exclude 79_Slalom --exclude 27_Civil_War --exclude 38_Fur_Trader --exclude 81_Splat --exclude 09_Battle --exclude 40_Gomoko --exclude 36_Flip_Flop --exclude 43_Hammurabi --exclude 04_Awari --exclude 78_Sine_Wave --exclude 77_Salvo --exclude 34_Digits --exclude 17_Bullfight --exclude 16_Bug
     - name: Test with flake8
       run: |
-        flake8 . --ignore E501,W503,E203,E731,B011
+        flake8 . --ignore E501,W503,E203,E731,B011,SIM119,SIM106
