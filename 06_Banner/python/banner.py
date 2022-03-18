@@ -97,11 +97,11 @@ def print_banner():
                         if s[u] == 1:
                             f[u] = 8 - k
                             break
-                for t1 in range(1, x + 1):
+                for _t1 in range(1, x + 1):
                     line_str = " " * int((63 - 4.5 * y) * g1 / len(xStr) + 1)
                     for b in range(0, f[u] + 1):
                         if j[b] == 0:
-                            for i in range(1, y + 1):
+                            for _ in range(1, y + 1):
                                 line_str = line_str + " " * len(xStr)
                         else:
                             line_str = line_str + xStr * y

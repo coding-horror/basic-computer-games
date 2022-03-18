@@ -38,7 +38,7 @@ def main():
         print("Guess my combination ...")
         answer = int(possibilities * random.random())
         numeric_answer = [-1] * num_positions
-        for i in range(0, answer):
+        for _ in range(0, answer):
             numeric_answer = get_possibility(numeric_answer)
         # human_readable_answer = make_human_readable(numeric_answer)
         while num_moves < 10 and not turn_over:
@@ -122,7 +122,7 @@ def main():
                     inconsistent_information = True
                 else:
                     numeric_guess = [-1] * num_positions
-                    for i in range(0, guess):
+                    for _ in range(0, guess):
                         numeric_guess = get_possibility(numeric_guess)
                     human_readable_guess = make_human_readable(numeric_guess)
                     print(f"My guess is: {human_readable_guess}")
@@ -142,7 +142,7 @@ def main():
                             if all_possibilities[i] == 0:  # already ruled out
                                 continue
                             numeric_possibility = [-1] * num_positions
-                            for j in range(0, i):
+                            for _ in range(0, i):
                                 numeric_possibility = get_possibility(
                                     numeric_possibility
                                 )

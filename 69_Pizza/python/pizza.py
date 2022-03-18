@@ -28,7 +28,7 @@ def print_header(title):
 
 
 def print_ticks():
-    for t in range(4):
+    for _ in range(4):
         print("-")
 
 
@@ -134,7 +134,7 @@ def deliver_to(customer_index, customer_name, player_name):
 
 
 def play_game(num_turns, player_name):
-    for turn in range(num_turns):
+    for _turn in range(num_turns):
         x = random.randint(1, 4)
         y = random.randint(1, 4)
         customer_index = calculate_customer_index(x, y)

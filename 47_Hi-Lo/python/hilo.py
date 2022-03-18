@@ -21,7 +21,7 @@ def play():
         secret = random.randint(1, 100)
         guessed_correctly = False
 
-        for attempt in range(MAX_ATTEMPTS):
+        for _attempt in range(MAX_ATTEMPTS):
             print("YOUR GUESS", end=QUESTION_PROMPT)
             guess = int(input())
 
