@@ -52,7 +52,7 @@ def main():
 
     count = int(PAGE_WIDTH / width)
 
-    for down in range(count):
+    for _down in range(count):
         print_diamond(1, width, 2, width, count)
         print_diamond(width - 2, 1, -2, width, count)
 

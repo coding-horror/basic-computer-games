@@ -418,9 +418,9 @@ def find_board_index_that_matches_board(board):
         if matches:
             return board_index, is_reversed
 
-    # THE TERMINATION OF THIS LOOP IS IMPOSSIBLE
-    print("ILLEGAL BOARD PATTERN.")
-    assert False
+    # This point should never be reached
+    # In future, mypy might be able to check exhaustiveness via assert_never
+    raise RuntimeError("ILLEGAL BOARD PATTERN.")
 
 
 def pick_computer_move(board):

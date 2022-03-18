@@ -1,4 +1,5 @@
 import random
+import time
 
 
 def print_n_whitespaces(n: int):
@@ -179,8 +180,7 @@ while not (Y > 0):
     # 970
     X = random.randint(1, 6)
     print()
-    for delay in range(2000):
-        pass
+    time.sleep(2)
 
     print("I ROLLED A", X)
     if X == 1:

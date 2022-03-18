@@ -225,7 +225,7 @@ def main():
         else:
             print("A FANTASTIC PERFORMANCE!!!  CHARLEMANGE, DISRAELI, AND")
             print("JEFFERSON COMBINED COULD NOT HAVE DONE BETTER!\n")
-        for N in range(1, 10):
+        for _ in range(1, 10):
             print("\a")
 
     print("\nSO LONG FOR NOW.\n")

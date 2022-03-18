@@ -46,7 +46,7 @@ radians = 0
 width = CENTER - 1
 
 # "Start long loop"
-for line_num in range(MAX_LINES):
+for _line_num in range(MAX_LINES):
 
     # Get string to display on this line
     curr_string = STRINGS[string_index]

@@ -51,7 +51,7 @@ while still_playing:
     n = int(input("How many rolls? "))
 
     # Roll the dice n times
-    for i in range(n):
+    for _ in range(n):
         die1 = random.randint(1, 6)
         die2 = random.randint(1, 6)
         roll_total = die1 + die2
