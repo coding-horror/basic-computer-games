@@ -105,7 +105,7 @@ public class Player {
             // Can't split twice
             return false;
         } else {
-            boolean isPair = this.hand.get(0).getValue() == this.hand.get(1).getValue();
+            boolean isPair = this.hand.get(0).value() == this.hand.get(1).value();
             return isPair;
         }
     }

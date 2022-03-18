@@ -72,7 +72,7 @@ public class Game {
 
 			printInitialDeal(players, dealer);
 
-			if(dealer.getHand().get(0).getValue() == 1) {
+			if(dealer.getHand().get(0).value() == 1) {
 				collectInsurance(players);
 			}
 
@@ -81,7 +81,7 @@ public class Game {
 				userIo.println("FOR BLACKJACK");
 			} else {
 				Card dealerFirstCard = dealer.getHand().get(0);
-				if(dealerFirstCard.getValue() == 1 || dealerFirstCard.getValue() > 9) {
+				if(dealerFirstCard.value() == 1 || dealerFirstCard.value() > 9) {
 					userIo.println("");
 					userIo.println("NO DEALER BLACKJACK.");
 				} // else dealer blackjack is imposible
@@ -199,7 +199,7 @@ public class Game {
 					card = deck.deal();
 					player.dealCard(card, 2);
 					userIo.println("SECOND HAND RECEIVES " + card.toProseString());					
-					if(player.getHand().get(0).getValue() > 1){ //Can't play after splitting aces
+					if(player.getHand().get(0).value() > 1){ //Can't play after splitting aces
 						play(player, 1);
 						play(player, 2);
 					}

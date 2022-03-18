@@ -13,11 +13,11 @@ public class DeckTest {
         // Then
         long nCards = deck.size();
         long nSuits = deck.getCards().stream()
-                .map(card -> card.getSuit())
+                .map(card -> card.suit())
                 .distinct()
                 .count();
         long nValues = deck.getCards().stream()
-                .map(card -> card.getValue())
+                .map(card -> card.value())
                 .distinct()
                 .count();
 
