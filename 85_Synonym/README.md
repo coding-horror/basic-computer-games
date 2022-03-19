@@ -19,8 +19,7 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
-
-## Known Issues
+#### Porting Notes
 
  - Each time the player asks for HELP, one of the synonyms is shown
    and discarded. There is no protection against the player using up
