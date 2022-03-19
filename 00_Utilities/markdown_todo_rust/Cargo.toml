@@ -1,5 +1,5 @@
 [package]
-name = "mardown_todo_rust"
+name = "markdown_todo_rust"
 version = "0.1.0"
 edition = "2021"
 
