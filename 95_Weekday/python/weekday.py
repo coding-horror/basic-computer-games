@@ -146,7 +146,7 @@ def end():
         print()
 
 
-def main():
+def main() -> None:
     print_with_tab(32, "WEEKDAY")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

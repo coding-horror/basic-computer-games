@@ -32,7 +32,7 @@ def b_input(promptstring):  # emulate BASIC input. It rejects non-numeric values
     return int(x)
 
 
-def main():
+def main() -> None:
     seed()
     title = "HAMURABI"
     title = title.rjust(32, " ")
@@ -45,7 +45,7 @@ def main():
     print("FOR A TEN-YEAR TERM OF OFFICE.\n")
 
     D1 = 0
-    P1 = 0
+    P1: float = 0
     year = 0
     population = 95
     grain_stores = 2800

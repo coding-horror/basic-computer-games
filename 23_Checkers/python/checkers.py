@@ -387,7 +387,7 @@ def play_game():
                 board.play_human_move(start_x, start_y, dest_x, dest_y)
 
 
-def main():
+def main() -> None:
     print_header("CHECKERS")
     print_instructions()
 

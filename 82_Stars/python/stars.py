@@ -57,7 +57,7 @@ def get_guess():
     return guess
 
 
-def main():
+def main() -> None:
     # Display intro text
     print("\n                   Stars")
     print("Creative Computing  Morristown, New Jersey")

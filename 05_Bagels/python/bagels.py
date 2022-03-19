@@ -79,7 +79,7 @@ def get_valid_guess(guesses: int) -> str:
     return guess
 
 
-def build_result_string(num: List[str], guess: str):
+def build_result_string(num: List[str], guess: str) -> str:
     result = ""
 
     # Correct digits in wrong place
@@ -105,10 +105,7 @@ def build_result_string(num: List[str], guess: str):
     return result
 
 
-######################################################################
-
-
-def main():
+def main() -> None:
     # Intro text
     print("\n                Bagels")
     print("Creative Computing  Morristown, New Jersey")

@@ -100,7 +100,7 @@ def print_thanks():
     print()
 
 
-def main():
+def main() -> None:
     print_header("CHANGE")
     print_introduction()
 

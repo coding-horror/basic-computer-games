@@ -50,7 +50,7 @@ letters = {
 }
 
 
-def print_banner():
+def print_banner() -> None:
     f = [0] * 7
     j = [0] * 9
 
@@ -77,8 +77,9 @@ def print_banner():
         g1 = 1
     mStr = input("Character (type 'ALL' if you want character being printed) ").upper()
     aStr = input("Statement ")
-    # This means to prepare printer, just press Enter
-    input("Set page ")
+
+    input("Set page ")  # This means to prepare printer, just press Enter
+
     for lStr in aStr:
         s = letters[lStr].copy()
         xStr = mStr

@@ -239,19 +239,19 @@ DATA = (
 )
 
 
-def display_intro():
+def display_intro() -> None:
     print(tab(33) + "BUNNY")
     print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
 
 
-def tab(column):
+def tab(column) -> str:
     """Emulates the TAB command in BASIC. Returns a string with ASCII
     codes for setting the cursor to the specified column."""
     return f"\r\33[{column}C"
 
 
-def play():
+def play() -> None:
     display_intro()
 
     # Using an iterator will give us a similar interface to BASIC's READ

@@ -23,7 +23,7 @@
 import random
 
 
-def main():
+def main() -> None:
     WORDS = [
         [
             "Ability",

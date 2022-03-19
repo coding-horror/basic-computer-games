@@ -55,7 +55,7 @@ def limit_set():
     return limit, limit_goal
 
 
-def main():
+def main() -> None:
     limit, limit_goal = limit_set()
     while True:
         guess_count = 1

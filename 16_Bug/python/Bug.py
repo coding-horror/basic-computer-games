@@ -49,7 +49,7 @@ def print_legs(n_legs):
         print()
 
 
-def main():
+def main() -> None:
     print_n_whitespaces(34)
     print("BUG")
     print_n_whitespaces(15)
@@ -59,8 +59,8 @@ def main():
     print("THE GAME BUG")
     print("I HOPE YOU ENJOY THIS GAME.")
     print()
-    Z = input("DO YOU WANT INSTRUCTIONS? ")
-    if Z != "NO":
+    want_instructions = input("DO YOU WANT INSTRUCTIONS? ")
+    if want_instructions != "NO":
         print("THE OBJECT OF BUG IS TO FINISH YOUR BUG BEFORE I FINISH")
         print("MINE. EACH NUMBER STANDS FOR A PART OF THE BUG BODY.")
         print("I WILL ROLL THE DIE FOR YOU, TELL YOU WHAT I ROLLED FOR YOU")
@@ -269,8 +269,8 @@ def main():
             Y = Y + 2
         if C == 1:
             continue
-        Z = input("DO YOU WANT THE PICTURES? ")
-        if Z != "NO":
+        want_pictures = input("DO YOU WANT THE PICTURES? ")
+        if want_pictures != "NO":
             print("*****YOUR BUG*****")
             print_n_newlines(2)
             if A != 0:

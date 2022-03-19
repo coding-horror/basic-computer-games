@@ -24,6 +24,7 @@ Ported in 2021 by Jonas Nockert / @lemonad
 """
 from math import sqrt
 from random import choice, random, uniform
+from typing import List
 
 PAGE_WIDTH = 72
 
@@ -293,10 +294,10 @@ def print_header():
     )
 
 
-def main():
+def main() -> None:
     print_header()
 
-    successful_jumps = []
+    successful_jumps: List[float] = []
     while True:
         chute_altitude = jump()
         if chute_altitude > 0:

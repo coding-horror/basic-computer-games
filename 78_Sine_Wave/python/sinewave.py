@@ -25,7 +25,7 @@ import math
 import time
 
 
-def main():
+def main() -> None:
     # Constants
     STRINGS = ("Creative", "Computing")  # Text to display
     MAX_LINES = 160
@@ -42,7 +42,7 @@ def main():
     # "REMarkable program by David Ahl"
 
     string_index = 0
-    radians = 0
+    radians: float = 0
     width = CENTER - 1
 
     # "Start long loop"

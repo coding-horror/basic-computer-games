@@ -9,11 +9,12 @@ Ported by Peter Sharp
 
 from collections import namedtuple
 from random import randint
+from typing import Any, Dict
 
 PAGE_WIDTH = 64
 
 
-def main(states, data):
+def main(states, data) -> None:
     """
     Starts the game loop using given states and data
 
@@ -327,7 +328,7 @@ if __name__ == "__main__":
     )
 
     # all the data used by the game
-    data = {
+    data: Dict[str, Any] = {
         "state": "start",
         "partNo": None,
         "players": {"YOU": [0] * len(part_types), "I": [0] * len(part_types)},

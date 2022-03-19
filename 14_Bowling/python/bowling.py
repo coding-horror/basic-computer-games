@@ -1,14 +1,14 @@
 import random
 
 
-def simulateRoll(pins):
+def simulate_roll(pins) -> None:
     for _ in range(20):
         x = random.randint(0, 14)
         if x < len(pins):
             pins[x] = 1
 
 
-def calculate_score(rolls):
+def calculate_score(rolls) -> int:
     score = 0
     frame = 1
     b = 1
@@ -41,7 +41,7 @@ class Player:
         prev_score = 0
         pins = [0] * 10  # reset the pins
         for ball in range(2):
-            simulateRoll(pins)
+            simulate_roll(pins)
             score = sum(pins)
             self.show(pins)
             pin_count = score - prev_score
@@ -69,7 +69,7 @@ class Player:
             for _ball in range(extra):
                 if score == 10:
                     pins = [0] * 10
-                simulateRoll(pins)
+                simulate_roll(pins)
                 score = sum(pins)
                 self.rolls.append(score)
 
@@ -92,7 +92,7 @@ def centreText(text, width):
     return (" " * ((width - t) // 2)) + text
 
 
-def main():
+def main() -> None:
     print(centreText("Bowl", 80))
     print(centreText("CREATIVE COMPUTING MORRISTOWN, NEW JERSEY", 80))
     print()

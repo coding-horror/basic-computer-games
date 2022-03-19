@@ -346,7 +346,7 @@ def run_simulation():
             capsule.update_state(sim_clock, delta_t, new_state)
 
 
-def main():
+def main() -> None:
     print_header("LUNAR")
     print_instructions()
     while True:

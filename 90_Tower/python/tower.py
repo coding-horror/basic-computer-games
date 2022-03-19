@@ -127,7 +127,7 @@ class Game:
             from_tower.add(disk)
 
 
-def main():
+def main() -> None:
     print(
         """
     IN THIS PROGRAM, WE SHALL REFER TO DISKS BY NUMERICAL CODE.

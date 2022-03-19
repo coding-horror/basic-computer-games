@@ -70,7 +70,7 @@ class NIM:
         return sum == 0
 
 
-def main():
+def main() -> None:
     # Game initialization
     game = NIM()
 

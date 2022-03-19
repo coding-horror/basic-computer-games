@@ -62,7 +62,7 @@ def display_bankroll(bank_roll: int) -> None:
         print("You now have %s dollars\n" % bank_roll)
 
 
-def main():
+def main() -> None:
     # Display initial title and instructions
     print("\n           Acey Ducey Card Game")
     print("Creative Computing  Morristown, New Jersey")

@@ -72,7 +72,7 @@ DATA = [
 ROW_LEN = sum(DATA[0])
 
 
-def main():
+def main() -> None:
     # Display intro text
     print("\n                  Love")
     print("Creative Computing  Morristown, New Jersey")

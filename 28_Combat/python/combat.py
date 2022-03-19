@@ -8,7 +8,7 @@ cpu_navy = 20000
 cpu_air = 22000
 
 
-def show_intro():
+def show_intro() -> None:
     global MAX_UNITS
 
     print(" " * 32 + "COMBAT")
@@ -18,7 +18,7 @@ def show_intro():
     print("WE HAVE " + str(MAX_UNITS) + " SOLDIERS APIECE.")
 
 
-def get_forces():
+def get_forces() -> None:
     global usr_army, usr_navy, usr_air
 
     while True:
@@ -34,7 +34,7 @@ def get_forces():
             break
 
 
-def attack_first():
+def attack_first() -> None:
     global usr_army, usr_navy, usr_air
     global cpu_army, cpu_navy, cpu_air
 
@@ -110,7 +110,7 @@ def attack_first():
             cpu_army = int(2 * cpu_army / 3)
 
 
-def attack_second():
+def attack_second() -> None:
     global usr_army, usr_navy, usr_air, cpu_army, cpu_navy, cpu_air
     global plane_crash_win
     num_units = 0
@@ -191,7 +191,7 @@ def attack_second():
         print("RESPECTIVE COUNTRIES AND LIVE IN PEACE.")
 
 
-def main():
+def main() -> None:
     show_intro()
     get_forces()
     attack_first()
