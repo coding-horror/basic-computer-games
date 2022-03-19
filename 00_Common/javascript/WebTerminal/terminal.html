@@ -1,0 +1,116 @@
+<html>
+  <head>
+    <title>Minimal node.js terminal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+      rel="stylesheet"
+      href="../../../00_Utilities/javascript/style_terminal.css"
+    />
+    <link rel="stylesheet" href="HtmlTerminal.css" />
+    <style>
+      header {
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid var(--text);
+        padding: 0.25rem 0.5rem;
+        margin: 0;
+        margin-bottom: 1rem;
+        background: black;
+        display: flex;
+        justify-content: space-between;
+      }
+      header h1 {
+        font-size: small;
+        color: var(--text),
+      }
+      header div {
+        font-size: small;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1><a href="../../../../">BASIC Computer Games</a></h1>
+    </header>
+    <main id="output"></main>
+    <script src="HtmlTerminal.js" type="text/javascript"></script>
+    <script>
+      const term = new HtmlTerminal(document.getElementById("output"));
+
+      function getGameScriptFromHash() {
+        const hash = window.location.hash;
+
+        // if no game-script was provided redirect to the overview.
+        if (!hash) {
+          // show error message and link back to the index.html
+          console.debug("[HtmlTerminal] No game script found!");
+          term.writeln(`no game script found :-(\n`);
+          term.inserHtml(`<a href="/">>> Back to game overview!</a>`);
+          return;
+        }
+
+        // remove the hash
+        const gameFile = hash.replace("#", "");
+        return gameFile;
+      }
+
+      function addGitHubLink(gameFile) {
+        const gameFolder = gameFile.split("/")[0];
+
+        $gitHubLink = document.createElement("a");
+        $gitHubLink.href = `https://github.com/coding-horror/basic-computer-games/tree/main/${gameFolder}`;
+        $gitHubLink.innerText = `show source-code`;
+
+        var $gitHubBanner = document.createElement("div");
+        $gitHubBanner.classList.add("githublink");
+        $gitHubBanner.appendChild($gitHubLink);
+
+        const $header = document.getElementsByTagName('header')[0];
+        $header.append($gitHubBanner);
+      }
+
+      function loadGameScript(gameFile) {
+        // clear terminal
+        term.clear();
+
+        // load game-script
+        console.debug("[HtmlTerminal] Game script found: ", gameFile);
+        const gameScript = `../../../${gameFile}`;
+        var $scriptTag = document.createElement("script");
+        $scriptTag.async = "async";
+        $scriptTag.type = "module";
+        $scriptTag.src = gameScript;
+        $scriptTag.onerror = () => {
+          term.clear();
+          term.writeln(`Error loading game-script "${gameFile}" :-(\n`);
+          term.inserHtml(`<a href="/">>> Back to game overview!</a>`);
+        };
+        $scriptTag.addEventListener("load", function () {
+          console.log("[HtmlTerminal] Game script loaded!");
+        });
+        document.body.append($scriptTag);
+      }
+
+      /* Redirect stdin/stdout to the HtmlTerminal.
+       * This is VERY hacky and should never be done in a serious project!
+       * We can use this here because we know what we are doing and...
+       * ...it's just simple games ;-) */
+      window.process = {
+        stdout: {
+          write: (t) => term.write(t),
+        },
+        stdin: {
+          on: (event, callback) => term.input(callback),
+        },
+        exit: (code) => {},
+      };
+
+      // let's play 🚀
+      const gameFile = getGameScriptFromHash();
+      addGitHubLink(gameFile);
+      loadGameScript(gameFile);
+    </script>
+  </body>
+</html>
