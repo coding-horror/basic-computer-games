@@ -12,11 +12,12 @@ use std::path::{Path, PathBuf};
 
 //DATA
 const ROOT_DIR: &str = "../../";
-const LANGUAGES: [(&str,&str); 9] = [ //first element of tuple is the language name, second element is the file extension
+const LANGUAGES: [(&str,&str); 10] = [ //first element of tuple is the language name, second element is the file extension
     ("csharp", "cs"),
     ("java", "java"),
     ("javascript", "html"),
-    ("pascal", "pas"),
+    ("kotlin", "kt"),
+    ("lua", "lua"),
     ("perl", "pl"),
     ("python", "py"),
     ("ruby", "rb"),
