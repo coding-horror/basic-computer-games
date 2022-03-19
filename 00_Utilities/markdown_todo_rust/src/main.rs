@@ -82,34 +82,50 @@ fn main() {
         // for every game
         //      every language + ✅/⬜️
         for g in root_folders.into_iter() {
-            let game = g.clone().into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>();//get the game name
-            output_string += format!(
-                "### {}\n\n{}\n", //message format
-                game,
-                {
-                    let mut s:String = String::new();
-                    //every language + ✅/⬜️
-                    LANGUAGES.iter().for_each(|lang| {
-                        s+="- ";
-                        s += lang.0;
-                        // + ✅/⬜️
-                        let paths:Vec<_> = list_files(&g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
-                        let paths:Vec<String> = paths.into_iter().filter_map(|s| {
-                            match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
-                                None => None,
-                                Some(s) => Some(s.to_string()),
-                            }
-                        }).collect(); //get all the extensions
-                        if paths.into_iter().any(|f| f.eq(lang.1)) {//list_files(&game).iter().map(|path| path.into_os_string().into_string().unwrap()).any(|s| LANGUAGES.iter().map(|tup| Some(tup.1)).collect::<Vec<_>>().contains(&s.split('.').next())) {
-                            s+="✅";
-                        } else {s += "⬜️";}
+            //DATA
+            let mut num_done:u8 = 0; //number of languages implemented
+            let mut total:u8 = 0; //number of languages
 
-                        s += "\n";
-                    });
-                    s
-                }
+            let game = g.clone().into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>();//get the game name
+
+
+            //find all the lanuages the game is coded in
+            let languages_list_for_game = {
+                let mut s:String = String::new();
+                //every language + ✅/⬜️
+                LANGUAGES.iter().for_each(|lang| {
+                    s+="- ";
+                    s += lang.0;
+                    // + ✅/⬜️
+                    let paths:Vec<_> = list_files(&g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect();
+                    let paths:Vec<String> = paths.into_iter().filter_map(|s| {
+                        match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
+                            None => None,
+                            Some(s) => Some(s.to_string()),
+                        }
+                    }).collect(); //get all the extensions
+                    if paths.into_iter().any(|f| f.eq(lang.1)) {//list_files(&game).iter().map(|path| path.into_os_string().into_string().unwrap()).any(|s| LANGUAGES.iter().map(|tup| Some(tup.1)).collect::<Vec<_>>().contains(&s.split('.').next())) {
+                        s+="✅";
+                        num_done += 1; //increment number done
+                    } else {
+                        s += "⬜️";  
+                    }
+                    total += 1; //increment total
+
+                    s += "\n";
+                });
+                s
+            };
+
+            //format message
+            output_string += format!(
+                "### {}\t{}\n\n{}\n", //message format
+                game,
+                format!("coded in {}/{} languages", num_done, total),
+                languages_list_for_game,
             ).as_str();
         }
+
         //print the whole list
         println!("\n\n{}", output_string);
     }
@@ -134,40 +150,56 @@ fn main() {
         // for every language
         //      every game + ✅/⬜️
         for lang in LANGUAGES.iter() {
-            output_string += format!(
-                "### {}\n\n{}\n", //message format
-                lang.0,
-                {
-                    let mut s:String = String::new();
-                    for g in (&root_folders).into_iter() {
-                        //data
-                        let game = g.clone();
-                        let game_name = game.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(); //get the game name
-                        let paths:Vec<_> = list_files(g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect(); //all subpaths of game
-                        let paths:Vec<String> = paths.into_iter().filter_map(|s| {
-                            match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
-                                None => None,
-                                Some(s) => Some(s.to_string()),
-                            }
-                        }).collect(); //get all the extensions
+            //DATA
+            let mut num_done = 0;
+            let mut total = 0;
+            let games_list_for_language = { //list
+                //DATA
+                let mut s:String = String::new();
 
-                        //add game name
-                        s+="- ";
-                        s+= game_name.as_str();
+                //go through every game and check if it's coded in the language
+                for g in (&root_folders).into_iter() {
+                    //data
+                    let game = g.clone();
+                    let game_name = game.into_os_string().into_string().unwrap().chars().filter(|c| !(*c=='.' || *c=='/')).collect::<String>(); //get the game name
+                    let paths:Vec<_> = list_files(g).into_iter().map(|path| path.into_os_string().into_string().unwrap()).collect(); //all subpaths of game
+                    let paths:Vec<String> = paths.into_iter().filter_map(|s| {
+                        match  Path::new(s.as_str()).extension().and_then(OsStr::to_str) {
+                            None => None,
+                            Some(s) => Some(s.to_string()),
+                        }
+                    }).collect(); //get all the extensions
 
-                        //every game + ✅/⬜️
-                        if paths.into_iter().any(|f| f.eq(lang.1)) {
-                            s+="✅";
-                        } else {s += "⬜️";}
+                    //add game name
+                    s+="- ";
+                    s+= game_name.as_str();
 
-                        s += "\n";
+                    //every game + ✅/⬜️
+                    if paths.into_iter().any(|f| f.eq(lang.1)) {
+                        s+="✅";
+                        num_done += 1; //increment num done
+                    } else {
+                        s += "⬜️";
                     }
-                    //print desired languages only
-                    if langs_to_print.contains(&lang.1) {
-                        print!("### {}\n\n{}",lang.0,s);
-                    }
-                    s
+                    total += 1; //increment total
+                    
+                    //new line
+                    s += "\n";
                 }
+
+                //print desired languages only, what's output to std_out, also not markdown formatted
+                if langs_to_print.contains(&lang.1) {
+                    print!("###  {}\t{}  ###\n{}\n\n", lang.0, format!("{}/{} games ported", num_done, total), s);
+                }
+                s
+            };
+
+            //format message, what's output to the file
+            output_string += format!(
+                "### {}\t{}\n\n{}\n\n", //message format
+                lang.0, //language
+                format!("{}/{} games ported", num_done, total),//number done / total number
+                games_list_for_language,
             ).as_str();
         }
     }
