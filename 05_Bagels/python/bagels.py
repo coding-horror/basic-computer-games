@@ -33,11 +33,12 @@
 
 
 import random
+from typing import List
 
 MAX_GUESSES = 20
 
 
-def print_rules():
+def print_rules() -> None:
     print("\nI am thinking of a three-digit number.  Try to guess")
     print("my number and I will give you clues as follows:")
     print("   PICO   - One digit correct but in the wrong position")
@@ -45,17 +46,17 @@ def print_rules():
     print("   BAGELS - No digits correct")
 
 
-def pick_number():
+def pick_number() -> List[str]:
     # Note that this returns a list of individual digits
     # as separate strings, not a single integer or string
     numbers = list(range(10))
     random.shuffle(numbers)
     num = numbers[0:3]
-    num = [str(i) for i in num]
-    return num
+    num_str = [str(i) for i in num]
+    return num_str
 
 
-def get_valid_guess(guesses):
+def get_valid_guess(guesses: int) -> str:
     valid = False
     while not valid:
         guess = input(f"Guess # {guesses}     ? ")
@@ -78,8 +79,7 @@ def get_valid_guess(guesses):
     return guess
 
 
-def build_result_string(num, guess):
-
+def build_result_string(num: List[str], guess: str):
     result = ""
 
     # Correct digits in wrong place
