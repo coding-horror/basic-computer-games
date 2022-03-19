@@ -76,12 +76,12 @@ def ask_question(question_number):
             return
 
 
-def finish():
+def finish() -> None:
     print()
     print("SYNONYM DRILL COMPLETED.")
 
 
-def main():
+def main() -> None:
     print_header("SYNONYM")
     print_instructions()
 

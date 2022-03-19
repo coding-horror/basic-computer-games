@@ -110,7 +110,7 @@ def play_game():
     print("\nThanks for playing. It was fun.")
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "WAR")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
     print("This is the card game of war. Each card is given by suit-#")

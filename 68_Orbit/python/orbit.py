@@ -143,7 +143,7 @@ def play_game():
     return False
 
 
-def main():
+def main() -> None:
     print_centered("ORBIT")
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

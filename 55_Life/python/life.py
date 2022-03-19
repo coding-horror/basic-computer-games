@@ -48,7 +48,7 @@ def get_pattern():
         c += 1
 
 
-def main():
+def main() -> None:
     print_header("LIFE")
 
     pattern = get_pattern()

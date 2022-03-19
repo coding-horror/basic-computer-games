@@ -60,7 +60,7 @@ def play_game():
         prompt_human = "Your turn -- you may take 1, 2 or 3 matches.\nHow many do you wish to remove "
 
 
-def main():
+def main() -> None:
     print(" " * 31 + "23 MATCHHES")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
     print("This is a game called '23 Matches'.\n")

@@ -168,7 +168,7 @@ def move(board):
         return False
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "H-I-Q")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print_instructions()

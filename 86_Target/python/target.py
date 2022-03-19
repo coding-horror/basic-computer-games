@@ -160,7 +160,7 @@ def play_game():
         next_target()
 
 
-def main():
+def main() -> None:
     print_header("TARGET")
     print_instructions()
 

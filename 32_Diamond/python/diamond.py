@@ -37,7 +37,7 @@ def print_diamond(begin_width, end_width, step, width, count):
         n += step
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "DIAMOND")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

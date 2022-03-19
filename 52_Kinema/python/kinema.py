@@ -74,7 +74,7 @@ def ask_player(question, answer):
     return score
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "KINEMA")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

@@ -46,7 +46,7 @@ def print_dice(n):
     print(" ----- ")
 
 
-def main():
+def main() -> None:
 
     while True:
         d1 = randint(1, 6)

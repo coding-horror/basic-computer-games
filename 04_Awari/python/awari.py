@@ -70,17 +70,18 @@ Ported by Dave LeCompte
 # - store history to a file on disk (or in the cloud!) to allow the AI
 #   to learn over more than a single session
 
+from typing import Dict, List, Tuple
 
-game_number = 0
-move_count = 0
-losing_book = []
+game_number: int = 0
+move_count: int = 0
+losing_book: List[int] = []
 n = 0
 
 MAX_HISTORY = 9
 LOSING_BOOK_SIZE = 50
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -88,7 +89,7 @@ def print_with_tab(space_count, msg):
     print(spaces + msg)
 
 
-def draw_pit(line, board, pit_index):
+def draw_pit(line: str, board, pit_index) -> str:
     val = board[pit_index]
     line = line + " "
     if val < 10:
@@ -97,7 +98,7 @@ def draw_pit(line, board, pit_index):
     return line
 
 
-def draw_board(board):
+def draw_board(board) -> None:
     print()
 
     # Draw the top (computer) pits
@@ -121,7 +122,7 @@ def draw_board(board):
     print()
 
 
-def play_game(board):
+def play_game(board: List[int]) -> None:
     # Place the beginning stones
     for i in range(0, 13):
         board[i] = 3
@@ -164,7 +165,7 @@ def play_game(board):
     game_over(board)
 
 
-def computer_move(msg, board):
+def computer_move(msg: str, board) -> Tuple[int, bool, int, str]:
     # This function does a two-ply lookahead evaluation; one computer
     # move plus one human move.
     #
@@ -239,7 +240,7 @@ def computer_move(msg, board):
             # penalize that move.
             for prev_game_number in range(game_number):
                 if losing_book[game_number] * 6 + move_digit == int(
-                    losing_book[prev_game_number] / 6 ^ (7 - move_count) + 0.1
+                    losing_book[prev_game_number] / 6 ^ (7 - move_count) + 0.1  # type: ignore
                 ):
                     computer_move_quality -= 2
 
@@ -264,7 +265,7 @@ def computer_move(msg, board):
     return move_number, is_still_going, home, msg
 
 
-def game_over(board):
+def game_over(board) -> None:
     print()
     print("GAME OVER")
 
@@ -282,13 +283,13 @@ def game_over(board):
             print(f"YOU WIN BY {pit_difference} POINTS")
 
 
-def do_capture(m, home, board):
+def do_capture(m, home, board) -> None:
     board[home] += board[12 - m] + 1
     board[m] = 0
     board[12 - m] = 0
 
 
-def do_move(m, home, board):
+def do_move(m, home, board) -> int:
     move_stones = board[m]
     board[m] = 0
 
@@ -302,15 +303,15 @@ def do_move(m, home, board):
     return m
 
 
-def player_has_stones(board):
+def player_has_stones(board) -> bool:
     return any(board[i] > 0 for i in range(6))
 
 
-def computer_has_stones(board):
+def computer_has_stones(board: Dict[int, int]) -> bool:
     return any(board[i] > 0 for i in range(7, 13))
 
 
-def execute_move(move, home, board):
+def execute_move(move, home: int, board) -> Tuple[int, bool, int]:
     move_digit = move
     last_location = do_move(move, home, board)
 
@@ -337,12 +338,12 @@ def execute_move(move, home, board):
     return last_location, is_still_going, home
 
 
-def player_move_again(board):
+def player_move_again(board) -> Tuple[int, bool, int]:
     print("AGAIN")
     return player_move(board)
 
 
-def player_move(board):
+def player_move(board) -> Tuple[int, bool, int]:
     while True:
         print("SELECT MOVE 1-6")
         m = int(input()) - 1
@@ -360,7 +361,7 @@ def player_move(board):
     return ending_spot, is_still_going, home
 
 
-def main():
+def main() -> None:
     print_with_tab(34, "AWARI")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

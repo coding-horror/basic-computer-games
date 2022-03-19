@@ -6,16 +6,17 @@ A physics simulation
 Ported by Dave LeCompte
 """
 
+from typing import Tuple
 
 PAGE_WIDTH = 64
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -23,7 +24,7 @@ def print_header(title):
     print()
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("THIS SIMULATION LETS YOU SPECIFY THE INITIAL VELOCITY")
     print("OF A BALL THROWN STRAIGHT UP, AND THE COEFFICIENT OF")
     print("ELASTICITY OF THE BALL.  PLEASE USE A DECIMAL FRACTION")
@@ -34,7 +35,7 @@ def print_instructions():
     print()
 
 
-def get_initial_conditions():
+def get_initial_conditions() -> Tuple[float, float, float]:
     delta_t = float(input("TIME INCREMENT (SEC)? "))
     print()
     v0 = float(input("VELOCITY (FPS)? "))
@@ -45,12 +46,12 @@ def get_initial_conditions():
     return delta_t, v0, coeff_rest
 
 
-def print_at_tab(line, tab, s):
+def print_at_tab(line: str, tab: int, s: str) -> str:
     line += (" " * (tab - len(line))) + s
     return line
 
 
-def run_simulation(delta_t, v0, coeff_rest):
+def run_simulation(delta_t, v0, coeff_rest) -> None:
     bounce_time = [0] * 20  # time of each bounce
 
     print("FEET")
@@ -61,14 +62,14 @@ def run_simulation(delta_t, v0, coeff_rest):
         bounce_time[i] = v0 * coeff_rest ** (i - 1) / 16
 
     # Draw the trajectory of the bouncing ball, one slice of height at a time
-    h = int(-16 * (v0 / 32) ** 2 + v0**2 / 32 + 0.5)
+    h: float = int(-16 * (v0 / 32) ** 2 + v0**2 / 32 + 0.5)
     while h >= 0:
         line = ""
         if int(h) == h:
             line += str(int(h))
         total_time = 0
         for i in range(1, sim_dur + 1):
-            tm = 0
+            tm: float = 0
             while tm <= bounce_time[i]:
                 total_time += delta_t
                 if (
@@ -95,7 +96,7 @@ def run_simulation(delta_t, v0, coeff_rest):
     print()
 
 
-def main():
+def main() -> None:
     print_header("BOUNCE")
     print_instructions()
 

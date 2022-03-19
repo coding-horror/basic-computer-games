@@ -58,7 +58,7 @@ def show_ending():
     print(" YOUR CONTRIBUTIONS TO THE FIELD OF COMIC BOOK CHEMISTRY.")
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "CHEMIST")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

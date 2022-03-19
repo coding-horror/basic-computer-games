@@ -4,7 +4,7 @@ import random  # for generating random numbers
 import sys  # for system function, like exit()
 
 # global variables for storing player's status
-player_funds = 0  # no money
+player_funds: float = 0  # no money
 player_furs = [0, 0, 0, 0]  # no furs
 
 

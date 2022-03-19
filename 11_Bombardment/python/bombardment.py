@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import random
 from functools import partial
+from typing import Callable, List, Set
 
 
-def display_intro():
+def display_intro() -> None:
     print("" * 33 + "BOMBARDMENT")
     print("" * 15 + " CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
@@ -23,7 +24,7 @@ def display_intro():
     print("\n" * 4)
 
 
-def display_field():
+def display_field() -> None:
     for row in range(5):
         initial = row * 5 + 1
         print("\t".join([str(initial + column) for column in range(5)]))
@@ -31,22 +32,22 @@ def display_field():
     print("\n" * 9)
 
 
-def positions_list():
+def positions_list() -> List[int]:
     return list(range(1, 26, 1))
 
 
-def generate_enemy_positions():
+def generate_enemy_positions() -> Set[int]:
     """Randomly choose 4 'positions' out of a range of 1 to 25"""
     positions = positions_list()
     random.shuffle(positions)
     return set(positions[:4])
 
 
-def is_valid_position(pos):
+def is_valid_position(pos) -> bool:
     return pos in positions_list()
 
 
-def prompt_for_player_positions():
+def prompt_for_player_positions() -> Set[int]:
 
     while True:
         raw_positions = input("WHAT ARE YOUR FOUR POSITIONS? ")
@@ -63,7 +64,7 @@ def prompt_for_player_positions():
             return positions
 
 
-def prompt_player_for_target():
+def prompt_player_for_target() -> int:
 
     while True:
         target = int(input("WHERE DO YOU WISH TO FIRE YOUR MISSLE? "))
@@ -74,7 +75,7 @@ def prompt_player_for_target():
         return target
 
 
-def attack(target, positions, hit_message, miss_message, progress_messages):
+def attack(target, positions, hit_message, miss_message, progress_messages) -> bool:
     """Performs attack procedure returning True if we are to continue."""
 
     if target in positions:
@@ -87,7 +88,7 @@ def attack(target, positions, hit_message, miss_message, progress_messages):
     return len(positions) > 0
 
 
-def init_enemy():
+def init_enemy() -> Callable[[], int]:
     """Returns a closure analogous to prompt_player_for_target. Will
     choose from a unique sequence of positions to avoid picking the
     same position twice."""
@@ -96,7 +97,7 @@ def init_enemy():
     random.shuffle(position_sequence)
     position = iter(position_sequence)
 
-    def choose():
+    def choose() -> int:
         return next(position)
 
     return choose
@@ -119,7 +120,7 @@ ENEMY_PROGRESS_MESSAGES = (
 )
 
 
-def play():
+def play() -> None:
     display_intro()
     display_field()
 

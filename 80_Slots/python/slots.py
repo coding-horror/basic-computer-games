@@ -117,7 +117,7 @@ def adjust_profits(wheel, m, profits):
     return profits
 
 
-def final_message(profits):
+def final_message(profits) -> None:
     if profits < 0:
         print("Pay up!  Please leave your money on the terminal")
     elif profits == 0:
@@ -126,7 +126,7 @@ def final_message(profits):
         print("Collect your winings from the H&M cashier.")
 
 
-def main():
+def main() -> None:
     profits = 0
     keep_betting = True
 

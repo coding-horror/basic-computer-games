@@ -14,11 +14,11 @@ appeared one day one a computer at DEC.
 from random import randint
 
 
-def throw_dice():
+def throw_dice() -> int:
     return randint(1, 6) + randint(1, 6)
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "Craps")
     print(" " * 15 + "Creative Computing  Morristown, New Jersey")
     print()

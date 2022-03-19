@@ -130,7 +130,7 @@ def run(gates, lvl, max_speeds):
         medals["bronze"] += 1
 
 
-def main():
+def main() -> None:
     print("Slalom".rjust(39))
     print("Creative Computing Morristown, New Jersey\n\n\n".rjust(57))
 

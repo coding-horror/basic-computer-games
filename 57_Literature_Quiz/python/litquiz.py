@@ -84,7 +84,7 @@ def print_instructions():
     print()
 
 
-def main():
+def main() -> None:
     print_centered("LITERATURE QUIZ")
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

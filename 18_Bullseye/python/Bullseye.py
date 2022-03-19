@@ -1,16 +1,16 @@
 import random
 
 
-def print_n_whitespaces(n: int):
+def print_n_whitespaces(n: int) -> None:
     print(" " * n, end="")
 
 
-def print_n_newlines(n: int):
+def print_n_newlines(n: int) -> None:
     for _ in range(n):
         print()
 
 
-def main():
+def main() -> None:
     print_n_whitespaces(32)
     print("BULLSEYE")
     print_n_whitespaces(15)

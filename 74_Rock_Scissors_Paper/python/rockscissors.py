@@ -67,7 +67,7 @@ def play_game():
     print("\nThanks for playing!!\n")
 
 
-def main():
+def main() -> None:
     print(" " * 21 + "GAME OF ROCK, SCISSORS, PAPER")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
 
