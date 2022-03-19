@@ -1,0 +1,69 @@
+:root {
+    --terminal-font: 1em "Lucida Console", "Courier New", monospace;
+    --background-color: transparent;
+    --text-color: var(--text);
+    --prompt-char: '$ ';
+    --cursor-char: '_';
+}
+
+/* Basic terminal style.
+ * If you wan t to overwrite them use custom properties (variables). 
+ */
+.terminal {
+    font: var(--terminal-font);
+    background-color: var(--background-color);
+    color: var(--text-color);
+
+    overflow-y: scroll;
+    width: max-content;
+}
+
+/* The terminal consits of multiple "line" elements
+ * Because sometimes we want to add a simulates "prompt" at the end of a line
+ * we need to make it an "inline" element and handle line-breaks 
+ * by adding <br> elements */
+.terminal pre.line {
+    display: inline-block;
+    font: var(--terminal-font);
+    margin: 0;
+    padding: 0;
+}
+
+/* The "terminal" has one "prompt" element.
+ * This prompt is not any kind of input, but just a simple <span> 
+ * with an id "prompt" and a 
+ */
+@keyframes prompt-blink {
+    100% {
+        opacity: 0;
+    }
+}
+.terminal #prompt {
+    display: inline-block;
+}
+.terminal #prompt:before {
+    display: inline-block;
+    content: var(--prompt-char);
+    font: var(--terminal-font);
+}
+.terminal #prompt:after {
+    display: inline-block;
+    content: var(--cursor-char);
+    background: var(--text);
+    animation: prompt-blink 1s steps(2) infinite;
+    width: 0.75rem;
+    opacity: 1;
+}
+
+
+/* Terminal scrollbar */
+::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+}
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--text-color); 
+}
