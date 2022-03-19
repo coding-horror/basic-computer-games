@@ -24,47 +24,50 @@
 import math
 import time
 
-# Constants
-STRINGS = ("Creative", "Computing")  # Text to display
-MAX_LINES = 160
-STEP_SIZE = 0.25  # Number of radians to increase at each
-# line. Controls speed of horizontal
-# printing movement.
-CENTER = 26  # Controls left edge of "middle" string
-DELAY = 0.05  # Amount of seconds to wait between lines
+
+def main():
+    # Constants
+    STRINGS = ("Creative", "Computing")  # Text to display
+    MAX_LINES = 160
+    STEP_SIZE = 0.25  # Number of radians to increase at each
+    # line. Controls speed of horizontal
+    # printing movement.
+    CENTER = 26  # Controls left edge of "middle" string
+    DELAY = 0.05  # Amount of seconds to wait between lines
+
+    # Display "intro" text
+    print("\n                        Sine Wave")
+    print("         Creative Computing  Morristown, New Jersey")
+    print("\n\n\n\n")
+    # "REMarkable program by David Ahl"
+
+    string_index = 0
+    radians = 0
+    width = CENTER - 1
+
+    # "Start long loop"
+    for _line_num in range(MAX_LINES):
+
+        # Get string to display on this line
+        curr_string = STRINGS[string_index]
+
+        # Calculate how far over to print the text
+        sine = math.sin(radians)
+        padding = int(CENTER + width * sine)
+        print(curr_string.rjust(padding + len(curr_string)))
+
+        # Increase radians and increment our tuple index
+        radians += STEP_SIZE
+        string_index += 1
+        if string_index >= len(STRINGS):
+            string_index = 0
+
+        # Make sure the text doesn't fly by too fast...
+        time.sleep(DELAY)
 
 
-# Display "intro" text
-print("\n                        Sine Wave")
-print("         Creative Computing  Morristown, New Jersey")
-print("\n\n\n\n")
-# "REMarkable program by David Ahl"
-
-
-string_index = 0
-radians = 0
-width = CENTER - 1
-
-# "Start long loop"
-for _line_num in range(MAX_LINES):
-
-    # Get string to display on this line
-    curr_string = STRINGS[string_index]
-
-    # Calculate how far over to print the text
-    sine = math.sin(radians)
-    padding = int(CENTER + width * sine)
-    print(curr_string.rjust(padding + len(curr_string)))
-
-    # Increase radians and increment our tuple index
-    radians += STEP_SIZE
-    string_index += 1
-    if string_index >= len(STRINGS):
-        string_index = 0
-
-    # Make sure the text doesn't fly by too fast...
-    time.sleep(DELAY)
-
+if __name__ == "__main__":
+    main()
 
 ########################################################
 #

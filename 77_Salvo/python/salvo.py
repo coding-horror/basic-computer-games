@@ -489,36 +489,36 @@ def execute_turn(turn):
 #
 ######################################
 
-######################
-#
-# main game flow
-#
-######################
 
-# initialize the player and computer
-# boards
-initialize_game()
+def main():
+    # initialize the player and computer
+    # boards
+    initialize_game()
 
-# execute turns until someone wins or we run
-# out of squares to shoot
+    # execute turns until someone wins or we run
+    # out of squares to shoot
 
-game_over = False
-while not game_over:
+    game_over = False
+    while not game_over:
 
-    # increment the turn
-    current_turn = current_turn + 1
+        # increment the turn
+        current_turn = current_turn + 1
 
-    print("\n")
-    print("TURN", current_turn)
+        print("\n")
+        print("TURN", current_turn)
 
-    # print("computer")
-    # print_board(computer_board)
-    # print("player")
-    # print_board(player_board)
+        # print("computer")
+        # print_board(computer_board)
+        # print("player")
+        # print_board(player_board)
 
-    if execute_turn(first_turn) == 0:
-        game_over = True
-        continue
-    if execute_turn(second_turn) == 0:
-        game_over = True
-        continue
+        if execute_turn(first_turn) == 0:
+            game_over = True
+            continue
+        if execute_turn(second_turn) == 0:
+            game_over = True
+            continue
+
+
+if __name__ == "__main__":
+    main()

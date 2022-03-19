@@ -44,23 +44,6 @@ class Tower:
         print(r)
 
 
-print(
-    """
-IN THIS PROGRAM, WE SHALL REFER TO DISKS BY NUMERICAL CODE.
-3 WILL REPRESENT THE SMALLEST DISK, 5 THE NEXT SIZE,
-7 THE NEXT, AND SO ON, UP TO 15.  IF YOU DO THE PUZZLE WITH
-2 DISKS, THEIR CODE NAMES WOULD BE 13 AND 15.  WITH 3 DISKS
-THE CODE NAMES WOULD BE 11, 13 AND 15, ETC.  THE NEEDLES
-ARE NUMBERED FROM LEFT TO RIGHT, 1 TO 3.  WE WILL
-START WITH THE DISKS ON NEEDLE 1, AND ATTEMPT TO MOVE THEM
-TO NEEDLE 3.
-
-GOOD LUCK!
-
-"""
-)
-
-
 class Game:
     def __init__(self):
         # use fewer sizes to make debugging easier
@@ -144,27 +127,48 @@ class Game:
             from_tower.add(disk)
 
 
-game = Game()
-while True:
-    game.print()
+def main():
+    print(
+        """
+    IN THIS PROGRAM, WE SHALL REFER TO DISKS BY NUMERICAL CODE.
+    3 WILL REPRESENT THE SMALLEST DISK, 5 THE NEXT SIZE,
+    7 THE NEXT, AND SO ON, UP TO 15.  IF YOU DO THE PUZZLE WITH
+    2 DISKS, THEIR CODE NAMES WOULD BE 13 AND 15.  WITH 3 DISKS
+    THE CODE NAMES WOULD BE 11, 13 AND 15, ETC.  THE NEEDLES
+    ARE NUMBERED FROM LEFT TO RIGHT, 1 TO 3.  WE WILL
+    START WITH THE DISKS ON NEEDLE 1, AND ATTEMPT TO MOVE THEM
+    TO NEEDLE 3.
 
-    game.take_turn()
+    GOOD LUCK!
 
-    if game.winner():
-        print(
-            "CONGRATULATIONS!!\nYOU HAVE PERFORMED THE TASK IN %s MOVES.\n"
-            % game.moves()
-        )
-        while True:
-            yesno = input("TRY AGAIN (YES OR NO)\n")
-            if yesno.upper() == "YES":
-                game = Game()
-                break
-            elif yesno.upper() == "NO":
-                print("THANKS FOR THE GAME!\n")
-                sys.exit(0)
-            else:
-                print("'YES' OR 'NO' PLEASE\n")
-    elif game.moves() > 128:
-        print("SORRY, BUT I HAVE ORDERS TO STOP IF YOU MAKE MORE THAN 128 MOVES.")
-        sys.exit(0)
+    """
+    )
+
+    game = Game()
+    while True:
+        game.print()
+
+        game.take_turn()
+
+        if game.winner():
+            print(
+                "CONGRATULATIONS!!\nYOU HAVE PERFORMED THE TASK IN %s MOVES.\n"
+                % game.moves()
+            )
+            while True:
+                yesno = input("TRY AGAIN (YES OR NO)\n")
+                if yesno.upper() == "YES":
+                    game = Game()
+                    break
+                elif yesno.upper() == "NO":
+                    print("THANKS FOR THE GAME!\n")
+                    sys.exit(0)
+                else:
+                    print("'YES' OR 'NO' PLEASE\n")
+        elif game.moves() > 128:
+            print("SORRY, BUT I HAVE ORDERS TO STOP IF YOU MAKE MORE THAN 128 MOVES.")
+            sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
