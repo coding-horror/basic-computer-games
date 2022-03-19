@@ -18,9 +18,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
-### Comments on the BASIC code for re-implementers.
+#### Porting Notes
 
     15 LET R=0
+
 `R` is a variable that tracks winnings and losings.  Unlike other games that
 start out with a lump sum of cash to spend this game assumes the user has as
 much money as they want and we only track how much they lost or won.
@@ -31,6 +32,7 @@ much money as they want and we only track how much they lost or won.
       24 LET X=(RND(0))
       25 LET T =T+1
       26 IF T<=Z THEN 24
+
 This block of code does nothing other than try to scramble the random number
 generator. Random number generation is not random, they are generated from the
 previous generated number. Because of the slow speed of these systems back then,
@@ -88,7 +90,6 @@ the user input.
       .... a bit later ....
       60 IF X=1 THEN 40
       65 IF X=0 THEN 40
-
 
 `F` is a variable that represents the users wager for this betting round.
 `E` and `S` represent the two individual and random dice being rolled.

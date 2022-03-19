@@ -10,7 +10,16 @@ The author of this program is James A. Storer who wrote it while a student at Le
 
 ⚠️ This game includes references to suicide or self-harm.
 
-### Bugs
+---
+
+As published in Basic Computer Games (1978):
+- [Atari Archives](https://www.atariarchives.org/basicgames/showpage.php?page=96)
+- [Annarchive](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf#page=111)
+
+Downloaded from Vintage Basic at
+http://www.vintage-basic.net/games.html
+
+#### Porting Notes
 
 Implementers should be aware that this game contains at least one bug.
 
@@ -32,11 +41,4 @@ A quick fix for this bug in the original code would be
 
     1410 PRINT " YOU MADE";ABS(INT(V1-V2));"RALLODS FROM TOURIST TRADE."
 
----
 
-As published in Basic Computer Games (1978):
-- [Atari Archives](https://www.atariarchives.org/basicgames/showpage.php?page=96)
-- [Annarchive](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf#page=111)
-
-Downloaded from Vintage Basic at
-http://www.vintage-basic.net/games.html

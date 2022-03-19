@@ -12,3 +12,7 @@ As published in Basic Computer Games (1978):
 
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
+
+#### Porting Notes
+
+(please note any difficulties or challenges in porting here)

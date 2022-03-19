@@ -19,7 +19,8 @@ The file `checkers.annotated.bas` contains an indented and annotated
 version of the source code.  This is no longer valid BASIC code but
 should be more readable.
 
-## Known Issues In the Original BASIC Code
+#### Porting Notes
+
  - If the computer moves a checker to the bottom row, it promotes, but
    leaves the original checker in place. (See line 1240)
  - Human players may move non-kings as if they were kings. (See lines 1590 to 1810)
