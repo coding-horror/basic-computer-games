@@ -177,7 +177,7 @@ def happy_goodbye(user_name):
     print(f"NICE MEETING YOU, {user_name}, HAVE A NICE DAY.")
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "HELLO")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

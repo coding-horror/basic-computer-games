@@ -489,7 +489,7 @@ def play_game():
             return
 
 
-def main():
+def main() -> None:
     print_header("HEXAPAWN")
     if prompt_yes_no("INSTRUCTIONS (Y-N)?"):
         print_instructions()

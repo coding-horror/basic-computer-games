@@ -47,8 +47,7 @@ def print_banner():
 def get_board_dimensions() -> int:
     n = 0
     while True:
-        n = input("WHAT IS YOUR BOARD SIZE (MIN 7/ MAX 19)? ")
-        n = int(n)
+        n = int(input("WHAT IS YOUR BOARD SIZE (MIN 7/ MAX 19)? "))
         if n < 7 or n > 19:
             print("I SAID, THE MINIMUM IS 7, THE MAXIMUM IS 19.")
             print()
@@ -61,10 +60,10 @@ def get_move() -> Tuple[int, int]:
     while True:
         xy = input("YOUR PLAY (I,J)? ")
         print()
-        x, y = xy.split(",")
+        x_str, y_str = xy.split(",")
         try:
-            x = int(x)
-            y = int(y)
+            x = int(x_str)
+            y = int(y_str)
         except Exception:
             print("ILLEGAL MOVE.  TRY AGAIN...")
             continue
@@ -82,7 +81,7 @@ def initialize_board(n: int) -> List[List[int]]:
     return board
 
 
-def main():
+def main() -> None:
     print_banner()
 
     while True:
@@ -147,8 +146,7 @@ def main():
                                         print_board(board, n)
         print()
         print("THANKS FOR THE GAME!!")
-        repeat = input("PLAY AGAIN (1 FOR YES, 0 FOR NO)? ")
-        repeat = int(repeat)
+        repeat = int(input("PLAY AGAIN (1 FOR YES, 0 FOR NO)? "))
         if repeat == 0:
             break
 

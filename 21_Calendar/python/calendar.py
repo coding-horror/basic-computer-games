@@ -20,8 +20,10 @@
 #
 ########################################################
 
+from typing import Tuple
 
-def parse_input():
+
+def parse_input() -> Tuple[int, bool]:
     """
     function to parse input for weekday and leap year boolean
     """
@@ -137,7 +139,7 @@ def calendar(weekday, leap_year):
     print("\n")
 
 
-def main():
+def main() -> None:
     print(" " * 32 + "CALENDAR")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n" * 11)

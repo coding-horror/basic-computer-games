@@ -32,7 +32,7 @@ def fnr():
     return random.randint(1, 5)
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "NUMBER")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -41,7 +41,7 @@ def main():
 
     print_instructions()
 
-    points = 100
+    points: float = 100
 
     while points <= 500:
         print("GUESS A NUMBER FROM 1 TO 5")

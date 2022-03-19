@@ -208,7 +208,7 @@ def play_game():
             serious_error(f"play_game: unknown player {whose_turn}")
 
 
-def main():
+def main() -> None:
     global whose_turn
 
     welcome_screen()

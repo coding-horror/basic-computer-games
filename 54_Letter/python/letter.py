@@ -66,7 +66,7 @@ def play_game():
             continue
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "LETTER")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

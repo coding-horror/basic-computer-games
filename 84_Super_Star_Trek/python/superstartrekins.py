@@ -139,7 +139,7 @@ def print_instructions():
     print("        GALACTIC REGIONS REFERRED TO IN THE GAME.")
 
 
-def main():
+def main() -> None:
     print_header()
     if not get_yes_no("DO YOU NEED INSTRUCTIONS (Y/N)? "):
         return

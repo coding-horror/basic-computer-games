@@ -28,18 +28,16 @@ def initial_message():
     print("Here is a Revolver.")
 
 
-def parse_input():
-    correct_input = False
-    while not correct_input:
+def parse_input() -> int:
+    while True:
         try:
             i = int(input("? "))
-            correct_input = True
+            return i
         except ValueError:
             print("Number expected...")
-    return i
 
 
-def main():
+def main() -> None:
     initial_message()
     while True:
         dead = False

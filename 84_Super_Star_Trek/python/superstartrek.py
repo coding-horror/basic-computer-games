@@ -14,7 +14,13 @@
 
 import random
 from math import sqrt
-from typing import Any, List
+from typing import Any, Callable, Dict, List
+
+# Global variables
+restart = False
+s = 0
+e = 0
+d: List[int] = []
 
 # -------------------------------------------------------------------------
 #  Utility functions
@@ -923,10 +929,10 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 # -------------------------------------------------------------------------
 
 
-def main():
+def main() -> None:
     global restart
 
-    f = {
+    f: Dict[str, Callable[[], None]] = {
         "NAV": navigation,
         "SRS": short_range_scan,
         "LRS": long_range_scan,

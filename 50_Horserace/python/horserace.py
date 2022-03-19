@@ -245,7 +245,7 @@ def print_race_results(race_positions, odds, bets, player_names):
             basic_print(f"{name} WINS ${amount * odds[winning_horse_idx]}")
 
 
-def main_loop(player_names, horse_odds):
+def main_loop(player_names, horse_odds) -> None:
     """Main game loop"""
 
     while True:
@@ -260,7 +260,7 @@ def main_loop(player_names, horse_odds):
             break
 
 
-def main():
+def main() -> None:
     # introduction, player names and horse odds are only generated once
     introduction()
     player_names = setup_players()

@@ -234,7 +234,7 @@ def play_game(guess_target):
                 break
 
 
-def main():
+def main() -> None:
     print(" " * 32 + "HANGMAN")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
 

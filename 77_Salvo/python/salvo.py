@@ -54,7 +54,6 @@ computer_board = []
 # array representing the coordinates
 # for each ship for player and computer
 # array is in the same order as SHIPS
-player_ship_coords = []
 computer_ship_coords = []
 
 
@@ -486,7 +485,7 @@ def execute_turn(turn, current_turn):
 ######################################
 
 
-def main():
+def main() -> None:
     # keep track of the turn
     current_turn = 0
 

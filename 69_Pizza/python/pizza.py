@@ -150,7 +150,7 @@ def play_game(num_turns, player_name):
                 break
 
 
-def main():
+def main() -> None:
     print_header("PIZZA")
 
     player_name = print_instructions()

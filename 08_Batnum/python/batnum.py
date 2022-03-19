@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Tuple, Union
 
 
 class WinOptions(Enum):
@@ -13,7 +14,7 @@ class StartOptions(Enum):
     PlayerFirst = 2
 
 
-def PrintIntro():
+def print_intro() -> None:
     """Prints out the introduction and rules for the game."""
     print("BATNUM".rjust(33, " "))
     print("CREATIVE COMPUTING  MORRISSTOWN, NEW JERSEY".rjust(15, " "))
@@ -33,7 +34,7 @@ def PrintIntro():
     return
 
 
-def GetParams():
+def get_params() -> Tuple[int, int, int, int, int]:
     """This requests the necessary parameters to play the game.
 
     Returns a set with the five game parameters:
@@ -45,26 +46,30 @@ def GetParams():
         winOption - 1 if the goal is to take the last object
                     or 2 if the goal is to not take the last object
     """
-    pileSize = 0
-    winOption = WinOptions.Undefined
-    minSelect = 0
-    maxSelect = 0
-    startOption = StartOptions.Undefined
+    pile_size = 0
+    win_option: Union[WinOptions, int] = WinOptions.Undefined
+    min_select = 0
+    max_select = 0
+    start_option: Union[StartOptions, int] = StartOptions.Undefined
 
-    while pileSize < 1:
-        pileSize = int(input("ENTER PILE SIZE "))
-    while winOption == WinOptions.Undefined:
-        winOption = int(input("ENTER WIN OPTION - 1 TO TAKE LAST, 2 TO AVOID LAST: "))
-    while minSelect < 1 or maxSelect < 1 or minSelect > maxSelect:
-        (minSelect, maxSelect) = (
+    while pile_size < 1:
+        pile_size = int(input("ENTER PILE SIZE "))
+    while win_option == WinOptions.Undefined:
+        win_option = int(input("ENTER WIN OPTION - 1 TO TAKE LAST, 2 TO AVOID LAST: "))
+    assert isinstance(win_option, int)
+    while min_select < 1 or max_select < 1 or min_select > max_select:
+        (min_select, max_select) = (
             int(x) for x in input("ENTER MIN AND MAX ").split(" ")
         )
-    while startOption == StartOptions.Undefined:
-        startOption = int(input("ENTER START OPTION - 1 COMPUTER FIRST, 2 YOU FIRST "))
-    return (pileSize, minSelect, maxSelect, startOption, winOption)
+    while start_option == StartOptions.Undefined:
+        start_option = int(input("ENTER START OPTION - 1 COMPUTER FIRST, 2 YOU FIRST "))
+    assert isinstance(start_option, int)
+    return (pile_size, min_select, max_select, start_option, win_option)
 
 
-def PlayerMove(pileSize, minSelect, maxSelect, startOption, winOption):
+def player_move(
+    pile_size, min_select, max_select, start_option, win_option
+) -> Tuple[bool, int]:
     """This handles the player's turn - asking the player how many objects
     to take and doing some basic validation around that input.  Then it
     checks for any win conditions.
@@ -75,36 +80,38 @@ def PlayerMove(pileSize, minSelect, maxSelect, startOption, winOption):
         playerMove = int(input("YOUR MOVE "))
         if playerMove == 0:
             print("I TOLD YOU NOT TO USE ZERO!  COMPUTER WINS BY FORFEIT.")
-            return (True, pileSize)
-        if playerMove > maxSelect or playerMove < minSelect:
+            return (True, pile_size)
+        if playerMove > max_select or playerMove < min_select:
             print("ILLEGAL MOVE, REENTER IT")
             continue
-        pileSize = pileSize - playerMove
+        pile_size = pile_size - playerMove
         playerDone = True
-        if pileSize <= 0:
-            if winOption == WinOptions.AvoidLast:
+        if pile_size <= 0:
+            if win_option == WinOptions.AvoidLast:
                 print("TOUGH LUCK, YOU LOSE.")
             else:
                 print("CONGRATULATIONS, YOU WIN.")
-            return (True, pileSize)
-    return (False, pileSize)
+            return (True, pile_size)
+    return (False, pile_size)
 
 
-def ComputerPick(pileSize, minSelect, maxSelect, startOption, winOption):
+def computer_pick(pile_size, min_select, max_select, start_option, win_option) -> int:
     """This handles the logic to determine how many objects the computer
     will select on its turn.
     """
-    q = pileSize - 1 if winOption == WinOptions.AvoidLast else pileSize
-    c = minSelect + maxSelect
-    computerPick = q - (c * int(q / c))
-    if computerPick < minSelect:
-        computerPick = minSelect
-    if computerPick > maxSelect:
-        computerPick = maxSelect
-    return computerPick
+    q = pile_size - 1 if win_option == WinOptions.AvoidLast else pile_size
+    c = min_select + max_select
+    computer_pick = q - (c * int(q / c))
+    if computer_pick < min_select:
+        computer_pick = min_select
+    if computer_pick > max_select:
+        computer_pick = max_select
+    return computer_pick
 
 
-def ComputerMove(pileSize, minSelect, maxSelect, startOption, winOption):
+def computer_move(
+    pile_size, min_select, max_select, start_option, win_option
+) -> Tuple[bool, int]:
     """This handles the computer's turn - first checking for the various
     win/lose conditions and then calculating how many objects
     the computer will take.
@@ -114,47 +121,45 @@ def ComputerMove(pileSize, minSelect, maxSelect, startOption, winOption):
     # In this case, we win by taking the last object and
     # the remaining pile is less than max select
     # so the computer can grab them all and win
-    if winOption == WinOptions.TakeLast and pileSize <= maxSelect:
-        print(f"COMPUTER TAKES {pileSize} AND WINS.")
-        return (True, pileSize)
+    if win_option == WinOptions.TakeLast and pile_size <= max_select:
+        print(f"COMPUTER TAKES {pile_size} AND WINS.")
+        return (True, pile_size)
     # In this case, we lose by taking the last object and
     # the remaining pile is less than minsize and the computer
     # has to take all of them.
-    if winOption == WinOptions.AvoidLast and pileSize <= minSelect:
-        print(f"COMPUTER TAKES {minSelect} AND LOSES.")
-        return (True, pileSize)
+    if win_option == WinOptions.AvoidLast and pile_size <= min_select:
+        print(f"COMPUTER TAKES {min_select} AND LOSES.")
+        return (True, pile_size)
 
     # Otherwise, we determine how many the computer selects
-    currSel = ComputerPick(pileSize, minSelect, maxSelect, startOption, winOption)
-    pileSize = pileSize - currSel
-    print(f"COMPUTER TAKES {currSel} AND LEAVES {pileSize}")
-    return (False, pileSize)
+    currSel = computer_pick(pile_size, min_select, max_select, start_option, win_option)
+    pile_size = pile_size - currSel
+    print(f"COMPUTER TAKES {currSel} AND LEAVES {pile_size}")
+    return (False, pile_size)
 
 
-def PlayGame(pileSize, minSelect, maxSelect, startOption, winOption):
+def play_game(pile_size, min_select, max_select, start_option, win_option) -> None:
     """This is the main game loop - repeating each turn until one
     of the win/lose conditions is met.
     """
-    gameOver = False
+    game_over = False
     # playersTurn is a boolean keeping track of whether it's the
     # player's or computer's turn
-    playersTurn = startOption == StartOptions.PlayerFirst
+    players_turn = start_option == StartOptions.PlayerFirst
 
-    while not gameOver:
-        if playersTurn:
-            (gameOver, pileSize) = PlayerMove(
-                pileSize, minSelect, maxSelect, startOption, winOption
+    while not game_over:
+        if players_turn:
+            (game_over, pile_size) = player_move(
+                pile_size, min_select, max_select, start_option, win_option
             )
-            playersTurn = False
-            if gameOver:
+            players_turn = False
+            if game_over:
                 return
-        if not playersTurn:
-            (gameOver, pileSize) = ComputerMove(
-                pileSize, minSelect, maxSelect, startOption, winOption
+        if not players_turn:
+            (game_over, pile_size) = computer_move(
+                pile_size, min_select, max_select, start_option, win_option
             )
-            playersTurn = True
-
-    return
+            players_turn = True
 
 
 if __name__ == "__main__":
@@ -168,7 +173,7 @@ if __name__ == "__main__":
     startOption = 0
 
     while True:
-        PrintIntro()
-        (pileSize, minSelect, maxSelect, startOption, winOption) = GetParams()
+        print_intro()
+        (pileSize, minSelect, maxSelect, startOption, winOption) = get_params()
         # Just keep playing the game until the user kills it with ctrl-C
-        PlayGame(pileSize, minSelect, maxSelect, startOption, winOption)
+        play_game(pileSize, minSelect, maxSelect, startOption, winOption)

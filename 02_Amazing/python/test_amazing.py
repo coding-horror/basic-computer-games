@@ -2,8 +2,8 @@ import pytest
 from amazing import build_maze, welcome_header
 
 
-def test_welcome_header(capsys):
-    assert welcome_header() is None
+def test_welcome_header(capsys) -> None:
+    welcome_header()
     out, err = capsys.readouterr()
     assert out == (
         "                            AMAZING PROGRAM\n"
@@ -22,6 +22,6 @@ def test_welcome_header(capsys):
         (2, 1),
     ],
 )
-def test_build_maze(width, length):
+def test_build_maze(width: int, length: int) -> None:
     with pytest.raises(AssertionError):
         build_maze(width, length)

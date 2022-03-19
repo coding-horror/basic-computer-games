@@ -29,7 +29,7 @@
 import random
 
 
-def main():
+def main() -> None:
     # We'll track counts of roll outcomes in a 13-element list.
     # The first two indices (0 & 1) are ignored, leaving just
     # the indices that match the roll values (2 through 12).
