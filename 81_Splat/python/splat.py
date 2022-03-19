@@ -293,27 +293,28 @@ def print_header():
     )
 
 
-#
-# Main program.
-#
+def main():
+    print_header()
 
-print_header()
-
-successful_jumps = []
-while True:
-    chute_altitude = jump()
-    if chute_altitude > 0:
-        # We want the statistics on previous jumps (i.e. not including the
-        # current jump.)
-        n_previous_jumps, n_better = jump_stats(successful_jumps, chute_altitude)
-        successful_jumps.append(chute_altitude)
-        print_results(n_previous_jumps, n_better)
-    else:
-        # Splat!
-        print("I'LL GIVE YOU ANOTHER CHANCE.")
-    z = yes_no_input("DO YOU WANT TO PLAY AGAIN")
-    if not z:
-        z = yes_no_input("PLEASE")
+    successful_jumps = []
+    while True:
+        chute_altitude = jump()
+        if chute_altitude > 0:
+            # We want the statistics on previous jumps (i.e. not including the
+            # current jump.)
+            n_previous_jumps, n_better = jump_stats(successful_jumps, chute_altitude)
+            successful_jumps.append(chute_altitude)
+            print_results(n_previous_jumps, n_better)
+        else:
+            # Splat!
+            print("I'LL GIVE YOU ANOTHER CHANCE.")
+        z = yes_no_input("DO YOU WANT TO PLAY AGAIN")
         if not z:
-            print("SSSSSSSSSS.")
-            break
+            z = yes_no_input("PLEASE")
+            if not z:
+                print("SSSSSSSSSS.")
+                break
+
+
+if __name__ == "__main__":
+    main()

@@ -39,39 +39,43 @@ def parse_input():
     return i
 
 
-initial_message()
-while True:
-    dead = False
-    n = 0
-    print("Type '1' to Spin chamber and pull trigger")
-    print("Type '2' to Give up")
-    print("Go")
-    while not dead:
-        i = parse_input()
+def main():
+    initial_message()
+    while True:
+        dead = False
+        n = 0
+        print("Type '1' to Spin chamber and pull trigger")
+        print("Type '2' to Give up")
+        print("Go")
+        while not dead:
+            i = parse_input()
 
-        if i == 2:
-            break
+            if i == 2:
+                break
 
-        if random() > 0.8333333333333334:
-            dead = True
+            if random() > 0.8333333333333334:
+                dead = True
+            else:
+                print("- CLICK -\n")
+                n += 1
+
+            if n > NUMBER_OF_ROUNDS:
+                break
+        if dead:
+            print("BANG!!!!!   You're Dead!")
+            print("Condolences will be sent to your relatives.\n\n\n")
+            print("...Next victim...")
         else:
-            print("- CLICK -\n")
-            n += 1
+            if n > NUMBER_OF_ROUNDS:
+                print("You win!!!!!")
+                print("Let someone else blow his brain out.\n")
+            else:
+                print("     Chicken!!!!!\n\n\n")
+                print("...Next victim....")
 
-        if n > NUMBER_OF_ROUNDS:
-            break
-    if dead:
-        print("BANG!!!!!   You're Dead!")
-        print("Condolences will be sent to your relatives.\n\n\n")
-        print("...Next victim...")
-    else:
-        if n > NUMBER_OF_ROUNDS:
-            print("You win!!!!!")
-            print("Let someone else blow his brain out.\n")
-        else:
-            print("     Chicken!!!!!\n\n\n")
-            print("...Next victim....")
 
+if __name__ == "__main__":
+    main()
 
 ########################################################
 # Porting Notes

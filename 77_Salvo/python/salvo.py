@@ -57,8 +57,6 @@ computer_board = []
 player_ship_coords = []
 computer_ship_coords = []
 
-# keep track of the turn
-current_turn = 0
 
 ####################################
 #
@@ -287,14 +285,12 @@ def generate_board():
     return board, ship_coords
 
 
-# execute_shot
-#
-# given a board and x, y coordinates,
-# execute a shot. returns True if the shot
-# is valid, False if not
-def execute_shot(turn, board, x, y):
-
-    global current_turn
+def execute_shot(turn, board, x, y, current_turn):
+    """
+    given a board and x, y coordinates,
+    execute a shot. returns True if the shot
+    is valid, False if not
+    """
     square = board[x - 1][y - 1]
     ship_hit = -1
     if square is not None and square >= 0 and square < len(SHIPS):
@@ -422,7 +418,7 @@ first_turn = PLAYER
 second_turn = COMPUTER
 
 
-def execute_turn(turn):
+def execute_turn(turn, current_turn):
 
     global num_computer_shots
     global num_player_shots
@@ -464,7 +460,7 @@ def execute_turn(turn):
 
     hits = []
     for shot in shots:
-        hit = execute_shot(turn, board, shot[0], shot[1])
+        hit = execute_shot(turn, board, shot[0], shot[1], current_turn)
         if hit >= 0:
             hits.append(hit)
         if turn == COMPUTER and print_computer_shots:
@@ -489,36 +485,39 @@ def execute_turn(turn):
 #
 ######################################
 
-######################
-#
-# main game flow
-#
-######################
 
-# initialize the player and computer
-# boards
-initialize_game()
+def main():
+    # keep track of the turn
+    current_turn = 0
 
-# execute turns until someone wins or we run
-# out of squares to shoot
+    # initialize the player and computer
+    # boards
+    initialize_game()
 
-game_over = False
-while not game_over:
+    # execute turns until someone wins or we run
+    # out of squares to shoot
 
-    # increment the turn
-    current_turn = current_turn + 1
+    game_over = False
+    while not game_over:
 
-    print("\n")
-    print("TURN", current_turn)
+        # increment the turn
+        current_turn = current_turn + 1
 
-    # print("computer")
-    # print_board(computer_board)
-    # print("player")
-    # print_board(player_board)
+        print("\n")
+        print("TURN", current_turn)
 
-    if execute_turn(first_turn) == 0:
-        game_over = True
-        continue
-    if execute_turn(second_turn) == 0:
-        game_over = True
-        continue
+        # print("computer")
+        # print_board(computer_board)
+        # print("player")
+        # print_board(player_board)
+
+        if execute_turn(first_turn, current_turn) == 0:
+            game_over = True
+            continue
+        if execute_turn(second_turn, current_turn) == 0:
+            game_over = True
+            continue
+
+
+if __name__ == "__main__":
+    main()

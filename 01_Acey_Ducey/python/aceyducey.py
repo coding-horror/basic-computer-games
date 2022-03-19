@@ -58,93 +58,97 @@ def get_card_name(number: int) -> str:
 
 def display_bankroll(bank_roll: int) -> None:
     """Print current bankroll"""
-    if BANK_ROLL > 0:
+    if bank_roll > 0:
         print("You now have %s dollars\n" % bank_roll)
 
 
-# Display initial title and instructions
-print("\n           Acey Ducey Card Game")
-print("Creative Computing  Morristown, New Jersey")
-print("\n\n")
-print("Acey-Ducey is played in the following manner")
-print("The dealer (computer) deals two cards face up")
-print("You have an option to bet or not bet depending")
-print("on whether or not you feel the card will have")
-print("a value between the first two.")
-print("If you do not want to bet, input a 0")
+def main():
+    # Display initial title and instructions
+    print("\n           Acey Ducey Card Game")
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
+    print("Acey-Ducey is played in the following manner")
+    print("The dealer (computer) deals two cards face up")
+    print("You have an option to bet or not bet depending")
+    print("on whether or not you feel the card will have")
+    print("a value between the first two.")
+    print("If you do not want to bet, input a 0")
 
+    # Loop for series of multiple games
+    KEEP_PLAYING = True
+    while KEEP_PLAYING:
 
-# Loop for series of multiple games
-KEEP_PLAYING = True
-while KEEP_PLAYING:
+        # Initialize bankroll at start of each game
+        BANK_ROLL = DEFAULT_BANKROLL
+        display_bankroll(BANK_ROLL)
 
-    # Initialize bankroll at start of each game
-    BANK_ROLL = DEFAULT_BANKROLL
-    display_bankroll(BANK_ROLL)
+        # Loop for a single round.  Repeat until out of money.
+        while BANK_ROLL > 0:
 
-    # Loop for a single round.  Repeat until out of money.
-    while BANK_ROLL > 0:
+            # Deal out dealer cards
+            print("Here are your next two cards")
+            dealer1 = deal_card_num()
+            # If the cards match, we redeal 2nd card until they don't
+            dealer2 = dealer1
+            while dealer1 == dealer2:
+                dealer2 = deal_card_num()
+            # Organize the cards in order if they're not already
+            if dealer1 >= dealer2:
+                (dealer1, dealer2) = (dealer2, dealer1)  # Ya gotta love Python!
+            # Show dealer cards to the player
+            # (use card name rather than internal number)
+            print(get_card_name(dealer1))
+            print(get_card_name(dealer2) + "\n")
 
-        # Deal out dealer cards
-        print("Here are your next two cards")
-        dealer1 = deal_card_num()
-        # If the cards match, we redeal 2nd card until they don't
-        dealer2 = dealer1
-        while dealer1 == dealer2:
-            dealer2 = deal_card_num()
-        # Organize the cards in order if they're not already
-        if dealer1 >= dealer2:
-            (dealer1, dealer2) = (dealer2, dealer1)  # Ya gotta love Python!
-        # Show dealer cards to the player
-        # (use card name rather than internal number)
-        print(get_card_name(dealer1))
-        print(get_card_name(dealer2) + "\n")
-
-        # Get and handle player bet choice
-        BET_IS_VALID = False
-        while not BET_IS_VALID:
-            curr_bet_str = input("What is your bet? ")
-            try:
-                curr_bet = int(curr_bet_str)
-            except ValueError:
-                # Bad input? Just loop back up and ask again...
-                pass
-            else:
-                if curr_bet == 0:
-                    BET_IS_VALID = True
-                    print("Chicken!!\n")
-                elif curr_bet > BANK_ROLL:
-                    print("Sorry, my friend but you bet too much")
-                    print("You have only %s dollars to bet\n" % BANK_ROLL)
+            # Get and handle player bet choice
+            BET_IS_VALID = False
+            while not BET_IS_VALID:
+                curr_bet_str = input("What is your bet? ")
+                try:
+                    curr_bet = int(curr_bet_str)
+                except ValueError:
+                    # Bad input? Just loop back up and ask again...
+                    pass
                 else:
-                    # Deal player card
-                    BET_IS_VALID = True
-                    player = deal_card_num()
-                    print(get_card_name(player))
-
-                    # Did we win?
-                    if dealer1 < player < dealer2:
-                        print("You win!!!")
-                        BANK_ROLL += curr_bet
+                    if curr_bet == 0:
+                        BET_IS_VALID = True
+                        print("Chicken!!\n")
+                    elif curr_bet > BANK_ROLL:
+                        print("Sorry, my friend but you bet too much")
+                        print("You have only %s dollars to bet\n" % BANK_ROLL)
                     else:
-                        print("Sorry, you lose")
-                        BANK_ROLL -= curr_bet
+                        # Deal player card
+                        BET_IS_VALID = True
+                        player = deal_card_num()
+                        print(get_card_name(player))
 
-                    # Update player on new bankroll level
-                    display_bankroll(BANK_ROLL)
+                        # Did we win?
+                        if dealer1 < player < dealer2:
+                            print("You win!!!")
+                            BANK_ROLL += curr_bet
+                        else:
+                            print("Sorry, you lose")
+                            BANK_ROLL -= curr_bet
 
-    # End of loop for a single round
+                        # Update player on new bankroll level
+                        display_bankroll(BANK_ROLL)
 
-    print("\n\nSorry, friend but you blew your wad")
-    player_response = input("Try again (yes or no) ")
-    if player_response.lower() == "yes":
-        print()
-    else:
-        KEEP_PLAYING = False
+        # End of loop for a single round
 
-# End of multiple game loop
+        print("\n\nSorry, friend but you blew your wad")
+        player_response = input("Try again (yes or no) ")
+        if player_response.lower() == "yes":
+            print()
+        else:
+            KEEP_PLAYING = False
 
-print("OK Hope you had fun\n")
+    # End of multiple game loop
+
+    print("OK Hope you had fun\n")
+
+
+if __name__ == "__main__":
+    main()
 
 
 ########################################################

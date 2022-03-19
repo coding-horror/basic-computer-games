@@ -71,42 +71,48 @@ DATA = [
 # is the line length used by every row
 ROW_LEN = sum(DATA[0])
 
-# Display intro text
-print("\n                  Love")
-print("Creative Computing  Morristown, New Jersey")
-print("\n\n")
-print("A tribute to the great American artist, Robert Indiana.")
-print("His great work will be reproduced with a message of")
-print("your choice up to 60 characters.  If you can't think of")
-print("a message, simple type the word 'love'\n")  # (sic)
 
-# Get message from user
-message = input("Your message, please? ")
-if message == "":
-    message = "LOVE"
+def main():
+    # Display intro text
+    print("\n                  Love")
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
+    print("A tribute to the great American artist, Robert Indiana.")
+    print("His great work will be reproduced with a message of")
+    print("your choice up to 60 characters.  If you can't think of")
+    print("a message, simple type the word 'love'\n")  # (sic)
 
-# Repeat the message until we get at least one line's worth
-while len(message) < ROW_LEN:
-    message += message
+    # Get message from user
+    message = input("Your message, please? ")
+    if message == "":
+        message = "LOVE"
 
-# Display image
-print("\n" * 9)
-for row in DATA:
-    print_message = True
-    position = 0
-    line_text = ""
-    for length in row:
-        if print_message:
-            text = message[position : (position + length)]
-            print_message = False
-        else:
-            text = " " * length
-            print_message = True
-        line_text += text
-        position += length
-    print(line_text)
+    # Repeat the message until we get at least one line's worth
+    while len(message) < ROW_LEN:
+        message += message
 
-print("")
+    # Display image
+    print("\n" * 9)
+    for row in DATA:
+        print_message = True
+        position = 0
+        line_text = ""
+        for length in row:
+            if print_message:
+                text = message[position : (position + length)]
+                print_message = False
+            else:
+                text = " " * length
+                print_message = True
+            line_text += text
+            position += length
+        print(line_text)
+
+    print("")
+
+
+if __name__ == "__main__":
+    main()
 
 
 ######################################################################
