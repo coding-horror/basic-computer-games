@@ -58,7 +58,7 @@ def get_card_name(number: int) -> str:
 
 def display_bankroll(bank_roll: int) -> None:
     """Print current bankroll"""
-    if BANK_ROLL > 0:
+    if bank_roll > 0:
         print("You now have %s dollars\n" % bank_roll)
 
 
