@@ -55,7 +55,7 @@ def pick_number():
     return num
 
 
-def get_valid_guess():
+def get_valid_guess(guesses):
     valid = False
     while not valid:
         guess = input(f"Guess # {guesses}     ? ")
@@ -135,7 +135,7 @@ def main():
         guessing = True
         while guessing:
 
-            guess = get_valid_guess()
+            guess = get_valid_guess(guesses)
 
             if guess == num_str:
                 print("You got it!!!\n")
