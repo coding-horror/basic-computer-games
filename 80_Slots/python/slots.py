@@ -126,26 +126,30 @@ def final_message(profits):
         print("Collect your winings from the H&M cashier.")
 
 
-profits = 0
-keep_betting = True
+def main():
+    profits = 0
+    keep_betting = True
 
-initial_message()
-while keep_betting:
-    m = input_betting()
-    w = spin_wheels()
-    profits = adjust_profits(w, m, profits)
+    initial_message()
+    while keep_betting:
+        m = input_betting()
+        w = spin_wheels()
+        profits = adjust_profits(w, m, profits)
 
-    print(f"Your standings are ${profits}")
-    answer = input("Again?")
+        print(f"Your standings are ${profits}")
+        answer = input("Again?")
 
-    try:
-        if not answer[0].lower() == "y":
+        try:
+            if not answer[0].lower() == "y":
+                keep_betting = False
+        except IndexError:
             keep_betting = False
-    except IndexError:
-        keep_betting = False
 
-final_message(profits)
+    final_message(profits)
 
+
+if __name__ == "__main__":
+    main()
 
 ######################################################################
 #

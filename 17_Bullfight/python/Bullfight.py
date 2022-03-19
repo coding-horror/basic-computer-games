@@ -214,28 +214,35 @@ while True:
 
         if death:
             break
-# 1310
-print_n_newlines(3)
-if D[4] == 0:
-    print("THE CROWD BOOS FOR TEN MINUTES.  IF YOU EVER DARE TO SHOW")
-    print("YOUR FACE IN A RING AGAIN, THEY SWEAR THEY WILL KILL YOU--")
-    print("UNLESS THE BULL DOES FIRST.")
-else:
-    if D[4] == 2:
-        print("THE CROWD CHEERS WILDLY!")
-    elif D[5] == 2:
-        print("THE CROWD CHEERS!")
-        print()
-    print("THE CROWD AWARDS YOU")
-    if FNC() < 2.4:
-        print("NOTHING AT ALL.")
-    elif FNC() < 4.9:
-        print("ONE EAR OF THE BULL.")
-    elif FNC() < 7.4:
-        print("BOTH EARS OF THE BULL!")
-        print("OLE!")
-    else:
-        print("OLE!  YOU ARE 'MUY HOMBRE'!! OLE!  OLE!")
-    print()
-    print("ADIOS")
+
+
+def main():
+    # 1310
     print_n_newlines(3)
+    if D[4] == 0:
+        print("THE CROWD BOOS FOR TEN MINUTES.  IF YOU EVER DARE TO SHOW")
+        print("YOUR FACE IN A RING AGAIN, THEY SWEAR THEY WILL KILL YOU--")
+        print("UNLESS THE BULL DOES FIRST.")
+    else:
+        if D[4] == 2:
+            print("THE CROWD CHEERS WILDLY!")
+        elif D[5] == 2:
+            print("THE CROWD CHEERS!")
+            print()
+        print("THE CROWD AWARDS YOU")
+        if FNC() < 2.4:
+            print("NOTHING AT ALL.")
+        elif FNC() < 4.9:
+            print("ONE EAR OF THE BULL.")
+        elif FNC() < 7.4:
+            print("BOTH EARS OF THE BULL!")
+            print("OLE!")
+        else:
+            print("OLE!  YOU ARE 'MUY HOMBRE'!! OLE!  OLE!")
+        print()
+        print("ADIOS")
+        print_n_newlines(3)
+
+
+if __name__ == "__main__":
+    main()

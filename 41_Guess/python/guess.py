@@ -55,42 +55,47 @@ def limit_set():
     return limit, limit_goal
 
 
-limit, limit_goal = limit_set()
-while True:
-    guess_count = 1
-    still_guessing = True
-    won = False
-    my_guess = int(limit * random() + 1)
+def main():
+    limit, limit_goal = limit_set()
+    while True:
+        guess_count = 1
+        still_guessing = True
+        won = False
+        my_guess = int(limit * random() + 1)
 
-    print(f"I'm thinking of a number between 1 and {limit}")
-    print("Now you try to guess what it is.")
+        print(f"I'm thinking of a number between 1 and {limit}")
+        print("Now you try to guess what it is.")
 
-    while still_guessing:
-        n = int(input())
+        while still_guessing:
+            n = int(input())
 
-        if n < 0:
-            break
+            if n < 0:
+                break
 
-        insert_whitespaces()
-        if n < my_guess:
-            print("Too low. Try a bigger answer")
-            guess_count += 1
-        elif n > my_guess:
-            print("Too high. Try a smaller answer")
-            guess_count += 1
+            insert_whitespaces()
+            if n < my_guess:
+                print("Too low. Try a bigger answer")
+                guess_count += 1
+            elif n > my_guess:
+                print("Too high. Try a smaller answer")
+                guess_count += 1
+            else:
+                print(f"That's it! You got it in {guess_count} tries")
+                won = True
+                still_guessing = False
+
+        if won:
+            if guess_count < limit_goal:
+                print("Very good.")
+            elif guess_count == limit_goal:
+                print("Good.")
+            else:
+                print(f"You should have been able to get it in only {limit_goal}")
+            insert_whitespaces()
         else:
-            print(f"That's it! You got it in {guess_count} tries")
-            won = True
-            still_guessing = False
+            insert_whitespaces()
+            limit, limit_goal = limit_set()
 
-    if won:
-        if guess_count < limit_goal:
-            print("Very good.")
-        elif guess_count == limit_goal:
-            print("Good.")
-        else:
-            print(f"You should have been able to get it in only {limit_goal}")
-        insert_whitespaces()
-    else:
-        insert_whitespaces()
-        limit, limit_goal = limit_set()
+
+if __name__ == "__main__":
+    main()

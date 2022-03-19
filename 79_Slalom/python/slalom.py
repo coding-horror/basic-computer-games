@@ -160,39 +160,44 @@ def run():
         medals["bronze"] += 1
 
 
-while True:
-    gates = ask_int("How many gates does this course have (1 to 25)")
-    if gates < 1:
-        print("Try again,")
-    else:
-        if gates > 25:
-            print("25 is the limit.")
-        break
-
-pre_run()
-
-while True:
-    lvl = ask_int("Rate yourself as a skier, (1=Worst, 3=Best)")
-    if lvl < 1 or lvl > 3:
-        print("The bounds are 1-3.")
-    else:
-        break
-
-while True:
-    run()
+def main():
     while True:
-        answer = ask("Do you want to play again?")
-        if answer == "YES" or answer == "NO":
-            break
+        gates = ask_int("How many gates does this course have (1 to 25)")
+        if gates < 1:
+            print("Try again,")
         else:
-            print('Please type "YES" or "NO"')
-    if answer == "NO":
-        break
+            if gates > 25:
+                print("25 is the limit.")
+            break
 
-print("Thanks for the race")
-if medals["gold"] > 0:
-    print(f"Gold medals: {medals['gold']}")
-if medals["silver"] > 0:
-    print(f"Silver medals: {medals['silver']}")
-if medals["bronze"] > 0:
-    print(f"Bronze medals: {medals['bronze']}")
+    pre_run()
+
+    while True:
+        lvl = ask_int("Rate yourself as a skier, (1=Worst, 3=Best)")
+        if lvl < 1 or lvl > 3:
+            print("The bounds are 1-3.")
+        else:
+            break
+
+    while True:
+        run()
+        while True:
+            answer = ask("Do you want to play again?")
+            if answer == "YES" or answer == "NO":
+                break
+            else:
+                print('Please type "YES" or "NO"')
+        if answer == "NO":
+            break
+
+    print("Thanks for the race")
+    if medals["gold"] > 0:
+        print(f"Gold medals: {medals['gold']}")
+    if medals["silver"] > 0:
+        print(f"Silver medals: {medals['silver']}")
+    if medals["bronze"] > 0:
+        print(f"Bronze medals: {medals['bronze']}")
+
+
+if __name__ == "__main__":
+    main()

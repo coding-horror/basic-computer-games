@@ -108,60 +108,63 @@ def build_result_string(num, guess):
 ######################################################################
 
 
-# Intro text
-print("\n                Bagels")
-print("Creative Computing  Morristown, New Jersey")
-print("\n\n")
+def main():
+    # Intro text
+    print("\n                Bagels")
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
 
-# Anything other than N* will show the rules
-response = input("Would you like the rules (Yes or No)? ")
-if len(response) > 0:
-    if response.upper()[0] != "N":
+    # Anything other than N* will show the rules
+    response = input("Would you like the rules (Yes or No)? ")
+    if len(response) > 0:
+        if response.upper()[0] != "N":
+            print_rules()
+    else:
         print_rules()
-else:
-    print_rules()
 
-games_won = 0
-still_running = True
-while still_running:
+    games_won = 0
+    still_running = True
+    while still_running:
 
-    # New round
-    num = pick_number()
-    num_str = "".join(num)
-    guesses = 1
+        # New round
+        num = pick_number()
+        num_str = "".join(num)
+        guesses = 1
 
-    print("\nO.K.  I have a number in mind.")
-    guessing = True
-    while guessing:
+        print("\nO.K.  I have a number in mind.")
+        guessing = True
+        while guessing:
 
-        guess = get_valid_guess()
+            guess = get_valid_guess()
 
-        if guess == num_str:
-            print("You got it!!!\n")
-            games_won += 1
-            guessing = False
-        else:
-            print(build_result_string(num, guess))
-            guesses += 1
-            if guesses > MAX_GUESSES:
-                print("Oh well")
-                print(f"That's {MAX_GUESSES} guesses.  My number was {num_str}")
+            if guess == num_str:
+                print("You got it!!!\n")
+                games_won += 1
                 guessing = False
+            else:
+                print(build_result_string(num, guess))
+                guesses += 1
+                if guesses > MAX_GUESSES:
+                    print("Oh well")
+                    print(f"That's {MAX_GUESSES} guesses.  My number was {num_str}")
+                    guessing = False
 
-    valid_response = False
-    while not valid_response:
-        response = input("Play again (Yes or No)? ")
-        if len(response) > 0:
-            valid_response = True
-            if response.upper()[0] != "Y":
-                still_running = False
+        valid_response = False
+        while not valid_response:
+            response = input("Play again (Yes or No)? ")
+            if len(response) > 0:
+                valid_response = True
+                if response.upper()[0] != "Y":
+                    still_running = False
+
+    if games_won > 0:
+        print(f"\nA {games_won} point Bagels buff!!")
+
+    print("Hope you had fun.  Bye.\n")
 
 
-if games_won > 0:
-    print(f"\nA {games_won} point Bagels buff!!")
-
-print("Hope you had fun.  Bye.\n")
-
+if __name__ == "__main__":
+    main()
 
 ######################################################################
 #

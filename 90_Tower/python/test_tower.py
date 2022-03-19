@@ -3,7 +3,7 @@ import unittest
 import tower
 
 
-class MyTestCase(unittest.TestCase):
+class TowerTestCase(unittest.TestCase):
     def test_something(self):
         t = tower.Tower()
         self.assertTrue(t.empty())
@@ -43,9 +43,6 @@ class MyTestCase(unittest.TestCase):
         d5 = tower.Disk(5)
         t.add(d5)
         t.add(d3)
-
-        f = t.vertical_format(6, 3)
-        self.assertEqual(f, ["      ", "[ 3 ] ", "[ 5 ] "])
 
 
 if __name__ == "__main__":
