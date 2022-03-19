@@ -41,12 +41,7 @@ impl DATE {
         }
 
         //create date
-        let mut date =DATE{
-            month:raw_date[0],
-            day:raw_date[1],
-            year:raw_date[2],
-            day_of_week: 0 
-        }; 
+        let mut date =DATE::new(raw_date[0], raw_date[1], raw_date[2], 0);
         date.update_day_of_week();
         //return date
         return date
@@ -73,7 +68,8 @@ impl DATE {
         //get days
         d = days_remaining;
 
-        return DATE { month: m, day: d, year: y, day_of_week: 0 }
+        //return new date
+        return DATE::new(m, d, y, 0);
     }
 
     /**
@@ -81,18 +77,42 @@ impl DATE {
      * uses the methodology found here: https://cs.uwaterloo.ca/~alopez-o/math-faq/node73.html
      */
     fn update_day_of_week(&mut self) {
+        //DATA
         let day = self.day as isize;
         let month = self.month as isize;
         let year = self.year as isize;
         let century = year/100;
         let year_of_century = year - century*100;
         let weekday; //as 0-6
+
+        //calculate weekday
         if self.month <= 2 { //if jan or feb
             weekday = (day + (2.6 * ((month+10) as f64)-0.2)as isize - 2*century + (year_of_century-1) + (year_of_century-1)/4 + century/4) % 7;
         } else {
             weekday = (day + (2.6 * ((month-2)  as f64)-0.2)as isize - 2*century + year_of_century     + year_of_century/4     + century/4) % 7;
         }
+
+        //update weekday
         self.day_of_week=(weekday+1) as u32; //weekday as 1-7
+    }
+
+    /**
+     * return the string for the weekday
+     */
+    fn day_of_week_as_string(&self) -> String {
+        match self.day_of_week {
+            1 => {return String::from("SUNDAY")},
+            2 => {return String::from("MONDAY")},
+            3 => {return String::from("TUESDAY")},
+            4 => {return String::from("WEDNESDAY")},
+            5 => {return String::from("THURSDAY")},
+            6 => {
+                if self.day == 13 {return String::from("FRIDAY THE THIRTEENTH---BEWARE!")}
+                else {return String::from("FRIDAY")}
+            },
+            7 => {return String::from("SATURDAY")}, 
+            _ => {return String::from("")},
+        }
     }
 
     /**
@@ -149,7 +169,6 @@ impl ToString for DATE {
     }
 }
 
-
 fn main() {
     //DATA
     let today_date: DATE;
@@ -193,7 +212,7 @@ fn main() {
             else if today_value == other_day_value {other_is_today=true;"IS"}
             else {"WAS"}
         },
-        other_date.day_of_week,
+        other_date.day_of_week_as_string(),
     );
 
     //end if both days are the same
@@ -202,7 +221,7 @@ fn main() {
     } 
 
     //create date representing the difference between the two dates
-    delta_date = if let Some(d) = today_date.time_since(&other_date) {d} else {return;};
+    delta_date = today_date.time_since(&other_date).unwrap();
 
     //print happy birthday message
     if delta_date.month == 0 && delta_date.day == 0 {
@@ -243,7 +262,11 @@ fn main() {
         "YOU HAVE RELAXED\t{}",
         DATE::new_from_days( ( (1.0-0.35-0.17-0.23) * delta_date.calc_days() as f64) as u32).format_ymd("\t"), //remaining% of their life
     );
-
+    //when they can retire
+    println!(
+        "YOU MAY RETIRE IN\t{}",
+        DATE::new(other_date.month, other_date.day, other_date.year + 65, 0).time_since(&today_date).unwrap().format_ymd("\t")
+    );
 }
 
 
