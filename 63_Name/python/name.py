@@ -59,4 +59,5 @@ def main():
     print("HAVE A NICE DAY!")
 
 
-main()
+if __name__ == "__main__":
+    main()

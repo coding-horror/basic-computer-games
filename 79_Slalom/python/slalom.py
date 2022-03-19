@@ -1,40 +1,10 @@
 from random import random
 
-print("Slalom".rjust(39))
-print("Creative Computing Morristown, New Jersey\n\n\n".rjust(57))
-
 medals = {
     "gold": 0,
     "silver": 0,
     "bronze": 0,
 }
-max_speeds = [
-    14,
-    18,
-    26,
-    29,
-    18,
-    25,
-    28,
-    32,
-    29,
-    20,
-    29,
-    29,
-    25,
-    21,
-    26,
-    29,
-    20,
-    21,
-    20,
-    18,
-    26,
-    25,
-    33,
-    31,
-    22,
-]
 
 
 def ask(question):
@@ -47,7 +17,7 @@ def ask_int(question):
     return int(reply) if reply.isnumeric() else -1
 
 
-def pre_run():
+def pre_run(gates, max_speeds):
     print('\nType "INS" for instructions')
     print('Type "MAX" for approximate maximum speeds')
     print('Type "RUN" for the beginning of the race')
@@ -80,7 +50,7 @@ def pre_run():
             cmd = ask(f'"{cmd}" is an illegal command--Retry')
 
 
-def run():
+def run(gates, lvl, max_speeds):
     global medals
     print("The starter counts down...5...4...3...2...1...Go!")
     time = 0
@@ -160,39 +130,75 @@ def run():
         medals["bronze"] += 1
 
 
-while True:
-    gates = ask_int("How many gates does this course have (1 to 25)")
-    if gates < 1:
-        print("Try again,")
-    else:
-        if gates > 25:
-            print("25 is the limit.")
-        break
+def main():
+    print("Slalom".rjust(39))
+    print("Creative Computing Morristown, New Jersey\n\n\n".rjust(57))
 
-pre_run()
+    max_speeds = [
+        14,
+        18,
+        26,
+        29,
+        18,
+        25,
+        28,
+        32,
+        29,
+        20,
+        29,
+        29,
+        25,
+        21,
+        26,
+        29,
+        20,
+        21,
+        20,
+        18,
+        26,
+        25,
+        33,
+        31,
+        22,
+    ]
 
-while True:
-    lvl = ask_int("Rate yourself as a skier, (1=Worst, 3=Best)")
-    if lvl < 1 or lvl > 3:
-        print("The bounds are 1-3.")
-    else:
-        break
-
-while True:
-    run()
     while True:
-        answer = ask("Do you want to play again?")
-        if answer == "YES" or answer == "NO":
-            break
+        gates = ask_int("How many gates does this course have (1 to 25)")
+        if gates < 1:
+            print("Try again,")
         else:
-            print('Please type "YES" or "NO"')
-    if answer == "NO":
-        break
+            if gates > 25:
+                print("25 is the limit.")
+            break
 
-print("Thanks for the race")
-if medals["gold"] > 0:
-    print(f"Gold medals: {medals['gold']}")
-if medals["silver"] > 0:
-    print(f"Silver medals: {medals['silver']}")
-if medals["bronze"] > 0:
-    print(f"Bronze medals: {medals['bronze']}")
+    pre_run(gates, max_speeds)
+
+    while True:
+        lvl = ask_int("Rate yourself as a skier, (1=Worst, 3=Best)")
+        if lvl < 1 or lvl > 3:
+            print("The bounds are 1-3.")
+        else:
+            break
+
+    while True:
+        run(gates, lvl, max_speeds)
+        while True:
+            answer = ask("Do you want to play again?")
+            if answer == "YES" or answer == "NO":
+                break
+            else:
+                print('Please type "YES" or "NO"')
+        if answer == "NO":
+            break
+
+    print("Thanks for the race")
+    if medals["gold"] > 0:
+        print(f"Gold medals: {medals['gold']}")
+    if medals["silver"] > 0:
+        print(f"Silver medals: {medals['silver']}")
+    if medals["bronze"] > 0:
+        print(f"Bronze medals: {medals['bronze']}")
+
+
+if __name__ == "__main__":
+    main()

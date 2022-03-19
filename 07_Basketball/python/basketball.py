@@ -353,4 +353,5 @@ class Basketball:
             self.opponent_jumpshot()
 
 
-new_game = Basketball()
+if __name__ == "__main__":
+    Basketball()

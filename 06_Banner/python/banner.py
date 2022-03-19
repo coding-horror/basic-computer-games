@@ -110,9 +110,5 @@ def print_banner():
     # print("\n" * 75)  # Feed some more paper from the printer
 
 
-def main():
-    print_banner()
-
-
 if __name__ == "__main__":
-    main()
+    print_banner()

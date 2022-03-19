@@ -57,52 +57,56 @@ def get_guess():
     return guess
 
 
-# Display intro text
-print("\n                   Stars")
-print("Creative Computing  Morristown, New Jersey")
-print("\n\n")
-# "*** Stars - People's Computer Center, MenloPark, CA"
+def main():
+    # Display intro text
+    print("\n                   Stars")
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
+    # "*** Stars - People's Computer Center, MenloPark, CA"
 
-response = input("Do you want instructions? ")
-if response.upper()[0] == "Y":
-    print_instructions()
+    response = input("Do you want instructions? ")
+    if response.upper()[0] == "Y":
+        print_instructions()
 
-still_playing = True
-while still_playing:
+    still_playing = True
+    while still_playing:
 
-    # "*** Computer thinks of a number"
-    secret_number = random.randint(1, MAX_NUM)
-    print("\n\nOK, I am thinking of a number, start guessing.")
+        # "*** Computer thinks of a number"
+        secret_number = random.randint(1, MAX_NUM)
+        print("\n\nOK, I am thinking of a number, start guessing.")
 
-    # Init/start guess loop
-    guess_number = 0
-    player_has_won = False
-    while (guess_number < MAX_GUESSES) and not player_has_won:
+        # Init/start guess loop
+        guess_number = 0
+        player_has_won = False
+        while (guess_number < MAX_GUESSES) and not player_has_won:
 
-        print("")
-        guess = get_guess()
-        guess_number += 1
+            print("")
+            guess = get_guess()
+            guess_number += 1
 
-        if guess == secret_number:
-            # "*** We have a winner"
-            player_has_won = True
-            print("**************************************************!!!")
-            print(f"You got it in {guess_number} guesses!!!")
+            if guess == secret_number:
+                # "*** We have a winner"
+                player_has_won = True
+                print("**************************************************!!!")
+                print(f"You got it in {guess_number} guesses!!!")
 
-        else:
-            print_stars(secret_number, guess)
+            else:
+                print_stars(secret_number, guess)
 
-        # End of guess loop
+            # End of guess loop
 
-    # "*** Did not guess in [MAX_GUESS] guesses"
-    if not player_has_won:
-        print(f"\nSorry, that's {guess_number} guesses, number was {secret_number}")
+        # "*** Did not guess in [MAX_GUESS] guesses"
+        if not player_has_won:
+            print(f"\nSorry, that's {guess_number} guesses, number was {secret_number}")
 
-    # Keep playing?
-    response = input("\nPlay again? ")
-    if response.upper()[0] != "Y":
-        still_playing = False
+        # Keep playing?
+        response = input("\nPlay again? ")
+        if response.upper()[0] != "Y":
+            still_playing = False
 
+
+if __name__ == "__main__":
+    main()
 
 ######################################################################
 #

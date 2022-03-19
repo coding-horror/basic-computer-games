@@ -22,86 +22,89 @@
 
 import random
 
-WORDS = [
-    [
-        "Ability",
-        "Basal",
-        "Behavioral",
-        "Child-centered",
-        "Differentiated",
-        "Discovery",
-        "Flexible",
-        "Heterogeneous",
-        "Homogenous",
-        "Manipulative",
-        "Modular",
-        "Tavistock",
-        "Individualized",
-    ],
-    [
-        "learning",
-        "evaluative",
-        "objective",
-        "cognitive",
-        "enrichment",
-        "scheduling",
-        "humanistic",
-        "integrated",
-        "non-graded",
-        "training",
-        "vertical age",
-        "motivational",
-        "creative",
-    ],
-    [
-        "grouping",
-        "modification",
-        "accountability",
-        "process",
-        "core curriculum",
-        "algorithm",
-        "performance",
-        "reinforcement",
-        "open classroom",
-        "resource",
-        "structure",
-        "facility",
-        "environment",
-    ],
-]
 
+def main():
+    WORDS = [
+        [
+            "Ability",
+            "Basal",
+            "Behavioral",
+            "Child-centered",
+            "Differentiated",
+            "Discovery",
+            "Flexible",
+            "Heterogeneous",
+            "Homogenous",
+            "Manipulative",
+            "Modular",
+            "Tavistock",
+            "Individualized",
+        ],
+        [
+            "learning",
+            "evaluative",
+            "objective",
+            "cognitive",
+            "enrichment",
+            "scheduling",
+            "humanistic",
+            "integrated",
+            "non-graded",
+            "training",
+            "vertical age",
+            "motivational",
+            "creative",
+        ],
+        [
+            "grouping",
+            "modification",
+            "accountability",
+            "process",
+            "core curriculum",
+            "algorithm",
+            "performance",
+            "reinforcement",
+            "open classroom",
+            "resource",
+            "structure",
+            "facility",
+            "environment",
+        ],
+    ]
 
-# Display intro text
-print("\n           Buzzword Generator")
-print("Creative Computing  Morristown, New Jersey")
-print("\n\n")
-print("This program prints highly acceptable phrases in")
-print("'educator-speak' that you can work into reports")
-print("and speeches.  Whenever a question mark is printed,")
-print("type a 'Y' for another phrase or 'N' to quit.")
-print("\n\nHere's the first phrase:")
+    # Display intro text
+    print("\n           Buzzword Generator")
+    print("Creative Computing  Morristown, New Jersey")
+    print("\n\n")
+    print("This program prints highly acceptable phrases in")
+    print("'educator-speak' that you can work into reports")
+    print("and speeches.  Whenever a question mark is printed,")
+    print("type a 'Y' for another phrase or 'N' to quit.")
+    print("\n\nHere's the first phrase:")
 
-still_running = True
-while still_running:
-    phrase = ""
-    for section in WORDS:
-        if len(phrase) > 0:
-            phrase += " "
-        phrase += section[random.randint(0, len(section) - 1)]
+    still_running = True
+    while still_running:
+        phrase = ""
+        for section in WORDS:
+            if len(phrase) > 0:
+                phrase += " "
+            phrase += section[random.randint(0, len(section) - 1)]
 
-    print(phrase)
-    print("")
+        print(phrase)
+        print("")
 
-    response = input("? ")
-    try:
-        if response.upper()[0] != "Y":
+        response = input("? ")
+        try:
+            if response.upper()[0] != "Y":
+                still_running = False
+        except Exception:
             still_running = False
-    except Exception:
-        still_running = False
+
+    print("Come back when you need help with another report!\n")
 
 
-print("Come back when you need help with another report!\n")
-
+if __name__ == "__main__":
+    main()
 
 ######################################################################
 #
