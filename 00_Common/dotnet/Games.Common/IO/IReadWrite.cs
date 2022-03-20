@@ -95,6 +95,13 @@ public interface IReadWrite
     void WriteLine(object value);
 
     /// <summary>
+    /// Writes a formatted string to output.
+    /// </summary>
+    /// <param name="format">The format <see cref="string" /> to be written.</param>
+    /// <param name="value">The values to be inserted into the format.</param>
+    void WriteLine(string format, params object[] values);
+
+    /// <summary>
     /// Writes the contents of a <see cref="Stream" /> to output.
     /// </summary>
     /// <param name="stream">The <see cref="Stream" /> to be written.</param>
