@@ -36,7 +36,8 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
 
     prev_game = ""
 
-    checklist = checklist_orig[:]
+    empty_boxes = ["⬜️" for _ in checklist_orig]
+    checklist = empty_boxes[:]
     for dir_name, subdir_list, file_list in os.walk(root_dir):
 
         # split_dir[1] is the game
@@ -53,7 +54,7 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
                 strings_done.append(checklist)
                 checklist = [
                     f"{split_dir[1]:<30}",
-                ] + checklist_orig[1:]
+                ] + empty_boxes[1:]
                 prev_game = split_dir[1]
         elif (
             len(split_dir) == 3 and split_dir[1] != ".git" and split_dir[2] in lang_pos
