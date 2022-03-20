@@ -40,14 +40,16 @@ def main():
         numeric_answer = [-1] * num_positions
         for _ in range(0, answer):
             numeric_answer = get_possibility(numeric_answer)
-        # human_readable_answer = make_human_readable(numeric_answer)
+        # human_readable_answer = make_human_readable(numeric_answer, color_letters)
         while num_moves < 10 and not turn_over:
             print(f"Move # {num_moves} Guess : ")
             user_command = input("Guess ")
             if user_command == "BOARD":
                 print_board(guesses)  # 2000
             elif user_command == "QUIT":  # 2500
-                human_readable_answer = make_human_readable(numeric_answer)
+                human_readable_answer = make_human_readable(
+                    numeric_answer, color_letters
+                )
                 print(f"QUITTER! MY COMBINATION WAS: {human_readable_answer}")
                 print("GOOD BYE")
                 quit()
@@ -66,7 +68,7 @@ def main():
                         turn_over = True
                         print(f"You guessed it in {num_moves} moves!")
                         human_score = human_score + num_moves
-                        print_score()
+                        print_score(computer_score, human_score)
                     else:
                         print(
                             "You have {} blacks and {} whites".format(
@@ -83,7 +85,7 @@ def main():
                 )
             )
             human_score = human_score + num_moves
-            print_score()
+            print_score(computer_score, human_score)
 
         # COMPUTER TURN
         guesses = []
@@ -135,7 +137,7 @@ def main():
                         print(f"I GOT IT IN {num_moves} MOVES")
                         turn_over = True
                         computer_score = computer_score + num_moves
-                        print_score()
+                        print_score(computer_score, human_score)
                     else:
                         num_moves += 1
                         for i in range(0, possibilities):
@@ -177,7 +179,7 @@ def get_invalid_letters(user_command):
 
 
 # 2000
-def print_board(guesses):
+def print_board(guesses) -> None:
     """Prints previous guesses within the round."""
     print("Board")
     print("Move\tGuess\tBlack White")
@@ -235,7 +237,7 @@ def compare_two_positions(guess, answer):
 
 
 # 5000 + logic from 1160
-def print_score(is_final_score=False):
+def print_score(computer_score, human_score, is_final_score: bool = False) -> None:
     """Prints score after each turn ends, including final score at end of game."""
     if is_final_score:
         print("GAME OVER")
@@ -247,7 +249,7 @@ def print_score(is_final_score=False):
 
 
 # 4000, 5500, 6000 subroutines are all identical
-def make_human_readable(num):
+def make_human_readable(num: str, color_letters) -> str:
     """Make the numeric representation of a position human readable."""
     retval = ""
     for i in range(0, len(num)):

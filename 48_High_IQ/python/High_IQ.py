@@ -40,7 +40,7 @@ def new_board():
     return board
 
 
-def print_instructions():
+def print_instructions() -> None:
     print(
         """
 HERE IS THE BOARD:
@@ -73,7 +73,7 @@ NUMBERS.  OK, LET'S BEGIN.
     )
 
 
-def print_board(board):
+def print_board(board) -> None:
     """Prints the boards using indexes in the passed parameter"""
     print(" " * 2 + board[13] + board[14] + board[15])
     print(" " * 2 + board[22] + board[23] + board[24])

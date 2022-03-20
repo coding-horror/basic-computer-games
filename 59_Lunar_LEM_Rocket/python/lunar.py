@@ -35,12 +35,12 @@ BURN_RIGHT = BURN_LEFT + BURN_WIDTH
 PhysicalState = collections.namedtuple("PhysicalState", ["velocity", "altitude"])
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -74,7 +74,7 @@ def add_ljust(line, s, pos):
     return line + s
 
 
-def print_instructions():
+def print_instructions() -> None:
     # Somebody had a bad experience with Xerox.
 
     print("THIS IS A COMPUTER SIMULATION OF AN APOLLO LUNAR")
@@ -86,7 +86,7 @@ def print_instructions():
     print()
 
 
-def print_intro():
+def print_intro() -> None:
     print("SET BURN RATE OF RETRO ROCKETS TO ANY VALUE BETWEEN")
     print("0 (FREE FALL) AND 200 (MAXIMUM BURN) POUNDS PER SECOND.")
     print("SET NEW BURN RATE EVERY 10 SECONDS.")

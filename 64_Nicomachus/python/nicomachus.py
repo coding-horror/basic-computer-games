@@ -15,7 +15,7 @@ Ported by Dave LeCompte
 import time
 
 
-def print_with_tab(spaces_count, msg):
+def print_with_tab(spaces_count: int, msg: str) -> None:
     if spaces_count > 0:
         spaces = " " * spaces_count
     else:

@@ -12,12 +12,12 @@ import random
 PAGE_WIDTH = 64
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -25,7 +25,7 @@ def print_header(title):
     print()
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("YOU ARE THE WEAPONS OFFICER ON THE STARSHIP ENTERPRISE")
     print("AND THIS IS A TEST TO SEE HOW ACCURATE A SHOT YOU")
     print("ARE IN A THREE-DIMENSIONAL RANGE.  YOU WILL BE TOLD")

@@ -26,12 +26,12 @@ MoveRecord = collections.namedtuple(
 )
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -336,7 +336,7 @@ class Board:
         return True
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("THIS IS THE GAME OF CHECKERS.  THE COMPUTER IS X,")
     print("AND YOU ARE O.  THE COMPUTER WILL MOVE FIRST.")
     print("SQUARES ARE REFERRED TO BY A COORDINATE SYSTEM.")
@@ -351,17 +351,17 @@ def print_instructions():
     print()
 
 
-def print_human_won():
+def print_human_won() -> None:
     print()
     print("YOU WIN.")
 
 
-def print_computer_won():
+def print_computer_won() -> None:
     print()
     print("I WIN.")
 
 
-def play_game():
+def play_game() -> None:
     board = Board()
 
     while True:

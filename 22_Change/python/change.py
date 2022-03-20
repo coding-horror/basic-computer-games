@@ -9,12 +9,12 @@ Port by Dave LeCompte
 PAGE_WIDTH = 64
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -22,7 +22,7 @@ def print_header(title):
     print()
 
 
-def print_introduction():
+def print_introduction() -> None:
     print("I, YOUR FRIENDLY MICROCOMPUTER, WILL DETERMINE")
     print("THE CORRECT CHANGE FOR ITEMS COSTING UP TO $100.")
     print()
@@ -94,7 +94,7 @@ def compute_change():
         print(f"{change_in_pennies} PENNY(S)")
 
 
-def print_thanks():
+def print_thanks() -> None:
     print("THANK YOU, COME AGAIN.")
     print()
     print()

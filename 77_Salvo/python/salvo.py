@@ -225,7 +225,7 @@ def create_blank_board():
 #
 # print out the game board for testing
 # purposes
-def print_board(board):
+def print_board(board) -> None:
 
     # print board header (column numbers)
     print("  ", end="")

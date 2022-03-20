@@ -718,7 +718,7 @@ def computer():
             )
 
 
-def print_direction(from1, from2, to1, to2):
+def print_direction(from1, from2, to1, to2) -> None:
     # Print direction and distance between two locations in the grid.
     delta1 = -(to1 - from1)  # flip so positive is up (heading = 3)
     delta2 = to2 - from2

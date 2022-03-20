@@ -165,7 +165,7 @@ class TicTacToe:
                     return c1 - gap + i, c2 + gap
 
 
-def display(Game: TicTacToe):
+def display(Game: TicTacToe) -> None:
     line1 = ""
     for i in range(0, Game.dim_sz):
         for j in range(0, Game.dim_sz - 1):

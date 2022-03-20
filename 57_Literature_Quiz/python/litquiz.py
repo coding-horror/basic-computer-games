@@ -67,13 +67,13 @@ questions = [
 ]
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((64 - len(msg)) // 2)
 
     print(spaces + msg)
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("TEST YOUR KNOWLEDGE OF CHILDREN'S LITERATURE.")
     print()
     print("THIS IS A MULTIPLE-CHOICE QUIZ.")
