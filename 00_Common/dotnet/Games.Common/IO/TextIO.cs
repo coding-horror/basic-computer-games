@@ -99,6 +99,8 @@ public class TextIO : IReadWrite
 
     public void WriteLine(object value) => _output.WriteLine(value.ToString());
 
+    public void WriteLine(string format, params object[] values) => _output.WriteLine(format, values);
+
     public void Write(Stream stream, bool keepOpen = false)
     {
         using var reader = new StreamReader(stream);
