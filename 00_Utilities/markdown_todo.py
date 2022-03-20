@@ -9,7 +9,7 @@ def has_implementation(lang: str, file_list: List[str], subdir_list: List[str]) 
         return len(file_list) > 1 or len(subdir_list) > 0
 
 
-def get_data(root_dir: str = "..") -> List[List[str]]:
+def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]:
     """
 
     Parameters
@@ -18,28 +18,9 @@ def get_data(root_dir: str = "..") -> List[List[str]]:
         The root directory you want to start from.
     """
     lang_pos: Dict[str, int] = {
-        "csharp": 1,
-        "java": 2,
-        "javascript": 3,
-        "pascal": 4,
-        "perl": 5,
-        "python": 6,
-        "ruby": 7,
-        "vbnet": 8,
+        lang: i for i, lang in enumerate(checklist_orig[1:], start=1)
     }
     strings_done: List[List[str]] = []
-
-    checklist = [
-        "game",
-        "csharp",
-        "java",
-        "javascript",
-        "pascal",
-        "perl",
-        "python",
-        "ruby",
-        "vbnet",
-    ]
 
     ignore_folders = [
         ".git",
@@ -55,7 +36,9 @@ def get_data(root_dir: str = "..") -> List[List[str]]:
 
     prev_game = ""
 
+    checklist = checklist_orig[:]
     for dir_name, subdir_list, file_list in os.walk(root_dir):
+
         # split_dir[1] is the game
         # split_dir[2] is the language
         split_dir = dir_name.split(os.path.sep)
@@ -69,16 +52,8 @@ def get_data(root_dir: str = "..") -> List[List[str]]:
                 # it's a new dir
                 strings_done.append(checklist)
                 checklist = [
-                    split_dir[1],
-                    "csharp",
-                    "java",
-                    "javascript",
-                    "pascal",
-                    "perl",
-                    "python",
-                    "ruby",
-                    "vbnet",
-                ]
+                    f"{split_dir[1]:<30}",
+                ] + checklist_orig[1:]
                 prev_game = split_dir[1]
         elif (
             len(split_dir) == 3 and split_dir[1] != ".git" and split_dir[2] in lang_pos
@@ -88,16 +63,17 @@ def get_data(root_dir: str = "..") -> List[List[str]]:
                 if has_implementation(split_dir[2], file_list, subdir_list)
                 else "⬜️"
             )
+            if split_dir[2] not in lang_pos or lang_pos[split_dir[2]] >= len(checklist):
+                print(f"Could not find {split_dir[2]}: {dir_name}")
+                checklist[lang_pos[split_dir[2]]] = "⬜️"
+                continue
             checklist[lang_pos[split_dir[2]]] = out
     return strings_done
 
 
-def write_file(path: str, strings_done: List[List[str]]) -> None:
-    write_string = (
-        "# TODO list\n"
-        " game | csharp | java | javascript | pascal | perl | python | ruby | vbnet\n"
-        " --- | --- | --- | --- | --- | --- | --- | --- | ---\n"
-    )
+def write_file(path: str, languages: List[str], strings_done: List[List[str]]) -> None:
+    dashes = " | ".join(["---"] * (len(languages) + 1))
+    write_string = "# TODO list\n" f" game | {' | '.join(languages)}\n" f"{dashes}\n"
     sorted_strings = list(
         map(lambda l: " | ".join(l) + "\n", sorted(strings_done, key=lambda x: x[0]))
     )
@@ -108,5 +84,17 @@ def write_file(path: str, strings_done: List[List[str]]) -> None:
 
 
 if __name__ == "__main__":
-    strings_done = get_data()
-    write_file("TODO.md", strings_done)
+    languages = [
+        "csharp",
+        "java",
+        "javascript",
+        "kotlin",
+        "lua",
+        "perl",
+        "python",
+        "ruby",
+        "rust",
+        "vbnet",
+    ]
+    strings_done = get_data(["game"] + languages[:])
+    write_file("TODO.md", languages, strings_done)

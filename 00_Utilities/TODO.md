@@ -1,98 +1,98 @@
 # TODO list
- game | csharp | java | javascript | pascal | perl | python | ruby | vbnet
- --- | --- | --- | --- | --- | --- | --- | --- | ---
-01_Acey_Ducey | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-02_Amazing | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-03_Animal | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-04_Awari | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-05_Bagels | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-06_Banner | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅
-07_Basketball | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ⬜️ | ✅
-08_Batnum | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ⬜️ | ✅
-09_Battle | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ⬜️ | ✅
-10_Blackjack | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-11_Bombardment | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-12_Bombs_Away | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-13_Bounce | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-14_Bowling | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-15_Boxing | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-16_Bug | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-17_Bullfight | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-18_Bullseye | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-20_Buzzword | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-21_Calendar | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-22_Change | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-23_Checkers | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-24_Chemist | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-25_Chief | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-26_Chomp | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-27_Civil_War | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-28_Combat | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-29_Craps | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-30_Cube | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-31_Depth_Charge | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-32_Diamond | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-33_Dice | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-34_Digits | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-35_Even_Wins | ⬜️ | ⬜️ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-36_Flip_Flop | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-37_Football | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ⬜️ | ⬜️ | ✅
-38_Fur_Trader | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-39_Golf | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-40_Gomoko | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-41_Guess | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-42_Gunner | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-43_Hammurabi | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-44_Hangman | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-45_Hello | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-46_Hexapawn | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-47_Hi-Lo | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-48_High_IQ | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-49_Hockey | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ⬜️ | ⬜️ | ✅
-50_Horserace | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-51_Hurkle | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-52_Kinema | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-53_King | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ⬜️ | ⬜️ | ✅
-54_Letter | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-55_Life | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-56_Life_for_Two | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ⬜️ | ⬜️ | ✅
-57_Literature_Quiz | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-58_Love | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-59_Lunar_LEM_Rocket | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-60_Mastermind | ✅ | ⬜️ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-61_Math_Dice | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-62_Mugwump | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-63_Name | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-64_Nicomachus | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-65_Nim | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ✅ | ✅
-66_Number | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-67_One_Check | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-68_Orbit | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-69_Pizza | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-70_Poetry | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-71_Poker | ⬜️ | ✅ | ✅ | pascal | ⬜️ | ⬜️ | ⬜️ | ✅
-72_Queen | ⬜️ | ⬜️ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-73_Reverse | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-74_Rock_Scissors_Paper | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-75_Roulette | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-76_Russian_Roulette | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-77_Salvo | ⬜️ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-78_Sine_Wave | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-79_Slalom | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-80_Slots | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-81_Splat | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-82_Stars | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-83_Stock_Market | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-84_Super_Star_Trek | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-85_Synonym | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-86_Target | ✅ | ✅ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-87_3-D_Plot | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-88_3-D_Tic-Tac-Toe | ✅ | ⬜️ | ✅ | pascal | ⬜️ | ✅ | ⬜️ | ✅
-89_Tic-Tac-Toe | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-90_Tower | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-91_Train | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-92_Trap | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-93_23_Matches | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-94_War | ⬜️ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
-95_Weekday | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ⬜️ | ✅
-96_Word | ✅ | ✅ | ✅ | pascal | ✅ | ✅ | ✅ | ✅
+ game | csharp | java | javascript | kotlin | lua | perl | python | ruby | rust | vbnet
+--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+01_Acey_Ducey                  | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅
+02_Amazing                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+03_Animal                      | ✅ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+04_Awari                       | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+05_Bagels                      | ✅ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+06_Banner                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+07_Basketball                  | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+08_Batnum                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+09_Battle                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+10_Blackjack                   | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | ✅ | ✅
+11_Bombardment                 | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+12_Bombs_Away                  | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+13_Bounce                      | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+14_Bowling                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+15_Boxing                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+16_Bug                         | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+17_Bullfight                   | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+18_Bullseye                    | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+20_Buzzword                    | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+21_Calendar                    | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+22_Change                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+23_Checkers                    | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+24_Chemist                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+25_Chief                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+26_Chomp                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+27_Civil_War                   | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+28_Combat                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+29_Craps                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+30_Cube                        | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+31_Depth_Charge                | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+32_Diamond                     | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+33_Dice                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+34_Digits                      | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+35_Even_Wins                   | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+36_Flip_Flop                   | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | rust | ✅
+37_Football | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | rust | ✅
+38_Fur_Trader                  | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+39_Golf                        | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+40_Gomoko                      | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+41_Guess                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+42_Gunner                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+43_Hammurabi                   | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+44_Hangman                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+45_Hello                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+46_Hexapawn                    | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+47_Hi-Lo                       | ✅ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+48_High_IQ                     | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+49_Hockey                      | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | rust | ✅
+50_Horserace                   | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+51_Hurkle                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+52_Kinema                      | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+53_King                        | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | rust | ✅
+54_Letter                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+55_Life                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+56_Life_for_Two                | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | rust | ✅
+57_Literature_Quiz             | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+58_Love                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+59_Lunar_LEM_Rocket            | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | ✅ | ✅
+60_Mastermind                  | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | ✅ | ✅
+61_Math_Dice                   | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+62_Mugwump                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+63_Name                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+64_Nicomachus                  | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+65_Nim                         | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅
+66_Number                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | ✅ | ✅
+67_One_Check                   | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+68_Orbit                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+69_Pizza                       | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+70_Poetry                      | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+71_Poker                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | ⬜️ | rust | ✅
+72_Queen                       | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+73_Reverse                     | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+74_Rock_Scissors_Paper         | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+75_Roulette                    | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+76_Russian_Roulette            | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+77_Salvo                       | ⬜️ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+78_Sine_Wave                   | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+79_Slalom                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+80_Slots                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+81_Splat                       | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+82_Stars                       | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+83_Stock_Market                | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+84_Super_Star_Trek             | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+85_Synonym                     | ✅ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+86_Target                      | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+87_3-D_Plot                    | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+88_3-D_Tic-Tac-Toe             | ✅ | ⬜️ | ✅ | ⬜️ | ⬜️ | ⬜️ | ✅ | ⬜️ | rust | ✅
+89_Tic-Tac-Toe                 | ⬜️ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ⬜️ | ✅ | ✅
+90_Tower                       | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+91_Train                       | ⬜️ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+92_Trap                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
+93_23_Matches                  | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | rust | ✅
+94_War                         | ⬜️ | ✅ | ✅ | ✅ | ⬜️ | ✅ | ✅ | ✅ | ✅ | ✅
+95_Weekday                     | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ⬜️ | ✅ | ✅
+96_Word                        | ✅ | ✅ | ✅ | ⬜️ | ⬜️ | ✅ | ✅ | ✅ | rust | ✅
