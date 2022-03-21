@@ -15,7 +15,7 @@ import random
 BELLS_ON_SUCCESS = False
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -24,7 +24,7 @@ def print_with_tab(space_count, msg):
     print(spaces + msg)
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("LETTER GUESSING GAME")
     print()
     print("I'LL THINK OF A LETTER OF THE ALPHABET, A TO Z.")

@@ -6,7 +6,7 @@ from math import sin
 from random import random
 
 
-def gunner():
+def gunner() -> None:
     gun_range = int(40000 * random() + 20000)
 
     print("\nMAXIMUM RANGE OF YOUR GUN IS", gun_range, "YARDS.")

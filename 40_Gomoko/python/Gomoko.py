@@ -6,7 +6,7 @@ def print_n_whitespaces(n: int) -> None:
     print(" " * n, end="")
 
 
-def print_board(A: List[List[Any]], n):
+def print_board(A: List[List[Any]], n: int) -> None:
     """PRINT THE BOARD"""
     for i in range(n):
         print(" ", end="")
@@ -22,7 +22,7 @@ def check_move(_I, _J, _N) -> bool:  # 910
     return True
 
 
-def print_banner():
+def print_banner() -> None:
     print_n_whitespaces(33)
     print("GOMOKU")
     print_n_whitespaces(15)

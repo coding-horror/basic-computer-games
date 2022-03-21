@@ -30,7 +30,7 @@ from math import log
 from random import random
 
 
-def insert_whitespaces():
+def insert_whitespaces() -> None:
     print("\n\n\n\n\n")
 
 

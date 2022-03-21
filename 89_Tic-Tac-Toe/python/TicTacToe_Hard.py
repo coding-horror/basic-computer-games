@@ -165,7 +165,7 @@ class TicTacToe:
                     return c1 - gap + i, c2 + gap
 
 
-def display(Game: TicTacToe):
+def display(Game: TicTacToe) -> None:
     line1 = ""
     for i in range(0, Game.dim_sz):
         for j in range(0, Game.dim_sz - 1):
@@ -181,7 +181,7 @@ def display(Game: TicTacToe):
     print(line1, "\n\n")
 
 
-def play():
+def play() -> None:
     Pick = input("Pick 'X' or 'O' ").strip().upper()
     if Pick == "O":
         Game = TicTacToe("O")

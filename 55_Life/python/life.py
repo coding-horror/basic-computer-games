@@ -13,12 +13,12 @@ MAX_WIDTH = 70
 MAX_HEIGHT = 24
 
 
-def print_centered(msg):
+def print_centered(msg) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

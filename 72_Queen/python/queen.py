@@ -141,7 +141,7 @@ def str_with_tab(indent: int, text: str, uppercase: bool = True) -> str:
     return " " * indent + text
 
 
-def intro():
+def intro() -> None:
     """Print the intro and print instructions if desired."""
     print(str_with_tab(33, "Queen"))
     print(str_with_tab(15, "Creative Computing  Morristown, New Jersey"))

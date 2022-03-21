@@ -66,7 +66,7 @@ def game_loop():
             return
 
 
-def print_list(numbers):
+def print_list(numbers) -> None:
     """Print out the list"""
     print(" ".join(map(str, numbers)))
 

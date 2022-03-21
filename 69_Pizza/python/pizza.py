@@ -14,12 +14,12 @@ customer_names = [chr(65 + x) for x in range(16)]
 street_names = [str(n) for n in range(1, 5)]
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -27,16 +27,16 @@ def print_header(title):
     print()
 
 
-def print_ticks():
+def print_ticks() -> None:
     for _ in range(4):
         print("-")
 
 
-def print_ruler():
+def print_ruler() -> None:
     print(" -----1-----2-----3-----4-----")
 
 
-def print_street(i):
+def print_street(i: int) -> None:
     street_number = 3 - i
 
     street_name = street_names[street_number]
@@ -52,7 +52,7 @@ def print_street(i):
     print(line)
 
 
-def print_map():
+def print_map() -> None:
     print("MAP OF THE CITY OF HYATTSVILLE")
     print()
     print_ruler()
@@ -64,7 +64,7 @@ def print_map():
     print()
 
 
-def print_instructions():
+def print_instructions() -> str:
     print("PIZZA DELIVERY GAME")
     print()
     print("WHAT IS YOUR FIRST NAME?")
@@ -101,7 +101,7 @@ def yes_no_prompt(msg):
         print("'YES' OR 'NO' PLEASE, NOW THEN,")
 
 
-def print_more_directions(player_name):
+def print_more_directions(player_name: str) -> None:
     print()
     print("SOMEBODY WILL ASK FOR A PIZZA TO BE")
     print("DELIVERED.  THEN A DELIVERY BOY WILL")
