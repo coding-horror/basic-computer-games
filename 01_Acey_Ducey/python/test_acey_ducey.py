@@ -1,5 +1,6 @@
 import io
 from unittest import mock
+from typing import TypeVar
 
 from acey_ducey import play_game
 
@@ -7,8 +8,9 @@ from acey_ducey import play_game
 @mock.patch("random.shuffle")
 def test_play_game_lose(mock_random_shuffle, monkeypatch, capsys) -> None:
     monkeypatch.setattr("sys.stdin", io.StringIO("100\n100"))
+    T = TypeVar("T")
 
-    def identity(x):
+    def identity(x: T) -> T:
         return x
 
     mock_random_shuffle = identity  # noqa: F841
