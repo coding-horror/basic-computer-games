@@ -5,6 +5,8 @@ from typing import Dict, List
 def has_implementation(lang: str, file_list: List[str], subdir_list: List[str]) -> bool:
     if lang == "csharp":
         return any(file.endswith(".cs") for file in file_list)
+    elif lang == "vbnet":
+        return any(file.endswith(".vb") for file in file_list)
     else:
         return len(file_list) > 1 or len(subdir_list) > 0
 
@@ -74,7 +76,7 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
 
 def write_file(path: str, languages: List[str], strings_done: List[List[str]]) -> None:
     dashes = " | ".join(["---"] * (len(languages) + 1))
-    write_string = "# TODO list\n" f" game | {' | '.join(languages)}\n" f"{dashes}\n"
+    write_string = f"# TODO list\n game | {' | '.join(languages)}\n{dashes}\n"
     sorted_strings = list(
         map(lambda l: " | ".join(l) + "\n", sorted(strings_done, key=lambda x: x[0]))
     )
