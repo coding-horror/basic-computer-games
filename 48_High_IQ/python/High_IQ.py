@@ -108,7 +108,7 @@ def print_board(board) -> None:
     print(" " * 2 + board[67] + board[68] + board[69])
 
 
-def play_game():
+def play_game() -> None:
     # Create new board
     board = new_board()
 

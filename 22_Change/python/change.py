@@ -35,7 +35,7 @@ def pennies_to_dollar_string(p):
     return ds
 
 
-def compute_change():
+def compute_change() -> None:
     print("COST OF ITEM?")
     cost = float(input())
     print("AMOUNT OF PAYMENT?")

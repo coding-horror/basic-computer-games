@@ -396,7 +396,7 @@ def print_scan_results(
         print(sep)
 
 
-def phaser_control():
+def phaser_control() -> None:
     # Take phaser control input and fire phasers.
     global e, k, g, z, k3, k9
 
@@ -428,7 +428,7 @@ def phaser_control():
 
     e -= x
     if d[7] < 0:  # bug in original, was d[6]
-        x *= random.random()
+        x *= random.random()  # type: ignore
 
     h1 = int(x / k3)
     for i in range(3):
@@ -458,7 +458,7 @@ def phaser_control():
     klingons_fire()
 
 
-def photon_torpedoes():
+def photon_torpedoes() -> None:
     # Take photon torpedo input and process firing of torpedoes.
     global e, p, k3, k9, k, b3, b9, docked, g, z
 
@@ -489,8 +489,8 @@ def photon_torpedoes():
     x3, y3 = x, y
     print("TORPEDO TRACK:")
     while True:
-        x += x1
-        y += x2
+        x += x1  # type: ignore
+        y += x2  # type: ignore
         x3, y3 = round(x), round(y)
         if x3 < 0 or x3 > 7 or y3 < 0 or y3 > 7:
             print("TORPEDO MISSED")
@@ -567,7 +567,7 @@ def klingons_fire():
             print(f"DAMAGE CONTROL REPORTS  '{devices[r1]} DAMAGED BY THE HIT'")
 
 
-def shield_control():
+def shield_control() -> None:
     # Raise or lower the shields.
     global e, s
 

@@ -181,7 +181,7 @@ def display(Game: TicTacToe) -> None:
     print(line1, "\n\n")
 
 
-def play():
+def play() -> None:
     Pick = input("Pick 'X' or 'O' ").strip().upper()
     if Pick == "O":
         Game = TicTacToe("O")

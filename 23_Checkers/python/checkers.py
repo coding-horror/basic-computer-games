@@ -62,7 +62,7 @@ def is_legal_board_coordinate(x, y):
 
 
 class Board:
-    def __init__(self):
+    def __init__(self) -> None:
         self.spaces = [[0 for y in range(8)] for x in range(8)]
         for x in range(8):
             if (x % 2) == 0:
@@ -74,7 +74,7 @@ class Board:
                 self.spaces[x][5] = COMPUTER_PIECE
                 self.spaces[x][1] = HUMAN_PIECE
 
-    def __str__(self):
+    def __str__(self) -> str:
         pieces = {
             EMPTY_SPACE: ".",
             HUMAN_PIECE: "O",
