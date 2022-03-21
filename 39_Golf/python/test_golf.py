@@ -16,7 +16,7 @@ from golf import (
 )
 
 
-def test_odds():
+def test_odds() -> None:
     n = 1000
     p = sum(odds(50) for i in range(n)) / n
     assert abs(p - 0.5) < 0.1

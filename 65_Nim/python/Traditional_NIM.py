@@ -44,7 +44,7 @@ class NIM:
     def _command_integrity(self, num, pile):
         return pile <= 4 and pile >= 1 and num <= self.piles[pile]
 
-    def print_pegs(self):
+    def print_pegs(self) -> None:
         for pile, peg in self.piles.items():
             print("Pile {} : {}".format(pile, "O " * peg))
 

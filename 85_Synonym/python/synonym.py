@@ -11,12 +11,12 @@ import random
 PAGE_WIDTH = 64
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -24,7 +24,7 @@ def print_header(title):
     print()
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("A SYNONYM OF A WORD MEANS ANOTHER WORD IN THE ENGLISH")
     print("LANGUAGE WHICH HAS THE SAME OR VERY NEARLY THE SAME MEANING.")
     print("I CHOOSE A WORD -- YOU TYPE A SYNONYM.")
@@ -49,7 +49,7 @@ synonym_words = [
 ]
 
 
-def print_right():
+def print_right() -> None:
     print(random.choice(right_words))
 
 

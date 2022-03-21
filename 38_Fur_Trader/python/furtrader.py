@@ -22,7 +22,7 @@ FORT_NEWYORK = 3
 FORT_NAMES = ["HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"]
 
 
-def print_at_column(column: int, words: str):
+def print_at_column(column: int, words: str) -> None:
     """Print the words at the specified column"""
     spaces = " " * column  # make a fat string of spaces
     print(spaces + words)

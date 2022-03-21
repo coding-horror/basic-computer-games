@@ -36,8 +36,8 @@ def flip_bits(
     """
     while m == n:
         r = r_function(n)
-        n = r - int(math.floor(r))
-        n = int(10 * n)
+        n_tmp = r - int(math.floor(r))
+        n = int(10 * n_tmp)
         if row[n] == "X":
             row[n] = "O"
             break
@@ -46,7 +46,7 @@ def flip_bits(
     return row, n
 
 
-def print_instructions():
+def print_instructions() -> None:
     print(" " * 32 + "FLIPFLOP")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n" * 2)

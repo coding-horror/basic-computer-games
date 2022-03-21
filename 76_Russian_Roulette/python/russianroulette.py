@@ -21,7 +21,7 @@ from random import random
 NUMBER_OF_ROUNDS = 9
 
 
-def initial_message():
+def initial_message() -> None:
     print(" " * 28 + "Russian Roulette")
     print(" " * 15 + "Creative Computing  Morristown, New Jersey\n\n\n")
     print("This is a game of >>>>>>>>>>Russian Roulette.\n")

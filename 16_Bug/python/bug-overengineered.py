@@ -38,7 +38,7 @@ def main(states, data) -> None:
 Bodypart = namedtuple("Bodypart", ["name", "count", "depends"])
 
 
-def print_start(_):
+def print_start(_) -> str:
     """
     Prints start message
     """
@@ -64,7 +64,7 @@ def control_start(cmd):
     return action
 
 
-def print_instructions(data):
+def print_instructions(data) -> str:
     """
     Prints game instructions
     """
@@ -171,7 +171,7 @@ def get_finished(data):
     return finished
 
 
-def print_game(data):
+def print_game(data) -> str:
     """
     Displays the results of the game turn
     """
@@ -222,7 +222,7 @@ def print_game(data):
     return input("DO YOU WANT THE PICTURES? ") if len(data["logs"]) else "n"
 
 
-def print_pictures(data):
+def print_pictures(data) -> None:
     """
     Displays what the bugs look like for each player
     """
@@ -272,7 +272,7 @@ def control_game(cmd):
     return action
 
 
-def print_winner(data):
+def print_winner(data) -> None:
     """
     Displays the winning message
     """
@@ -288,7 +288,7 @@ def exit_game(_):
     return "exit"
 
 
-def print_centered(msg, width=PAGE_WIDTH):
+def print_centered(msg, width=PAGE_WIDTH) -> None:
     """
     Prints given message centered to given width
     """
@@ -296,7 +296,7 @@ def print_centered(msg, width=PAGE_WIDTH):
     print(spaces + msg)
 
 
-def print_table(rows):
+def print_table(rows) -> None:
     for row in rows:
         print(*row, sep="\t")
 

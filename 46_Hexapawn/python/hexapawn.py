@@ -61,12 +61,12 @@ wins = 0
 losses = 0
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header(title):
+def print_header(title: str) -> None:
     print_centered(title)
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -74,7 +74,7 @@ def print_header(title):
     print()
 
 
-def print_instructions():
+def print_instructions() -> None:
     print(
         """
 THIS PROGRAM PLAYS THE GAME OF HEXAPAWN.
@@ -215,7 +215,7 @@ def init_board():
     return [COMPUTER_PIECE] * 3 + [EMPTY_SPACE] * 3 + [HUMAN_PIECE] * 3
 
 
-def print_board(board):
+def print_board(board) -> None:
     piece_dict = {COMPUTER_PIECE: "X", EMPTY_SPACE: ".", HUMAN_PIECE: "O"}
 
     space = " " * 10
@@ -242,7 +242,7 @@ def get_coordinates():
             print_illegal()
 
 
-def print_illegal():
+def print_illegal() -> None:
     print("ILLEGAL MOVE.")
 
 

@@ -2,16 +2,16 @@ import random
 import time
 
 
-def print_n_whitespaces(n: int):
+def print_n_whitespaces(n: int) -> None:
     print(" " * n, end="")
 
 
-def print_n_newlines(n: int):
+def print_n_newlines(n: int) -> None:
     for _ in range(n):
         print()
 
 
-def print_feelers(n_feelers, is_player=True):
+def print_feelers(n_feelers, is_player: bool = True) -> None:
     for _ in range(4):
         print_n_whitespaces(10)
         for _ in range(n_feelers):
@@ -19,7 +19,7 @@ def print_feelers(n_feelers, is_player=True):
         print()
 
 
-def print_head():
+def print_head() -> None:
     print("        HHHHHHH")
     print("        H     H")
     print("        H O O H")
@@ -28,12 +28,12 @@ def print_head():
     print("        HHHHHHH")
 
 
-def print_neck():
+def print_neck() -> None:
     print("          N N")
     print("          N N")
 
 
-def print_body(has_tail=False):
+def print_body(has_tail: bool = False) -> None:
     print("     BBBBBBBBBBBB")
     print("     B          B")
     print("     B          B")
@@ -41,7 +41,7 @@ def print_body(has_tail=False):
     print("     BBBBBBBBBBBB")
 
 
-def print_legs(n_legs):
+def print_legs(n_legs: int) -> None:
     for _ in range(2):
         print_n_whitespaces(5)
         for _ in range(n_legs):

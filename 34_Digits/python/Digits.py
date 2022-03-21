@@ -56,7 +56,7 @@ def read_continue_choice():
         return False
 
 
-def print_summary_report(running_correct: int):
+def print_summary_report(running_correct: int) -> None:
     print()
     if running_correct > 10:
         print()
