@@ -4,7 +4,7 @@ import random
 QUESTION_PROMPT = "? "
 
 
-def play():
+def play() -> None:
     print("BOXING")
     print("CREATIVE COMPUTING   MORRISTOWN, NEW JERSEY")
     print("\n\n")

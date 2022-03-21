@@ -3,7 +3,7 @@ import random
 import time
 
 
-def basic_print(*zones, **kwargs):
+def basic_print(*zones, **kwargs) -> None:
     """Simulates the PRINT command from BASIC to some degree.
     Supports `printing zones` if given multiple arguments."""
 
