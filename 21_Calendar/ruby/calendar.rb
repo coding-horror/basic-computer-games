@@ -1,8 +1,4 @@
 class Calendar
-  def initialize
-    $stdout.sync = true    
-  end
-
   def parse_input
     days_mapping = {
       "sunday": 0,
@@ -48,7 +44,7 @@ class Calendar
     return day, leap_day
   end
 
-  def calendar(weekday, leap_year)
+  def start(weekday, leap_year)
     months_days = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     days = "S        M        T        W        T        F        S\n"
     sep = "*" * 59
@@ -106,13 +102,12 @@ class Calendar
       d -= g if d2 > months_days[n]
       print "\n"
     end
-    print("\n")
+    print "\n"
   end
 end
 
-
-calendar = Calendar.new
-input = calendar.parse_input
-
-calendar.calendar(input[0], input[1])
-
+if __FILE__ == $0
+  calendar = Calendar.new
+  input = calendar.parse_input
+  calendar.start(input[0], input[1])
+end
