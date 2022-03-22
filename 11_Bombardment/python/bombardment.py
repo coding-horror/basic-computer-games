@@ -43,12 +43,11 @@ def generate_enemy_positions() -> Set[int]:
     return set(positions[:4])
 
 
-def is_valid_position(pos) -> bool:
+def is_valid_position(pos: int) -> bool:
     return pos in positions_list()
 
 
 def prompt_for_player_positions() -> Set[int]:
-
     while True:
         raw_positions = input("WHAT ARE YOUR FOUR POSITIONS? ")
         positions = {int(pos) for pos in raw_positions.split()}
@@ -75,7 +74,13 @@ def prompt_player_for_target() -> int:
         return target
 
 
-def attack(target, positions, hit_message, miss_message, progress_messages) -> bool:
+def attack(
+    target: int,
+    positions: Set[int],
+    hit_message: str,
+    miss_message: str,
+    progress_messages: str,
+) -> bool:
     """Performs attack procedure returning True if we are to continue."""
 
     if target in positions:
@@ -89,9 +94,12 @@ def attack(target, positions, hit_message, miss_message, progress_messages) -> b
 
 
 def init_enemy() -> Callable[[], int]:
-    """Returns a closure analogous to prompt_player_for_target. Will
-    choose from a unique sequence of positions to avoid picking the
-    same position twice."""
+    """
+    Return a closure analogous to prompt_player_for_target.
+
+    Will choose from a unique sequence of positions to avoid picking the
+    same position twice.
+    """
 
     position_sequence = positions_list()
     random.shuffle(position_sequence)
