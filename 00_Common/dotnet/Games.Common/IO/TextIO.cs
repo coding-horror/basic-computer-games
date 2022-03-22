@@ -29,6 +29,15 @@ public class TextIO : IReadWrite
         _numberTokenReader = TokenReader.ForNumbers(this);
     }
 
+    public virtual char ReadCharacter()
+    {
+        while(true)
+        {
+            var ch = _input.Read();
+            if (ch != -1) { return (char)ch; }
+        }
+    }
+
     public float ReadNumber(string prompt) => ReadNumbers(prompt, 1)[0];
 
     public (float, float) Read2Numbers(string prompt)
@@ -98,6 +107,8 @@ public class TextIO : IReadWrite
     public void Write(object value) => _output.Write(value.ToString());
 
     public void WriteLine(object value) => _output.WriteLine(value.ToString());
+
+    public void Write(string format, params object[] values) => _output.Write(format, values);
 
     public void WriteLine(string format, params object[] values) => _output.WriteLine(format, values);
 

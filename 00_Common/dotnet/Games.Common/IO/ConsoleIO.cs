@@ -12,4 +12,6 @@ public sealed class ConsoleIO : TextIO
         : base(Console.In, Console.Out)
     {
     }
+
+    public override char ReadCharacter() => Console.ReadKey(intercept: true).KeyChar;
 }

@@ -9,6 +9,12 @@ namespace Games.Common.IO;
 public interface IReadWrite
 {
     /// <summary>
+    /// Reads a character from input.
+    /// </summary>
+    /// <returns>The character read.</returns>
+    char ReadCharacter();
+
+    /// <summary>
     /// Reads a <see cref="float" /> value from input.
     /// </summary>
     /// <param name="prompt">The text to display to prompt for the value.</param>
@@ -96,6 +102,13 @@ public interface IReadWrite
 
     /// <summary>
     /// Writes a formatted string to output.
+    /// </summary>
+    /// <param name="format">The format <see cref="string" /> to be written.</param>
+    /// <param name="value">The values to be inserted into the format.</param>
+    void Write(string format, params object[] values);
+
+    /// <summary>
+    /// Writes a formatted string to output followed by a new-line.
     /// </summary>
     /// <param name="format">The format <see cref="string" /> to be written.</param>
     /// <param name="value">The values to be inserted into the format.</param>
