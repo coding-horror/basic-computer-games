@@ -40,8 +40,8 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
 
     empty_boxes = ["⬜️" for _ in checklist_orig]
     checklist = empty_boxes[:]
-    for dir_name, subdir_list, file_list in os.walk(root_dir):
 
+    for dir_name, subdir_list, file_list in sorted(os.walk(root_dir)):
         # split_dir[1] is the game
         # split_dir[2] is the language
         split_dir = dir_name.split(os.path.sep)
@@ -49,7 +49,7 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
         if len(split_dir) == 2 and split_dir[1] not in ignore_folders:
             if prev_game == "":
                 prev_game = split_dir[1]
-                checklist[0] = split_dir[1]
+                checklist[0] = f"{split_dir[1]:<30}"
 
             if prev_game != split_dir[1]:
                 # it's a new dir
@@ -75,8 +75,10 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
 
 
 def write_file(path: str, languages: List[str], strings_done: List[List[str]]) -> None:
-    dashes = " | ".join(["---"] * (len(languages) + 1))
-    write_string = f"# TODO list\n game | {' | '.join(languages)}\n{dashes}\n"
+    dashes_arr = ["---"] * (len(languages) + 1)
+    dashes_arr[0] = "-" * 30
+    dashes = " | ".join(dashes_arr)
+    write_string = f"# TODO list\n {'game':<30}| {' | '.join(languages)}\n{dashes}\n"
     sorted_strings = list(
         map(lambda l: " | ".join(l) + "\n", sorted(strings_done, key=lambda x: x[0]))
     )
@@ -87,17 +89,17 @@ def write_file(path: str, languages: List[str], strings_done: List[List[str]]) -
 
 
 if __name__ == "__main__":
-    languages = [
-        "csharp",
-        "java",
-        "javascript",
-        "kotlin",
-        "lua",
-        "perl",
-        "python",
-        "ruby",
-        "rust",
-        "vbnet",
-    ]
-    strings_done = get_data(["game"] + languages[:])
-    write_file("TODO.md", languages, strings_done)
+    languages = {
+        "csharp": "C#",
+        "java": "Java",
+        "javascript": "JS",
+        "kotlin": "Kotlin",
+        "lua": "Lua",
+        "perl": "Perl",
+        "python": "Python",
+        "ruby": "Ruby",
+        "rust": "Rust",
+        "vbnet": "VB.NET",
+    }
+    strings_done = get_data(["game"] + list(languages.keys()))
+    write_file("TODO.md", list(languages.values()), strings_done)
