@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-# BANNER
-#
-# Converted from BASIC to Python by Trevor Hobson
+"""
+BANNER
+
+Converted from BASIC to Python by Trevor Hobson
+"""
 
 letters = {
     " ": [0, 0, 0, 0, 0, 0, 0],
@@ -56,8 +58,8 @@ def print_banner() -> None:
 
     while True:
         try:
-            x = int(input("Horizontal "))
-            if x < 1:
+            horizontal = int(input("Horizontal "))
+            if horizontal < 1:
                 raise ValueError("Horizontal must be greater than zero")
             break
 
@@ -65,8 +67,8 @@ def print_banner() -> None:
             print("Please enter a number greater than zero")
     while True:
         try:
-            y = int(input("Vertical "))
-            if y < 1:
+            vertical = int(input("Vertical "))
+            if vertical < 1:
                 raise ValueError("Vertical must be greater than zero")
             break
 
@@ -75,18 +77,20 @@ def print_banner() -> None:
     g1 = 0
     if input("Centered ").lower().startswith("y"):
         g1 = 1
-    mStr = input("Character (type 'ALL' if you want character being printed) ").upper()
-    aStr = input("Statement ")
+    character = input(
+        "Character (type 'ALL' if you want character being printed) "
+    ).upper()
+    statement = input("Statement ")
 
     input("Set page ")  # This means to prepare printer, just press Enter
 
-    for lStr in aStr:
-        s = letters[lStr].copy()
-        xStr = mStr
-        if mStr == "ALL":
-            xStr = lStr
+    for statement_char in statement:
+        s = letters[statement_char].copy()
+        xStr = character
+        if character == "ALL":
+            xStr = statement_char
         if xStr == " ":
-            print("\n" * (7 * x))
+            print("\n" * (7 * horizontal))
         else:
             for u in range(0, 7):
                 for k in range(8, -1, -1):
@@ -98,16 +102,16 @@ def print_banner() -> None:
                         if s[u] == 1:
                             f[u] = 8 - k
                             break
-                for _t1 in range(1, x + 1):
-                    line_str = " " * int((63 - 4.5 * y) * g1 / len(xStr) + 1)
+                for _t1 in range(1, horizontal + 1):
+                    line_str = " " * int((63 - 4.5 * vertical) * g1 / len(xStr) + 1)
                     for b in range(0, f[u] + 1):
                         if j[b] == 0:
-                            for _ in range(1, y + 1):
+                            for _ in range(1, vertical + 1):
                                 line_str = line_str + " " * len(xStr)
                         else:
-                            line_str = line_str + xStr * y
+                            line_str = line_str + xStr * vertical
                     print(line_str)
-            print("\n" * (2 * x - 1))
+            print("\n" * (2 * horizontal - 1))
     # print("\n" * 75)  # Feed some more paper from the printer
 
 
