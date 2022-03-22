@@ -1,12 +1,14 @@
 import io
 from unittest import mock
 from typing import TypeVar
+from _pytest.capture import CaptureFixture
+from _pytest.monkeypatch import MonkeyPatch
 
 from acey_ducey import play_game
 
 
 @mock.patch("random.shuffle")
-def test_play_game_lose(mock_random_shuffle, monkeypatch, capsys) -> None:
+def test_play_game_lose(mock_random_shuffle, monkeypatch: MonkeyPatch, capsys: CaptureFixture) -> None:
     monkeypatch.setattr("sys.stdin", io.StringIO("100\n100"))
     T = TypeVar("T")
 

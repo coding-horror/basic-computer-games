@@ -1,46 +1,44 @@
-########################################################
-#
-# Animal
-#
-# From: Basic computer Games(1978)
-#
-#    Unlike other computer games in which the computer
-#   picks a number or letter and you must guess what it is,
-#   in this game you think of an animal and the computer asks
-#   you questions and tries to guess the name of your animal.
-#   If the computer guesses incorrectly, it will ask you for a
-#   question that differentiates the animal it guessed
-#   from the one you were thinking of. In this way the
-#   computer "learns" new animals. Questions to differentiate
-#   new animals should be input without a question mark.
-#    This version of the game does not have a SAVE feature.
-#   If your sistem allows, you may modify the program to
-#   save array A$, then reload the array  when you want
-#   to play the game again. This way you can save what the
-#   computer learns over a series of games.
-#    At any time if you reply 'LIST' to the question "ARE YOU
-#   THINKING OF AN ANIMAL", the computer will tell you all the
-#   animals it knows so far.
-#    The program starts originally by knowing only FISH and BIRD.
-#   As you build up a file of animals you should use broad,
-#   general questions first and then narrow down to more specific
-#   ones with later animals. For example, If an elephant was to be
-#   your first animal, the computer would ask for a question to distinguish
-#   an elephant from a bird. Naturally there are hundreds of possibilities,
-#   however, if you plan to build a large file of animals a good question
-#   would be "IS IT A MAMAL".
-#    This program can be easily modified to deal with categories of
-#   things other than animals by simply modifying the initial data
-#   in Line 530 and the dialogue references to animal in Lines 10,
-#   40, 50, 130, 230, 240 and 600. In an educational environment, this
-#   would be a valuable program to teach the distinguishing chacteristics
-#   of many classes of objects -- rock formations, geography, marine life,
-#   cell structures, etc.
-#    Originally developed by Arthur Luehrmann at Dartmouth College,
-#   Animal was subsequently shortened and modified by Nathan Teichholtz at
-#   DEC and Steve North at Creative Computing
-#
-########################################################
+"""
+Animal
+
+From: Basic computer Games(1978)
+
+   Unlike other computer games in which the computer
+  picks a number or letter and you must guess what it is,
+  in this game you think of an animal and the computer asks
+  you questions and tries to guess the name of your animal.
+  If the computer guesses incorrectly, it will ask you for a
+  question that differentiates the animal it guessed
+  from the one you were thinking of. In this way the
+  computer "learns" new animals. Questions to differentiate
+  new animals should be input without a question mark.
+   This version of the game does not have a SAVE feature.
+  If your sistem allows, you may modify the program to
+  save array A$, then reload the array  when you want
+  to play the game again. This way you can save what the
+  computer learns over a series of games.
+   At any time if you reply 'LIST' to the question "ARE YOU
+  THINKING OF AN ANIMAL", the computer will tell you all the
+  animals it knows so far.
+   The program starts originally by knowing only FISH and BIRD.
+  As you build up a file of animals you should use broad,
+  general questions first and then narrow down to more specific
+  ones with later animals. For example, If an elephant was to be
+  your first animal, the computer would ask for a question to distinguish
+  an elephant from a bird. Naturally there are hundreds of possibilities,
+  however, if you plan to build a large file of animals a good question
+  would be "IS IT A MAMAL".
+   This program can be easily modified to deal with categories of
+  things other than animals by simply modifying the initial data
+  in Line 530 and the dialogue references to animal in Lines 10,
+  40, 50, 130, 230, 240 and 600. In an educational environment, this
+  would be a valuable program to teach the distinguishing chacteristics
+  of many classes of objects -- rock formations, geography, marine life,
+  cell structures, etc.
+   Originally developed by Arthur Luehrmann at Dartmouth College,
+  Animal was subsequently shortened and modified by Nathan Teichholtz at
+  DEC and Steve North at Creative Computing
+"""
 
 from typing import Optional
 
@@ -80,7 +78,7 @@ class Node:
 
 
 def list_known_animals(root_node: Optional[Node]) -> None:
-    # Traversing the tree by recursion until we reach the leafs
+    """Traversing the tree by recursion until we reach the leafs."""
     if root_node is None:
         return
 
