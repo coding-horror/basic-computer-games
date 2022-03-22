@@ -1,30 +1,30 @@
+using Games.Common.IO;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems.ComputerFunctions
+namespace SuperStarTrek.Systems.ComputerFunctions;
+
+internal class DirectionDistanceCalculator : NavigationCalculator
 {
-    internal class DirectionDistanceCalculator : NavigationCalculator
+    private readonly Enterprise _enterprise;
+    private readonly IReadWrite _io;
+
+    internal DirectionDistanceCalculator(Enterprise enterprise, IReadWrite io)
+        : base("Direction/distance calculator", io)
     {
-        private readonly Enterprise _enterprise;
-        private readonly Input _input;
+        _enterprise = enterprise;
+        _io = io;
+    }
 
-        internal DirectionDistanceCalculator(Enterprise enterprise, Output output, Input input)
-            : base("Direction/distance calculator", output)
-        {
-            _enterprise = enterprise;
-            _input = input;
-        }
+    internal override void Execute(Quadrant quadrant)
+    {
+        IO.WriteLine("Direction/distance calculator:");
+        IO.Write($"You are at quadrant {_enterprise.QuadrantCoordinates}");
+        IO.WriteLine($" sector {_enterprise.SectorCoordinates}");
+        IO.WriteLine("Please enter");
 
-        internal override void Execute(Quadrant quadrant)
-        {
-            Output.WriteLine("Direction/distance calculator:")
-                .Write($"You are at quadrant {_enterprise.QuadrantCoordinates}")
-                .WriteLine($" sector {_enterprise.SectorCoordinates}")
-                .WriteLine("Please enter");
-
-            WriteDirectionAndDistance(
-                _input.GetCoordinates("  Initial coordinates"),
-                _input.GetCoordinates("  Final coordinates"));
-        }
+        WriteDirectionAndDistance(
+            _io.GetCoordinates("  Initial coordinates"),
+            _io.GetCoordinates("  Final coordinates"));
     }
 }

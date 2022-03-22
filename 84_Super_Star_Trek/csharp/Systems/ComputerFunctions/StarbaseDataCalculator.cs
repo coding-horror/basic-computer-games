@@ -1,30 +1,30 @@
+using Games.Common.IO;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Resources;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems.ComputerFunctions
+namespace SuperStarTrek.Systems.ComputerFunctions;
+
+internal class StarbaseDataCalculator : NavigationCalculator
 {
-    internal class StarbaseDataCalculator : NavigationCalculator
+    private readonly Enterprise _enterprise;
+
+    internal StarbaseDataCalculator(Enterprise enterprise, IReadWrite io)
+        : base("Starbase nav data", io)
     {
-        private readonly Enterprise _enterprise;
+        _enterprise = enterprise;
+    }
 
-        internal StarbaseDataCalculator(Enterprise enterprise, Output output)
-            : base("Starbase nav data", output)
+    internal override void Execute(Quadrant quadrant)
+    {
+        if (!quadrant.HasStarbase)
         {
-            _enterprise = enterprise;
+            IO.WriteLine(Strings.NoStarbase);
+            return;
         }
 
-        internal override void Execute(Quadrant quadrant)
-        {
-            if (!quadrant.HasStarbase)
-            {
-                Output.WriteLine(Strings.NoStarbase);
-                return;
-            }
+        IO.WriteLine("From Enterprise to Starbase:");
 
-            Output.WriteLine("From Enterprise to Starbase:");
-
-            WriteDirectionAndDistance(_enterprise.SectorCoordinates, quadrant.Starbase.Sector);
-        }
+        WriteDirectionAndDistance(_enterprise.SectorCoordinates, quadrant.Starbase.Sector);
     }
 }

@@ -1,31 +1,11 @@
-﻿using System;
-using System.Reflection;
+﻿using Games.Common.IO;
+using Love;
+using Love.Resources;
 
-namespace Love
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            DisplayIntro();
+var io = new ConsoleIO();
 
-            var message = Input.ReadLine("Your message, please");
-            var pattern = new LovePattern();
+io.Write(Resource.Streams.Intro);
 
-            var source = new SourceCharacters(pattern.LineLength, message);
+var message = io.ReadString("Your message, please");
 
-            using var destination = Console.OpenStandardOutput();
-
-            pattern.Write(source, destination);
-        }
-
-        private static void DisplayIntro()
-        {
-            using var stream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream("Love.Strings.Intro.txt");
-            using var stdout = Console.OpenStandardOutput();
-
-            stream.CopyTo(stdout);
-        }
-    }
-}
+io.Write(new LovePattern(message));
