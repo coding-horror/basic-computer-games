@@ -1,19 +1,19 @@
+using Games.Common.IO;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems.ComputerFunctions
+namespace SuperStarTrek.Systems.ComputerFunctions;
+
+internal abstract class ComputerFunction
 {
-    internal abstract class ComputerFunction
+    protected ComputerFunction(string description, IReadWrite io)
     {
-        protected ComputerFunction(string description, Output output)
-        {
-            Description = description;
-            Output = output;
-        }
-
-        internal string Description { get; }
-
-        protected Output Output { get; }
-
-        internal abstract void Execute(Quadrant quadrant);
+        Description = description;
+        IO = io;
     }
+
+    internal string Description { get; }
+
+    protected IReadWrite IO { get; }
+
+    internal abstract void Execute(Quadrant quadrant);
 }

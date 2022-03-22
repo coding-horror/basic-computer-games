@@ -1,54 +1,55 @@
+using Games.Common.IO;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems
+namespace SuperStarTrek.Systems;
+
+internal class DamageControl : Subsystem
 {
-    internal class DamageControl : Subsystem
+    private readonly Enterprise _enterprise;
+    private readonly IReadWrite _io;
+
+    internal DamageControl(Enterprise enterprise, IReadWrite io)
+        : base("Damage Control", Command.DAM, io)
     {
-        private readonly Enterprise _enterprise;
-        private readonly Output _output;
+        _enterprise = enterprise;
+        _io = io;
+    }
 
-        internal DamageControl(Enterprise enterprise, Output output)
-            : base("Damage Control", Command.DAM, output)
+    protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
+    {
+        if (IsDamaged)
         {
-            _enterprise = enterprise;
-            _output = output;
+            _io.WriteLine("Damage Control report not available");
+        }
+        else
+        {
+            _io.WriteLine();
+            WriteDamageReport();
         }
 
-        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
+        if (_enterprise.DamagedSystemCount > 0 && _enterprise.IsDocked)
         {
-            if (IsDamaged)
+            if (quadrant.Starbase.TryRepair(_enterprise, out var repairTime))
             {
-                _output.WriteLine("Damage Control report not available");
-            }
-            else
-            {
-                _output.NextLine();
                 WriteDamageReport();
+                return CommandResult.Elapsed(repairTime);
             }
-
-            if (_enterprise.DamagedSystemCount > 0 && _enterprise.IsDocked)
-            {
-                if (quadrant.Starbase.TryRepair(_enterprise, out var repairTime))
-                {
-                    WriteDamageReport();
-                    return CommandResult.Elapsed(repairTime);
-                }
-            }
-
-            return CommandResult.Ok;
         }
 
-        internal void WriteDamageReport()
+        return CommandResult.Ok;
+    }
+
+    internal void WriteDamageReport()
+    {
+        _io.WriteLine();
+        _io.WriteLine("Device             State of Repair");
+        foreach (var system in _enterprise.Systems)
         {
-            _output.NextLine().WriteLine("Device             State of Repair");
-            foreach (var system in _enterprise.Systems)
-            {
-                _output.Write(system.Name.PadRight(25))
-                    .WriteLine(((int)(system.Condition * 100) * 0.01).ToString(" 0.##;-0.##"));
-            }
-            _output.NextLine();
+            _io.Write(system.Name.PadRight(25));
+            _io.WriteLine((int)(system.Condition * 100) * 0.01F);
         }
+        _io.WriteLine();
     }
 }

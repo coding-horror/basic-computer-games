@@ -1,7 +1,6 @@
-namespace SuperStarTrek.Objects
+namespace SuperStarTrek.Objects;
+
+internal class Star
 {
-    internal class Star
-    {
-        public override string ToString() => " * ";
-    }
+    public override string ToString() => " * ";
 }
