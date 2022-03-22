@@ -1,48 +1,40 @@
 using System;
+using Games.Common.IO;
 
-namespace Hexapawn
+namespace Hexapawn;
+
+// A single game of Hexapawn
+internal class Game
 {
-    // Runs a single game of Hexapawn
-    internal class Game
+    private readonly TextIO _io;
+    private readonly Board _board;
+
+    public Game(TextIO io)
     {
-        private readonly Board _board;
-        private readonly Human _human;
-        private readonly Computer _computer;
+        _board = new Board();
+        _io = io;
+    }
 
-        public Game(Human human, Computer computer)
+    public object Play(Human human, Computer computer)
+    {
+        _io.WriteLine(_board);
+        while(true)
         {
-            _board = new Board();
-            _human = human;
-            _computer = computer;
-        }
-
-        public IPlayer Play()
-        {
-            Console.WriteLine(_board);
-
-            while(true)
+            human.Move(_board);
+            _io.WriteLine(_board);
+            if (!computer.TryMove(_board))
             {
-                _human.Move(_board);
-
-                Console.WriteLine(_board);
-
-                if (!_computer.TryMove(_board))
-                {
-                    return _human;
-                }
-
-                Console.WriteLine(_board);
-
-                if (_computer.IsFullyAdvanced(_board) || _human.HasNoPawns(_board))
-                {
-                    return _computer;
-                }
-
-                if (!_human.HasLegalMove(_board))
-                {
-                    Console.Write("You can't move, so ");
-                    return _computer;
-                }
+                return human;
+            }
+            _io.WriteLine(_board);
+            if (computer.IsFullyAdvanced(_board) || human.HasNoPawns(_board))
+            {
+                return computer;
+            }
+            if (!human.HasLegalMove(_board))
+            {
+                _io.Write("You can't move, so ");
+                return computer;
             }
         }
     }

@@ -23,24 +23,18 @@
 // ****  CONVERTED TO MICROSOFT C# 2/20/21 BY ANDREW COOPER
 // ****
 
-namespace SuperStarTrek
+using Games.Common.IO;
+using Games.Common.Randomness;
+using SuperStarTrek;
+
+var io = new ConsoleIO();
+var random = new RandomNumberGenerator();
+
+var game = new Game(io, random);
+
+game.DoIntroduction();
+
+do
 {
-    internal class Program
-    {
-        static void Main()
-        {
-            var output = new Output();
-            var input = new Input(output);
-            var random = new Random();
-
-            var game = new Game(output, input, random);
-
-            game.DoIntroduction();
-
-            do
-            {
-                game.Play();
-            } while (game.Replay());
-        }
-    }
-}
+    game.Play();
+} while (game.Replay());

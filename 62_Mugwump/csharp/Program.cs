@@ -1,33 +1,12 @@
-﻿using System;
-using System.Reflection;
+﻿global using System;
+global using Games.Common.IO;
+global using Games.Common.Randomness;
 
-namespace Mugwump
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            DisplayIntro();
+using Mugwump;
 
-            var random = new Random();
+var random = new RandomNumberGenerator();
+var io = new ConsoleIO();
 
-            while (true)
-            {
-                Game.Play(random);
+var game = new Game(io, random);
 
-                Console.WriteLine();
-                Console.WriteLine("That was fun! Let's play again.......");
-                Console.WriteLine("Four more mugwumps are now in hiding.");
-            }
-        }
-
-        private static void DisplayIntro()
-        {
-            using var stream = Assembly.GetExecutingAssembly()
-                .GetManifestResourceStream("Mugwump.Strings.Intro.txt");
-            using var stdout = Console.OpenStandardOutput();
-
-            stream.CopyTo(stdout);
-        }
-    }
-}
+game.Play();
