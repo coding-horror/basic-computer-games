@@ -6,7 +6,7 @@ A physics simulation
 Ported by Dave LeCompte
 """
 
-from typing import Tuple
+from typing import Tuple, List
 
 PAGE_WIDTH = 64
 
@@ -51,8 +51,8 @@ def print_at_tab(line: str, tab: int, s: str) -> str:
     return line
 
 
-def run_simulation(delta_t, v0, coeff_rest) -> None:
-    bounce_time = [0] * 20  # time of each bounce
+def run_simulation(delta_t: float, v0: float, coeff_rest: float) -> None:
+    bounce_time: List[float] = [0] * 20  # time of each bounce
 
     print("FEET")
     print()
@@ -67,7 +67,7 @@ def run_simulation(delta_t, v0, coeff_rest) -> None:
         line = ""
         if int(h) == h:
             line += str(int(h))
-        total_time = 0
+        total_time: float = 0
         for i in range(1, sim_dur + 1):
             tm: float = 0
             while tm <= bounce_time[i]:
