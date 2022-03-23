@@ -2,7 +2,6 @@ import io
 
 from _pytest.capture import CaptureFixture
 from _pytest.monkeypatch import MonkeyPatch
-
 from boxing import play
 
 

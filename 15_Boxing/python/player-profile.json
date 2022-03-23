@@ -1,0 +1,38 @@
+{
+    "1": {
+        "choices": 30,
+        "threshold": 10,
+        "hit_damage": 15,
+        "block_damage": 0,
+        "pre_msg": "{active.name} SWINGS AND",
+        "hit_msg": "HE CONNECTS!",
+        "blocked_msg": "HE MISSES"
+    },
+    "2": {
+        "choices": 2,
+        "threshold": 1,
+        "hit_damage": 7,
+        "block_damage": 0,
+        "pre_msg": "{active.name} GIVES THE HOOK...",
+        "hit_msg": "CONNECTS...",
+        "blocked_msg": "BUT IT'S BLOCKED!!!!!!!!!!!!!"
+    },
+    "3": {
+        "choices": 100,
+        "threshold": 50,
+        "hit_damage": 4,
+        "block_damage": 0,
+        "pre_msg": "{player_name} TRIES AN UPPERCUT",
+        "hit_msg": "AND HE CONNECTS!",
+        "blocked_msg": "AND IT'S BLOCKED (LUCKY BLOCK!)"
+    },
+    "4": {
+        "choices": 8,
+        "threshold": 3,
+        "hit_damage": 3,
+        "block_damage": 0,
+        "pre_msg": "{active.name} JABS AT {passive.name}'S HEAD",
+        "hit_msg": "AND HE CONNECTS!",
+        "blocked_msg": "AND IT'S BLOCKED (LUCKY BLOCK!)"
+    }
+}
