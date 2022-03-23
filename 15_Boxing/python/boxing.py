@@ -23,9 +23,9 @@ class HitStats(NamedTuple):
 @dataclass
 class Player:
     name: str
-    best: int  # TODO: This is never used!
+    best: int  # this hit guarantees 2 damage on opponent
+    weakness: int  # you're always hit when your opponent uses this punch
     is_computer: bool
-    weakness: int
 
     # for each of the 4 punch types, we have a probability of hitting
     hit_stats: Dict[Literal[1, 2, 3, 4], HitStats]
@@ -216,7 +216,7 @@ def play_round(round_number: int, player: Player, opponent: Player) -> None:
         # Load the hit characteristics of the current player's punch
         hit_stats = active.hit_stats[punch]
 
-        if punch == passive.weakness:
+        if punch == active.best:
             passive.damage += 2
 
         print(hit_stats.pre_msg.format(active=active, passive=passive), end=" ")
