@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, Literal, NamedTuple, Tuple
 
 
-class HitStats(NamedTuple):
+class PunchProfile(NamedTuple):
     choices: int
     threshold: int
     hit_damage: int
@@ -30,7 +30,7 @@ class Player:
     is_computer: bool
 
     # for each of the 4 punch types, we have a probability of hitting
-    hit_stats: Dict[Literal[1, 2, 3, 4], HitStats]
+    punch_profiles: Dict[Literal[1, 2, 3, 4], PunchProfile]
 
     damage: int = 0
     score: int = 0
@@ -68,12 +68,12 @@ def get_opponent_stats() -> Tuple[int, int]:
     return opponent_best, opponent_weakness
 
 
-def read_hit_stats(filepath: Path) -> Dict[Literal[1, 2, 3, 4], HitStats]:
+def read_punch_profiles(filepath: Path) -> Dict[Literal[1, 2, 3, 4], PunchProfile]:
     with open(filepath) as f:
-        hit_stats_dict = json.load(f)
+        punch_profile_dict = json.load(f)
     result = {}
-    for key, value in hit_stats_dict.items():
-        result[int(key)] = HitStats(**value)
+    for key, value in punch_profile_dict.items():
+        result[int(key)] = PunchProfile(**value)
     return result  # type: ignore
 
 
@@ -97,7 +97,9 @@ def play() -> None:
         best=player_best,
         weakness=player_weakness,
         is_computer=False,
-        hit_stats=read_hit_stats(Path(__file__).parent / "player-profile.json"),
+        punch_profiles=read_punch_profiles(
+            Path(__file__).parent / "player-profile.json"
+        ),
     )
 
     opponent_best, opponent_weakness = get_opponent_stats()
@@ -106,7 +108,9 @@ def play() -> None:
         best=opponent_best,
         weakness=opponent_weakness,
         is_computer=True,
-        hit_stats=read_hit_stats(Path(__file__).parent / "opponent-profile.json"),
+        punch_profiles=read_punch_profiles(
+            Path(__file__).parent / "opponent-profile.json"
+        ),
     )
 
     print(
@@ -148,21 +152,21 @@ def play_round(round_number: int, player: Player, opponent: Player) -> None:
             passive = opponent
 
         # Load the hit characteristics of the current player's punch
-        hit_stats = active.hit_stats[punch]
+        punch_profile = active.punch_profiles[punch]
 
         if punch == active.best:
             passive.damage += 2
 
-        print(hit_stats.pre_msg.format(active=active, passive=passive), end=" ")
-        if passive.weakness == punch or hit_stats.is_hit():
-            print(hit_stats.hit_msg.format(active=active, passive=passive))
-            if hit_stats.knockout_possible and passive.damage > KNOCKOUT_THRESHOLD:
+        print(punch_profile.pre_msg.format(active=active, passive=passive), end=" ")
+        if passive.weakness == punch or punch_profile.is_hit():
+            print(punch_profile.hit_msg.format(active=active, passive=passive))
+            if punch_profile.knockout_possible and passive.damage > KNOCKOUT_THRESHOLD:
                 passive.knockedout = True
                 break
-            passive.damage += hit_stats.hit_damage
+            passive.damage += punch_profile.hit_damage
         else:
-            print(hit_stats.blocked_msg.format(active=active, passive=passive))
-            active.damage += hit_stats.block_damage
+            print(punch_profile.blocked_msg.format(active=active, passive=passive))
+            active.damage += punch_profile.block_damage
 
     if player.knockedout or opponent.knockedout:
         return
