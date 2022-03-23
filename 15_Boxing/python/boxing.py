@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+import json
 import random
 from dataclasses import dataclass
-from typing import Tuple, Dict, NamedTuple, Literal
+from pathlib import Path
+from typing import Dict, Literal, NamedTuple, Tuple
 
 
 class HitStats(NamedTuple):
@@ -47,7 +49,6 @@ class Player:
 
 KNOCKOUT_THRESHOLD = 35
 
-# Texts
 QUESTION_PROMPT = "? "
 KNOCKED_COLD = "{loser} IS KNOCKED COLD AND {winner} IS THE WINNER AND CHAMP"
 
@@ -65,6 +66,15 @@ def get_opponent_stats() -> Tuple[int, int]:
         opponent_best = random.randint(1, 4)
         opponent_weakness = random.randint(1, 4)
     return opponent_best, opponent_weakness
+
+
+def read_hit_stats(filepath: Path) -> Dict[Literal[1, 2, 3, 4], HitStats]:
+    with open(filepath) as f:
+        hit_stats_dict = json.load(f)
+    result = {}
+    for key, value in hit_stats_dict.items():
+        result[int(key)] = HitStats(**value)
+    return result  # type: ignore
 
 
 def play() -> None:
@@ -87,44 +97,7 @@ def play() -> None:
         best=player_best,
         weakness=player_weakness,
         is_computer=False,
-        hit_stats={
-            1: HitStats(  # FULL SWING
-                choices=30,
-                threshold=10,
-                hit_damage=15,
-                block_damage=0,
-                pre_msg="{active.name} SWINGS AND",
-                hit_msg="HE CONNECTS!",
-                blocked_msg="HE MISSES",
-            ),
-            2: HitStats(  # HOOK
-                choices=2,
-                threshold=1,
-                hit_damage=7,
-                block_damage=0,
-                pre_msg="{active.name} GIVES THE HOOK...",
-                hit_msg="",
-                blocked_msg="",
-            ),
-            3: HitStats(  # UPPERCUT
-                choices=100,
-                threshold=50,
-                hit_damage=4,
-                block_damage=0,
-                pre_msg="{player_name} TRIES AN UPPERCUT",
-                hit_msg="AND HE CONNECTS!",
-                blocked_msg="AND IT'S BLOCKED (LUCKY BLOCK!)",
-            ),
-            4: HitStats(  # JAB
-                choices=8,
-                threshold=3,
-                hit_damage=3,
-                block_damage=0,
-                pre_msg="{active.name} JABS AT {passive.name}'S HEAD",
-                hit_msg="AND HE CONNECTS!",
-                blocked_msg="AND IT'S BLOCKED (LUCKY BLOCK!)",
-            ),
-        },
+        hit_stats=read_hit_stats(Path(__file__).parent / "player-profile.json"),
     )
 
     opponent_best, opponent_weakness = get_opponent_stats()
@@ -133,46 +106,7 @@ def play() -> None:
         best=opponent_best,
         weakness=opponent_weakness,
         is_computer=True,
-        hit_stats={
-            1: HitStats(  # FULL SWING
-                choices=60,
-                threshold=29,
-                hit_damage=15,
-                block_damage=0,
-                knockout_possible=True,
-                pre_msg="{active.name} TAKES A FULL SWING",
-                hit_msg="AND POW!!!! HE HITS HIM RIGHT IN THE FACE!",
-                blocked_msg="BUT IT'S BLOCKED!",
-            ),
-            2: HitStats(  # HOOK
-                choices=1,
-                threshold=1,
-                hit_damage=12,
-                block_damage=0,
-                knockout_possible=True,
-                pre_msg="{active.name} GETS {passive.name} IN THE JAW (OUCH!)....AND AGAIN",
-                hit_msg="CONNECTS...",
-                blocked_msg="BUT IT'S BLOCKED!!!!!!!!!!!!!",
-            ),
-            3: HitStats(  # UPPERCUT
-                choices=200,
-                threshold=125,
-                hit_damage=8,
-                block_damage=5,
-                pre_msg="{passive.name} IS ATTACKED BY AN UPPERCUT (OH,OH)",
-                hit_msg="AND {active.name} CONNECTS...",
-                blocked_msg="{passive.name} BLOCKS AND HITS {active.name} WITH A HOOK",
-            ),
-            4: HitStats(  # JAB
-                choices=7,
-                threshold=3,
-                hit_damage=3,
-                block_damage=0,
-                pre_msg="{active.name} JABS AND",
-                hit_msg="BLOOD SPILLS !!!",
-                blocked_msg="AND IT'S BLOCKED (LUCKY BLOCK!)",
-            ),
-        },
+        hit_stats=read_hit_stats(Path(__file__).parent / "opponent-profile.json"),
     )
 
     print(
