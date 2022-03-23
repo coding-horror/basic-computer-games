@@ -1,14 +1,15 @@
 import random
+from typing import List
 
 
-def simulate_roll(pins) -> None:
+def simulate_roll(pins: List[int]) -> None:
     for _ in range(20):
         x = random.randint(0, 14)
         if x < len(pins):
             pins[x] = 1
 
 
-def calculate_score(rolls) -> int:
+def calculate_score(rolls: List[int]) -> int:
     score = 0
     frame = 1
     b = 1
@@ -32,11 +33,11 @@ def calculate_score(rolls) -> int:
 
 
 class Player:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
-        self.rolls = []
+        self.rolls: List[int] = []
 
-    def play_frame(self, frame):
+    def play_frame(self, frame: int) -> None:
         extra = 0
         prev_score = 0
         pins = [0] * 10  # reset the pins
@@ -73,10 +74,10 @@ class Player:
                 score = sum(pins)
                 self.rolls.append(score)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}: {self.rolls}, total:{calculate_score(self.rolls)}"
 
-    def show(self, pins):
+    def show(self, pins: List[int]) -> None:
         pins_iter = iter(pins)
         print()
         for row in range(4):
@@ -87,14 +88,14 @@ class Player:
             print()
 
 
-def centreText(text, width):
+def centre_text(text: str, width: int) -> str:
     t = len(text)
     return (" " * ((width - t) // 2)) + text
 
 
 def main() -> None:
-    print(centreText("Bowl", 80))
-    print(centreText("CREATIVE COMPUTING MORRISTOWN, NEW JERSEY", 80))
+    print(centre_text("Bowl", 80))
+    print(centre_text("CREATIVE COMPUTING MORRISTOWN, NEW JERSEY", 80))
     print()
     print("WELCOME TO THE ALLEY.")
     print("BRING YOUR FRIENDS.")
