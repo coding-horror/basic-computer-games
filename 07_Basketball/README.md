@@ -14,7 +14,7 @@ Both teams use the same defense, but you may call it:
 - Enter (7): Zone
 - Enter (7.5): None
 
-To change defense, type “0” as your next shot.
+To change defense, type "0" as your next shot.
 
 Note: The game is biased slightly in favor of Dartmouth. The average probability of a Dartmouth shot being good is 62.95% compared to a probability of 61.85% for their opponent. (This makes the sample run slightly remarkable in that Cornell won by a score of 45 to 42 Hooray for the Big Red!)
 
@@ -33,3 +33,19 @@ http://www.vintage-basic.net/games.html
 
 (please note any difficulties or challenges in porting here)
 
+##### Original bugs
+
+###### Initial defense selection
+
+If a number <6 is entered for the starting defense then the original code prompts again until a value >=6 is entered,
+but then skips the opponent selection center jump.
+
+The C# port does not reproduce this behavior. It does prompt for a correct value, but will then go to opponent selection
+followed by the center jump.
+
+###### Unvalidated defense selection
+
+The original code does not validate the value entered for the defense beyond checking that it is >=6. A large enough
+defense value will guarantee that all shots are good, and the game gets rather predictable.
+
+This bug is preserved in the C# port.

@@ -1,0 +1,12 @@
+                               Basketball
+               Creative Computing  Morristown, New Jersey
+
+
+
+This is Dartmouth College basketball.  You will be Dartmouth
+ captain and playmaker.  Call shots as follows:  1. Long
+ (30 ft.) jump shot; 2. Short (15 ft.) jump shot; 3. Lay
+ up; 4. Set shot.
+Both teams will use the same defense.  Call defense as
+follows:  6. Press; 6.5 Man-to-man; 7. Zone; 7.5 None.
+To change defense, just type 0 as your next shot.
