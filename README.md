@@ -3,6 +3,7 @@
 We’re updating the first million selling computer book, [BASIC Computer Games](https://en.wikipedia.org/wiki/BASIC_Computer_Games), for 2022 and beyond!
 
 [Read book](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf)
+[Play the original games in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html)
 
 ### Where can we discuss it?
 
@@ -43,7 +44,7 @@ But first, a few guidelines:
 
 - **These are very old games**. They date from the mid-70s so they’re not exactly examples of what kids (or anyone, really?) would be playing these days. Consider them more like classic programming exercises to teach programming.  We’re paying it forward by converting them into modern languages, so the next generation can learn from the programs in this classic book – and compare implementations across common modern languages.
 
-- **Stay true to the original program**. These are mostly unsophisticated, simple command line / console games, so we should strive to replicate the command line / console output and behavior illustrated in the original book. See the README in the project folder for links to the original scanned source input and output. Avoid the impulse to add features; keep it simple.
+- **Stay true to the original program**. These are mostly unsophisticated, simple command line / console games, so we should strive to replicate the command line / console output and behavior illustrated in the original book. See the README in the project folder for links to the original scanned source input and output. Try [running the game in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html). Avoid the impulse to add features; keep it simple, _except_ for modern conventions, see next item 👇
 
 - **Please DO update for modern coding conventions**. Support uppercase and lowercase. Use structured programming. Use subroutines. Try to be an example of good, modern coding practices!
 
