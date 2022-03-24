@@ -6,7 +6,7 @@ How about a nice game of checkers?
 Ported by Dave LeCompte
 """
 
-import collections
+from typing import Iterator, NamedTuple, Optional, Tuple
 
 PAGE_WIDTH = 64
 
@@ -21,9 +21,13 @@ EMPTY_SPACE = 0
 TOP_ROW = 7
 BOTTOM_ROW = 0
 
-MoveRecord = collections.namedtuple(
-    "MoveRecord", ["quality", "start_x", "start_y", "dest_x", "dest_y"]
-)
+
+class MoveRecord(NamedTuple):
+    quality: int
+    start_x: int
+    start_y: int
+    dest_x: int
+    dest_y: int
 
 
 def print_centered(msg: str) -> None:
@@ -39,7 +43,7 @@ def print_header(title: str) -> None:
     print()
 
 
-def get_coordinates(prompt):
+def get_coordinates(prompt: str) -> Tuple[int, int]:
     err_msg = "ENTER COORDINATES in X,Y FORMAT"
     while True:
         print(prompt)
@@ -57,7 +61,7 @@ def get_coordinates(prompt):
         return x, y
 
 
-def is_legal_board_coordinate(x, y):
+def is_legal_board_coordinate(x: int, y: int) -> bool:
     return (0 <= x <= 7) and (0 <= y <= 7)
 
 
@@ -94,24 +98,24 @@ class Board:
 
         return s
 
-    def get_spaces(self):
+    def get_spaces(self) -> Iterator[Tuple[int, int]]:
         for x in range(0, 8):
             for y in range(0, 8):
                 yield x, y
 
-    def get_spaces_with_computer_pieces(self):
+    def get_spaces_with_computer_pieces(self) -> Iterator[Tuple[int, int]]:
         for x, y in self.get_spaces():
             contents = self.spaces[x][y]
             if contents < 0:
                 yield x, y
 
-    def get_spaces_with_human_pieces(self):
+    def get_spaces_with_human_pieces(self) -> Iterator[Tuple[int, int]]:
         for x, y in self.get_spaces():
             contents = self.spaces[x][y]
             if contents > 0:
                 yield x, y
 
-    def get_legal_deltas_for_space(self, x, y):
+    def get_legal_deltas_for_space(self, x: int, y: int) -> Iterator[Tuple[int, int]]:
         contents = self.spaces[x][y]
         if contents == COMPUTER_PIECE:
             for delta_x in (-1, 1):
@@ -121,7 +125,14 @@ class Board:
                 for delta_y in (-1, 1):
                     yield (delta_x, delta_y)
 
-    def pick_computer_move(self):
+    def get_legal_moves(self, x: int, y: int) -> Iterator[MoveRecord]:
+        for delta_x, delta_y in self.get_legal_deltas_for_space(x, y):
+            new_move_record = self.check_move(x, y, delta_x, delta_y)
+
+            if new_move_record is not None:
+                yield new_move_record
+
+    def pick_computer_move(self) -> Optional[MoveRecord]:
         move_record = None
 
         for start_x, start_y in self.get_spaces_with_computer_pieces():
@@ -138,7 +149,9 @@ class Board:
 
         return move_record
 
-    def check_move(self, start_x, start_y, delta_x, delta_y):
+    def check_move(
+        self, start_x: int, start_y: int, delta_x: int, delta_y: int
+    ) -> Optional[MoveRecord]:
         new_x = start_x + delta_x
         new_y = start_y + delta_y
         if not is_legal_board_coordinate(new_x, new_y):
@@ -158,8 +171,11 @@ class Board:
             return None
         if self.spaces[landing_x][landing_y] == EMPTY_SPACE:
             return self.evaluate_move(start_x, start_y, landing_x, landing_y)
+        return None
 
-    def evaluate_move(self, start_x, start_y, dest_x, dest_y):
+    def evaluate_move(
+        self, start_x: int, start_y: int, dest_x: int, dest_y: int
+    ) -> MoveRecord:
         quality = 0
         if dest_y == 0 and self.spaces[start_x][start_y] == COMPUTER_PIECE:
             # promoting is good
@@ -193,7 +209,7 @@ class Board:
                 quality -= 2
         return MoveRecord(quality, start_x, start_y, dest_x, dest_y)
 
-    def remove_r_pieces(self, move_record):
+    def remove_r_pieces(self, move_record: MoveRecord) -> None:
         self.remove_pieces(
             move_record.start_x,
             move_record.start_y,
@@ -201,7 +217,9 @@ class Board:
             move_record.dest_y,
         )
 
-    def remove_pieces(self, start_x, start_y, dest_x, dest_y):
+    def remove_pieces(
+        self, start_x: int, start_y: int, dest_x: int, dest_y: int
+    ) -> None:
         self.spaces[dest_x][dest_y] = self.spaces[start_x][start_y]
         self.spaces[start_x][start_y] = EMPTY_SPACE
 
@@ -210,7 +228,7 @@ class Board:
             mid_y = (start_y + dest_y) // 2
             self.spaces[mid_x][mid_y] = EMPTY_SPACE
 
-    def play_computer_move(self, move_record):
+    def play_computer_move(self, move_record: MoveRecord) -> None:
         print(
             f"FROM {move_record.start_x} {move_record.start_y} TO {move_record.dest_x} {move_record.dest_y}"
         )
@@ -249,11 +267,11 @@ class Board:
                             test_record = self.try_extend(
                                 landing_x, landing_y, delta_x, delta_y
                             )
-                            if not (move_record is None):
-                                if (best_move is None) or (
-                                    move_record.quality > best_move.quality
-                                ):
-                                    best_move = test_record
+                            if (move_record is not None) and (
+                                (best_move is None)
+                                or (move_record.quality > best_move.quality)
+                            ):
+                                best_move = test_record
 
                 if best_move is None:
                     return
@@ -261,7 +279,9 @@ class Board:
                     print(f"TO {best_move.dest_x} {best_move.dest_y}")
                     move_record = best_move
 
-    def try_extend(self, start_x, start_y, delta_x, delta_y):
+    def try_extend(
+        self, start_x: int, start_y: int, delta_x: int, delta_y: int
+    ) -> Optional[MoveRecord]:
         new_x = start_x + delta_x
         new_y = start_y + delta_y
 
@@ -275,13 +295,18 @@ class Board:
             self.spaces[jumped_x][jumped_y] > 0
         ):
             return self.evaluate_move(start_x, start_y, new_x, new_y)
+        return None
 
-    def get_human_move(self):
+    def get_human_move(self) -> Tuple[int, int, int, int]:
         is_king = False
 
         while True:
             start_x, start_y = get_coordinates("FROM?")
 
+            legal_moves = list(self.get_legal_moves(start_x, start_y))
+            if not legal_moves:
+                print(f"({start_x}, {start_y}) has no legal moves. Choose again.")
+                continue
             if self.spaces[start_x][start_y] > 0:
                 break
 
@@ -293,15 +318,16 @@ class Board:
             if (not is_king) and (dest_y < start_y):
                 # CHEATER! Trying to move non-king backwards
                 continue
-            if (
-                (self.spaces[dest_x][dest_y] == 0)
-                and (abs(dest_x - start_x) <= 2)
-                and (abs(dest_x - start_x) == abs(dest_y - start_y))
-            ):
+            is_free = self.spaces[dest_x][dest_y] == 0
+            within_reach = abs(dest_x - start_x) <= 2
+            is_diagonal_move = abs(dest_x - start_x) == abs(dest_y - start_y)
+            if is_free and within_reach and is_diagonal_move:
                 break
         return start_x, start_y, dest_x, dest_y
 
-    def get_human_extension(self, start_x, start_y):
+    def get_human_extension(
+        self, start_x: int, start_y: int
+    ) -> Tuple[bool, Optional[Tuple[int, int, int, int]]]:
         is_king = self.spaces[start_x][start_y] == HUMAN_KING
 
         while True:
@@ -319,14 +345,16 @@ class Board:
             ):
                 return True, (start_x, start_y, dest_x, dest_y)
 
-    def play_human_move(self, start_x, start_y, dest_x, dest_y):
+    def play_human_move(
+        self, start_x: int, start_y: int, dest_x: int, dest_y: int
+    ) -> None:
         self.remove_pieces(start_x, start_y, dest_x, dest_y)
 
         if dest_y == TOP_ROW:
             # KING ME
             self.spaces[dest_x][dest_y] = HUMAN_KING
 
-    def check_pieces(self):
+    def check_pieces(self) -> bool:
         if len(list(self.get_spaces_with_computer_pieces())) == 0:
             print_human_won()
             return False
@@ -381,6 +409,7 @@ def play_game() -> None:
         if abs(dest_x - start_x) == 2:
             while True:
                 extend, move = board.get_human_extension(dest_x, dest_y)
+                assert move is not None
                 if not extend:
                     break
                 start_x, start_y, dest_x, dest_y = move
