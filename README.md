@@ -60,7 +60,7 @@ We want the general behavior of the original programs to be preserved, _however_
 - incorporate any bugfixes to the original programs; see the `readme.md` in the game folder
 - improved error handling for bad or erroneous input
 
-Please note that on the back of the Basic Computer Games book it says **Microsoft 8K Basic, Rev 4.0 was the version David Ahl used to test**, so that is the level of compatibility we are looking for.  QBasic on the DOS emulation is a later version of Basic but one that retains downwards compatibility so far in our testing. We’re working on a recommended emulation to verify behavior.
+Please note that on the back of the Basic Computer Games book it says **Microsoft 8K Basic, Rev 4.0 was the version David Ahl used to test**, so that is the level of compatibility we are looking for.  QBasic on the DOS emulation is a later version of Basic but one that retains downwards compatibility so far in our testing. To verify behavior, try [running the programs in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html) with [JS BASIC, effectively Applesoft BASIC](https://github.com/inexorabletash/jsbasic/).
 
 ### Have fun!
 
