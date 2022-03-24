@@ -9,12 +9,38 @@ Ported by Peter Sharp
 
 from collections import namedtuple
 from random import randint
-from typing import Any, Dict
+from typing import Any, Callable, Dict, List, Literal, Optional, Tuple, TypedDict, Union
 
 PAGE_WIDTH = 64
 
+OneParamFunc = Callable[[Any], Any]
+TwoParamFunc = Callable[[Any, Any], Any]
+StateFunctions = Tuple[OneParamFunc, OneParamFunc, TwoParamFunc]
+Action = Literal["instructions", "game", "pictures", "won", "start", "exit"]
 
-def main(states, data) -> None:
+Bodypart = namedtuple("Bodypart", ["name", "count", "depends"])
+
+# body part types used by the game to work out whether a player's body part can be added
+part_types = (
+    Bodypart(name="BODY", count=1, depends=None),
+    Bodypart(name="NECK", count=1, depends=0),
+    Bodypart(name="HEAD", count=1, depends=1),
+    Bodypart(name="FEELERS", count=2, depends=2),
+    Bodypart(name="TAIL", count=1, depends=0),
+    Bodypart(name="LEGS", count=6, depends=0),
+)
+
+
+class DataDict(TypedDict):
+    state: Action
+    partNo: Optional[Any]
+    players: Dict[str, List[int]]
+    partTypes: Tuple[Bodypart, ...]
+    finished: List[Any]
+    logs: List[Any]
+
+
+def game_loop(states: Dict[Action, StateFunctions], data: DataDict) -> None:
     """
     Starts the game loop using given states and data
 
@@ -35,10 +61,7 @@ def main(states, data) -> None:
         data = model(data, action)
 
 
-Bodypart = namedtuple("Bodypart", ["name", "count", "depends"])
-
-
-def print_start(_) -> str:
+def print_start(_: Any) -> str:
     """
     Prints start message
     """
@@ -53,7 +76,7 @@ def print_start(_) -> str:
     return input("DO YOU WANT INSTRUCTIONS? ")
 
 
-def control_start(cmd):
+def control_start(cmd: str) -> str:
     """
     Controls the start state
     """
@@ -64,7 +87,7 @@ def control_start(cmd):
     return action
 
 
-def print_instructions(data) -> str:
+def print_instructions(data: DataDict) -> str:
     """
     Prints game instructions
     """
@@ -92,26 +115,25 @@ def print_instructions(data) -> str:
     return ""
 
 
-def goto_game(_):
-    """
-    Returns game
-    """
+def goto_game(_: Any) -> Literal["game"]:
     return "game"
 
 
-def update_state(data, action):
+def update_state(data: DataDict, action: Action) -> DataDict:
     """
     sets game state to given player value
     """
-    return {**data, "state": action}
+    return {**data, "state": action}  # type: ignore
 
 
-def update_game(data, action):
+def update_game(data: DataDict, action: Action) -> DataDict:
     """
     Updates game data for player turns until one player successfully gets a body part
     """
     # stores logs of what happened during a particular round
-    logs = []
+    Log1 = Tuple[str, int, Any]
+    Log2 = Tuple[str, int, Any, Any]
+    logs: List[Union[Log1, Log2]] = []
 
     if action == "pictures":
         data["state"] = "pictures"
@@ -133,16 +155,16 @@ def update_game(data, action):
                 # a new part can only be added if the player has the parts
                 # the new part depends on and doesn't have enough of the part already
                 overMaxParts = part_type.count < part_count + 1
-                missingPartDep = (
+                missing_part_dep = (
                     part_type.depends is not None and parts[part_type.depends] == 0
                 )
 
-                if not overMaxParts and not missingPartDep:
+                if not overMaxParts and not missing_part_dep:
                     # adds a new part
                     part_count += 1
                     logs.append(("added", new_part_idx, player))
                     part_added = True
-                elif missingPartDep:
+                elif missing_part_dep:
                     logs.append(("missingDep", new_part_idx, player, part_type.depends))
                 if overMaxParts:
                     logs.append(("overMax", new_part_idx, player, part_count))
@@ -159,7 +181,7 @@ def update_game(data, action):
     return data
 
 
-def get_finished(data):
+def get_finished(data: DataDict) -> List[str]:
     """
     Gets players who have finished their bugs
     """
@@ -171,7 +193,7 @@ def get_finished(data):
     return finished
 
 
-def print_game(data) -> str:
+def print_game(data: DataDict) -> str:
     """
     Displays the results of the game turn
     """
@@ -222,7 +244,7 @@ def print_game(data) -> str:
     return input("DO YOU WANT THE PICTURES? ") if len(data["logs"]) else "n"
 
 
-def print_pictures(data) -> None:
+def print_pictures(data: DataDict) -> None:
     """
     Displays what the bugs look like for each player
     """
@@ -261,7 +283,7 @@ def print_pictures(data) -> None:
         print()
 
 
-def control_game(cmd):
+def control_game(cmd: str) -> Literal["pictures", "game"]:
     """
     returns state based on command
     """
@@ -269,10 +291,10 @@ def control_game(cmd):
         action = "pictures"
     else:
         action = "game"
-    return action
+    return action  # type: ignore
 
 
-def print_winner(data) -> None:
+def print_winner(data: DataDict) -> None:
     """
     Displays the winning message
     """
@@ -281,30 +303,25 @@ def print_winner(data) -> None:
     print("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!")
 
 
-def exit_game(_):
-    """
-    Exists the game regardless of input
-    """
+def exit_game(_: Any) -> Literal["exit"]:
+    """Exist the game regardless of input"""
     return "exit"
 
 
-def print_centered(msg, width=PAGE_WIDTH) -> None:
-    """
-    Prints given message centered to given width
-    """
+def print_centered(msg: str, width: int = PAGE_WIDTH) -> None:
+    """Print given message centered to given width."""
     spaces = " " * ((width - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_table(rows) -> None:
+def print_table(rows: List[Any]) -> None:
     for row in rows:
         print(*row, sep="\t")
 
 
-if __name__ == "__main__":
-
+def main() -> None:
     # The main states in the game
-    states = {
+    states: Dict[Action, StateFunctions] = {
         # Initial state of the game
         "start": (print_start, control_start, update_state),
         # displays game instructions
@@ -317,23 +334,17 @@ if __name__ == "__main__":
         "won": (print_winner, exit_game, update_state),
     }
 
-    # body part types used by the game to work out whether a player's body part can be added
-    part_types = (
-        Bodypart(name="BODY", count=1, depends=None),
-        Bodypart(name="NECK", count=1, depends=0),
-        Bodypart(name="HEAD", count=1, depends=1),
-        Bodypart(name="FEELERS", count=2, depends=2),
-        Bodypart(name="TAIL", count=1, depends=0),
-        Bodypart(name="LEGS", count=6, depends=0),
-    )
-
     # all the data used by the game
-    data: Dict[str, Any] = {
-        "state": "start",
-        "partNo": None,
-        "players": {"YOU": [0] * len(part_types), "I": [0] * len(part_types)},
-        "partTypes": part_types,
-        "finished": [],
-        "logs": [],
-    }
-    main(states, data)
+    data = DataDict(
+        state="start",
+        partNo=None,
+        players={"YOU": [0] * len(part_types), "I": [0] * len(part_types)},
+        partTypes=part_types,
+        finished=[],
+        logs=[],
+    )
+    game_loop(states, data)
+
+
+if __name__ == "__main__":
+    main()
