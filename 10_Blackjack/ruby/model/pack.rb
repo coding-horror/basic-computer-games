@@ -1,4 +1,4 @@
-require "./card_kind.rb"
+require_relative "./card_kind.rb"
 
 module Model
 class Pack
@@ -13,13 +13,13 @@ class Pack
   end
 
   def draw
-    @card.pop
+    @cards.pop
   end
 
   private
 
   def reshuffle
-    @cards = 4.times.map {|_| CardKind.KINDS_SET}.flatten
+    @cards = 4.times.map {|_| CardKind::KINDS_SET}.flatten
     @cards.shuffle!
   end
 end

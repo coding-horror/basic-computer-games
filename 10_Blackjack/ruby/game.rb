@@ -1,6 +1,7 @@
-require "./model/hand.rb"
-require "./model/player.rb"
-require "./model/card_kind.rb"
+require_relative "./model/hand.rb"
+require_relative "./model/player.rb"
+require_relative "./model/card_kind.rb"
+require_relative "./model/pack.rb"
 
 class Game
 
@@ -8,7 +9,7 @@ class Game
     @pack = Model::Pack.new
     @dealer_balance = 0
     @dealer_hand = nil
-    @palyers = 1.upto(players_count).map { |id| Model::Player.new(id) }
+    @players = 1.upto(players_count).map { |id| Model::Player.new(id) }
   end
 
   def start
@@ -28,11 +29,10 @@ class Game
     @players.each_entry do |player|
       print "# #{player.id} ? "
       bet = gets.to_i
-      player.deal_initial_hand Hand.new(bet, [@pack.draw, @pack.draw])
+      player.deal_initial_hand Model::Hand.new(bet, [@pack.draw, @pack.draw])
     end
 
-    @dealer_hand = Hand.new(0, [@pack.draw, @pack.draw])
-
+    @dealer_hand = Model::Hand.new(0, [@pack.draw, @pack.draw])
     print_players_and_dealer_hands
   end
 
@@ -43,17 +43,32 @@ class Game
   end
 
   def play_dealer
+    while @dealer_hand.total < 17
+      card = @pack.draw
+      @dealer_hand.hit card
+    end
+
+    if !@dealer_hand.is_busted?
+      @dealer_hand.stand
+    end
+
+    # TODO: print dealer hand
   end
 
   def settle
+    @players.each_entry do |player|
+      @dealer_balance -= player.update_balance @dealer_hand
+    end
+
+    # TODO: print players balances
   end
 
 
   def print_players_and_dealer_hands
     puts "PLAYER\t#{@players.map(&:id).join("\t")}\tDEALER"
     # TODO: Check for split hands
-    puts "      \t#{@players.map {|p| p.current_hand.cards[0].label}.join("\t")}\t#{@dealer_hand.cards[0].label}"
-    puts "      \t#{@players.map {|p| p.current_hand.cards[1].label}.join("\t")}"
+    puts "      \t#{@players.map {|p| p.hand.cards[0].label}.join("\t")}\t#{@dealer_hand.cards[0].label}"
+    puts "      \t#{@players.map {|p| p.hand.cards[1].label}.join("\t")}"
   end
 
   def play_hand player, hand
@@ -61,7 +76,8 @@ class Game
 
     print "#{name}? "
 
-    while not case gets
+    # TODO: redo this loop logic isn't working properly
+    while not case gets.strip
     when "H"
       while hand.is_playing?
         card = @pack.draw
@@ -73,15 +89,14 @@ class Game
           return
         end
 
-        print "HIT?"
-        while case gets
+        print "HIT? "
+        while case gets.strip
         when "S"
           hand.stand
           true
         when "H"
           true
         else
-          puts
           print "(H)IT or (S)TAND? "
           false
         end
@@ -109,7 +124,6 @@ class Game
       print "RECEIVED #{card.label}"
       true
     else
-      puts "#{name}? "
       print "#{name}? "
       false
     end

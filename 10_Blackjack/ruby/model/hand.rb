@@ -1,4 +1,4 @@
-require "./card_kind.rb"
+require_relative "./card_kind.rb"
 
 module Model
 class Hand
@@ -6,7 +6,7 @@ class Hand
   HAND_STATE_BUSTED = :hand_busted
   HAND_STATE_STAND = :hand_stand
 
-  def initialize(bet: 0, cards: [], is_split_hand: false)
+  def initialize(bet, cards, is_split_hand: false)
     @state = HAND_STATE_PLAYING
     @bet = bet
     @cards = cards
@@ -28,14 +28,14 @@ class Hand
     @state == HAND_STATE_STAND
   end
 
-  def total
+  def total(is_dealer: false)
     return @total unless @total.nil?
 
-    @total = @cards.sum
+    @total = @cards.reduce(0) {|sum, card| sum + card.value}
 
     if @total > 21
       aces_count = @cards.count {|c| c == CardKind::ACE}
-      while @total > 21 && aces_count > 0 do
+      while ((!is_dealer && @total > 21) || (is_dealer && @total < 16)) && aces_count > 0 do
         @total -= 10
         aces_count -= 1
       end
@@ -76,7 +76,7 @@ class Hand
   end
 
   def stand
-    throw "can't double down" unless @state == HAND_STATE_PLAYING
+    throw "can't stand" unless @state == HAND_STATE_PLAYING
 
     @state = HAND_STATE_STAND
   end

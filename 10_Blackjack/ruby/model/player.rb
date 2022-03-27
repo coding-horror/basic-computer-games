@@ -1,4 +1,4 @@
-require "./hand.rb"
+require_relative "./hand.rb"
 
 module Model
 class Player
@@ -19,7 +19,7 @@ class Player
   end
 
   def has_split_hand?
-    @split_hand.present?
+    !@split_hand.nil?
   end
 
   def can_split?
@@ -54,10 +54,10 @@ class Player
   private
 
   def get_balance_update(hand, dealer_hand)
-    if (dealer_hand.is_busted and not hand.is_busted?) or
+    if (dealer_hand.is_busted? and not hand.is_busted?) or
         dealer_hand.total < hand.total then
       return hand.bet
-    elsif (hand.is_busted? and not @dealer_hand.is_busted?) or
+    elsif hand.is_busted? or
         dealer_hand.total > hand.total then
       return -hand.bet
     end

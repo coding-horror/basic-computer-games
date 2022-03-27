@@ -1,5 +1,10 @@
 module Model
 class CardKind
+  def initialize(label, value)
+    @label = label
+    @value = value
+  end
+  
   private_class_method :new
 
   TWO = self.new("2", 2)
@@ -29,15 +34,8 @@ class CardKind
     throw "other doesn't respond to +" unless other.responds_to? :+
 
     other.+(@value)
-  end
-
-  protected
+  end 
 
   attr_reader :label, :value
-
-  def initialize(label, value)
-    @label = label
-    @value = value
-  end
 end
 end
