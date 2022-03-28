@@ -30,6 +30,8 @@ Each project has subfolders corresponding to the languages we’d like to see th
 
 > 📢 Note that in March 2022 we removed Pascal / Object Pascal and replaced it with Rust as we couldn’t determine if Pascal is effectively memory safe. We’ve also added Lua, as it made the top 20 in TIOBE (as of 2022) and it is both memory safe and a scripting language. The Pascal ports were moved to the alternate languages folder.
 
+> ⚠️ Please note that we have decided, as a project, that we **do not want any IDE-specific or build-specific files in the repository.** Please refrain from committing any files to the repository that only exist to work with a specific IDE or a specific build system.
+
 ### Alternate Languages
 
 If you wish to port one of the programs to a language not in our list – that is, a language which is either not memory safe, or not a general purpose scripting language, you can do so via the `00_Alternate_Languages` folder. Place your port in the appropriate game subfolder, in a subfolder named for the language. Please note that these ports are appreciated, but they will not count toward the donation total at the end of the project.
@@ -50,7 +52,9 @@ But first, a few guidelines:
 
 - **Use lots of comments to explain what is going on**. Comment liberally! If there were clever tricks in the original code, decompose those tricks into simpler (even if more verbose) code, and use comments to explain what’s happening and why. If there is something particularly tricky about a program, edit the **Porting Notes** section of the `readme.md` to let everyone know. Those `GOTO`s can be very pesky..
 
-- **Don’t get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable – the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks.
+- **Please don’t get _too_ fancy**. Definitely use the most recent versions and features of the target language, but also try to keep the code samples simple and explainable – the goal is to teach programming in the target language, not necessarily demonstrate the cleverest one-line tricks, or big system "enterprise" coding techniques designed for thousands of lines of code.
+
+- **Please don't check in any build specific or IDE specific files**. We want the repository to be simple and clean, so we have ruled out including any IDE or build system specific files from the repository. Git related files are OK, as we are using Git and this is GitHub. 😉
 
 ### Emulation and Bugfixes
 
