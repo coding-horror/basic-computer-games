@@ -8,7 +8,7 @@ class Disk:
     def size(self):
         return self.__size
 
-    def print(self):
+    def print(self) -> None:
         print("[ %s ]" % self.size())
 
 
@@ -39,7 +39,7 @@ class Tower:
             raise Exception("empty pop")
         return self.__disks.pop()
 
-    def print(self):
+    def print(self) -> None:
         r = "Needle: [%s]" % (", ".join([str(x.size()) for x in self.__disks]))
         print(r)
 
@@ -63,7 +63,7 @@ class Game:
     def winner(self):
         return self.__towers[0].empty() and self.__towers[1].empty()
 
-    def print(self):
+    def print(self) -> None:
         for t in self.__towers:
             t.print()
 
@@ -127,7 +127,7 @@ class Game:
             from_tower.add(disk)
 
 
-def main():
+def main() -> None:
     print(
         """
     IN THIS PROGRAM, WE SHALL REFER TO DISKS BY NUMERICAL CODE.

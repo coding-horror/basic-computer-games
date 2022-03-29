@@ -1,0 +1,40 @@
+{
+    "1": {
+        "choices": 60,
+        "threshold": 29,
+        "hit_damage": 15,
+        "block_damage": 0,
+        "knockout_possible": true,
+        "pre_msg": "{active.name} TAKES A FULL SWING",
+        "hit_msg": "AND POW!!!! HE HITS HIM RIGHT IN THE FACE!",
+        "blocked_msg": "BUT IT'S BLOCKED!"
+    },
+    "2": {
+        "choices": 1,
+        "threshold": 1,
+        "hit_damage": 12,
+        "block_damage": 0,
+        "knockout_possible": true,
+        "pre_msg": "{active.name} GETS {passive.name} IN THE JAW (OUCH!)....AND AGAIN",
+        "hit_msg": "CONNECTS...",
+        "blocked_msg": "BUT IT'S BLOCKED!!!!!!!!!!!!!"
+    },
+    "3": {
+        "choices": 200,
+        "threshold": 125,
+        "hit_damage": 8,
+        "block_damage": 5,
+        "pre_msg": "{passive.name} IS ATTACKED BY AN UPPERCUT (OH,OH)",
+        "hit_msg": "AND {active.name} CONNECTS...",
+        "blocked_msg": "{passive.name} BLOCKS AND HITS {active.name} WITH A HOOK"
+    },
+    "4": {
+        "choices": 7,
+        "threshold": 3,
+        "hit_damage": 3,
+        "block_damage": 0,
+        "pre_msg": "{active.name} JABS AND",
+        "hit_msg": "BLOOD SPILLS !!!",
+        "blocked_msg": "AND IT'S BLOCKED (LUCKY BLOCK!)"
+    }
+}

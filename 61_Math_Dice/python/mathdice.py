@@ -13,11 +13,11 @@ To conclude the program, type 0.
 )
 
 
-def print_dice(n):
-    def print_0():
+def print_dice(n: int) -> None:
+    def print_0() -> None:
         print("|     |")
 
-    def print_2():
+    def print_2() -> None:
         print("| * * |")
 
     print(" ----- ")
@@ -46,7 +46,7 @@ def print_dice(n):
     print(" ----- ")
 
 
-def main():
+def main() -> None:
 
     while True:
         d1 = randint(1, 6)

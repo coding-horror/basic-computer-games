@@ -1,121 +1,109 @@
 import random
+from dataclasses import dataclass
+from typing import List
 
 
-def print_n_whitespaces(n: int):
-    print(" " * n, end="")
+@dataclass
+class Player:
+    name: str
+    score: int = 0
 
 
-def print_n_newlines(n: int):
-    for _ in range(n):
-        print()
-
-
-def main():
-    print_n_whitespaces(32)
-    print("BULLSEYE")
-    print_n_whitespaces(15)
-    print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print_n_newlines(3)
+def print_intro() -> None:
+    print(" " * 32 + "BULLSEYE")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print("\n" * 3, end="")
     print("IN THIS GAME, UP TO 20 PLAYERS THROW DARTS AT A TARGET")
     print("WITH 10, 20, 30, AND 40 POINT ZONES.  THE OBJECTIVE IS")
     print("TO GET 200 POINTS.")
     print()
     print("THROW", end="")
-    print_n_whitespaces(20)
-    print("DESCRIPTION", end="")
-    print_n_whitespaces(45)
-    print("PROBABLE SCORE")
+    print(" " * 20 + "DESCRIPTION", end="")
+    print(" " * 45 + "PROBABLE SCORE")
     print(" 1", end="")
-    print_n_whitespaces(20)
-    print("FAST OVERARM", end="")
-    print_n_whitespaces(45)
-    print("BULLSEYE OR COMPLETE MISS")
+    print(" " * 20 + "FAST OVERARM", end="")
+    print(" " * 45 + "BULLSEYE OR COMPLETE MISS")
     print(" 2", end="")
-    print_n_whitespaces(20)
-    print("CONTROLLED OVERARM", end="")
-    print_n_whitespaces(45)
-    print("10, 20 OR 30 POINTS")
+    print(" " * 20 + "CONTROLLED OVERARM", end="")
+    print(" " * 45 + "10, 20 OR 30 POINTS")
     print(" 3", end="")
-    print_n_whitespaces(20)
-    print("UNDERARM", end="")
-    print_n_whitespaces(45)
-    print("ANYTHING")
+    print(" " * 20 + "UNDERARM", end="")
+    print(" " * 45 + "ANYTHING")
     print()
 
-    nb_winners = 0
-    round = 0
 
-    winners = {}
-    for i in range(1, 11):
-        winners[i] = 0
+def print_outro(players: List[Player], winners: List[int]) -> None:
+    print()
+    print("WE HAVE A WINNER!!")
+    print()
+    for winner in winners:
+        print(f"{players[winner].name} SCORED {players[winner].score} POINTS.")
+    print()
+    print("THANKS FOR THE GAME.")
 
-    total_score = {}
-    for i in range(1, 21):
-        total_score[i] = 0
+
+def main() -> None:
+    print_intro()
+    players: List[Player] = []
+
+    winners: List[int] = []  # will point to indices of player_names
 
     nb_players = int(input("HOW MANY PLAYERS? "))
-    player_names = {}
-    for i in range(1, nb_players + 1):
+    for _ in range(nb_players):
         player_name = input("NAME OF PLAYER #")
-        player_names[i] = player_name
+        players.append(Player(player_name))
 
-    while nb_winners == 0:
-        round = round + 1
+    round_number = 0
+    while len(winners) == 0:
+        round_number += 1
         print()
-        print(f"ROUND {round}---------")
-        for i in range(1, nb_players + 1):
+        print(f"ROUND {round_number}---------")
+        for player in players:
             print()
             while True:
-                throw = int(input(f"{player_names[i]}'S THROW? "))
+                throw = int(input(f"{player.name}'S THROW? "))
                 if throw not in [1, 2, 3]:
                     print("INPUT 1, 2, OR 3!")
                 else:
                     break
             if throw == 1:
-                P1 = 0.65
-                P2 = 0.55
-                P3 = 0.5
-                P4 = 0.5
+                probability_1 = 0.65
+                probability_2 = 0.55
+                probability_3 = 0.5
+                probability_4 = 0.5
             elif throw == 2:
-                P1 = 0.99
-                P2 = 0.77
-                P3 = 0.43
-                P4 = 0.01
+                probability_1 = 0.99
+                probability_2 = 0.77
+                probability_3 = 0.43
+                probability_4 = 0.01
             elif throw == 3:
-                P1 = 0.95
-                P2 = 0.75
-                P3 = 0.45
-                P4 = 0.05
+                probability_1 = 0.95
+                probability_2 = 0.75
+                probability_3 = 0.45
+                probability_4 = 0.05
             throwing_luck = random.random()
-            if throwing_luck >= P1:
+            if throwing_luck >= probability_1:
                 print("BULLSEYE!!  40 POINTS!")
                 points = 40
-            elif throwing_luck >= P2:
+            elif throwing_luck >= probability_2:
                 print("30-POINT ZONE!")
                 points = 30
-            elif throwing_luck >= P3:
+            elif throwing_luck >= probability_3:
                 print("20-POINT ZONE")
                 points = 20
-            elif throwing_luck >= P4:
+            elif throwing_luck >= probability_4:
                 print("WHEW!  10 POINTS.")
                 points = 10
             else:
                 print("MISSED THE TARGET!  TOO BAD.")
                 points = 0
-            total_score[i] = total_score[i] + points
-            print(f"TOTAL SCORE = {total_score[i]}")
-        for player_index in range(1, nb_players + 1):
-            if total_score[player_index] > 200:
-                nb_winners = nb_winners + 1
-                winners[nb_winners] = player_index
+            player.score += points
+            print(f"TOTAL SCORE = {player.score}")
+        for player_index, player in enumerate(players):
+            if player.score > 200:
+                winners.append(player_index)
 
-    print()
-    print("WE HAVE A WINNER!!")
-    print()
-    for i in range(1, nb_winners + 1):
-        print(f"{player_names[winners[i]]} SCORED {total_score[winners[i]]} POINTS.")
-    print()
-    print("THANKS FOR THE GAME.")
+    print_outro(players, winners)
 
 
 if __name__ == "__main__":

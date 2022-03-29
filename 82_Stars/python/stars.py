@@ -28,7 +28,7 @@ MAX_NUM = 100
 MAX_GUESSES = 7
 
 
-def print_instructions():
+def print_instructions() -> None:
     """Instructions on how to play"""
     print("I am thinking of a whole number from 1 to %d" % MAX_NUM)
     print("Try to guess my number.  After you guess, I")
@@ -38,7 +38,7 @@ def print_instructions():
     print("means really close!  You get %d guesses." % MAX_GUESSES)
 
 
-def print_stars(secret_number, guess):
+def print_stars(secret_number, guess) -> None:
     diff = abs(guess - secret_number)
     stars = ""
     for i in range(8):
@@ -57,7 +57,7 @@ def get_guess():
     return guess
 
 
-def main():
+def main() -> None:
     # Display intro text
     print("\n                   Stars")
     print("Creative Computing  Morristown, New Jersey")

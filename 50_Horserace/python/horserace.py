@@ -3,7 +3,7 @@ import random
 import time
 
 
-def basic_print(*zones, **kwargs):
+def basic_print(*zones, **kwargs) -> None:
     """Simulates the PRINT command from BASIC to some degree.
     Supports `printing zones` if given multiple arguments."""
 
@@ -92,7 +92,7 @@ def setup_horses():
     return [round(total / odd, 2) for odd in odds]
 
 
-def print_horse_odds(odds):
+def print_horse_odds(odds) -> None:
     """Print the odds for each horse"""
 
     basic_print("")
@@ -146,7 +146,7 @@ def get_distance(odd):
         return 7
 
 
-def print_race_state(total_distance, race_pos):
+def print_race_state(total_distance, race_pos) -> None:
     """Outputs the current state/stop of the race.
     Each horse is placed according to the distance they have travelled. In
     case some horses travelled the same distance, their numbers are printed
@@ -226,7 +226,7 @@ def simulate_race(odds):
         time.sleep(1)
 
 
-def print_race_results(race_positions, odds, bets, player_names):
+def print_race_results(race_positions, odds, bets, player_names) -> None:
     """Print the race results, as well as the winnings of each player"""
 
     # print the race positions first
@@ -245,7 +245,7 @@ def print_race_results(race_positions, odds, bets, player_names):
             basic_print(f"{name} WINS ${amount * odds[winning_horse_idx]}")
 
 
-def main_loop(player_names, horse_odds):
+def main_loop(player_names, horse_odds) -> None:
     """Main game loop"""
 
     while True:
@@ -260,7 +260,7 @@ def main_loop(player_names, horse_odds):
             break
 
 
-def main():
+def main() -> None:
     # introduction, player names and horse odds are only generated once
     introduction()
     player_names = setup_players()

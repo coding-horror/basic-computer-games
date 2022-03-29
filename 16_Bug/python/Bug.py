@@ -1,17 +1,51 @@
 import random
 import time
+from dataclasses import dataclass
+from typing import Literal
 
 
-def print_n_whitespaces(n: int):
+@dataclass
+class State:
+    is_player: bool
+    body: int = 0
+    neck: int = 0
+    head: int = 0
+    feelers: int = 0
+    tail: int = 0
+    legs: int = 0
+
+    def is_finished(self) -> bool:
+        return (
+            self.feelers == 2
+            and self.tail == 1
+            and self.legs == 6
+            and self.head == 1
+            and self.neck == 1
+        )
+
+    def display(self) -> None:
+        if self.feelers != 0:
+            print_feelers(self.feelers, is_player=self.is_player)
+        if self.head != 0:
+            print_head()
+        if self.neck != 0:
+            print_neck()
+        if self.body != 0:
+            print_body(True) if self.tail == 1 else print_body(False)
+        if self.legs != 0:
+            print_legs(self.legs)
+
+
+def print_n_whitespaces(n: int) -> None:
     print(" " * n, end="")
 
 
-def print_n_newlines(n: int):
+def print_n_newlines(n: int) -> None:
     for _ in range(n):
         print()
 
 
-def print_feelers(n_feelers, is_player=True):
+def print_feelers(n_feelers: int, is_player: bool = True) -> None:
     for _ in range(4):
         print_n_whitespaces(10)
         for _ in range(n_feelers):
@@ -19,7 +53,7 @@ def print_feelers(n_feelers, is_player=True):
         print()
 
 
-def print_head():
+def print_head() -> None:
     print("        HHHHHHH")
     print("        H     H")
     print("        H O O H")
@@ -28,12 +62,12 @@ def print_head():
     print("        HHHHHHH")
 
 
-def print_neck():
+def print_neck() -> None:
     print("          N N")
     print("          N N")
 
 
-def print_body(has_tail=False):
+def print_body(has_tail: bool = False) -> None:
     print("     BBBBBBBBBBBB")
     print("     B          B")
     print("     B          B")
@@ -41,7 +75,7 @@ def print_body(has_tail=False):
     print("     BBBBBBBBBBBB")
 
 
-def print_legs(n_legs):
+def print_legs(n_legs: int) -> None:
     for _ in range(2):
         print_n_whitespaces(5)
         for _ in range(n_legs):
@@ -49,7 +83,79 @@ def print_legs(n_legs):
         print()
 
 
-def main():
+def handle_roll(diceroll: Literal[1, 2, 3, 4, 5, 6], state: State) -> bool:
+    who = "YOU" if state.is_player else "I"
+    changed = False
+
+    print(f"{who} ROLLED A", diceroll)
+    if diceroll == 1:
+        print("1=BODY")
+        if state.body:
+            print(f"{who} DO NOT NEED A BODY.")
+        else:
+            print(f"{who} NOW HAVE A BODY.")
+            state.body = 1
+            changed = True
+    elif diceroll == 2:
+        print("2=NECK")
+        if state.neck:
+            print(f"{who} DO NOT NEED A NECK.")
+        elif state.body == 0:
+            print(f"{who} DO NOT HAVE A BODY.")
+        else:
+            print(f"{who} NOW HAVE A NECK.")
+            state.neck = 1
+            changed = True
+    elif diceroll == 3:
+        print("3=HEAD")
+        if state.neck == 0:
+            print(f"{who} DO NOT HAVE A NECK.")
+        elif state.head:
+            print(f"{who} HAVE A HEAD.")
+        else:
+            print(f"{who} NEEDED A HEAD.")
+            state.head = 1
+            changed = True
+    elif diceroll == 4:
+        print("4=FEELERS")
+        if state.head == 0:
+            print(f"{who} DO NOT HAVE A HEAD.")
+        elif state.feelers == 2:
+            print(f"{who} HAVE TWO FEELERS ALREADY.")
+        else:
+            if state.is_player:
+                print("I NOW GIVE YOU A FEELER.")
+            else:
+                print(f"{who} GET A FEELER.")
+            state.feelers += 1
+            changed = True
+    elif diceroll == 5:
+        print("5=TAIL")
+        if state.body == 0:
+            print(f"{who} DO NOT HAVE A BODY.")
+        elif state.tail:
+            print(f"{who} ALREADY HAVE A TAIL.")
+        else:
+            if state.is_player:
+                print("I NOW GIVE YOU A TAIL.")
+            else:
+                print(f"{who} NOW HAVE A TAIL.")
+            state.tail = 1
+            changed = True
+    elif diceroll == 6:
+        print("6=LEG")
+        if state.legs == 6:
+            print(f"{who} HAVE 6 FEET ALREADY.")
+        elif state.body == 0:
+            print(f"{who} DO NOT HAVE A BODY.")
+        else:
+            state.legs += 1
+            changed = True
+            print(f"{who} NOW HAVE {state.legs} LEGS")
+    return changed
+
+
+def main() -> None:
     print_n_whitespaces(34)
     print("BUG")
     print_n_whitespaces(15)
@@ -59,8 +165,8 @@ def main():
     print("THE GAME BUG")
     print("I HOPE YOU ENJOY THIS GAME.")
     print()
-    Z = input("DO YOU WANT INSTRUCTIONS? ")
-    if Z != "NO":
+    want_instructions = input("DO YOU WANT INSTRUCTIONS? ")
+    if want_instructions != "NO":
         print("THE OBJECT OF BUG IS TO FINISH YOUR BUG BEFORE I FINISH")
         print("MINE. EACH NUMBER STANDS FOR A PART OF THE BUG BODY.")
         print("I WILL ROLL THE DIE FOR YOU, TELL YOU WHAT I ROLLED FOR YOU")
@@ -83,221 +189,42 @@ def main():
             print(f"{row[0]:<16}{row[1]:<16}{row[2]:<20}")
         print_n_newlines(2)
 
-    A = 0
-    B = 0
-    H = 0
-    L = 0
-    N = 0
-    P = 0
-    Q = 0
-    R = 0  # NECK
-    S = 0  # FEELERS
-    T = 0
-    U = 0
-    V = 0
-    Y = 0
+    player = State(is_player=True)
+    opponent = State(is_player=False)
+    bugs_finished = 0
 
-    while Y <= 0:
-        Z = random.randint(1, 6)
+    while bugs_finished <= 0:
+        diceroll = random.randint(1, 6)
         print()
-        C = 1
-        print("YOU ROLLED A", Z)
-        if Z == 1:
-            print("1=BODY")
-            if B == 1:
-                print("YOU DO NOT NEED A BODY.")
-                # goto 970
-            else:
-                print("YOU NOW HAVE A BODY.")
-                B = 1
-                C = 0
-                # goto 970
-        elif Z == 2:
-            print("2=NECK")
-            if N == 1:
-                print("YOU DO NOT NEED A NECK.")
-                # goto 970
-            elif B == 0:
-                print("YOU DO NOT HAVE A BODY.")
-                # goto 970
-            else:
-                print("YOU NOW HAVE A NECK.")
-                N = 1
-                C = 0
-                # goto 970
-        elif Z == 3:
-            print("3=HEAD")
-            if N == 0:
-                print("YOU DO NOT HAVE A NECK.")
-                # goto 970
-            elif H == 1:
-                print("YOU HAVE A HEAD.")
-                # goto 970
-            else:
-                print("YOU NEEDED A HEAD.")
-                H = 1
-                C = 0
-                # goto 970
-        elif Z == 4:
-            print("4=FEELERS")
-            if H == 0:
-                print("YOU DO NOT HAVE A HEAD.")
-                # goto 970
-            elif A == 2:
-                print("YOU HAVE TWO FEELERS ALREADY.")
-                # goto 970
-            else:
-                print("I NOW GIVE YOU A FEELER.")
-                A = A + 1
-                C = 0
-                # goto 970
-        elif Z == 5:
-            print("5=TAIL")
-            if B == 0:
-                print("YOU DO NOT HAVE A BODY.")
-                # goto 970
-            elif T == 1:
-                print("YOU ALREADY HAVE A TAIL.")
-                # goto 970
-            else:
-                print("I NOW GIVE YOU A TAIL.")
-                T = T + 1
-                C = 0
-                # goto 970
-        elif Z == 6:
-            print("6=LEG")
-            if L == 6:
-                print("YOU HAVE 6 FEET ALREADY.")
-                # goto 970
-            elif B == 0:
-                print("YOU DO NOT HAVE A BODY.")
-                # goto 970
-            else:
-                L = L + 1
-                C = 0
-                print(f"YOU NOW HAVE {L} LEGS")
-                # goto 970
+        changed = handle_roll(diceroll, player)  # type: ignore
 
-        # 970
-        X = random.randint(1, 6)
+        diceroll = random.randint(1, 6)
         print()
         time.sleep(2)
 
-        print("I ROLLED A", X)
-        if X == 1:
-            print("1=BODY")
-            if P == 1:
-                print("I DO NOT NEED A BODY.")
-                # goto 1630
-            else:
-                print("I NOW HAVE A BODY.")
-                C = 0
-                P = 1
-                # goto 1630
-        elif X == 2:
-            print("2=NECK")
-            if Q == 1:
-                print("I DO NOT NEED A NECK.")
-                # goto 1630
-            elif P == 0:
-                print("I DO NOT HAVE A BODY.")
-                # goto 1630
-            else:
-                print("I NOW HAVE A NECK.")
-                Q = 1
-                C = 0
-                # goto 1630
-        elif X == 3:
-            print("3=HEAD")
-            if Q == 0:
-                print("I DO NOT HAVE A NECK.")
-                # goto 1630
-            elif R == 1:
-                print("I HAVE A HEAD.")
-                # goto 1630
-            else:
-                print("I NEEDED A HEAD.")
-                R = 1
-                C = 0
-                # goto 1630
-        elif X == 4:
-            print("4=FEELERS")
-            if R == 0:
-                print("I DO NOT HAVE A HEAD.")
-                # goto 1630
-            elif S == 2:
-                print("I HAVE TWO FEELERS ALREADY.")
-                # goto 1630
-            else:
-                print("I GET A FEELER.")
-                S = S + 1
-                C = 0
-                # goto 1630
-        elif X == 5:
-            print("5=TAIL")
-            if P == 0:
-                print("I DO NOT HAVE A BODY.")
-                # goto 1630
-            elif U == 1:
-                print("I ALREADY HAVE A TAIL.")
-                # goto 1630
-            else:
-                print("I NOW HAVE A TAIL.")
-                U = 1
-                C = 0
-                # goto 1630
-        elif X == 6:
-            print("6=LEG")
-            if V == 6:
-                print("I HAVE 6 FEET.")
-                # goto 1630
-            elif P == 0:
-                print("I DO NOT HAVE A BODY.")
-                # goto 1630
-            else:
-                V = V + 1
-                C = 0
-                print(f"I NOW HAVE {V} LEGS")
-                # goto 1630
+        changed_op = handle_roll(diceroll, opponent)  # type: ignore
 
-        # 1630
-        if (A == 2) and (T == 1) and (L == 6):
+        changed = changed or changed_op
+
+        if player.is_finished():
             print("YOUR BUG IS FINISHED.")
-            Y = Y + 1
-        if (S == 2) and (P == 1) and (V == 6):
+            bugs_finished += 1
+        if opponent.is_finished():
             print("MY BUG IS FINISHED.")
-            Y = Y + 2
-        if C == 1:
+            bugs_finished += 1
+        if not changed:
             continue
-        Z = input("DO YOU WANT THE PICTURES? ")
-        if Z != "NO":
+        want_pictures = input("DO YOU WANT THE PICTURES? ")
+        if want_pictures != "NO":
             print("*****YOUR BUG*****")
             print_n_newlines(2)
-            if A != 0:
-                print_feelers(A, is_player=True)
-            if H != 0:
-                print_head()
-            if N != 0:
-                print_neck()
-            if B != 0:
-                print_body(True) if T == 1 else print_body(False)
-            if L != 0:
-                print_legs(L)
+            player.display()
             print_n_newlines(4)
             print("*****MY BUG*****")
             print_n_newlines(3)
-            if S != 0:
-                print_feelers(S, is_player=False)
-            if R == 1:
-                print_head()
-            if Q != 0:
-                print_neck()
-            if P != 0:
-                print_body(True) if U == 1 else print_body(False)
-            if V != 0:
-                print_legs(V)
+            opponent.display()
 
-            if Y != 0:
+            if bugs_finished != 0:
                 break
 
     print("I HOPE YOU ENJOYED THE GAME, PLAY IT AGAIN SOON!!")

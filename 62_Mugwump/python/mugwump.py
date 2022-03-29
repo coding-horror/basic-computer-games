@@ -2,7 +2,7 @@ from math import sqrt
 from random import randint
 
 
-def introduction():
+def introduction() -> None:
     print(
         """The object of this game is to find 4 mugwumps
 hidden on a 10*10 grid.  Homebase is position 0,0.
@@ -38,7 +38,7 @@ def calculate_distance(guess, mugwump):
     return d
 
 
-def play_again():
+def play_again() -> None:
     print("THAT WAS FUN! LET'S PLAY AGAIN.......")
     choice = input("Press Enter to play again, any other key then Enter to quit.")
     if choice == "":

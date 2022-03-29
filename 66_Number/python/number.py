@@ -9,7 +9,7 @@ Ported by Dave LeCompte
 import random
 
 
-def print_with_tab(num_spaces, msg):
+def print_with_tab(num_spaces: int, msg: str) -> None:
     if num_spaces > 0:
         spaces = " " * num_spaces
     else:
@@ -18,7 +18,7 @@ def print_with_tab(num_spaces, msg):
     print(spaces + msg)
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("YOU HAVE 100 POINTS.  BY GUESSING NUMBERS FROM 1 TO 5, YOU")
     print("CAN GAIN OR LOSE POINTS DEPENDING UPON HOW CLOSE YOU GET TO")
     print("A RANDOM NUMBER SELECTED BY THE COMPUTER.")
@@ -32,7 +32,7 @@ def fnr():
     return random.randint(1, 5)
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "NUMBER")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()
@@ -41,7 +41,7 @@ def main():
 
     print_instructions()
 
-    points = 100
+    points: float = 100
 
     while points <= 500:
         print("GUESS A NUMBER FROM 1 TO 5")

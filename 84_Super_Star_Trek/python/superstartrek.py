@@ -14,7 +14,57 @@
 
 import random
 from math import sqrt
-from typing import Any, List
+from typing import Any, Callable, Dict, List, Tuple
+
+# Global variables
+restart = False
+s = 0
+e = 0
+d: List[int] = []
+k: List[List[float]] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]  # Klingons in current quadrant
+devices = [
+    "WARP ENGINES",
+    "SHORT RANGE SENSORS",
+    "LONG RANGE SENSORS",
+    "PHASER CONTROL",
+    "PHOTON TUBES",
+    "DAMAGE CONTROL",
+    "SHIELD CONTROL",
+    "LIBRARY-COMPUTER",
+]
+c = [
+    [0, 1],
+    [-1, 1],
+    [-1, 0],
+    [-1, -1],
+    [0, -1],
+    [1, -1],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+]  # vectors in cardinal directions
+q1 = s1 = 0
+q2 = s2 = 0
+k3 = b3 = s3 = 0  # Klingons, bases, stars in quad.
+
+b4 = b5 = 0
+qs = " " * 192  # quadrant string
+# set up global game variables
+g = [[0] * 8 for _ in range(8)]  # galaxy map
+z = [[0] * 8 for _ in range(8)]  # charted galaxy map
+d = [0] * 8  # damage stats for devices
+t = t0 = 100 * random.randint(20, 39)  # stardate (current, initial)
+t9 = random.randint(25, 34)  # mission duration (stardates)
+docked = False  # true when docked at starbase
+e = e0 = 3000  # energy (current, initial)
+p = p0 = 10  # torpedoes (current, initial)
+s = 0  # shields
+k9, b9 = 0, 0  # total Klingons, bases in galaxy
+# ^ bug in original, was b9 = 2
+s9 = 200  # avg. Klingon shield strength
+
+k7 = k9  # Klingons at start of game
+d4 = 0.5 * random.random()  # extra delay in repairs at base
 
 # -------------------------------------------------------------------------
 #  Utility functions
@@ -78,7 +128,7 @@ def compare_marker(row, col, test_marker):
     return qs[pos : (pos + 3)] == test_marker
 
 
-def find_empty_place():
+def find_empty_place() -> Tuple[int, int]:
     # Find an empty location in the current quadrant.
     while True:
         row, col = fnr(), fnr()
@@ -91,7 +141,7 @@ def find_empty_place():
 # -------------------------------------------------------------------------
 
 
-def navigation():
+def navigation() -> None:
     # Take navigation input and move the Enterprise.
     global d, s, e, k, qs, t, q1, q2, s1, s2
 
@@ -142,9 +192,9 @@ def navigation():
     line = ""
     for i in range(8):
         if d[i] < 0:
-            d[i] += min(warp, 1)
+            d[i] += min(warp, 1)  # type: ignore
             if -0.1 < d[i] < 0:
-                d[i] = -0.1
+                d[i] = -0.1  # type: ignore
             elif d[i] >= 0:
                 if len(line) == 0:
                     line = "DAMAGE CONTROL REPORT:"
@@ -169,13 +219,13 @@ def navigation():
     x, y = s1, s2
 
     for _ in range(n):
-        s1 += x1
-        s2 += x2
+        s1 += x1  # type: ignore
+        s2 += x2  # type: ignore
 
         if s1 < 0 or s1 > 7 or s2 < 0 or s2 > 7:
             # exceeded quadrant limits; calculate final position
-            x += 8 * q1 + n * x1
-            y += 8 * q2 + n * x2
+            x += 8 * q1 + n * x1  # type: ignore
+            y += 8 * q2 + n * x2  # type: ignore
             q1, q2 = int(x / 8), int(y / 8)
             s1, s2 = int(x - q1 * 8), int(y - q2 * 8)
             if s1 < 0:
@@ -232,7 +282,7 @@ def navigation():
     insert_marker(int(s1), int(s2), "<*>")
     maneuver_energy(n)
 
-    t += 0.1 * int(10 * warp) if warp < 1 else 1
+    t += 0.1 * int(10 * warp) if warp < 1 else 1  # type: ignore
     if t > t0 + t9:
         end_game(won=False, quit=False)
         return
@@ -253,7 +303,7 @@ def maneuver_energy(n):
         s = max(0, s)
 
 
-def short_range_scan():
+def short_range_scan() -> None:
     # Print a short range scan.
     global docked, e, p, s
 
@@ -311,7 +361,7 @@ def short_range_scan():
     print(sep)
 
 
-def long_range_scan():
+def long_range_scan() -> None:
     # Print a long range scan.
     global z, g
 
@@ -346,7 +396,7 @@ def print_scan_results(
         print(sep)
 
 
-def phaser_control():
+def phaser_control() -> None:
     # Take phaser control input and fire phasers.
     global e, k, g, z, k3, k9
 
@@ -378,7 +428,7 @@ def phaser_control():
 
     e -= x
     if d[7] < 0:  # bug in original, was d[6]
-        x *= random.random()
+        x *= random.random()  # type: ignore
 
     h1 = int(x / k3)
     for i in range(3):
@@ -408,7 +458,7 @@ def phaser_control():
     klingons_fire()
 
 
-def photon_torpedoes():
+def photon_torpedoes() -> None:
     # Take photon torpedo input and process firing of torpedoes.
     global e, p, k3, k9, k, b3, b9, docked, g, z
 
@@ -439,8 +489,8 @@ def photon_torpedoes():
     x3, y3 = x, y
     print("TORPEDO TRACK:")
     while True:
-        x += x1
-        y += x2
+        x += x1  # type: ignore
+        y += x2  # type: ignore
         x3, y3 = round(x), round(y)
         if x3 < 0 or x3 > 7 or y3 < 0 or y3 > 7:
             print("TORPEDO MISSED")
@@ -517,7 +567,7 @@ def klingons_fire():
             print(f"DAMAGE CONTROL REPORTS  '{devices[r1]} DAMAGED BY THE HIT'")
 
 
-def shield_control():
+def shield_control() -> None:
     # Raise or lower the shields.
     global e, s
 
@@ -584,7 +634,7 @@ def damage_control():
     t += d3 + 0.1
 
 
-def computer():
+def computer() -> None:
     # Perform the various functions of the library computer.
     global d, z, k9, t0, t9, t, b9, s1, s2, b4, b5
 
@@ -712,7 +762,7 @@ def computer():
             )
 
 
-def print_direction(from1, from2, to1, to2):
+def print_direction(from1, from2, to1, to2) -> None:
     # Print direction and distance between two locations in the grid.
     delta1 = -(to1 - from1)  # flip so positive is up (heading = 3)
     delta2 = to2 - from2
@@ -746,7 +796,7 @@ def print_direction(from1, from2, to1, to2):
 # -------------------------------------------------------------------------
 
 
-def startup():
+def startup() -> None:
     # Initialize the game variables and map, and print startup messages.
     global g, z, d, t, t0, t9, docked, e, e0, p, p0, s, k9, b9, s9, c
     global devices, q1, q2, s1, s2, k7
@@ -844,7 +894,7 @@ def startup():
     )
 
 
-def new_quadrant():
+def new_quadrant() -> None:
     # Enter a new quadrant: populate map and print a short range scan.
     global z, k3, b3, s3, d4, k, qs, b4, b5
 
@@ -888,7 +938,9 @@ def new_quadrant():
     short_range_scan()
 
 
-def end_game(won=False, quit=True, enterprise_killed=False):
+def end_game(
+    won: bool = False, quit: bool = True, enterprise_killed: bool = False
+) -> None:
     # Handle end-of-game situations.
     global restart
 
@@ -923,10 +975,10 @@ def end_game(won=False, quit=True, enterprise_killed=False):
 # -------------------------------------------------------------------------
 
 
-def main():
+def main() -> None:
     global restart
 
-    f = {
+    f: Dict[str, Callable[[], None]] = {
         "NAV": navigation,
         "SRS": short_range_scan,
         "LRS": long_range_scan,

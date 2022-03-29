@@ -54,7 +54,6 @@ computer_board = []
 # array representing the coordinates
 # for each ship for player and computer
 # array is in the same order as SHIPS
-player_ship_coords = []
 computer_ship_coords = []
 
 
@@ -226,7 +225,7 @@ def create_blank_board():
 #
 # print out the game board for testing
 # purposes
-def print_board(board):
+def print_board(board) -> None:
 
     # print board header (column numbers)
     print("  ", end="")
@@ -486,7 +485,7 @@ def execute_turn(turn, current_turn):
 ######################################
 
 
-def main():
+def main() -> None:
     # keep track of the turn
     current_turn = 0
 

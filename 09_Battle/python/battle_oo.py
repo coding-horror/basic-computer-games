@@ -36,7 +36,7 @@ class Vector:
 class Sea:
     WIDTH = 6
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._graph = tuple([0 for _ in range(self.WIDTH)] for _ in range(self.WIDTH))
 
     def _validate_item_indices(self, point: Point) -> None:
@@ -67,7 +67,7 @@ class Sea:
         return True
 
     # Redefines how python will render this object when asked as a str
-    def __str__(self):
+    def __str__(self) -> str:
         # Display it encoded
         return "\n".join(
             [
@@ -145,7 +145,7 @@ class Battle:
 
             break
 
-    def loop(self):
+    def loop(self) -> None:
         while True:
             target = self._next_target()
             target_value = self.sea[target]
@@ -174,7 +174,7 @@ class Battle:
 
             print(f"YOUR CURRENT SPLASH/HIT RATIO IS {self.splash_hit_ratio}")
 
-    def _display_sunk_report(self):
+    def _display_sunk_report(self) -> None:
         print(
             "SO FAR, THE BAD GUYS HAVE LOST",
             f"{self.sea.count_sunk(1, 2)} DESTROYER(S),",
@@ -182,7 +182,7 @@ class Battle:
             f"AND {self.sea.count_sunk(5, 6)} AIRCRAFT CARRIER(S).",
         )
 
-    def _display_game_end(self):
+    def _display_game_end(self) -> None:
         print(
             "YOU HAVE TOTALLY WIPED OUT THE BAD GUYS' FLEET "
             f"WITH A FINAL SPLASH/HIT RATIO OF {self.splash_hit_ratio}"

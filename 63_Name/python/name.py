@@ -7,7 +7,7 @@ Ported by Dave LeCompte
 """
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -22,7 +22,7 @@ def is_yes_ish(answer):
     return False
 
 
-def main():
+def main() -> None:
     print_with_tab(34, "NAME")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

@@ -103,7 +103,7 @@ def play_game():
                 break
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "CHOMP")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
     print("THIS IS THE GAME OF CHOMP (SCIENTIFIC AMERICAN, JAN 1973)")

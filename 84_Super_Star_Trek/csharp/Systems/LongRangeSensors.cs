@@ -1,34 +1,35 @@
 using System.Linq;
+using Games.Common.IO;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems
+namespace SuperStarTrek.Systems;
+
+internal class LongRangeSensors : Subsystem
 {
-    internal class LongRangeSensors : Subsystem
+    private readonly Galaxy _galaxy;
+    private readonly IReadWrite _io;
+
+    internal LongRangeSensors(Galaxy galaxy, IReadWrite io)
+        : base("Long Range Sensors", Command.LRS, io)
     {
-        private readonly Galaxy _galaxy;
-        private readonly Output _output;
+        _galaxy = galaxy;
+        _io = io;
+    }
 
-        internal LongRangeSensors(Galaxy galaxy, Output output)
-            : base("Long Range Sensors", Command.LRS, output)
+    protected override bool CanExecuteCommand() => IsOperational("{name} are inoperable");
+
+    protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
+    {
+        _io.WriteLine($"Long range scan for quadrant {quadrant.Coordinates}");
+        _io.WriteLine("-------------------");
+        foreach (var quadrants in _galaxy.GetNeighborhood(quadrant))
         {
-            _galaxy = galaxy;
-            _output = output;
+            _io.WriteLine(": " + string.Join(" : ", quadrants.Select(q => q?.Scan() ?? "***")) + " :");
+            _io.WriteLine("-------------------");
         }
 
-        protected override bool CanExecuteCommand() => IsOperational("{name} are inoperable");
-
-        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
-        {
-            _output.WriteLine($"Long range scan for quadrant {quadrant.Coordinates}");
-            _output.WriteLine("-------------------");
-            foreach (var quadrants in _galaxy.GetNeighborhood(quadrant))
-            {
-                _output.WriteLine(": " + string.Join(" : ", quadrants.Select(q => q?.Scan() ?? "***")) + " :");
-                _output.WriteLine("-------------------");
-            }
-
-            return CommandResult.Ok;
-        }
+        return CommandResult.Ok;
     }
 }
+

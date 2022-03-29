@@ -1,94 +1,105 @@
 using System;
+using Games.Common.IO;
+using Games.Common.Randomness;
+using Stars.Resources;
 
-namespace Stars
+namespace Stars;
+
+internal class Game
 {
-    internal class Game
-    {
-        private readonly int _maxNumber;
-        private readonly int _maxGuessCount;
-        private readonly Random _random;
+    private readonly TextIO _io;
+    private readonly IRandom _random;
+    private readonly int _maxNumber;
+    private readonly int _maxGuessCount;
 
-        public Game(int maxNumber, int maxGuessCount)
+    public Game(TextIO io, IRandom random, int maxNumber, int maxGuessCount)
+    {
+        _io = io;
+        _random = random;
+        _maxNumber = maxNumber;
+        _maxGuessCount = maxGuessCount;
+    }
+
+    internal void Play(Func<bool> playAgain)
+    {
+        DisplayIntroduction();
+
+        do
         {
-            _maxNumber = maxNumber;
-            _maxGuessCount = maxGuessCount;
-            _random = new Random();
+            Play();
+        } while (playAgain.Invoke());
+    }
+
+    private void DisplayIntroduction()
+    {
+        _io.Write(Resource.Streams.Title);
+
+        if (_io.ReadString("Do you want instructions").Equals("N", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return;
         }
 
-        internal void DisplayInstructions()
+        _io.WriteLine(Resource.Formats.Instructions, _maxNumber, _maxGuessCount);
+    }
+
+    private void Play()
+    {
+        _io.WriteLine();
+        _io.WriteLine();
+
+        var target = _random.Next(_maxNumber) + 1;
+
+        _io.WriteLine("Ok, I am thinking of a number.  Start guessing.");
+
+        AcceptGuesses(target);
+    }
+
+    private void AcceptGuesses(int target)
+    {
+        for (int guessCount = 1; guessCount <= _maxGuessCount; guessCount++)
         {
-            if (Input.GetString("Do you want instructions? ").Equals("N", StringComparison.InvariantCultureIgnoreCase))
+            _io.WriteLine();
+            var guess = _io.ReadNumber("Your guess");
+
+            if (guess == target)
             {
+                DisplayWin(guessCount);
                 return;
             }
 
-            Console.WriteLine($"I am thinking of a number between 1 and {_maxNumber}.");
-            Console.WriteLine("Try to guess my number.  After you guess, I");
-            Console.WriteLine("will type one or more stars (*).  The more");
-            Console.WriteLine("stars I type, the close you are to my number.");
-            Console.WriteLine("One star (*) means far away, seven stars (*******)");
-            Console.WriteLine($"means really close!  You get {_maxGuessCount} guesses.");
+            DisplayStars(target, guess);
         }
 
-        internal void Play()
+        DisplayLoss(target);
+    }
+
+    private void DisplayStars(int target, float guess)
+    {
+        var stars = Math.Abs(guess - target) switch
         {
-            Console.WriteLine();
-            Console.WriteLine();
+            >= 64 => "*",
+            >= 32 => "**",
+            >= 16 => "***",
+            >= 8  => "****",
+            >= 4  => "*****",
+            >= 2  => "******",
+            _     => "*******"
+        };
 
-            var target = _random.Next(_maxNumber) + 1;
+        _io.WriteLine(stars);
+    }
 
-            Console.WriteLine("Ok, I am thinking of a number.  Start guessing.");
+    private void DisplayWin(int guessCount)
+    {
+        _io.WriteLine();
+        _io.WriteLine(new string('*', 79));
+        _io.WriteLine();
+        _io.WriteLine($"You got it in {guessCount} guesses!!!  Let's play again...");
+    }
 
-            AcceptGuesses(target);
-        }
-
-        private void AcceptGuesses(int target)
-        {
-            for (int guessCount = 1; guessCount <= _maxGuessCount; guessCount++)
-            {
-                Console.WriteLine();
-                var guess = Input.GetNumber("Your guess? ");
-
-                if (guess == target)
-                {
-                    DisplayWin(guessCount);
-                    return;
-                }
-
-                DisplayStars(target, guess);
-            }
-
-            DisplayLoss(target);
-        }
-
-        private static void DisplayStars(int target, float guess)
-        {
-            var stars = Math.Abs(guess - target) switch
-            {
-                >= 64 => "*",
-                >= 32 => "**",
-                >= 16 => "***",
-                >= 8  => "****",
-                >= 4  => "*****",
-                >= 2  => "******",
-                _     => "*******"
-            };
-
-            Console.WriteLine(stars);
-        }
-
-        private static void DisplayWin(int guessCount)
-        {
-            Console.WriteLine();
-            Console.WriteLine(new string('*', 79));
-            Console.WriteLine();
-            Console.WriteLine($"You got it in {guessCount} guesses!!!  Let's play again...");
-        }
-
-        private void DisplayLoss(int target)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"Sorry, that's {_maxGuessCount} guesses. The number was {target}.");
-        }
+    private void DisplayLoss(int target)
+    {
+        _io.WriteLine();
+        _io.WriteLine($"Sorry, that's {_maxGuessCount} guesses. The number was {target}.");
     }
 }

@@ -82,12 +82,12 @@ def get_next_target(sea: SeaType) -> PointType:
     while True:
         try:
             guess = input("? ")
-            point = guess.split(",")
+            point_str_list = guess.split(",")
 
-            if len(point) != 2:
+            if len(point_str_list) != 2:
                 raise ValueError()
 
-            point = (int(point[0]), int(point[1]))
+            point = (int(point_str_list[0]), int(point_str_list[1]))
 
             if not is_within_sea(point, sea):
                 raise ValueError()
@@ -99,7 +99,7 @@ def get_next_target(sea: SeaType) -> PointType:
             )
 
 
-def setup_ships(sea: SeaType):
+def setup_ships(sea: SeaType) -> None:
     place_ship(sea, DESTROYER_LENGTH, 1)
     place_ship(sea, DESTROYER_LENGTH, 2)
     place_ship(sea, CRUISER_LENGTH, 3)

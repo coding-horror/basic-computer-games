@@ -1,0 +1,6 @@
+I am thinking of a number between 1 and {0}.
+Try to guess my number.  After you guess, I
+will type one or more stars (*).  The more
+stars I type, the closer you are to my number.
+One star (*) means far away, seven stars (*******)
+means really close!  You get {1} guesses.

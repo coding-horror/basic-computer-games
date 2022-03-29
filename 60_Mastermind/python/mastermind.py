@@ -1,9 +1,17 @@
 import random
 import sys
+from typing import List, Union
+
+# Global variables
+colors = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
+color_letters = "BWRGOYPT"
+num_positions = 0
+num_colors = 100
+human_score = 0
+computer_score = 0
 
 
-def main():
-
+def main() -> None:
     global colors, color_letters, num_positions, num_colors, human_score, computer_score
     colors = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
     color_letters = "BWRGOYPT"
@@ -33,21 +41,23 @@ def main():
     while current_round <= num_rounds:
         print(f"Round number {current_round}")
         num_moves = 1
-        guesses = []
+        guesses: List[List[Union[str, int]]] = []
         turn_over = False
         print("Guess my combination ...")
         answer = int(possibilities * random.random())
         numeric_answer = [-1] * num_positions
         for _ in range(0, answer):
             numeric_answer = get_possibility(numeric_answer)
-        # human_readable_answer = make_human_readable(numeric_answer)
+        # human_readable_answer = make_human_readable(numeric_answer, color_letters)
         while num_moves < 10 and not turn_over:
             print(f"Move # {num_moves} Guess : ")
             user_command = input("Guess ")
             if user_command == "BOARD":
                 print_board(guesses)  # 2000
             elif user_command == "QUIT":  # 2500
-                human_readable_answer = make_human_readable(numeric_answer)
+                human_readable_answer = make_human_readable(
+                    numeric_answer, color_letters
+                )
                 print(f"QUITTER! MY COMBINATION WAS: {human_readable_answer}")
                 print("GOOD BYE")
                 quit()
@@ -59,14 +69,14 @@ def main():
                     print(f"INVALID GUESS: {invalid_letters}")
                 else:
                     guess_results = compare_two_positions(
-                        user_command, make_human_readable(numeric_answer)
+                        user_command, make_human_readable(numeric_answer, color_letters)
                     )
                     print(f"Results: {guess_results}")
                     if guess_results[1] == num_positions:  # correct guess
                         turn_over = True
                         print(f"You guessed it in {num_moves} moves!")
                         human_score = human_score + num_moves
-                        print_score()
+                        print_score(computer_score, human_score)
                     else:
                         print(
                             "You have {} blacks and {} whites".format(
@@ -79,11 +89,11 @@ def main():
             print("YOU RAN OUT OF MOVES! THAT'S ALL YOU GET!")
             print(
                 "THE ACTUAL COMBINATION WAS: {}".format(
-                    make_human_readable(numeric_answer)
+                    make_human_readable(numeric_answer, color_letters)
                 )
             )
             human_score = human_score + num_moves
-            print_score()
+            print_score(computer_score, human_score)
 
         # COMPUTER TURN
         guesses = []
@@ -124,18 +134,20 @@ def main():
                     numeric_guess = [-1] * num_positions
                     for _ in range(0, guess):
                         numeric_guess = get_possibility(numeric_guess)
-                    human_readable_guess = make_human_readable(numeric_guess)
-                    print(f"My guess is: {human_readable_guess}")
-                    blacks, whites = input("ENTER BLACKS, WHITES (e.g. 1,2): ").split(
-                        ","
+                    human_readable_guess = make_human_readable(
+                        numeric_guess, color_letters
                     )
-                    blacks = int(blacks)
-                    whites = int(whites)
+                    print(f"My guess is: {human_readable_guess}")
+                    blacks_str, whites_str = input(
+                        "ENTER BLACKS, WHITES (e.g. 1,2): "
+                    ).split(",")
+                    blacks = int(blacks_str)
+                    whites = int(whites_str)
                     if blacks == num_positions:  # Correct guess
                         print(f"I GOT IT IN {num_moves} MOVES")
                         turn_over = True
                         computer_score = computer_score + num_moves
-                        print_score()
+                        print_score(computer_score, human_score)
                     else:
                         num_moves += 1
                         for i in range(0, possibilities):
@@ -147,21 +159,21 @@ def main():
                                     numeric_possibility
                                 )
                             human_readable_possibility = make_human_readable(
-                                numeric_possibility
+                                numeric_possibility, color_letters
                             )  # 4000
                             comparison = compare_two_positions(
                                 human_readable_possibility, human_readable_guess
                             )
                             print(comparison)
-                            if (blacks > comparison[1]) or (whites > comparison[2]):
+                            if (blacks > comparison[1]) or (whites > comparison[2]):  # type: ignore
                                 all_possibilities[i] = 0
             if not turn_over:  # COMPUTER DID NOT GUESS
                 print("I USED UP ALL MY MOVES!")
                 print("I GUESS MY CPU IS JUST HAVING AN OFF DAY.")
                 computer_score = computer_score + num_moves
-                print_score()
+                print_score(computer_score, human_score)
         current_round += 1
-    print_score(is_final_score=True)
+    print_score(computer_score, human_score, is_final_score=True)
     sys.exit()
 
 
@@ -177,7 +189,7 @@ def get_invalid_letters(user_command):
 
 
 # 2000
-def print_board(guesses):
+def print_board(guesses) -> None:
     """Prints previous guesses within the round."""
     print("Board")
     print("Move\tGuess\tBlack White")
@@ -209,7 +221,7 @@ def get_possibility(possibility):
 
 
 # 4500
-def compare_two_positions(guess, answer):
+def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
     """Returns blacks (correct color and position) and whites (correct color only) for candidate position (guess) versus reference position (answer)."""
     increment = 0
     blacks = 0
@@ -235,7 +247,7 @@ def compare_two_positions(guess, answer):
 
 
 # 5000 + logic from 1160
-def print_score(is_final_score=False):
+def print_score(computer_score, human_score, is_final_score: bool = False) -> None:
     """Prints score after each turn ends, including final score at end of game."""
     if is_final_score:
         print("GAME OVER")
@@ -247,7 +259,7 @@ def print_score(is_final_score=False):
 
 
 # 4000, 5500, 6000 subroutines are all identical
-def make_human_readable(num):
+def make_human_readable(num: List[int], color_letters) -> str:
     """Make the numeric representation of a position human readable."""
     retval = ""
     for i in range(0, len(num)):

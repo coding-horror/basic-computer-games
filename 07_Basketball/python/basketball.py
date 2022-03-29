@@ -1,84 +1,76 @@
-import random
+"""
+The basketball class is a computer game that allows you to play as
+Dartmouth College's captain and playmaker
+The game uses set probabilites to simulate outcomes of each posession
+You are able to choose your shot types as well as defensive formations
+"""
 
-# The basketball class is a computer game that allows you to play as
-# Dartmouth College's captain and playmaker
-# The game uses set probabilites to simulate outcomes of each posession
-# You are able to choose your shot types as well as defensive formations
+import random
+from typing import Optional, List, Literal
+
+
+def explain_keyboard_inputs():
+    print("\t\t\t Basketball")
+    print("\t Creative Computing  Morristown, New Jersey\n\n\n")
+    print("This is Dartmouth College basketball. ")
+    print("Υou will be Dartmouth captain and playmaker.")
+    print("Call shots as follows:")
+    print(
+        "1. Long (30ft.) Jump Shot; "
+        "2. Short (15 ft.) Jump Shot; "
+        "3. Lay up; 4. Set Shot"
+    )
+    print("Both teams will use the same defense. Call Defense as follows:")
+    print("6. Press; 6.5 Man-to-Man; 7. Zone; 7.5 None.")
+    print("To change defense, just type 0 as your next shot.")
+    print("Your starting defense will be? ", end="")
 
 
 class Basketball:
-    def __init__(self):
+    def __init__(self) -> None:
         self.time = 0
         self.score = [0, 0]  # first value is opponents score, second is home
-        self.defense = None
-        self.defense_choices = [6, 6.5, 7, 7.5]
-        self.shot = None
-        self.shot_choices = [0, 1, 2, 3, 4]
-        self.z1 = None
+        self.defense_choices: List[float] = [6, 6.5, 7, 7.5]
+        self.shot: Optional[int] = None
+        self.shot_choices: List[Literal[0, 1, 2, 3, 4]] = [0, 1, 2, 3, 4]
+        self.z1: Optional[float] = None
 
-        # Explains the keyboard inputs
-        print("\t\t\t Basketball")
-        print("\t Creative Computing  Morristown, New Jersey\n\n\n")
-        print("This is Dartmouth College basketball. ")
-        print("Υou will be Dartmouth captain and playmaker.")
-        print("Call shots as follows:")
-        print(
-            "1. Long (30ft.) Jump Shot; "
-            "2. Short (15 ft.) Jump Shot; "
-            "3. Lay up; 4. Set Shot"
-        )
-        print("Both teams will use the same defense. Call Defense as follows:")
-        print("6. Press; 6.5 Man-to-Man; 7. Zone; 7.5 None.")
-        print("To change defense, just type 0 as your next shot.")
-        print("Your starting defense will be? ", end="")
+        explain_keyboard_inputs()
 
-        # takes input for a defense
-        try:
-            self.defense = float(input())
+        self.defense = get_defense_choice(self.defense_choices)
 
-        except ValueError:
-            self.defense = None
-
-        # if the input wasn't a valid defense, takes input again
-        while self.defense not in self.defense_choices:
-            print("Your new defensive allignment is? ", end="")
-            try:
-                self.defense = float(input())
-
-            except ValueError:
-                continue
-
-        # takes input for opponent's name
-        print("\nChoose your opponent? ", end="")
-
-        self.opponent = input()
+        self.opponent = get_opponents_name()
         self.start_of_period()
 
-    # adds points to the score
-    # team can take 0 or 1, for opponent or Dartmouth, respectively
-    def add_points(self, team, points):
+    def add_points(self, team: Literal[0, 1], points: Literal[0, 1, 2]) -> None:
+        """
+        Add points to the score.
+
+        Team can take 0 or 1, for opponent or Dartmouth, respectively
+        """
         self.score[team] += points
         self.print_score()
 
-    def ball_passed_back(self):
+    def ball_passed_back(self) -> None:
         print("Ball passed back to you. ", end="")
         self.dartmouth_ball()
 
-    # change defense, called when the user enters 0 for their shot
-    def change_defense(self):
-        self.defense = None
+    def change_defense(self) -> None:
+        """change defense, called when the user enters 0 for their shot"""
+        defense = None
 
-        while self.defense not in self.defense_choices:
+        while defense not in self.defense_choices:
             print("Your new defensive allignment is? ")
             try:
-                self.defense = float(input())
-
+                defense = float(input())
             except ValueError:
                 continue
+        assert isinstance(defense, float)
+        self.defense = defense
         self.dartmouth_ball()
 
-    # simulates two foul shots for a player and adds the points
-    def foul_shots(self, team):
+    def foul_shots(self, team: Literal[0, 1]) -> None:
+        """Simulate two foul shots for a player and adds the points."""
         print("Shooter fouled.  Two shots.")
         if random.random() > 0.49:
             if random.random() > 0.75:
@@ -92,18 +84,18 @@ class Basketball:
 
         self.print_score()
 
-    # called when t = 50, starts a new period
-    def halftime(self):
+    def halftime(self) -> None:
+        """called when t = 50, starts a new period"""
         print("\n   ***** End of first half *****\n")
         self.print_score()
         self.start_of_period()
 
-    # prints the current score
-    def print_score(self):
-        print("Score:  " + str(self.score[1]) + " to " + str(self.score[0]) + "\n")
+    def print_score(self) -> None:
+        """Print the current score"""
+        print(f"Score:  {self.score[1]} to {self.score[0]}\n")
 
-    # simulates a center jump for posession at the beginning of a period
-    def start_of_period(self):
+    def start_of_period(self) -> None:
+        """Simulate a center jump for posession at the beginning of a period"""
         print("Center jump")
         if random.random() > 0.6:
             print("Dartmouth controls the tap.\n")
@@ -112,12 +104,12 @@ class Basketball:
             print(self.opponent + " controls the tap.\n")
             self.opponent_ball()
 
-    # called when t = 92
-    def two_minute_warning(self):
+    def two_minute_warning(self) -> None:
+        """called when t = 92"""
         print("   *** Two minutes left in the game ***")
 
-    # called when the user enters 1 or 2 for their shot
-    def dartmouth_jump_shot(self):
+    def dartmouth_jump_shot(self) -> None:
+        """called when the user enters 1 or 2 for their shot"""
         self.time += 1
         if self.time == 50:
             self.halftime()
@@ -169,9 +161,12 @@ class Basketball:
             self.add_points(1, 2)
             self.opponent_ball()
 
-    # called when the user enters 0, 3, or 4
-    # lay up, set shot, or defense change
-    def dartmouth_non_jump_shot(self):
+    def dartmouth_non_jump_shot(self) -> None:
+        """
+        Lay up, set shot, or defense change
+
+        called when the user enters 0, 3, or 4
+        """
         self.time += 1
         if self.time == 50:
             self.halftime()
@@ -215,21 +210,10 @@ class Basketball:
             self.add_points(1, 2)
             self.opponent_ball()
 
-    # plays out a Dartmouth posession, starting with your choice of shot
-    def dartmouth_ball(self):
-        print("Your shot? ", end="")
-        self.shot = None
-        try:
-            self.shot = int(input())
-        except ValueError:
-            self.shot = None
-
-        while self.shot not in self.shot_choices:
-            print("Incorrect answer. Retype it. Your shot? ", end="")
-            try:
-                self.shot = int(input())
-            except Exception:
-                continue
+    def dartmouth_ball(self) -> None:
+        """plays out a Dartmouth posession, starting with your choice of shot"""
+        shot = get_dartmouth_ball_choice(self.shot_choices)
+        self.shot = shot
 
         if self.time < 100 or random.random() < 0.5:
             if self.shot == 1 or self.shot == 2:
@@ -262,8 +246,8 @@ class Basketball:
                 self.time = 93
                 self.start_of_period()
 
-    # simulates the opponents jumpshot
-    def opponent_jumpshot(self):
+    def opponent_jumpshot(self) -> None:
+        """Simulate the opponents jumpshot"""
         print("Jump Shot.")
         if 8 / self.defense * random.random() > 0.35:
             if 8 / self.defense * random.random() > 0.75:
@@ -303,9 +287,9 @@ class Basketball:
             self.add_points(0, 2)
             self.dartmouth_ball()
 
-    # simulates opponents lay up or set shot
-    def opponent_non_jumpshot(self):
-        if self.z1 > 3:
+    def opponent_non_jumpshot(self) -> None:
+        """Simulate opponents lay up or set shot."""
+        if self.z1 > 3:  # type: ignore
             print("Set shot.")
         else:
             print("Lay up")
@@ -340,9 +324,12 @@ class Basketball:
             self.add_points(0, 2)
             self.dartmouth_ball()
 
-    # simulates an opponents possesion
-    # #randomly picks jump shot or lay up / set shot.
-    def opponent_ball(self):
+    def opponent_ball(self) -> None:
+        """
+        Simulate an opponents possesion
+
+        Randomly picks jump shot or lay up / set shot.
+        """
         self.time += 1
         if self.time == 50:
             self.halftime()
@@ -351,6 +338,48 @@ class Basketball:
             self.opponent_non_jumpshot()
         else:
             self.opponent_jumpshot()
+
+
+def get_defense_choice(defense_choices: List[float]) -> float:
+    """Takes input for a defense"""
+    try:
+        defense = float(input())
+    except ValueError:
+        defense = None
+
+    # if the input wasn't a valid defense, takes input again
+    while defense not in defense_choices:
+        print("Your new defensive allignment is? ", end="")
+        try:
+            defense = float(input())
+        except ValueError:
+            continue
+    assert isinstance(defense, float)
+    return defense
+
+
+def get_dartmouth_ball_choice(shot_choices: List[Literal[0, 1, 2, 3, 4]]) -> int:
+    print("Your shot? ", end="")
+    shot = None
+    try:
+        shot = int(input())
+    except ValueError:
+        shot = None
+
+    while shot not in shot_choices:
+        print("Incorrect answer. Retype it. Your shot? ", end="")
+        try:
+            shot = int(input())
+        except Exception:
+            continue
+    assert isinstance(shot, int)
+    return shot
+
+
+def get_opponents_name() -> str:
+    """Take input for opponent's name"""
+    print("\nChoose your opponent? ", end="")
+    return input()
 
 
 if __name__ == "__main__":

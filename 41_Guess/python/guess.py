@@ -30,7 +30,7 @@ from math import log
 from random import random
 
 
-def insert_whitespaces():
+def insert_whitespaces() -> None:
     print("\n\n\n\n\n")
 
 
@@ -55,7 +55,7 @@ def limit_set():
     return limit, limit_goal
 
 
-def main():
+def main() -> None:
     limit, limit_goal = limit_set()
     while True:
         guess_count = 1

@@ -21,25 +21,23 @@ from random import random
 NUMBER_OF_ROUNDS = 9
 
 
-def initial_message():
+def initial_message() -> None:
     print(" " * 28 + "Russian Roulette")
     print(" " * 15 + "Creative Computing  Morristown, New Jersey\n\n\n")
     print("This is a game of >>>>>>>>>>Russian Roulette.\n")
     print("Here is a Revolver.")
 
 
-def parse_input():
-    correct_input = False
-    while not correct_input:
+def parse_input() -> int:
+    while True:
         try:
             i = int(input("? "))
-            correct_input = True
+            return i
         except ValueError:
             print("Number expected...")
-    return i
 
 
-def main():
+def main() -> None:
     initial_message()
     while True:
         dead = False

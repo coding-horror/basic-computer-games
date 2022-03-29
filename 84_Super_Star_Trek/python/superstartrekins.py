@@ -13,7 +13,7 @@ def get_yes_no(prompt):
     return response[0] != "N"
 
 
-def print_header():
+def print_header() -> None:
     for _ in range(12):
         print()
     t10 = " " * 10
@@ -28,7 +28,7 @@ def print_header():
         print()
 
 
-def print_instructions():
+def print_instructions() -> None:
     # Back in the 70s, at this point, the user would be prompted to
     # turn on their (printing) TTY to capture the output to hard copy.
 
@@ -139,7 +139,7 @@ def print_instructions():
     print("        GALACTIC REGIONS REFERRED TO IN THE GAME.")
 
 
-def main():
+def main() -> None:
     print_header()
     if not get_yes_no("DO YOU NEED INSTRUCTIONS (Y/N)? "):
         return

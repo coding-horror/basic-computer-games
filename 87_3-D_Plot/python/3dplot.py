@@ -11,7 +11,7 @@ def equation(x: float) -> float:
     return 30 * exp(-x * x / 100)
 
 
-def main():
+def main() -> None:
     print(" " * 32 + "3D PLOT")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n\n")
 

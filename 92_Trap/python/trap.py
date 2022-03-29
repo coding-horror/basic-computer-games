@@ -49,7 +49,7 @@ def play_game():
             break
 
 
-def main():
+def main() -> None:
     print(" " * 34 + "TRAP")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
     if input("Instructions ").lower().startswith("y"):

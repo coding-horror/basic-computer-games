@@ -92,7 +92,7 @@ def to_int(s):
         return False, 0
 
 
-def print_board():
+def print_board() -> None:
     global marbles_in_middle
     global human_marbles
     global computer_marbles
@@ -208,7 +208,7 @@ def play_game():
             serious_error(f"play_game: unknown player {whose_turn}")
 
 
-def main():
+def main() -> None:
     global whose_turn
 
     welcome_screen()

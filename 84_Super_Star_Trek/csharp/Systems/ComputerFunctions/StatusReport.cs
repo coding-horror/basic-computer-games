@@ -1,41 +1,43 @@
+using Games.Common.IO;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Objects;
 using SuperStarTrek.Space;
 
-namespace SuperStarTrek.Systems.ComputerFunctions
+namespace SuperStarTrek.Systems.ComputerFunctions;
+
+internal class StatusReport : ComputerFunction
 {
-    internal class StatusReport : ComputerFunction
+    private readonly Game _game;
+    private readonly Galaxy _galaxy;
+    private readonly Enterprise _enterprise;
+
+    internal StatusReport(Game game, Galaxy galaxy, Enterprise enterprise, IReadWrite io)
+        : base("Status report", io)
     {
-        private readonly Game _game;
-        private readonly Galaxy _galaxy;
-        private readonly Enterprise _enterprise;
+        _game = game;
+        _galaxy = galaxy;
+        _enterprise = enterprise;
+    }
 
-        internal StatusReport(Game game, Galaxy galaxy, Enterprise enterprise, Output output)
-            : base("Status report", output)
+    internal override void Execute(Quadrant quadrant)
+    {
+        IO.WriteLine("   Status report:");
+        IO.Write("Klingon".Pluralize(_galaxy.KlingonCount));
+        IO.WriteLine($" left:  {_galaxy.KlingonCount}");
+        IO.WriteLine($"Mission must be completed in {_game.StardatesRemaining:0.#} stardates.");
+
+        if (_galaxy.StarbaseCount > 0)
         {
-            _game = game;
-            _galaxy = galaxy;
-            _enterprise = enterprise;
+            IO.Write($"The Federation is maintaining {_galaxy.StarbaseCount} ");
+            IO.Write("starbase".Pluralize(_galaxy.StarbaseCount));
+            IO.WriteLine(" in the galaxy.");
+        }
+        else
+        {
+            IO.WriteLine("Your stupidity has left you on your own in");
+            IO.WriteLine("  the galaxy -- you have no starbases left!");
         }
 
-        internal override void Execute(Quadrant quadrant)
-        {
-            Output.WriteLine("   Status report:")
-                .Write("Klingon".Pluralize(_galaxy.KlingonCount)).WriteLine($" left:  {_galaxy.KlingonCount}")
-                .WriteLine($"Mission must be completed in {_game.StardatesRemaining:0.#} stardates.");
-
-            if (_galaxy.StarbaseCount > 0)
-            {
-                Output.Write($"The Federation is maintaining {_galaxy.StarbaseCount} ")
-                   .Write("starbase".Pluralize(_galaxy.StarbaseCount)).WriteLine(" in the galaxy.");
-            }
-            else
-            {
-                Output.WriteLine("Your stupidity has left you on your own in")
-                    .WriteLine("  the galaxy -- you have no starbases left!");
-            }
-
-            _enterprise.Execute(Command.DAM);
-        }
+        _enterprise.Execute(Command.DAM);
     }
 }

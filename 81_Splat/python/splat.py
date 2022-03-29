@@ -24,6 +24,7 @@ Ported in 2021 by Jonas Nockert / @lemonad
 """
 from math import sqrt
 from random import choice, random, uniform
+from typing import List
 
 PAGE_WIDTH = 72
 
@@ -210,7 +211,7 @@ def jump_stats(previous_jumps, chute_altitude):
     return n_previous_jumps, n_better
 
 
-def print_splat(time_on_impact):
+def print_splat(time_on_impact) -> None:
     """Parachute opened too late!"""
     print(f"{time_on_impact:.2f}\t\tSPLAT")
     print(
@@ -231,7 +232,7 @@ def print_splat(time_on_impact):
     )
 
 
-def print_results(n_previous_jumps, n_better):
+def print_results(n_previous_jumps, n_better) -> None:
     """Compare current jump to previous successful jumps."""
     k = n_previous_jumps
     k1 = n_better
@@ -276,13 +277,13 @@ def print_results(n_previous_jumps, n_better):
         )
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     """Print centered text."""
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_header():
+def print_header() -> None:
     print_centered("SPLAT")
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print(
@@ -293,10 +294,10 @@ def print_header():
     )
 
 
-def main():
+def main() -> None:
     print_header()
 
-    successful_jumps = []
+    successful_jumps: List[float] = []
     while True:
         chute_altitude = jump()
         if chute_altitude > 0:

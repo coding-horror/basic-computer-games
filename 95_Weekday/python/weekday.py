@@ -16,7 +16,7 @@ import datetime
 GET_TODAY_FROM_SYSTEM = True
 
 
-def print_with_tab(space_count, s):
+def print_with_tab(space_count: int, s: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -146,7 +146,7 @@ def end():
         print()
 
 
-def main():
+def main() -> None:
     print_with_tab(32, "WEEKDAY")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

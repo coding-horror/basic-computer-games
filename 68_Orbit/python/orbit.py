@@ -12,12 +12,12 @@ import random
 PAGE_WIDTH = 64
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def print_instructions():
+def print_instructions() -> None:
     print(
         """SOMEWHERE ABOVE YOUR PLANET IS A ROMULAN SHIP.
 
@@ -143,7 +143,7 @@ def play_game():
     return False
 
 
-def main():
+def main() -> None:
     print_centered("ORBIT")
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

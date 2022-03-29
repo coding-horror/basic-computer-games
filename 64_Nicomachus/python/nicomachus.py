@@ -15,7 +15,7 @@ Ported by Dave LeCompte
 import time
 
 
-def print_with_tab(spaces_count, msg):
+def print_with_tab(spaces_count: int, msg: str) -> None:
     if spaces_count > 0:
         spaces = " " * spaces_count
     else:
@@ -61,7 +61,7 @@ def play_game():
     print("LET'S TRY ANOTHER")
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "NICOMA")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

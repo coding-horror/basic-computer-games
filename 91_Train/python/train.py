@@ -28,7 +28,7 @@ def play_game():
         print("Good! Answer within", error_percent, "percent.")
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "TRAIN")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
     print("Time - speed distance exercise")

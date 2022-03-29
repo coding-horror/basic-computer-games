@@ -69,7 +69,7 @@ def play_game():
                 print("\nIf you give up, type '?' for you next guess.")
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "WORD")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n")
 

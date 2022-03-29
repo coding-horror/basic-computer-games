@@ -1,14 +1,14 @@
 import random
 
 
-def print_intro():
+def print_intro() -> None:
     print("                                DIGITS")
     print("              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
     print("THIS IS A GAME OF GUESSING.")
 
 
-def read_instruction_choice():
+def read_instruction_choice() -> bool:
     print("FOR INSTRUCTIONS, TYPE '1', ELSE TYPE '0' ? ")
     try:
         choice = int(input())
@@ -17,7 +17,7 @@ def read_instruction_choice():
         return False
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("\n")
     print("PLEASE TAKE A PIECE OF PAPER AND WRITE DOWN")
     print("THE DIGITS '0', '1', OR '2' THIRTY TIMES AT RANDOM.")
@@ -56,7 +56,7 @@ def read_continue_choice():
         return False
 
 
-def print_summary_report(running_correct: int):
+def print_summary_report(running_correct: int) -> None:
     print()
     if running_correct > 10:
         print()
@@ -70,7 +70,7 @@ def print_summary_report(running_correct: int):
         print("IT'S A TIE GAME.")
 
 
-def main():
+def main() -> None:
     print_intro()
     if read_instruction_choice():
         print_instructions()
@@ -88,8 +88,8 @@ def main():
         l[0][0] = 2
         l[4][1] = 2
         l[8][2] = 2
-        z = 26
-        z1 = 8
+        z: float = 26
+        z1: float = 8
         z2 = 2
         running_correct = 0
 

@@ -20,7 +20,7 @@ g = 10
 EXPECTED_ACCURACY_PERCENT = 15
 
 
-def print_with_tab(spaces_count, msg):
+def print_with_tab(spaces_count, msg) -> None:
     if spaces_count > 0:
         spaces = " " * spaces_count
     else:
@@ -74,7 +74,7 @@ def ask_player(question, answer):
     return score
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "KINEMA")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

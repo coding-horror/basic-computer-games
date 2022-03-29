@@ -2,4 +2,5 @@ pytest
 flake8
 flake8-bugbear
 flake8-comprehensions
+flake8_implicit_str_concat
 mypy

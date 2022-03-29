@@ -4,7 +4,7 @@ import random  # for generating random numbers
 import sys  # for system function, like exit()
 
 # global variables for storing player's status
-player_funds = 0  # no money
+player_funds: float = 0  # no money
 player_furs = [0, 0, 0, 0]  # no furs
 
 
@@ -22,7 +22,7 @@ FORT_NEWYORK = 3
 FORT_NAMES = ["HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"]
 
 
-def print_at_column(column: int, words: str):
+def print_at_column(column: int, words: str) -> None:
     """Print the words at the specified column"""
     spaces = " " * column  # make a fat string of spaces
     print(spaces + words)

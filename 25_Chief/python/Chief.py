@@ -1,4 +1,4 @@
-def print_lightning_bolt():
+def print_lightning_bolt() -> None:
 
     print("*" * 36)
     n = 24
@@ -17,7 +17,7 @@ def print_lightning_bolt():
     print("*" * 36)
 
 
-def print_solution(n):
+def print_solution(n: int) -> None:
 
     print(f"\n{n} plus 3 gives {n + 3}. This Divided by 5 equals {(n + 3) / 5}")
     print(f"This times 8 gives {((n + 3) / 5) * 8}. If we divide 5 and add 5.")

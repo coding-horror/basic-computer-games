@@ -7,7 +7,7 @@ Ported by Dave LeCompte
 """
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -15,7 +15,7 @@ def print_with_tab(space_count, msg):
     print(spaces + msg)
 
 
-def print_diamond(begin_width, end_width, step, width, count):
+def print_diamond(begin_width, end_width, step, width, count) -> None:
     edgeString = "CC"
     fill = "!"
 
@@ -37,7 +37,7 @@ def print_diamond(begin_width, end_width, step, width, count):
         n += step
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "DIAMOND")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

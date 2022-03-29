@@ -7,7 +7,7 @@ def tab(x):
     return " " * x
 
 
-def main():
+def main() -> None:
 
     # Initial instructions
     print(tab(30) + "ONE CHECK")

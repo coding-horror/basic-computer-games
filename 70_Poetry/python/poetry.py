@@ -26,12 +26,12 @@ phrase = 1
 line = ""
 
 
-def print_centered(msg):
+def print_centered(msg: str) -> None:
     spaces = " " * ((PAGE_WIDTH - len(msg)) // 2)
     print(spaces + msg)
 
 
-def process_phrase_1():
+def process_phrase_1() -> str:
     global line
 
     line_1_options = [
@@ -46,7 +46,7 @@ def process_phrase_1():
     return line
 
 
-def process_phrase_2():
+def process_phrase_2() -> None:
     global line
     global u
 
@@ -63,7 +63,7 @@ def process_phrase_2():
         u = u_modifier
 
 
-def process_phrase_3():
+def process_phrase_3() -> None:
     global line
 
     phrases = [
@@ -79,7 +79,7 @@ def process_phrase_3():
         line = line + words
 
 
-def process_phrase_4():
+def process_phrase_4() -> None:
     global line
 
     phrases = [
@@ -131,7 +131,7 @@ def pick_phrase():
     phrase = j + 1
 
 
-def main():
+def main() -> None:
     print_centered("POETRY")
     print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

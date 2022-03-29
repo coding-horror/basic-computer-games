@@ -11,7 +11,7 @@ import random
 MAX_LIVES = 9
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -58,7 +58,7 @@ def show_ending():
     print(" YOUR CONTRIBUTIONS TO THE FIELD OF COMIC BOOK CHEMISTRY.")
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "CHEMIST")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

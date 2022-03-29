@@ -11,7 +11,7 @@ Ported by Dave LeCompte
 import time
 
 
-def print_with_tab(space_count, msg):
+def print_with_tab(space_count: int, msg: str) -> None:
     if space_count > 0:
         spaces = " " * space_count
     else:
@@ -177,7 +177,7 @@ def happy_goodbye(user_name):
     print(f"NICE MEETING YOU, {user_name}, HAVE A NICE DAY.")
 
 
-def main():
+def main() -> None:
     print_with_tab(33, "HELLO")
     print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print()

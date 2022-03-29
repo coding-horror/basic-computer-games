@@ -1,46 +1,44 @@
+using Games.Common.IO;
 using SuperStarTrek.Commands;
 using SuperStarTrek.Space;
 using SuperStarTrek.Systems.ComputerFunctions;
 
-namespace SuperStarTrek.Systems
+namespace SuperStarTrek.Systems;
+
+internal class LibraryComputer : Subsystem
 {
-    internal class LibraryComputer : Subsystem
+    private readonly IReadWrite _io;
+    private readonly ComputerFunction[] _functions;
+
+    internal LibraryComputer(IReadWrite io, params ComputerFunction[] functions)
+        : base("Library-Computer", Command.COM, io)
     {
-        private readonly Output _output;
-        private readonly Input _input;
-        private readonly ComputerFunction[] _functions;
+        _io = io;
+        _functions = functions;
+    }
 
-        internal LibraryComputer(Output output, Input input, params ComputerFunction[] functions)
-            : base("Library-Computer", Command.COM, output)
+    protected override bool CanExecuteCommand() => IsOperational("Computer disabled");
+
+    protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
+    {
+        var index = GetFunctionIndex();
+        _io.WriteLine();
+
+        _functions[index].Execute(quadrant);
+
+        return CommandResult.Ok;
+    }
+
+    private int GetFunctionIndex()
+    {
+        while (true)
         {
-            _output = output;
-            _input = input;
-            _functions = functions;
-        }
+            var index = (int)_io.ReadNumber("Computer active and waiting command");
+            if (index >= 0 && index <= 5) { return index; }
 
-        protected override bool CanExecuteCommand() => IsOperational("Computer disabled");
-
-        protected override CommandResult ExecuteCommandCore(Quadrant quadrant)
-        {
-            var index = GetFunctionIndex();
-            _output.NextLine();
-
-            _functions[index].Execute(quadrant);
-
-            return CommandResult.Ok;
-        }
-
-        private int GetFunctionIndex()
-        {
-            while (true)
+            for (int i = 0; i < _functions.Length; i++)
             {
-                var index = (int)_input.GetNumber("Computer active and waiting command");
-                if (index >= 0 && index <= 5) { return index; }
-
-                for (int i = 0; i < _functions.Length; i++)
-                {
-                    _output.WriteLine($"   {i} = {_functions[i].Description}");
-                }
+                _io.WriteLine($"   {i} = {_functions[i].Description}");
             }
         }
     }

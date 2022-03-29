@@ -1,15 +1,14 @@
-#
-# AceyDuchy
-#
-# From: BASIC Computer Games (1978)
-#       Edited by David Ahl
-#
-# "The original BASIC program author was Bill Palmby
-#  of Prairie View, Illinois."
-#
-# Python port by Aviyam Fischer, 2022
-#
-######################################################
+"""
+AceyDuchy
+
+From: BASIC Computer Games (1978)
+      Edited by David Ahl
+
+"The original BASIC program author was Bill Palmby
+ of Prairie View, Illinois."
+
+Python port by Aviyam Fischer, 2022
+"""
 
 from typing import List, Literal, TypeAlias, get_args
 
@@ -107,7 +106,19 @@ class Game:
             self.not_done = False
 
 
-if __name__ == "__main__":
+def game_loop() -> None:
+    game_over = False
+
+    while not game_over:
+        game = Game()
+        game.play()
+        print(f"You have ${game.money} left")
+        print("Would you like to play again? (y/n)")
+        if input() == "n":
+            game_over = True
+
+
+def main():
     print(
         """
     Acey Ducey is a card game where you play against the computer.
@@ -117,14 +128,9 @@ if __name__ == "__main__":
     If you do not want to bet input a 0
     """
     )
-    GAME_OVER = False
-
-    while not GAME_OVER:
-        game = Game()
-        game.play()
-        print(f"You have ${game.money} left")
-        print("Would you like to play again? (y/n)")
-        if input() == "n":
-            GAME_OVER = True
-
+    game_loop()
     print("\nThanks for playing!")
+
+
+if __name__ == "__main__":
+    main()

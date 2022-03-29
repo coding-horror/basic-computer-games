@@ -87,7 +87,7 @@ def play_game() -> None:
     print("\nGoodbye.")
 
 
-def print_instructions():
+def print_instructions() -> None:
     print("\nThis is a game in which you will be playing against the")
     print("random decisions of the computer. The field of play is a")
     print("cube of side 3. Any of the 27 locations can be designated")
