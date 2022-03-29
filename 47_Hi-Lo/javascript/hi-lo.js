@@ -86,6 +86,7 @@ async function main()
         print("\n");
         print("PLAY AGAIN (YES OR NO)");
         str = await input();
+        str = str.toUpperCase();
         if (str != "YES")
             break;
     }
