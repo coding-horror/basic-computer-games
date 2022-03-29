@@ -29,6 +29,10 @@ class Hand
     @state == HAND_STATE_STAND
   end
 
+  def is_blackjack?
+    total == 21 && @cards.length == 2
+  end
+
   def total(is_dealer: false)
     return @total unless @total.nil?
     

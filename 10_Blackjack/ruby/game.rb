@@ -22,6 +22,7 @@ class Game
     loop do
       collect_bets_and_deal
       play_players
+      check_for_insurance_bets
       play_dealer
       settle
     end
@@ -45,6 +46,18 @@ class Game
   def play_players
     @players.each_entry do |player|
       play_hand player, player.hand
+    end
+  end
+
+  def check_for_insurance_bets
+    return if @dealer_hand.cards[0].label != "A"
+
+    print "ANY INSURANCE? "
+    return if gets.strip != "Y"
+
+    @players.each_entry do |player|
+      print "PLAYER #{player.id} INSURANCE BET? "
+      player.bet_insurance(gets.to_i)
     end
   end
 
