@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Minimal node.js terminal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=.75">
     <link
       rel="stylesheet"
       href="../../../00_Utilities/javascript/style_terminal.css"
@@ -37,7 +37,8 @@
     <main id="output"></main>
     <script src="HtmlTerminal.js" type="text/javascript"></script>
     <script>
-      const term = new HtmlTerminal(document.getElementById("output"));
+      const $output = document.getElementById("output");
+      const term = new HtmlTerminal($output);
 
       function getGameScriptFromHash() {
         const hash = window.location.hash;
@@ -93,6 +94,17 @@
         document.body.append($scriptTag);
       }
 
+      /**
+       * Determine how much chars will fit in each terminal line.
+       */
+      function getOutputColumns($element) {
+        
+        const fontWidth = 10; //TODO: this width could be measured but it may be complicated!
+        const columnWidth = Math.trunc($element.clientWidth / fontWidth);
+        console.warn(`[terminal] document.body.clientWidth:${$element.clientWidth} fontsize:${fontWidth} columnWidth:${columnWidth}`);
+        return columnWidth;
+      }
+
       /* Redirect stdin/stdout to the HtmlTerminal.
        * This is VERY hacky and should never be done in a serious project!
        * We can use this here because we know what we are doing and...
@@ -100,6 +112,7 @@
       window.process = {
         stdout: {
           write: (t) => term.write(t),
+          columns: getOutputColumns($output)
         },
         stdin: {
           on: (event, callback) => term.input(callback),

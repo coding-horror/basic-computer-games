@@ -1,5 +1,5 @@
 :root {
-    --terminal-font: 1em "Lucida Console", "Courier New", monospace;
+    --terminal-font: 1rem "Lucida Console", "Courier New", monospace;
     --background-color: transparent;
     --text-color: var(--text);
     --prompt-char: '$ ';
@@ -10,12 +10,15 @@
  * If you wan t to overwrite them use custom properties (variables). 
  */
 .terminal {
+    display: block;
     font: var(--terminal-font);
     background-color: var(--background-color);
     color: var(--text-color);
 
     overflow-y: scroll;
-    width: max-content;
+    width: 100%;
+    max-width: 60rem;
+    margin: 0 auto;
 }
 
 /* The terminal consits of multiple "line" elements
