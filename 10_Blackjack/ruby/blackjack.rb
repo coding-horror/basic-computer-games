@@ -1,9 +1,5 @@
 require_relative "./game.rb"
 
-# TODOS
-# 1. check if we should implement insurances
-# 2. test splitting
-
 def intro
     puts "Welcome to Blackjack"
 end

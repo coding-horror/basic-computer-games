@@ -13,6 +13,7 @@ class Pack
   end
 
   def draw
+    reshuffle_if_necessary
     @cards.pop
   end
 

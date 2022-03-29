@@ -54,7 +54,7 @@ class Hand
   def split
     throw "can't split" unless can_split?
     [
-      Hand.new(@bet, @cards[0..1], is_split_hand: true),
+      Hand.new(@bet, @cards[0...1], is_split_hand: true),
       Hand.new(@bet, @cards[1..1], is_split_hand: true)
     ]
   end

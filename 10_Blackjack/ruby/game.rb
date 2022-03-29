@@ -77,7 +77,6 @@ class Game
 
   def print_players_and_dealer_hands
     puts "PLAYER\t#{@players.map(&:id).join("\t")}\tDEALER"
-    # TODO: Check for split hands
     puts "      \t#{@players.map {|p| p.hand.cards[0].label}.join("\t")}\t#{@dealer_hand.cards[0].label}"
     puts "      \t#{@players.map {|p| p.hand.cards[1].label}.join("\t")}"
   end
@@ -85,6 +84,10 @@ class Game
   def play_hand player, hand
     allowed_actions = ALLOWED_HAND_ACTIONS[(hand.is_split_hand || !hand.can_split?) ? "split" : "normal"]
     name = "PLAYER #{player.id}"
+    if hand.is_split_hand
+      name += " - HAND #{hand === player.hand ? 1 : 2}"
+    end
+
     did_hit = false
 
     while hand.is_playing?
@@ -100,8 +103,8 @@ class Game
       if action === "/"
         player.split
 
-        play_hand "#{name} - Hand 1", player.hand
-        play_hand "#{name} - Hand 2", player.split_hand
+        play_hand player, player.hand
+        play_hand player, player.split_hand
 
         return
       end
