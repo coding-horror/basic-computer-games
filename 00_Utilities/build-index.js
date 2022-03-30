@@ -14,6 +14,10 @@ const path = require('path');
 const TITLE = 'BASIC Computer Games';
 const JAVASCRIPT_FOLDER = 'javascript';
 const IGNORE_FOLDERS_START_WITH = ['.', '00_', 'buildJvm', 'Sudoku'];
+const IGNORE_FILES = [
+	// "84 Super Star Trek"  has it's own node/js implementation (using xterm)
+	'cli.mjs', 'superstartrek.mjs'
+];
 
 function createGameLinks(game) {
 	const creatFileLink = (file, name = path.basename(file)) => {
@@ -98,7 +102,8 @@ function findJSFilesInFolder(folder) {
 	const entries = [
 		...htmlFiles,
 		...mjsFiles
-	];
+	].filter(file => !IGNORE_FILES.includes(file));
+	console.log(entries);
 		
 
 		
