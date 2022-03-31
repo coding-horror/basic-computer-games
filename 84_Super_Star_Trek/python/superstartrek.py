@@ -1,15 +1,17 @@
-# ****        **** STAR TREK ****        ****
-# **** SIMULATION OF A MISSION OF THE STARSHIP ENTERPRISE,
-# **** AS SEEN ON THE STAR TREK TV SHOW.
-# **** ORIGINAL PROGRAM BY MIKE MAYFIELD, MODIFIED VERSION
-# **** PUBLISHED IN DEC'S "101 BASIC GAMES", BY DAVE AHL.
-# **** MODIFICATIONS TO THE LATTER (PLUS DEBUGGING) BY BOB
-# **** LEEDOM - APRIL & DECEMBER 1974,
-# **** WITH A LITTLE HELP FROM HIS FRIENDS . . .
-#
-# Python translation by Jack Boyce - February 2021
-#   Output is identical to BASIC version except for a few
-#   fixes (as noted, search `bug`) and minor cleanup.
+"""
+****        **** STAR TREK ****        ****
+**** SIMULATION OF A MISSION OF THE STARSHIP ENTERPRISE,
+**** AS SEEN ON THE STAR TREK TV SHOW.
+**** ORIGINAL PROGRAM BY MIKE MAYFIELD, MODIFIED VERSION
+**** PUBLISHED IN DEC'S "101 BASIC GAMES", BY DAVE AHL.
+**** MODIFICATIONS TO THE LATTER (PLUS DEBUGGING) BY BOB
+**** LEEDOM - APRIL & DECEMBER 1974,
+**** WITH A LITTLE HELP FROM HIS FRIENDS . . .
+
+Python translation by Jack Boyce - February 2021
+  Output is identical to BASIC version except for a few
+  fixes (as noted, search `bug`) and minor cleanup.
+"""
 
 
 import random
@@ -20,7 +22,7 @@ from typing import Any, Callable, Dict, List, Tuple
 restart = False
 s = 0
 e = 0
-d: List[int] = []
+d: List[float] = []
 k: List[List[float]] = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]  # Klingons in current quadrant
 devices = [
     "WARP ENGINES",
@@ -53,6 +55,7 @@ qs = " " * 192  # quadrant string
 g = [[0] * 8 for _ in range(8)]  # galaxy map
 z = [[0] * 8 for _ in range(8)]  # charted galaxy map
 d = [0] * 8  # damage stats for devices
+t: float
 t = t0 = 100 * random.randint(20, 39)  # stardate (current, initial)
 t9 = random.randint(25, 34)  # mission duration (stardates)
 docked = False  # true when docked at starbase
@@ -71,12 +74,12 @@ d4 = 0.5 * random.random()  # extra delay in repairs at base
 # -------------------------------------------------------------------------
 
 
-def fnr():
+def fnr() -> int:
     # Generate a random integer from 0 to 7 inclusive.
     return random.randint(0, 7)
 
 
-def quadrant_name(row, col, region_only=False):
+def quadrant_name(row: int, col: int, region_only: bool = False) -> str:
     # Return quadrant name visible on scans, etc.
     region1 = [
         "ANTARES",
@@ -108,7 +111,7 @@ def quadrant_name(row, col, region_only=False):
     return quadrant
 
 
-def insert_marker(row, col, marker):
+def insert_marker(row: float, col: float, marker: str) -> None:
     # Insert a marker into a given position in the quadrant string `qs`. The
     # contents of a quadrant (Enterprise, stars, etc.) are stored in `qs`.
     global qs
@@ -121,7 +124,7 @@ def insert_marker(row, col, marker):
     qs = qs[0:pos] + marker + qs[(pos + 3) : 192]
 
 
-def compare_marker(row, col, test_marker):
+def compare_marker(row: float, col: float, test_marker: str) -> bool:
     # Check whether the position in the current quadrant is occupied with a
     # given marker.
     pos = round(col) * 3 + round(row) * 24
@@ -192,9 +195,9 @@ def navigation() -> None:
     line = ""
     for i in range(8):
         if d[i] < 0:
-            d[i] += min(warp, 1)  # type: ignore
+            d[i] += min(warp, 1)
             if -0.1 < d[i] < 0:
-                d[i] = -0.1  # type: ignore
+                d[i] = -0.1
             elif d[i] >= 0:
                 if len(line) == 0:
                     line = "DAMAGE CONTROL REPORT:"
@@ -282,7 +285,7 @@ def navigation() -> None:
     insert_marker(int(s1), int(s2), "<*>")
     maneuver_energy(n)
 
-    t += 0.1 * int(10 * warp) if warp < 1 else 1  # type: ignore
+    t += 0.1 * int(10 * warp) if warp < 1 else 1
     if t > t0 + t9:
         end_game(won=False, quit=False)
         return
@@ -290,7 +293,7 @@ def navigation() -> None:
     short_range_scan()
 
 
-def maneuver_energy(n):
+def maneuver_energy(n: int) -> None:
     # Deduct the energy for navigation from energy/shields.
     global e, s
 
@@ -534,12 +537,12 @@ def photon_torpedoes() -> None:
     klingons_fire()
 
 
-def fnd(i):
+def fnd(i: int) -> float:
     # Find distance between Enterprise and i'th Klingon warship.
     return sqrt((k[i][0] - s1) ** 2 + (k[i][1] - s2) ** 2)
 
 
-def klingons_fire():
+def klingons_fire() -> None:
     # Process nearby Klingons firing on Enterprise.
     global s, k, d
 
@@ -601,7 +604,7 @@ def shield_control() -> None:
     print(f"  'SHIELDS NOW AT {s} UNITS PER YOUR COMMAND.'")
 
 
-def damage_control():
+def damage_control() -> None:
     # Print a damage control report.
     global d, t
 
@@ -762,7 +765,7 @@ def computer() -> None:
             )
 
 
-def print_direction(from1, from2, to1, to2) -> None:
+def print_direction(from1: float, from2: float, to1: float, to2: float) -> None:
     # Print direction and distance between two locations in the grid.
     delta1 = -(to1 - from1)  # flip so positive is up (heading = 3)
     delta2 = to2 - from2
