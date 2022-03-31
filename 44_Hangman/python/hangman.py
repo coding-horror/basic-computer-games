@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
-# HANGMAN
-#
-# Converted from BASIC to Python by Trevor Hobson and Daniel Piron
+
+"""
+HANGMAN
+
+Converted from BASIC to Python by Trevor Hobson and Daniel Piron
+"""
 
 import random
+from typing import List
 
 
 class Canvas:
     """For drawing text-based figures"""
 
-    def __init__(self, width=12, height=12, fill=" "):
+    def __init__(self, width: int = 12, height: int = 12, fill: str = " ") -> None:
         self._buffer = []
         for _ in range(height):
             line = []
@@ -19,12 +23,12 @@ class Canvas:
 
         self.clear()
 
-    def clear(self, fill=" "):
+    def clear(self, fill: str = " ") -> None:
         for row in self._buffer:
             for x in range(len(row)):
                 row[x] = fill
 
-    def render(self):
+    def render(self) -> str:
         lines = []
         for line in self._buffer:
             # Joining by the empty string ("") smooshes all of the
@@ -32,13 +36,13 @@ class Canvas:
             lines.append("".join(line))
         return "\n".join(lines)
 
-    def put(self, s, x, y):
+    def put(self, s: str, x: int, y: int) -> None:
         # In an effort to avoid distorting the drawn image, only write the
         # first character of the given string to the buffer.
         self._buffer[y][x] = s[0]
 
 
-def init_gallows(canvas):
+def init_gallows(canvas: Canvas) -> None:
     for i in range(12):
         canvas.put("X", 0, i)
     for i in range(7):
@@ -46,7 +50,7 @@ def init_gallows(canvas):
     canvas.put("X", 6, 1)
 
 
-def draw_head(canvas):
+def draw_head(canvas: Canvas) -> None:
     canvas.put("-", 5, 2)
     canvas.put("-", 6, 2)
     canvas.put("-", 7, 2)
@@ -59,47 +63,47 @@ def draw_head(canvas):
     canvas.put("-", 7, 4)
 
 
-def draw_body(canvas):
+def draw_body(canvas: Canvas) -> None:
     for i in range(5, 9, 1):
         canvas.put("X", 6, i)
 
 
-def draw_right_arm(canvas):
+def draw_right_arm(canvas: Canvas) -> None:
     for i in range(3, 7):
         canvas.put("\\", i - 1, i)
 
 
-def draw_left_arm(canvas):
+def draw_left_arm(canvas: Canvas) -> None:
     canvas.put("/", 10, 3)
     canvas.put("/", 9, 4)
     canvas.put("/", 8, 5)
     canvas.put("/", 7, 6)
 
 
-def draw_right_leg(canvas):
+def draw_right_leg(canvas: Canvas) -> None:
     canvas.put("/", 5, 9)
     canvas.put("/", 4, 10)
 
 
-def draw_left_leg(canvas):
+def draw_left_leg(canvas: Canvas) -> None:
     canvas.put("\\", 7, 9)
     canvas.put("\\", 8, 10)
 
 
-def draw_left_hand(canvas):
+def draw_left_hand(canvas: Canvas) -> None:
     canvas.put("\\", 10, 2)
 
 
-def draw_right_hand(canvas):
+def draw_right_hand(canvas: Canvas) -> None:
     canvas.put("/", 2, 2)
 
 
-def draw_left_foot(canvas):
+def draw_left_foot(canvas: Canvas) -> None:
     canvas.put("\\", 9, 11)
     canvas.put("-", 10, 11)
 
 
-def draw_right_foot(canvas):
+def draw_right_foot(canvas: Canvas) -> None:
     canvas.put("-", 2, 11)
     canvas.put("/", 3, 11)
 
@@ -172,11 +176,11 @@ words = [
 ]
 
 
-def play_game(guess_target):
+def play_game(guess_target: str) -> None:
     """Play one round of the game"""
     wrong_guesses = 0
     guess_progress = ["-"] * len(guess_target)
-    guess_list = []
+    guess_list: List[str] = []
 
     gallows = Canvas()
     init_gallows(gallows)
@@ -206,7 +210,7 @@ def play_game(guess_target):
             ]
             for i in indices:
                 guess_progress[i] = guess_letter
-            if guess_progress == guess_target:
+            if "".join(guess_progress) == guess_target:
                 print("You found the word!")
                 break
             else:

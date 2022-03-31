@@ -192,7 +192,7 @@ if __name__ == "__main__":
     help = input("\nDO YOU WANT INSTRUCTIONS(YES OR NO)? ")
 
     # Printing Instruction
-    if help == "YES" or help == "yes" or help == "Yes":
+    if help.lower() == "yes":
         print_instruction()
 
     # Initialize Game

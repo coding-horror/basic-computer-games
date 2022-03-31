@@ -28,7 +28,7 @@ def print_at_column(column: int, words: str) -> None:
     print(spaces + words)
 
 
-def show_introduction():
+def show_introduction() -> None:
     """Show the player the introductory message"""
     print("YOU ARE THE LEADER OF A FRENCH FUR TRADING EXPEDITION IN ")
     print("1776 LEAVING THE LAKE ONTARIO AREA TO SELL FURS AND GET")
@@ -39,7 +39,7 @@ def show_introduction():
     print("")
 
 
-def get_fort_choice():
+def get_fort_choice() -> int:
     """Show the player the choices of Fort, get their input, if the
     input is a valid choice (1,2,3) return it, otherwise keep
     prompting the user."""

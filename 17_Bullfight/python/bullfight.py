@@ -112,10 +112,10 @@ def print_intro() -> None:
 
 def ask_bool(prompt: str) -> bool:
     while True:
-        answer = input(prompt)
-        if answer == "YES":
+        answer = input(prompt).lower()
+        if answer == "yes":
             return True
-        elif answer == "NO":
+        elif answer == "no":
             return False
         else:
             print("INCORRECT ANSWER - - PLEASE TYPE 'YES' OR 'NO'.")

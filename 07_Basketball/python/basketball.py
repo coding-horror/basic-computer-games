@@ -6,10 +6,10 @@ You are able to choose your shot types as well as defensive formations
 """
 
 import random
-from typing import Optional, List, Literal
+from typing import List, Literal, Optional
 
 
-def explain_keyboard_inputs():
+def explain_keyboard_inputs() -> None:
     print("\t\t\t Basketball")
     print("\t Creative Computing  Morristown, New Jersey\n\n\n")
     print("This is Dartmouth College basketball. ")

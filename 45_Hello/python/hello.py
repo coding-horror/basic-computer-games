@@ -9,6 +9,7 @@ Ported by Dave LeCompte
 """
 
 import time
+from typing import Optional, Tuple
 
 
 def print_with_tab(space_count: int, msg: str) -> None:
@@ -19,7 +20,7 @@ def print_with_tab(space_count: int, msg: str) -> None:
     print(spaces + msg)
 
 
-def get_yes_or_no():
+def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
     msg = input()
     if msg.upper() == "YES":
         return True, True, msg
@@ -58,7 +59,7 @@ def prompt_for_problems(user_name):
     return problem_type
 
 
-def prompt_too_much_or_too_little():
+def prompt_too_much_or_too_little() -> Tuple[bool, Optional[bool]]:
     answer = input().upper()
     if answer == "TOO MUCH":
         return True, True
@@ -67,7 +68,7 @@ def prompt_too_much_or_too_little():
     return False, None
 
 
-def solve_sex_problem(user_name):
+def solve_sex_problem(user_name: str) -> None:
     print("IS YOUR PROBLEM TOO MUCH OR TOO LITTLE?")
     while True:
         valid, too_much = prompt_too_much_or_too_little()
@@ -85,31 +86,31 @@ def solve_sex_problem(user_name):
             print("WITH 'TOO MUCH' OR 'TOO LITTLE'.  WHICH IS IT?")
 
 
-def solve_money_problem(user_name):
+def solve_money_problem(user_name: str) -> None:
     print(f"SORRY, {user_name}, I'M BROKE TOO.  WHY DON'T YOU SELL")
     print("ENCYCLOPEADIAS OR MARRY SOMEONE RICH OR STOP EATING")
     print("SO YOU WON'T NEED SO MUCH MONEY?")
 
 
-def solve_health_problem(user_name):
+def solve_health_problem(user_name: str) -> None:
     print(f"MY ADVICE TO YOU {user_name} IS:")
     print("     1.  TAKE TWO ASPRIN")
     print("     2.  DRINK PLENTY OF FLUIDS (ORANGE JUICE, NOT BEER!)")
     print("     3.  GO TO BED (ALONE)")
 
 
-def solve_job_problem(user_name):
+def solve_job_problem(user_name: str) -> None:
     print(f"I CAN SYMPATHIZE WITH YOU {user_name}.  I HAVE TO WORK")
     print("VERY LONG HOURS FOR NO PAY -- AND SOME OF MY BOSSES")
     print(f"REALLY BEAT ON MY KEYBOARD.  MY ADVICE TO YOU, {user_name},")
     print("IS TO OPEN A RETAIL COMPUTER STORE.  IT'S GREAT FUN.")
 
 
-def alert_unknown_problem_type(user_name, problem_type):
+def alert_unknown_problem_type(user_name: str, problem_type: str) -> None:
     print(f"OH, {user_name}, YOUR ANSWER OF {problem_type} IS GREEK TO ME.")
 
 
-def ask_question_loop(user_name):
+def ask_question_loop(user_name: str) -> None:
     while True:
         problem_type = prompt_for_problems(user_name)
         if problem_type == "SEX":
@@ -137,7 +138,7 @@ def ask_question_loop(user_name):
             print(f"JUST A SIMPLE 'YES' OR 'NO' PLEASE, {user_name}.")
 
 
-def ask_for_fee(user_name):
+def ask_for_fee(user_name: str) -> None:
     print()
     print(f"THAT WILL BE $5.00 FOR THE ADVICE, {user_name}.")
     print("PLEASE LEAVE THE MONEY ON THE TERMINAL.")
@@ -166,14 +167,14 @@ def ask_for_fee(user_name):
             print("PLEASE RESPOND WITH 'YES' or 'NO'.")
 
 
-def unhappy_goodbye(user_name):
+def unhappy_goodbye(user_name: str) -> None:
     print()
     print(f"TAKE A WALK, {user_name}.")
     print()
     print()
 
 
-def happy_goodbye(user_name):
+def happy_goodbye(user_name: str) -> None:
     print(f"NICE MEETING YOU, {user_name}, HAVE A NICE DAY.")
 
 
