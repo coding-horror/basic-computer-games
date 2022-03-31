@@ -13,12 +13,11 @@ internal class Scoreboard
         _scores = new() { [home] = 0, [visitors] = 0 };
         Home = home;
         Visitors = visitors;
-        Offense = home;
         _io = io;
     }
 
     public bool ScoresAreEqual => _scores[Home] == _scores[Visitors];
-    public Team Offense { get; set; }
+    public Team? Offense { get; set; }
     public Team Home { get; }
     public Team Visitors { get; }
 
@@ -28,11 +27,15 @@ internal class Scoreboard
 
     private void AddScore(uint score, string message)
     {
+        if (Offense is null) { throw new InvalidOperationException("Offense must be set before adding to score."); }
+
         _io.WriteLine(message);
         _scores[Offense] += score;
         Turnover();
         Display();
     }
+
+    public void StartPeriod() => Offense = null;
 
     public void Turnover(string? message = null)
     {

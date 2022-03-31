@@ -1,8 +1,8 @@
 namespace Basketball;
 
-internal record Team(string Name, Action<Scoreboard> PlayResolution)
+internal record Team(string Name, Func<Scoreboard, bool> PlayResolution)
 {
     public override string ToString() => Name;
 
-    public void ResolvePlay(Scoreboard scoreboard) => PlayResolution.Invoke(scoreboard);
+    public bool ResolvePlay(Scoreboard scoreboard) => PlayResolution.Invoke(scoreboard);
 }

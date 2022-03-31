@@ -36,113 +36,107 @@ internal class Game
 
             _io.WriteLine();
 
-            while (true)
+            do
             {
-                scoreboard.Offense.ResolvePlay(scoreboard);
-            }
+                var gameOver = scoreboard.Offense.ResolvePlay(scoreboard);
+                if (gameOver) { return; }
+                if (clock.IsHalfTime) { scoreboard.StartPeriod(); }
+            } while (scoreboard.Offense is not null);
         }
     }
 
-    private Action<Scoreboard> HomeTeamPlay(Clock clock, Defense defense) => scoreboard =>
+    private Func<Scoreboard, bool> HomeTeamPlay(Clock clock, Defense defense) => scoreboard =>
     {
         var shot = _io.ReadShot("Your shot");
 
         if (_random.NextFloat() >= 0.5f && clock.IsFullTime)
         {
             _io.WriteLine();
-            if (scoreboard.ScoresAreEqual)
-            {
-                scoreboard.Display(Resource.Formats.EndOfSecondHalf);
-                clock.StartOvertime();
-                // Loop back to center jump
-            }
-            else
+            if (!scoreboard.ScoresAreEqual)
             {
                 scoreboard.Display(Resource.Formats.EndOfGame);
-                return;
-            }
-        }
-        else
-        {
-            if (shot == 0)
-            {
-                defense.Set(_io.ReadDefense("Your new defensive alignment is"));
-                // go to next shot
+                return true;
             }
 
-            if (shot == 1 || shot == 2)
+            scoreboard.Display(Resource.Formats.EndOfSecondHalf);
+            clock.StartOvertime();
+            scoreboard.StartPeriod();
+            return false;
+        }
+
+        if (shot == 0)
+        {
+            defense.Set(_io.ReadDefense("Your new defensive alignment is"));
+            return false;
+        }
+
+        var playContinues = false;
+
+        if (shot == 1 || shot == 2)
+        {
+            clock.Increment(scoreboard);
+            if (clock.IsHalfTime) { return false; }
+
+            _io.WriteLine("Jump shot");
+            if (_random.NextFloat() <= 0.341f * defense / 8)
             {
-                clock.Increment(scoreboard);
-                if (clock.IsHalfTime)
+                scoreboard.AddBasket("Shot is good");
+            }
+            else if (_random.NextFloat() <= 0.682f * defense / 8)
+            {
+                _io.WriteLine("Shot is off target");
+                if (defense / 6 * _random.NextFloat() > 0.45f)
                 {
-                    // Loop back to center jump;
-                }
-                _io.WriteLine("Jump shot");
-                if (_random.NextFloat() <= 0.341f * defense / 8)
-                {
-                    scoreboard.AddBasket("Shot is good");
-                    // over to opponent
-                }
-                else if (_random.NextFloat() <= 0.682f * defense / 8)
-                {
-                    _io.WriteLine("Shot is off target");
-                    if (defense / 6 * _random.NextFloat() > 0.45f)
-                    {
-                        scoreboard.Turnover($"Rebound to {scoreboard.Visitors}");
-                        // over to opponent
-                    }
-                    else
-                    {
-                        _io.WriteLine("Dartmouth controls the rebound.");
-                        if (_random.NextFloat() <= 0.4f)
-                        {
-                            // fall through to 1300
-                        }
-                        else
-                        {
-                            if (defense == 6)
-                            {
-                                if (_random.NextFloat() > 0.6f)
-                                {
-                                    scoreboard.Turnover();
-                                    scoreboard.AddBasket($"Pass stolen by {scoreboard.Visitors} easy layup.");
-                                    _io.WriteLine();
-                                }
-                            }
-                            _io.Write("Ball passed back to you. ");
-                            // next shot without writeline
-                        }
-                    }
-                }
-                else if (_random.NextFloat() <= 0.782f * defense / 8)
-                {
-                    scoreboard.Offense = ContestBall(0.5f, scoreboard, "Shot is blocked.  Ball controlled by {0}.");
-                    // go to next shot
-                }
-                else if (_random.NextFloat() <= 0.843f * defense / 8)
-                {
-                    FreeThrows(scoreboard, "Shooter is fouled.  Two shots.");
-                    // over to opponent
+                    scoreboard.Turnover($"Rebound to {scoreboard.Visitors}");
                 }
                 else
                 {
-                    scoreboard.Turnover("Charging foul.  Dartmouth loses ball.");
-                    // over to opponent
+                    _io.WriteLine("Dartmouth controls the rebound.");
+                    if (_random.NextFloat() <= 0.4f)
+                    {
+                        playContinues = true;
+                    }
+                    else
+                    {
+                        if (defense == 6)
+                        {
+                            if (_random.NextFloat() > 0.6f)
+                            {
+                                scoreboard.Turnover();
+                                scoreboard.AddBasket($"Pass stolen by {scoreboard.Visitors} easy layup.");
+                                _io.WriteLine();
+                            }
+                        }
+                        _io.Write("Ball passed back to you. ");
+                    }
                 }
             }
-            // 1300
-            clock.Increment(scoreboard);
-            if (clock.IsHalfTime)
+            else if (_random.NextFloat() <= 0.782f * defense / 8)
             {
-                // Loop back to center jump;
+                scoreboard.Offense = ContestBall(0.5f, scoreboard, "Shot is blocked.  Ball controlled by {0}.");
             }
+            else if (_random.NextFloat() <= 0.843f * defense / 8)
+            {
+                FreeThrows(scoreboard, "Shooter is fouled.  Two shots.");
+            }
+            else
+            {
+                scoreboard.Turnover("Charging foul.  Dartmouth loses ball.");
+            }
+        }
+
+        while (playContinues)
+        {
+            clock.Increment(scoreboard);
+            if (clock.IsHalfTime) { return false; }
+
+            playContinues = false;
 
             _io.WriteLine(shot == 3 ? "Lay up." : "Set shot.");
 
             if (_random.NextFloat() <= 0.4f * defense / 7)
             {
                 scoreboard.AddBasket("Shot is good.  Two points.");
-                // over to opponent
             }
             else if (_random.NextFloat() <= 0.7f * defense / 7)
             {
@@ -150,47 +144,43 @@ internal class Game
                 if (_random.NextFloat() <= 2 / 3f)
                 {
                     scoreboard.Turnover($"{scoreboard.Visitors} controls the rebound.");
-                    // over to opponent
                 }
                 else
                 {
                     _io.WriteLine("Dartmouth controls the rebound");
                     if (_random.NextFloat() <= 0.4f)
                     {
-                        // goto 1300
+                        playContinues = true;
                     }
                     else
                     {
                         _io.WriteLine("Ball passed back to you.");
-                        // go to next shot
                     }
                 }
             }
             else if (_random.NextFloat() <= 0.875f * defense / 7)
             {
                 FreeThrows(scoreboard, "Shooter fouled.  Two shots.");
-                // over to opponent
             }
             else if (_random.NextFloat() <= 0.925f * defense / 7)
             {
                 scoreboard.Turnover($"Shot blocked. {scoreboard.Visitors}'s ball.");
-                // over to opponent
             }
             else
             {
                 scoreboard.Turnover("Charging foul.  Dartmouth loses ball.");
-                // over to opponent
             }
         }
+
+        return false;
     };
 
-    private Action<Scoreboard> VisitingTeamPlay(Clock clock, Defense defense) => scoreboard =>
+    private Func<Scoreboard, bool> VisitingTeamPlay(Clock clock, Defense defense) => scoreboard =>
     {
         clock.Increment(scoreboard);
-        if (clock.IsHalfTime)
-        {
-            // Loop back to center jump;
-        }
+        if (clock.IsHalfTime) { return false; }
+
+        var playContinues = false;
 
         _io.WriteLine();
         var shot = _random.NextFloat(1, 3.5f);
@@ -201,7 +191,6 @@ internal class Game
             if (_random.NextFloat() <= 0.35f * defense / 8)
             {
                 scoreboard.AddBasket("Shot is good.");
-                // over to Dartmouth
             }
             else if (_random.NextFloat() <= 0.75f * defense / 8)
             {
@@ -209,7 +198,6 @@ internal class Game
                 if (_random.NextFloat() <= 0.5f / defense * 6)
                 {
                     scoreboard.Turnover("Dartmouth controls the rebound.");
-                    // over to Dartmouth
                 }
                 else
                 {
@@ -221,66 +209,70 @@ internal class Game
                             scoreboard.Turnover();
                             scoreboard.AddBasket("Ball stolen.  Easy lay up for Dartmouth.");
                             _io.WriteLine();
-                            // next opponent shot
+                            return false;
                         }
                     }
                     if (_random.NextFloat() <= 0.5f)
                     {
                         _io.WriteLine($"Pass back to {scoreboard.Visitors} guard.");
-                        // next opponent shot
+                        return false;
                     }
-                    // goto 3500
+
+                    playContinues = true;
                 }
             }
             else if (_random.NextFloat() <= 0.9f * defense / 8)
             {
                 FreeThrows(scoreboard, "Player fouled.  Two shots.");
-                // next Dartmouth shot
             }
             else
             {
                 _io.WriteLine("Offensive foul.  Dartmouth's ball.");
-                // next Dartmouth shot
             }
         }
 
-        // 3500
-        _io.WriteLine(shot > 3 ? "Set shot." : "Lay up.");
+        while (playContinues)
+        {
+            playContinues = false;
 
-        if (_random.NextFloat() <= 0.413f * defense / 7)
-        {
-            scoreboard.AddBasket("Shot is good.");
-            // over to Dartmouth
-        }
-        else
-        {
-            _io.WriteLine("Shot is missed.");
-            if (_random.NextFloat() <= 0.5f * 6 / defense)
+            _io.WriteLine(shot > 3 ? "Set shot." : "Lay up.");
+
+            if (_random.NextFloat() <= 0.413f * defense / 7)
             {
-                scoreboard.Turnover("Dartmouth controls the rebound.");
-                // over to Dartmouth
+                scoreboard.AddBasket("Shot is good.");
             }
             else
             {
-                _io.WriteLine($"{scoreboard.Visitors} controls the rebound.");
-                if (defense == 6)
+                _io.WriteLine("Shot is missed.");
+                if (_random.NextFloat() <= 0.5f * 6 / defense)
                 {
-                    if (_random.NextFloat() <= 0.25f)
+                    scoreboard.Turnover("Dartmouth controls the rebound.");
+                }
+                else
+                {
+                    _io.WriteLine($"{scoreboard.Visitors} controls the rebound.");
+                    if (defense == 6)
                     {
-                        scoreboard.Turnover();
-                        scoreboard.AddBasket("Ball stolen.  Easy lay up for Dartmouth.");
-                        _io.WriteLine();
-                        // next opponent shot
+                        if (_random.NextFloat() <= 0.25f)
+                        {
+                            scoreboard.Turnover();
+                            scoreboard.AddBasket("Ball stolen.  Easy lay up for Dartmouth.");
+                            _io.WriteLine();
+                            return false;
+                        }
                     }
+                    if (_random.NextFloat() <= 0.5f)
+                    {
+                        _io.WriteLine($"Pass back to {scoreboard.Visitors} guard.");
+                        return false;
+                    }
+
+                    playContinues = true;
                 }
-                if (_random.NextFloat() <= 0.5f)
-                {
-                    _io.WriteLine($"Pass back to {scoreboard.Visitors} guard.");
-                    // next opponent shot
-                }
-                // goto 3500
             }
         }
+
+        return false;
     };
 
     Team ContestBall(float probability, Scoreboard scoreboard, string messageFormat)
