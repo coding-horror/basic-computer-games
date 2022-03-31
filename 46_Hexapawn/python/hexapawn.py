@@ -44,8 +44,8 @@ Port to Python by Dave LeCompte
 # BoardLayout matches the current board, as well as removing losing move
 # have been moved into methods of this class.
 
-import collections
 import random
+from typing import Iterator, List, NamedTuple, Optional, Tuple
 
 PAGE_WIDTH = 64
 
@@ -53,9 +53,13 @@ HUMAN_PIECE = 1
 EMPTY_SPACE = 0
 COMPUTER_PIECE = -1
 
-ComputerMove = collections.namedtuple(
-    "ComputerMove", ["board_index", "move_index", "m1", "m2"]
-)
+
+class ComputerMove(NamedTuple):
+    board_index: int
+    move_index: int
+    m1: int
+    m2: int
+
 
 wins = 0
 losses = 0
@@ -68,10 +72,7 @@ def print_centered(msg: str) -> None:
 
 def print_header(title: str) -> None:
     print_centered(title)
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
 def print_instructions() -> None:
@@ -110,7 +111,7 @@ GO FIRST.
     )
 
 
-def prompt_yes_no(msg):
+def prompt_yes_no(msg: str) -> bool:
     while True:
         print(msg)
         response = input().upper()
@@ -120,7 +121,7 @@ def prompt_yes_no(msg):
             return False
 
 
-def reverse_space_name(space_name):
+def reverse_space_name(space_name: int) -> int:
     # reverse a space name in the range 1-9 left to right
     assert 1 <= space_name <= 9
 
@@ -128,36 +129,38 @@ def reverse_space_name(space_name):
     return reflections[space_name]
 
 
-def is_space_in_center_column(space_name):
+def is_space_in_center_column(space_name: int) -> bool:
     return reverse_space_name(space_name) == space_name
 
 
 class BoardLayout:
-    def __init__(self, cells, move_list):
+    def __init__(self, cells: List[int], move_list: List[Tuple[int, int]]) -> None:
         self.cells = cells
         self.moves = move_list
 
-    def _check_match_no_mirror(self, cell_list):
+    def _check_match_no_mirror(self, cell_list: List[int]) -> bool:
         return all(
             board_contents == cell_list[space_index]
             for space_index, board_contents in enumerate(self.cells)
         )
 
-    def _check_match_with_mirror(self, cell_list):
+    def _check_match_with_mirror(self, cell_list: List[int]) -> bool:
         for space_index, board_contents in enumerate(self.cells):
             reversed_space_index = reverse_space_name(space_index + 1) - 1
             if board_contents != cell_list[reversed_space_index]:
                 return False
         return True
 
-    def check_match(self, cell_list):
+    def check_match(self, cell_list: List[int]) -> Tuple[bool, Optional[bool]]:
         if self._check_match_with_mirror(cell_list):
             return True, True
         elif self._check_match_no_mirror(cell_list):
             return True, False
         return False, None
 
-    def get_random_move(self, reverse_board):
+    def get_random_move(
+        self, reverse_board: Optional[bool]
+    ) -> Optional[Tuple[int, int, int]]:
         if not self.moves:
             return None
         move_index = random.randrange(len(self.moves))
@@ -193,7 +196,7 @@ boards = [
 ]
 
 
-def get_move(board_index, move_index):
+def get_move(board_index: int, move_index: int) -> Tuple[int, int]:
     assert board_index >= 0 and board_index < len(boards)
     board = boards[board_index]
 
@@ -202,7 +205,7 @@ def get_move(board_index, move_index):
     return board.moves[move_index]
 
 
-def remove_move(board_index, move_index):
+def remove_move(board_index: int, move_index: int) -> None:
     assert board_index >= 0 and board_index < len(boards)
     board = boards[board_index]
 
@@ -211,11 +214,11 @@ def remove_move(board_index, move_index):
     del board.moves[move_index]
 
 
-def init_board():
+def init_board() -> List[int]:
     return [COMPUTER_PIECE] * 3 + [EMPTY_SPACE] * 3 + [HUMAN_PIECE] * 3
 
 
-def print_board(board) -> None:
+def print_board(board: List[int]) -> None:
     piece_dict = {COMPUTER_PIECE: "X", EMPTY_SPACE: ".", HUMAN_PIECE: "O"}
 
     space = " " * 10
@@ -231,7 +234,7 @@ def print_board(board) -> None:
     print()
 
 
-def get_coordinates():
+def get_coordinates() -> Tuple[int, int]:
     while True:
         try:
             print("YOUR MOVE?")
@@ -246,15 +249,15 @@ def print_illegal() -> None:
     print("ILLEGAL MOVE.")
 
 
-def board_contents(board, space_number):
+def board_contents(board: List[int], space_number: int) -> int:
     return board[space_number - 1]
 
 
-def set_board(board, space_number, new_value):
+def set_board(board: List[int], space_number: int, new_value: int) -> None:
     board[space_number - 1] = new_value
 
 
-def is_legal_human_move(board, m1, m2):
+def is_legal_human_move(board: List[int], m1: int, m2: int) -> bool:
     if board_contents(board, m1) != HUMAN_PIECE:
         # Start space doesn't contain player's piece
         return False
@@ -285,30 +288,30 @@ def is_legal_human_move(board, m1, m2):
     return True
 
 
-def player_piece_on_back_row(board):
+def player_piece_on_back_row(board: List[int]) -> bool:
     return any(board_contents(board, space) == HUMAN_PIECE for space in range(1, 4))
 
 
-def computer_piece_on_front_row(board):
+def computer_piece_on_front_row(board: List[int]) -> bool:
     return any(board_contents(board, space) == COMPUTER_PIECE for space in range(7, 10))
 
 
-def all_human_pieces_captured(board):
+def all_human_pieces_captured(board: List[int]) -> bool:
     return len(list(get_human_spaces(board))) == 0
 
 
-def all_computer_pieces_captured(board):
+def all_computer_pieces_captured(board: List[int]) -> bool:
     return len(list(get_computer_spaces(board))) == 0
 
 
-def human_win(last_computer_move):
+def human_win(last_computer_move: ComputerMove) -> None:
     print("YOU WIN")
     remove_move(last_computer_move.board_index, last_computer_move.move_index)
     global losses
     losses += 1
 
 
-def computer_win(has_moves):
+def computer_win(has_moves: bool) -> None:
     if not has_moves:
         msg = "YOU CAN'T MOVE, SO "
     else:
@@ -319,12 +322,11 @@ def computer_win(has_moves):
     wins += 1
 
 
-def show_scores():
-    print(f"I HAVE WON {wins} AND YOU {losses} OUT OF {wins + losses} GAMES.")
-    print()
+def show_scores() -> None:
+    print(f"I HAVE WON {wins} AND YOU {losses} OUT OF {wins + losses} GAMES.\n")
 
 
-def human_has_move(board):
+def human_has_move(board: List[int]) -> bool:
     for i in get_human_spaces(board):
         if board_contents(board, i - 3) == EMPTY_SPACE:
             # can move piece forward
@@ -353,31 +355,31 @@ def human_has_move(board):
     return False
 
 
-def get_board_spaces():
+def get_board_spaces() -> Iterator[int]:
     """generates the space names (1-9)"""
     yield from range(1, 10)
 
 
-def get_board_spaces_with(board, val):
+def get_board_spaces_with(board: List[int], val: int) -> Iterator[int]:
     """generates spaces containing pieces of type val"""
     for i in get_board_spaces():
         if board_contents(board, i) == val:
             yield i
 
 
-def get_human_spaces(board):
+def get_human_spaces(board: List[int]) -> Iterator[int]:
     yield from get_board_spaces_with(board, HUMAN_PIECE)
 
 
-def get_empty_spaces(board):
+def get_empty_spaces(board: List[int]) -> Iterator[int]:
     yield from get_board_spaces_with(board, EMPTY_SPACE)
 
 
-def get_computer_spaces(board):
+def get_computer_spaces(board: List[int]) -> Iterator[int]:
     yield from get_board_spaces_with(board, COMPUTER_PIECE)
 
 
-def has_computer_move(board):
+def has_computer_move(board: List[int]) -> bool:
     for i in get_computer_spaces(board):
         if board_contents(board, i + 3) == EMPTY_SPACE:
             # can move forward (down)
@@ -406,7 +408,7 @@ def has_computer_move(board):
     return False
 
 
-def find_board_index_that_matches_board(board):
+def find_board_index_that_matches_board(board: List[int]) -> Tuple[int, Optional[bool]]:
     for board_index, board_layout in enumerate(boards):
         matches, is_reversed = board_layout.check_match(board)
         if matches:
@@ -417,7 +419,7 @@ def find_board_index_that_matches_board(board):
     raise RuntimeError("ILLEGAL BOARD PATTERN.")
 
 
-def pick_computer_move(board):
+def pick_computer_move(board: List[int]) -> Optional[ComputerMove]:
     if not has_computer_move(board):
         return None
 
@@ -434,7 +436,7 @@ def pick_computer_move(board):
     return ComputerMove(board_index, move_index, m1, m2)
 
 
-def get_human_move(board):
+def get_human_move(board: List[int]) -> Tuple[int, int]:
     while True:
         m1, m2 = get_coordinates()
 
@@ -444,12 +446,12 @@ def get_human_move(board):
             return m1, m2
 
 
-def apply_move(board, m1, m2, piece_value):
+def apply_move(board: List[int], m1: int, m2: int, piece_value: int) -> None:
     set_board(board, m1, EMPTY_SPACE)
     set_board(board, m2, piece_value)
 
 
-def play_game():
+def play_game() -> None:
     last_computer_move = None
 
     board = init_board()
@@ -464,11 +466,13 @@ def play_game():
         print_board(board)
 
         if player_piece_on_back_row(board) or all_computer_pieces_captured(board):
+            assert last_computer_move is not None
             human_win(last_computer_move)
             return
 
         computer_move = pick_computer_move(board)
         if computer_move is None:
+            assert last_computer_move is not None
             human_win(last_computer_move)
             return
 
