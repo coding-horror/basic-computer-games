@@ -93,3 +93,11 @@ If you don't already have a ruby interpreter, you can download it from the [ruby
 ## vbnet
 
 Follow the same steps as for the [csharp](#csharp) translations. This can be run with `dotnet` or `Visual Studio`.
+
+## rust
+
+If you don't already have Rust on your computer, you can follow the instruction on [Rust Book](https://doc.rust-lang.org/book/ch01-01-installation.html)
+
+1. From the command-line, navigate to the corresponding directory.
+2. Run the following command.
+   * `cargo run`
