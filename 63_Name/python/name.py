@@ -15,9 +15,9 @@ def print_with_tab(space_count: int, msg: str) -> None:
     print(spaces + msg)
 
 
-def is_yes_ish(answer):
+def is_yes_ish(answer: str) -> bool:
     cleaned = answer.strip().upper()
-    if cleaned == "Y" or cleaned == "YES":
+    if cleaned in ["Y", "YES"]:
         return True
     return False
 

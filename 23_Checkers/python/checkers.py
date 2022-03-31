@@ -37,10 +37,7 @@ def print_centered(msg: str) -> None:
 
 def print_header(title: str) -> None:
     print_centered(title)
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
 def get_coordinates(prompt: str) -> Tuple[int, int]:
@@ -373,20 +370,15 @@ def print_instructions() -> None:
     print("(7,0) IS THE LOWER RIGHT CORNER")
     print("(7,7) IS THE UPPER RIGHT CORNER")
     print("THE COMPUTER WILL TYPE '+TO' WHEN YOU HAVE ANOTHER")
-    print("JUMP.  TYPE TWO NEGATIVE NUMBERS IF YOU CANNOT JUMP.")
-    print()
-    print()
-    print()
+    print("JUMP.  TYPE TWO NEGATIVE NUMBERS IF YOU CANNOT JUMP.\n\n\n")
 
 
 def print_human_won() -> None:
-    print()
-    print("YOU WIN.")
+    print("\nYOU WIN.")
 
 
 def print_computer_won() -> None:
-    print()
-    print("I WIN.")
+    print("\nI WIN.")
 
 
 def play_game() -> None:

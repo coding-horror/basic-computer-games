@@ -1,31 +1,32 @@
 from random import random, seed
 
 
-def gen_random():
+def gen_random() -> int:
     return int(random() * 5) + 1
 
 
-def bad_input_850():
+def bad_input_850() -> None:
     print("\nHAMURABI:  I CANNOT DO WHAT YOU WISH.")
     print("GET YOURSELF ANOTHER STEWARD!!!!!")
 
 
-def bad_input_710(S):
+def bad_input_710(grain_bushels: int) -> None:
     print("HAMURABI:  THINK AGAIN.  YOU HAVE ONLY")
-    print(S, "BUSHELS OF GRAIN.  NOW THEN,")
+    print(f"{grain_bushels} BUSHELS OF GRAIN.  NOW THEN,")
 
 
-def bad_input_720(A):
-    print("HAMURABI:  THINK AGAIN.  YOU OWN ONLY", A, "ACRES.  NOW THEN,")
+def bad_input_720(acres: float) -> None:
+    print(f"HAMURABI:  THINK AGAIN.  YOU OWN ONLY {acres} ACRES.  NOW THEN,")
 
 
-def national_fink():
+def national_fink() -> None:
     print("DUE TO THIS EXTREME MISMANAGEMENT YOU HAVE NOT ONLY")
     print("BEEN IMPEACHED AND THROWN OUT OF OFFICE BUT YOU HAVE")
     print("ALSO BEEN DECLARED NATIONAL FINK!!!!")
 
 
-def b_input(promptstring):  # emulate BASIC input. It rejects non-numeric values
+def b_input(promptstring: str) -> int:
+    """emulate BASIC input. It rejects non-numeric values"""
     x = input(promptstring)
     while x.isalpha():
         x = input("?REDO FROM START\n? ")

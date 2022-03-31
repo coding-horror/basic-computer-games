@@ -81,7 +81,7 @@ GOOD LUCK.  THE FEDERATION IS COUNTING ON YOU.
     )
 
 
-def get_yes_or_no():
+def get_yes_or_no() -> bool:
     while True:
         response = input().upper()
         if response == "YES":
@@ -92,7 +92,7 @@ def get_yes_or_no():
             print("PLEASE TYPE 'YES' OR 'NO'")
 
 
-def game_over(is_success):
+def game_over(is_success: bool) -> bool:
     if is_success:
         print("YOU HAVE SUCCESSFULLY COMPLETED YOUR MISSION.")
     else:
@@ -103,7 +103,7 @@ def game_over(is_success):
     return get_yes_or_no()
 
 
-def play_game():
+def play_game() -> bool:
     rom_angle = random.randint(0, 359)
     rom_distance = random.randint(100, 300)
     rom_angular_velocity = random.randint(10, 30)
@@ -145,10 +145,7 @@ def play_game():
 
 def main() -> None:
     print_centered("ORBIT")
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     print_instructions()
 

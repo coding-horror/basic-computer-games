@@ -24,7 +24,7 @@ import random
 
 
 def main() -> None:
-    WORDS = [
+    words = [
         [
             "Ability",
             "Basal",
@@ -85,7 +85,7 @@ def main() -> None:
     still_running = True
     while still_running:
         phrase = ""
-        for section in WORDS:
+        for section in words:
             if len(phrase) > 0:
                 phrase += " "
             phrase += section[random.randint(0, len(section) - 1)]

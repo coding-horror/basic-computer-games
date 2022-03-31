@@ -125,7 +125,6 @@ def main() -> None:
 
     keep_playing = True
     while keep_playing:
-
         play_game()
         keep_playing = input("\nAgain (1=Yes, 0=No!) ") == "1"
 

@@ -1,6 +1,7 @@
 import math
 import random
 import time
+from typing import List
 
 
 def basic_print(*zones, **kwargs) -> None:
@@ -17,7 +18,7 @@ def basic_print(*zones, **kwargs) -> None:
     print(" " * identation + line, end=end)
 
 
-def basic_input(prompt, type_conversion=None):
+def basic_input(prompt: str, type_conversion=None):
     """BASIC INPUT command with optional type conversion"""
 
     while True:
@@ -45,7 +46,7 @@ HORSE_NAMES = [
 ]
 
 
-def introduction():
+def introduction() -> None:
     """Print the introduction, and optional the instructions"""
 
     basic_print("HORSERACE", indent=31)
@@ -66,7 +67,7 @@ def introduction():
     basic_print("")
 
 
-def setup_players():
+def setup_players() -> List[str]:
     """Gather the number of players and their names"""
 
     # ensure we get an integer value from the user

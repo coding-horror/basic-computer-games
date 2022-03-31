@@ -115,7 +115,7 @@ def game_loop() -> None:
             game_over = True
 
 
-def main():
+def main() -> None:
     print(
         """
     Acey Ducey is a card game where you play against the computer.
