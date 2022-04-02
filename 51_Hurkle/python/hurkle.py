@@ -6,7 +6,7 @@ from random import random
 
 
 def direction(A, B, X, Y) -> None:
-    """Prints the direction hint for finding the hurkle."""
+    """Print the direction hint for finding the hurkle."""
 
     print("GO ", end="")
     if Y < B:

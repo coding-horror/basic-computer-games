@@ -190,7 +190,7 @@ def get_invalid_letters(user_command):
 
 # 2000
 def print_board(guesses) -> None:
-    """Prints previous guesses within the round."""
+    """Print previous guesses within the round."""
     print("Board")
     print("Move\tGuess\tBlack White")
     for idx, guess in enumerate(guesses):
@@ -248,7 +248,7 @@ def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
 
 # 5000 + logic from 1160
 def print_score(computer_score, human_score, is_final_score: bool = False) -> None:
-    """Prints score after each turn ends, including final score at end of game."""
+    """Print score after each turn ends, including final score at end of game."""
     if is_final_score:
         print("GAME OVER")
         print("FINAL SCORE:")

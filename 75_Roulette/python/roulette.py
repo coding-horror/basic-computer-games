@@ -134,7 +134,7 @@ def bet_results(bet_ids: List[int], bet_values: List[int], result):
 
 
 def print_check(amount: int) -> None:
-    """Prints a check of a given amount"""
+    """Print a check of a given amount"""
     name = input("TO WHOM SHALL I MAKE THE CHECK? ")
 
     print("-" * 72)

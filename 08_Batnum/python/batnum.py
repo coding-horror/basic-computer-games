@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Tuple, Any
+from typing import Any, Tuple
 
 
 class WinOptions(IntEnum):
@@ -41,7 +41,7 @@ class StartOptions(IntEnum):
 
 
 def print_intro() -> None:
-    """Prints out the introduction and rules for the game."""
+    """Print out the introduction and rules for the game."""
     print("BATNUM".rjust(33, " "))
     print("CREATIVE COMPUTING  MORRISSTOWN, NEW JERSEY".rjust(15, " "))
     print()
