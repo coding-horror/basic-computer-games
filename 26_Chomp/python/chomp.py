@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-# CHOMP
-#
-# Converted from BASIC to Python by Trevor Hobson
+
+"""
+CHOMP
+
+Converted from BASIC to Python by Trevor Hobson
+"""
 
 
 class Canvas:

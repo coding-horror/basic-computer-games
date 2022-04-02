@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 
-# This data is meant to be read-only, so we are storing it in a tuple
 import json
 
+# This data is meant to be read-only, so we are storing it in a tuple
 with open("data.json") as f:
     DATA = tuple(json.load(f))
 
