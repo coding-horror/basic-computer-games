@@ -91,7 +91,7 @@ def main() -> None:
             phrase += section[random.randint(0, len(section) - 1)]
 
         print(phrase)
-        print("")
+        print()
 
         response = input("? ")
         try:

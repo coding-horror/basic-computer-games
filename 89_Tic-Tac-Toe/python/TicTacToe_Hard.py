@@ -181,7 +181,7 @@ def display(Game: TicTacToe) -> None:
     print(line1, "\n\n")
 
 
-def play() -> None:
+def main() -> None:
     Pick = input("Pick 'X' or 'O' ").strip().upper()
     if Pick == "O":
         Game = TicTacToe("O")
@@ -219,4 +219,4 @@ def play() -> None:
 
 
 if __name__ == "__main__":
-    play()
+    main()

@@ -1,9 +1,9 @@
+"""
+Original game design: Cram, Goodie, Hibbard Lexington H.S.
+Modifications: G. Paul, R. Hess (Ties), 1973
+"""
 import math
 from typing import List
-
-
-def tab(n: int) -> str:
-    return " " * n
 
 
 def get_choice(prompt: str, choices: List[str]) -> str:
@@ -96,13 +96,9 @@ def main():
     salaries = {}
     ammunition = {}
     oa = {}
-    print(tab(26) + "CIVIL WAR")
-    print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    # Original game design: Cram, Goodie, Hibbard Lexington H.S.
-    # Modifications: G. Paul, R. Hess (Ties), 1973
+    print(" " * 26 + "CIVIL WAR")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+
     # Union info on likely confederate strategy
     sa[1] = 25
     sa[2] = 25

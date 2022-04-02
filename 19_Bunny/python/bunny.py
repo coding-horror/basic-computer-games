@@ -8,20 +8,14 @@ with open("data.json") as f:
     DATA = tuple(json.load(f))
 
 
-def display_intro() -> None:
-    print(tab(33) + "BUNNY")
-    print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+def print_intro() -> None:
+    print(" " * 33 + "BUNNY")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
 
 
-def tab(column: int) -> str:
-    """Emulates the TAB command in BASIC. Returns a string with ASCII
-    codes for setting the cursor to the specified column."""
-    return f"\r\33[{column}C"
-
-
-def play() -> None:
-    display_intro()
+def main() -> None:
+    print_intro()
 
     # Using an iterator will give us a similar interface to BASIC's READ
     # command. Instead of READ, we will call 'next(data)' to fetch the next element.
@@ -55,7 +49,7 @@ def play() -> None:
         # position of a line segment.
         start = command
         # Position cursor at start
-        print(tab(start), end="")
+        print(" " * start, end="")
 
         # The following number, indicates the end of the segment.
         end = next(data)
@@ -67,4 +61,4 @@ def play() -> None:
 
 
 if __name__ == "__main__":
-    play()
+    main()

@@ -5,7 +5,7 @@ import textwrap
 NUMCNT = 9  # How many numbers are we playing with?
 
 
-def play():
+def main():
     print("REVERSE".center(72))
     print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY".center(72))
     print()
@@ -103,6 +103,6 @@ def rules():
 
 if __name__ == "__main__":
     try:
-        play()
+        main()
     except KeyboardInterrupt:
         pass

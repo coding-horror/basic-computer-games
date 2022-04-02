@@ -3,10 +3,6 @@ import random
 from typing import Dict, List, Literal, Tuple, Union
 
 
-def print_n_whitespaces(n: int) -> None:
-    print(" " * n, end="")
-
-
 def print_n_newlines(n: int) -> None:
     for _ in range(n):
         print()
@@ -73,10 +69,8 @@ def calculate_final_score(
 
 
 def print_header() -> None:
-    print_n_whitespaces(34)
-    print("BULL")
-    print_n_whitespaces(15)
-    print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print(" " * 34 + "BULL")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print_n_newlines(2)
 
 

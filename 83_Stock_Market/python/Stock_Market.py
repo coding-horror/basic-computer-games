@@ -186,8 +186,7 @@ HAVE $10,000 TO INVEST.  USE INTEGERS FOR ALL YOUR INPUTS.
     )
 
 
-if __name__ == "__main__":
-
+def main():
     print("\t\t      STOCK MARKET")
     help = input("\nDO YOU WANT INSTRUCTIONS(YES OR NO)? ")
 
@@ -226,3 +225,7 @@ if __name__ == "__main__":
 
     print("\nHOPE YOU HAD FUN!!!!")
     input("")
+
+
+if __name__ == "__main__":
+    main()

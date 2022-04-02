@@ -12,14 +12,6 @@ import time
 from typing import Optional, Tuple
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
 def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
     msg = input()
     if msg.upper() == "YES":
@@ -179,14 +171,9 @@ def happy_goodbye(user_name: str) -> None:
 
 
 def main() -> None:
-    print_with_tab(33, "HELLO")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    print("HELLO.  MY NAME IS CREATIVE COMPUTER.")
-    print()
-    print()
+    print(" " * 33 + "HELLO")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print("HELLO.  MY NAME IS CREATIVE COMPUTER.\n\n")
     print("WHAT'S YOUR NAME?")
     user_name = input()
     print()

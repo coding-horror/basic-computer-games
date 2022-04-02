@@ -80,7 +80,7 @@ def main() -> None:
         player_has_won = False
         while (guess_number < MAX_GUESSES) and not player_has_won:
 
-            print("")
+            print()
             guess = get_guess()
             guess_number += 1
 

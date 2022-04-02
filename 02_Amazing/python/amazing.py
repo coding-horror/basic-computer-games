@@ -1,7 +1,7 @@
-import random
 import enum
-from typing import List, Tuple
+import random
 from dataclasses import dataclass
+from typing import List, Tuple
 
 # Python translation by Frank Palazzolo - 2/2021
 
@@ -77,18 +77,15 @@ EXIT_RIGHT = 2
 
 
 def main() -> None:
-    welcome_header()
+    print_intro()
     width, length = get_maze_dimensions()
     maze = build_maze(width, length)
     maze.display()
 
 
-def welcome_header() -> None:
+def print_intro() -> None:
     print(" " * 28 + "AMAZING PROGRAM")
-    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
 def build_maze(width: int, length: int) -> Maze:

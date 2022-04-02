@@ -2,10 +2,6 @@ import random
 from typing import Any, List, Tuple
 
 
-def print_n_whitespaces(n: int) -> None:
-    print(" " * n, end="")
-
-
 def print_board(A: List[List[Any]], n: int) -> None:
     """PRINT THE BOARD"""
     for i in range(n):
@@ -23,25 +19,17 @@ def check_move(_I, _J, _N) -> bool:  # 910
 
 
 def print_banner() -> None:
-    print_n_whitespaces(33)
-    print("GOMOKU")
-    print_n_whitespaces(15)
-    print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    print("WELCOME TO THE ORIENTAL GAME OF GOMOKO.")
-    print()
+    print(" " * 33 + "GOMOKU")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print("WELCOME TO THE ORIENTAL GAME OF GOMOKO.\n")
     print("THE GAME IS PLAYED ON AN N BY N GRID OF A SIZE")
     print("THAT YOU SPECIFY.  DURING YOUR PLAY, YOU MAY COVER ONE GRID")
     print("INTERSECTION WITH A MARKER. THE OBJECT OF THE GAME IS TO GET")
     print("5 ADJACENT MARKERS IN A ROW -- HORIZONTALLY, VERTICALLY, OR")
     print("DIAGONALLY.  ON THE BOARD DIAGRAM, YOUR MOVES ARE MARKED")
-    print("WITH A '1' AND THE COMPUTER MOVES WITH A '2'.")
-    print()
+    print("WITH A '1' AND THE COMPUTER MOVES WITH A '2'.\n")
     print("THE COMPUTER DOES NOT KEEP TRACK OF WHO HAS WON.")
-    print("TO END THE GAME, TYPE -1,-1 FOR YOUR MOVE.")
-    print()
+    print("TO END THE GAME, TYPE -1,-1 FOR YOUR MOVE.\n")
 
 
 def get_board_dimensions() -> int:

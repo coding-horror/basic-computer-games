@@ -11,15 +11,6 @@ import random
 MAX_LIVES = 9
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-
-    print(spaces + msg)
-
-
 def play_scenario() -> bool:
     acid_amount = random.randint(1, 50)
 
@@ -58,8 +49,8 @@ def show_ending() -> None:
 
 
 def main() -> None:
-    print_with_tab(33, "CHEMIST")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print(" " * 33 + "CHEMIST")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     print("THE FICTITIOUS CHEMICAL KRYPTOCYANIC ACID CAN ONLY BE")
     print("DILUTED BY THE RATIO OF 7 PARTS WATER TO 3 PARTS ACID.")

@@ -48,7 +48,7 @@ def main() -> None:
 
     still_playing = True
     while still_playing:
-        print("")
+        print()
         n = int(input("How many rolls? "))
 
         # Roll the dice n times
@@ -64,7 +64,7 @@ def main() -> None:
             print(" %-14d%d" % (i, freq[i]))
 
         # Keep playing?
-        print("")
+        print()
         response = input("Try again? ")
         if len(response) > 0 and response.upper()[0] == "Y":
             # Clear out the frequency list

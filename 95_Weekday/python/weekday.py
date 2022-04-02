@@ -16,15 +16,7 @@ import datetime
 GET_TODAY_FROM_SYSTEM = True
 
 
-def print_with_tab(space_count: int, s: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + s)
-
-
-def get_date_from_user(prompt):
+def get_date_from_user(prompt: str):
     while True:
         print(prompt)
         date_str = input()
@@ -62,7 +54,7 @@ def previous_day(b):
     return b - 1
 
 
-def is_leap_year(year):
+def is_leap_year(year: int) -> bool:
     if (year % 4) != 0:
         return False
     if (year % 100) != 0:
@@ -113,7 +105,7 @@ def deduct_time(frac, days, years_remain, months_remain, days_remain):
 
 def time_report(msg, years, months, days):
     leading_spaces = 23 - len(msg)
-    print_with_tab(leading_spaces, msg + f"\t{years}\t{months}\t{days}")
+    print(" " * leading_spaces + f"{msg}\t{years}\t{months}\t{days}")
 
 
 def make_occupation_label(years):
@@ -147,11 +139,8 @@ def end():
 
 
 def main() -> None:
-    print_with_tab(32, "WEEKDAY")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 32 + "WEEKDAY")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("WEEKDAY IS A COMPUTER DEMONSTRATION THAT")
     print("GIVES FACTS ABOUT A DATE OF INTEREST TO YOU.")
     print()
@@ -226,8 +215,8 @@ def main() -> None:
         print("***HAPPY BIRTHDAY***")
 
     # print report
-    print_with_tab(23, "\tYEARS\tMONTHS\tDAYS")
-    print_with_tab(23, "\t-----\t------\t----")
+    print(" " * 23 + "\tYEARS\tMONTHS\tDAYS")
+    print(" " * 23 + "\t-----\t------\t----")
     print(f"YOUR AGE (IF BIRTHDATE)\t{el_years}\t{el_months}\t{el_days}")
 
     life_days = (el_years * 365) + (el_months * 30) + el_days + int(el_months / 2)
@@ -255,11 +244,9 @@ def main() -> None:
 
     # Calculate retirement date
     e = year + 65
-    print_with_tab(16, f"***  YOU MAY RETIRE IN {e} ***")
+    print(" " * 16 + f"***  YOU MAY RETIRE IN {e} ***")
     end()
 
 
 if __name__ == "__main__":
     main()
-
-    # test_harness()

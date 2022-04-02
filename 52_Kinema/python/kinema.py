@@ -20,14 +20,6 @@ g = 10
 EXPECTED_ACCURACY_PERCENT = 15
 
 
-def print_with_tab(spaces_count, msg) -> None:
-    if spaces_count > 0:
-        spaces = " " * spaces_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
 def do_quiz():
     print()
     print()
@@ -75,11 +67,8 @@ def ask_player(question, answer):
 
 
 def main() -> None:
-    print_with_tab(33, "KINEMA")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33 + "KINEMA")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     while True:
         do_quiz()

@@ -231,7 +231,7 @@ def print_board(board) -> None:
     print("  ", end="")
     for z in range(BOARD_WIDTH):
         print(f"{z+1:3}", end="")
-    print("")
+    print()
 
     for x in range(len(board)):
         print(f"{x+1:2}", end="")
@@ -240,7 +240,7 @@ def print_board(board) -> None:
                 print(f"{' ':3}", end="")
             else:
                 print(f"{board[x][y]:3}", end="")
-        print("")
+        print()
 
 
 # place_ship
@@ -338,7 +338,7 @@ def initialize_game():
     # print out the title 'screen'
     print("{:>38}".format("SALVO"))
     print("{:>57s}".format("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"))
-    print("")
+    print()
     print("{:>52s}".format("ORIGINAL BY LAWRENCE SIEGEL, 1973"))
     print("{:>56s}".format("PYTHON 3 PORT BY TODD KAISER, MARCH 2021"))
     print("\n")

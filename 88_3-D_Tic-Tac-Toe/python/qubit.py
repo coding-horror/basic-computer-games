@@ -300,7 +300,7 @@ class Qubit:
             print("\n")
 
     def humanMove(self, board):
-        print("")
+        print()
         c = "1234"
         while True:
             h = input("Your move?\n")

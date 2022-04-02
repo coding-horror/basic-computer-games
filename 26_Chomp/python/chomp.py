@@ -69,9 +69,9 @@ def play_game():
     player = 0
     alive = True
     while alive:
-        print("")
+        print()
         print(cookie.render())
-        print("")
+        print()
         player += 1
         if player > players:
             player = 1

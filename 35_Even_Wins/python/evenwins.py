@@ -35,7 +35,7 @@ def serious_error(msg):
     exit(1)
 
 
-def welcome_screen():
+def print_intro():
     print("Welcome to Even Wins!")
     print("Based on evenwins.bas from Creative Computing")
     print()
@@ -149,7 +149,7 @@ def game_over():
         print("You are the winner! Congratulations!")
     else:
         print("The computer wins: all hail mighty silicon!")
-    print("")
+    print()
 
 
 def computer_turn():
@@ -211,7 +211,7 @@ def play_game():
 def main() -> None:
     global whose_turn
 
-    welcome_screen()
+    print_intro()
 
     while True:
         choose_first_player()

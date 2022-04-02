@@ -537,7 +537,7 @@ class Golf:
 
     def set_putter_and_stroke(self, strength: float) -> None:
         putter = self.clubs[self.putt]
-        self.Stroke((putter[1] * (strength / 10.0)), self.putt)
+        self.stroke((putter[1] * (strength / 10.0)), self.putt)
 
     def ask_gauge(self, c: int) -> None:
         self.club = self.clubs[c]
@@ -555,7 +555,7 @@ class Golf:
         )
 
     def make_stroke(self, strength: float, c: int) -> None:
-        self.Stroke((self.club[1] * (strength / 10.0)), c)
+        self.stroke((self.club[1] * (strength / 10.0)), c)
 
     def tee_up(self) -> None:
         # on the green? automatically select putter
@@ -579,7 +579,7 @@ class Golf:
         else:
             self.ask("What club do you choose? (1-10)", 1, 10, self.ask_gauge)
 
-    def Stroke(self, clubAmt: float, clubIndex: int) -> None:
+    def stroke(self, clubAmt: float, clubIndex: int) -> None:
         self.STROKE_NUM += 1
 
         flags = 0b000000000000
@@ -739,7 +739,7 @@ class Golf:
         if (flags & ace) == ace:
             print("Hole in One! You aced it.")
             self.score_card_record_stroke(Ball(0, 0, 0, GameObjType.BALL))
-            self.ReportCurrentScore()
+            self.report_current_score()
             return
 
         if (flags & in_trees) == in_trees:
@@ -777,7 +777,7 @@ class Golf:
                 msg = "It's in!"
             print(msg)
             self.score_card_record_stroke(Ball(plot.X, plot.Y, 0, GameObjType.BALL))
-            self.ReportCurrentScore()
+            self.report_current_score()
             return
 
         if ((flags & slice_) == slice_) and not ((flags & on_green) == on_green):
@@ -829,7 +829,7 @@ class Golf:
 
         self.tee_up()
 
-    def ReportCurrentScore(self) -> None:
+    def report_current_score(self) -> None:
         par = CourseInfo[self.HOLE_NUM].par
         if len(self.score_card[self.HOLE_NUM]) == par + 1:
             print("A bogey. One above par.")
@@ -986,9 +986,7 @@ class Golf:
         print(" ")
 
     def quit_game(self) -> None:
-        print("")
-        print("Looks like rain. Goodbye!")
-        print("")
+        print("\nLooks like rain. Goodbye!\n")
         return
 
     def game_over(self) -> None:

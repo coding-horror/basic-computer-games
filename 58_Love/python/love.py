@@ -108,7 +108,7 @@ def main() -> None:
             position += length
         print(line_text)
 
-    print("")
+    print()
 
 
 if __name__ == "__main__":

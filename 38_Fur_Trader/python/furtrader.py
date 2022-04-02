@@ -22,12 +22,6 @@ FORT_NEWYORK = 3
 FORT_NAMES = ["HOCHELAGA (MONTREAL)", "STADACONA (QUEBEC)", "NEW YORK"]
 
 
-def print_at_column(column: int, words: str) -> None:
-    """Print the words at the specified column"""
-    spaces = " " * column  # make a fat string of spaces
-    print(spaces + words)
-
-
 def show_introduction() -> None:
     """Show the player the introductory message"""
     print("YOU ARE THE LEADER OF A FRENCH FUR TRADING EXPEDITION IN ")
@@ -36,7 +30,7 @@ def show_introduction() -> None:
     print("FORTS AT WHICH YOU MAY TRADE.  THE COST OF SUPPLIES")
     print("AND THE AMOUNT YOU RECEIVE FOR YOUR FURS WILL DEPEND")
     print("ON THE FORT THAT YOU CHOOSE.")
-    print("")
+    print()
 
 
 def get_fort_choice() -> int:
@@ -45,7 +39,7 @@ def get_fort_choice() -> int:
     prompting the user."""
     result = 0
     while result == 0:
-        print("")
+        print()
         print("YOU MAY TRADE YOUR FURS AT FORT 1, FORT 2,")
         print("OR FORT 3.  FORT 1 IS FORT HOCHELAGA (MONTREAL)")
         print("AND IS UNDER THE PROTECTION OF THE FRENCH ARMY.")
@@ -70,7 +64,7 @@ def get_fort_choice() -> int:
 
 def show_fort_comment(which_fort):
     """Print the description for the fort"""
-    print("")
+    print()
     if which_fort == FORT_MONTREAL:
         print("YOU HAVE CHOSEN THE EASIEST ROUTE.  HOWEVER, THE FORT")
         print("IS FAR FROM ANY SEAPORT.  THE VALUE")
@@ -89,7 +83,7 @@ def show_fort_comment(which_fort):
     else:
         print("Internal error #1, fort " + str(which_fort) + " does not exist")
         sys.exit(1)  # you have a bug
-    print("")
+    print()
 
 
 def get_yes_or_no():
@@ -116,7 +110,7 @@ def get_furs_purchase():
 
     print("YOUR " + str(MAX_FURS) + " FURS ARE DISTRIBUTED AMONG THE FOLLOWING")
     print("KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX.")
-    print("")
+    print()
 
     for i in range(len(FUR_NAMES)):
         print("HOW MANY " + FUR_NAMES[i] + " DO YOU HAVE")
@@ -130,11 +124,10 @@ def get_furs_purchase():
     return results
 
 
-if __name__ == "__main__":
-
-    print_at_column(31, "FUR TRADER")
-    print_at_column(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print_at_column(15, "(Ported to Python Oct 2012 krt@krt.com.au)")
+def main():
+    print(" " * 31 + "FUR TRADER")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print(" " * 15 + "(Ported to Python Oct 2012 krt@krt.com.au)")
     print("\n\n\n")
 
     game_state = "starting"
@@ -155,13 +148,13 @@ if __name__ == "__main__":
             game_state = "trading"
 
         elif game_state == "trading":
-            print("")
+            print()
             print("YOU HAVE $ %1.2f IN SAVINGS" % (player_funds))
             print("AND " + str(MAX_FURS) + " FURS TO BEGIN THE EXPEDITION")
             player_furs = get_furs_purchase()
 
             if sum(player_furs) > MAX_FURS:
-                print("")
+                print()
                 print("YOU MAY NOT HAVE THAT MANY FURS.")
                 print("DO NOT TRY TO CHEAT.  I CAN ADD.")
                 print("YOU MUST START AGAIN.")
@@ -178,7 +171,7 @@ if __name__ == "__main__":
                 game_state = "travelling"
 
         elif game_state == "travelling":
-            print("")
+            print()
             if which_fort == FORT_MONTREAL:
                 mink_price = (
                     int((0.2 * random.random() + 0.70) * 100 + 0.5) / 100
@@ -234,7 +227,7 @@ if __name__ == "__main__":
                     )
                     sys.exit(1)  # you have a bug
 
-                print("")
+                print()
                 print("SUPPLIES AT FORT STADACONA COST $125.00.")
                 print("YOUR TRAVEL EXPENSES TO STADACONA WERE $15.00.")
                 player_funds -= 140
@@ -281,7 +274,7 @@ if __name__ == "__main__":
                     )
                     sys.exit(1)  # you have a bug
 
-                print("")
+                print()
                 print("SUPPLIES AT NEW YORK COST $85.00.")
                 print("YOUR TRAVEL EXPENSES TO NEW YORK WERE $25.00.")
                 player_funds -= 105
@@ -296,7 +289,7 @@ if __name__ == "__main__":
             ermine_value = ermine_price * player_furs[FUR_ERMINE]
             mink_value = mink_price * player_furs[FUR_MINK]
 
-            print("")
+            print()
             print("YOUR BEAVER SOLD FOR $%6.2f" % (beaver_value))
             print("YOUR FOX SOLD FOR    $%6.2f" % (fox_value))
             print("YOUR ERMINE SOLD FOR $%6.2f" % (ermine_value))
@@ -304,15 +297,19 @@ if __name__ == "__main__":
 
             player_funds += beaver_value + fox_value + ermine_value + mink_value
 
-            print("")
+            print()
             print(
                 "YOU NOW HAVE $ %1.2f INCLUDING YOUR PREVIOUS SAVINGS" % (player_funds)
             )
 
-            print("")
+            print()
             print("DO YOU WANT TO TRADE FURS NEXT YEAR?")
             should_trade = get_yes_or_no()
             if should_trade == "N":
                 sys.exit(0)  # STOP
             else:
                 game_state = "trading"
+
+
+if __name__ == "__main__":
+    main()

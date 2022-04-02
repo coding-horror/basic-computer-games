@@ -5,7 +5,7 @@ MAX_ATTEMPTS = 6
 QUESTION_PROMPT = "? "
 
 
-def play():
+def main():
     print("HI LO")
     print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("THIS IS THE GAME OF HI LO.\n")
@@ -50,4 +50,4 @@ def play():
 
 
 if __name__ == "__main__":
-    play()
+    main()

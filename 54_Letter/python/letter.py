@@ -15,15 +15,6 @@ import random
 BELLS_ON_SUCCESS = False
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-
-    print(spaces + msg)
-
-
 def print_instructions() -> None:
     print("LETTER GUESSING GAME")
     print()
@@ -67,11 +58,8 @@ def play_game():
 
 
 def main() -> None:
-    print_with_tab(33, "LETTER")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33 + "LETTER")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     print_instructions()
 
