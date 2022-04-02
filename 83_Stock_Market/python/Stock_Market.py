@@ -224,7 +224,7 @@ def main():
         print("\n------------END OF TRADING DAY--------------\n")
 
     print("\nHOPE YOU HAD FUN!!!!")
-    input("")
+    input()
 
 
 if __name__ == "__main__":
