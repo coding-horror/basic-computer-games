@@ -10,7 +10,7 @@ Converted from BASIC to Python by Trevor Hobson
 class Canvas:
     """For drawing the cookie"""
 
-    def __init__(self, width=9, height=9, fill="*"):
+    def __init__(self, width=9, height=9, fill="*") -> None:
         self._buffer = []
         for _ in range(height):
             line = []
@@ -19,13 +19,13 @@ class Canvas:
             self._buffer.append(line)
         self._buffer[0][0] = "P"
 
-    def render(self):
+    def render(self) -> str:
         lines = ["       1 2 3 4 5 6 7 8 9"]
         for row, line in enumerate(self._buffer, start=1):
             lines.append(" " + str(row) + " " * 5 + " ".join(line))
         return "\n".join(lines)
 
-    def chomp(self, r, c):
+    def chomp(self, r, c) -> str:
         if not 1 <= r <= len(self._buffer) or not 1 <= c <= len(self._buffer[0]):
             return "Empty"
         elif self._buffer[r - 1][c - 1] == " ":
@@ -39,7 +39,7 @@ class Canvas:
             return "Chomp"
 
 
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
     players = 0
     while players == 0:

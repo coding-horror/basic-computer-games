@@ -86,12 +86,12 @@ def show_fort_comment(which_fort):
     print()
 
 
-def get_yes_or_no():
+def get_yes_or_no() -> str:
     """Prompt the player to enter 'YES' or 'NO'. Keep prompting until
     valid input is entered.  Accept various spellings by only
     checking the first letter of input.
     Return a single letter 'Y' or 'N'"""
-    result = 0
+    result = ""
     while result not in ("Y", "N"):
         print("ANSWER YES OR NO")
         player_choice = input(">> ")
