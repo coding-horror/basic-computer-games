@@ -2,12 +2,9 @@ import {
   onExit,
   onPrint,
   onInput,
-  setGameOptions,
-  getGameState,
   gameMain,
 } from "./superstartrek.mjs";
 
-import util from "util";
 import readline from "readline";
 
 onExit(function exit() {

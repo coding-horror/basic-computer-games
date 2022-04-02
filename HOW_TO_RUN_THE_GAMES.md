@@ -40,9 +40,21 @@ or if you are **using JDK11 or later** you can now execute a self contained java
 
 ## javascript
 
-The javascript examples can be run from within your web browser:
+There are two ways of javascript implementations:
 
-1. Simply open the corresponding `.html` file from your web browser.
+### browser
+
+The html examples can be run from within your web browser. Simply open the corresponding `.html` file from your web browser.
+
+### node.js
+
+Some games are implemented as a [node.js](https://nodejs.org/) script. In this case there is no `*.html` file in the folder.
+
+1. [install node.js](https://nodejs.org/en/download/) for your system.
+1. change directory to the root of this repository (e.g. `cd basic-computer-games`).
+1. from a terminal call the script you want to run (e.g. `node 78_Sine_Wave/javascript/sinewave.mjs`).
+
+_Hint: Normally javascript files have a `*.js` extension. We are using `*.mjs` to let node know , that we are using [ES modules](https://nodejs.org/docs/latest/api/esm.html#modules-ecmascript-modules) instead of [CommonJS](https://nodejs.org/docs/latest/api/modules.html#modules-commonjs-modules)._
 
 ## kotlin
 

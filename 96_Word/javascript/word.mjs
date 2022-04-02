@@ -1,43 +1,9 @@
+#!/usr/bin/env node
 // WORD
 //
 // Converted from BASIC to Javascript by Oscar Toledo G. (nanochess)
-//
 
-function print(str)
-{
-    document.getElementById("output").appendChild(document.createTextNode(str));
-}
-
-function input()
-{
-
-    return new Promise(function (resolve) {
-                       const input_element = document.createElement("INPUT");
-
-                       print("? ");
-                       input_element.setAttribute("type", "text");
-                       input_element.setAttribute("length", "50");
-                       document.getElementById("output").appendChild(input_element);
-                       input_element.focus();
-                       input_element.addEventListener("keydown", function (event) {
-                                                      if (event.keyCode === 13) {
-                                                          const input_str = input_element.value;
-                                                          document.getElementById("output").removeChild(input_element);
-                                                          print(input_str);
-                                                          print("\n");
-                                                          resolve(input_str);
-                                                      }
-                                                      });
-                       });
-}
-
-function tab(space)
-{
-    let str = "";
-    while (space-- > 0)
-        str += " ";
-    return str;
-}
+import { print, tab, input } from '../../00_Common/javascript/common.mjs';
 
 // These are the words that the game knows about> If you want a bigger challenge you could add more words to the array
 const WORDS = ["DINKY", "SMOKE", "WATER", "GLASS", "TRAIN",
@@ -74,7 +40,7 @@ async function main()
 
         let guess = undefined;
         while (1) {
-            print("GUESS A FIVE LETTER WORD");
+            print("GUESS A FIVE LETTER WORD:");
             guess = (await input()).toUpperCase();
             guessCount++;
             if (secretWord === guess) {
