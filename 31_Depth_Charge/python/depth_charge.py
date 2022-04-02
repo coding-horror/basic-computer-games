@@ -1,7 +1,9 @@
-# Original BASIC version as published in Basic Computer Games (1978)
-# https://www.atariarchives.org/basicgames/showpage.php?page=55
-#
-# Converted to Python by Anson VanDoren in 2021
+"""
+Original BASIC version as published in Basic Computer Games (1978)
+https://www.atariarchives.org/basicgames/showpage.php?page=55
+
+Converted to Python by Anson VanDoren in 2021
+"""
 
 import math
 import random
@@ -38,7 +40,7 @@ def get_num_charges() -> Tuple[int, int]:
 def ask_for_new_game() -> None:
     answer = input("Another game (Y or N): ")
     if answer.lower().strip()[0] == "y":
-        start_new_game()
+        main()
     else:
         print("OK. Hope you enjoyed yourself")
         exit()
@@ -83,7 +85,7 @@ def get_shot_input() -> Tuple[int, int, int]:
             print("Please enter whole numbers only")
 
 
-def play_game(search_area, num_charges):
+def play_game(search_area, num_charges) -> None:
     print("\nYou are the captain of the destroyer USS Computer.")
     print("An enemy sub has been causing you trouble. Your")
     print(f"mission is to destroy it. You have {num_charges} shots.")
@@ -112,10 +114,10 @@ def play_game(search_area, num_charges):
     ask_for_new_game()
 
 
-def start_new_game() -> None:
+def main() -> None:
     search_area, num_charges = get_num_charges()
     play_game(search_area, num_charges)
 
 
 if __name__ == "__main__":
-    start_new_game()
+    main()

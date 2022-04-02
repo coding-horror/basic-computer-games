@@ -9,7 +9,7 @@ import random
 from typing import List, Literal, Optional
 
 
-def explain_keyboard_inputs() -> None:
+def print_intro() -> None:
     print("\t\t\t Basketball")
     print("\t Creative Computing  Morristown, New Jersey\n\n\n")
     print("This is Dartmouth College basketball. ")
@@ -35,7 +35,7 @@ class Basketball:
         self.shot_choices: List[Literal[0, 1, 2, 3, 4]] = [0, 1, 2, 3, 4]
         self.z1: Optional[float] = None
 
-        explain_keyboard_inputs()
+        print_intro()
 
         self.defense = get_defense_choice(self.defense_choices)
 
@@ -154,7 +154,7 @@ class Basketball:
                             # ball is passed back to you
                             self.ball_passed_back()
                     else:
-                        print("")
+                        print()
                         self.dartmouth_non_jump_shot()
         else:
             print("Shot is good.")
@@ -268,7 +268,7 @@ class Basketball:
                             self.opponent_ball()
                         else:
                             if random.random() > 0.5:
-                                print("")
+                                print()
                                 self.opponent_non_jumpshot()
                             else:
                                 print("Pass back to " + self.opponent + " guard.\n")
@@ -304,14 +304,14 @@ class Basketball:
                         self.opponent_ball()
                     else:
                         if random.random() > 0.5:
-                            print("")
+                            print()
                             self.opponent_non_jumpshot()
                         else:
                             print("Pass back to " + self.opponent + " guard.\n")
                             self.opponent_ball()
                 else:
                     if random.random() > 0.5:
-                        print("")
+                        print()
                         self.opponent_non_jumpshot()
                     else:
                         print("Pass back to " + self.opponent + " guard\n")

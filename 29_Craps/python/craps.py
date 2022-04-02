@@ -20,10 +20,7 @@ def throw_dice() -> int:
 
 def main() -> None:
     print(" " * 33 + "Craps")
-    print(" " * 15 + "Creative Computing  Morristown, New Jersey")
-    print()
-    print()
-    print()
+    print(" " * 15 + "Creative Computing  Morristown, New Jersey\n\n\n")
 
     winnings = 0
     print("2,3,12 are losers; 4,5,6,8,9,10 are points; 7,11 are natural winners.")

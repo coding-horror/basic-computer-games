@@ -1,15 +1,18 @@
+from typing import List, Tuple, Union
+
+
 class TicTacToe:
-    def __init__(self, pick, sz=3):
+    def __init__(self, pick, sz=3) -> None:
         self.pick = pick
         self.dim_sz = sz
         self.board = self.clear_board()
 
-    def clear_board(self):
+    def clear_board(self) -> List[List[str]]:
         board = [["blur" for i in range(self.dim_sz)] for j in range(self.dim_sz)]
         # made a 3x3 by-default board
         return board
 
-    def move_record(self, r, c):
+    def move_record(self, r, c) -> Union[str, bool]:
         if r > self.dim_sz or c > self.dim_sz:
             return "Out of Bounds"
         if self.board[r][c] != "blur":
@@ -17,7 +20,7 @@ class TicTacToe:
         self.board[r][c] = self.pick
         return True
 
-    def check_win(self):  # 1 you won, 0 computer won, -1 tie
+    def check_win(self) -> int:  # 1 you won, 0 computer won, -1 tie
         # Flag syntax -> first player no. ,
         # User is Player#1 ;
         # Check set 1 -> row and '\' diagonal & Check set 2 -> col and '/' diagonal
@@ -88,7 +91,7 @@ class TicTacToe:
 
         return -1
 
-    def next_move(self):
+    def next_move(self) -> Union[Tuple[int, int], Tuple[List[int], List[int]]]:
         available_moves = []  # will carry all available moves
         player_win_spot = []  # if player (user Wins)
         comp_pick = "O"
@@ -113,7 +116,6 @@ class TicTacToe:
         if len(player_win_spot) != 0:
             self.board[player_win_spot[0][0]][player_win_spot[0][1]] = comp_pick
             return player_win_spot[0][0], player_win_spot[0][1]
-        # print(AvailableMoves)
         if len(available_moves) == 1:
             self.board[available_moves[0][0]][available_moves[0][1]] = comp_pick
             return [available_moves[0][0]], [available_moves[0][1]]
@@ -121,7 +123,6 @@ class TicTacToe:
             return -1, -1
 
         c1, c2 = self.dim_sz // 2, self.dim_sz // 2
-        # print(c1,c2,self.dim_sz)
         if (c1, c2) in available_moves:  # CENTER
             self.board[c1][c2] = comp_pick
             return c1, c2
@@ -163,34 +164,33 @@ class TicTacToe:
                 ) in available_moves:  # RIGHT TOP TO RIGHT BOTTOM
                     self.board[c1 - gap + i][c2 + gap] = comp_pick
                     return c1 - gap + i, c2 + gap
+        raise RuntimeError("No moves available")
 
 
-def display(Game: TicTacToe) -> None:
+def display(game: TicTacToe) -> None:
     line1 = ""
-    for i in range(0, Game.dim_sz):
-        for j in range(0, Game.dim_sz - 1):
-            if Game.board[i][j] == "blur":
+    for i in range(0, game.dim_sz):
+        for j in range(0, game.dim_sz - 1):
+            if game.board[i][j] == "blur":
                 line1 = line1 + "    |"
             else:
-                line1 = line1 + "  " + Game.board[i][j] + " |"
-        if Game.board[i][Game.dim_sz - 1] == "blur":
+                line1 = line1 + "  " + game.board[i][j] + " |"
+        if game.board[i][game.dim_sz - 1] == "blur":
             line1 = line1 + "    \n"
         else:
-            line1 = line1 + "  " + Game.board[i][Game.dim_sz - 1] + " \n"
-        # line1 = line1 + " " + Game.board[i][Game.dim_sz-1] + "\n"
+            line1 = line1 + "  " + game.board[i][game.dim_sz - 1] + " \n"
     print(line1, "\n\n")
 
 
-def play() -> None:
-    Pick = input("Pick 'X' or 'O' ").strip().upper()
-    if Pick == "O":
-        Game = TicTacToe("O")
+def main() -> None:
+    pick = input("Pick 'X' or 'O' ").strip().upper()
+    if pick == "O":
+        game = TicTacToe("O")
     else:
-        Game = TicTacToe("X")
-    display(Game=Game)
+        game = TicTacToe("X")
+    display(game=game)
     while True:
-        # Display(Game)
-        temp = False
+        temp: Union[bool, str] = False
         while not temp:
             move = list(
                 map(
@@ -198,25 +198,25 @@ def play() -> None:
                     input("Make A Move in Grid System from (0,0) to (2,2) ").split(),
                 )
             )
-            temp = Game.move_record(move[0], move[1])
+            temp = game.move_record(move[0], move[1])
             if not temp:
                 print(temp)
 
-        if Game.check_win() == 1:
+        if game.check_win() == 1:
             print("You Won!")
             break
         print("Your Move:- ")
-        display(Game)
-        C1, C2 = Game.next_move()
+        display(game)
+        C1, C2 = game.next_move()
         if C1 == -1 and C2 == -1:
             print("Game Tie!")
             break
-        if Game.check_win() == 0:
+        if game.check_win() == 0:
             print("You lost!")
             break
         print("Computer's Move :-")
-        display(Game)
+        display(game)
 
 
 if __name__ == "__main__":
-    play()
+    main()

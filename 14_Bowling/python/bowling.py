@@ -33,7 +33,7 @@ def calculate_score(rolls: List[int]) -> int:
 
 
 class Player:
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
         self.rolls: List[int] = []
 

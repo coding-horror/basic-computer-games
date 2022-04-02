@@ -1,41 +1,36 @@
-# evenwins.py
+"""
+This version of evenwins.bas based on game decscription and does *not*
+follow the source. The computer chooses marbles at random.
 
-#
-# This version of evenwins.bas based on game decscription and does *not*
-# follow the source. The computer chooses marbles at random.
-#
-# For simplicity, global variables are used to store the game state.
-# A good exercise would be to replace this with a class.
-#
-# The code is not short, but hopefully it is easy for beginners to understand
-# and modify.
-#
-# Infinite loops of the style "while True:" are used to simplify some of the
-# code. The "continue" keyword is used in a few places to jump back to the top
-# of the loop. The "return" keyword is also used to break out of functions.
-# This is generally considered poor style, but in this case it simplifies the
-# code and makes it easier to read (at least in my opinion). A good exercise
-# would be to remove these infinite loops, and uses of continue, to follow a
-# more structured style.
-#
+For simplicity, global variables are used to store the game state.
+A good exercise would be to replace this with a class.
+The code is not short, but hopefully it is easy for beginners to understand
+and modify.
 
-# global variables
-marbles_in_middle = -1
-human_marbles = -1
-computer_marbles = -1
-whose_turn = ""
+Infinite loops of the style "while True:" are used to simplify some of the
+code. The "continue" keyword is used in a few places to jump back to the top
+of the loop. The "return" keyword is also used to break out of functions.
+This is generally considered poor style, but in this case it simplifies the
+code and makes it easier to read (at least in my opinion). A good exercise
+would be to remove these infinite loops, and uses of continue, to follow a
+more structured style.
+"""
 
 
-def serious_error(msg):
-    """
-    Only call this function during development for serious errors that are due
-    to mistakes in the program. Should never be called during a regular game.
-    """
-    print("serious_error: " + msg)
-    exit(1)
+from dataclasses import dataclass
+from typing import Literal, Tuple
+
+PlayerType = Literal["human", "computer"]
 
 
-def welcome_screen():
+@dataclass
+class MarbleCounts:
+    middle: int
+    human: int
+    computer: int
+
+
+def print_intro() -> None:
     print("Welcome to Even Wins!")
     print("Based on evenwins.bas from Creative Computing")
     print()
@@ -50,22 +45,19 @@ def welcome_screen():
     print()
 
 
-def marbles_str(n):
+def marbles_str(n: int) -> str:
     if n == 1:
         return "1 marble"
     return f"{n} marbles"
 
 
-def choose_first_player():
-    global whose_turn
+def choose_first_player() -> PlayerType:
     while True:
         ans = input("Do you want to play first? (y/n) --> ")
         if ans == "y":
-            whose_turn = "human"
-            return
+            return "human"
         elif ans == "n":
-            whose_turn = "computer"
-            return
+            return "computer"
         else:
             print()
             print('Please enter "y" if you want to play first,')
@@ -73,18 +65,15 @@ def choose_first_player():
             print()
 
 
-def next_player():
-    global whose_turn
+def toggle_player(whose_turn: PlayerType) -> PlayerType:
     if whose_turn == "human":
-        whose_turn = "computer"
-    elif whose_turn == "computer":
-        whose_turn = "human"
+        return "computer"
     else:
-        serious_error(f"play_game: unknown player {whose_turn}")
+        return "human"
 
 
-# Converts a string s to an int, if possible.
-def to_int(s):
+def to_int(s: str) -> Tuple[bool, int]:
+    """Convert a string s to an int, if possible."""
     try:
         n = int(s)
         return True, n
@@ -92,142 +81,108 @@ def to_int(s):
         return False, 0
 
 
-def print_board() -> None:
-    global marbles_in_middle
-    global human_marbles
-    global computer_marbles
+def print_board(marbles: MarbleCounts) -> None:
     print()
-    print(f" marbles in the middle: {marbles_in_middle} " + marbles_in_middle * "*")
-    print(f"    # marbles you have: {human_marbles}")
-    print(f"# marbles computer has: {computer_marbles}")
+    print(f" marbles in the middle: {marbles.middle} " + marbles.middle * "*")
+    print(f"    # marbles you have: {marbles.human}")
+    print(f"# marbles computer has: {marbles.computer}")
     print()
 
 
-def human_turn():
-    global marbles_in_middle
-    global human_marbles
-
-    # get number in range 1 to min(4, marbles_in_middle)
-    max_choice = min(4, marbles_in_middle)
+def human_turn(marbles: MarbleCounts) -> None:
+    """get number in range 1 to min(4, marbles.middle)"""
+    max_choice = min(4, marbles.middle)
     print("It's your turn!")
     while True:
         s = input(f"Marbles to take? (1 - {max_choice}) --> ")
         ok, n = to_int(s)
         if not ok:
-            print()
-            print(f"  Please enter a whole number from 1 to {max_choice}")
-            print()
+            print(f"\n  Please enter a whole number from 1 to {max_choice}\n")
             continue
         if n < 1:
-            print()
-            print("  You must take at least 1 marble!")
-            print()
+            print("\n  You must take at least 1 marble!\n")
             continue
         if n > max_choice:
-            print()
-            print(f"  You can take at most {marbles_str(max_choice)}")
-            print()
+            print(f"\n  You can take at most {marbles_str(max_choice)}\n")
             continue
-        print()
-        print(f"Okay, taking {marbles_str(n)} ...")
-        marbles_in_middle -= n
-        human_marbles += n
+        print(f"\nOkay, taking {marbles_str(n)} ...")
+        marbles.middle -= n
+        marbles.human += n
         return
 
 
-def game_over():
-    global marbles_in_middle
-    global human_marbles
-    global computer_marbles
+def game_over(marbles: MarbleCounts) -> None:
     print()
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print("!! All the marbles are taken: Game Over!")
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     print()
-    print_board()
-    if human_marbles % 2 == 0:
+    print_board(marbles)
+    if marbles.human % 2 == 0:
         print("You are the winner! Congratulations!")
     else:
         print("The computer wins: all hail mighty silicon!")
-    print("")
+    print()
 
 
-def computer_turn():
-    global marbles_in_middle
-    global computer_marbles
-    global human_marbles
-
+def computer_turn(marbles: MarbleCounts) -> None:
     marbles_to_take = 0
 
     print("It's the computer's turn ...")
-    r = marbles_in_middle - 6 * int(marbles_in_middle / 6)  # line 500
+    r = marbles.middle - 6 * int(marbles.middle / 6)
 
-    if int(human_marbles / 2) == human_marbles / 2:  # line 510
-        if r < 1.5 or r > 5.3:  # lines 710 and 720
+    if int(marbles.human / 2) == marbles.human / 2:
+        if r < 1.5 or r > 5.3:
             marbles_to_take = 1
         else:
             marbles_to_take = r - 1
 
-    elif marbles_in_middle < 4.2:  # line 580
-        marbles_to_take = marbles_in_middle
-    elif r > 3.4:  # line 530
+    elif marbles.middle < 4.2:
+        marbles_to_take = marbles.middle
+    elif r > 3.4:
         if r < 4.7 or r > 3.5:
             marbles_to_take = 4
     else:
         marbles_to_take = r + 1
 
     print(f"Computer takes {marbles_str(marbles_to_take)} ...")
-    marbles_in_middle -= marbles_to_take
-    computer_marbles += marbles_to_take
+    marbles.middle -= marbles_to_take
+    marbles.computer += marbles_to_take
 
 
-def play_game():
-    global marbles_in_middle
-    global human_marbles
-    global computer_marbles
-
-    # initialize the game state
-    marbles_in_middle = 27
-    human_marbles = 0
-    computer_marbles = 0
-    print_board()
+def play_game(whose_turn: PlayerType) -> None:
+    marbles = MarbleCounts(middle=27, human=0, computer=0)
+    print_board(marbles)
 
     while True:
-        if marbles_in_middle == 0:
-            game_over()
+        if marbles.middle == 0:
+            game_over(marbles)
             return
         elif whose_turn == "human":
-            human_turn()
-            print_board()
-            next_player()
+            human_turn(marbles)
+            print_board(marbles)
+            whose_turn = toggle_player(whose_turn)
         elif whose_turn == "computer":
-            computer_turn()
-            print_board()
-            next_player()
+            computer_turn(marbles)
+            print_board(marbles)
+            whose_turn = toggle_player(whose_turn)
         else:
-            serious_error(f"play_game: unknown player {whose_turn}")
+            raise Exception(f"whose_turn={whose_turn} is not 'human' or 'computer'")
 
 
 def main() -> None:
-    global whose_turn
-
-    welcome_screen()
+    print_intro()
 
     while True:
-        choose_first_player()
-        play_game()
+        whose_turn = choose_first_player()
+        play_game(whose_turn)
 
-        # ask if the user if they want to play again
         print()
-        again = input("Would you like to play again? (y/n) --> ")
+        again = input("Would you like to play again? (y/n) --> ").lower()
         if again == "y":
-            print()
-            print("Ok, let's play again ...")
-            print()
+            print("\nOk, let's play again ...\n")
         else:
-            print()
-            print("Ok, thanks for playing ... goodbye!")
-            print()
+            print("\nOk, thanks for playing ... goodbye!\n")
             return
 
 

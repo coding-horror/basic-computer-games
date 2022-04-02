@@ -9,15 +9,6 @@ Ported by Dave LeCompte
 import random
 
 
-def print_with_tab(num_spaces: int, msg: str) -> None:
-    if num_spaces > 0:
-        spaces = " " * num_spaces
-    else:
-        spaces = ""
-
-    print(spaces + msg)
-
-
 def print_instructions() -> None:
     print("YOU HAVE 100 POINTS.  BY GUESSING NUMBERS FROM 1 TO 5, YOU")
     print("CAN GAIN OR LOSE POINTS DEPENDING UPON HOW CLOSE YOU GET TO")
@@ -28,16 +19,13 @@ def print_instructions() -> None:
     print()
 
 
-def fnr():
+def fnr() -> int:
     return random.randint(1, 5)
 
 
 def main() -> None:
-    print_with_tab(33, "NUMBER")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33 + "NUMBER")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
 
     print_instructions()
 

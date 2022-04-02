@@ -1,24 +1,22 @@
-######################################################################
-#
-# LOVE
-#
-# From: BASIC Computer Games (1978)
-#       Edited by David H. Ahl
-#
-# "This program is designed to reproduce Robert Indiana's great art
-#  work 'Love' with a message of your choice up to 60 characters long.
-#
-# "The [DATA variable is] an alternating count of the number
-#  of characters and blanks which form the design.  These data give
-#  the correct proportions for a standard 10 character per inch
-#  Teletype or line printer.
-#
-# "The LOVE program was created by David Ahl."
-#
-#
-# Python port by Jeff Jetton, 2019
-#
-######################################################################
+"""
+LOVE
+
+From: BASIC Computer Games (1978)
+      Edited by David H. Ahl
+
+"This program is designed to reproduce Robert Indiana's great art
+ work 'Love' with a message of your choice up to 60 characters long.
+
+"The [DATA variable is] an alternating count of the number
+ of characters and blanks which form the design.  These data give
+ the correct proportions for a standard 10 character per inch
+ Teletype or line printer.
+
+"The LOVE program was created by David Ahl."
+
+
+Python port by Jeff Jetton, 2019
+"""
 
 
 # Image data. Each top-level element is a row. Each row element
@@ -108,7 +106,7 @@ def main() -> None:
             position += length
         print(line_text)
 
-    print("")
+    print()
 
 
 if __name__ == "__main__":

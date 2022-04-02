@@ -12,14 +12,6 @@ import time
 from typing import Optional, Tuple
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
 def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
     msg = input()
     if msg.upper() == "YES":
@@ -30,7 +22,7 @@ def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
         return False, None, msg
 
 
-def ask_enjoy_question(user_name):
+def ask_enjoy_question(user_name: str) -> None:
     print(f"HI THERE, {user_name}, ARE YOU ENJOYING YOURSELF HERE?")
 
     while True:
@@ -49,7 +41,7 @@ def ask_enjoy_question(user_name):
             print("PLEASE ANSWER 'YES' OR 'NO'.  DO YOU LIKE IT HERE?")
 
 
-def prompt_for_problems(user_name):
+def prompt_for_problems(user_name: str) -> str:
     print()
     print(f"SAY, {user_name}, I CAN SOLVE ALL KINDS OF PROBLEMS EXCEPT")
     print("THOSE DEALING WITH GREECE.  WHAT KIND OF PROBLEMS DO")
@@ -179,14 +171,9 @@ def happy_goodbye(user_name: str) -> None:
 
 
 def main() -> None:
-    print_with_tab(33, "HELLO")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    print("HELLO.  MY NAME IS CREATIVE COMPUTER.")
-    print()
-    print()
+    print(" " * 33 + "HELLO")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print("HELLO.  MY NAME IS CREATIVE COMPUTER.\n\n")
     print("WHAT'S YOUR NAME?")
     user_name = input()
     print()

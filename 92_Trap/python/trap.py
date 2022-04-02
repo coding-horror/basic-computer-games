@@ -10,7 +10,7 @@ number_max = 100
 guess_max = 6
 
 
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
 
     number_computer = random.randint(1, number_max)

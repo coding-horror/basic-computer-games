@@ -88,17 +88,13 @@ def compute_change() -> None:
         print(f"{change_in_pennies} PENNY(S)")
 
 
-def print_thanks() -> None:
-    print("THANK YOU, COME AGAIN.\n\n")
-
-
 def main() -> None:
     print_header("CHANGE")
     print_introduction()
 
     while True:
         compute_change()
-        print_thanks()
+        print("THANK YOU, COME AGAIN.\n\n")
 
 
 if __name__ == "__main__":

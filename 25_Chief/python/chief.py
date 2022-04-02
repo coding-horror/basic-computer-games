@@ -29,43 +29,45 @@ def game() -> None:
     print("\nTake a Number and ADD 3. Now, Divide this number by 5 and")
     print("multiply by 8. Now, Divide by 5 and add the same. Subtract 1")
 
-    resp = float(input("\nWhat do you have? "))
-    comp_guess = (((resp - 4) * 5) / 8) * 5 - 3
-    resp2 = input(f"\nI bet your number was {comp_guess} was I right(Yes or No)? ")
+    you_have = float(input("\nWhat do you have? "))
+    comp_guess = (((you_have - 4) * 5) / 8) * 5 - 3
+    first_guess_right = input(
+        f"\nI bet your number was {comp_guess} was I right(Yes or No)? "
+    )
 
-    if resp2.lower() == "yes":
+    if first_guess_right.lower() == "yes":
         print("\nHuh, I Knew I was unbeatable")
         print("And here is how i did it")
         print_solution(comp_guess)
-        input("")
+        input()
     else:
-        resp3 = float(input("\nHUH!! what was you original number? "))
+        original_number = float(input("\nHUH!! what was you original number? "))
 
-        if resp3 == comp_guess:
+        if original_number == comp_guess:
             print("\nThat was my guess, AHA i was right")
             print(
                 "Shamed to accept defeat i guess, don't worry you can master mathematics too"
             )
             print("Here is how i did it")
             print_solution(comp_guess)
-            input("")
+            input()
         else:
             print("\nSo you think you're so smart, EH?")
             print("Now, Watch")
-            print_solution(resp3)
+            print_solution(original_number)
 
-            resp4 = input("\nNow do you believe me? ")
+            believe_me = input("\nNow do you believe me? ")
 
-            if resp4.lower() == "yes":
+            if believe_me.lower() == "yes":
                 print("\nOk, Lets play again sometime bye!!!!")
-                input("")
+                input()
             else:
                 print("\nYOU HAVE MADE ME VERY MAD!!!!!")
                 print("BY THE WRATH OF THE MATHEMATICS AND THE RAGE OF THE GODS")
                 print("THERE SHALL BE LIGHTNING!!!!!!!")
                 print_lightning_bolt()
                 print("\nI Hope you believe me now, for your own sake")
-                input("")
+                input()
 
 
 if __name__ == "__main__":
@@ -75,4 +77,4 @@ if __name__ == "__main__":
         game()
     else:
         print("Ok, Nevermind. Let me go back to my great slumber, Bye")
-        input("")
+        input()

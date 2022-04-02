@@ -36,10 +36,6 @@ class State:
             print_legs(self.legs)
 
 
-def print_n_whitespaces(n: int) -> None:
-    print(" " * n, end="")
-
-
 def print_n_newlines(n: int) -> None:
     for _ in range(n):
         print()
@@ -47,7 +43,7 @@ def print_n_newlines(n: int) -> None:
 
 def print_feelers(n_feelers: int, is_player: bool = True) -> None:
     for _ in range(4):
-        print_n_whitespaces(10)
+        print(" " * 10, end="")
         for _ in range(n_feelers):
             print("A " if is_player else "F ", end="")
         print()
@@ -77,7 +73,7 @@ def print_body(has_tail: bool = False) -> None:
 
 def print_legs(n_legs: int) -> None:
     for _ in range(2):
-        print_n_whitespaces(5)
+        print(" " * 5, end="")
         for _ in range(n_legs):
             print(" L", end="")
         print()
@@ -156,10 +152,8 @@ def handle_roll(diceroll: Literal[1, 2, 3, 4, 5, 6], state: State) -> bool:
 
 
 def main() -> None:
-    print_n_whitespaces(34)
-    print("BUG")
-    print_n_whitespaces(15)
-    print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+    print(" " * 34 + "BUG")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print_n_newlines(3)
 
     print("THE GAME BUG")

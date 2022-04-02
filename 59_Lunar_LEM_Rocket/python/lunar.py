@@ -7,6 +7,7 @@ Ported by Dave LeCompte
 """
 
 import math
+from dataclasses import dataclass
 from typing import Any, NamedTuple
 
 PAGE_WIDTH = 64
@@ -122,23 +123,15 @@ class SimulationClock:
         self.time_until_next_prompt -= delta_t
 
 
+@dataclass
 class Capsule:
-    def __init__(
-        self,
-        altitude: float = 120,
-        velocity: float = 1,
-        mass_with_fuel: float = 33000,
-        mass_without_fuel: float = 16500,
-        g: float = 1e-3,
-        z: float = 1.8,
-    ) -> None:
-        self.a = altitude  # in miles above the surface
-        self.v = velocity  # downward
-        self.m = mass_with_fuel
-        self.n = mass_without_fuel
-        self.g = g
-        self.z = z
-        self.fuel_per_second: float = 0
+    altitude: float = 120  # in miles above the surface
+    velocity: float = 1  # downward
+    m: float = 33000  # mass_with_fuel
+    n: float = 16500  # mass_without_fuel
+    g: float = 1e-3
+    z: float = 1.8
+    fuel_per_second: float = 0
 
     def remaining_fuel(self) -> float:
         return self.m - self.n
@@ -151,8 +144,8 @@ class Capsule:
     ) -> None:
         sim_clock.advance(delta_t)
         self.m = self.m - delta_t * self.fuel_per_second
-        self.a = new_state.altitude
-        self.v = new_state.velocity
+        self.altitude = new_state.altitude
+        self.velocity = new_state.velocity
 
     def fuel_time_remaining(self) -> float:
         # extrapolates out how many seconds we have at the current fuel burn rate
@@ -166,16 +159,16 @@ class Capsule:
 
         # new velocity
         new_velocity = (
-            self.v
+            self.velocity
             + self.g * delta_t
             + self.z * (-q - q**2 / 2 - q**3 / 3 - q**4 / 4 - q**5 / 5)
         )
 
         # new altitude
         new_altitude = (
-            self.a
+            self.altitude
             - self.g * delta_t**2 / 2
-            - self.v * delta_t
+            - self.velocity * delta_t
             + self.z
             * delta_t
             * (q / 2 + q**2 / 6 + q**3 / 12 + q**4 / 20 + q**5 / 30)
@@ -185,9 +178,9 @@ class Capsule:
 
     def make_state_display_string(self, sim_clock: SimulationClock) -> str:
         seconds = sim_clock.elapsed_time
-        miles = int(self.a)
-        feet = int(5280 * (self.a - miles))
-        velocity = int(3600 * self.v)
+        miles = int(self.altitude)
+        feet = int(5280 * (self.altitude - miles))
+        velocity = int(3600 * self.velocity)
         fuel = int(self.remaining_fuel())
         burn_rate = " ? "
 
@@ -203,7 +196,7 @@ class Capsule:
 
 
 def show_landing(sim_clock: SimulationClock, capsule: Capsule) -> None:
-    w = 3600 * capsule.v
+    w = 3600 * capsule.velocity
     print(
         f"ON MOON AT {sim_clock.elapsed_time:.2f} SECONDS - IMPACT VELOCITY {w:.2f} MPH"
     )
@@ -223,9 +216,10 @@ def show_landing(sim_clock: SimulationClock, capsule: Capsule) -> None:
 def show_out_of_fuel(sim_clock: SimulationClock, capsule: Capsule) -> None:
     print(f"FUEL OUT AT {sim_clock.elapsed_time} SECONDS")
     delta_t = (
-        -capsule.v + math.sqrt(capsule.v**2 + 2 * capsule.a * capsule.g)
+        -capsule.velocity
+        + math.sqrt(capsule.velocity**2 + 2 * capsule.altitude * capsule.g)
     ) / capsule.g
-    capsule.v += capsule.g * delta_t
+    capsule.velocity += capsule.g * delta_t
     sim_clock.advance(delta_t)
     show_landing(sim_clock, capsule)
 
@@ -243,15 +237,15 @@ def process_final_tick(
             return
         # line 35
         average_vel = (
-            capsule.v
+            capsule.velocity
             + math.sqrt(
-                capsule.v**2
+                capsule.velocity**2
                 + 2
-                * capsule.a
+                * capsule.altitude
                 * (capsule.g - capsule.z * capsule.fuel_per_second / capsule.m)
             )
         ) / 2
-        delta_t = capsule.a / average_vel
+        delta_t = capsule.altitude / average_vel
         new_state = capsule.predict_motion(delta_t)
         capsule.update_state(sim_clock, delta_t, new_state)
 
@@ -269,11 +263,11 @@ def handle_flyaway(sim_clock: SimulationClock, capsule: Capsule) -> bool:
         w = (1 - capsule.m * capsule.g / (capsule.z * capsule.fuel_per_second)) / 2
         delta_t = (
             capsule.m
-            * capsule.v
+            * capsule.velocity
             / (
                 capsule.z
                 * capsule.fuel_per_second
-                * math.sqrt(w**2 + capsule.v / capsule.z)
+                * math.sqrt(w**2 + capsule.velocity / capsule.z)
             )
         ) + 0.05
 
@@ -285,7 +279,7 @@ def handle_flyaway(sim_clock: SimulationClock, capsule: Capsule) -> bool:
 
         capsule.update_state(sim_clock, delta_t, new_state)
 
-        if (new_state.velocity > 0) or (capsule.v <= 0):
+        if (new_state.velocity > 0) or (capsule.velocity <= 0):
             # return to normal sim
             return False
 
@@ -329,7 +323,7 @@ def run_simulation() -> None:
             process_final_tick(delta_t, sim_clock, capsule)
             return
 
-        if capsule.v > 0 and new_state.velocity < 0:
+        if capsule.velocity > 0 and new_state.velocity < 0:
             # moving away from the moon
 
             landed = handle_flyaway(sim_clock, capsule)

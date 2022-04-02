@@ -75,8 +75,8 @@ def query_bets() -> Tuple[List[int], List[int]]:
     for i in range(bet_count):
         while bet_ids[i] == -1:
             try:
-                inString = input("NUMBER " + str(i + 1) + "? ").split(",")
-                id_, val = int(inString[0]), int(inString[1])
+                in_string = input("NUMBER " + str(i + 1) + "? ").split(",")
+                id_, val = int(in_string[0]), int(in_string[1])
 
                 # check other bet_IDs
                 for j in range(i):
@@ -93,7 +93,7 @@ def query_bets() -> Tuple[List[int], List[int]]:
     return bet_ids, bet_values
 
 
-def bet_results(bet_ids: List[int], bet_values: List[int], result):
+def bet_results(bet_ids: List[int], bet_values: List[int], result) -> int:
     """Computes the results, prints them, and returns the total net winnings"""
     total_winnings = 0
 
@@ -134,7 +134,7 @@ def bet_results(bet_ids: List[int], bet_values: List[int], result):
 
 
 def print_check(amount: int) -> None:
-    """Prints a check of a given amount"""
+    """Print a check of a given amount"""
     name = input("TO WHOM SHALL I MAKE THE CHECK? ")
 
     print("-" * 72)

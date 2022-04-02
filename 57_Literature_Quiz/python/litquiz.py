@@ -6,20 +6,19 @@ A children's literature quiz
 Ported by Dave LeCompte
 """
 
+from typing import List, NamedTuple
+
 PAGE_WIDTH = 64
 
 
-class Question:
-    def __init__(
-        self, question, answer_list, correct_number, incorrect_message, correct_message
-    ):
-        self.question = question
-        self.answer_list = answer_list
-        self.correct_number = correct_number
-        self.incorrect_message = incorrect_message
-        self.correct_message = correct_message
+class Question(NamedTuple):
+    question: str
+    answer_list: List[str]
+    correct_number: int
+    incorrect_message: str
+    correct_message: str
 
-    def ask(self):
+    def ask(self) -> bool:
         print(self.question)
 
         options = [f"{i+1}){self.answer_list[i]}" for i in range(len(self.answer_list))]
@@ -69,7 +68,6 @@ questions = [
 
 def print_centered(msg: str) -> None:
     spaces = " " * ((64 - len(msg)) // 2)
-
     print(spaces + msg)
 
 
