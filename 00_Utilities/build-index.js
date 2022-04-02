@@ -103,10 +103,7 @@ function findJSFilesInFolder(folder) {
 		...htmlFiles,
 		...mjsFiles
 	].filter(file => !IGNORE_FILES.includes(file));
-	console.log(entries);
-		
 
-		
 	if (entries.length == 0) {
 		throw new Error(`Game "${folder}" is missing a HTML or node.js file in the folder "${folder}/${JAVASCRIPT_FOLDER}"`);
 	}

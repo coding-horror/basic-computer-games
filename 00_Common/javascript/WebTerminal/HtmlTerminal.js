@@ -96,9 +96,18 @@ class HtmlTerminal {
       this.#inputCallback = undefined;
     } else if (e.keyCode === 8 /* BACKSPACE */) {
       this.#$prompt.innerText = this.#$prompt.innerText.slice(0, -1);
+    } else if (
+      e.keyCode == 16 // "Shift"
+      || e.keyCode == 17 // "Control"
+      || e.keyCode == 20 // "CapsLock"
+      || !e.key.match(/^[a-z0-9!"§#$%&'()*+,.\/:;<=>?@\[\] ^_`{|}~-]$/i)
+    ) {
+      // ignore non-visible characters
+      return e;
     } else {
       this.#$prompt.innerHtml = '';
-      this.#$prompt.innerText =  this.#$prompt.innerText + e.key;
+      const key = e.shiftKey ? e.key.toUpperCase() : e.key;
+      this.#$prompt.innerText =  this.#$prompt.innerText + key;
     }
   }
 
@@ -135,27 +144,23 @@ class HtmlTerminal {
    * @param {string} text 
    */
   write(text) {
-    if (text.match(/^\n*$/)) {
-      // empty new line
-      text.match(/\n/g).forEach(() => {
-        const $br = document.createElement("br");
-        this.$output.appendChild($br);
-      });
-    } else if (text && text.length && text.includes("\n")) {
+    if (!text || text.length <= 0) {
+      // empty line
+      this.$output.appendChild(document.createElement("br"));
+    } else if (text.endsWith("\n")) {
+      // single line with linebrank
+      const $lineNode = this.#newLine(text);
+      this.$output.appendChild(this.#newLine(text));
+      this.$output.appendChild(document.createElement("br"));
+    } else if (text.includes("\n")) {
+      // multible lines
       const lines = text.split("\n");
       lines.forEach((line) => {
-        if (line.length === 0 || line.match(/^\s*$/)) {
-          this.$output.appendChild(document.createElement("br"));
-        } else {
-          const $lineNode = this.#newLine(line);
-          this.$output.appendChild($lineNode);
-          //this.$node.appendChild(document.createElement("br"));
-        }
+        this.write(line);
       });
-    } else if (text && text.length) {
-      // simple line
-      const $lineNode = this.#newLine(text);
-      this.$output.appendChild($lineNode);
+    } else {
+      // single line
+      this.$output.appendChild(this.#newLine(text));
     }
 
     // scroll to the buttom of the page
