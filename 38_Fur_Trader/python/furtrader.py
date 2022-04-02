@@ -112,15 +112,14 @@ def get_furs_purchase():
     print("KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX.")
     print()
 
-    for i in range(len(FUR_NAMES)):
-        print("HOW MANY " + FUR_NAMES[i] + " DO YOU HAVE")
+    while len(results) < len(FUR_NAMES):
+        print(f"HOW MANY {FUR_NAMES[len(results)]} DO YOU HAVE")
         count_str = input(">> ")
         try:
             count = int(count_str)
             results.append(count)
-        except Exception:
-            # invalid input, prompt again by re-looping
-            i -= 1
+        except Exception:  # invalid input, prompt again by re-looping
+            pass
     return results
 
 
