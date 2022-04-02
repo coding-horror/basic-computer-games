@@ -3,7 +3,8 @@ Original game design: Cram, Goodie, Hibbard Lexington H.S.
 Modifications: G. Paul, R. Hess (Ties), 1973
 """
 import math
-from typing import List
+import random
+from typing import List, Tuple
 
 
 def get_choice(prompt: str, choices: List[str]) -> str:
@@ -14,7 +15,7 @@ def get_choice(prompt: str, choices: List[str]) -> str:
     return choice
 
 
-def main():
+def main() -> None:
     battles = [
         [
             "JULY 21, 1861.  GEN. BEAUREGARD, COMMANDING THE SOUTH, MET",
@@ -73,22 +74,22 @@ def main():
         ],
     ]
 
-    historical_data = [
-        [],
-        ["BULL RUN", 18000, 18500, 1967, 2708, 1],
-        ["SHILOH", 40000.0, 44894.0, 10699, 13047, 3],
-        ["SEVEN DAYS", 95000.0, 115000.0, 20614, 15849, 3],
-        ["SECOND BULL RUN", 54000.0, 63000.0, 10000, 14000, 2],
-        ["ANTIETAM", 40000.0, 50000.0, 10000, 12000, 3],
-        ["FREDERICKSBURG", 75000.0, 120000.0, 5377, 12653, 1],
-        ["MURFREESBORO", 38000.0, 45000.0, 11000, 12000, 1],
-        ["CHANCELLORSVILLE", 32000, 90000.0, 13000, 17197, 2],
-        ["VICKSBURG", 50000.0, 70000.0, 12000, 19000, 1],
-        ["GETTYSBURG", 72500.0, 85000.0, 20000, 23000, 3],
-        ["CHICKAMAUGA", 66000.0, 60000.0, 18000, 16000, 2],
-        ["CHATTANOOGA", 37000.0, 60000.0, 36700.0, 5800, 2],
-        ["SPOTSYLVANIA", 62000.0, 110000.0, 17723, 18000, 2],
-        ["ATLANTA", 65000.0, 100000.0, 8500, 3700, 1],
+    historical_data: List[Tuple[str, float, float, float, int, int]] = [
+        ("", 0, 0, 0, 0, 0),
+        ("BULL RUN", 18000, 18500, 1967, 2708, 1),
+        ("SHILOH", 40000.0, 44894.0, 10699, 13047, 3),
+        ("SEVEN DAYS", 95000.0, 115000.0, 20614, 15849, 3),
+        ("SECOND BULL RUN", 54000.0, 63000.0, 10000, 14000, 2),
+        ("ANTIETAM", 40000.0, 50000.0, 10000, 12000, 3),
+        ("FREDERICKSBURG", 75000.0, 120000.0, 5377, 12653, 1),
+        ("MURFREESBORO", 38000.0, 45000.0, 11000, 12000, 1),
+        ("CHANCELLORSVILLE", 32000, 90000.0, 13000, 17197, 2),
+        ("VICKSBURG", 50000.0, 70000.0, 12000, 19000, 1),
+        ("GETTYSBURG", 72500.0, 85000.0, 20000, 23000, 3),
+        ("CHICKAMAUGA", 66000.0, 60000.0, 18000, 16000, 2),
+        ("CHATTANOOGA", 37000.0, 60000.0, 36700.0, 5800, 2),
+        ("SPOTSYLVANIA", 62000.0, 110000.0, 17723, 18000, 2),
+        ("ATLANTA", 65000.0, 100000.0, 8500, 3700, 1),
     ]
     sa = {}
     dollars_available = {}
@@ -163,30 +164,30 @@ def main():
     xs = get_choice("(ANSWER YES OR NO) ", ["YES", "NO"])
     line = 0
     w = 0
-    r1 = 0
-    q1 = 0
-    m3 = 0
-    m4 = 0
-    p1 = 0
-    p2 = 0
-    t1 = 0
-    t2 = 0
+    r1: float = 0
+    q1: float = 0
+    m3: float = 0
+    m4: float = 0
+    p1: float = 0
+    p2: float = 0
+    t1: float = 0
+    t2: float = 0
     for i in range(1, 3):
         dollars_available[i] = 0
         food_array[i] = 0
         salaries[i] = 0
         ammunition[i] = 0
         oa[i] = 0
-    r2 = 0
+    r2: float = 0
     q2 = 0
-    c6 = 0
+    c6: float = 0
     food = 0
     w0 = 0
     strategy_index = 0
     union_strategy_index = 0
     u = 0
     u2 = 0
-    random_nb = 0
+    random_nb: float = 0
     while True:
         print()
         print()
@@ -264,7 +265,7 @@ def main():
                     print("NEGATIVE VALUES NOT ALLOWED.")
                 print()
                 if food_array[i] + salaries[i] + ammunition[i] > dollars_available[i]:
-                    print("THINK AGAIN! YOU HAVE ONLY $" + dollars_available[i])
+                    print(f"THINK AGAIN! YOU HAVE ONLY ${dollars_available[i]}")
                 else:
                     break
 
@@ -290,7 +291,7 @@ def main():
                 print("MORALE IS POOR")
             if bs != "YES":
                 break
-            oa[z] = o
+            oa[z] = o  # type: ignore
 
         o2 = oa[2]
         o = oa[1]
@@ -323,7 +324,7 @@ def main():
                     print("ENTER 1, 2, 3, OR 4 (USUALLY PREVIOUS UNION STRATEGY)")
             else:
                 s0 = 0
-                random_nb = math.random() * 100
+                random_nb = random.random() * 100
                 for i in range(1, 5):
                     s0 += sa[i]
                     # If actual strategy info is in program data statements
@@ -344,7 +345,7 @@ def main():
                     print("YOUR STRATEGY ? ", end="")
                 if i == 2:
                     union_strategy_index = strategy_index
-                    strategy_index = previous_strategy  # noqa: F821
+                    strategy_index = previous_strategy  # type: ignore # noqa: F821
                     if union_strategy_index != 5:
                         break
                 else:
