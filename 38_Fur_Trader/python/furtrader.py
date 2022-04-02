@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 
 import random  # for generating random numbers
 import sys  # for system function, like exit()

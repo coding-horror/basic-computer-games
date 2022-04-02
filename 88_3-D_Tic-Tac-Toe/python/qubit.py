@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Ported from the BASIC source for 3D Tic Tac Toe
 # in BASIC Computer Games, by David H. Ahl
