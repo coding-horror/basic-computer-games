@@ -19,7 +19,7 @@ def print_instructions() -> None:
     print()
 
 
-def fnr():
+def fnr() -> int:
     return random.randint(1, 5)
 
 

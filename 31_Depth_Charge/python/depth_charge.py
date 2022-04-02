@@ -85,7 +85,7 @@ def get_shot_input() -> Tuple[int, int, int]:
             print("Please enter whole numbers only")
 
 
-def play_game(search_area, num_charges):
+def play_game(search_area, num_charges) -> None:
     print("\nYou are the captain of the destroyer USS Computer.")
     print("An enemy sub has been causing you trouble. Your")
     print(f"mission is to destroy it. You have {num_charges} shots.")

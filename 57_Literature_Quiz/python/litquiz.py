@@ -19,7 +19,7 @@ class Question:
         self.incorrect_message = incorrect_message
         self.correct_message = correct_message
 
-    def ask(self):
+    def ask(self) -> bool:
         print(self.question)
 
         options = [f"{i+1}){self.answer_list[i]}" for i in range(len(self.answer_list))]

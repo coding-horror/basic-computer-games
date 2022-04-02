@@ -23,7 +23,7 @@ def print_instructions() -> None:
     print("AS TO HOW CLOSE YOU'RE GETTING TO MY LETTER.")
 
 
-def play_game():
+def play_game() -> None:
     target_value = random.randint(ord("A"), ord("Z"))
     num_guesses = 0
     print()

@@ -26,13 +26,14 @@ From: Basic Computer Games (1978)
 
 from math import log
 from random import random
+from typing import Tuple
 
 
 def insert_whitespaces() -> None:
     print("\n\n\n\n\n")
 
 
-def limit_set():
+def limit_set() -> Tuple[int, int]:
     print("                   Guess")
     print("Creative Computing  Morristown, New Jersey")
     print("\n\n\n")

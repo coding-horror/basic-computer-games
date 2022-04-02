@@ -71,7 +71,7 @@ def gunner() -> None:
                 return
 
 
-def main():
+def main() -> None:
     print(" " * 33 + "GUNNER")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n\n")

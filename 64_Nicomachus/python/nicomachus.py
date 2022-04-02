@@ -15,7 +15,7 @@ Ported by Dave LeCompte
 import time
 
 
-def get_yes_or_no():
+def get_yes_or_no() -> bool:
     while True:
         response = input().upper()
         if response == "YES":
@@ -25,7 +25,7 @@ def get_yes_or_no():
         print(f"EH?  I DON'T UNDERSTAND '{response}'  TRY 'YES' OR 'NO'.")
 
 
-def play_game():
+def play_game() -> None:
     print("PLEASE THINK OF A NUMBER BETWEEN 1 AND 100.")
     print("YOUR NUMBER DIVIDED BY 3 HAS A REMAINDER OF")
     a = int(input())

@@ -22,7 +22,7 @@ def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
         return False, None, msg
 
 
-def ask_enjoy_question(user_name):
+def ask_enjoy_question(user_name: str) -> None:
     print(f"HI THERE, {user_name}, ARE YOU ENJOYING YOURSELF HERE?")
 
     while True:
@@ -41,7 +41,7 @@ def ask_enjoy_question(user_name):
             print("PLEASE ANSWER 'YES' OR 'NO'.  DO YOU LIKE IT HERE?")
 
 
-def prompt_for_problems(user_name):
+def prompt_for_problems(user_name: str) -> str:
     print()
     print(f"SAY, {user_name}, I CAN SOLVE ALL KINDS OF PROBLEMS EXCEPT")
     print("THOSE DEALING WITH GREECE.  WHAT KIND OF PROBLEMS DO")

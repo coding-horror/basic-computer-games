@@ -20,7 +20,7 @@ g = 10
 EXPECTED_ACCURACY_PERCENT = 15
 
 
-def do_quiz():
+def do_quiz() -> None:
     print()
     print()
     num_questions_correct = 0

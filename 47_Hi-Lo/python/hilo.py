@@ -5,7 +5,7 @@ MAX_ATTEMPTS = 6
 QUESTION_PROMPT = "? "
 
 
-def main():
+def main() -> None:
     print("HI LO")
     print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("THIS IS THE GAME OF HI LO.\n")

@@ -2,6 +2,7 @@
 
 import random  # for generating random numbers
 import sys  # for system function, like exit()
+from typing import List
 
 # global variables for storing player's status
 player_funds: float = 0  # no money
@@ -62,7 +63,7 @@ def get_fort_choice() -> int:
     return result
 
 
-def show_fort_comment(which_fort):
+def show_fort_comment(which_fort) -> None:
     """Print the description for the fort"""
     print()
     if which_fort == FORT_MONTREAL:
@@ -103,10 +104,10 @@ def get_yes_or_no() -> str:
     return result
 
 
-def get_furs_purchase():
+def get_furs_purchase() -> List[int]:
     """Prompt the player for how many of each fur type they want.
     Accept numeric inputs, re-prompting on incorrect input values"""
-    results = []
+    results: List[int] = []
 
     print("YOUR " + str(MAX_FURS) + " FURS ARE DISTRIBUTED AMONG THE FOLLOWING")
     print("KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX.")
@@ -123,7 +124,7 @@ def get_furs_purchase():
     return results
 
 
-def main():
+def main() -> None:
     print(" " * 31 + "FUR TRADER")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print(" " * 15 + "(Ported to Python Oct 2012 krt@krt.com.au)")
@@ -137,7 +138,7 @@ def main():
         if game_state == "starting":
             show_introduction()
 
-            player_funds = 600  # Initial player start money
+            player_funds: float = 600  # Initial player start money
             player_furs = [0, 0, 0, 0]  # Player fur inventory
 
             print("DO YOU WISH TO TRADE FURS?")

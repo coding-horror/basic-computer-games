@@ -204,7 +204,7 @@ def print_board(guesses) -> None:
 #    "We did try a version that kept an actual list of all possible combinations
 #    (as a string array), which was significantly faster than this versionn but
 #    which ate tremendous amounts of memory."
-def get_possibility(possibility):
+def get_possibility(possibility) -> List[int]:
     # print(possibility)
     if possibility[0] > -1:  # 3530
         current_position = 0  # Python arrays are zero-indexed
