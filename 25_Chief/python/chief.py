@@ -37,7 +37,7 @@ def game() -> None:
         print("\nHuh, I Knew I was unbeatable")
         print("And here is how i did it")
         print_solution(comp_guess)
-        input("")
+        input()
     else:
         resp3 = float(input("\nHUH!! what was you original number? "))
 
@@ -48,7 +48,7 @@ def game() -> None:
             )
             print("Here is how i did it")
             print_solution(comp_guess)
-            input("")
+            input()
         else:
             print("\nSo you think you're so smart, EH?")
             print("Now, Watch")
@@ -58,14 +58,14 @@ def game() -> None:
 
             if resp4.lower() == "yes":
                 print("\nOk, Lets play again sometime bye!!!!")
-                input("")
+                input()
             else:
                 print("\nYOU HAVE MADE ME VERY MAD!!!!!")
                 print("BY THE WRATH OF THE MATHEMATICS AND THE RAGE OF THE GODS")
                 print("THERE SHALL BE LIGHTNING!!!!!!!")
                 print_lightning_bolt()
                 print("\nI Hope you believe me now, for your own sake")
-                input("")
+                input()
 
 
 if __name__ == "__main__":
@@ -75,4 +75,4 @@ if __name__ == "__main__":
         game()
     else:
         print("Ok, Nevermind. Let me go back to my great slumber, Bye")
-        input("")
+        input()

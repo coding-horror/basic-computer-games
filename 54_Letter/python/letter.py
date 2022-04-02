@@ -43,8 +43,8 @@ def play_game() -> None:
             print("GOOD JOB !!!!!")
 
             if BELLS_ON_SUCCESS:
-                bellStr = chr(7) * 15
-                print(bellStr)
+                bell_str = chr(7) * 15
+                print(bell_str)
 
             print()
             print("LET'S PLAY AGAIN.....")

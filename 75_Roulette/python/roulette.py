@@ -75,8 +75,8 @@ def query_bets() -> Tuple[List[int], List[int]]:
     for i in range(bet_count):
         while bet_ids[i] == -1:
             try:
-                inString = input("NUMBER " + str(i + 1) + "? ").split(",")
-                id_, val = int(inString[0]), int(inString[1])
+                in_string = input("NUMBER " + str(i + 1) + "? ").split(",")
+                id_, val = int(in_string[0]), int(in_string[1])
 
                 # check other bet_IDs
                 for j in range(i):

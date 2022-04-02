@@ -62,10 +62,10 @@ def initialize_board(n: int) -> List[List[int]]:
     # Initialize the board
     board = []
     for _x in range(n):
-        subA = []
+        sub_a = []
         for _y in range(n):
-            subA.append(0)
-        board.append(subA)
+            sub_a.append(0)
+        board.append(sub_a)
     return board
 
 

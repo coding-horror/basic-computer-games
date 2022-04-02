@@ -64,12 +64,12 @@ def get_params() -> Tuple[int, int, int, StartOptions, WinOptions]:
     """This requests the necessary parameters to play the game.
 
     Returns a set with the five game parameters:
-        pileSize - the starting size of the object pile
-        minSelect - minimum selection that can be made on each turn
-        maxSelect - maximum selection that can be made on each turn
-        startOption - 1 if the computer is first
+        pile_size - the starting size of the object pile
+        min_select - minimum selection that can be made on each turn
+        max_select - maximum selection that can be made on each turn
+        start_option - 1 if the computer is first
                       or 2 if the player is first
-        winOption - 1 if the goal is to take the last object
+        win_option - 1 if the goal is to take the last object
                     or 2 if the goal is to not take the last object
     """
     pile_size = get_pile_size()
@@ -123,7 +123,7 @@ def player_move(
     to take and doing some basic validation around that input.  Then it
     checks for any win conditions.
 
-    Returns a boolean indicating whether the game is over and the new pileSize."""
+    Returns a boolean indicating whether the game is over and the new pile_size."""
     player_done = False
     while not player_done:
         player_move = int(input("YOUR MOVE "))
@@ -167,7 +167,7 @@ def computer_move(
     win/lose conditions and then calculating how many objects
     the computer will take.
 
-    Returns a boolean indicating whether the game is over and the new pileSize."""
+    Returns a boolean indicating whether the game is over and the new pile_size."""
     # First, check for win conditions on this move
     # In this case, we win by taking the last object and
     # the remaining pile is less than max select
@@ -200,7 +200,7 @@ def play_game(
     of the win/lose conditions is met.
     """
     game_over = False
-    # playersTurn is a boolean keeping track of whether it's the
+    # players_turn is a boolean keeping track of whether it's the
     # player's or computer's turn
     players_turn = start_option == StartOptions.PlayerFirst
 

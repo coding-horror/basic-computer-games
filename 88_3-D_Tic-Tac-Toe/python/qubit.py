@@ -356,7 +356,7 @@ class Qubit:
                     break
                 print("Incorrect answer. Please type 'yes' or 'no'.")
 
-            skipHuman = s[0] in "nN"
+            skip_human = s[0] in "nN"
 
             move_text = [
                 "Machine moves to",
@@ -368,9 +368,9 @@ class Qubit:
             ]
 
             while True:
-                if not skipHuman and not self.human_move(board):
+                if not skip_human and not self.human_move(board):
                     break
-                skipHuman = False
+                skip_human = False
 
                 m = board.machine_move()
                 assert m is not None

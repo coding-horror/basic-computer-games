@@ -7,11 +7,7 @@ from typing import List, Tuple
 
 
 class Maze:
-    def __init__(
-        self,
-        width: int,
-        length: int,
-    ):
+    def __init__(self, width: int, length: int) -> None:
         assert width >= 2 and length >= 2
         used: List[List[int]] = []
         walls: List[List[int]] = []
@@ -117,7 +113,7 @@ def build_maze(width: int, length: int) -> Maze:
         else:
             while True:
                 if position.col != width - 1:
-                    position.col = position.col + 1
+                    position.col += 1
                 elif position.row != length - 1:
                     position.row, position.col = position.row + 1, 0
                 else:

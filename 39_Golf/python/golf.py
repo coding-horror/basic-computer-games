@@ -129,8 +129,8 @@ def clear_console() -> None:
 
 
 class Point(NamedTuple):
-    X: int
-    Y: int
+    x: int
+    y: int
 
 
 class GameObjType(enum.Enum):
@@ -183,14 +183,14 @@ class HoleGeometry(NamedTuple):
 
 @dataclass
 class Plot:
-    X: int
-    Y: int
-    Offline: int
+    x: int
+    y: int
+    offline: int
 
 
 def get_distance(pt1: Point, pt2: Point) -> float:
     """distance between 2 points"""
-    return math.sqrt(math.pow((pt2.X - pt1.X), 2) + math.pow((pt2.Y - pt1.Y), 2))
+    return math.sqrt(math.pow((pt2.x - pt1.x), 2) + math.pow((pt2.y - pt1.y), 2))
 
 
 def is_in_rectangle(pt: CircleGameObj, rect: RectGameObj) -> bool:
@@ -392,9 +392,9 @@ ace = 0b10000000000000
 
 
 class Golf:
-    BALL: Ball
-    HOLE_NUM: int = 0
-    STROKE_NUM: int = 0
+    ball: Ball
+    hole_num: int = 0
+    stroke_num: int = 0
     handicap: int = 0
     player_difficulty: int = 0
     hole_geometry: HoleGeometry
@@ -491,10 +491,10 @@ class Golf:
         self.new_hole()
 
     def new_hole(self) -> None:
-        self.HOLE_NUM += 1
-        self.STROKE_NUM = 0
+        self.hole_num += 1
+        self.stroke_num = 0
 
-        info: HoleInfo = CourseInfo[self.HOLE_NUM]
+        info: HoleInfo = CourseInfo[self.hole_num]
 
         yards: int = info.yards
         # from tee to cup
@@ -517,19 +517,19 @@ class Golf:
             GameObjType.ROUGH,
         )
 
-        self.BALL = Ball(0, yards, 0, GameObjType.BALL)
+        self.ball = Ball(0, yards, 0, GameObjType.BALL)
 
         self.score_card_start_new_hole()
 
         self.hole_geometry = HoleGeometry(cup, green, fairway, rough, info.hazards)
 
-        print(f"                |> {self.HOLE_NUM}")
+        print(f"                |> {self.hole_num}")
         print("                |        ")
         print("                |        ")
         print("          ^^^^^^^^^^^^^^^")
 
         print(
-            f"Hole #{self.HOLE_NUM}. You are at the tee. Distance {info.yards} yards, par {info.par}."
+            f"Hole #{self.hole_num}. You are at the tee. Distance {info.yards} yards, par {info.par}."
         )
         print(info.description)
 
@@ -560,8 +560,8 @@ class Golf:
     def tee_up(self) -> None:
         # on the green? automatically select putter
         # otherwise Ask club and swing strength
-        if self.is_on_green(self.BALL) and not self.is_in_hazard(
-            self.BALL, GameObjType.SAND
+        if self.is_on_green(self.ball) and not self.is_in_hazard(
+            self.ball, GameObjType.SAND
         ):
             self.putt = 10
             print("[PUTTER: average 10 yards]")
@@ -579,13 +579,13 @@ class Golf:
         else:
             self.ask("What club do you choose? (1-10)", 1, 10, self.ask_gauge)
 
-    def stroke(self, clubAmt: float, clubIndex: int) -> None:
-        self.STROKE_NUM += 1
+    def stroke(self, club_amt: float, club_index: int) -> None:
+        self.stroke_num += 1
 
         flags = 0b000000000000
 
         # fore! only when driving
-        if (self.STROKE_NUM == 1) and (clubAmt > 210) and odds(30):
+        if (self.stroke_num == 1) and (club_amt > 210) and odds(30):
             print('"...Fore !"')
 
         # dub
@@ -596,37 +596,37 @@ class Golf:
         # if you're in the rough, or sand, you really should be using a wedge
         if (
             (
-                self.is_in_rough(self.BALL)
-                or self.is_in_hazard(self.BALL, GameObjType.SAND)
+                self.is_in_rough(self.ball)
+                or self.is_in_hazard(self.ball, GameObjType.SAND)
             )
-            and not (clubIndex == 8 or clubIndex == 9)
+            and not (club_index == 8 or club_index == 9)
             and odds(40)
         ):
             flags |= dub
 
         # trap difficulty
         if (
-            self.is_in_hazard(self.BALL, GameObjType.SAND)
+            self.is_in_hazard(self.ball, GameObjType.SAND)
             and self.player_difficulty == 4
         ) and odds(20):
             flags |= dub
 
         # hook/slice
         # There's 10% chance of a hook or slice
-        # if it's a known playerDifficulty then increase chance to 30%
-        # if it's a putt & putting is a playerDifficulty increase to 30%
+        # if it's a known player_difficulty then increase chance to 30%
+        # if it's a putt & putting is a player_difficulty increase to 30%
 
-        randHookSlice: bool
+        rand_hook_slice: bool
         if (
             self.player_difficulty == 1
             or self.player_difficulty == 2
-            or (self.player_difficulty == 5 and self.is_on_green(self.BALL))
+            or (self.player_difficulty == 5 and self.is_on_green(self.ball))
         ):
-            randHookSlice = odds(30)
+            rand_hook_slice = odds(30)
         else:
-            randHookSlice = odds(10)
+            rand_hook_slice = odds(10)
 
-        if randHookSlice:
+        if rand_hook_slice:
             if self.player_difficulty == 1:
                 if odds(80):
                     flags |= hook
@@ -650,7 +650,7 @@ class Golf:
 
         # ace
         # there's a 10% chance of an Ace on a par 3
-        if CourseInfo[self.HOLE_NUM].par == 3 and odds(10) and self.STROKE_NUM == 1:
+        if CourseInfo[self.hole_num].par == 3 and odds(10) and self.stroke_num == 1:
             flags |= ace
 
         # distance:
@@ -659,29 +659,29 @@ class Golf:
         # If handicap is > 15, there's a 25% chance of reaching club average,
         # and 75% chance of falling short
         # The greater the handicap, the more the ball falls short
-        # If poor distance is a known playerDifficulty, then reduce distance by 10%
+        # If poor distance is a known player_difficulty, then reduce distance by 10%
 
         distance: float
         rnd = random.randint(1, 101)
 
         if self.handicap < 15:
             if rnd <= 25:
-                distance = clubAmt - (clubAmt * (self.handicap / 100.0))
+                distance = club_amt - (club_amt * (self.handicap / 100.0))
             elif rnd > 25 and rnd <= 75:
-                distance = clubAmt
+                distance = club_amt
             else:
-                distance = clubAmt + (clubAmt * 0.10)
+                distance = club_amt + (club_amt * 0.10)
         else:
             if rnd <= 75:
-                distance = clubAmt - (clubAmt * (self.handicap / 100.0))
+                distance = club_amt - (club_amt * (self.handicap / 100.0))
             else:
-                distance = clubAmt
+                distance = club_amt
 
         if self.player_difficulty == 3 and odds(80):  # poor distance
             distance = distance * 0.80
 
         if (flags & luck) == luck:
-            distance = clubAmt
+            distance = club_amt
 
         # angle
         # For all strokes, there's a possible "drift" of 4 degrees
@@ -695,43 +695,45 @@ class Golf:
         if (flags & luck) == luck:
             angle = 0
 
-        plot = self.plot_ball(self.BALL, distance, angle)
+        plot = self.plot_ball(self.ball, distance, angle)
         # calculate a new location
-        if (flags & luck) == luck and plot.Y > 0:
-            plot.Y = 2
+        if (flags & luck) == luck and plot.y > 0:
+            plot.y = 2
 
         flags = self.find_ball(
-            Ball(plot.X, plot.Y, plot.Offline, GameObjType.BALL), flags
+            Ball(plot.x, plot.y, plot.offline, GameObjType.BALL), flags
         )
 
         self.interpret_results(plot, flags)
 
-    def plot_ball(self, ball: Ball, strokeDistance: float, degreesOff: float) -> Plot:
-        cupVector = Point(0, -1)
-        radFromCup = math.atan2(ball.Y, ball.X) - math.atan2(cupVector.Y, cupVector.X)
-        radFromBall = radFromCup - math.pi
+    def plot_ball(self, ball: Ball, stroke_distance: float, degrees_off: float) -> Plot:
+        cup_vector = Point(0, -1)
+        rad_from_cup = math.atan2(ball.Y, ball.X) - math.atan2(
+            cup_vector.y, cup_vector.x
+        )
+        rad_from_ball = rad_from_cup - math.pi
 
-        hypotenuse = strokeDistance
-        adjacent = math.cos(radFromBall + to_radians(degreesOff)) * hypotenuse
+        hypotenuse = stroke_distance
+        adjacent = math.cos(rad_from_ball + to_radians(degrees_off)) * hypotenuse
         opposite = math.sqrt(math.pow(hypotenuse, 2) - math.pow(adjacent, 2))
 
-        newPos: Point
-        if to_degrees_360(radFromBall + to_radians(degreesOff)) > 180:
-            newPos = Point(int(ball.X - opposite), int(ball.Y - adjacent))
+        new_pos: Point
+        if to_degrees_360(rad_from_ball + to_radians(degrees_off)) > 180:
+            new_pos = Point(int(ball.X - opposite), int(ball.Y - adjacent))
         else:
-            newPos = Point(int(ball.X + opposite), int(ball.Y - adjacent))
+            new_pos = Point(int(ball.X + opposite), int(ball.Y - adjacent))
 
-        return Plot(newPos.X, newPos.Y, int(opposite))
+        return Plot(new_pos.x, new_pos.y, int(opposite))
 
     def interpret_results(self, plot: Plot, flags: int) -> None:
-        cupDistance: int = int(
+        cup_distance: int = int(
             get_distance(
-                Point(plot.X, plot.Y),
+                Point(plot.x, plot.y),
                 Point(self.hole_geometry.cup.X, self.hole_geometry.cup.Y),
             )
         )
-        travelDistance: int = int(
-            get_distance(Point(plot.X, plot.Y), Point(self.BALL.X, self.BALL.Y))
+        travel_distance: int = int(
+            get_distance(Point(plot.x, plot.y), Point(self.ball.X, self.ball.Y))
         )
 
         print(" ")
@@ -744,7 +746,7 @@ class Golf:
 
         if (flags & in_trees) == in_trees:
             print("Your ball is lost in the trees. Take a penalty stroke.")
-            self.score_card_record_stroke(self.BALL)
+            self.score_card_record_stroke(self.ball)
             self.tee_up()
             return
 
@@ -754,19 +756,19 @@ class Golf:
             else:
                 msg = "Your ball is lost in the water."
             print(msg + " Take a penalty stroke.")
-            self.score_card_record_stroke(self.BALL)
+            self.score_card_record_stroke(self.ball)
             self.tee_up()
             return
 
         if (flags & out_of_bounds) == out_of_bounds:
             print("Out of bounds. Take a penalty stroke.")
-            self.score_card_record_stroke(self.BALL)
+            self.score_card_record_stroke(self.ball)
             self.tee_up()
             return
 
         if (flags & dub) == dub:
             print("You dubbed it.")
-            self.score_card_record_stroke(self.BALL)
+            self.score_card_record_stroke(self.ball)
             self.tee_up()
             return
 
@@ -776,7 +778,7 @@ class Golf:
             else:
                 msg = "It's in!"
             print(msg)
-            self.score_card_record_stroke(Ball(plot.X, plot.Y, 0, GameObjType.BALL))
+            self.score_card_record_stroke(Ball(plot.x, plot.y, 0, GameObjType.BALL))
             self.report_current_score()
             return
 
@@ -785,22 +787,22 @@ class Golf:
                 bad = "badly"
             else:
                 bad = ""
-            print(f"You sliced{bad}: {plot.Offline} yards offline.")
+            print(f"You sliced{bad}: {plot.offline} yards offline.")
 
         if ((flags & hook) == hook) and not ((flags & on_green) == on_green):
             if (flags & out_of_bounds) == out_of_bounds:
                 bad = "badly"
             else:
                 bad = ""
-            print(f"You hooked{bad}: {plot.Offline} yards offline.")
+            print(f"You hooked{bad}: {plot.offline} yards offline.")
 
-        if self.STROKE_NUM > 1:
-            prevBall = self.score_card_get_previous_stroke()
+        if self.stroke_num > 1:
+            prev_ball = self.score_card_get_previous_stroke()
             d1 = get_distance(
-                Point(prevBall.X, prevBall.Y),
+                Point(prev_ball.X, prev_ball.Y),
                 Point(self.hole_geometry.cup.X, self.hole_geometry.cup.Y),
             )
-            d2 = cupDistance
+            d2 = cup_distance
             if d2 > d1:
                 print("Too much club.")
 
@@ -811,55 +813,55 @@ class Golf:
             print("You're in a sand trap.")
 
         if (flags & on_green) == on_green:
-            if cupDistance < 4:
-                pd = str(cupDistance * 3) + " feet"
+            if cup_distance < 4:
+                pd = str(cup_distance * 3) + " feet"
             else:
-                pd = f"{cupDistance} yards"
+                pd = f"{cup_distance} yards"
             print(f"You're on the green. It's {pd} from the pin.")
 
         if ((flags & on_fairway) == on_fairway) or ((flags & in_rough) == in_rough):
             print(
-                f"Shot went {travelDistance} yards. "
-                f"It's {cupDistance} yards from the cup."
+                f"Shot went {travel_distance} yards. "
+                f"It's {cup_distance} yards from the cup."
             )
 
-        self.score_card_record_stroke(Ball(plot.X, plot.Y, 0, GameObjType.BALL))
+        self.score_card_record_stroke(Ball(plot.x, plot.y, 0, GameObjType.BALL))
 
-        self.BALL = Ball(plot.X, plot.Y, 0, GameObjType.BALL)
+        self.ball = Ball(plot.x, plot.y, 0, GameObjType.BALL)
 
         self.tee_up()
 
     def report_current_score(self) -> None:
-        par = CourseInfo[self.HOLE_NUM].par
-        if len(self.score_card[self.HOLE_NUM]) == par + 1:
+        par = CourseInfo[self.hole_num].par
+        if len(self.score_card[self.hole_num]) == par + 1:
             print("A bogey. One above par.")
-        if len(self.score_card[self.HOLE_NUM]) == par:
+        if len(self.score_card[self.hole_num]) == par:
             print("Par. Nice.")
-        if len(self.score_card[self.HOLE_NUM]) == (par - 1):
+        if len(self.score_card[self.hole_num]) == (par - 1):
             print("A birdie! One below par.")
-        if len(self.score_card[self.HOLE_NUM]) == (par - 2):
+        if len(self.score_card[self.hole_num]) == (par - 2):
             print("An Eagle! Two below par.")
-        if len(self.score_card[self.HOLE_NUM]) == (par - 3):
+        if len(self.score_card[self.hole_num]) == (par - 3):
             print("Double Eagle! Unbelievable.")
 
-        totalPar: int = 0
-        for i in range(1, self.HOLE_NUM + 1):
-            totalPar += CourseInfo[i].par
+        total_par: int = 0
+        for i in range(1, self.hole_num + 1):
+            total_par += CourseInfo[i].par
 
         print(" ")
         print("-----------------------------------------------------")
-        if self.HOLE_NUM > 1:
+        if self.hole_num > 1:
             hole_str = "holes"
         else:
             hole_str = "hole"
         print(
-            f" Total par for {self.HOLE_NUM} {hole_str} is: {totalPar}. "
+            f" Total par for {self.hole_num} {hole_str} is: {total_par}. "
             f"Your total is: {self.score_card_get_total()}."
         )
         print("-----------------------------------------------------")
         print(" ")
 
-        if self.HOLE_NUM == 18:
+        if self.hole_num == 18:
             self.game_over()
         else:
             time.sleep(2)
@@ -930,10 +932,10 @@ class Golf:
 
     def score_card_record_stroke(self, ball: Ball) -> None:
         clone = Ball(ball.X, ball.Y, 0, GameObjType.BALL)
-        self.score_card[self.HOLE_NUM].append(clone)
+        self.score_card[self.hole_num].append(clone)
 
     def score_card_get_previous_stroke(self) -> Ball:
-        return self.score_card[self.HOLE_NUM][len(self.score_card[self.HOLE_NUM]) - 1]
+        return self.score_card[self.hole_num][len(self.score_card[self.hole_num]) - 1]
 
     def score_card_get_total(self) -> int:
         total: int = 0

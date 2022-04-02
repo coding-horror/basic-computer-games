@@ -8,7 +8,7 @@ Ported by Dave LeCompte
 
 
 def print_diamond(begin_width, end_width, step, width, count) -> None:
-    edgeString = "CC"
+    edge_string = "CC"
     fill = "!"
 
     n = begin_width
@@ -16,10 +16,10 @@ def print_diamond(begin_width, end_width, step, width, count) -> None:
         line_buffer = " " * ((width - n) // 2)
         for across in range(count):
             for a in range(n):
-                if a >= len(edgeString):
+                if a >= len(edge_string):
                     line_buffer += fill
                 else:
-                    line_buffer += edgeString[a]
+                    line_buffer += edge_string[a]
             line_buffer += " " * (
                 (width * (across + 1) + (width - n) // 2) - len(line_buffer)
             )
