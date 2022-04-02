@@ -102,7 +102,7 @@ def play_game() -> Tuple[str, str]:
     return (str(jumps), str(left))
 
 
-def try_again():
+def try_again() -> bool:
     print("TRY AGAIN", end=" ")
     answer = input().upper()
     if answer == "YES":
@@ -110,7 +110,7 @@ def try_again():
     elif answer == "NO":
         return False
     print("PLEASE ANSWER 'YES' OR 'NO'.")
-    try_again()
+    return try_again()
 
 
 if __name__ == "__main__":
