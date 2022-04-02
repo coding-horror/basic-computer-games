@@ -178,7 +178,7 @@ def main() -> None:
 
 
 # 470
-def get_invalid_letters(user_command):
+def get_invalid_letters(user_command) -> str:
     """Makes sure player input consists of valid colors for selected game configuration."""
     valid_colors = color_letters[:num_colors]
     invalid_letters = ""

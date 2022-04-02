@@ -93,7 +93,7 @@ def query_bets() -> Tuple[List[int], List[int]]:
     return bet_ids, bet_values
 
 
-def bet_results(bet_ids: List[int], bet_values: List[int], result):
+def bet_results(bet_ids: List[int], bet_values: List[int], result) -> int:
     """Computes the results, prints them, and returns the total net winnings"""
     total_winnings = 0
 

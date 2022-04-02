@@ -5,7 +5,7 @@ import textwrap
 NUMCNT = 9  # How many numbers are we playing with?
 
 
-def main():
+def main() -> None:
     print("REVERSE".center(72))
     print("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY".center(72))
     print()
@@ -14,7 +14,7 @@ def main():
     print()
 
     if not input("DO YOU WANT THE RULES? (yes/no) ").lower().startswith("n"):
-        rules()
+        print_rules()
 
     while True:
         game_loop()
@@ -23,7 +23,7 @@ def main():
             return
 
 
-def game_loop():
+def game_loop() -> None:
     """Play the main game."""
     # Make a random list from 1 to NUMCNT
     numbers = list(range(1, NUMCNT + 1))
@@ -67,12 +67,10 @@ def game_loop():
 
 
 def print_list(numbers) -> None:
-    """Print out the list"""
     print(" ".join(map(str, numbers)))
 
 
-def rules():
-    """Print out the rules"""
+def print_rules() -> None:
     help = textwrap.dedent(
         """
         THIS IS THE GAME OF "REVERSE".  TO WIN, ALL YOU HAVE

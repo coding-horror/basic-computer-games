@@ -96,7 +96,7 @@ def maybe_comma(state: State) -> None:
         state.u = 0
 
 
-def pick_phrase(state: State):
+def pick_phrase(state: State) -> None:
     state.i = random.randint(0, 4)
     state.j += 1
     state.k += 1

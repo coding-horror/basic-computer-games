@@ -50,7 +50,7 @@ def do_quiz() -> None:
         print("  NOT BAD.")
 
 
-def ask_player(question, answer):
+def ask_player(question: str, answer) -> int:
     print(question)
     player_answer = float(input())
 

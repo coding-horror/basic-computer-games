@@ -12,27 +12,28 @@ Ported by Dave LeCompte.
 """
 
 import datetime
+from typing import Tuple
 
 GET_TODAY_FROM_SYSTEM = True
 
 
-def get_date_from_user(prompt: str):
+def get_date_from_user(prompt: str) -> Tuple[int, int, int]:
     while True:
         print(prompt)
         date_str = input()
         try:
             month_num, day_num, year_num = (int(x) for x in date_str.split(","))
+            return month_num, day_num, year_num
         except Exception:
             print("I COULDN'T UNDERSTAND THAT. TRY AGAIN.")
-        return month_num, day_num, year_num
 
 
-def get_date_from_system():
+def get_date_from_system() -> Tuple[int, int, int]:
     dt = datetime.datetime.today()
     return dt.month, dt.day, dt.year
 
 
-def get_day_of_week(weekday_index, day):
+def get_day_of_week(weekday_index, day) -> str:
     day_names = {
         1: "SUNDAY",
         2: "MONDAY",
@@ -48,7 +49,7 @@ def get_day_of_week(weekday_index, day):
     return day_names[weekday_index]
 
 
-def previous_day(b):
+def previous_day(b) -> int:
     if b == 0:
         b = 6
     return b - 1
@@ -133,7 +134,7 @@ def calculate_day_of_week(year, month, day):
     return b
 
 
-def end():
+def end() -> None:
     for _ in range(5):
         print()
 

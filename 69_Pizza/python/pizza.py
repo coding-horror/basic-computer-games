@@ -89,7 +89,7 @@ def print_instructions() -> str:
     return player_name
 
 
-def yes_no_prompt(msg):
+def yes_no_prompt(msg: str) -> bool:
     while True:
         print(msg)
         response = input().upper()
@@ -113,11 +113,11 @@ def print_more_directions(player_name: str) -> None:
     print()
 
 
-def calculate_customer_index(x, y):
+def calculate_customer_index(x: int, y: int) -> int:
     return 4 * (y - 1) + x - 1
 
 
-def deliver_to(customer_index, customer_name, player_name):
+def deliver_to(customer_index, customer_name, player_name) -> bool:
     print(f"  DRIVER TO {player_name}:  WHERE DOES {customer_name} LIVE?")
 
     coords = input()
@@ -133,7 +133,7 @@ def deliver_to(customer_index, customer_name, player_name):
         return False
 
 
-def play_game(num_turns, player_name):
+def play_game(num_turns, player_name) -> None:
     for _turn in range(num_turns):
         x = random.randint(1, 4)
         y = random.randint(1, 4)

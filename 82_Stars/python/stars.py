@@ -47,14 +47,12 @@ def print_stars(secret_number, guess) -> None:
     print(stars)
 
 
-def get_guess():
-    valid_response = False
-    while not valid_response:
-        guess = input("Your guess? ")
-        if guess.isdigit():
-            valid_response = True
-            guess = int(guess)
-    return guess
+def get_guess(prompt: str) -> int:
+    while True:
+        guess_str = input(prompt)
+        if guess_str.isdigit():
+            guess = int(guess_str)
+            return guess
 
 
 def main() -> None:
@@ -81,7 +79,7 @@ def main() -> None:
         while (guess_number < MAX_GUESSES) and not player_has_won:
 
             print()
-            guess = get_guess()
+            guess = get_guess("Your guess? ")
             guess_number += 1
 
             if guess == secret_number:

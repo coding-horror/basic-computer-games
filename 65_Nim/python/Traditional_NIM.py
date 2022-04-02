@@ -41,7 +41,7 @@ class NIM:
 
         return pile, num
 
-    def _command_integrity(self, num, pile):
+    def _command_integrity(self, num, pile) -> bool:
         return pile <= 4 and pile >= 1 and num <= self.piles[pile]
 
     def print_pegs(self) -> None:
