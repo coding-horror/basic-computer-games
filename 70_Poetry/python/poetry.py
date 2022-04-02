@@ -6,24 +6,20 @@ A poetry generator
 Ported by Dave LeCompte
 """
 
-# PORTING EDITORIAL NOTE:
-#
-# The original code is a pretty convoluted mesh of GOTOs and global
-# state. This adaptation pulls things apart into phrases, but I have
-# left the variables as globals, which makes goes against decades of
-# wisdom that global state is bad.
 import random
+from dataclasses import dataclass
 
 PAGE_WIDTH = 64
 
 
-# globals
-u = 0
-i = 0
-j = 0
-k = 0
-phrase = 1
-line = ""
+@dataclass
+class State:
+    u: int = 0
+    i: int = 0
+    j: int = 0
+    k: int = 0
+    phrase: int = 1
+    line: str = ""
 
 
 def print_centered(msg: str) -> None:
@@ -31,9 +27,7 @@ def print_centered(msg: str) -> None:
     print(spaces + msg)
 
 
-def process_phrase_1() -> str:
-    global line
-
+def process_phrase_1(state: State) -> str:
     line_1_options = [
         "MIDNIGHT DREARY",
         "FIERY EYES",
@@ -41,15 +35,11 @@ def process_phrase_1() -> str:
         "THING OF EVIL",
         "PROPHET",
     ]
+    state.line = state.line + line_1_options[state.i]
+    return state.line
 
-    line = line + line_1_options[i]
-    return line
 
-
-def process_phrase_2() -> None:
-    global line
-    global u
-
+def process_phrase_2(state: State) -> None:
     line_2_options = [
         ("BEGUILING ME", 2),
         ("THRILLED ME", None),
@@ -57,15 +47,13 @@ def process_phrase_2() -> None:
         ("NEVER FLITTING", 2),
         ("BURNED", None),
     ]
-    words, u_modifier = line_2_options[i]
-    line += words
+    words, u_modifier = line_2_options[state.i]
+    state.line += words
     if not (u_modifier is None):
-        u = u_modifier
+        state.u = u_modifier
 
 
-def process_phrase_3() -> None:
-    global line
-
+def process_phrase_3(state: State) -> None:
     phrases = [
         (False, "AND MY SOUL"),
         (False, "DARKNESS THERE"),
@@ -74,14 +62,12 @@ def process_phrase_3() -> None:
         (True, "SIGN OF PARTING"),
     ]
 
-    only_if_u, words = phrases[i]
-    if (not only_if_u) or (u > 0):
-        line = line + words
+    only_if_u, words = phrases[state.i]
+    if (not only_if_u) or (state.u > 0):
+        state.line = state.line + words
 
 
-def process_phrase_4() -> None:
-    global line
-
+def process_phrase_4(state: State) -> None:
     phrases = [
         ("NOTHING MORE"),
         ("YET AGAIN"),
@@ -90,55 +76,42 @@ def process_phrase_4() -> None:
         ("NEVERMORE"),
     ]
 
-    line += phrases[i]
+    state.line += phrases[state.i]
 
 
-def maybe_comma():
-    # line 210
-    global u
-    global line
-
-    if len(line) > 0 and line[-1] == ".":
+def maybe_comma(state: State) -> None:
+    if len(state.line) > 0 and state.line[-1] == ".":
         # don't follow a period with a comma, ever
         return
 
-    if u != 0 and random.random() <= 0.19:
-        line += ", "
-        u = 2
-    # line 212
+    if state.u != 0 and random.random() <= 0.19:
+        state.line += ", "
+        state.u = 2
     if random.random() <= 0.65:
-        line += " "
-        u += 1
+        state.line += " "
+        state.u += 1
     else:
-        # line 214
-        print(line)
-        line = ""
-        u = 0
+        print(state.line)
+        state.line = ""
+        state.u = 0
 
 
-def pick_phrase():
-    global phrase
-    global line
-    global i, j, k
+def pick_phrase(state: State):
+    state.i = random.randint(0, 4)
+    state.j += 1
+    state.k += 1
 
-    i = random.randint(0, 4)
-    j += 1
-    k += 1
-
-    if u <= 0 and (j % 2) != 0:
+    if state.u <= 0 and (state.j % 2) != 0:
         # random indentation is fun!
-        line += " " * 5
-    phrase = j + 1
+        state.line += " " * 5
+    state.phrase = state.j + 1
 
 
 def main() -> None:
     print_centered("POETRY")
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
-    global line, phrase, j, k, u
+    state = State()
 
     phrase_processors = {
         1: process_phrase_1,
@@ -148,21 +121,21 @@ def main() -> None:
     }
 
     while True:
-        if phrase >= 1 and phrase <= 4:
-            phrase_processors[phrase]()
-            maybe_comma()
-        elif phrase == 5:
-            j = 0
-            print(line)
-            line = ""
-            if k > 20:
+        if state.phrase >= 1 and state.phrase <= 4:
+            phrase_processors[state.phrase](state)
+            maybe_comma(state)
+        elif state.phrase == 5:
+            state.j = 0
+            print(state.line)
+            state.line = ""
+            if state.k > 20:
                 print()
-                u = 0
-                k = 0
+                state.u = 0
+                state.k = 0
             else:
-                phrase = 2
+                state.phrase = 2
                 continue
-        pick_phrase()
+        pick_phrase(state)
 
 
 if __name__ == "__main__":
