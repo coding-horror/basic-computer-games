@@ -81,14 +81,6 @@ MAX_HISTORY = 9
 LOSING_BOOK_SIZE = 50
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
 def draw_pit(line: str, board, pit_index) -> str:
     val = board[pit_index]
     line = line + " "
@@ -362,10 +354,8 @@ def player_move(board) -> Tuple[int, bool, int]:
 
 
 def main() -> None:
-    print_with_tab(34, "AWARI")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
+    print(" " * 34 + "AWARI")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n")
 
     board = [0] * 14  # clear the board representation
     global losing_book

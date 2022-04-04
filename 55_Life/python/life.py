@@ -6,6 +6,7 @@ An implementation of John Conway's popular cellular automaton
 Ported by Dave LeCompte
 """
 
+from typing import Dict
 
 PAGE_WIDTH = 64
 
@@ -26,11 +27,11 @@ def print_header(title) -> None:
     print()
 
 
-def get_pattern():
+def get_pattern() -> Dict[int, str]:
     print("ENTER YOUR PATTERN:")
     c = 0
 
-    pattern = {}
+    pattern: Dict[int, str] = {}
     while True:
         line = input()
         if line == "DONE":
@@ -98,8 +99,8 @@ def main() -> None:
             print()
 
         for x in range(min_x, max_x + 1):
-            print
-            line = [" "] * MAX_WIDTH
+            print()
+            line_list = [" "] * MAX_WIDTH
             for y in range(min_y, max_y + 1):
                 if a[x][y] == 2:
                     a[x][y] = 0
@@ -109,15 +110,14 @@ def main() -> None:
                 elif a[x][y] != 1:
                     continue
 
-                # line 261
-                line[y] = "*"
+                line_list[y] = "*"
 
                 next_min_x = min(x, next_min_x)
                 next_max_x = max(x, next_max_x)
                 next_min_y = min(y, next_min_y)
                 next_max_y = max(y, next_max_y)
 
-            print("".join(line))
+            print("".join(line_list))
 
         # line 295
         for _ in range(max_x + 1, MAX_HEIGHT):

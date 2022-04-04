@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 
 def print_intro() -> None:
@@ -30,7 +31,7 @@ def print_instructions() -> None:
     print()
 
 
-def read_10_numbers():
+def read_10_numbers() -> List[int]:
     print("TEN NUMBERS, PLEASE ? ")
     numbers = []
 
@@ -47,7 +48,7 @@ def read_10_numbers():
     return numbers
 
 
-def read_continue_choice():
+def read_continue_choice() -> bool:
     print("\nDO YOU WANT TO TRY AGAIN (1 FOR YES, 0 FOR NO) ? ")
     try:
         choice = int(input())

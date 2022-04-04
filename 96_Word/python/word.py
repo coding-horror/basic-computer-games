@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-# WORD
-#
-# Converted from BASIC to Python by Trevor Hobson
+
+"""
+WORD
+
+Converted from BASIC to Python by Trevor Hobson
+"""
 
 import random
 
@@ -21,7 +24,7 @@ words = [
 ]
 
 
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
 
     random.shuffle(words)
@@ -54,16 +57,15 @@ def play_game():
                         if i == j:
                             guess_progress[j] = guess_word[i]
             print(
-                "There were",
-                matches,
-                "matches and the common letters were... " + common_letters,
+                f"There were {matches}",
+                f"matches and the common letters were... {common_letters}",
             )
             print(
                 "From the exact letter matches, you know............ "
                 + "".join(guess_progress)
             )
             if "".join(guess_progress) == guess_word:
-                print("\nYou have guessed the word. It took", guess_count, "guesses!")
+                print(f"\nYou have guessed the word. It took {guess_count} guesses!")
                 break
             elif matches == 0:
                 print("\nIf you give up, type '?' for you next guess.")

@@ -61,7 +61,7 @@ def print_instructions() -> None:
     print("11 (ELEVEN).\n")
 
 
-def main():
+def main() -> None:
     q = random.random()
 
     print("HERE IS THE STARTING LINE OF X'S.\n")
@@ -75,9 +75,9 @@ def main():
         if legal_move:
             print(" ".join([str(i) for i in range(1, 11)]))
             print(" ".join(row[1:]) + "\n")
-        m = input("INPUT THE NUMBER\n")
+        m_str = input("INPUT THE NUMBER\n")
         try:
-            m = int(m)
+            m = int(m_str)
             if m > 11 or m < 0:
                 raise ValueError()
         except ValueError:

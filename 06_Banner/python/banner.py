@@ -86,10 +86,10 @@ def print_banner() -> None:
 
     for statement_char in statement:
         s = letters[statement_char].copy()
-        xStr = character
+        x_str = character
         if character == "ALL":
-            xStr = statement_char
-        if xStr == " ":
+            x_str = statement_char
+        if x_str == " ":
             print("\n" * (7 * horizontal))
         else:
             for u in range(0, 7):
@@ -103,13 +103,13 @@ def print_banner() -> None:
                             f[u] = 8 - k
                             break
                 for _t1 in range(1, horizontal + 1):
-                    line_str = " " * int((63 - 4.5 * vertical) * g1 / len(xStr) + 1)
+                    line_str = " " * int((63 - 4.5 * vertical) * g1 / len(x_str) + 1)
                     for b in range(0, f[u] + 1):
                         if j[b] == 0:
                             for _ in range(1, vertical + 1):
-                                line_str = line_str + " " * len(xStr)
+                                line_str = line_str + " " * len(x_str)
                         else:
-                            line_str = line_str + xStr * vertical
+                            line_str = line_str + x_str * vertical
                     print(line_str)
             print("\n" * (2 * horizontal - 1))
     # print("\n" * 75)  # Feed some more paper from the printer

@@ -8,7 +8,6 @@ attrs==20.3.0
     # via
     #   flake8-bugbear
     #   flake8-implicit-str-concat
-    #   pytest
 flake8==4.0.1
     # via
     #   -r ci-requirements.in
@@ -20,8 +19,6 @@ flake8-comprehensions==3.8.0
     # via -r ci-requirements.in
 flake8-implicit-str-concat==0.2.0
     # via -r ci-requirements.in
-iniconfig==1.1.1
-    # via pytest
 mccabe==0.6.1
     # via flake8
 more-itertools==8.12.0
@@ -30,23 +27,11 @@ mypy==0.931
     # via -r ci-requirements.in
 mypy-extensions==0.4.3
     # via mypy
-packaging==21.3
-    # via pytest
-pluggy==1.0.0
-    # via pytest
-py==1.11.0
-    # via pytest
 pycodestyle==2.8.0
     # via flake8
 pyflakes==2.4.0
     # via flake8
-pyparsing==3.0.7
-    # via packaging
-pytest==7.0.1
-    # via -r ci-requirements.in
 tomli==2.0.1
-    # via
-    #   mypy
-    #   pytest
+    # via mypy
 typing-extensions==4.1.1
     # via mypy

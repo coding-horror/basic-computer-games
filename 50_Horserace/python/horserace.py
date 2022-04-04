@@ -1,6 +1,7 @@
 import math
 import random
 import time
+from typing import List, Tuple
 
 
 def basic_print(*zones, **kwargs) -> None:
@@ -17,7 +18,7 @@ def basic_print(*zones, **kwargs) -> None:
     print(" " * identation + line, end=end)
 
 
-def basic_input(prompt, type_conversion=None):
+def basic_input(prompt: str, type_conversion=None):
     """BASIC INPUT command with optional type conversion"""
 
     while True:
@@ -45,7 +46,7 @@ HORSE_NAMES = [
 ]
 
 
-def introduction():
+def introduction() -> None:
     """Print the introduction, and optional the instructions"""
 
     basic_print("HORSERACE", indent=31)
@@ -66,7 +67,7 @@ def introduction():
     basic_print("")
 
 
-def setup_players():
+def setup_players() -> List[str]:
     """Gather the number of players and their names"""
 
     # ensure we get an integer value from the user
@@ -80,7 +81,7 @@ def setup_players():
     return player_names
 
 
-def setup_horses():
+def setup_horses() -> List[float]:
     """Generates random odds for each horse. Returns a list of
     odds, indexed by the order of the global HORSE_NAMES."""
 
@@ -101,14 +102,14 @@ def print_horse_odds(odds) -> None:
     basic_print("")
 
 
-def get_bets(player_names):
+def get_bets(player_names: List[str]) -> List[Tuple[int, float]]:
     """For each player, get the number of the horse to bet on,
     as well as the amount of money to bet"""
 
     basic_print("--------------------------------------------------")
     basic_print("PLACE YOUR BETS...HORSE # THEN AMOUNT")
 
-    bets = []
+    bets: List[Tuple[int, float]] = []
     for name in player_names:
         horse = basic_input(name, int)
         amount = None
@@ -124,7 +125,7 @@ def get_bets(player_names):
     return bets
 
 
-def get_distance(odd):
+def get_distance(odd: float) -> int:
     """Advances a horse during one step of the racing simulation.
     The amount travelled is random, but scaled by the odds of the horse"""
 
@@ -180,7 +181,7 @@ def print_race_state(total_distance, race_pos) -> None:
     basic_print("XXXXFINISHXXXX")
 
 
-def simulate_race(odds):
+def simulate_race(odds) -> List[int]:
     num_horses = len(HORSE_NAMES)
 
     # in spirit of the original implementation, using two arrays to

@@ -24,22 +24,22 @@ Ported in 2021 by Jonas Nockert / @lemonad
 """
 from math import sqrt
 from random import choice, random, uniform
-from typing import List
+from typing import List, Tuple
 
 PAGE_WIDTH = 72
 
 
-def numeric_input(question, default=0):
+def numeric_input(question, default=0) -> float:
     """Ask user for a numeric value."""
     while True:
-        answer = input(f"{question} [{default}]: ").strip() or default
+        answer_str = input(f"{question} [{default}]: ").strip() or default
         try:
-            return float(answer)
+            return float(answer_str)
         except ValueError:
             pass
 
 
-def yes_no_input(question, default="YES"):
+def yes_no_input(question: str, default="YES") -> bool:
     """Ask user a yes/no question and returns True if yes, otherwise False."""
     answer = input(f"{question} (YES OR NO) [{default}]: ").strip() or default
     while answer.lower() not in ["n", "no", "y", "yes"]:
@@ -47,7 +47,7 @@ def yes_no_input(question, default="YES"):
     return answer.lower() in ["y", "yes"]
 
 
-def get_terminal_velocity():
+def get_terminal_velocity() -> float:
     """Terminal velocity by user or picked by computer."""
     if yes_no_input("SELECT YOUR OWN TERMINAL VELOCITY", default="NO"):
         v1 = numeric_input("WHAT TERMINAL VELOCITY (MI/HR)", default=100)
@@ -60,7 +60,7 @@ def get_terminal_velocity():
     return v1 * (5280 / 3600)
 
 
-def get_acceleration():
+def get_acceleration() -> float:
     """Acceleration due to gravity by user or picked by computer."""
     if yes_no_input("WANT TO SELECT ACCELERATION DUE TO GRAVITY", default="NO"):
         a2 = numeric_input("WHAT ACCELERATION (FT/SEC/SEC)", default=32.16)
@@ -70,14 +70,14 @@ def get_acceleration():
     return a2
 
 
-def get_freefall_time():
+def get_freefall_time() -> float:
     """User-guessed freefall time.
 
     The idea of the game is to pick a freefall time, given initial
     altitude, terminal velocity and acceleration, so the parachute
     as close to the ground as possible without going splat.
     """
-    t_freefall = 0
+    t_freefall: float = 0
     # A zero or negative freefall time is not handled by the motion
     # equations during the jump.
     while t_freefall <= 0:
@@ -85,13 +85,13 @@ def get_freefall_time():
     return t_freefall
 
 
-def jump():
+def jump() -> float:
     """Simulate a jump and returns the altitude where the chute opened.
 
     The idea is to open the chute as late as possible -- but not too late.
     """
-    v = 0  # Terminal velocity.
-    a = 0  # Acceleration.
+    v: float = 0  # Terminal velocity.
+    a: float = 0  # Acceleration.
     initial_altitude = int(9001 * random() + 1000)
 
     v1 = get_terminal_velocity()
@@ -181,9 +181,9 @@ def jump():
     return altitude
 
 
-def pick_random_celestial_body():
+def pick_random_celestial_body() -> Tuple[str, float]:
     """Pick a random planet, the moon, or the sun with associated gravity."""
-    body, gravity = choice(
+    return choice(
         [
             ("MERCURY", 12.2),
             ("VENUS", 28.3),
@@ -197,10 +197,9 @@ def pick_random_celestial_body():
             ("THE SUN", 896.0),
         ]
     )
-    return body, gravity
 
 
-def jump_stats(previous_jumps, chute_altitude):
+def jump_stats(previous_jumps, chute_altitude) -> Tuple[int, int]:
     """Compare altitude when chute opened with previous successful jumps.
 
     Return the number of previous jumps and the number of times

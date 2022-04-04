@@ -242,7 +242,7 @@ class Game:
             players.append(Player.new(PlayerType.Player, i))
 
         if get_char_from_user_input("Do you want instructions", ["y", "n"]) == "y":
-            instructions()
+            print_instructions()
         print()
 
         return Game(players=players, decks=Decks.new(), games_played=0)
@@ -284,7 +284,7 @@ class Game:
             # turn loop, ends when player finishes their turn
             while True:
                 clear()
-                welcome()
+                print_welcome_screen()
                 print(f"\n\t\t\tGame {game}")
                 print(scores)
                 print(player_hands_message)
@@ -407,7 +407,7 @@ STARTING_BALANCE: int = 100
 def main() -> None:
     game: Game
 
-    welcome()
+    print_welcome_screen()
 
     # create game
     game = Game.new(
@@ -421,9 +421,7 @@ def main() -> None:
         char = get_char_from_user_input("Play Again?", ["y", "n"])
 
 
-def welcome() -> None:
-    """prints the welcome screen"""
-    # welcome message
+def print_welcome_screen() -> None:
     print(
         """
                             BLACK JACK
@@ -432,8 +430,7 @@ def welcome() -> None:
     )
 
 
-def instructions() -> None:
-    """prints the instructions"""
+def print_instructions() -> None:
     print(
         """
     THIS IS THE GAME OF 21. AS MANY AS 7 PLAYERS MAY PLAY THE

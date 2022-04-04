@@ -1,5 +1,6 @@
 from math import sqrt
 from random import randint
+from typing import List, Tuple
 
 
 def introduction() -> None:
@@ -18,7 +19,7 @@ you how far you are from each mugwump."""
     )
 
 
-def generate_mugwumps(n=4):
+def generate_mugwumps(n: int = 4) -> List[List[int]]:
     mugwumps = []
     for _ in range(n):
         current = [randint(0, 9), randint(0, 9)]
@@ -26,14 +27,14 @@ def generate_mugwumps(n=4):
     return mugwumps
 
 
-def reveal_mugwumps(mugwumps):
+def reveal_mugwumps(mugwumps: List[List[int]]) -> None:
     print("Sorry, that's 10 tries.  Here's where they're hiding.")
     for idx, mugwump in enumerate(mugwumps, 1):
         if mugwump[0] != -1:
             print(f"Mugwump {idx} is at {mugwump[0]},{mugwump[1]}")
 
 
-def calculate_distance(guess, mugwump):
+def calculate_distance(guess: Tuple[int, int], mugwump: List[int]) -> float:
     d = sqrt(((mugwump[0] - guess[0]) ** 2) + ((mugwump[1] - guess[1]) ** 2))
     return d
 
@@ -47,7 +48,7 @@ def play_again() -> None:
         exit()
 
 
-def play_round():
+def play_round() -> None:
     mugwumps = generate_mugwumps()
     turns = 1
     score = 0

@@ -178,7 +178,7 @@ def main() -> None:
 
 
 # 470
-def get_invalid_letters(user_command):
+def get_invalid_letters(user_command) -> str:
     """Makes sure player input consists of valid colors for selected game configuration."""
     valid_colors = color_letters[:num_colors]
     invalid_letters = ""
@@ -190,7 +190,7 @@ def get_invalid_letters(user_command):
 
 # 2000
 def print_board(guesses) -> None:
-    """Prints previous guesses within the round."""
+    """Print previous guesses within the round."""
     print("Board")
     print("Move\tGuess\tBlack White")
     for idx, guess in enumerate(guesses):
@@ -204,7 +204,7 @@ def print_board(guesses) -> None:
 #    "We did try a version that kept an actual list of all possible combinations
 #    (as a string array), which was significantly faster than this versionn but
 #    which ate tremendous amounts of memory."
-def get_possibility(possibility):
+def get_possibility(possibility) -> List[int]:
     # print(possibility)
     if possibility[0] > -1:  # 3530
         current_position = 0  # Python arrays are zero-indexed
@@ -248,7 +248,7 @@ def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
 
 # 5000 + logic from 1160
 def print_score(computer_score, human_score, is_final_score: bool = False) -> None:
-    """Prints score after each turn ends, including final score at end of game."""
+    """Print score after each turn ends, including final score at end of game."""
     if is_final_score:
         print("GAME OVER")
         print("FINAL SCORE:")

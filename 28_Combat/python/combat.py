@@ -116,7 +116,7 @@ def attack_second() -> None:
     num_units = 0
     unit_type = 0
 
-    print("")
+    print()
     print("              YOU           ME")
     print("ARMY           ", end="")
     print("%-14s%s\n" % (usr_army, cpu_army), end="")
@@ -176,7 +176,7 @@ def attack_second() -> None:
             plane_crash_win = True
 
     if not plane_crash_win:
-        print("")
+        print()
         print("FROM THE RESULTS OF BOTH OF YOUR ATTACKS,")
 
     if plane_crash_win or (

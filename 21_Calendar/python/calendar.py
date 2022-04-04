@@ -1,24 +1,23 @@
-########################################################
-# Calendar
-#
-# From: BASIC Computer Games (1978)
-#       Edited by David Ahl#
-#
-#    This program prints out a calendar
-# for any year. You must specify the
-# starting day of the week of the year in
-# statement 130. (Sunday(0), Monday
-# (-1), Tuesday(-2), etc.) You can determine
-# this by using the program WEEKDAY.
-# You must also make two changes
-# for leap years in statement 360 and 620.
-# The program listing describes the necessary
-# changes. Running the program produces a
-# nice 12-month calendar.
-#    The program was written by Geofrey
-# Chase of the Abbey, Portsmouth, Rhode Island.
-#
-########################################################
+"""
+Calendar
+
+From: BASIC Computer Games (1978)
+      Edited by David Ahl#
+
+   This program prints out a calendar
+for any year. You must specify the
+starting day of the week of the year in
+statement 130. (Sunday(0), Monday
+(-1), Tuesday(-2), etc.) You can determine
+this by using the program WEEKDAY.
+You must also make two changes
+for leap years in statement 360 and 620.
+The program listing describes the necessary
+changes. Running the program produces a
+nice 12-month calendar.
+   The program was written by Geofrey
+Chase of the Abbey, Portsmouth, Rhode Island.
+"""
 
 from typing import Tuple
 
@@ -65,7 +64,7 @@ def parse_input() -> Tuple[int, bool]:
     return day, leap_day
 
 
-def calendar(weekday, leap_year):
+def calendar(weekday: int, leap_year: bool) -> None:
     """
     function to print a year's calendar.
 
@@ -104,9 +103,8 @@ def calendar(weekday, leap_year):
     for n in range(1, 13):
         days_count += months_days[n - 1]
         print(
-            "** {} ****************** {} ****************** {} **\n".format(
-                days_count, months_names[n - 1], years_day - days_count
-            )
+            f"** {days_count} ****************** {months_names[n - 1]} "
+            f"****************** {years_day - days_count} **\n"
         )
         print(days)
         print(sep)
@@ -121,7 +119,7 @@ def calendar(weekday, leap_year):
                     break
 
                 if d2 <= 0:
-                    print("{}".format("  "), end="       ")
+                    print("  ", end="       ")
                 elif d2 < 10:
                     print(f" {d2}", end="       ")
                 else:
@@ -151,8 +149,6 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-########################################################
-#
 ########################################################
 #
 # Porting notes:

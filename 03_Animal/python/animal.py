@@ -119,7 +119,7 @@ def avoid_void_input(message: str) -> str:
     return answer
 
 
-def initial_message() -> None:
+def print_intro() -> None:
     print(" " * 32 + "Animal")
     print(" " * 15 + "Creative Computing Morristown, New Jersey\n")
     print("Play ´Guess the Animal´")
@@ -133,7 +133,7 @@ def main() -> None:
     root = Node("Does it swim?", yes_child, no_child)
 
     # Main loop of game
-    initial_message()
+    print_intro()
     keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
     while keep_playing:
         keep_asking = True

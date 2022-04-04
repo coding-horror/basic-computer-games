@@ -191,7 +191,7 @@ def prompt_player(board):
         return move
 
 
-def play():
+def main() -> None:
     print(" " * 30 + "TIC-TAC-TOE")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
@@ -247,4 +247,4 @@ def play():
 
 
 if __name__ == "__main__":
-    play()
+    main()
