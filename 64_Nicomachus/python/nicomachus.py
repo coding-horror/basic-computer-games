@@ -15,15 +15,7 @@ Ported by Dave LeCompte
 import time
 
 
-def print_with_tab(spaces_count: int, msg: str) -> None:
-    if spaces_count > 0:
-        spaces = " " * spaces_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
-def get_yes_or_no():
+def get_yes_or_no() -> bool:
     while True:
         response = input().upper()
         if response == "YES":
@@ -33,7 +25,7 @@ def get_yes_or_no():
         print(f"EH?  I DON'T UNDERSTAND '{response}'  TRY 'YES' OR 'NO'.")
 
 
-def play_game():
+def play_game() -> None:
     print("PLEASE THINK OF A NUMBER BETWEEN 1 AND 100.")
     print("YOUR NUMBER DIVIDED BY 3 HAS A REMAINDER OF")
     a = int(input())
@@ -62,11 +54,8 @@ def play_game():
 
 
 def main() -> None:
-    print_with_tab(33, "NICOMA")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33 + "NICOMA")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     print("BOOMERANG PUZZLE FROM ARITHMETICA OF NICOMACHUS -- A.D. 90!")
     print()

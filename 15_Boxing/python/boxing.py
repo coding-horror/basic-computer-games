@@ -77,7 +77,7 @@ def read_punch_profiles(filepath: Path) -> Dict[Literal[1, 2, 3, 4], PunchProfil
     return result  # type: ignore
 
 
-def play() -> None:
+def main() -> None:
     print("BOXING")
     print("CREATIVE COMPUTING   MORRISTOWN, NEW JERSEY")
     print("\n\n")
@@ -179,4 +179,4 @@ def play_round(round_number: int, player: Player, opponent: Player) -> None:
 
 
 if __name__ == "__main__":
-    play()
+    main()

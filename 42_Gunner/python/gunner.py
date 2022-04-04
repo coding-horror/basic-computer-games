@@ -71,12 +71,10 @@ def gunner() -> None:
                 return
 
 
-if __name__ == "__main__":
+def main() -> None:
     print(" " * 33 + "GUNNER")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-
     print("\n\n\n")
-
     print("YOU ARE THE OFFICER-IN-CHARGE, GIVING ORDERS TO A GUN")
     print("CREW, TELLING THEM THE DEGREES OF ELEVATION YOU ESTIMATE")
     print("WILL PLACE A PROJECTILE ON TARGET.  A HIT WITHIN 100 YARDS")
@@ -85,7 +83,11 @@ if __name__ == "__main__":
     while True:
         gunner()
 
-        Y = input("TRY AGAIN (Y OR N)? ")
-        if Y != "Y":
+        not_again = input("TRY AGAIN (Y OR N)? ").upper() != "Y"
+        if not_again:
             print("\nOK.  RETURN TO BASE CAMP.")
             break
+
+
+if __name__ == "__main__":
+    main()

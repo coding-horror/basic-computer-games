@@ -7,16 +7,8 @@ Ported by Dave LeCompte
 """
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
 def print_diamond(begin_width, end_width, step, width, count) -> None:
-    edgeString = "CC"
+    edge_string = "CC"
     fill = "!"
 
     n = begin_width
@@ -24,10 +16,10 @@ def print_diamond(begin_width, end_width, step, width, count) -> None:
         line_buffer = " " * ((width - n) // 2)
         for across in range(count):
             for a in range(n):
-                if a >= len(edgeString):
+                if a >= len(edge_string):
                     line_buffer += fill
                 else:
-                    line_buffer += edgeString[a]
+                    line_buffer += edge_string[a]
             line_buffer += " " * (
                 (width * (across + 1) + (width - n) // 2) - len(line_buffer)
             )
@@ -38,11 +30,8 @@ def print_diamond(begin_width, end_width, step, width, count) -> None:
 
 
 def main() -> None:
-    print_with_tab(33, "DIAMOND")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33, "DIAMOND")
+    print(" " * 15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
     print("FOR A PRETTY DIAMOND PATTERN,")
     print("TYPE IN AN ODD NUMBER BETWEEN 5 AND 21")
     width = int(input())

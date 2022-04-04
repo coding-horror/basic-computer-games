@@ -40,9 +40,21 @@ or if you are **using JDK11 or later** you can now execute a self contained java
 
 ## javascript
 
-The javascript examples can be run from within your web browser:
+There are two ways of javascript implementations:
 
-1. Simply open the corresponding `.html` file from your web browser.
+### browser
+
+The html examples can be run from within your web browser. Simply open the corresponding `.html` file from your web browser.
+
+### node.js
+
+Some games are implemented as a [node.js](https://nodejs.org/) script. In this case there is no `*.html` file in the folder.
+
+1. [install node.js](https://nodejs.org/en/download/) for your system.
+1. change directory to the root of this repository (e.g. `cd basic-computer-games`).
+1. from a terminal call the script you want to run (e.g. `node 78_Sine_Wave/javascript/sinewave.mjs`).
+
+_Hint: Normally javascript files have a `*.js` extension. We are using `*.mjs` to let node know , that we are using [ES modules](https://nodejs.org/docs/latest/api/esm.html#modules-ecmascript-modules) instead of [CommonJS](https://nodejs.org/docs/latest/api/modules.html#modules-commonjs-modules)._
 
 ## kotlin
 
@@ -93,3 +105,11 @@ If you don't already have a ruby interpreter, you can download it from the [ruby
 ## vbnet
 
 Follow the same steps as for the [csharp](#csharp) translations. This can be run with `dotnet` or `Visual Studio`.
+
+## rust
+
+If you don't already have Rust on your computer, you can follow the instruction on [Rust Book](https://doc.rust-lang.org/book/ch01-01-installation.html)
+
+1. From the command-line, navigate to the corresponding directory.
+2. Run the following command.
+   * `cargo run`

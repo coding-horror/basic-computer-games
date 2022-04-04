@@ -7,17 +7,17 @@ medals = {
 }
 
 
-def ask(question):
+def ask(question: str) -> str:
     print(question, end="? ")
     return input().upper()
 
 
-def ask_int(question):
+def ask_int(question: str) -> int:
     reply = ask(question)
     return int(reply) if reply.isnumeric() else -1
 
 
-def pre_run(gates, max_speeds):
+def pre_run(gates, max_speeds) -> None:
     print('\nType "INS" for instructions')
     print('Type "MAX" for approximate maximum speeds')
     print('Type "RUN" for the beginning of the race')
@@ -50,10 +50,10 @@ def pre_run(gates, max_speeds):
             cmd = ask(f'"{cmd}" is an illegal command--Retry')
 
 
-def run(gates, lvl, max_speeds):
+def run(gates, lvl, max_speeds) -> None:
     global medals
     print("The starter counts down...5...4...3...2...1...Go!")
-    time = 0
+    time: float = 0
     speed = int(random() * (18 - 9) + 9)
     print("You're off")
     for i in range(0, gates):

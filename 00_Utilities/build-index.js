@@ -14,16 +14,29 @@ const path = require('path');
 const TITLE = 'BASIC Computer Games';
 const JAVASCRIPT_FOLDER = 'javascript';
 const IGNORE_FOLDERS_START_WITH = ['.', '00_', 'buildJvm', 'Sudoku'];
+const IGNORE_FILES = [
+	// "84 Super Star Trek"  has it's own node/js implementation (using xterm)
+	'cli.mjs', 'superstartrek.mjs'
+];
 
 function createGameLinks(game) {
-	if (game.htmlFiles.length > 1) {
-		const entries = game.htmlFiles.map(htmlFile => {
-			const name = path.basename(htmlFile).replace('.html', '');
+	const creatFileLink = (file, name = path.basename(file)) => {
+		if (file.endsWith('.html')) {
 			return `
-				<li>
-					<a href="${htmlFile}">${name}</a>
-				</li>
+				<li><a href="${file}">${name.replace('.html', '')}</a></li>
 			`;
+		} else if (file.endsWith('.mjs')) {
+			return `
+				<li><a href="./00_Common/javascript/WebTerminal/terminal.html#${file}">${name.replace('.mjs', '')} (node.js)</a></li>
+			`;
+		} else {
+			throw new Error(`Unknown file-type found: ${file}`);
+		}
+	}
+
+	if (game.files.length > 1) {
+		const entries = game.files.map(file => {
+			return creatFileLink(file);
 		});
 		return `
 			<li>
@@ -32,7 +45,7 @@ function createGameLinks(game) {
 			</li>
 		`;
 	} else {
-		return `<li><a href="${game.htmlFiles}">${game.name}</a></li>`;
+		return creatFileLink(game.files[0], game.name);
 	}
 }
 
@@ -73,11 +86,11 @@ function createIndexHtml(title, games) {
 	`.trim().replace(/\s\s+/g, '');
 }
 
-function findHtmlFilesInFolder(folder) {
+function findJSFilesInFolder(folder) {
 	// filter folders that do not include a subfolder called "javascript"
 	const hasJavascript = fs.existsSync(`${folder}/${JAVASCRIPT_FOLDER}`);
 	if (!hasJavascript) {
-		throw new Error(`Game "${folder}" is missing a javascript implementation`);
+		throw new Error(`Game "${folder}" is missing a javascript folder`);
 	}
 
 	// get all files in the javascript folder
@@ -85,12 +98,17 @@ function findHtmlFilesInFolder(folder) {
 
 	// filter files only allow .html files
 	const htmlFiles = files.filter(file => file.endsWith('.html'));
+	const mjsFiles = files.filter(file => file.endsWith('.mjs'));
+	const entries = [
+		...htmlFiles,
+		...mjsFiles
+	].filter(file => !IGNORE_FILES.includes(file));
 
-	if (htmlFiles.length == 0) {
-		throw new Error(`Game "${folder}" is missing a html file in the "${folder}/${JAVASCRIPT_FOLDER}" folder`);
+	if (entries.length == 0) {
+		throw new Error(`Game "${folder}" is missing a HTML or node.js file in the folder "${folder}/${JAVASCRIPT_FOLDER}"`);
 	}
 
-	return htmlFiles.map(htmlFile => path.join(folder, JAVASCRIPT_FOLDER, htmlFile));
+	return entries.map(file => path.join(folder, JAVASCRIPT_FOLDER, file));
 }
 
 function main() {
@@ -111,10 +129,10 @@ function main() {
 	// get name and javascript file from folder
 	const games = folders.map(folder => {
 		const name = folder.replace('_', ' ');
-		let htmlFiles;
+		let files;
 		
 		try {
-			htmlFiles = findHtmlFilesInFolder(folder);
+			files = findJSFilesInFolder(folder);
 		} catch (error) {
 			console.warn(`Game "${name}" is missing a javascript implementation: ${error.message}`);
 			return null;
@@ -122,7 +140,7 @@ function main() {
 
 		return {
 			name,
-			htmlFiles
+			files
 		}
 	}).filter(game => game !== null);
 

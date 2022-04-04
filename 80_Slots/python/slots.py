@@ -34,9 +34,10 @@
 import sys
 from collections import Counter
 from random import choices
+from typing import List
 
 
-def initial_message():
+def initial_message() -> None:
     print(" " * 30 + "Slots")
     print(" " * 15 + "Creative Computing Morrison, New Jersey")
     print("\n" * 3)
@@ -45,7 +46,7 @@ def initial_message():
     print("To pull the arm, punch the return key after making your bet.")
 
 
-def input_betting():
+def input_betting() -> int:
     print("\n")
     b = -1
     while b < 1 or b > 100:
@@ -61,7 +62,7 @@ def input_betting():
     return int(b)
 
 
-def beeping():
+def beeping() -> None:
     # Function to produce a beep sound.
     # In the original program is the subroutine at line 1270
     for _ in range(5):
@@ -69,7 +70,7 @@ def beeping():
         sys.stdout.flush()
 
 
-def spin_wheels():
+def spin_wheels() -> List[str]:
     possible_fruits = ["Bar", "Bell", "Orange", "Lemon", "Plum", "Cherry"]
     wheel = choices(possible_fruits, k=3)
 
@@ -79,7 +80,7 @@ def spin_wheels():
     return wheel
 
 
-def adjust_profits(wheel, m, profits):
+def adjust_profits(wheel: List[str], m: int, profits: int) -> int:
     # we remove the duplicates
     s = set(wheel)
 
@@ -117,7 +118,7 @@ def adjust_profits(wheel, m, profits):
     return profits
 
 
-def final_message(profits) -> None:
+def final_message(profits: int) -> None:
     if profits < 0:
         print("Pay up!  Please leave your money on the terminal")
     elif profits == 0:
@@ -140,7 +141,7 @@ def main() -> None:
         answer = input("Again?")
 
         try:
-            if not answer[0].lower() == "y":
+            if answer[0].lower() != "y":
                 keep_betting = False
         except IndexError:
             keep_betting = False

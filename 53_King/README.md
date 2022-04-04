@@ -21,7 +21,9 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-Implementers should be aware that this game contains at least one bug.
+Implementers should be aware that this game contains bugs.
+
+### Bug 1
 
 On basic line 1450
 
@@ -41,4 +43,26 @@ A quick fix for this bug in the original code would be
 
     1410 PRINT " YOU MADE";ABS(INT(V1-V2));"RALLODS FROM TOURIST TRADE."
 
+### Bug 2
 
+On basic line 1330 following was the variable T1 never assigned:
+
+    1330 PRINT " YOU HARVESTED ";INT(J-U2);"SQ. MILES OF CROPS."
+    1340 IF U2=0 THEN 1370
+    1344 IF T1>=2 THEN 1370
+    1350 PRINT "   (DUE TO ";
+    1355 IF T1=0 THEN 1365
+    1360 PRINT "INCREASED ";
+
+Likely it should be the difference of the current years crop loss compared to the
+last years crop loss.
+
+### Bug 3
+
+On basic line 1997 it is:
+
+    1997 PRINT "   AND 10,000 SQ. MILES OF FOREST LAND."
+
+but it should be:
+
+    1997 PRINT "   AND 1,000 SQ. MILES OF FOREST LAND."

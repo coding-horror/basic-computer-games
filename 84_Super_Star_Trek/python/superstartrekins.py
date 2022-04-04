@@ -8,7 +8,7 @@ Ported by Dave LeCompte
 """
 
 
-def get_yes_no(prompt):
+def get_yes_no(prompt: str) -> bool:
     response = input(prompt).upper()
     return response[0] != "N"
 

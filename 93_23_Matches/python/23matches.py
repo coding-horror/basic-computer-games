@@ -6,7 +6,7 @@
 import random
 
 
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
 
     matches = 23

@@ -4,9 +4,9 @@ from functools import partial
 from typing import Callable, List, Set
 
 
-def display_intro() -> None:
-    print("" * 33 + "BOMBARDMENT")
-    print("" * 15 + " CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
+def print_intro() -> None:
+    print(" " * 33 + "BOMBARDMENT")
+    print(" " * 15 + " CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
     print("\n\n")
     print("YOU ARE ON A BATTLEFIELD WITH 4 PLATOONS AND YOU")
     print("HAVE 25 OUTPOSTS AVAILABLE WHERE THEY MAY BE PLACED.")
@@ -28,7 +28,6 @@ def display_field() -> None:
     for row in range(5):
         initial = row * 5 + 1
         print("\t".join([str(initial + column) for column in range(5)]))
-
     print("\n" * 9)
 
 
@@ -128,8 +127,8 @@ ENEMY_PROGRESS_MESSAGES = (
 )
 
 
-def play() -> None:
-    display_intro()
+def main() -> None:
+    print_intro()
     display_field()
 
     enemy_positions = generate_enemy_positions()
@@ -162,4 +161,4 @@ def play() -> None:
 
 
 if __name__ == "__main__":
-    play()
+    main()

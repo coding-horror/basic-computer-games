@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-#
-# Ported to Python by @iamtraction
+
+"""Ported to Python by @iamtraction"""
 
 from random import random
 
 
-def direction(A, B, X, Y):
-    """Prints the direction hint for finding the hurkle."""
+def direction(A, B, X, Y) -> None:
+    """Print the direction hint for finding the hurkle."""
 
     print("GO ", end="")
     if Y < B:
@@ -22,7 +22,7 @@ def direction(A, B, X, Y):
     print()
 
 
-if __name__ == "__main__":
+def main() -> None:
     print(" " * 33 + "HURKLE")
     print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
 
@@ -63,3 +63,7 @@ if __name__ == "__main__":
                 continue
 
         print("\n\nLET'S PLAY AGAIN, HURKLE IS HIDING.\n")
+
+
+if __name__ == "__main__":
+    main()

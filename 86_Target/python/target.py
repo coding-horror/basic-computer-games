@@ -8,6 +8,7 @@ Ported by Dave LeCompte
 
 import math
 import random
+from typing import List
 
 PAGE_WIDTH = 64
 
@@ -41,7 +42,7 @@ def print_instructions() -> None:
     print()
 
 
-def prompt():
+def prompt() -> List[float]:
     while True:
         response = input("INPUT ANGLE DEVIATION FROM X, DEVIATION FROM Z, DISTANCE? ")
         if "," not in response:
@@ -54,14 +55,14 @@ def prompt():
         return [float(t) for t in terms]
 
 
-def next_target():
+def next_target() -> None:
     for _ in range(5):
         print()
     print("NEXT TARGET...")
     print()
 
 
-def describe_miss(x, y, z, x1, y1, z1, d):
+def describe_miss(x, y, z, x1, y1, z1, d) -> None:
     x2 = x1 - x
     y2 = y1 - y
     z2 = z1 - z
@@ -88,7 +89,7 @@ def describe_miss(x, y, z, x1, y1, z1, d):
     print()
 
 
-def do_shot_loop(p1, x, y, z):
+def do_shot_loop(p1, x, y, z) -> None:
     shot_count = 0
     while True:
         shot_count += 1
@@ -137,11 +138,11 @@ def do_shot_loop(p1, x, y, z):
             describe_miss(x, y, z, x1, y1, z1, distance)
 
 
-def show_radians(a, b):
+def show_radians(a, b) -> None:
     print(f"RADIANS FROM X AXIS = {a:.4f}   FROM Z AXIS = {b:.4f}")
 
 
-def play_game():
+def play_game() -> None:
     while True:
         a = random.uniform(0, 2 * math.pi)  # random angle
         b = random.uniform(0, 2 * math.pi)  # random angle

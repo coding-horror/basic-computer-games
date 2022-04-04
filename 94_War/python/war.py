@@ -1,75 +1,27 @@
 #!/usr/bin/env python3
-# WAR
-#
-# Converted from BASIC to Python by Trevor Hobson
 
+"""
+WAR
+
+Converted from BASIC to Python by Trevor Hobson
+"""
+
+import json
 import random
+from pathlib import Path
+from typing import List
 
 
-def card_value(input):
+def card_value(input: str) -> int:
     return ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"].index(
         input.split("-")[1]
     )
 
 
-cards = [
-    "S-2",
-    "H-2",
-    "C-2",
-    "D-2",
-    "S-3",
-    "H-3",
-    "C-3",
-    "D-3",
-    "S-4",
-    "H-4",
-    "C-4",
-    "D-4",
-    "S-5",
-    "H-5",
-    "C-5",
-    "D-5",
-    "S-6",
-    "H-6",
-    "C-6",
-    "D-6",
-    "S-7",
-    "H-7",
-    "C-7",
-    "D-7",
-    "S-8",
-    "H-8",
-    "C-8",
-    "D-8",
-    "S-9",
-    "H-9",
-    "C-9",
-    "D-9",
-    "S-10",
-    "H-10",
-    "C-10",
-    "D-10",
-    "S-J",
-    "H-J",
-    "C-J",
-    "D-J",
-    "S-Q",
-    "H-Q",
-    "C-Q",
-    "D-Q",
-    "S-K",
-    "H-K",
-    "C-K",
-    "D-K",
-    "S-A",
-    "H-A",
-    "C-A",
-    "D-A",
-]
-
-
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
+    with open(Path(__file__).parent / "cards.json") as f:
+        cards: List[str] = json.load(f)
 
     random.shuffle(cards)
     score_you = 0

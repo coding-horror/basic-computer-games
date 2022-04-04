@@ -1,17 +1,13 @@
-import random
 import enum
-from typing import List, Tuple
+import random
 from dataclasses import dataclass
+from typing import List, Tuple
 
 # Python translation by Frank Palazzolo - 2/2021
 
 
 class Maze:
-    def __init__(
-        self,
-        width: int,
-        length: int,
-    ):
+    def __init__(self, width: int, length: int) -> None:
         assert width >= 2 and length >= 2
         used: List[List[int]] = []
         walls: List[List[int]] = []
@@ -77,18 +73,15 @@ EXIT_RIGHT = 2
 
 
 def main() -> None:
-    welcome_header()
+    print_intro()
     width, length = get_maze_dimensions()
     maze = build_maze(width, length)
     maze.display()
 
 
-def welcome_header() -> None:
+def print_intro() -> None:
     print(" " * 28 + "AMAZING PROGRAM")
-    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
 def build_maze(width: int, length: int) -> Maze:
@@ -120,7 +113,7 @@ def build_maze(width: int, length: int) -> Maze:
         else:
             while True:
                 if position.col != width - 1:
-                    position.col = position.col + 1
+                    position.col += 1
                 elif position.row != length - 1:
                     position.row, position.col = position.row + 1, 0
                 else:

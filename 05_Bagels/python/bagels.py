@@ -106,8 +106,7 @@ def build_result_string(num: List[str], guess: str) -> str:
 def main() -> None:
     # Intro text
     print("\n                Bagels")
-    print("Creative Computing  Morristown, New Jersey")
-    print("\n\n")
+    print("Creative Computing  Morristown, New Jersey\n\n")
 
     # Anything other than N* will show the rules
     response = input("Would you like the rules (Yes or No)? ")
