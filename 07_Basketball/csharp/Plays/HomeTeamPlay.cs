@@ -24,20 +24,7 @@ internal class HomeTeamPlay : Play
     {
         var shot = _io.ReadShot("Your shot");
 
-        if (_random.NextFloat() >= 0.5f && _clock.IsFullTime)
-        {
-            _io.WriteLine();
-            if (!scoreboard.ScoresAreEqual)
-            {
-                scoreboard.Display(Resource.Formats.EndOfGame);
-                return true;
-            }
-
-            scoreboard.Display(Resource.Formats.EndOfSecondHalf);
-            _clock.StartOvertime();
-            scoreboard.StartPeriod();
-            return false;
-        }
+        if (_random.NextFloat() >= 0.5f && _clock.IsFullTime) { return true; }
 
         if (shot == 0)
         {

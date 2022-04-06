@@ -13,11 +13,12 @@ internal class Scoreboard
         _scores = new() { [home] = 0, [visitors] = 0 };
         Home = home;
         Visitors = visitors;
+        Offense = home;  // temporary value till first center jump
         _io = io;
     }
 
     public bool ScoresAreEqual => _scores[Home] == _scores[Visitors];
-    public Team? Offense { get; set; }
+    public Team Offense { get; set; }
     public Team Home { get; }
     public Team Visitors { get; }
 
@@ -34,8 +35,6 @@ internal class Scoreboard
         Turnover();
         Display();
     }
-
-    public void StartPeriod() => Offense = null;
 
     public void Turnover(string? message = null)
     {

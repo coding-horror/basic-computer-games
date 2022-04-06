@@ -39,12 +39,26 @@ internal class Game
 
             _io.WriteLine();
 
-            while (scoreboard.Offense is not null)
+            while (true)
             {
-                var gameOver = scoreboard.Offense.ResolvePlay(scoreboard);
-                if (gameOver) { return; }
-                if (clock.IsHalfTime) { scoreboard.StartPeriod(); }
+                var isFullTime = scoreboard.Offense.ResolvePlay(scoreboard);
+                if (isFullTime && IsGameOver(scoreboard, clock)) { return; }
+                if (clock.IsHalfTime) { break; }
             }
         }
+    }
+
+    private bool IsGameOver(Scoreboard scoreboard, Clock clock)
+    {
+        _io.WriteLine();
+        if (scoreboard.ScoresAreEqual)
+        {
+            scoreboard.Display(Resource.Formats.EndOfSecondHalf);
+            clock.StartOvertime();
+            return false;
+        }
+
+        scoreboard.Display(Resource.Formats.EndOfGame);
+        return true;
     }
 }

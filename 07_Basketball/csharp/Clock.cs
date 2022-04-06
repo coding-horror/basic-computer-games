@@ -17,15 +17,8 @@ internal class Clock
     public void Increment(Scoreboard scoreboard)
     {
         time += 1;
-        if (IsHalfTime)
-        {
-            scoreboard.Display(Resource.Formats.EndOfFirstHalf);
-            // Loop back to center jump;
-        }
-        if (TwoMinutesLeft)
-        {
-            _io.Write(Resource.Streams.TwoMinutesLeft);
-        }
+        if (IsHalfTime) { scoreboard.Display(Resource.Formats.EndOfFirstHalf); }
+        if (TwoMinutesLeft) { _io.Write(Resource.Streams.TwoMinutesLeft); }
     }
 
     public void StartOvertime() => time = 93;
