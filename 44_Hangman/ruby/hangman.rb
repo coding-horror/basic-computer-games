@@ -182,7 +182,7 @@ def play_game guess_target
 	init_gallows(gallows)
 
 	guess_count = 0
-    while true
+	while true
 		puts "Here are the letters you used:"
 		puts "#{guess_list.join(",")}\n"
 		puts "#{guess_progress.join("")}\n"
@@ -246,35 +246,35 @@ def play_game guess_target
 				break
 			end
 		end
-    end
+	end
 end
 
 
 def main
-    puts "#{(" " * 32)}HANGMAN"
+	puts "#{(" " * 32)}HANGMAN"
 
-    shuffled = WORDS.shuffle(random: Random.new(1))
-    current_word = 0
-    word_count = shuffled.length
+	shuffled = WORDS.shuffle(random: Random.new(1))
+	current_word = 0
+	word_count = shuffled.length
 
-    keep_playing = true
-    while keep_playing
+	keep_playing = true
+	while keep_playing
 
-        play_game(WORDS[current_word])
-        current_word += 1
+		play_game(WORDS[current_word])
+		current_word += 1
 
-        if current_word == word_count
-            puts "You did all the words!!"
-            keep_playing = false
-        else
-        	print "Want another word? (yes or no) "
-        	a = gets.chomp!.upcase
-        	keep_playing = true if a == 'Y' || a == 'y' || a == 'Yes' || a == 'YES' || a == 'yes'
-        end
-    end
-    puts "It's been fun! Bye for now."
+		if current_word == word_count
+			puts "You did all the words!!"
+			keep_playing = false
+		else
+			print "Want another word? (yes or no) "
+			a = gets.chomp!.upcase
+			keep_playing = true if a == 'Y' || a == 'y' || a == 'Yes' || a == 'YES' || a == 'yes'
+		end
+	end
+	puts "It's been fun! Bye for now."
 end
 
 if __FILE__ == $0
-  main
+	main
 end
