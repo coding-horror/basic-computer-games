@@ -1,4 +1,3 @@
-using Basketball.Resources;
 using Games.Common.IO;
 using Games.Common.Randomness;
 
@@ -10,9 +9,10 @@ internal class HomeTeamPlay : Play
     private readonly IRandom _random;
     private readonly Clock _clock;
     private readonly Defense _defense;
+    private bool _playContinues;
 
     public HomeTeamPlay(TextIO io, IRandom random, Clock clock, Defense defense)
-        : base(io, random)
+        : base(io, random, clock)
     {
         _io = io;
         _random = random;
@@ -33,61 +33,69 @@ internal class HomeTeamPlay : Play
             return false;
         }
 
-        var playContinues = shot >= 3;
-
         if (shot == 1 || shot == 2)
         {
-            _clock.Increment(scoreboard);
-            if (_clock.IsHalfTime) { return false; }
-
-            var ballContest = new BallContest(0.5f, "Shot is blocked.  Ball controlled by {0}.", _io, _random);
-
-            Resolve("Jump shot", _defense / 8)
-                .Do(0.341f, () => scoreboard.AddBasket("Shot is good"))
-                .Or(0.682f, () => ResolveShotOffTarget())
-                .Or(0.782f, () => ballContest.Resolve(scoreboard))
-                .Or(0.843f, () => ResolveFreeThrows(scoreboard, "Shooter is fouled.  Two shots."))
-                .Or(() => scoreboard.Turnover("Charging foul.  Dartmouth loses ball."));
+            if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
+            ResolveJumpShot(scoreboard);
         }
 
-        while (playContinues)
+        _playContinues |= shot >= 3;
+
+        while (_playContinues)
         {
-            _clock.Increment(scoreboard);
-            if (_clock.IsHalfTime) { return false; }
-
-            playContinues = false;
-
-            Resolve(shot == 3 ? "Lay up." : "Set shot.", _defense / 7)
-                .Do(0.4f, () => scoreboard.AddBasket("Shot is good.  Two points."))
-                .Or(0.7f, () => ResolveShotOffTheRim())
-                .Or(0.875f, () => ResolveFreeThrows(scoreboard, "Shooter fouled.  Two shots."))
-                .Or(0.925f, () => scoreboard.Turnover($"Shot blocked. {scoreboard.Visitors}'s ball."))
-                .Or(() => scoreboard.Turnover("Charging foul.  Dartmouth loses ball."));
+            if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
+            ResolveLayupOrSetShot(scoreboard, shot);
         }
 
         return false;
-
-        void ResolveShotOffTarget() =>
-            Resolve("Shot is off target", 6 / _defense)
-                .Do(0.45f, () => Resolve("Dartmouth controls the rebound.")
-                    .Do(0.4f, () => playContinues = true)
-                    .Or(() =>
-                    {
-                        if (_defense == 6 && _random.NextFloat() > 0.6f)
-                        {
-                            scoreboard.Turnover();
-                            scoreboard.AddBasket($"Pass stolen by {scoreboard.Visitors} easy layup.");
-                            _io.WriteLine();
-                        }
-                        _io.Write("Ball passed back to you. ");
-                    }))
-                .Or(() => scoreboard.Turnover($"Rebound to {scoreboard.Visitors}"));
-
-        void ResolveShotOffTheRim() =>
-            Resolve("Shot is off the rim.")
-                .Do(2 / 3f, () => scoreboard.Turnover($"{scoreboard.Visitors} controls the rebound."))
-                .Or(() => Resolve("Dartmouth controls the rebound")
-                    .Do(0.4f, () => playContinues = true)
-                    .Or(() => _io.WriteLine("Ball passed back to you.")));
     }
+
+    private void ResolveJumpShot(Scoreboard scoreboard)
+    {
+        var ballContest = new BallContest(0.5f, "Shot is blocked.  Ball controlled by {0}.", _io, _random);
+
+        Resolve("Jump shot", _defense / 8)
+            .Do(0.341f, () => scoreboard.AddBasket("Shot is good"))
+            .Or(0.682f, () => ResolveShotOffTarget(scoreboard))
+            .Or(0.782f, () => ballContest.Resolve(scoreboard))
+            .Or(0.843f, () => ResolveFreeThrows(scoreboard, "Shooter is fouled.  Two shots."))
+            .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
+    }
+
+    private void ResolveLayupOrSetShot(Scoreboard scoreboard, int shot)
+    {
+        _playContinues = false;
+
+        Resolve(shot == 3 ? "Lay up." : "Set shot.", _defense / 7)
+            .Do(0.4f, () => scoreboard.AddBasket("Shot is good.  Two points."))
+            .Or(0.7f, () => ResolveShotOffTheRim(scoreboard))
+            .Or(0.875f, () => ResolveFreeThrows(scoreboard, "Shooter fouled.  Two shots."))
+            .Or(0.925f, () => scoreboard.Turnover($"Shot blocked. {scoreboard.Visitors}'s ball."))
+            .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
+    }
+
+    private void ResolveShotOffTarget(Scoreboard scoreboard) =>
+        Resolve("Shot is off target", 6 / _defense)
+            .Do(0.45f, () => ResolveHomeRebound(scoreboard, ResolvePossibleSteal))
+            .Or(() => scoreboard.Turnover($"Rebound to {scoreboard.Visitors}"));
+
+    private void ResolveHomeRebound(Scoreboard scoreboard, Action<Scoreboard> endOfPlayAction) =>
+        Resolve($"{scoreboard.Home} controls the rebound.")
+            .Do(0.4f, () => _playContinues = true)
+            .Or(() => endOfPlayAction.Invoke(scoreboard));
+    private void ResolvePossibleSteal(Scoreboard scoreboard)
+    {
+        if (_defense == 6 && _random.NextFloat() > 0.6f)
+        {
+            scoreboard.Turnover();
+            scoreboard.AddBasket($"Pass stolen by {scoreboard.Visitors} easy layup.");
+            _io.WriteLine();
+        }
+        _io.Write("Ball passed back to you. ");
+    }
+
+    private void ResolveShotOffTheRim(Scoreboard scoreboard) =>
+        Resolve("Shot is off the rim.")
+            .Do(2 / 3f, () => scoreboard.Turnover($"{scoreboard.Visitors} controls the rebound."))
+            .Or(() => ResolveHomeRebound(scoreboard, _ => _io.WriteLine("Ball passed back to you.")));
 }

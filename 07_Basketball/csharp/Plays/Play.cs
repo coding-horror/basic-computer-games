@@ -7,11 +7,19 @@ internal abstract class Play
 {
     private readonly IReadWrite _io;
     private readonly IRandom _random;
+    private readonly Clock _clock;
 
-    public Play(IReadWrite io, IRandom random)
+    public Play(IReadWrite io, IRandom random, Clock clock)
     {
         _io = io;
         _random = random;
+        _clock = clock;
+    }
+
+    protected bool ClockIncrementsToHalfTime(Scoreboard scoreboard)
+    {
+        _clock.Increment(scoreboard);
+        return _clock.IsHalfTime;
     }
 
     internal abstract bool Resolve(Scoreboard scoreboard);
