@@ -15,15 +15,6 @@ import random
 BELLS_ON_SUCCESS = False
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-
-    print(spaces + msg)
-
-
 def print_instructions() -> None:
     print("LETTER GUESSING GAME")
     print()
@@ -32,7 +23,7 @@ def print_instructions() -> None:
     print("AS TO HOW CLOSE YOU'RE GETTING TO MY LETTER.")
 
 
-def play_game():
+def play_game() -> None:
     target_value = random.randint(ord("A"), ord("Z"))
     num_guesses = 0
     print()
@@ -52,8 +43,8 @@ def play_game():
             print("GOOD JOB !!!!!")
 
             if BELLS_ON_SUCCESS:
-                bellStr = chr(7) * 15
-                print(bellStr)
+                bell_str = chr(7) * 15
+                print(bell_str)
 
             print()
             print("LET'S PLAY AGAIN.....")
@@ -67,11 +58,8 @@ def play_game():
 
 
 def main() -> None:
-    print_with_tab(33, "LETTER")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print(" " * 33 + "LETTER")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
     print_instructions()
 

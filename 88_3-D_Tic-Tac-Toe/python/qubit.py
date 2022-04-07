@@ -1,10 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 # Ported from the BASIC source for 3D Tic Tac Toe
 # in BASIC Computer Games, by David H. Ahl
 # The code originated from Dartmouth College
 
 from enum import Enum
+from typing import Optional, Tuple, Union
 
 
 class Move(Enum):
@@ -31,8 +32,7 @@ class Player(Enum):
 class TicTacToe3D:
     """The game logic for 3D Tic Tac Toe and the machine opponent"""
 
-    def __init__(self):
-
+    def __init__(self) -> None:
         # 4x4x4 board keeps track of which player occupies each place
         # and used by machine to work out its strategy
         self.board = [0] * 64
@@ -120,7 +120,7 @@ class TicTacToe3D:
             [12, 25, 38, 51],
         ]
 
-    def get(self, x, y, z):
+    def get(self, x, y, z) -> Player:
         m = self.board[4 * (4 * z + y) + x]
         if m == 40:
             return Player.MACHINE
@@ -129,11 +129,11 @@ class TicTacToe3D:
         else:
             return Player.EMPTY
 
-    def move3D(self, x, y, z, player):
+    def move_3d(self, x, y, z, player) -> bool:
         m = 4 * (4 * z + y) + x
         return self.move(m, player)
 
-    def move(self, m, player):
+    def move(self, m, player) -> bool:
         if self.board[m] > 1:
             return False
 
@@ -143,13 +143,13 @@ class TicTacToe3D:
             self.board[m] = 8
         return True
 
-    def get3DPosition(self, m):
+    def get_3d_position(self, m) -> Tuple[int, int, int]:
         x = m % 4
         y = (m // 4) % 4
         z = m // 16
         return x, y, z
 
-    def evaluateLines(self):
+    def evaluate_lines(self) -> None:
         self.lineValues = [0] * 76
         for j in range(76):
             value = 0
@@ -157,18 +157,18 @@ class TicTacToe3D:
                 value += self.board[self.lines[j][k]]
             self.lineValues[j] = value
 
-    def strategyMarkLine(self, i):
+    def strategy_mark_line(self, i) -> None:
         for j in range(4):
             m = self.lines[i][j]
             if self.board[m] == 0:
                 self.board[m] = 1
 
-    def clearStrategyMarks(self):
+    def clear_strategy_marks(self) -> None:
         for i in range(64):
             if self.board[i] == 1:
                 self.board[i] = 0
 
-    def markAndMove(self, vlow, vhigh, vmove):
+    def mark_and_move(self, vlow, vhigh, vmove) -> Optional[Tuple[Move, int]]:
         """
         mark lines that can potentially win the game for the human
         or the machine and choose best place to play
@@ -180,37 +180,37 @@ class TicTacToe3D:
             self.lineValues[i] = value
             if vlow <= value < vhigh:
                 if value > vlow:
-                    return self.moveTriple(i)
-                self.strategyMarkLine(i)
-        self.evaluateLines()
+                    return self.move_triple(i)
+                self.strategy_mark_line(i)
+        self.evaluate_lines()
 
         for i in range(76):
             value = self.lineValues[i]
             if value == 4 or value == vmove:
-                return self.moveDiagonals(i, 1)
+                return self.move_diagonals(i, 1)
         return None
 
-    def machineMove(self):
+    def machine_move(self) -> Union[None, Tuple[Move, int], Tuple[Move, int, int]]:
         """machine works out what move to play"""
-        self.clearStrategyMarks()
+        self.clear_strategy_marks()
 
-        self.evaluateLines()
+        self.evaluate_lines()
         for value, event in [
-            (32, self.humanWin),
-            (120, self.machineWin),
-            (24, self.blockHumanWin),
+            (32, self.human_win),
+            (120, self.machine_win),
+            (24, self.block_human_win),
         ]:
             for i in range(76):
                 if self.lineValues[i] == value:
                     return event(i)
 
-        m = self.markAndMove(80, 88, 43)
+        m = self.mark_and_move(80, 88, 43)
         if m is not None:
             return m
 
-        self.clearStrategyMarks()
+        self.clear_strategy_marks()
 
-        m = self.markAndMove(16, 24, 11)
+        m = self.mark_and_move(16, 24, 11)
         if m is not None:
             return m
 
@@ -222,11 +222,11 @@ class TicTacToe3D:
             if (32 <= value < 40) or (72 <= value < 80):
                 for s in [1, 0]:
                     for i in range(4 * k, 4 * k + 4):
-                        m = self.moveDiagonals(i, s)
+                        m = self.move_diagonals(i, s)
                         if m is not None:
                             return m
 
-        self.clearStrategyMarks()
+        self.clear_strategy_marks()
 
         for y in self.corners:
             if self.board[y] == 0:
@@ -238,24 +238,24 @@ class TicTacToe3D:
 
         return (Move.DRAW, -1)
 
-    def humanWin(self, i):
+    def human_win(self, i) -> Tuple[Move, int, int]:
         return (Move.HUMAN_WIN, -1, i)
 
-    def machineWin(self, i):
+    def machine_win(self, i) -> Optional[Tuple[Move, int, int]]:
         for j in range(4):
             m = self.lines[i][j]
             if self.board[m] == 0:
                 return (Move.MACHINE_WIN, m, i)
         return None
 
-    def blockHumanWin(self, i):
+    def block_human_win(self, i) -> Optional[Tuple[Move, int]]:
         for j in range(4):
             m = self.lines[i][j]
             if self.board[m] == 0:
                 return (Move.NICE_TRY, m)
         return None
 
-    def moveTriple(self, i):
+    def move_triple(self, i) -> Tuple[Move, int]:
         """make two lines-of-3 or prevent human from doing this"""
         for j in range(4):
             m = self.lines[i][j]
@@ -267,7 +267,7 @@ class TicTacToe3D:
         return (Move.CONCEDES, -1)
 
     # choose move in corners or center boxes of square 4x4
-    def moveDiagonals(self, i, s):
+    def move_diagonals(self, i, s) -> Optional[Tuple[Move, int]]:
         if 0 < (i % 4) < 3:
             jrange = [1, 2]
         else:
@@ -280,15 +280,15 @@ class TicTacToe3D:
 
 
 class Qubit:
-    def moveCode(self, board, m):
+    def move_code(self, board, m) -> str:
         x, y, z = board.get3DPosition(m)
         return f"{z + 1:d}{y + 1:d}{x + 1:d}"
 
-    def showWin(self, board, i):
+    def show_win(self, board, i) -> None:
         for m in board.lines[i]:
-            print(self.moveCode(board, m))
+            print(self.move_code(board, m))
 
-    def showBoard(self, board):
+    def show_board(self, board) -> None:
         c = " YM"
         for z in range(4):
             for y in range(4):
@@ -299,15 +299,15 @@ class Qubit:
                 print("\n")
             print("\n")
 
-    def humanMove(self, board):
-        print("")
+    def human_move(self, board) -> bool:
+        print()
         c = "1234"
         while True:
             h = input("Your move?\n")
             if h == "1":
                 return False
             if h == "0":
-                self.showBoard(board)
+                self.show_board(board)
                 continue
             if (len(h) == 3) and (h[0] in c) and (h[1] in c) and (h[2] in c):
                 x = c.find(h[2])
@@ -322,7 +322,7 @@ class Qubit:
 
         return True
 
-    def play(self):
+    def play(self) -> None:
         print("Qubic\n")
         print("Create Computing Morristown, New Jersey\n\n\n")
         while True:
@@ -356,7 +356,7 @@ class Qubit:
                     break
                 print("Incorrect answer. Please type 'yes' or 'no'.")
 
-            skipHuman = s[0] in "nN"
+            skip_human = s[0] in "nN"
 
             move_text = [
                 "Machine moves to",
@@ -368,22 +368,23 @@ class Qubit:
             ]
 
             while True:
-                if not skipHuman and not self.humanMove(board):
+                if not skip_human and not self.human_move(board):
                     break
-                skipHuman = False
+                skip_human = False
 
-                m = board.machineMove()
+                m = board.machine_move()
+                assert m is not None
                 if m[0] == Move.HUMAN_WIN:
                     print("You win as follows,")
-                    self.showWin(board, m[2])
+                    self.show_win(board, m[2])  # type: ignore
                     break
                 elif m[0] == Move.MACHINE_WIN:
                     print(
                         "Machine moves to {}, and wins as follows".format(
-                            self.moveCode(board, m[1])
+                            self.move_code(board, m[1])
                         )
                     )
-                    self.showWin(board, m[2])
+                    self.show_win(board, m[2])  # type: ignore
                     break
                 elif m[0] == Move.DRAW:
                     print("The game is a draw.")
@@ -393,10 +394,10 @@ class Qubit:
                     break
                 else:
                     print(move_text[m[0].value - Move.MOVES.value])
-                    print(self.moveCode(board, m[1]))
+                    print(self.move_code(board, m[1]))
                     board.move(m[1], Player.MACHINE)
 
-                self.showBoard(board)
+                self.show_board(board)
 
             print(" ")
             while True:

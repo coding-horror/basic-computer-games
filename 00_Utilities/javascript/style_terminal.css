@@ -31,7 +31,11 @@ body {
   background-color: var(--background);
   color: var(--text);
   font: var(--font);
-  padding: 3rem;
+  margin: 0;
+}
+
+#output {
+  padding: 1rem;
 }
 
 /* format input fields */
@@ -80,7 +84,10 @@ a:hover {
 }
 
 /* add all the face flicker effects (only on desktop) */
-@media screen and (min-width: 640px) {
+@media screen and (min-width: 960px) {
+  main {
+    padding: 3rem;
+  }
   @keyframes flicker {
     0% {
       opacity: 0.27861;

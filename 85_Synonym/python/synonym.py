@@ -53,7 +53,7 @@ def print_right() -> None:
     print(random.choice(right_words))
 
 
-def ask_question(question_number):
+def ask_question(question_number: int) -> None:
     words = synonym_words[question_number]
     clues = words[:]
     base_word = clues.pop(0)

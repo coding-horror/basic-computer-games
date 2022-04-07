@@ -1,37 +1,23 @@
-import * as readline from 'readline'
+#!/usr/bin/env node
 
-// start reusable code
-async function input(prompt = "") {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    })
+import { println, input } from '../../00_Common/javascript/common.mjs';
 
-    return new Promise((resolve, _) => {
-        rl.setPrompt(prompt)
-        // show user the question
-        rl.prompt()
-        // listen for user answer,
-        // callback is triggered as soon as user hits enter key
-        rl.on('line', answer => {
-            rl.close()
-            // resolve the promise, with the input the user entered
-            resolve(answer)
-        })
-    })
-}
-
-function println(message = "", align = "left"){
-    let padColCount = 0
-    if(align === "center"){
+function printAlign(message = "", align = "left") {
+    // process.stdout.columns is the number of spaces per line in the terminal
+    const maxWidth = process.stdout.columns
+    if (align === "center") {
         // calculate the amount of spaces required to center the message
-        // process.stdout.columns is the number of spaces per line in the terminal
-        padColCount = Math.round(process.stdout.columns / 2 + message.length / 2)
+        const padColCount = Math.round((process.stdout.columns-message.length)/2);
+        const padding = padColCount <= 0 ? '' : ' '.repeat(padColCount);
+        println(padding, message);
+    } else if (align === "right") {
+        const padColCount = Math.round(process.stdout.columns-message.length);
+        const padding = padColCount <= 0 ? '' : ' '.repeat(padColCount);
+        println(padding, message);
+    } else {
+        println(message);
     }
-    console.log(message.padStart(padColCount, " "))
 }
-// end reusable code
-
 
 function equalIgnoreCase(correct, provided){
     return correct.toString().toLowerCase() === provided.toString().toLowerCase()
@@ -39,8 +25,10 @@ function equalIgnoreCase(correct, provided){
 
 async function evaluateQuestion(question, answerOptions, correctAnswer, correctMessage, wrongMessage){
     // ask the user to answer the given question
+    println(question);
+    println(answerOptions.map((answer, index) => `${index+1})${answer}`).join(', '));
     // this is a blocking wait
-    const answer = await input(question + "\n" + answerOptions + "\n")
+    const answer = await input('?')
     const isCorrect = equalIgnoreCase(correctAnswer, answer)
     println(isCorrect ? correctMessage : wrongMessage)
     return isCorrect ? 1 : 0
@@ -48,31 +36,40 @@ async function evaluateQuestion(question, answerOptions, correctAnswer, correctM
 
 async function main(){
     let score = 0
-    println("LITERATURE QUIZ", "center")
-    println("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY", "center")
-    println();println();println()
+
+    printAlign("LITERATURE QUIZ", "center")
+    printAlign("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY", "center")
+    println("\n\n")
+
+    println("TEST YOUR KNOWLEDGE OF CHILDREN'S LITERATURE.");
+    println();
+    println("THIS IS A MULTIPLE-CHOICE QUIZ.");
+    println("TYPE A 1, 2, 3, OR 4 AFTER THE QUESTION MARK.");
+    println();
+    println("GOOD LUCK!");
+    println("\n\n");
 
     score += await evaluateQuestion("IN PINOCCHIO, WHAT WAS THE NAME OF THE CAT?",
-        "1)TIGGER, 2)CICERO, 3)FIGARO, 4)GUIPETTO", 3,
+        [ "TIGGER", "CICERO", "FIGARO", "GUIPETTO"], 3,
         "VERY GOOD!  HERE'S ANOTHER.", "SORRY...FIGARO WAS HIS NAME.")
     println()
 
     score += await evaluateQuestion("FROM WHOSE GARDEN DID BUGS BUNNY STEAL THE CARROTS?",
-        "1)MR. NIXON'S, 2)ELMER FUDD'S, 3)CLEM JUDD'S, 4)STROMBOLI'S", 2,
+        [ "MR. NIXON'S", "ELMER FUDD'S", "CLEM JUDD'S", "STROMBOLI'S" ], 2,
         "PRETTY GOOD!", "TOO BAD...IT WAS ELMER FUDD'S GARDEN.")
     println()
 
     score += await evaluateQuestion("IN THE WIZARD OF OS, DOROTHY'S DOG WAS NAMED",
-        "1)CICERO, 2)TRIXIA, 3)KING, 4)TOTO", 4,
+        [ "CICERO", "TRIXIA", "KING", "TOTO" ], 4,
         "YEA!  YOU'RE A REAL LITERATURE GIANT.",
         "BACK TO THE BOOKS,...TOTO WAS HIS NAME.")
     println()
 
     score += await evaluateQuestion("WHO WAS THE FAIR MAIDEN WHO ATE THE POISON APPLE",
-        "1)SLEEPING BEAUTY, 2)CINDERELLA, 3)SNOW WHITE, 4)WENDY", 3,
+        [ "SLEEPING BEAUTY", "CINDERELLA", "SNOW WHITE", "WENDY" ], 3,
         "GOOD MEMORY!", "OH, COME ON NOW...IT WAS SNOW WHITE.")
 
-    println();println()
+    println("\n")
 
     if(score === 4) {
         println("WOW!  THAT'S SUPER!  YOU REALLY KNOW YOUR NURSERY\n"+

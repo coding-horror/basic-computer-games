@@ -1,22 +1,17 @@
-# ONE CHECK
+"""
+ONE CHECK
 
-# Port to python by imiro
+Port to Python by imiro
+"""
 
-
-def tab(x):
-    return " " * x
+from typing import Tuple
 
 
 def main() -> None:
-
     # Initial instructions
-    print(tab(30) + "ONE CHECK")
-    print(tab(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    print("SOLITAIRE CHECKER PUZZLE BY DAVID AHL")
-    print()
+    print(" " * 30 + "ONE CHECK")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print("SOLITAIRE CHECKER PUZZLE BY DAVID AHL\n")
     print("48 CHECKERS ARE PLACED ON THE 2 OUTSIDE SPACES OF A")
     print("STANDARD 64-SQUARE CHECKERBOARD.  THE OBJECT IS TO")
     print("REMOVE AS MANY CHECKERS AS POSSIBLE BY DIAGONAL JUMPS")
@@ -25,35 +20,29 @@ def main() -> None:
     print("THE BOARD PRINTED OUT ON EACH TURN '1' INDICATES A")
     print("CHECKER AND '0' AN EMPTY SQUARE.  WHEN YOU HAVE NO")
     print("POSSIBLE JUMPS REMAINING, INPUT A '0' IN RESPONSE TO")
-    print("QUESTION 'JUMP FROM ?'")
-    print()
-    print("HERE IS THE NUMERICAL BOARD:")
-    print()
+    print("QUESTION 'JUMP FROM ?'\n")
+    print("HERE IS THE NUMERICAL BOARD:\n")
 
     while True:
         for j in range(1, 64, 8):
             for i in range(j, j + 7):
                 print(i, end=(" " * (3 if i < 10 else 2)))
             print(j + 7)
-        print()
-        print("AND HERE IS THE OPENING POSITION OF THE CHECKERS.")
-        print()
+        print("\nAND HERE IS THE OPENING POSITION OF THE CHECKERS.\n")
 
         (jumps, left) = play_game()
 
         print()
-        print("YOU MADE " + jumps + " JUMPS AND HAD " + left + " PIECES")
-        print("REMAINING ON THE BOARD.")
-        print()
+        print(f"YOU MADE {jumps} JUMPS AND HAD {left} PIECES")
+        print("REMAINING ON THE BOARD.\n")
 
         if not (try_again()):
             break
 
-    print()
-    print("O.K.  HOPE YOU HAD FUN!!")
+    print("\nO.K.  HOPE YOU HAD FUN!!")
 
 
-def play_game():
+def play_game() -> Tuple[str, str]:
     # Initialize board
     # Give more than 64 elements to accomodate 1-based indexing
     board = [1] * 70
@@ -71,13 +60,13 @@ def play_game():
 
         while True:
             print("JUMP FROM", end=" ")
-            f = input()
-            f = int(f)
+            f_str = input()
+            f = int(f_str)
             if f == 0:
                 break
             print("TO", end=" ")
-            t = input()
-            t = int(t)
+            t_str = input()
+            t = int(t_str)
             print()
 
             # Check legality of move
@@ -113,15 +102,15 @@ def play_game():
     return (str(jumps), str(left))
 
 
-def try_again():
+def try_again() -> bool:
     print("TRY AGAIN", end=" ")
-    answer = input()
-    if answer.upper() == "YES":
+    answer = input().upper()
+    if answer == "YES":
         return True
-    elif answer.upper() == "NO":
+    elif answer == "NO":
         return False
     print("PLEASE ANSWER 'YES' OR 'NO'.")
-    try_again()
+    return try_again()
 
 
 if __name__ == "__main__":

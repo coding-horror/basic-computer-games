@@ -1,30 +1,27 @@
-########################################################
-#
-# Dice
-#
-# From: BASIC Computer Games (1978)
-#       Edited by David H. Ahl
-#
-# "Not exactly a game, this program simulates rolling
-#  a pair of dice a large number of times and prints out
-#  the frequency distribution.  You simply input the
-#  number of rolls.  It is interesting to see how many
-#  rolls are necessary to approach the theoretical
-#  distribution:
-#
-#  2  1/36  2.7777...%
-#  3  2/36  5.5555...%
-#  4  3/36  8.3333...%
-#    etc.
-#
-# "Daniel Freidus wrote this program while in the
-#  seventh grade at Harrison Jr-Sr High School,
-#  Harrison, New York."
-#
-# Python port by Jeff Jetton, 2019
-#
-########################################################
+"""
+Dice
 
+From: BASIC Computer Games (1978)
+      Edited by David H. Ahl
+
+"Not exactly a game, this program simulates rolling
+ a pair of dice a large number of times and prints out
+ the frequency distribution.  You simply input the
+ number of rolls.  It is interesting to see how many
+ rolls are necessary to approach the theoretical
+ distribution:
+
+ 2  1/36  2.7777...%
+ 3  2/36  5.5555...%
+ 4  3/36  8.3333...%
+   etc.
+
+"Daniel Freidus wrote this program while in the
+ seventh grade at Harrison Jr-Sr High School,
+ Harrison, New York."
+
+Python port by Jeff Jetton, 2019
+"""
 
 import random
 
@@ -48,7 +45,7 @@ def main() -> None:
 
     still_playing = True
     while still_playing:
-        print("")
+        print()
         n = int(input("How many rolls? "))
 
         # Roll the dice n times
@@ -64,7 +61,7 @@ def main() -> None:
             print(" %-14d%d" % (i, freq[i]))
 
         # Keep playing?
-        print("")
+        print()
         response = input("Try again? ")
         if len(response) > 0 and response.upper()[0] == "Y":
             # Clear out the frequency list

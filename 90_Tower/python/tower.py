@@ -1,11 +1,12 @@
 import sys
+from typing import List, Optional
 
 
 class Disk:
-    def __init__(self, size):
+    def __init__(self, size: int) -> None:
         self.__size = size
 
-    def size(self):
+    def size(self) -> int:
         return self.__size
 
     def print(self) -> None:
@@ -13,28 +14,29 @@ class Disk:
 
 
 class Tower:
-    def __init__(self):
-        self.__disks = []
+    def __init__(self) -> None:
+        self.__disks: List[Disk] = []
 
-    def empty(self):
+    def empty(self) -> bool:
         return len(self.__disks) == 0
 
-    def top(self):
+    def top(self) -> Optional[Disk]:
         if self.empty():
             return None
         else:
             return self.__disks[-1]
 
-    def add(self, disk):
+    def add(self, disk: Disk) -> None:
         if not self.empty():
             t = self.top()
+            assert t is not None  # cannot happen as it's not empty
             if disk.size() > t.size():
                 raise Exception(
                     "YOU CAN'T PLACE A LARGER DISK ON TOP OF A SMALLER ONE, IT MIGHT CRUSH IT!"
                 )
         self.__disks.append(disk)
 
-    def pop(self):
+    def pop(self) -> Disk:
         if self.empty():
             raise Exception("empty pop")
         return self.__disks.pop()
@@ -45,7 +47,7 @@ class Tower:
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         # use fewer sizes to make debugging easier
         # self.__sizes = [3, 5, 7]  # ,9,11,13,15]
         self.__sizes = [3, 5, 7, 9, 11, 13, 15]
@@ -60,23 +62,23 @@ class Game:
             disk = Disk(size)
             self.__towers[0].add(disk)
 
-    def winner(self):
+    def winner(self) -> bool:
         return self.__towers[0].empty() and self.__towers[1].empty()
 
     def print(self) -> None:
         for t in self.__towers:
             t.print()
 
-    def moves(self):
+    def moves(self) -> int:
         return self.__moves
 
-    def which_disk(self):
+    def which_disk(self) -> int:
         w = int(input("WHICH DISK WOULD YOU LIKE TO MOVE\n"))
         if w in self.__sizes:
             return w
         raise Exception()
 
-    def pick_disk(self):
+    def pick_disk(self) -> Optional[Tower]:
         which = None
         while which is None:
             try:
@@ -93,7 +95,7 @@ class Game:
             assert valids[0].top().size() == which
             return valids[0]
 
-    def which_tower(self):
+    def which_tower(self) -> Optional[Tower]:
         try:
             needle = int(input("PLACE DISK ON WHICH NEEDLE\n"))
             tower = self.__towers[needle - 1]
@@ -105,7 +107,7 @@ class Game:
         else:
             return tower
 
-    def take_turn(self):
+    def take_turn(self) -> None:
         from_tower = None
         while from_tower is None:
             from_tower = self.pick_disk()

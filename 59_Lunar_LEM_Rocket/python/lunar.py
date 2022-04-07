@@ -6,8 +6,9 @@ Lunar landing simulation
 Ported by Dave LeCompte
 """
 
-import collections
 import math
+from dataclasses import dataclass
+from typing import Any, NamedTuple
 
 PAGE_WIDTH = 64
 
@@ -32,7 +33,10 @@ FUEL_RIGHT = FUEL_LEFT + FUEL_WIDTH
 BURN_LEFT = FUEL_RIGHT + COLUMN_WIDTH
 BURN_RIGHT = BURN_LEFT + BURN_WIDTH
 
-PhysicalState = collections.namedtuple("PhysicalState", ["velocity", "altitude"])
+
+class PhysicalState(NamedTuple):
+    velocity: float
+    altitude: float
 
 
 def print_centered(msg: str) -> None:
@@ -42,29 +46,24 @@ def print_centered(msg: str) -> None:
 
 def print_header(title: str) -> None:
     print_centered(title)
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
-def add_rjust(line, s, pos):
-    # adds a new field to a line right justified to end at pos
-
-    s = str(s)
-    slen = len(s)
+def add_rjust(line: str, s: Any, pos: int) -> str:
+    """Add a new field to a line right justified to end at pos"""
+    s_str = str(s)
+    slen = len(s_str)
     if len(line) + slen > pos:
         new_len = pos - slen
         line = line[:new_len]
     if len(line) + slen < pos:
         spaces = " " * (pos - slen - len(line))
         line = line + spaces
-    return line + s
+    return line + s_str
 
 
-def add_ljust(line, s, pos):
-    # adds a new field to a line left justified starting at pos
-
+def add_ljust(line: str, s: str, pos: int) -> str:
+    """Add a new field to a line left justified starting at pos"""
     s = str(s)
     if len(line) > pos:
         line = line[:pos]
@@ -75,32 +74,129 @@ def add_ljust(line, s, pos):
 
 
 def print_instructions() -> None:
-    # Somebody had a bad experience with Xerox.
-
+    """Somebody had a bad experience with Xerox."""
     print("THIS IS A COMPUTER SIMULATION OF AN APOLLO LUNAR")
-    print("LANDING CAPSULE.")
-    print()
-    print()
+    print("LANDING CAPSULE.\n\n")
     print("THE ON-BOARD COMPUTER HAS FAILED (IT WAS MADE BY")
-    print("XEROX) SO YOU HAVE TO LAND THE CAPSULE MANUALLY.")
-    print()
+    print("XEROX) SO YOU HAVE TO LAND THE CAPSULE MANUALLY.\n")
 
 
 def print_intro() -> None:
     print("SET BURN RATE OF RETRO ROCKETS TO ANY VALUE BETWEEN")
     print("0 (FREE FALL) AND 200 (MAXIMUM BURN) POUNDS PER SECOND.")
-    print("SET NEW BURN RATE EVERY 10 SECONDS.")
-    print()
-    print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,500 LBS.")
-    print()
-    print()
-    print()
-    print("GOOD LUCK")
-    print()
+    print("SET NEW BURN RATE EVERY 10 SECONDS.\n")
+    print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,500 LBS.\n\n\n")
+    print("GOOD LUCK\n")
 
 
-def show_landing(sim_clock, capsule):
-    w = 3600 * capsule.v
+def format_line_for_report(
+    t: Any,
+    miles: Any,
+    feet: Any,
+    velocity: Any,
+    fuel: Any,
+    burn_rate: str,
+    is_header: bool,
+) -> str:
+    line = add_rjust("", t, SECONDS_RIGHT)
+    line = add_rjust(line, miles, ALT_MI_RIGHT)
+    line = add_rjust(line, feet, ALT_FT_RIGHT)
+    line = add_rjust(line, velocity, MPH_RIGHT)
+    line = add_rjust(line, fuel, FUEL_RIGHT)
+    if is_header:
+        line = add_rjust(line, burn_rate, BURN_RIGHT)
+    else:
+        line = add_ljust(line, burn_rate, BURN_LEFT)
+    return line
+
+
+class SimulationClock:
+    def __init__(self, elapsed_time: float, time_until_next_prompt: float) -> None:
+        self.elapsed_time = elapsed_time
+        self.time_until_next_prompt = time_until_next_prompt
+
+    def time_for_prompt(self) -> bool:
+        return self.time_until_next_prompt < 1e-3
+
+    def advance(self, delta_t: float) -> None:
+        self.elapsed_time += delta_t
+        self.time_until_next_prompt -= delta_t
+
+
+@dataclass
+class Capsule:
+    altitude: float = 120  # in miles above the surface
+    velocity: float = 1  # downward
+    m: float = 33000  # mass_with_fuel
+    n: float = 16500  # mass_without_fuel
+    g: float = 1e-3
+    z: float = 1.8
+    fuel_per_second: float = 0
+
+    def remaining_fuel(self) -> float:
+        return self.m - self.n
+
+    def is_out_of_fuel(self) -> bool:
+        return self.remaining_fuel() < 1e-3
+
+    def update_state(
+        self, sim_clock: SimulationClock, delta_t: float, new_state: PhysicalState
+    ) -> None:
+        sim_clock.advance(delta_t)
+        self.m = self.m - delta_t * self.fuel_per_second
+        self.altitude = new_state.altitude
+        self.velocity = new_state.velocity
+
+    def fuel_time_remaining(self) -> float:
+        # extrapolates out how many seconds we have at the current fuel burn rate
+        assert self.fuel_per_second > 0
+        return self.remaining_fuel() / self.fuel_per_second
+
+    def predict_motion(self, delta_t: float) -> PhysicalState:
+        # Perform an Euler's Method numerical integration of the equations of motion.
+
+        q = delta_t * self.fuel_per_second / self.m
+
+        # new velocity
+        new_velocity = (
+            self.velocity
+            + self.g * delta_t
+            + self.z * (-q - q**2 / 2 - q**3 / 3 - q**4 / 4 - q**5 / 5)
+        )
+
+        # new altitude
+        new_altitude = (
+            self.altitude
+            - self.g * delta_t**2 / 2
+            - self.velocity * delta_t
+            + self.z
+            * delta_t
+            * (q / 2 + q**2 / 6 + q**3 / 12 + q**4 / 20 + q**5 / 30)
+        )
+
+        return PhysicalState(altitude=new_altitude, velocity=new_velocity)
+
+    def make_state_display_string(self, sim_clock: SimulationClock) -> str:
+        seconds = sim_clock.elapsed_time
+        miles = int(self.altitude)
+        feet = int(5280 * (self.altitude - miles))
+        velocity = int(3600 * self.velocity)
+        fuel = int(self.remaining_fuel())
+        burn_rate = " ? "
+
+        return format_line_for_report(
+            seconds, miles, feet, velocity, fuel, burn_rate, False
+        )
+
+    def prompt_for_burn(self, sim_clock: SimulationClock) -> None:
+        msg = self.make_state_display_string(sim_clock)
+
+        self.fuel_per_second = float(input(msg))
+        sim_clock.time_until_next_prompt = 10
+
+
+def show_landing(sim_clock: SimulationClock, capsule: Capsule) -> None:
+    w = 3600 * capsule.velocity
     print(
         f"ON MOON AT {sim_clock.elapsed_time:.2f} SECONDS - IMPACT VELOCITY {w:.2f} MPH"
     )
@@ -117,121 +213,20 @@ def show_landing(sim_clock, capsule):
     end_sim()
 
 
-def show_out_of_fuel(sim_clock, capsule):
+def show_out_of_fuel(sim_clock: SimulationClock, capsule: Capsule) -> None:
     print(f"FUEL OUT AT {sim_clock.elapsed_time} SECONDS")
     delta_t = (
-        -capsule.v + math.sqrt(capsule.v**2 + 2 * capsule.a * capsule.g)
+        -capsule.velocity
+        + math.sqrt(capsule.velocity**2 + 2 * capsule.altitude * capsule.g)
     ) / capsule.g
-    capsule.v += capsule.g * delta_t
+    capsule.velocity += capsule.g * delta_t
     sim_clock.advance(delta_t)
     show_landing(sim_clock, capsule)
 
 
-def format_line_for_report(t, miles, feet, velocity, fuel, burn_rate, is_header) -> str:
-    line = add_rjust("", t, SECONDS_RIGHT)
-    line = add_rjust(line, miles, ALT_MI_RIGHT)
-    line = add_rjust(line, feet, ALT_FT_RIGHT)
-    line = add_rjust(line, velocity, MPH_RIGHT)
-    line = add_rjust(line, fuel, FUEL_RIGHT)
-    if is_header:
-        line = add_rjust(line, burn_rate, BURN_RIGHT)
-    else:
-        line = add_ljust(line, burn_rate, BURN_LEFT)
-    return line
-
-
-class Capsule:
-    def __init__(
-        self,
-        altitude=120,
-        velocity=1,
-        mass_with_fuel=33000,
-        mass_without_fuel=16500,
-        g=1e-3,
-        z=1.8,
-    ):
-        self.a = altitude  # in miles above the surface
-        self.v = velocity  # downward
-        self.m = mass_with_fuel
-        self.n = mass_without_fuel
-        self.g = g
-        self.z = z
-        self.fuel_per_second = 0
-
-    def remaining_fuel(self):
-        return self.m - self.n
-
-    def is_out_of_fuel(self):
-        return self.remaining_fuel() < 1e-3
-
-    def update_state(self, sim_clock, delta_t, new_state):
-        sim_clock.advance(delta_t)
-        self.m = self.m - delta_t * self.fuel_per_second
-        self.a = new_state.altitude
-        self.v = new_state.velocity
-
-    def fuel_time_remaining(self):
-        # extrapolates out how many seconds we have at the current fuel burn rate
-        assert self.fuel_per_second > 0
-        return self.remaining_fuel() / self.fuel_per_second
-
-    def predict_motion(self, delta_t):
-        # Perform an Euler's Method numerical integration of the equations of motion.
-
-        q = delta_t * self.fuel_per_second / self.m
-
-        # new velocity
-        new_velocity = (
-            self.v
-            + self.g * delta_t
-            + self.z * (-q - q**2 / 2 - q**3 / 3 - q**4 / 4 - q**5 / 5)
-        )
-
-        # new altitude
-        new_altitude = (
-            self.a
-            - self.g * delta_t**2 / 2
-            - self.v * delta_t
-            + self.z
-            * delta_t
-            * (q / 2 + q**2 / 6 + q**3 / 12 + q**4 / 20 + q**5 / 30)
-        )
-
-        return PhysicalState(altitude=new_altitude, velocity=new_velocity)
-
-    def make_state_display_string(self, sim_clock) -> str:
-        seconds = sim_clock.elapsed_time
-        miles = int(self.a)
-        feet = int(5280 * (self.a - miles))
-        velocity = int(3600 * self.v)
-        fuel = int(self.remaining_fuel())
-        burn_rate = " ? "
-
-        return format_line_for_report(
-            seconds, miles, feet, velocity, fuel, burn_rate, False
-        )
-
-    def prompt_for_burn(self, sim_clock):
-        msg = self.make_state_display_string(sim_clock)
-
-        self.fuel_per_second = float(input(msg))
-        sim_clock.time_until_next_prompt = 10
-
-
-class SimulationClock:
-    def __init__(self, elapsed_time, time_until_next_prompt):
-        self.elapsed_time = elapsed_time
-        self.time_until_next_prompt = time_until_next_prompt
-
-    def time_for_prompt(self):
-        return self.time_until_next_prompt < 1e-3
-
-    def advance(self, delta_t):
-        self.elapsed_time += delta_t
-        self.time_until_next_prompt -= delta_t
-
-
-def process_final_tick(delta_t, sim_clock, capsule):
+def process_final_tick(
+    delta_t: float, sim_clock: SimulationClock, capsule: Capsule
+) -> None:
     # When we extrapolated our position based on our velocity
     # and delta_t, we overshot the surface. For better
     # accuracy, we will back up and do shorter time advances.
@@ -242,20 +237,20 @@ def process_final_tick(delta_t, sim_clock, capsule):
             return
         # line 35
         average_vel = (
-            capsule.v
+            capsule.velocity
             + math.sqrt(
-                capsule.v**2
+                capsule.velocity**2
                 + 2
-                * capsule.a
+                * capsule.altitude
                 * (capsule.g - capsule.z * capsule.fuel_per_second / capsule.m)
             )
         ) / 2
-        delta_t = capsule.a / average_vel
+        delta_t = capsule.altitude / average_vel
         new_state = capsule.predict_motion(delta_t)
         capsule.update_state(sim_clock, delta_t, new_state)
 
 
-def handle_flyaway(sim_clock, capsule):
+def handle_flyaway(sim_clock: SimulationClock, capsule: Capsule) -> bool:
     """
     The user has started flying away from the moon. Since this is a
     lunar LANDING simulation, we wait until the capsule's velocity is
@@ -268,11 +263,11 @@ def handle_flyaway(sim_clock, capsule):
         w = (1 - capsule.m * capsule.g / (capsule.z * capsule.fuel_per_second)) / 2
         delta_t = (
             capsule.m
-            * capsule.v
+            * capsule.velocity
             / (
                 capsule.z
                 * capsule.fuel_per_second
-                * math.sqrt(w**2 + capsule.v / capsule.z)
+                * math.sqrt(w**2 + capsule.velocity / capsule.z)
             )
         ) + 0.05
 
@@ -284,22 +279,16 @@ def handle_flyaway(sim_clock, capsule):
 
         capsule.update_state(sim_clock, delta_t, new_state)
 
-        if (new_state.velocity > 0) or (capsule.v <= 0):
+        if (new_state.velocity > 0) or (capsule.velocity <= 0):
             # return to normal sim
             return False
 
 
-def end_sim():
-    print()
-    print()
-    print()
-    print("TRY AGAIN??")
-    print()
-    print()
-    print()
+def end_sim() -> None:
+    print("\n\n\nTRY AGAIN??\n\n\n")
 
 
-def run_simulation():
+def run_simulation() -> None:
     print()
     print(
         format_line_for_report("SEC", "MI", "FT", "MPH", "LB FUEL", "BURN RATE", True)
@@ -334,7 +323,7 @@ def run_simulation():
             process_final_tick(delta_t, sim_clock, capsule)
             return
 
-        if capsule.v > 0 and new_state.velocity < 0:
+        if capsule.velocity > 0 and new_state.velocity < 0:
             # moving away from the moon
 
             landed = handle_flyaway(sim_clock, capsule)

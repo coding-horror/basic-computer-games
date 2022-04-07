@@ -1,12 +1,12 @@
 import random
+from typing import Tuple
 
 
-# Class of the Game
 class NIM:
-    def __init__(self):
+    def __init__(self) -> None:
         self.piles = {1: 7, 2: 5, 3: 3, 4: 1}
 
-    def remove_pegs(self, command):
+    def remove_pegs(self, command) -> None:
         try:
 
             pile, num = command.split(",")
@@ -29,7 +29,7 @@ class NIM:
         else:
             print("\nInvalid value of either Peg or Pile\n")
 
-    def get_ai_move(self):
+    def get_ai_move(self) -> Tuple[int, int]:
         possible_pile = []
         for k, v in self.piles.items():
             if v != 0:
@@ -41,14 +41,14 @@ class NIM:
 
         return pile, num
 
-    def _command_integrity(self, num, pile):
+    def _command_integrity(self, num, pile) -> bool:
         return pile <= 4 and pile >= 1 and num <= self.piles[pile]
 
     def print_pegs(self) -> None:
         for pile, peg in self.piles.items():
             print("Pile {} : {}".format(pile, "O " * peg))
 
-    def help(self):
+    def help(self) -> None:
         print("-" * 10)
         print('\nThe Game is player with a number of Piles of Objects("O" == one peg)')
         print("\nThe Piles are arranged as given below(Tradional NIM)\n")
@@ -62,7 +62,7 @@ class NIM:
         print("\nThe winner is defined as the one that picks the last remaning object")
         print("-" * 10)
 
-    def check_for_win(self):
+    def check_for_win(self) -> bool:
         sum = 0
         for v in self.piles.values():
             sum += v
@@ -96,13 +96,13 @@ def main() -> None:
             break
 
         # Computers Move
-        command = game.get_ai_move()
+        ai_command = game.get_ai_move()
         print(
             "\nA.I MOVE - A.I Removed {} pegs from Pile {}".format(
-                command[1], command[0]
+                ai_command[1], ai_command[0]
             )
         )
-        game.remove_pegs(str(command[0]) + "," + str(command[1]))
+        game.remove_pegs(str(ai_command[0]) + "," + str(ai_command[1]))
         end = game.check_for_win()
         if end:
             print("\nComputer Wins the Game, Better Luck Next Time\n")

@@ -24,7 +24,6 @@ cards = {
 
 
 def play_game() -> None:
-    """Play the game"""
     cash = 100
     while cash > 0:
         print(f"You now have {cash} dollars\n")
@@ -64,16 +63,6 @@ def play_game() -> None:
 
 
 def main() -> None:
-    """Main"""
-    keep_playing = True
-
-    while keep_playing:
-        play_game()
-        keep_playing = input("Try again? (yes or no) ").lower().startswith("y")
-    print("Ok hope you had fun")
-
-
-if __name__ == "__main__":
     print(
         """
 Acey-Ducey is played in the following manner
@@ -84,4 +73,13 @@ a value between the first two.
 If you do not want to bet, input a 0
   """
     )
+    keep_playing = True
+
+    while keep_playing:
+        play_game()
+        keep_playing = input("Try again? (yes or no) ").lower().startswith("y")
+    print("Ok hope you had fun")
+
+
+if __name__ == "__main__":
     main()

@@ -1,43 +1,46 @@
-def new_board():
-    # Using a dictionary in python to store the board, since we are not including all numbers within a given range.
-    board = {}
-    for i in [
-        13,
-        14,
-        15,
-        22,
-        23,
-        24,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        38,
-        39,
-        40,
-        42,
-        43,
-        44,
-        47,
-        48,
-        49,
-        50,
-        51,
-        52,
-        53,
-        58,
-        59,
-        60,
-        67,
-        68,
-        69,
-    ]:
-        board[i] = "!"
-    board[41] = "O"
-    return board
+from typing import Dict
+
+
+def new_board() -> Dict[int, str]:
+    """
+    Using a dictionary in python to store the board,
+    since we are not including all numbers within a given range.
+    """
+    return {
+        13: "!",
+        14: "!",
+        15: "!",
+        22: "!",
+        23: "!",
+        24: "!",
+        29: "!",
+        30: "!",
+        31: "!",
+        32: "!",
+        33: "!",
+        34: "!",
+        35: "!",
+        38: "!",
+        39: "!",
+        40: "!",
+        42: "!",
+        43: "!",
+        44: "!",
+        47: "!",
+        48: "!",
+        49: "!",
+        50: "!",
+        51: "!",
+        52: "!",
+        53: "!",
+        58: "!",
+        59: "!",
+        60: "!",
+        67: "!",
+        68: "!",
+        69: "!",
+        41: "O",
+    }
 
 
 def print_instructions() -> None:
@@ -73,7 +76,7 @@ NUMBERS.  OK, LET'S BEGIN.
     )
 
 
-def print_board(board) -> None:
+def print_board(board: Dict[int, str]) -> None:
     """Prints the boards using indexes in the passed parameter"""
     print(" " * 2 + board[13] + board[14] + board[15])
     print(" " * 2 + board[22] + board[23] + board[24])
@@ -131,7 +134,7 @@ def play_game() -> None:
         print("SAVE THIS PAPER AS A RECORD OF YOUR ACCOMPLISHMENT!")
 
 
-def move(board):
+def move(board: Dict[int, str]) -> bool:
     """Queries the user to move. Returns false if the user puts in an invalid input or move, returns true if the move was successful"""
     start_input = input("MOVE WHICH PIECE? ")
 
@@ -154,7 +157,7 @@ def move(board):
         return False
 
     difference = abs(start - end)
-    center = (end + start) / 2
+    center = int((end + start) / 2)
     if (
         (difference == 2 or difference == 18)
         and board[end] == "O"
@@ -175,20 +178,20 @@ def main() -> None:
     play_game()
 
 
-def is_game_finished(board):
-    # Checks all locations and whether or not a move is possible at that location.
+def is_game_finished(board) -> bool:
+    """Check all locations and whether or not a move is possible at that location."""
     for pos in board.keys():
         if board[pos] == "!":
             for space in [1, 9]:
                 # Checks if the next location has a peg
-                nextToPeg = ((pos + space) in board) and board[pos + space] == "!"
+                next_to_peg = ((pos + space) in board) and board[pos + space] == "!"
                 # Checks both going forward (+ location) or backwards (-location)
-                hasMovableSpace = (
+                has_movable_space = (
                     not ((pos - space) in board and board[pos - space] == "!")
                 ) or (
                     not ((pos + space * 2) in board and board[pos + space * 2] == "!")
                 )
-                if nextToPeg and hasMovableSpace:
+                if next_to_peg and has_movable_space:
                     return False
     return True
 

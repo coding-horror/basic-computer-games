@@ -7,16 +7,15 @@ From: BASIC Computer Games (1978)
 Python port by Aviyam Fischer, 2022
 """
 
-from typing import List, Literal, TypeAlias, get_args
+from typing import List, Literal, NamedTuple, TypeAlias, get_args
 
 Suit: TypeAlias = Literal["\u2665", "\u2666", "\u2663", "\u2660"]
 Rank: TypeAlias = Literal[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
 
-class Card:
-    def __init__(self, suit: Suit, rank: Rank) -> None:
-        self.suit = suit
-        self.rank = rank
+class Card(NamedTuple):
+    suit: Suit
+    rank: Rank
 
     def __str__(self) -> str:
         r = str(self.rank)
@@ -115,7 +114,7 @@ def game_loop() -> None:
             game_over = True
 
 
-def main():
+def main() -> None:
     print(
         """
     Acey Ducey is a card game where you play against the computer.

@@ -134,17 +134,10 @@ SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = COMPUTER_SAFE_SPOTS | frozenset(
 )
 
 
-def str_with_tab(indent: int, text: str, uppercase: bool = True) -> str:
-    """Create a string with ``indent`` spaces followed by ``text``."""
-    if uppercase:
-        text = text.upper()
-    return " " * indent + text
-
-
 def intro() -> None:
     """Print the intro and print instructions if desired."""
-    print(str_with_tab(33, "Queen"))
-    print(str_with_tab(15, "Creative Computing  Morristown, New Jersey"))
+    print(" " * 33 + "Queen")
+    print(" " * 15 + "Creative Computing  Morristown, New Jersey")
     print("\n" * 2)
     if ask("DO YOU WANT INSTRUCTIONS"):
         print(INSTR_TXT)

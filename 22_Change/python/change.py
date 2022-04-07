@@ -16,23 +16,17 @@ def print_centered(msg: str) -> None:
 
 def print_header(title: str) -> None:
     print_centered(title)
-    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
+    print_centered("CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
 
 
 def print_introduction() -> None:
     print("I, YOUR FRIENDLY MICROCOMPUTER, WILL DETERMINE")
-    print("THE CORRECT CHANGE FOR ITEMS COSTING UP TO $100.")
-    print()
-    print()
+    print("THE CORRECT CHANGE FOR ITEMS COSTING UP TO $100.\n\n")
 
 
-def pennies_to_dollar_string(p):
+def pennies_to_dollar_string(p: float) -> str:
     d = p / 100
-    ds = f"${d:0.2f}"
-    return ds
+    return f"${d:0.2f}"
 
 
 def compute_change() -> None:
@@ -94,19 +88,13 @@ def compute_change() -> None:
         print(f"{change_in_pennies} PENNY(S)")
 
 
-def print_thanks() -> None:
-    print("THANK YOU, COME AGAIN.")
-    print()
-    print()
-
-
 def main() -> None:
     print_header("CHANGE")
     print_introduction()
 
     while True:
         compute_change()
-        print_thanks()
+        print("THANK YOU, COME AGAIN.\n\n")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,9 @@
 import random
+from typing import Any, Dict, List
 
 
-# Stock_Market
 class Stock_Market:
-    def __init__(self):
-
+    def __init__(self) -> None:
         # Hard Coded Names
         short_names = ["IBM", "RCA", "LBJ", "ABC", "CBS"]
         full_names = [
@@ -16,7 +15,7 @@ class Stock_Market:
         ]
 
         # Initializing Dictionary to hold all the information systematically
-        self.data = {}
+        self.data: Dict[str, Any] = {}
         for sn, fn in zip(short_names, full_names):
             # A dictionary for each stock
             temp = {"Name": fn, "Price": None, "Holdings": 0}
@@ -31,20 +30,17 @@ class Stock_Market:
         self.cash_assets = 10000
         self.stock_assets = 0
 
-    def total_assets(self):
-
+    def total_assets(self) -> float:
         return self.cash_assets + self.stock_assets
 
-    def _generate_day_change(self):
-
+    def _generate_day_change(self) -> None:
         self.changes = []
         for _ in range(len(self.data)):
             self.changes.append(
                 round(random.uniform(-5, 5), 2)
             )  # Random % Change b/w -5 and 5
 
-    def update_prices(self):
-
+    def update_prices(self) -> None:
         self._generate_day_change()
         for stock, change in zip(self.data.values(), self.changes):
             stock["Price"] = round(stock["Price"] + (change / 100) * stock["Price"], 2)
@@ -57,9 +53,8 @@ class Stock_Market:
 
         print(f"\nNEW YORK STOCK EXCHANGE AVERAGE: ${sum / 5:.2f}")
 
-    def get_average_change(self):
-
-        sum = 0
+    def get_average_change(self) -> float:
+        sum: float = 0
         for change in self.changes:
             sum += change
 
@@ -77,8 +72,7 @@ class Stock_Market:
         self.print_exchange_average()
         self.print_assets()
 
-    def take_inputs(self):
-
+    def take_inputs(self) -> List[str]:
         print("\nWHAT IS YOUR TRANSACTION IN")
         flag = False
         while not flag:
@@ -92,7 +86,7 @@ class Stock_Market:
             if len(new_holdings) == 5:
                 flag = self._check_transaction(new_holdings)
 
-        return new_holdings
+        return new_holdings  # type: ignore
 
     def print_trading_day(self) -> None:
 
@@ -107,8 +101,7 @@ class Stock_Market:
                 )
             )
 
-    def update_cash_assets(self, new_holdings):
-
+    def update_cash_assets(self, new_holdings) -> None:
         sell = 0
         buy = 0
         for stock, holding in zip(self.data.values(), new_holdings):
@@ -120,8 +113,7 @@ class Stock_Market:
 
         self.cash_assets = self.cash_assets + sell - buy
 
-    def update_stock_assets(self):
-
+    def update_stock_assets(self) -> None:
         sum = 0
         for data in self.data.values():
             sum += data["Price"] * data["Holdings"]
@@ -129,13 +121,11 @@ class Stock_Market:
         self.stock_assets = round(sum, 2)
 
     def print_assets(self) -> None:
-
         print(f"\nTOTAL STOCK ASSETS ARE: ${self.stock_assets:.2f}")
         print(f"TOTAL CASH ASSETS ARE: ${self.cash_assets:.2f}")
         print(f"TOTAL ASSETS ARE: ${self.total_assets():.2f}")
 
-    def _check_transaction(self, new_holdings):
-
+    def _check_transaction(self, new_holdings) -> bool:
         sum = 0
         for stock, holding in zip(self.data.values(), new_holdings):
             if holding > 0:
@@ -156,8 +146,7 @@ class Stock_Market:
 
         return True
 
-    def update_holdings(self, new_holdings):
-
+    def update_holdings(self, new_holdings) -> None:
         for stock, new_holding in zip(self.data.values(), new_holdings):
             stock["Holdings"] += new_holding
 
@@ -186,13 +175,12 @@ HAVE $10,000 TO INVEST.  USE INTEGERS FOR ALL YOUR INPUTS.
     )
 
 
-if __name__ == "__main__":
-
+def main() -> None:
     print("\t\t      STOCK MARKET")
     help = input("\nDO YOU WANT INSTRUCTIONS(YES OR NO)? ")
 
     # Printing Instruction
-    if help == "YES" or help == "yes" or help == "Yes":
+    if help.lower() == "yes":
         print_instruction()
 
     # Initialize Game
@@ -225,4 +213,8 @@ if __name__ == "__main__":
         print("\n------------END OF TRADING DAY--------------\n")
 
     print("\nHOPE YOU HAD FUN!!!!")
-    input("")
+    input()
+
+
+if __name__ == "__main__":
+    main()

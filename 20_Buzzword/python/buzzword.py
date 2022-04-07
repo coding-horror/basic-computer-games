@@ -1,30 +1,28 @@
-######################################################################
-#
-# Buzzword Generator
-#
-# From: BASIC Computer Games (1978)
-#       Edited by David H. Ahl
-#
-# "This program is an invaluable aid for preparing speeches and
-#  briefings about education technology.  This buzzword generator
-#  provides sets of three highly-acceptable words to work into your
-#  material.  Your audience will never know that the phrases don't
-#  really mean much of anything because they sound so great!  Full
-#  instructions for running are given in the program.
-#
-# "This version of Buzzword was written by David Ahl."
-#
-#
-# Python port by Jeff Jetton, 2019
-#
-######################################################################
+"""
+Buzzword Generator
+
+From: BASIC Computer Games (1978)
+      Edited by David H. Ahl
+
+"This program is an invaluable aid for preparing speeches and
+ briefings about education technology.  This buzzword generator
+ provides sets of three highly-acceptable words to work into your
+ material.  Your audience will never know that the phrases don't
+ really mean much of anything because they sound so great!  Full
+ instructions for running are given in the program.
+
+"This version of Buzzword was written by David Ahl."
+
+
+Python port by Jeff Jetton, 2019
+"""
 
 
 import random
 
 
 def main() -> None:
-    WORDS = [
+    words = [
         [
             "Ability",
             "Basal",
@@ -85,13 +83,13 @@ def main() -> None:
     still_running = True
     while still_running:
         phrase = ""
-        for section in WORDS:
+        for section in words:
             if len(phrase) > 0:
                 phrase += " "
             phrase += section[random.randint(0, len(section) - 1)]
 
         print(phrase)
-        print("")
+        print()
 
         response = input("? ")
         try:

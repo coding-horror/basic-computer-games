@@ -9,17 +9,10 @@ Ported by Dave LeCompte
 """
 
 import time
+from typing import Optional, Tuple
 
 
-def print_with_tab(space_count: int, msg: str) -> None:
-    if space_count > 0:
-        spaces = " " * space_count
-    else:
-        spaces = ""
-    print(spaces + msg)
-
-
-def get_yes_or_no():
+def get_yes_or_no() -> Tuple[bool, Optional[bool], str]:
     msg = input()
     if msg.upper() == "YES":
         return True, True, msg
@@ -29,7 +22,7 @@ def get_yes_or_no():
         return False, None, msg
 
 
-def ask_enjoy_question(user_name):
+def ask_enjoy_question(user_name: str) -> None:
     print(f"HI THERE, {user_name}, ARE YOU ENJOYING YOURSELF HERE?")
 
     while True:
@@ -48,7 +41,7 @@ def ask_enjoy_question(user_name):
             print("PLEASE ANSWER 'YES' OR 'NO'.  DO YOU LIKE IT HERE?")
 
 
-def prompt_for_problems(user_name):
+def prompt_for_problems(user_name: str) -> str:
     print()
     print(f"SAY, {user_name}, I CAN SOLVE ALL KINDS OF PROBLEMS EXCEPT")
     print("THOSE DEALING WITH GREECE.  WHAT KIND OF PROBLEMS DO")
@@ -58,7 +51,7 @@ def prompt_for_problems(user_name):
     return problem_type
 
 
-def prompt_too_much_or_too_little():
+def prompt_too_much_or_too_little() -> Tuple[bool, Optional[bool]]:
     answer = input().upper()
     if answer == "TOO MUCH":
         return True, True
@@ -67,7 +60,7 @@ def prompt_too_much_or_too_little():
     return False, None
 
 
-def solve_sex_problem(user_name):
+def solve_sex_problem(user_name: str) -> None:
     print("IS YOUR PROBLEM TOO MUCH OR TOO LITTLE?")
     while True:
         valid, too_much = prompt_too_much_or_too_little()
@@ -85,31 +78,31 @@ def solve_sex_problem(user_name):
             print("WITH 'TOO MUCH' OR 'TOO LITTLE'.  WHICH IS IT?")
 
 
-def solve_money_problem(user_name):
+def solve_money_problem(user_name: str) -> None:
     print(f"SORRY, {user_name}, I'M BROKE TOO.  WHY DON'T YOU SELL")
     print("ENCYCLOPEADIAS OR MARRY SOMEONE RICH OR STOP EATING")
     print("SO YOU WON'T NEED SO MUCH MONEY?")
 
 
-def solve_health_problem(user_name):
+def solve_health_problem(user_name: str) -> None:
     print(f"MY ADVICE TO YOU {user_name} IS:")
     print("     1.  TAKE TWO ASPRIN")
     print("     2.  DRINK PLENTY OF FLUIDS (ORANGE JUICE, NOT BEER!)")
     print("     3.  GO TO BED (ALONE)")
 
 
-def solve_job_problem(user_name):
+def solve_job_problem(user_name: str) -> None:
     print(f"I CAN SYMPATHIZE WITH YOU {user_name}.  I HAVE TO WORK")
     print("VERY LONG HOURS FOR NO PAY -- AND SOME OF MY BOSSES")
     print(f"REALLY BEAT ON MY KEYBOARD.  MY ADVICE TO YOU, {user_name},")
     print("IS TO OPEN A RETAIL COMPUTER STORE.  IT'S GREAT FUN.")
 
 
-def alert_unknown_problem_type(user_name, problem_type):
+def alert_unknown_problem_type(user_name: str, problem_type: str) -> None:
     print(f"OH, {user_name}, YOUR ANSWER OF {problem_type} IS GREEK TO ME.")
 
 
-def ask_question_loop(user_name):
+def ask_question_loop(user_name: str) -> None:
     while True:
         problem_type = prompt_for_problems(user_name)
         if problem_type == "SEX":
@@ -137,7 +130,7 @@ def ask_question_loop(user_name):
             print(f"JUST A SIMPLE 'YES' OR 'NO' PLEASE, {user_name}.")
 
 
-def ask_for_fee(user_name):
+def ask_for_fee(user_name: str) -> None:
     print()
     print(f"THAT WILL BE $5.00 FOR THE ADVICE, {user_name}.")
     print("PLEASE LEAVE THE MONEY ON THE TERMINAL.")
@@ -166,26 +159,21 @@ def ask_for_fee(user_name):
             print("PLEASE RESPOND WITH 'YES' or 'NO'.")
 
 
-def unhappy_goodbye(user_name):
+def unhappy_goodbye(user_name: str) -> None:
     print()
     print(f"TAKE A WALK, {user_name}.")
     print()
     print()
 
 
-def happy_goodbye(user_name):
+def happy_goodbye(user_name: str) -> None:
     print(f"NICE MEETING YOU, {user_name}, HAVE A NICE DAY.")
 
 
 def main() -> None:
-    print_with_tab(33, "HELLO")
-    print_with_tab(15, "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    print()
-    print()
-    print()
-    print("HELLO.  MY NAME IS CREATIVE COMPUTER.")
-    print()
-    print()
+    print(" " * 33 + "HELLO")
+    print(" " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print("HELLO.  MY NAME IS CREATIVE COMPUTER.\n\n")
     print("WHAT'S YOUR NAME?")
     user_name = input()
     print()

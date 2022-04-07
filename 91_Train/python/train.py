@@ -6,14 +6,14 @@
 import random
 
 
-def play_game():
+def play_game() -> None:
     """Play one round of the game"""
     car_speed = random.randint(40, 65)
     time_difference = random.randint(5, 20)
     train_speed = random.randint(20, 39)
     print("\nA car travelling", car_speed, "MPH can make a certain trip in")
     print(time_difference, "hours less than a train travelling at", train_speed, "MPH")
-    time_answer = 0
+    time_answer: float = 0
     while time_answer == 0:
         try:
             time_answer = float(input("How long does the trip take by car "))

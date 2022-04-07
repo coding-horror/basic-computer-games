@@ -1,0 +1,17 @@
+[package]
+<<<<<<< HEAD
+name = "rust"
+=======
+name = "stars"
+>>>>>>> 3e27c70ca800f5efbe6bc1a7d180211decf55b7d
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+<<<<<<< HEAD
+rand = "0.8.5"
+=======
+rand = "0.8.3"
+>>>>>>> 3e27c70ca800f5efbe6bc1a7d180211decf55b7d

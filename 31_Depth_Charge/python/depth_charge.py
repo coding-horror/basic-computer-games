@@ -1,13 +1,16 @@
-# Original BASIC version as published in Basic Computer Games (1978)
-# https://www.atariarchives.org/basicgames/showpage.php?page=55
-#
-# Converted to Python by Anson VanDoren in 2021
+"""
+Original BASIC version as published in Basic Computer Games (1978)
+https://www.atariarchives.org/basicgames/showpage.php?page=55
+
+Converted to Python by Anson VanDoren in 2021
+"""
 
 import math
 import random
+from typing import Tuple
 
 
-def show_welcome():
+def show_welcome() -> None:
     # Clear screen. chr(27) is `Esc`, and the control sequence is
     # initiated by Ctrl+[
     # `J` is "Erase in Display" and `2J` means clear the entire screen
@@ -18,14 +21,14 @@ def show_welcome():
     print("Creative Computing  Morristown, New Jersey\n\n".center(45))
 
 
-def get_num_charges():
+def get_num_charges() -> Tuple[int, int]:
     print("Depth Charge game\n")
     while True:
-        search_area = input("Dimensions of search area? ")
+        search_area_str = input("Dimensions of search area? ")
 
         # Make sure the input is an integer
         try:
-            search_area = int(search_area)
+            search_area = int(search_area_str)
             break
         except ValueError:
             print("Must enter an integer number. Please try again...")
@@ -34,16 +37,16 @@ def get_num_charges():
     return search_area, num_charges
 
 
-def ask_for_new_game():
+def ask_for_new_game() -> None:
     answer = input("Another game (Y or N): ")
     if answer.lower().strip()[0] == "y":
-        start_new_game()
+        main()
     else:
         print("OK. Hope you enjoyed yourself")
         exit()
 
 
-def show_shot_result(shot, location):
+def show_shot_result(shot, location) -> None:
     result = "Sonar reports shot was "
     if shot[1] > location[1]:  # y-direction
         result += "north"
@@ -66,23 +69,23 @@ def show_shot_result(shot, location):
     return
 
 
-def get_shot_input():
+def get_shot_input() -> Tuple[int, int, int]:
     while True:
         raw_guess = input("Enter coordinates: ")
         try:
-            x, y, z = raw_guess.split()
+            xyz = raw_guess.split()
         except ValueError:
             print("Please enter coordinates separated by spaces")
             print("Example: 3 2 1")
             continue
         try:
-            x, y, z = (int(num) for num in [x, y, z])
+            x, y, z = (int(num) for num in xyz)
             return x, y, z
         except ValueError:
             print("Please enter whole numbers only")
 
 
-def play_game(search_area, num_charges):
+def play_game(search_area, num_charges) -> None:
     print("\nYou are the captain of the destroyer USS Computer.")
     print("An enemy sub has been causing you trouble. Your")
     print(f"mission is to destroy it. You have {num_charges} shots.")
@@ -111,10 +114,10 @@ def play_game(search_area, num_charges):
     ask_for_new_game()
 
 
-def start_new_game():
+def main() -> None:
     search_area, num_charges = get_num_charges()
     play_game(search_area, num_charges)
 
 
 if __name__ == "__main__":
-    start_new_game()
+    main()
