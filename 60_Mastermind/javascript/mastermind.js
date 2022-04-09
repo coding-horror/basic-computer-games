@@ -343,7 +343,7 @@ async function main()
                     copy_hs();
                     convert_qa();
                     get_number();
-                    if (b1 > b || w1 > w)
+                    if (b1 != b || w1 != w)
                         ia[x] = 0;
                 }
             }
