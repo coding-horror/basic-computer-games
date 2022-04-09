@@ -325,7 +325,7 @@ fn main() {
                     if *b.1 { //filter out ones we already know aren't possible
                         let mut tmp_guess = GUESS::new(CODE::new_from_int(b.0, num_colors, num_positions));
                         tmp_guess.evaluate(&answer);
-                        if blacks > tmp_guess.blacks || whites > tmp_guess.whites { //if number of blacks/whites is different, set it to false
+                        if blacks != tmp_guess.blacks || whites != tmp_guess.whites { //if number of blacks/whites is different, set it to false
                             *b.1 = false;
                         }
                     }
