@@ -3,7 +3,7 @@ using Games.Common.Randomness;
 
 namespace Basketball.Plays;
 
-internal class BallContest : Play
+internal class BallContest
 {
     private readonly float _probability;
     private readonly string _messageFormat;
@@ -11,7 +11,6 @@ internal class BallContest : Play
     private readonly IRandom _random;
 
     internal BallContest(float probability, string messageFormat, IReadWrite io, IRandom random)
-        : base(io, random)
     {
         _io = io;
         _probability = probability;
@@ -19,7 +18,7 @@ internal class BallContest : Play
         _random = random;
     }
 
-    internal override bool Resolve(Scoreboard scoreboard)
+    internal bool Resolve(Scoreboard scoreboard)
     {
         var winner = _random.NextFloat() <= _probability ? scoreboard.Home : scoreboard.Visitors;
         scoreboard.Offense = winner;

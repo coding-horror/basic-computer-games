@@ -26,35 +26,35 @@ internal class HomeTeamPlay : Play
 
         if (_random.NextFloat() >= 0.5f && _clock.IsFullTime) { return true; }
 
-        if (shot == 0)
+        if (shot is null)
         {
             _defense.Set(_io.ReadDefense("Your new defensive alignment is"));
             _io.WriteLine();
             return false;
         }
 
-        if (shot == 1 || shot == 2)
+        if (shot is JumpShot jumpShot)
         {
             if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
-            ResolveJumpShot(scoreboard);
+            Resolve(jumpShot, scoreboard);
         }
 
-        _playContinues |= shot >= 3;
+        _playContinues |= shot is not JumpShot;
 
         while (_playContinues)
         {
             if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
-            ResolveLayupOrSetShot(scoreboard, shot);
+            Resolve(shot, scoreboard);
         }
 
         return false;
     }
 
-    private void ResolveJumpShot(Scoreboard scoreboard)
+    private void Resolve(JumpShot shot, Scoreboard scoreboard)
     {
         var ballContest = new BallContest(0.5f, "Shot is blocked.  Ball controlled by {0}.", _io, _random);
 
-        Resolve("Jump shot", _defense / 8)
+        Resolve(shot.ToString(), _defense / 8)
             .Do(0.341f, () => scoreboard.AddBasket("Shot is good"))
             .Or(0.682f, () => ResolveShotOffTarget(scoreboard))
             .Or(0.782f, () => ballContest.Resolve(scoreboard))
@@ -62,11 +62,11 @@ internal class HomeTeamPlay : Play
             .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
     }
 
-    private void ResolveLayupOrSetShot(Scoreboard scoreboard, int shot)
+    private void Resolve(Shot shot, Scoreboard scoreboard)
     {
         _playContinues = false;
 
-        Resolve(shot == 3 ? "Lay up." : "Set shot.", _defense / 7)
+        Resolve(shot.ToString(), _defense / 7)
             .Do(0.4f, () => scoreboard.AddBasket("Shot is good.  Two points."))
             .Or(0.7f, () => ResolveShotOffTheRim(scoreboard))
             .Or(0.875f, () => ResolveFreeThrows(scoreboard, "Shooter fouled.  Two shots."))

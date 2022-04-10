@@ -23,42 +23,37 @@ internal class VisitingTeamPlay : Play
         if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
 
         _io.WriteLine();
-        var shot = _random.NextFloat(1, 3.5f);
+        var shot = _random.NextShot();
 
-        if (shot <= 2)
+        if (shot is JumpShot jumpShot)
         {
-            ResolveJumpShot(scoreboard);
+            Resolve(jumpShot, scoreboard);
+            _io.WriteLine();
         }
 
-        _playContinues |= shot > 2;
+        _playContinues |= shot is not JumpShot;
 
         while (_playContinues)
         {
-            ResolveLayupOrSetShot(scoreboard, shot);
+            _playContinues = false;
+            Resolve(shot, scoreboard);
+            _io.WriteLine();
         }
 
         return false;
     }
 
-    private void ResolveJumpShot(Scoreboard scoreboard)
-    {
-        Resolve("Jump shot.", _defense / 8)
+    private void Resolve(JumpShot shot, Scoreboard scoreboard) =>
+        Resolve(shot.ToString(), _defense / 8)
             .Do(0.35f, () => scoreboard.AddBasket("Shot is good."))
             .Or(0.75f, () => ResolveBadShot(scoreboard, "Shot is off the rim.", _defense * 6))
             .Or(0.9f, () => ResolveFreeThrows(scoreboard, "Player fouled.  Two shots."))
             .Or(() => _io.WriteLine("Offensive foul.  Dartmouth's ball."));
-        _io.WriteLine();
-    }
 
-    private void ResolveLayupOrSetShot(Scoreboard scoreboard, float shot)
-    {
-        _playContinues = false;
-
-        Resolve(shot > 3 ? "Set shot." : "Lay up.", _defense / 7)
+    private void Resolve(Shot shot, Scoreboard scoreboard) =>
+        Resolve(shot.ToString(), _defense / 7)
             .Do(0.413f, () => scoreboard.AddBasket("Shot is good."))
             .Or(() => ResolveBadShot(scoreboard, "Shot is missed.", 6 / _defense));
-        _io.WriteLine();
-    }
 
     void ResolveBadShot(Scoreboard scoreboard, string message, float defenseFactor) =>
         Resolve(message, defenseFactor)

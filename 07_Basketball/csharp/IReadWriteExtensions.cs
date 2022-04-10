@@ -13,16 +13,22 @@ internal static class IReadWriteExtensions
         }
     }
 
-    public static int ReadShot(this IReadWrite io, string prompt)
+    private static bool TryReadInteger(this IReadWrite io, string prompt, out int value)
+    {
+        var floatValue = io.ReadNumber(prompt);
+        value = (int)floatValue;
+        return value == floatValue;
+    }
+
+    public static Shot? ReadShot(this IReadWrite io, string prompt)
     {
         while (true)
         {
-            var shot = io.ReadNumber(prompt);
-            if ((int)shot == shot && shot >= 0 && shot <= 4) { return (int)shot; }
+            if (io.TryReadInteger(prompt, out var value) && Shot.TryGet(value, out var shot))
+            {
+                return shot;
+            }
             io.Write("Incorrect answer.  Retype it. ");
         }
     }
-
-    public static void WriteScore(this IReadWrite io, string format, string opponent, Dictionary<string ,int> score) =>
-        io.WriteLine(format, "Dartmouth", score["Dartmouth"], opponent, score[opponent]);
 }
