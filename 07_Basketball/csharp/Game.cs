@@ -7,58 +7,67 @@ namespace Basketball;
 
 internal class Game
 {
+    private readonly Clock _clock;
+    private readonly Scoreboard _scoreboard;
     private readonly TextIO _io;
     private readonly IRandom _random;
 
-    public Game(TextIO io, IRandom random)
+    private Game(Clock clock, Scoreboard scoreboard, TextIO io, IRandom random)
     {
+        _clock = clock;
+        _scoreboard = scoreboard;
         _io = io;
         _random = random;
     }
 
-    public void Play()
+    public static Game Create(TextIO io, IRandom random)
     {
-        _io.Write(Resource.Streams.Introduction);
+        io.Write(Resource.Streams.Introduction);
 
-        var defense = new Defense(_io.ReadDefense("Your starting defense will be"));
-        var clock = new Clock(_io);
+        var defense = new Defense(io.ReadDefense("Your starting defense will be"));
+        var clock = new Clock(io);
 
-        _io.WriteLine();
+        io.WriteLine();
 
         var scoreboard = new Scoreboard(
-            new Team("Dartmouth", new HomeTeamPlay(_io, _random, clock, defense)),
-            new Team(_io.ReadString("Choose your opponent"), new VisitingTeamPlay(_io, _random, clock, defense)),
-            _io);
+            new Team("Dartmouth", new HomeTeamPlay(io, random, clock, defense)),
+            new Team(io.ReadString("Choose your opponent"), new VisitingTeamPlay(io, random, clock, defense)),
+            io);
 
+        return new Game(clock, scoreboard, io, random);
+    }
+
+    public void Play()
+    {
         var ballContest = new BallContest(0.4f, "{0} controls the tap", _io, _random);
 
         while (true)
         {
             _io.WriteLine("Center jump");
-            ballContest.Resolve(scoreboard);
+            ballContest.Resolve(_scoreboard);
 
             _io.WriteLine();
 
             while (true)
             {
-                var isFullTime = scoreboard.Offense.ResolvePlay(scoreboard);
-                if (isFullTime && IsGameOver(scoreboard, clock)) { return; }
-                if (clock.IsHalfTime) { break; }
+                var isFullTime = _scoreboard.Offense.ResolvePlay(_scoreboard);
+                if (isFullTime && IsGameOver()) { return; }
+                if (_clock.IsHalfTime) { break; }
             }
         }
     }
 
-    private bool IsGameOver(Scoreboard scoreboard, Clock clock)
+    private bool IsGameOver()
     {
         _io.WriteLine();
-        if (scoreboard.ScoresAreEqual)
+        if (_scoreboard.ScoresAreEqual)
         {
-            scoreboard.Display(Resource.Formats.EndOfSecondHalf);
-            clock.StartOvertime();
+            _scoreboard.Display(Resource.Formats.EndOfSecondHalf);
+            _clock.StartOvertime();
             return false;
         }
 
-        scoreboard.Display(Resource.Formats.EndOfGame);
+        _scoreboard.Display(Resource.Formats.EndOfGame);
         return true;
     }
 }
