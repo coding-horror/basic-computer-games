@@ -12,27 +12,41 @@ internal struct Probably
 {
     private readonly float _defenseFactor;
     private readonly IRandom _random;
-    private readonly bool _done;
+    private readonly bool? _result;
 
-    internal Probably(float defenseFactor, IRandom random, bool done = false)
+    internal Probably(float defenseFactor, IRandom random, bool? result = false)
     {
         _defenseFactor = defenseFactor;
         _random = random;
-        _done = done;
+        _result = result;
     }
 
-    public Probably Do(float probability, Action action)
-    {
-        if (!_done && _random.NextFloat() <= probability * _defenseFactor)
-        {
-            action.Invoke();
-            return new Probably(_defenseFactor, _random, true);
-        }
+    public Probably Do(float probability, Func<bool?> action) =>
+        ShouldResolveAction(probability)
+            ? new Probably(_defenseFactor, _random, _result | Resolve(action))
+            : this;
 
-        return this;
-    }
+    public Probably Do(float probability, Action action) =>
+        ShouldResolveAction(probability)
+            ? new Probably(_defenseFactor, _random, _result | Resolve(action))
+            : this;
 
     public Probably Or(float probability, Action action) => Do(probability, action);
 
-    public Probably Or(Action action) => Do(1f, action);
+    public Probably Or(float probability, Func<bool?> action) => Do(probability, action);
+
+    public bool Or(Action action) => _result | Resolve(action) ?? false;
+
+    private bool? Resolve(Action action)
+    {
+        action.Invoke();
+        return _result;
+    }
+
+    private bool? Resolve(Func<bool?> action) => action.Invoke();
+
+    private readonly bool ShouldResolveAction(float probability)
+    {
+        return _result is null && _random.NextFloat() <= probability * _defenseFactor;
+    }
 }

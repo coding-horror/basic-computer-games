@@ -10,7 +10,6 @@ internal class HomeTeamPlay : Play
     private readonly Clock _clock;
     private readonly Defense _defense;
     private readonly BallContest _ballContest;
-    private bool _playContinues;
 
     public HomeTeamPlay(TextIO io, IRandom random, Clock clock, Defense defense)
         : base(io, random, clock)
@@ -38,24 +37,20 @@ internal class HomeTeamPlay : Play
         if (shot is JumpShot jumpShot)
         {
             if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
-            Resolve(jumpShot, scoreboard);
+            if (!Resolve(jumpShot, scoreboard)) { return false; }
         }
 
-        // Either the above resolution has transition to a lay-up
-        // or the chosen shot is not a jump shot and has not been resolved yet.
-        _playContinues |= shot is not JumpShot;
-
-        while (_playContinues)
+        do
         {
-            _playContinues = false;
             if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
-            Resolve(shot, scoreboard);
-        }
+        } while (Resolve(shot, scoreboard));
 
         return false;
     }
 
-    private void Resolve(JumpShot shot, Scoreboard scoreboard) =>
+    // The Resolve* methods resolve the probabilistic outcome of the current game state.
+    // They return true if the Home team should continue the play and attempt a layup, false otherwise.
+    private bool Resolve(JumpShot shot, Scoreboard scoreboard) =>
         Resolve(shot.ToString(), _defense / 8)
             .Do(0.341f, () => scoreboard.AddBasket("Shot is good"))
             .Or(0.682f, () => ResolveShotOffTarget(scoreboard))
@@ -63,7 +58,7 @@ internal class HomeTeamPlay : Play
             .Or(0.843f, () => ResolveFreeThrows(scoreboard, "Shooter is fouled.  Two shots."))
             .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
 
-    private void Resolve(Shot shot, Scoreboard scoreboard) =>
+    private bool Resolve(Shot shot, Scoreboard scoreboard) =>
         Resolve(shot.ToString(), _defense / 7)
             .Do(0.4f, () => scoreboard.AddBasket("Shot is good.  Two points."))
             .Or(0.7f, () => ResolveShotOffTheRim(scoreboard))
@@ -71,14 +66,14 @@ internal class HomeTeamPlay : Play
             .Or(0.925f, () => scoreboard.Turnover($"Shot blocked. {scoreboard.Visitors}'s ball."))
             .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
 
-    private void ResolveShotOffTarget(Scoreboard scoreboard) =>
+    private bool ResolveShotOffTarget(Scoreboard scoreboard) =>
         Resolve("Shot is off target", 6 / _defense)
             .Do(0.45f, () => ResolveHomeRebound(scoreboard, ResolvePossibleSteal))
             .Or(() => scoreboard.Turnover($"Rebound to {scoreboard.Visitors}"));
 
-    private void ResolveHomeRebound(Scoreboard scoreboard, Action<Scoreboard> endOfPlayAction) =>
+    private bool ResolveHomeRebound(Scoreboard scoreboard, Action<Scoreboard> endOfPlayAction) =>
         Resolve($"{scoreboard.Home} controls the rebound.")
-            .Do(0.4f, () => _playContinues = true)
+            .Do(0.4f, () => true)
             .Or(() => endOfPlayAction.Invoke(scoreboard));
     private void ResolvePossibleSteal(Scoreboard scoreboard)
     {
