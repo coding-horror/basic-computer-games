@@ -2,6 +2,12 @@ using Games.Common.Randomness;
 
 namespace Basketball;
 
+/// <summary>
+/// Supports a chain of actions to be performed based on various probabilities. The original game code gets a new
+/// random number for each probability check. Evaluating a set of probabilities against a single random number is
+/// much simpler, but yield a very different outcome distribution. The purpose of this class is to simplify the code
+/// to for the original probabilistic branch decisions.
+/// </summary>
 internal struct Probably
 {
     private readonly float _defenseFactor;

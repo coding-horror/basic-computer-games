@@ -9,6 +9,7 @@ internal class HomeTeamPlay : Play
     private readonly IRandom _random;
     private readonly Clock _clock;
     private readonly Defense _defense;
+    private readonly BallContest _ballContest;
     private bool _playContinues;
 
     public HomeTeamPlay(TextIO io, IRandom random, Clock clock, Defense defense)
@@ -18,6 +19,7 @@ internal class HomeTeamPlay : Play
         _random = random;
         _clock = clock;
         _defense = defense;
+        _ballContest = new BallContest(0.5f, "Shot is blocked.  Ball controlled by {0}.", _io, _random);
     }
 
     internal override bool Resolve(Scoreboard scoreboard)
@@ -39,10 +41,13 @@ internal class HomeTeamPlay : Play
             Resolve(jumpShot, scoreboard);
         }
 
+        // Either the above resolution has transition to a lay-up
+        // or the chosen shot is not a jump shot and has not been resolved yet.
         _playContinues |= shot is not JumpShot;
 
         while (_playContinues)
         {
+            _playContinues = false;
             if (ClockIncrementsToHalfTime(scoreboard)) { return false; }
             Resolve(shot, scoreboard);
         }
@@ -50,29 +55,21 @@ internal class HomeTeamPlay : Play
         return false;
     }
 
-    private void Resolve(JumpShot shot, Scoreboard scoreboard)
-    {
-        var ballContest = new BallContest(0.5f, "Shot is blocked.  Ball controlled by {0}.", _io, _random);
-
+    private void Resolve(JumpShot shot, Scoreboard scoreboard) =>
         Resolve(shot.ToString(), _defense / 8)
             .Do(0.341f, () => scoreboard.AddBasket("Shot is good"))
             .Or(0.682f, () => ResolveShotOffTarget(scoreboard))
-            .Or(0.782f, () => ballContest.Resolve(scoreboard))
+            .Or(0.782f, () => _ballContest.Resolve(scoreboard))
             .Or(0.843f, () => ResolveFreeThrows(scoreboard, "Shooter is fouled.  Two shots."))
             .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
-    }
 
-    private void Resolve(Shot shot, Scoreboard scoreboard)
-    {
-        _playContinues = false;
-
+    private void Resolve(Shot shot, Scoreboard scoreboard) =>
         Resolve(shot.ToString(), _defense / 7)
             .Do(0.4f, () => scoreboard.AddBasket("Shot is good.  Two points."))
             .Or(0.7f, () => ResolveShotOffTheRim(scoreboard))
             .Or(0.875f, () => ResolveFreeThrows(scoreboard, "Shooter fouled.  Two shots."))
             .Or(0.925f, () => scoreboard.Turnover($"Shot blocked. {scoreboard.Visitors}'s ball."))
             .Or(() => scoreboard.Turnover($"Charging foul.  {scoreboard.Home} loses ball."));
-    }
 
     private void ResolveShotOffTarget(Scoreboard scoreboard) =>
         Resolve("Shot is off target", 6 / _defense)

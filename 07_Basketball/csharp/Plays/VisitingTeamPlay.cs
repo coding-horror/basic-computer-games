@@ -31,6 +31,8 @@ internal class VisitingTeamPlay : Play
             _io.WriteLine();
         }
 
+        // Either the above resolution has transition to a lay-up
+        // or the chosen shot is not a jump shot and has not been resolved yet.
         _playContinues |= shot is not JumpShot;
 
         while (_playContinues)
@@ -48,7 +50,7 @@ internal class VisitingTeamPlay : Play
             .Do(0.35f, () => scoreboard.AddBasket("Shot is good."))
             .Or(0.75f, () => ResolveBadShot(scoreboard, "Shot is off the rim.", _defense * 6))
             .Or(0.9f, () => ResolveFreeThrows(scoreboard, "Player fouled.  Two shots."))
-            .Or(() => _io.WriteLine("Offensive foul.  Dartmouth's ball."));
+            .Or(() => _io.WriteLine($"Offensive foul.  {scoreboard.Home}'s ball."));
 
     private void Resolve(Shot shot, Scoreboard scoreboard) =>
         Resolve(shot.ToString(), _defense / 7)
@@ -57,7 +59,7 @@ internal class VisitingTeamPlay : Play
 
     void ResolveBadShot(Scoreboard scoreboard, string message, float defenseFactor) =>
         Resolve(message, defenseFactor)
-            .Do(0.5f, () => scoreboard.Turnover("Dartmouth controls the rebound."))
+            .Do(0.5f, () => scoreboard.Turnover($"{scoreboard.Home} controls the rebound."))
             .Or(() => ResolveVisitorsRebound(scoreboard));
 
     void ResolveVisitorsRebound(Scoreboard scoreboard)
@@ -67,7 +69,7 @@ internal class VisitingTeamPlay : Play
         {
             _io.WriteLine();
             scoreboard.Turnover();
-            scoreboard.AddBasket("Ball stolen.  Easy lay up for Dartmouth.");
+            scoreboard.AddBasket($"Ball stolen.  Easy lay up for {scoreboard.Home}.");
             return;
         }
 
