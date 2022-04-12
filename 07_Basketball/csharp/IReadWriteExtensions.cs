@@ -13,11 +13,11 @@ internal static class IReadWriteExtensions
         }
     }
 
-    private static bool TryReadInteger(this IReadWrite io, string prompt, out int value)
+    private static bool TryReadInteger(this IReadWrite io, string prompt, out int intValue)
     {
         var floatValue = io.ReadNumber(prompt);
-        value = (int)floatValue;
-        return value == floatValue;
+        intValue = (int)floatValue;
+        return intValue == floatValue;
     }
 
     public static Shot? ReadShot(this IReadWrite io, string prompt)

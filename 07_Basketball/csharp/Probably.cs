@@ -14,28 +14,28 @@ internal struct Probably
     private readonly IRandom _random;
     private readonly bool? _result;
 
-    internal Probably(float defenseFactor, IRandom random, bool? result = false)
+    internal Probably(float defenseFactor, IRandom random, bool? result = null)
     {
         _defenseFactor = defenseFactor;
         _random = random;
         _result = result;
     }
 
-    public Probably Do(float probability, Func<bool?> action) =>
-        ShouldResolveAction(probability)
-            ? new Probably(_defenseFactor, _random, _result | Resolve(action))
-            : this;
-
     public Probably Do(float probability, Action action) =>
         ShouldResolveAction(probability)
-            ? new Probably(_defenseFactor, _random, _result | Resolve(action))
+            ? new Probably(_defenseFactor, _random, Resolve(action) ?? false)
+            : this;
+
+    public Probably Do(float probability, Func<bool> action) =>
+        ShouldResolveAction(probability)
+            ? new Probably(_defenseFactor, _random, Resolve(action) ?? false)
             : this;
 
     public Probably Or(float probability, Action action) => Do(probability, action);
 
-    public Probably Or(float probability, Func<bool?> action) => Do(probability, action);
+    public Probably Or(float probability, Func<bool> action) => Do(probability, action);
 
-    public bool Or(Action action) => _result | Resolve(action) ?? false;
+    public bool Or(Action action) => _result ?? Resolve(action) ?? false;
 
     private bool? Resolve(Action action)
     {
@@ -43,10 +43,8 @@ internal struct Probably
         return _result;
     }
 
-    private bool? Resolve(Func<bool?> action) => action.Invoke();
+    private bool? Resolve(Func<bool> action) => action.Invoke();
 
-    private readonly bool ShouldResolveAction(float probability)
-    {
-        return _result is null && _random.NextFloat() <= probability * _defenseFactor;
-    }
+    private readonly bool ShouldResolveAction(float probability) =>
+        _result is null && _random.NextFloat() <= probability * _defenseFactor;
 }
