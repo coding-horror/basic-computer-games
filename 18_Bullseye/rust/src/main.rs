@@ -18,14 +18,13 @@ fn main() {
     welcome();
 
     // set up other configuration
-    let config = Config::new(&args).unwrap_or_else(|err| {
+    let mut config = Config::new().unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {}", err);
-        lib::help();
         process::exit(1);
     });
 
     // run the program
-    if let Err(e) = lib::run(config) {
+    if let Err(e) = lib::run(&mut config) {
         eprintln!("Application Error: {}", e); //use the eprintln! macro to output to standard error
         process::exit(1); //exit the program with an error code
     }
