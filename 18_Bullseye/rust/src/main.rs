@@ -1,8 +1,7 @@
 /*
     The responsibilities that remain in the main function after separating concerns
     should be limited to the following:
- - Calling the command line logic with the argument values
- - Setting up any other configuration
+ - Setting up any configuration
  - Calling a run function in lib.rs
  - Handling the error if run returns an error
 */
@@ -19,7 +18,7 @@ fn main() {
 
     // set up other configuration
     let mut config = Config::new().unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
+        eprintln!("Problem configuring program: {}", err);
         process::exit(1);
     });
 
