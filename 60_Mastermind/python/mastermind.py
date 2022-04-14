@@ -165,7 +165,7 @@ def main() -> None:
                                 human_readable_possibility, human_readable_guess
                             )
                             print(comparison)
-                            if (blacks > comparison[1]) or (whites > comparison[2]):  # type: ignore
+                            if ((blacks != comparison[1]) or (whites != comparison[2])):  # type: ignore
                                 all_possibilities[i] = 0
             if not turn_over:  # COMPUTER DID NOT GUESS
                 print("I USED UP ALL MY MOVES!")

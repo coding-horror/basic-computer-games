@@ -152,7 +152,7 @@ namespace Game
                         if (isCandidate[index])
                         {
                             var (candidateBlacks, candidateWhites) = guess.Compare(candidate);
-                            if (blacks > candidateBlacks || whites > candidateWhites)
+                            if (blacks != candidateBlacks || whites != candidateWhites)
                                 isCandidate[index] = false;
                         }
                     }
