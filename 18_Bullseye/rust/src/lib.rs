@@ -2,7 +2,7 @@
  lib.rs contains all the logic of the program
 */
 
-use std::{error::Error, fmt::Display, str::FromStr, io};
+use std::{error::Error, fmt::Display, str::FromStr, io::{self, Write}};
 
 use rand::Rng;
 
@@ -155,7 +155,9 @@ fn get_string_from_user_input(prompt: &str) -> Result<String, Box<dyn Error>> {
     let mut raw_input = String::new();
 
     //print prompt
-    println!("{} ", prompt);
+    print!("{}", prompt);
+    //make sure it's printed before getting input
+    io::stdout().flush().unwrap();
 
     //read user input from standard input, and store it to raw_input, then return it or an error as needed
     raw_input.clear(); //clear input
