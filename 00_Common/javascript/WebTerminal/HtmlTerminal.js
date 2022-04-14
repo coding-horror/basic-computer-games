@@ -26,7 +26,7 @@ class HtmlTerminal {
    * @private
    * @type {HTMLElement}
    */
-  #$prompt = undefined;
+  #$prompt;
   
   /**
    * Constructor
@@ -45,13 +45,18 @@ class HtmlTerminal {
     this.$output.classList.add('terminal');
 
     // Create a prompt element.
-    // This element gets added if input is needed
-    this.#$prompt = document.createElement("span");
+    // This element gets added if input is needed.
+    this.#$prompt = document.createElement("input");
     this.#$prompt.setAttribute("id", "prompt");
-    this.#$prompt.innerText = "";
+    this.#$prompt.setAttribute("type", "text");
+    this.#$prompt.setAttribute("length", "50");
+    this.#$prompt.addEventListener("keydown", this.#handleKey.bind(this));
 
-    //TODO: this handler shouls be only on the propt element and only active if cursor is visible
-    document.addEventListener("keyup", this.#handleKey.bind(this));
+    // Force focus on the promt on each click.
+    // This is needed for mobile support.
+    document.body.addEventListener('click', () => {
+      this.#$prompt.focus();
+    });
   }
 
   /**
@@ -77,37 +82,16 @@ class HtmlTerminal {
    * @param {*} e 
    */
   #handleKey(e) {
-    // if no input-callback is defined 
+    // if no input-callback is defined just return
     if (!this.#inputCallback) {
       return;
     }
 
-    if (e.keyCode === 13 /* ENTER */) {
-      // create a new line with the text input and remove the prompt
-      const text = this.#$prompt.innerText;
-      this.write(text + "\n");
-      this.#$prompt.innerText = "";
+    if (e.keyCode == 13) {
+      const text = this.#$prompt.value;
+      this.#$prompt.value = '';
       this.#$prompt.remove();
-
-      // return the inputed text
-      this.#inputCallback(text);
-      
-      // remove the callback and the key handler
-      this.#inputCallback = undefined;
-    } else if (e.keyCode === 8 /* BACKSPACE */) {
-      this.#$prompt.innerText = this.#$prompt.innerText.slice(0, -1);
-    } else if (
-      e.keyCode == 16 // "Shift"
-      || e.keyCode == 17 // "Control"
-      || e.keyCode == 20 // "CapsLock"
-      || !e.key.match(/^[a-z0-9!"§#$%&'()*+,.\/:;<=>?@\[\] ^_`{|}~-]$/i)
-    ) {
-      // ignore non-visible characters
-      return e;
-    } else {
-      this.#$prompt.innerHtml = '';
-      const key = e.shiftKey ? e.key.toUpperCase() : e.key;
-      this.#$prompt.innerText =  this.#$prompt.innerText + key;
+      this.#inputCallback(text + '\n');
     }
   }
 
@@ -122,7 +106,7 @@ class HtmlTerminal {
   }
 
   /**
-   * TODO:
+   * Create a new div and add html content.
    * 
    * @public
    * @param {*} htmlContent 
@@ -189,7 +173,8 @@ class HtmlTerminal {
    */
   input(callback) {
     // show prompt with a blinking prompt
-    this.$output.appendChild(this.#$prompt);
     this.#inputCallback = callback;
+    this.$output.appendChild(this.#$prompt);
+    this.#$prompt.focus();
   }
 }

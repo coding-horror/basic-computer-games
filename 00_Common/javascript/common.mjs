@@ -57,9 +57,13 @@ export async function input(message = '') {
 			 * First we need to convert it into a string. */
 			const data = input.toString();
 
+			/* add input to terminal
+			 * The data should end with a newline! */
+			process.stdout.write(data);
+
 			/* The result fo onData is a string ending with an `\n`.
 			 * We just need the actual content so let's remove the newline at the end: */
-			const content = data[data.length] === '\n' ? data.slice(0, -1) : data;
+			const content = data.endsWith('\n') ? data.slice(0, -1) : data;
 
 			resolve(content);
 		});
