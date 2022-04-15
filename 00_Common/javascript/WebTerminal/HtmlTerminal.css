@@ -17,7 +17,7 @@
 
     overflow-y: scroll;
     width: 100%;
-    max-width: 60rem;
+    max-width: 640px;
     margin: 0 auto;
 }
 
@@ -32,10 +32,7 @@
     padding: 0;
 }
 
-/* The "terminal" has one "prompt" element.
- * This prompt is not any kind of input, but just a simple <span> 
- * with an id "prompt" and a 
- */
+/* The "terminal" has one "prompt" input-element. */
 @keyframes prompt-blink {
     100% {
         opacity: 0;
@@ -56,6 +53,15 @@
     animation: prompt-blink 1s steps(2) infinite;
     width: 0.75rem;
     opacity: 1;
+}
+.terminal input#prompt {
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    outline: none;
+    caret-color: var(--text);
+    color: var(--text);
+    font: var(--terminal-font);
 }
 
 
