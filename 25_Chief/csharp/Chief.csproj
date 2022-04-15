@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources/*.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\00_Common\dotnet\Games.Common\Games.Common.csproj" />
   </ItemGroup>
 </Project>

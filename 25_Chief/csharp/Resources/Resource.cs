@@ -36,6 +36,6 @@ internal static class Resource
     }
 
     private static Stream GetStream([CallerMemberName] string? name = null)
-        => Assembly.GetExecutingAssembly().GetManifestResourceStream($"Stars.Resources.{name}.txt")
+        => Assembly.GetExecutingAssembly().GetManifestResourceStream($"Chief.Resources.{name}.txt")
             ?? throw new ArgumentException($"Resource stream {name} does not exist", nameof(name));
 }
