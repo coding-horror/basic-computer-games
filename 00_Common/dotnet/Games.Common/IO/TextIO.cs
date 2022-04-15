@@ -93,7 +93,7 @@ public class TextIO : IReadWrite
     internal string ReadLine(string prompt)
     {
         Write(prompt + "? ");
-        return _input.ReadLine();
+        return _input.ReadLine() ?? throw new InsufficientInputException();
     }
 
     public void Write(string value) => _output.Write(value);
