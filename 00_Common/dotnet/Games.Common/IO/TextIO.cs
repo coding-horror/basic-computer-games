@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Games.Common.Numbers;
 
 namespace Games.Common.IO;
 
@@ -100,9 +97,9 @@ public class TextIO : IReadWrite
 
     public void WriteLine(string value = "") => _output.WriteLine(value);
 
-    public void Write(float value) => _output.Write(GetString(value));
+    public void Write(Number value) => _output.Write(value.ToString());
 
-    public void WriteLine(float value) => _output.WriteLine(GetString(value));
+    public void WriteLine(Number value) => _output.WriteLine(value.ToString());
 
     public void Write(object value) => _output.Write(value.ToString());
 

@@ -1,4 +1,3 @@
-using Chief.Resources;
 using static Chief.Resources.Resource;
 
 namespace Chief;

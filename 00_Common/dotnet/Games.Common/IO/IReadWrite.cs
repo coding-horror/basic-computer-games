@@ -1,5 +1,4 @@
-using System;
-using System.IO;
+using Games.Common.Numbers;
 
 namespace Games.Common.IO;
 
@@ -76,17 +75,16 @@ public interface IReadWrite
     void WriteLine(string message = "");
 
     /// <summary>
-    /// Writes a <see cref="float" /> to output, formatted per the BASIC interpreter, with leading and trailing spaces.
+    /// Writes a <see cref="Number" /> to output.
     /// </summary>
-    /// <param name="value">The <see cref="float" /> to be written.</param>
-    void Write(float value);
+    /// <param name="value">The <see cref="Number" /> to be written.</param>
+    void Write(Number value);
 
     /// <summary>
-    /// Writes a <see cref="float" /> to output, formatted per the BASIC interpreter, with leading and trailing spaces,
-    /// followed by a new-line.
+    /// Writes a <see cref="Number" /> to output.
     /// </summary>
-    /// <param name="value">The <see cref="float" /> to be written.</param>
-    void WriteLine(float value);
+    /// <param name="value">The <see cref="Number" /> to be written.</param>
+    void WriteLine(Number value);
 
     /// <summary>
     /// Writes an <see cref="object" /> to output.
