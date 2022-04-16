@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using Games.Common.Numbers;
 
 namespace Games.Common.IO;
 
@@ -93,16 +90,16 @@ public class TextIO : IReadWrite
     internal string ReadLine(string prompt)
     {
         Write(prompt + "? ");
-        return _input.ReadLine();
+        return _input.ReadLine() ?? throw new InsufficientInputException();
     }
 
     public void Write(string value) => _output.Write(value);
 
     public void WriteLine(string value = "") => _output.WriteLine(value);
 
-    public void Write(float value) => _output.Write(GetString(value));
+    public void Write(Number value) => _output.Write(value.ToString());
 
-    public void WriteLine(float value) => _output.WriteLine(GetString(value));
+    public void WriteLine(Number value) => _output.WriteLine(value.ToString());
 
     public void Write(object value) => _output.Write(value.ToString());
 

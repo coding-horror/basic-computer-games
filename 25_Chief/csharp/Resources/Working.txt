@@ -1,0 +1,5 @@
+So you think you're so smart, eh?
+Now watch.
+{0}plus 3 equals{1}. This divided by 5 equals{2};
+This times by 8 equals{3}. If we divide by 5 and add 5,
+we get{4}, which, minus 1, equals{5}.

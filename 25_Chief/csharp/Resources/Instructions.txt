@@ -1,0 +1,2 @@
+ Take a number and add 3. Divide this number by 5 and
+multiply by 8. Divide by 5 and add the same. Subtract 1.
