@@ -14,17 +14,11 @@ internal class Game
 
     internal void Play()
     {
-        _io.Write(Streams.Title);
-        if (!_io.ReadYes(Prompts.Ready))
-        {
-            _io.Write(Streams.ShutUp);
-        }
-
-        _io.Write(Streams.Instructions);
+        DoIntroduction();
 
         var result = _io.ReadNumber(Prompts.Answer);
 
-        if (_io.ReadYes(Formats.Bet, (result + 1 - 5) * 5 / 8 * 5 - 3))
+        if (_io.ReadYes(Formats.Bet, Math.CalculateOriginal(result)))
         {
             _io.Write(Streams.Bye);
             return;
@@ -32,7 +26,7 @@ internal class Game
 
         var original = _io.ReadNumber(Prompts.Original);
 
-        _io.WriteLine(Formats.Working, GetStepValues(original).ToArray());
+        _io.WriteLine(Math.ShowWorking(original));
 
         if (_io.ReadYes(Prompts.Believe))
         {
@@ -43,13 +37,14 @@ internal class Game
         _io.Write(Streams.Lightning);
     }
 
-    private static IEnumerable<object> GetStepValues(float value)
+    private void DoIntroduction()
     {
-        yield return value;
-        yield return value += 3;
-        yield return value /= 5;
-        yield return value *= 8;
-        yield return value = value / 5 + 5;
-        yield return value - 1;
+        _io.Write(Streams.Title);
+        if (!_io.ReadYes(Prompts.Ready))
+        {
+            _io.Write(Streams.ShutUp);
+        }
+
+        _io.Write(Streams.Instructions);
     }
 }
