@@ -1,0 +1,8 @@
+This simulation lets you specify the initial velocity
+of a ball thrown straight up, and the coefficient of
+elasticity of the ball.  Please use a decimal fraction
+coefficiency (less than 1).
+
+You also specify the time increment to be used in
+'strobing' the ball's flight (try .1 initially).
+
