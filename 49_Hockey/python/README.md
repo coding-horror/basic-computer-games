@@ -16,7 +16,7 @@ Variables:
 Functions:
 
 * REM: A line comment
-
+* `INT(2*RND(X))+1`: X is constantly 1. That means that this expression is simpler expressed as `randint(1,2)`
 
 ---
 
