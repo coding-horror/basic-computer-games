@@ -55,7 +55,7 @@ def get_data(checklist_orig: List[str], root_dir: str = "..") -> List[List[str]]
                 # it's a new dir
                 strings_done.append(checklist)
                 checklist = [
-                    f"{split_dir[1]:<30}",
+                    f"{f'[{split_dir[1]}](../{split_dir[1]})':<30}",
                 ] + empty_boxes[1:]
                 prev_game = split_dir[1]
         elif (
@@ -83,6 +83,19 @@ def write_file(path: str, languages: List[str], strings_done: List[List[str]]) -
         map(lambda l: " | ".join(l) + "\n", sorted(strings_done, key=lambda x: x[0]))
     )
     write_string += "".join(sorted_strings)
+    write_string += f"{dashes}\n"
+    language_indices = range(1, len(languages) + 1)
+    nb_games = len(strings_done)
+    write_string += (
+        f"{f'Sum of {nb_games}':<30} | "
+        + " | ".join(
+            [
+                f"{sum(row[lang] == '✅' for row in strings_done)}"
+                for lang in language_indices
+            ]
+        )
+        + "\n"
+    )
 
     with open(path, "w", encoding="utf-8") as f:
         f.write(write_string)
