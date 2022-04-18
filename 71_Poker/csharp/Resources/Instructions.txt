@@ -1,0 +1,5 @@
+Welcome to the casino.  We each have $200.
+I will open the betting before the draw; you open after.
+To fold bet 0; to check bet .5.
+Enough talk -- Let's get down to business.
+
