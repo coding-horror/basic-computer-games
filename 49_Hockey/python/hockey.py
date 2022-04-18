@@ -100,14 +100,11 @@ def make_shot(
             break
     if controlling_team == 1:
         print(team_a.players[player_index[j - 1]])
-        g = player_index[j - 1]
-        g1 = 0
-        g2 = 0
     else:
         print(team_b.players[player_index[j - 1]])
-        g2 = 0
-        g2 = 0
-        g = player_index[j - 1]
+    g = player_index[j - 1]
+    g1 = 0
+    g2 = 0
     if s == 1:
         print(" LET'S A BOOMER GO FROM THE RED LINE!!\n")  # line 400
         z = 10
@@ -201,14 +198,12 @@ def team1_action(
             team_a.players[player_index[j - 2]]
             + " GIVES AND GOEST WITH "
             + team_a.players[player_index[j - 1]]
-            + "\n"
         )
         print("PRETTY PASSING!\n")
         print(
             team_a.players[player_index[j - 1]]
             + " DROPS IT TO "
             + team_a.players[player_index[j - 4]]
-            + "\n"
         )
         scoring_player = player_index[j - 4]
         goal_assistant1 = player_index[j - 1]
@@ -240,13 +235,11 @@ def team2_action(
             team_b.players[player_index[j - 2]]
             + " GIVES OFF TO "
             + team_b.players[player_index[j - 1]]
-            + "\n"
         )
         print(
             team_b.players[player_index[j - 1]]
             + " DROPS TO "
             + team_b.players[player_index[j - 3]]
-            + "\n"
         )
         scoring_player = player_index[j - 3]
         goal_assistant1 = player_index[j - 1]
@@ -382,43 +375,24 @@ def handle_hit(
         else:
             print(f"{team_b.name}: {team_b.score}\t{team_a.name}: {team_a.score}\n")
         if controlling_team == 1:
-            print("GOAL SCORED BY: " + team_a.players[goal_player] + "\n")
-            if goal_assistant1 != 0:
-                if goal_assistant2 != 0:
-                    print(
-                        " ASSISTED BY: "
-                        + team_a.players[goal_assistant1]
-                        + " AND "
-                        + team_a.players[goal_assistant2]
-                        + "\n"
-                    )
-                else:
-                    print(" ASSISTED BY: " + team_a.players[goal_assistant1] + "\n")
-            else:
-                print(" UNASSISTED.\n")
-            team_a.goals[goal_player] += 1
-            team_a.assists[goal_assistant1] += 1
-            team_a.assists[goal_assistant2] += 1
-            # 1540
+            team = team_a
         else:
-            print("GOAL SCORED BY: " + team_b.players[goal_player] + "\n")
-            if goal_assistant1 != 0:
-                if goal_assistant2 != 0:
-                    print(
-                        " ASSISTED BY: "
-                        + team_b.players[goal_assistant1]
-                        + " AND "
-                        + team_b.players[goal_assistant2]
-                        + "\n"
-                    )
-                else:
-                    print(" ASSISTED BY: " + team_b.players[goal_assistant1] + "\n")
+            team = team_b
+        print("GOAL SCORED BY: " + team.players[goal_player] + "\n")
+        if goal_assistant1 != 0:
+            if goal_assistant2 != 0:
+                print(
+                    f" ASSISTED BY: {team.players[goal_assistant1]}"
+                    f" AND {team.players[goal_assistant2]}"
+                )
             else:
-                print(" UNASSISTED.\n")
-            team_b.goals[goal_player] += 1
-            team_b.assists[goal_assistant1] += 1
-            team_b.assists[goal_assistant2] += 1
-            # 1540
+                print(f" ASSISTED BY: {team.players[goal_assistant1]}")
+            team.assists[goal_assistant1] += 1
+            team.assists[goal_assistant2] += 1
+        else:
+            print(" UNASSISTED.\n")
+        team.goals[goal_player] += 1
+
     return hit_area
 
 
