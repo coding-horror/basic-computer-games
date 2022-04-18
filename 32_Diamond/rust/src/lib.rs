@@ -105,7 +105,12 @@ fn print_diamonds(width:isize, count:isize) {
         step = -2;
     } 
     //separate line by LINE_WIDTH or whatever
-    println!("{}", line);
+    while line.len() >= LINE_WIDTH as usize {
+        let line_parts = line.split_at(LINE_WIDTH as usize);
+        println!("{}",line_parts.0);
+
+        line = String::from(line_parts.1);
+    }
 
 
 }
