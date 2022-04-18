@@ -4,14 +4,14 @@
 
 use std::{error::Error, fmt::Display, str::FromStr, io::{self, Write}};
 
-const LINE_WIDTH:usize = 60;
+const LINE_WIDTH: isize = 60;
 const EDGE: &str = "C";
-const EDGE_WIDTH: usize = 2;
+const EDGE_WIDTH: isize = 2;
 const FILL: &str = "!";
 
 /// handles setup for the game
 pub struct Config {
-    diamond_size: usize,
+    diamond_size: isize,
 }
 impl Config {
     /// creates and returns a new Config from user input
@@ -26,7 +26,11 @@ impl Config {
         //input looop
         config.diamond_size = loop {
             match get_number_from_input("TYPE IN AN ODD NUMBER BETWEEN 5 AND 21 ", 5, 21) {
-                Ok(num) => break num,
+                Ok(num) => {
+                    //ensure num is odd
+                    if num%2 == 0 {continue;}
+                    else {break num;}
+                },
                 Err(e) => {
                     eprintln!("{}",e);
                     continue;
@@ -43,48 +47,72 @@ impl Config {
 pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     //DATA
     let diamonds = LINE_WIDTH / config.diamond_size;
-    let mut line: String;
 
-    //print out diamond
-    for i in 1..diamonds {
-        let mut x = 1;
-        let mut y = config.diamond_size.clone();
-        for n in x..y {
-            line = String::new();
-
-            //add (diamond size - n) / 2 spaces
-            line += &n_spaces( (config.diamond_size - n) / 2);
-
-            for m in 1..diamonds {
-                let mut c = 1;
-
-                for a in 1..n {
-                    if c > EDGE_WIDTH {
-                        line += FILL;
-                    } else {
-                        line += EDGE;
-                        c = c + 1;
-                    }
-                }
-
-                //53
-            }
-
-
-
-
-            //print line
-            println!("{}", line);
-        }
-    }
-
+    //print out diamonds
+    print_diamonds(config.diamond_size, diamonds);
 
     //return to main
     Ok(())
 }
 
+/// prints a diamond
+fn print_diamonds(width:isize, count:isize) {
+    //DATA
+    let mut line: String = String::new();
+/*
+8 FOR L=1 TO width
+    10 X=1:Y=count:Z=2
+    20 FOR N=X TO Y STEP Z
+        25 PRINT TAB((count-N)/2);
+        28 FOR M=1 TO width
+            29 C=1
+            30 FOR A=1 TO N
+               32 IF C>LEN(A$) THEN PRINT "!";:GOTO 50
+               34 PRINT MID$(A$,C,1);
+               36 C=C+1
+            50 NEXT A
+            53 IF M=width THEN 60
+            55 PRINT TAB(count*M+(count-N)/2);
+        56 NEXT M
+        60 PRINT
+    70 NEXT N (n+=Z)
+    83 IF X<>1 THEN 95
+    85 X=count-2:Y=1:Z=-2
+    90 GOTO 20
+95 NEXT L
+99 END
+*/
+    let mut x = 1;
+    let mut y = count;
+    let mut step = 2;
+    let mut l  =1;
+    while l < width {
+        let mut n = x;
+        while n <= y {
+            line+= &n_spaces( (count-n) / 2);
+            for m in 1..width {
+                for c in 1..n {
+                    line += if c > EDGE_WIDTH {FILL} else {EDGE};
+                }
+                
+                line += &n_spaces(count*m+(count-n)/2);
+            }
+            n += step;
+        }
+        if x != 1 {l+=1;continue;}
+        x = count - 2;
+        y = 1;
+        step = -2;
+    } 
+    //separate line by LINE_WIDTH or whatever
+    println!("{}", line);
+
+
+}
+
+
 /// returns n spaces in a string
-fn n_spaces(n:usize) -> String {
+fn n_spaces(n:isize) -> String {
     let mut output = String::new();
 
     for _i in 0..n {
