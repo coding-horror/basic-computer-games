@@ -20,7 +20,7 @@ impl Config {
         println!("FOR A PRETTY DIAMOND PATTERN,");
         //input looop
         config.diamond_size = loop {
-            match get_number_from_input("TYPE IN AN ODD NUMBER BETWEEN 5 AND 21 ", 5, 21) {
+            match get_number_from_input("TYPE IN AN ODD NUMBER BETWEEN 5 AND 31 ", 5, 31) {
                 Ok(num) => {
                     //ensure num is odd
                     if num%2 == 0 {continue;}
@@ -43,20 +43,22 @@ pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     //DATA
     let line_width: isize = 60;
     let padding: char = 'C';
-    let pixel_width: isize = 2;
+    let pixel_width: isize = 1;
     let filling: char = '!';
     let border: char = '#';
 
+    let width_of_full_diamonds_in_line = (line_width/config.diamond_size) * config.diamond_size;
+
     //print top border
-    println!("{}", n_chars(line_width+2, border));
+    println!("{}", n_chars(width_of_full_diamonds_in_line+2, border));
 
     //print out diamonds
-    for row in 0..(line_width/pixel_width) {
+    for row in 0..width_of_full_diamonds_in_line {
         print_diamond_line(config.diamond_size, row, line_width, pixel_width, padding, filling, border);
     }
 
     //print bottom border
-    println!("{}", n_chars(line_width+2, border));
+    println!("{}", n_chars(width_of_full_diamonds_in_line+2, border));
 
     //return to main
     Ok(())
