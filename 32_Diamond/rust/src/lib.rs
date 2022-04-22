@@ -4,11 +4,6 @@
 
 use std::{error::Error, fmt::Display, str::FromStr, io::{self, Write}};
 
-const LINE_WIDTH: isize = 60;
-const EDGE: &str = "C";
-const EDGE_WIDTH: isize = 2;
-const FILL: &str = "!";
-
 /// handles setup for the game
 pub struct Config {
     diamond_size: isize,
@@ -46,82 +41,65 @@ impl Config {
 /// run the program
 pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
     //DATA
-    let diamonds = LINE_WIDTH / config.diamond_size;
+    let line_width: isize = 60;
+    let padding: char = 'C';
+    let pixel_width: isize = 2;
+    let filling: char = '!';
+    let border: char = '#';
+
+    //print top border
+    println!("{}", n_chars(line_width+2, border));
 
     //print out diamonds
-    print_diamonds(config.diamond_size, diamonds);
+    for row in 0..(line_width/pixel_width) {
+        print_diamond_line(config.diamond_size, row, line_width, pixel_width, padding, filling, border);
+    }
+
+    //print bottom border
+    println!("{}", n_chars(line_width+2, border));
 
     //return to main
     Ok(())
 }
 
-/// prints a diamond
-fn print_diamonds(width:isize, count:isize) {
+/// prints the next line of diamonds
+fn print_diamond_line(diamond_width: isize,row: isize,  line_width:isize, pixel_width:isize, padding:char, filling:char, border:char) {
     //DATA
-    let mut line: String = String::new();
-/*
-8 FOR L=1 TO width
-    10 X=1:Y=count:Z=2
-    20 FOR N=X TO Y STEP Z
-        25 PRINT TAB((count-N)/2);
-        28 FOR M=1 TO width
-            29 C=1
-            30 FOR A=1 TO N
-               32 IF C>LEN(A$) THEN PRINT "!";:GOTO 50
-               34 PRINT MID$(A$,C,1);
-               36 C=C+1
-            50 NEXT A
-            53 IF M=width THEN 60
-            55 PRINT TAB(count*M+(count-N)/2);
-        56 NEXT M
-        60 PRINT
-    70 NEXT N (n+=Z)
-    83 IF X<>1 THEN 95
-    85 X=count-2:Y=1:Z=-2
-    90 GOTO 20
-95 NEXT L
-99 END
-*/
-    let mut x = 1;
-    let mut y = count;
-    let mut step = 2;
-    let mut l  =1;
-    while l < width {
-        let mut n = x;
-        while n <= y {
-            line+= &n_spaces( (count-n) / 2);
-            for m in 1..width {
-                for c in 1..n {
-                    line += if c > EDGE_WIDTH {FILL} else {EDGE};
-                }
-                
-                line += &n_spaces(count*m+(count-n)/2);
-            }
-            n += step;
-        }
-        if x != 1 {l+=1;continue;}
-        x = count - 2;
-        y = 1;
-        step = -2;
-    } 
-    //separate line by LINE_WIDTH or whatever
-    while line.len() >= LINE_WIDTH as usize {
-        let line_parts = line.split_at(LINE_WIDTH as usize);
-        println!("{}",line_parts.0);
+    let diamonds_per_row = (line_width/pixel_width) / diamond_width;
+    //let row = row % (diamonds_per_row - 1);
+    let padding_amount; //total amount of padding before and after the filling of each diamond in this row
+    let filling_amount; //amount of "diamond" in each diamond in this row
 
-        line = String::from(line_parts.1);
+    //calculate padding
+    padding_amount = (2 * ( (row%(diamond_width-1)) - (diamond_width/2))).abs();
+    //calculate filling
+    filling_amount = -padding_amount + diamond_width;
+    
+    //print border before every row
+    print!("{}", border);
+
+    //for every diamond in this row:
+    for _diamond in 0..diamonds_per_row {
+        //print leading padding
+        print!("{}", n_chars( pixel_width * padding_amount/2, padding ) );
+        //print filling
+        print!("{}", n_chars( pixel_width * filling_amount  , filling ) );
+        //print trailing padding
+        print!("{}", n_chars( pixel_width * padding_amount/2, padding ) );
     }
 
-
+    //print border after every row
+    print!("{}", border);
+    //new line
+    println!("");
 }
 
-
-/// returns n spaces in a string
-fn n_spaces(n:isize) -> String {
+/// returns n of the passed character, put into a string
+fn n_chars(n:isize, character: char) -> String {
     let mut output = String::new();
 
     for _i in 0..n {
-        output += " ";
+        output.push(character);
     }
 
     output
