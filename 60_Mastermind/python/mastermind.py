@@ -46,7 +46,7 @@ def main() -> None:
         print("Guess my combination ...")
         answer = int(possibilities * random.random())
         numeric_answer = [-1] * num_positions
-        for _ in range(0, answer):
+        for _ in range(0, answer + 1):
             numeric_answer = get_possibility(numeric_answer)
         # human_readable_answer = make_human_readable(numeric_answer, color_letters)
         while num_moves < 10 and not turn_over:
