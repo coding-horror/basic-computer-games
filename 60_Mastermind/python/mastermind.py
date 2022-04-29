@@ -132,7 +132,7 @@ def main() -> None:
                     inconsistent_information = True
                 else:
                     numeric_guess = [-1] * num_positions
-                    for _ in range(0, guess):
+                    for _ in range(0, guess+1):
                         numeric_guess = get_possibility(numeric_guess)
                     human_readable_guess = make_human_readable(
                         numeric_guess, color_letters
@@ -154,7 +154,7 @@ def main() -> None:
                             if all_possibilities[i] == 0:  # already ruled out
                                 continue
                             numeric_possibility = [-1] * num_positions
-                            for _ in range(0, i):
+                            for _ in range(0, i+1):
                                 numeric_possibility = get_possibility(
                                     numeric_possibility
                                 )
