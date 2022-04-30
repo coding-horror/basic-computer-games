@@ -1,27 +1,20 @@
 import random
 import sys
-from typing import List, Union
-
-# Global variables
-colors = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
-color_letters = "BWRGOYPT"
-num_positions = 0
-num_colors: int = 100
-human_score = 0
-computer_score = 0
+from typing import List, Union, Tuple
 
 
-def main() -> None:
-    global colors, color_letters, num_positions, num_colors, human_score, computer_score
-
-    num_colors = 100
-    human_score = 0
-    computer_score = 0
-
+#  define some parameters for the game which should not be modified.
+def setup_game() -> Tuple[int, int, int, int]:
+    print("""    
+                                  MASTERMIND
+                   CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY
+                   
+                   
+                   
+    """)
     # get user inputs for game conditions
-    print("Mastermind")
-    print("Creative Computing Morristown, New Jersey")
-    while num_colors > 8:
+    num_colors: int = len(COLOR_LETTERS)+1
+    while num_colors > len(COLOR_LETTERS):
         num_colors = int(input("Number of colors (max 8): "))  # C9 in BASIC
     num_positions = int(input("Number of positions: "))  # P9 in BASIC
     num_rounds = int(input("Number of rounds: "))  # R9 in BASIC
@@ -31,17 +24,30 @@ def main() -> None:
     print("Color\tLetter")
     print("=====\t======")
     for element in range(0, num_colors):
-        print(f"{colors[element]}\t{colors[element][0]}")
+        print(f"{COLORS[element]}\t{COLORS[element][0]}")
+    return num_colors, num_positions, num_rounds, possibilities
+
+
+# Global variables
+COLORS = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
+COLOR_LETTERS = "BWRGOYPT"
+NUM_COLORS, NUM_POSITIONS, NUM_ROUNDS, POSSIBILITIES = setup_game()
+human_score = 0
+computer_score = 0
+
+
+def main() -> None:
+    global human_score, computer_score
 
     current_round = 1
 
-    while current_round <= num_rounds:
+    while current_round <= NUM_ROUNDS:
         print(f"Round number {current_round}")
         num_moves = 1
         guesses: List[List[Union[str, int]]] = []
         turn_over = False
         print("Guess my combination ...")
-        secret_combination = int(possibilities * random.random())
+        secret_combination = int(POSSIBILITIES * random.random())
         answer = possibility_to_color_code(secret_combination)
         while num_moves < 10 and not turn_over:
             print(f"Move # {num_moves} Guess : ")
@@ -52,7 +58,7 @@ def main() -> None:
                 print(f"QUITTER! MY COMBINATION WAS: {answer}")
                 print("GOOD BYE")
                 quit()
-            elif len(user_command) != num_positions:  # 410
+            elif len(user_command) != NUM_POSITIONS:  # 410
                 print("BAD NUMBER OF POSITIONS")
             else:
                 invalid_letters = get_invalid_letters(user_command)
@@ -60,7 +66,7 @@ def main() -> None:
                     print(f"INVALID GUESS: {invalid_letters}")
                 else:
                     guess_results = compare_two_positions(user_command, answer)
-                    if guess_results[1] == num_positions:  # correct guess
+                    if guess_results[1] == NUM_POSITIONS:  # correct guess
                         turn_over = True
                         print(f"You guessed it in {num_moves} moves!")
                         human_score = human_score + num_moves
@@ -83,20 +89,20 @@ def main() -> None:
         turn_over = False
         inconsistent_information = False
         while not turn_over and not inconsistent_information:
-            all_possibilities = [1] * possibilities
+            all_possibilities = [1] * POSSIBILITIES
             num_moves = 1
             inconsistent_information = False
             print("NOW I GUESS. THINK OF A COMBINATION.")
             input("HIT RETURN WHEN READY: ")
             while num_moves < 10 and not turn_over and not inconsistent_information:
                 found_guess = False
-                possible_guess = int(possibilities * random.random())
+                possible_guess = int(POSSIBILITIES * random.random())
                 if (
                     all_possibilities[possible_guess] == 1
                 ):  # random guess is possible, use it
                     found_guess = True
                 else:
-                    for i in range(possible_guess + 1, possibilities):
+                    for i in range(possible_guess + 1, POSSIBILITIES):
                         if all_possibilities[i] == 1:
                             found_guess = True
                             possible_guess = i
@@ -120,14 +126,14 @@ def main() -> None:
                     ).split(",")
                     blacks = int(blacks_str)
                     whites = int(whites_str)
-                    if blacks == num_positions:  # Correct guess
+                    if blacks == NUM_POSITIONS:  # Correct guess
                         print(f"I GOT IT IN {num_moves} MOVES")
                         turn_over = True
                         computer_score = computer_score + num_moves
                         print_score()
                     else:
                         num_moves += 1
-                        for i in range(0, possibilities):
+                        for i in range(0, POSSIBILITIES):
                             if all_possibilities[i] == 0:  # already ruled out
                                 continue
                             possible_answer = possibility_to_color_code(i)
@@ -149,7 +155,7 @@ def main() -> None:
 # 470
 def get_invalid_letters(user_command) -> str:
     """Makes sure player input consists of valid colors for selected game configuration."""
-    valid_colors = color_letters[:num_colors]
+    valid_colors = COLOR_LETTERS[:NUM_COLORS]
     invalid_letters = ""
     for letter in user_command:
         if letter not in valid_colors:
@@ -166,20 +172,21 @@ def print_board(guesses) -> None:
         print(f"{idx + 1}\t{guess[0]}\t{guess[1]}     {guess[2]}")
 
 
-# Accepts a (decimal) number representing one permutation in the realm of possible
-# secret codes and returns the color code mapped to that permutation.
-# This algorithm is essentially converting a decimal  number to a number with a
-# base of #num_colors, where each color code letter represents a digit in
-# that #num_colors base.
+
 def possibility_to_color_code(possibility: int) -> str:
+    """Accepts a (decimal) number representing one permutation in the realm of
+    possible secret codes and returns the color code mapped to that permutation.
+    This algorithm is essentially converting a decimal  number to a number with
+    a base of #num_colors, where each color code letter represents a digit in
+    that #num_colors base."""
     color_code: str = ""
-    pos: int = num_colors ** num_positions  # start with total possibilities
+    pos: int = NUM_COLORS ** NUM_POSITIONS  # start with total possibilities
     remainder = possibility
-    for i in range(num_positions-1, 0, -1):  # process all but the last digit
-        pos = pos // num_colors
-        color_code += color_letters[remainder // pos]
+    for i in range(NUM_POSITIONS - 1, 0, -1):  # process all but the last digit
+        pos = pos // NUM_COLORS
+        color_code += COLOR_LETTERS[remainder // pos]
         remainder = remainder % pos
-    color_code += color_letters[remainder]  # last digit is what remains
+    color_code += COLOR_LETTERS[remainder]  # last digit is what remains
     return color_code
 
 
@@ -191,9 +198,9 @@ def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
     blacks = 0
     whites = 0
     initial_guess = guess
-    for pos in range(0, num_positions):
+    for pos in range(0, NUM_POSITIONS):
         if guess[pos] != answer[pos]:
-            for pos2 in range(0, num_positions):
+            for pos2 in range(0, NUM_POSITIONS):
                 if not (
                     guess[pos] != answer[pos2] or guess[pos2] == answer[pos2]
                 ):  # correct color but not correct place
