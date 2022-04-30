@@ -26,4 +26,18 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+As per the analysis in
+
+https://forums.raspberrypi.com/viewtopic.php?p=1997950#p1997950
+
+see also the earlier post
+
+https://forums.raspberrypi.com/viewtopic.php?p=1994961#p1994961
+
+in the same thread, there is a typo in later published versions of the SALVO Basic source code compared to the original edition of 101 Basic Computer Games.
+
+This typo is interesting because it causes the program to play by a much weaker strategy while exhibiting no other obvious side effects. I would recommend changing the line 3970 in the Basic program back to the original
+
+`3970 K(R,S)=K(R,S)+E(U)-2*INT(H(U)+.5)`
+
+and to change the JavaScript program accordingly.
