@@ -6,7 +6,7 @@ from typing import List, Union
 colors = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
 color_letters = "BWRGOYPT"
 num_positions = 0
-num_colors = 100
+num_colors: int = 100
 human_score = 0
 computer_score = 0
 
@@ -44,21 +44,16 @@ def main() -> None:
         guesses: List[List[Union[str, int]]] = []
         turn_over = False
         print("Guess my combination ...")
-        answer = int(possibilities * random.random())
+        secret_combination = int(possibilities * random.random())
+        answer = possibility_to_color_code(secret_combination)
         numeric_answer = [-1] * num_positions
-        for _ in range(0, answer + 1):
-            numeric_answer = get_possibility(numeric_answer)
-        # human_readable_answer = make_human_readable(numeric_answer, color_letters)
         while num_moves < 10 and not turn_over:
             print(f"Move # {num_moves} Guess : ")
             user_command = input("Guess ")
             if user_command == "BOARD":
                 print_board(guesses)  # 2000
             elif user_command == "QUIT":  # 2500
-                human_readable_answer = make_human_readable(
-                    numeric_answer, color_letters
-                )
-                print(f"QUITTER! MY COMBINATION WAS: {human_readable_answer}")
+                print(f"QUITTER! MY COMBINATION WAS: {answer}")
                 print("GOOD BYE")
                 quit()
             elif len(user_command) != num_positions:  # 410
@@ -68,9 +63,7 @@ def main() -> None:
                 if invalid_letters > "":
                     print(f"INVALID GUESS: {invalid_letters}")
                 else:
-                    guess_results = compare_two_positions(
-                        user_command, make_human_readable(numeric_answer, color_letters)
-                    )
+                    guess_results = compare_two_positions(user_command, answer)
                     print(f"Results: {guess_results}")
                     if guess_results[1] == num_positions:  # correct guess
                         turn_over = True
@@ -87,11 +80,7 @@ def main() -> None:
                         guesses.append(guess_results)
         if not turn_over:  # RAN OUT OF MOVES
             print("YOU RAN OUT OF MOVES! THAT'S ALL YOU GET!")
-            print(
-                "THE ACTUAL COMBINATION WAS: {}".format(
-                    make_human_readable(numeric_answer, color_letters)
-                )
-            )
+            print(f"THE ACTUAL COMBINATION WAS: {answer}")
             human_score = human_score + num_moves
             print_score(computer_score, human_score)
 
@@ -107,23 +96,22 @@ def main() -> None:
             input("HIT RETURN WHEN READY: ")
             while num_moves < 10 and not turn_over and not inconsistent_information:
                 found_guess = False
-                computer_guess = int(possibilities * random.random())
+                possible_guess = int(possibilities * random.random())
                 if (
-                    all_possibilities[computer_guess] == 1
+                    all_possibilities[possible_guess] == 1
                 ):  # random guess is possible, use it
                     found_guess = True
-                    guess = computer_guess
                 else:
-                    for i in range(computer_guess, possibilities):
+                    for i in range(possible_guess + 1, possibilities):
                         if all_possibilities[i] == 1:
                             found_guess = True
-                            guess = i
+                            possible_guess = i
                             break
                     if not found_guess:
-                        for i in range(0, computer_guess):
+                        for i in range(0, possible_guess):
                             if all_possibilities[i] == 1:
                                 found_guess = True
-                                guess = i
+                                possible_guess = i
                                 break
                 if not found_guess:  # inconsistent info from user
                     print("YOU HAVE GIVEN ME INCONSISTENT INFORMATION.")
@@ -131,13 +119,8 @@ def main() -> None:
                     turn_over = True
                     inconsistent_information = True
                 else:
-                    numeric_guess = [-1] * num_positions
-                    for _ in range(0, guess+1):
-                        numeric_guess = get_possibility(numeric_guess)
-                    human_readable_guess = make_human_readable(
-                        numeric_guess, color_letters
-                    )
-                    print(f"My guess is: {human_readable_guess}")
+                    computer_guess = possibility_to_color_code(possible_guess)
+                    print(f"My guess is: {computer_guess}")
                     blacks_str, whites_str = input(
                         "ENTER BLACKS, WHITES (e.g. 1,2): "
                     ).split(",")
@@ -153,19 +136,12 @@ def main() -> None:
                         for i in range(0, possibilities):
                             if all_possibilities[i] == 0:  # already ruled out
                                 continue
-                            numeric_possibility = [-1] * num_positions
-                            for _ in range(0, i+1):
-                                numeric_possibility = get_possibility(
-                                    numeric_possibility
-                                )
-                            human_readable_possibility = make_human_readable(
-                                numeric_possibility, color_letters
-                            )  # 4000
+                            possible_answer = possibility_to_color_code(i)
                             comparison = compare_two_positions(
-                                human_readable_possibility, human_readable_guess
+                                possible_answer, computer_guess
                             )
                             print(comparison)
-                            if ((blacks != comparison[1]) or (whites != comparison[2])):  # type: ignore
+                            if (blacks != comparison[1]) or (whites != comparison[2]):  # type: ignore
                                 all_possibilities[i] = 0
             if not turn_over:  # COMPUTER DID NOT GUESS
                 print("I USED UP ALL MY MOVES!")
@@ -197,27 +173,21 @@ def print_board(guesses) -> None:
         print(f"{idx + 1}\t{guess[0]}\t{guess[1]}     {guess[2]}")
 
 
-# 3500
-# Easily the place for most optimization, since they generate every possibility
-# every time when checking for potential solutions
-# From the original article:
-#    "We did try a version that kept an actual list of all possible combinations
-#    (as a string array), which was significantly faster than this versionn but
-#    which ate tremendous amounts of memory."
-def get_possibility(possibility) -> List[int]:
-    # print(possibility)
-    if possibility[0] > -1:  # 3530
-        current_position = 0  # Python arrays are zero-indexed
-        while True:
-            if possibility[current_position] < num_colors - 1:  # zero-index again
-                possibility[current_position] += 1
-                return possibility
-            else:
-                possibility[current_position] = 0
-                current_position += 1
-    else:  # 3524
-        possibility = [0] * num_positions
-    return possibility
+# Accepts a (decimal) number representing one permutation in the realm of possible
+# secret codes and returns the color code mapped to that permutation.
+# This algorithm is essentially converting a decimal  number to a number with a
+# base of #num_colors, where each color code letter represents a digit in
+# that #num_colors base.
+def possibility_to_color_code(possibility: int) -> str:
+    color_code: str = ""
+    pos: int = num_colors ** num_positions  # start with total possibilities
+    remainder = possibility
+    for i in range(num_positions-1, 0, -1):  # process all but the last digit
+        pos = pos // num_colors
+        color_code += color_letters[remainder // pos]
+        remainder = remainder % pos
+    color_code += color_letters[remainder]  # last digit is what remains
+    return color_code
 
 
 # 4500
@@ -256,15 +226,6 @@ def print_score(computer_score, human_score, is_final_score: bool = False) -> No
         print("SCORE:")
     print(f"     COMPUTER {computer_score}")
     print(f"     HUMAN    {human_score}")
-
-
-# 4000, 5500, 6000 subroutines are all identical
-def make_human_readable(num: List[int], color_letters) -> str:
-    """Make the numeric representation of a position human readable."""
-    retval = ""
-    for i in range(0, len(num)):
-        retval = retval + color_letters[int(num[i])]
-    return retval
 
 
 if __name__ == "__main__":
