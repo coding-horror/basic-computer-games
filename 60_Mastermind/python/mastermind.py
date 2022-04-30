@@ -13,8 +13,6 @@ computer_score = 0
 
 def main() -> None:
     global colors, color_letters, num_positions, num_colors, human_score, computer_score
-    colors = ["BLACK", "WHITE", "RED", "GREEN", "ORANGE", "YELLOW", "PURPLE", "TAN"]
-    color_letters = "BWRGOYPT"
 
     num_colors = 100
     human_score = 0
@@ -28,7 +26,6 @@ def main() -> None:
     num_positions = int(input("Number of positions: "))  # P9 in BASIC
     num_rounds = int(input("Number of rounds: "))  # R9 in BASIC
     possibilities = num_colors**num_positions
-    all_possibilities = [1] * possibilities
 
     print(f"Number of possibilities {possibilities}")
     print("Color\tLetter")
@@ -46,7 +43,6 @@ def main() -> None:
         print("Guess my combination ...")
         secret_combination = int(possibilities * random.random())
         answer = possibility_to_color_code(secret_combination)
-        numeric_answer = [-1] * num_positions
         while num_moves < 10 and not turn_over:
             print(f"Move # {num_moves} Guess : ")
             user_command = input("Guess ")
@@ -64,12 +60,11 @@ def main() -> None:
                     print(f"INVALID GUESS: {invalid_letters}")
                 else:
                     guess_results = compare_two_positions(user_command, answer)
-                    print(f"Results: {guess_results}")
                     if guess_results[1] == num_positions:  # correct guess
                         turn_over = True
                         print(f"You guessed it in {num_moves} moves!")
                         human_score = human_score + num_moves
-                        print_score(computer_score, human_score)
+                        print_score()
                     else:
                         print(
                             "You have {} blacks and {} whites".format(
@@ -82,10 +77,9 @@ def main() -> None:
             print("YOU RAN OUT OF MOVES! THAT'S ALL YOU GET!")
             print(f"THE ACTUAL COMBINATION WAS: {answer}")
             human_score = human_score + num_moves
-            print_score(computer_score, human_score)
+            print_score()
 
         # COMPUTER TURN
-        guesses = []
         turn_over = False
         inconsistent_information = False
         while not turn_over and not inconsistent_information:
@@ -130,7 +124,7 @@ def main() -> None:
                         print(f"I GOT IT IN {num_moves} MOVES")
                         turn_over = True
                         computer_score = computer_score + num_moves
-                        print_score(computer_score, human_score)
+                        print_score()
                     else:
                         num_moves += 1
                         for i in range(0, possibilities):
@@ -140,16 +134,15 @@ def main() -> None:
                             comparison = compare_two_positions(
                                 possible_answer, computer_guess
                             )
-                            print(comparison)
-                            if (blacks != comparison[1]) or (whites != comparison[2]):  # type: ignore
+                            if (blacks != comparison[1]) or (whites != comparison[2]):
                                 all_possibilities[i] = 0
             if not turn_over:  # COMPUTER DID NOT GUESS
                 print("I USED UP ALL MY MOVES!")
                 print("I GUESS MY CPU IS JUST HAVING AN OFF DAY.")
                 computer_score = computer_score + num_moves
-                print_score(computer_score, human_score)
+                print_score()
         current_round += 1
-    print_score(computer_score, human_score, is_final_score=True)
+    print_score(is_final_score=True)
     sys.exit()
 
 
@@ -192,7 +185,8 @@ def possibility_to_color_code(possibility: int) -> str:
 
 # 4500
 def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
-    """Returns blacks (correct color and position) and whites (correct color only) for candidate position (guess) versus reference position (answer)."""
+    """Returns blacks (correct color and position) and whites (correct color
+    only) for candidate position (guess) versus reference position (answer)."""
     increment = 0
     blacks = 0
     whites = 0
@@ -204,20 +198,20 @@ def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
                     guess[pos] != answer[pos2] or guess[pos2] == answer[pos2]
                 ):  # correct color but not correct place
                     whites = whites + 1
-                    answer = answer[:pos2] + chr(increment) + answer[pos2 + 1 :]
-                    guess = guess[:pos] + chr(increment + 1) + guess[pos + 1 :]
+                    answer = answer[:pos2] + chr(increment) + answer[pos2 + 1:]
+                    guess = guess[:pos] + chr(increment + 1) + guess[pos + 1:]
                     increment = increment + 2
         else:  # correct color and placement
             blacks = blacks + 1
             # THIS IS DEVIOUSLY CLEVER
-            guess = guess[:pos] + chr(increment + 1) + guess[pos + 1 :]
-            answer = answer[:pos] + chr(increment) + answer[pos + 1 :]
+            guess = guess[:pos] + chr(increment + 1) + guess[pos + 1:]
+            answer = answer[:pos] + chr(increment) + answer[pos + 1:]
             increment = increment + 2
     return [initial_guess, blacks, whites]
 
 
 # 5000 + logic from 1160
-def print_score(computer_score, human_score, is_final_score: bool = False) -> None:
+def print_score(is_final_score: bool = False) -> None:
     """Print score after each turn ends, including final score at end of game."""
     if is_final_score:
         print("GAME OVER")
