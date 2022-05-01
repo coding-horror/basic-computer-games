@@ -1,5 +1,5 @@
 [package]
-name = "Mastermind"
+name = "mastermind"
 version = "0.1.0"
 edition = "2021"
 

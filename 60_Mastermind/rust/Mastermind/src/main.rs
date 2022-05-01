@@ -378,7 +378,6 @@ fn print_board(guesses: &Vec<GUESS>) {
     for guess in guesses.iter().enumerate() {
         println!("{}\t{}\t\t{}\t{}", guess.0,guess.1.code._as_human_readible_chars(),guess.1.blacks,guess.1.whites);
     }
-
 }
 
 /**
