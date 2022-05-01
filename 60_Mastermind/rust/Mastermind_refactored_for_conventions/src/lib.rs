@@ -32,7 +32,7 @@ impl Config {
 
         //get data from user input
         //input loop
-        loop {match get_number_from_input("NUMBER OF COLORS", 2, COLORS.len()) {
+        loop {match get_number_from_input("NUMBER OF COLORS: ", 2, COLORS.len()) {
             Ok(num) => {
                 config.num_colors = num;
                 break;
@@ -40,7 +40,7 @@ impl Config {
             Err(e) => eprintln!("{}",e),
         }}
         //input loop
-        loop {match get_number_from_input("NUMBER OF POSITIONS", 2, 10) {
+        loop {match get_number_from_input("NUMBER OF POSITIONS: ", 2, 10) {
             Ok(num) => {
                 config.num_positions = num;
                 break;
@@ -48,7 +48,7 @@ impl Config {
             Err(e) => eprintln!("{}",e),
         }}
         //input loop
-        loop {match get_number_from_input("NUMBER OF ROUNDS", 1, 10) {
+        loop {match get_number_from_input("NUMBER OF ROUNDS: ", 1, 10) {
             Ok(num) => {
                 config.num_rounds = num;
                 break;
@@ -56,7 +56,7 @@ impl Config {
             Err(e) => eprintln!("{}",e),
         }}
         //input loop
-        loop {match get_number_from_input("NUMBER OF GUESSES", 10, 0) {
+        loop {match get_number_from_input("NUMBER OF GUESSES: ", 10, 0) {
             Ok(num) => {
                 config.num_guesses = num;
                 break;
@@ -89,13 +89,17 @@ pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
         println!("\n\nROUND NUMBER: {}", round);
 
         //computer as code-maker
-        play_round_computer_codemaker(config, &mut human_score, &computer_score);
+        if let Some(score) = play_round_computer_codemaker(config) {
+            human_score += score;
+        } else {break;}
 
         //human as code-maker
-        play_round_human_codemaker(config, &human_score, &mut computer_score);
+        if let Some(score) = play_round_human_codemaker(config) {
+            computer_score += score;
+        } else {break;}
 
-        //update and print score
-
+        //print scores
+        print_scores(human_score,computer_score);
     }
 
     //return to main
@@ -103,7 +107,8 @@ pub fn run(config: &Config) -> Result<(), Box<dyn Error>> {
 }
 
 /// run a round with computer as code-maker
-fn play_round_computer_codemaker(config: &Config, human_score:&mut usize, computer_score:&usize) {
+/// returns the number of turns it takes the human to guess the secret code
+fn play_round_computer_codemaker(config: &Config) -> Option<usize> {
     //DATA
     let mut rng = thread_rng();
     let mut guesses: Vec<Code> = Vec::new();
@@ -113,12 +118,12 @@ fn play_round_computer_codemaker(config: &Config, human_score:&mut usize, comput
     secret = Code::new_from_int(rng.gen_range(0..config.num_colors.pow(config.num_positions.try_into().unwrap())), config);
 
     //round loop
-    for m in 1..=config.num_guesses {
+    for human_moves in 1..=config.num_guesses {
         //get guess from user input
         //input loop
         let mut guess = loop {
             //get input
-            let user_input = get_string_from_user_input(format!("\nMOVE # {} GUESS: ", m).as_str()).expect("something went wrong getting user guess");
+            let user_input = get_string_from_user_input(format!("\nMOVE # {} GUESS: ", human_moves).as_str()).expect("something went wrong getting user guess");
 
             //parse input
             if user_input.trim().eq_ignore_ascii_case("board") { //print the board state
@@ -126,7 +131,7 @@ fn play_round_computer_codemaker(config: &Config, human_score:&mut usize, comput
                 continue; //run input loop again
             } else if user_input.trim().eq_ignore_ascii_case("quit") { //quit the game
                 println!("QUITTER!  MY COMBINATION WAS: {}\nGOOD BYE", secret.as_human_readible_chars());
-                return; //exit the game
+                return None; //exit the game
             } else {
                 //parse input for a code
                 match Code::new_from_string(&user_input, &config) {
@@ -142,18 +147,14 @@ fn play_round_computer_codemaker(config: &Config, human_score:&mut usize, comput
                 }
             }
         };
-
-        //update scores
-        *human_score += 1;
         
         //evaluate guess
         guess.evaluate(&secret).expect("something went wrong evaluating user guess");
 
         //tell user the results
         if guess.black_pins >= config.num_positions { //guessed it correctly
-            println!("YOU GUESSED IT IN {} MOVES!", m);
-            print_scores(*human_score,*computer_score);
-            return; //exit function
+            println!("YOU GUESSED IT IN {} MOVES!", human_moves);
+            return Some(human_moves); //exit function
         } else { //didn't
             println!("YOU HAVE {} BLACKS AND {} WHITES.", guess.black_pins, guess.white_pins);
         }
@@ -165,11 +166,12 @@ fn play_round_computer_codemaker(config: &Config, human_score:&mut usize, comput
     //only runs if user doesn't guess the code
     println!("YOU RAN OUT OF MOVES!  THAT'S ALL YOU GET!");
     println!("THE ACTUAL COMBINATION WAS: {}", secret.as_human_readible_chars());
-    print_scores(*human_score,*computer_score);
+    return Some(config.num_guesses); //max score gain per round
 }
 
 /// run a round with human as code-maker
-fn play_round_human_codemaker(config: &Config, human_score:&usize, computer_score:&mut usize, ) {
+/// returns the number of turns it takes the computer to guess the secret code
+fn play_round_human_codemaker(config: &Config) -> Option<usize>{
     //DATA
     let mut rng = thread_rng();
     let mut all_possibilities = vec![true; config.total_possibilities];
@@ -192,7 +194,7 @@ fn play_round_human_codemaker(config: &Config, human_score:&usize, computer_scor
     };
 
     //round loop
-    for m in 1..=config.num_guesses {
+    for computer_moves in 1..=config.num_guesses {
         let mut guess: Code = Code::new();
 
         //randomly generate a guess //770
@@ -226,7 +228,7 @@ fn play_round_human_codemaker(config: &Config, human_score:&usize, computer_scor
             if guess.code.is_empty() {
                 println!("YOU HAVE GIVEN ME INCONSISTENT INFORMATION.");
                 println!("PLAY AGAIN, AND THIS TIME PLEASE BE MORE CAREFUL.");
-                return; //exit game
+                return None; //exit game
             };
         }
 
@@ -254,9 +256,8 @@ fn play_round_human_codemaker(config: &Config, human_score:&usize, computer_scor
 
         //if computer guessed it, end #990
         if guess.black_pins >= config.num_positions { //guessed it correctly
-            println!("I GOT IT IN {} MOVES!", m);
-            print_scores(*human_score,*computer_score);
-            return; //exit function
+            println!("I GOT IT IN {} MOVES!", computer_moves);
+            return Some(computer_moves); //exit function
         } else { //didn't
             all_possibilities[guess_int] = false;
             //if we didn't, eliminate the combinations that don't work
@@ -276,10 +277,8 @@ fn play_round_human_codemaker(config: &Config, human_score:&usize, computer_scor
     //only runs if computer doesn't guess the code
     println!("I USED UP ALL MY MOVES!");
     println!("I GUESS MY CPU IS JUST HAVING AN OFF DAY.");
-    print_scores(*human_score,*computer_score);
+    return Some(config.num_guesses); //max moves the computer could've taken
 }
-
-
 
 struct Code {
     code: Vec<usize>,
@@ -365,11 +364,12 @@ impl Code {
     }
 }
 
+
+
 /// print scores
 fn print_scores(human_score:usize, computer_score:usize) {
     println!("SCORE\n\tCOMPUTER: {}\n\tHUMAN: {}", computer_score, human_score);
 }
-
 /// print the color - letter table
 /// only prints the first num_colors pairs
 fn print_color_letter_table(num_colors:usize) {
@@ -379,7 +379,6 @@ fn print_color_letter_table(num_colors:usize) {
         println!("{}\t{}", COLORS[i], &LETTERS[i..i+1]);
     }
 }
-
 /// prints the board state, previous guesses and the number of black/white pins for each
 fn print_board(guesses: &[Code]) {
     println!("BOARD");
@@ -388,6 +387,8 @@ fn print_board(guesses: &[Code]) {
         println!("{}\t{}\t\t{}\t{}", guess.0,guess.1.as_human_readible_chars(),guess.1.black_pins,guess.1.white_pins);
     }
 }
+
+
 
 /// gets a string from user input
 fn get_string_from_user_input(prompt: &str) -> Result<String, Box<dyn Error>> {
@@ -406,7 +407,6 @@ fn get_string_from_user_input(prompt: &str) -> Result<String, Box<dyn Error>> {
         Err(err) => return Err(format!("ERROR: CANNOT READ INPUT!: {}", err).into()),
     }
 }
-
 /// generic function to get a number from the passed string (user input)
 /// pass a min lower  than the max to have minimun and maximun bounds
 /// pass a min higher than the max to only have a minumum bound
