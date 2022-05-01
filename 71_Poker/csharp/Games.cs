@@ -23,7 +23,7 @@ internal class Game
     }
 
     private readonly FloatArray _cards = new(new float[51]);  // 10 DIM A(50),B(15)
-    private readonly FloatArray BB = new(new float[16]);
+    private readonly FloatArray _cardRanks = new(new float[16]);
     private float O = 1;  // 90 = 120
     private float _computerBalance = 200;
     private float _playerBalance = 200;
@@ -55,7 +55,9 @@ internal class Game
 
     private int Get0To9() => _random.Next(10);
 
-    private static int Mod100(float x) => (int)x % 100;
+    private static int GetRank(float x) => (int)x % 100;
+
+    private static int GetSuit(float x) => (int)x / 100;
 
     internal void Play()
     {
@@ -78,12 +80,12 @@ _160:   _io.WriteLine("The ante is $5.  I will deal:");
 _170:   _io.WriteLine();
 _180:   if (_playerBalance>5) { goto _200; }
 _190:   if (Line_3830()) { return false; }
-_200:   _pot=_pot+10;
-_210:   _playerBalance=_playerBalance-5;
-_220:   _computerBalance=_computerBalance-5;
+_200:   _pot += 10;
+_210:   _playerBalance -= 5;
+_220:   _computerBalance -= 5;
 _230:   for (Z=1; Z <= 10; Z++)
         {
-_240:       Line_1740();
+_240:       DealCard((int)Z);
         }
 _260:   _io.WriteLine("Your hand:");
 _280:   DisplayHand(1);
@@ -119,7 +121,8 @@ _580:   V=Z+Get0To9();
 _590:   if (Line_3480()) { return false; }
 _600:   _io.WriteLine($"I'll open with ${V}");
 _610:   K=V;
-_620:   if (Line_3050()) { return false; }
+        G = 0;
+_620:   if (GetWager()) { return false; }
 _630:   var response = Line_650();
         if (response.HasValue) { return response.Value; }
 _640:   goto _820;
@@ -146,8 +149,7 @@ _680:       _computerBalance=_computerBalance+_pot;
         bool? Line_690()
         {
 _690:       _io.WriteLine($"Now I have ${_computerBalance}and you have ${_playerBalance}");
-_700:       _io.Write("Do you wish to continue");
-_710:       HS = _io.ReadString("");
+_700:       HS = _io.ReadString("Do you wish to continue");
 _720:       if (HS.Equals("YES", InvariantCultureIgnoreCase)) { return true; }
 _730:       if (HS.Equals("NO", InvariantCultureIgnoreCase)) { return false; }
 _740:       _io.WriteLine("Answer Yes or No, please.");
@@ -173,7 +175,7 @@ _900:   _io.WriteLine("What are their numbers:");
 _910:   for (Q=1; Q <= T; Q++)
         {
 _920:       U = _io.ReadNumber("");
-_930:       Line_1730();
+_930:       DealCard((int)++Z, (int)U);
         }
 _950:   _io.WriteLine("Your new hand:");
 _970:   DisplayHand(1);
@@ -181,7 +183,7 @@ _980:   Z=10+T;
 _990:   for (U=6; U <= 10; U++)
         {
 _1000:      if ((int)(X/Math.Pow(10, U-6))!=10*(int)(X/Math.Pow(10, U-5))) { goto _1020; }
-_1010:      Line_1730();
+_1010:      DealCard((int)++Z, (int)U);
 _1020:      ;
         }
 _1030:   _io.WriteLine();
@@ -214,7 +216,8 @@ _1300:   Z=11;
 _1310:   goto _1330;
 _1320:   Z=2;
 _1330:   K=0;
-_1340:   if (Line_3050()) { return false; }
+         G=0;
+_1340:   if (GetWager()) { return false; }
 _1350:   if (T!=.5) { goto _1450; }
 _1360:   if (V==7) { goto _1400; }
 _1370:   if (I!=6) { goto _1400; }
@@ -224,7 +227,7 @@ _1400:   V=Z+Get0To9();
 _1410:   if (Line_3480()) { return false; }
 _1420:   _io.WriteLine($"I'll bet ${V}");
 _1430:   K=V;
-_1440:   if (Line_3060()) { return false; }
+_1440:   if (GetWager()) { return false; }
 _1450:   response = Line_650();
          if (response.HasValue) { return response.Value; }
 _1460:   _io.WriteLine();
@@ -236,43 +239,33 @@ _1520:   DisplayHand(6);
 _1540:   AnalyzeHand(1);
 _1550:   _io.WriteLine();
 _1560:   _io.Write("You have ");
-_1570:   K=D;
-_1580:   DisplayHandRank();
-_1590:   HS=JS;
-_1600:   IS=KS;
-_1610:   K=M;
+_1580:   DisplayHandRank(HS, IS, (int)D);
 _1620:   _io.Write("and I have ");
-_1630:   DisplayHandRank();
+_1630:   DisplayHandRank(JS, KS, (int)M);
 _1640:   if (B>U) { return Line_670().Value; }
 _1650:   if (U>B) { return Line_780().Value; }
 _1660:   if (HS=="A Flus") { goto _1700; }
-_1662:   if (Mod100(M)<Mod100(D)) { return Line_780().Value; }
-_1664:   if (Mod100(M)>Mod100(D)) { return Line_670().Value; }
+_1662:   if (GetRank(M)<GetRank(D)) { return Line_780().Value; }
+_1664:   if (GetRank(M)>GetRank(D)) { return Line_670().Value; }
 _1670:   _io.WriteLine("The hand is drawn.");
 _1680:   _io.WriteLine($"All ${_pot}remains in the pot.");
 _1690:   goto _140;
-_1700:   if (Mod100(M)>Mod100(D)) { return Line_670().Value; }
-_1710:   if (Mod100(D)>Mod100(M)) { return Line_780().Value; }
+_1700:   if (GetRank(M)>GetRank(D)) { return Line_670().Value; }
+_1710:   if (GetRank(D)>GetRank(M)) { return Line_780().Value; }
 _1720:   goto _1670;
 
-        void Line_1730()
+        void DealCard(int index, int indexToReplace = 0)
         {
-_1730:      Z=Z+1;
-            Line_1740();
-        }
-
-        void Line_1740()
-        {
-_1740:      _cards[Z]=100*(int)(4*_random.NextFloat())+(int)(100*_random.NextFloat());
-_1750:      if ((int)(_cards[Z]/100)>3) { goto _1740; }
-_1760:      if (_cards[Z]-100*(int)(_cards[Z]/100)>12) { goto _1740; }
-_1765:      if (Z==1) { goto _1840; }
-_1770:      for (K=1; K <= Z-1; K++)
+_1740:      _cards[index]=100*_random.Next(4) + _random.Next(100);
+_1750:      if ((int)_cards[index] / 100 > 3) { goto _1740; }
+_1760:      if (_cards[index] % 100 > 12) { goto _1740; }
+_1765:      if (index==1) { goto _1840; }
+_1770:      for (K=1; K <= index-1; K++)
             {
-_1780:          if (_cards[Z]==_cards[K]) { goto _1740; }
+_1780:          if (_cards[index]==_cards[K]) { goto _1740; }
             }
-_1800:      if (Z<=10) { goto _1840; }
-            (_cards[U], _cards[Z]) = (_cards[Z], _cards[U]);
+_1800:      if (index<=10) { goto _1840; }
+            (_cards[indexToReplace], _cards[index]) = (_cards[index], _cards[indexToReplace]);
 _1840:      return;
         }
 
@@ -280,11 +273,12 @@ _1840:      return;
         {
 _1850:      for (Z = firstCard; Z <= firstCard+4; Z++)
             {
+                var card = _cards[Z];
 _1860:          _io.Write($"{Z}--  ");
-_1870:          DisplayRank(Z);
+_1870:          DisplayRank(GetRank(card));
 _1880:          _io.Write(" of");
-_1890:          DisplaySuit(Z);
-_1900:          if (Z/2!=(int)(Z/2)) { goto _1920; }
+_1890:          DisplaySuit(GetSuit(card));
+_1900:          if (Z % 2 != 0) { goto _1920; }
 _1910:          _io.WriteLine();
 _1920:          ;
             }
@@ -292,12 +286,7 @@ _1930:      _io.WriteLine();
 _1940:      return;
         }
 
-        void DisplayRank(float cardNumber)
-        {
-            Line_1960(Mod100(_cards[cardNumber]));
-        }
-
-        void Line_1960(int rank)
+        void DisplayRank(int rank)
         {
 _1960:      if (rank!=9) { goto _1980; }
 _1970:      _io.Write("Jack");
@@ -312,12 +301,7 @@ _2050:      _io.Write(rank+2);
 _2060:      return;
         }
 
-        void DisplaySuit(float cardNumber)
-        {
-            Line_2080((int)(_cards[cardNumber]/100));
-        }
-
-        void Line_2080(int suitNumber)
+        void DisplaySuit(int suitNumber)
         {
 _2080:      if (suitNumber!=0) { goto _2100; }
 _2090:      _io.Write(" Clubs");
@@ -335,10 +319,10 @@ _2160:      return;
 _2170:      U=0;
 _2180:      for (Z=firstCard; Z <= firstCard+4; Z++)
             {
-_2190:         BB[Z]=Mod100(_cards[Z]);
+_2190:         _cardRanks[Z]=GetRank(_cards[Z]);
 _2200:         if (Z==firstCard+4) { goto _2230; }
-_2210:         if ((int)(_cards[Z]/100)!=(int)(_cards[Z+1]/100)) { goto _2230; }
-_2220:         U=U+1;
+_2210:         if (GetSuit(_cards[Z]) != GetSuit(_cards[Z+1])) { goto _2230; }
+_2220:         U++;
 _2230:         ;
             }
 _2240:      if (U!=4) { goto _2310; }
@@ -352,29 +336,29 @@ _2310:      for (Z=firstCard; Z <= firstCard+3; Z++)
             {
 _2320:          for (K=Z+1; K <= firstCard+4; K++)
                 {
-_2330:              if (BB[Z]<=BB[K]) { goto _2390; }
+_2330:              if (_cardRanks[Z]<=_cardRanks[K]) { goto _2390; }
 _2340:              X=_cards[Z];
 _2350:              _cards[Z]=_cards[K];
-_2360:              BB[Z]=BB[K];
+_2360:              _cardRanks[Z]=_cardRanks[K];
 _2370:              _cards[K]=X;
-_2380:              BB[K]=_cards[K]-100*(int)(_cards[K]/100);
+_2380:              _cardRanks[K]=GetRank(_cards[K]);
 _2390:              ;
                 }
             }
 _2410:      X=0;
 _2420:      for (Z=firstCard; Z <= firstCard+3; Z++)
             {
-_2430:          if (BB[Z]!=BB[Z+1]) { goto _2470; }
-_2440:          X=X+11*(float)Math.Pow(10, Z-firstCard);
+_2430:          if (_cardRanks[Z]!=_cardRanks[Z+1]) { goto _2470; }
+_2440:          X += 11*(float)Math.Pow(10, Z-firstCard);
 _2450:          D=_cards[Z];
-_2460:          Line_2760();
+_2460:          AnalyzeMultiples();
 _2470:          ;
             }
 _2480:      if (X!=0) { goto _2620; }
-_2490:      if (BB[firstCard]+3!=BB[firstCard+3]) { goto _2520; }
+_2490:      if (_cardRanks[firstCard]+3!=_cardRanks[firstCard+3]) { goto _2520; }
 _2500:      X=1111;
 _2510:      U=10;
-_2520:      if (BB[firstCard+1]+3!=BB[firstCard+4]) { goto _2620; }
+_2520:      if (_cardRanks[firstCard+1]+3!=_cardRanks[firstCard+4]) { goto _2620; }
 _2530:      if (U!=10) { goto _2600; }
 _2540:      U=14;
 _2550:      HS="Straig";
@@ -395,12 +379,12 @@ _2690:      if (U!=10) { goto _2720; }
 _2700:      if (I==1) { goto _2740; }
 _2710:      goto _2750;
 _2720:      if (U>12) { goto _2750; }
-_2730:      if (Mod100(D)>6) { goto _2750; }
+_2730:      if (GetRank(D)>6) { goto _2750; }
 _2740:      I=6;
 _2750:      return;
         }
 
-        void Line_2760()
+        void AnalyzeMultiples()
         {
 _2760:      if (U>=11) { goto _2810; }
 _2770:      U=11;
@@ -408,7 +392,7 @@ _2780:      HS="A Pair";
 _2790:      IS=" of ";
 _2800:      return;
 _2810:      if (U!=11) { goto _2910; }
-_2820:      if (BB[Z]!=BB[Z-1]) { goto _2870; }
+_2820:      if (_cardRanks[Z]!=_cardRanks[Z-1]) { goto _2870; }
 _2830:      HS="Three";
 _2840:      IS=" ";
 _2850:      U=13;
@@ -422,7 +406,7 @@ _2920:      U=16;
 _2930:      HS="Full H";
 _2940:      IS="ouse, ";
 _2950:      return;
-_2960:      if (BB[Z]!=BB[Z-1]) { goto _3010; }
+_2960:      if (_cardRanks[Z]!=_cardRanks[Z-1]) { goto _3010; }
 _2970:      U=17;
 _2980:      HS="Four";
 _2990:      IS=" ";
@@ -436,18 +420,17 @@ _3040:      return;
         bool Line_3050()
         {
 _3050:      G=0;
-            return Line_3060();
+            return GetWager();
         }
 
-        bool Line_3060()
+        bool GetWager()
         {
 _3060:      _io.WriteLine();
-            _io.Write("What is your bet");
-_3070:      T = _io.ReadNumber("");
+            T = _io.ReadNumber("What is your bet");
 _3080:      if ((T-(int)T)==0) { goto _3140; }
 _3090:      if (K!=0) { goto _3120; }
 _3100:      if (G!=0) { goto _3120; }
-_3110:      if (T==.5) { return Line_3410(); }
+_3110:      if (T==.5) { return false; }
 _3120:      _io.WriteLine("No small change, please.");
 _3130:      goto _3060;
 _3140:      if (_playerBalance-G-T>=0) { goto _3170; }
@@ -459,7 +442,7 @@ _3190:      return Line_3380();
 _3200:      if (G+T>=K) { goto _3230; }
 _3210:      _io.WriteLine("If you can't see my bet, then fold.");
 _3220:      goto _3060;
-_3230:      G=G+T;
+_3230:      G += T;
 _3240:      if (G==K) { return Line_3380(); }
 _3250:      if (Z!=1) { return Line_3420(); }
 _3260:      if (G>5) { goto _3300; }
@@ -488,15 +471,10 @@ _3370:      K=G;
 
         bool Line_3380()
         {
-_3380:      _playerBalance=_playerBalance-G;
-_3390:      _computerBalance=_computerBalance-K;
-_3400:      _pot=_pot+G+K;
-            return Line_3410();
-        }
-
-        bool Line_3410()
-        {
-_3410:      return false;
+_3380:      _playerBalance -= G;
+_3390:      _computerBalance -= K;
+_3400:      _pot += G+K;
+            return false;
         }
 
         bool Line_3420()
@@ -511,7 +489,7 @@ _3430:      V=G-K+Get0To9();
 _3440:      if (Line_3480()) { return true; }
 _3450:      _io.WriteLine($"I'll see you, and raise you{V}");
 _3460:      K=G+V;
-_3470:      return Line_3060();
+_3470:      return GetWager();
         }
 
         bool Line_3480()
@@ -522,15 +500,13 @@ _3500:      V=_computerBalance;
 _3510:      return false;
 _3520:      if (_computerBalance-G>=0) { return Line_3360(); }
 _3530:      if (O % 2 != 0) { goto _3600; }
-_3540:      _io.Write("Would you like to buy back your watch for $50");
-_3550:      JS = _io.ReadString("");
+_3540:      JS = _io.ReadString("Would you like to buy back your watch for $50");
 _3560:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { goto _3600; }
 _3570:      _computerBalance=_computerBalance+50;
 _3580:      O=O/2;
 _3590:      return false;
 _3600:      if (O % 3!= 0) { return Line_3670(); }
-_3610:      _io.Write("Would you like to buy back your tie tack for $50");
-_3620:      JS = _io.ReadString("");
+_3610:      JS = _io.ReadString("Would you like to buy back your tie tack for $50");
 _3630:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { return Line_3670(); }
 _3640:      _computerBalance=_computerBalance+50;
 _3650:      O=O/3;
@@ -543,17 +519,17 @@ _3670:      _io.WriteLine("I'm busted.  Congratulations!");
 _3680:      return true;  // STOP
         }
 
-        void DisplayHandRank()
+        void DisplayHandRank(string part1, string part2, int highCard)
         {
-_3690:      _io.Write($"{HS}{IS}");
-_3700:      if (HS!="A FLUS") { goto _3750; }
+_3690:      _io.Write($"{part1}{part2}");
+_3700:      if (part1!="A FLUS") { goto _3750; }
 _3710:      ;
-_3720:      Line_2080((int)(K/=100));
+_3720:      DisplaySuit(highCard/100);
 _3730:      _io.WriteLine();
 _3740:      return;
-_3750:      Line_1960((int)(K=Mod100(K)));
-_3770:      if (HS=="Schmal") { goto _3790; }
-_3780:      if (HS!="Straig") { goto _3810; }
+_3750:      DisplayRank(GetRank(highCard));
+_3770:      if (part1=="Schmal") { goto _3790; }
+_3780:      if (part1!="Straig") { goto _3810; }
 _3790:      _io.WriteLine(" High");
 _3800:      return;
 _3810:      _io.WriteLine("'s");
@@ -564,7 +540,7 @@ _3820:      return;
         {
 _3830:      _io.WriteLine();
 _3840:      _io.WriteLine("You can't bet with what you haven't got.");
-_3850:      if (O/2 == (int)(O/2)) { goto _3970; }
+_3850:      if (O % 2 == 0) { goto _3970; }
 _3860:      _io.Write("Would you like to sell your watch");
 _3870:      JS = _io.ReadString("");
 _3880:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { goto _3970; }
@@ -576,7 +552,7 @@ _3930:      _io.WriteLine("That's a pretty crummy watch - I'll give you $25.");
 _3940:      _playerBalance=_playerBalance+25;
 _3950:      O=O*2;
 _3960:      return false;
-_3970:      if (O/3 != (int)(O/3)) { goto _4090; }
+_3970:      if (O % 3 != 0) { goto _4090; }
 _3980:      _io.WriteLine("Will you part with that diamond tie tack");
 _3990:      JS = _io.ReadString("");
 _4000:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { goto _4080; }
