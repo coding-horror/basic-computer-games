@@ -68,7 +68,7 @@ impl WordGame<'_> {
         }
 
         if guess.len() != 5 {
-            return invalid_input("You must guess a 5 letter word");
+            return invalid_input("You must guess a 5 letter word.");
         }
 
         self.guess = guess.to_string();
@@ -91,18 +91,16 @@ impl WordGame<'_> {
             }
         }
 
-        let match_amount = matches.len();
-
         println!(
             "There were {} matches and the common letters were....{}",
-            match_amount,
+            matches.len(),
             matches.into_iter().collect::<String>()
         );
 
         print!("From the exact letter matches you know....");
         self.progress.print();
 
-        if match_amount == 5 {
+        if self.progress.done() {
             println!(
                 "\n\nYou have guessed the word. It took {} guesses!\n",
                 self.guesses

@@ -16,4 +16,14 @@ impl Progress {
             print!("{}", c);
         }
     }
+
+    pub fn done(&self) -> bool {
+        for c in self.chars {
+            if c == '-' {
+                return false;
+            }
+        }
+
+        true
+    }
 }
