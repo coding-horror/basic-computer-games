@@ -64,255 +64,253 @@ internal class Game
         _io.Write(Resource.Streams.Title);
         _io.Write(Resource.Streams.Instructions);
 
-_90:    O=1;
-_100:   _computerBalance=200;
-_110:   _playerBalance=200;
-
+        O=1;
+        _computerBalance=200;
+        _playerBalance=200;
         while(PlayHand());
     }
 
     internal bool PlayHand()
     {
-_120:   _pot=0;
-_140:   _io.WriteLine();
-_150:   if (_computerBalance<=5) { Line_3670(); return false; }
-_160:   _io.WriteLine("The ante is $5.  I will deal:");
-_170:   _io.WriteLine();
-_180:   if (_playerBalance>5) { goto _200; }
-_190:   if (Line_3830()) { return false; }
-_200:   _pot += 10;
-_210:   _playerBalance -= 5;
-_220:   _computerBalance -= 5;
-_230:   for (Z=1; Z <= 10; Z++)
+        _pot=0;
+        while(true)
         {
-_240:       DealCard((int)Z);
-        }
-_260:   _io.WriteLine("Your hand:");
-_280:   DisplayHand(1);
-_300:   I=2;
-_310:   AnalyzeHand(6);
-_320:   _io.WriteLine();
-_330:   if (I!=6) { goto _470; }
-_340:   if (Get0To9()<=7) { goto _370; }
-_350:   X=11100;
-_360:   goto _420;
-_370:   if (Get0To9()<=7) { goto _400; }
-_380:   X=11110;
-_390:   goto _420;
-_400:   if (Get0To9()>=1) { goto _450; }
-_410:   X=11111;
-_420:   I=7;
-_430:   Z=23;
-_440:   goto _580;
-_450:   Z=1;
-_460:   goto _510;
-_470:   if (U>=13) { goto _540; }
-_480:   if (Get0To9()>=2) { goto _500; }
-_490:   goto _420;
-_500:   Z=0;
-_510:   K=0;
-_520:   _io.WriteLine("I check.");
-_530:   goto _620;
-_540:   if (U<=16) { goto _570; }
-_550:   Z=2;
-_560:   if (Get0To9()>=1) { goto _580; }
-_570:   Z=35;
-_580:   V=Z+Get0To9();
-_590:   if (Line_3480()) { return false; }
-_600:   _io.WriteLine($"I'll open with ${V}");
-_610:   K=V;
-        G = 0;
-_620:   if (GetWager()) { return false; }
-_630:   var response = Line_650();
-        if (response.HasValue) { return response.Value; }
-_640:   goto _820;
+            _io.WriteLine();
+            if (_computerBalance<=5)
+            {
+                CongratulatePlayer();
+                return false;
+            }
+            _io.WriteLine("The ante is $5.  I will deal:");
+            _io.WriteLine();
+            if (_playerBalance <= 5 && PlayerCantRaiseFunds()) { return false; }
+            _pot += 10;
+            _playerBalance -= 5;
+            _computerBalance -= 5;
+            for (Z=1; Z <= 10; Z++)
+            {
+                DealCard((int)Z);
+            }
+            _io.WriteLine("Your hand:");
+            DisplayHand(1);
+            I=2;
+            AnalyzeHand(6);
+            _io.WriteLine();
+_330:       if (I!=6) { goto _470; }
+_340:       if (Get0To9()<=7) { goto _370; }
+_350:       X=11100;
+_360:       goto _420;
+_370:       if (Get0To9()<=7) { goto _400; }
+_380:       X=11110;
+_390:       goto _420;
+_400:       if (Get0To9()>=1) { goto _450; }
+_410:       X=11111;
+_420:       I=7;
+_430:       Z=23;
+_440:       goto _580;
+_450:       Z=1;
+_460:       goto _510;
+_470:       if (U>=13) { goto _540; }
+_480:       if (Get0To9()>=2) { goto _500; }
+_490:       goto _420;
+_500:       Z=0;
+_510:       K=0;
+_520:       _io.WriteLine("I check.");
+_530:       goto _620;
+_540:       Z = U <= 16 || Get0To9() < 1 ? 35 : 2;
+_580:       V=Z+Get0To9();
+_590:       if (Line_3480()) { return false; }
+_600:       _io.WriteLine($"I'll open with ${V}");
+_610:       K=V;
+            G = 0;
+_620:       if (GetWager()) { return false; }
+_630:       var response = IsThereAWinner();
+            if (response.HasValue) { return response.Value; }
 
-        bool? Line_650()
+            _io.WriteLine();
+            T = _io.ReadNumber("Now we draw -- How many cards do you want", 3, "You can't draw more than three cards.");
+            if (T != 0)
+            {
+                Z=10;
+                _io.WriteLine("What are their numbers:");
+                for (Q=1; Q <= T; Q++)
+                {
+                    U = _io.ReadNumber("");
+                    DealCard((int)++Z, (int)U);
+                }
+                _io.WriteLine("Your new hand:");
+                DisplayHand(1);
+            }
+            Z=10+T;
+            for (U=6; U <= 10; U++)
+            {
+                if ((int)(X/Math.Pow(10, U-6)) == 10*(int)(X/Math.Pow(10, U-5)))
+                {
+                    DealCard((int)++Z, (int)U);
+                }
+            }
+            _io.WriteLine();
+            _io.Write($"I am taking{Z-10-T}card");
+            if (Z != 11 + T)
+            {
+                _io.WriteLine("s");
+            }
+            _io.WriteLine();
+            V=I;
+            I=1;
+            AnalyzeHand(6);
+            B=U;
+            M=D;
+            if (V == 7)
+            {
+                Z=28;
+            }
+            else if (I == 6)
+            {
+                Z=1;
+            }
+            else if (U < 13)
+            {
+                Z = Get0To9() == 6 ? 19 : 2;
+            }
+            else
+            {
+                if (U >= 16)
+                {
+                    Z = 2;
+                }
+                else
+                {
+                    Z = Get0To9()==8 ? 11 : 19;
+                }
+            }
+_1330:      K=0;
+            G=0;
+_1340:      if (GetWager()) { return false; }
+_1350:      if (T!=.5) { goto _1450; }
+_1360:      if (V==7) { goto _1400; }
+_1370:      if (I!=6) { goto _1400; }
+_1380:      _io.WriteLine("I'll check");
+_1390:      goto _1460;
+_1400:      V=Z+Get0To9();
+_1410:      if (Line_3480()) { return false; }
+_1420:      _io.WriteLine($"I'll bet ${V}");
+_1430:      K=V;
+_1440:      if (GetWager()) { return false; }
+_1450:      response = IsThereAWinner();
+            if (response.HasValue) { return response.Value; }
+_1460:      _io.WriteLine();
+_1470:      _io.WriteLine("Now we compare hands:");
+_1480:      JS=HS;
+_1490:      KS=IS;
+_1500:      _io.WriteLine("My hand:");
+_1520:      DisplayHand(6);
+_1540:      AnalyzeHand(1);
+_1550:      _io.WriteLine();
+_1560:      _io.Write("You have ");
+_1580:      DisplayHandRank(HS, IS, (int)D);
+_1620:      _io.Write("and I have ");
+_1630:      DisplayHandRank(JS, KS, (int)M);
+            if (B > U || GetRank(M) > GetRank(D)) { return ComputerWins().Value; }
+            if (U > B || GetRank(D) > GetRank(M)) { return PlayerWins().Value; }
+_1670:       _io.WriteLine("The hand is drawn.");
+_1680:       _io.WriteLine($"All ${_pot}remains in the pot.");
+        }
+
+        bool? IsThereAWinner()
         {
-_650:       if (I!=3)
+            if (I!=3)
             {
                 if (I!=4) { return null; }
                 _io.WriteLine();
-                return Line_780();
+                return PlayerWins();
             }
-_660:       _io.WriteLine();
-            return Line_670();
+            _io.WriteLine();
+            return ComputerWins();
         }
 
-        bool? Line_670()
+        bool? ComputerWins()
         {
-_670:       _io.WriteLine("I win.");
-_680:       _computerBalance=_computerBalance+_pot;
-            return Line_690();
+            _io.WriteLine("I win.");
+            _computerBalance += _pot;
+            return ShouldContinue();
         }
 
-        bool? Line_690()
+        bool? ShouldContinue()
         {
-_690:       _io.WriteLine($"Now I have ${_computerBalance}and you have ${_playerBalance}");
-_700:       HS = _io.ReadString("Do you wish to continue");
-_720:       if (HS.Equals("YES", InvariantCultureIgnoreCase)) { return true; }
-_730:       if (HS.Equals("NO", InvariantCultureIgnoreCase)) { return false; }
-_740:       _io.WriteLine("Answer Yes or No, please.");
-_750:       goto _700;
+            _io.WriteLine($"Now I have ${_computerBalance}and you have ${_playerBalance}");
+            return _io.ReadYesNo("Do you wish to continue");
         }
 
-        bool? Line_780()
+        bool? PlayerWins()
         {
-_780:       _io.WriteLine("You win.");
-_790:       _playerBalance=_playerBalance+_pot;
-_800:       return Line_690();
+            _io.WriteLine("You win.");
+            _playerBalance += _pot;
+            return ShouldContinue();
         }
-
-_820:   _io.WriteLine();
-_830:   _io.Write("Now we draw -- How many cards do you want");
-_840:   T = _io.ReadNumber("");
-_850:   if (T==0) { goto _980; }
-_860:   Z=10;
-_870:   if (T<4) { goto _900; }
-_880:   _io.WriteLine("You can't draw more than three cards.");
-_890:   goto _840;
-_900:   _io.WriteLine("What are their numbers:");
-_910:   for (Q=1; Q <= T; Q++)
-        {
-_920:       U = _io.ReadNumber("");
-_930:       DealCard((int)++Z, (int)U);
-        }
-_950:   _io.WriteLine("Your new hand:");
-_970:   DisplayHand(1);
-_980:   Z=10+T;
-_990:   for (U=6; U <= 10; U++)
-        {
-_1000:      if ((int)(X/Math.Pow(10, U-6))!=10*(int)(X/Math.Pow(10, U-5))) { goto _1020; }
-_1010:      DealCard((int)++Z, (int)U);
-_1020:      ;
-        }
-_1030:   _io.WriteLine();
-_1040:   _io.Write($"I am taking{Z-10-T}card");
-_1050:   if (Z==11+T) { goto _1090; }
-_1060:   _io.WriteLine("s");
-_1070:   _io.WriteLine();
-_1080:   goto _1100;
-_1090:   _io.WriteLine();
-_1100:   V=I;
-_1120:   I=1;
-_1130:   AnalyzeHand(6);
-_1140:   B=U;
-_1150:   M=D;
-_1160:   if (V!=7) { goto _1190; }
-_1170:   Z=28;
-_1180:   goto _1330;
-_1190:   if (I!=6) { goto _1220; }
-_1200:   Z=1;
-_1210:   goto _1330;
-_1220:   if (U>=13) { goto _1270; }
-_1230:   Z=2;
-_1240:   if (Get0To9()!=6) { goto _1260; }
-_1250:   Z=19;
-_1260:   goto _1330;
-_1270:   if (U>=16) { goto _1320; }
-_1280:   Z=19;
-_1290:   if (Get0To9()!=8) { goto _1310; }
-_1300:   Z=11;
-_1310:   goto _1330;
-_1320:   Z=2;
-_1330:   K=0;
-         G=0;
-_1340:   if (GetWager()) { return false; }
-_1350:   if (T!=.5) { goto _1450; }
-_1360:   if (V==7) { goto _1400; }
-_1370:   if (I!=6) { goto _1400; }
-_1380:   _io.WriteLine("I'll check");
-_1390:   goto _1460;
-_1400:   V=Z+Get0To9();
-_1410:   if (Line_3480()) { return false; }
-_1420:   _io.WriteLine($"I'll bet ${V}");
-_1430:   K=V;
-_1440:   if (GetWager()) { return false; }
-_1450:   response = Line_650();
-         if (response.HasValue) { return response.Value; }
-_1460:   _io.WriteLine();
-_1470:   _io.WriteLine("Now we compare hands:");
-_1480:   JS=HS;
-_1490:   KS=IS;
-_1500:   _io.WriteLine("My hand:");
-_1520:   DisplayHand(6);
-_1540:   AnalyzeHand(1);
-_1550:   _io.WriteLine();
-_1560:   _io.Write("You have ");
-_1580:   DisplayHandRank(HS, IS, (int)D);
-_1620:   _io.Write("and I have ");
-_1630:   DisplayHandRank(JS, KS, (int)M);
-_1640:   if (B>U) { return Line_670().Value; }
-_1650:   if (U>B) { return Line_780().Value; }
-_1660:   if (HS=="A Flus") { goto _1700; }
-_1662:   if (GetRank(M)<GetRank(D)) { return Line_780().Value; }
-_1664:   if (GetRank(M)>GetRank(D)) { return Line_670().Value; }
-_1670:   _io.WriteLine("The hand is drawn.");
-_1680:   _io.WriteLine($"All ${_pot}remains in the pot.");
-_1690:   goto _140;
-_1700:   if (GetRank(M)>GetRank(D)) { return Line_670().Value; }
-_1710:   if (GetRank(D)>GetRank(M)) { return Line_780().Value; }
-_1720:   goto _1670;
 
         void DealCard(int index, int indexToReplace = 0)
         {
-_1740:      _cards[index]=100*_random.Next(4) + _random.Next(100);
-_1750:      if ((int)_cards[index] / 100 > 3) { goto _1740; }
-_1760:      if (_cards[index] % 100 > 12) { goto _1740; }
-_1765:      if (index==1) { goto _1840; }
-_1770:      for (K=1; K <= index-1; K++)
+            while(true)
             {
-_1780:          if (_cards[index]==_cards[K]) { goto _1740; }
+                _cards[index]=100*_random.Next(4) + _random.Next(100);
+                if (GetSuit(_cards[index]) > 3) { continue; }
+                if (GetRank(_cards[index]) > 12) { continue; }
+                if (index==1) { break; }
+                var matchFound = false;
+                for (K=1; K <= index-1; K++)
+                {
+                    if (_cards[index]==_cards[K])
+                    {
+                        matchFound = true;
+                        break;
+                    }
+                }
+                if (!matchFound) { break; }
             }
-_1800:      if (index<=10) { goto _1840; }
-            (_cards[indexToReplace], _cards[index]) = (_cards[index], _cards[indexToReplace]);
-_1840:      return;
+            if (index > 10)
+            {
+                (_cards[indexToReplace], _cards[index]) = (_cards[index], _cards[indexToReplace]);
+            }
+            return;
         }
 
         void DisplayHand(int firstCard)
         {
-_1850:      for (Z = firstCard; Z <= firstCard+4; Z++)
+            for (Z = firstCard; Z <= firstCard+4; Z++)
             {
                 var card = _cards[Z];
-_1860:          _io.Write($"{Z}--  ");
-_1870:          DisplayRank(GetRank(card));
-_1880:          _io.Write(" of");
-_1890:          DisplaySuit(GetSuit(card));
-_1900:          if (Z % 2 != 0) { goto _1920; }
-_1910:          _io.WriteLine();
-_1920:          ;
+                _io.Write($"{Z}--  ");
+                _io.Write(GetRankName(GetRank(card)));
+                _io.Write(" of");
+                _io.Write(GetSuitName(GetSuit(card)));
+                if (Z % 2 == 0)
+                {
+                    _io.WriteLine();
+                }
             }
-_1930:      _io.WriteLine();
-_1940:      return;
+            _io.WriteLine();
+            return;
         }
 
-        void DisplayRank(int rank)
+        string GetRankName(int rank) => rank switch
         {
-_1960:      if (rank!=9) { goto _1980; }
-_1970:      _io.Write("Jack");
-_1980:      if (rank!=10) { goto _2000; }
-_1990:      _io.Write("Queen");
-_2000:      if (rank!=11) { goto _2020; }
-_2010:      _io.Write("King");
-_2020:      if (rank!=12) { goto _2040; }
-_2030:      _io.Write("Ace");
-_2040:      if (rank>=9) { goto _2060; }
-_2050:      _io.Write(rank+2);
-_2060:      return;
-        }
+            9 => "Jack",
+            10 => "Queen",
+            11 => "King",
+            12 => "Ace",
+            _ => (rank + 2).ToString()
+        };
 
-        void DisplaySuit(int suitNumber)
+
+        string GetSuitName(int suitNumber) => suitNumber switch
         {
-_2080:      if (suitNumber!=0) { goto _2100; }
-_2090:      _io.Write(" Clubs");
-_2100:      if (suitNumber!=1) { goto _2120; }
-_2110:      _io.Write(" Diamonds");
-_2120:      if (suitNumber!=2) { goto _2140; }
-_2130:      _io.Write(" Hearts");
-_2140:      if (suitNumber!=3) { goto _2160; }
-_2150:      _io.Write(" Spades");
-_2160:      return;
-        }
+            0 => " Clubs",
+            1 => " Diamonds",
+            2 => " Hearts",
+            3 => " Spades",
+        };
+
 
         void AnalyzeHand(int firstCard)
         {
@@ -417,12 +415,6 @@ _3030:      IS="ouse, ";
 _3040:      return;
         }
 
-        bool Line_3050()
-        {
-_3050:      G=0;
-            return GetWager();
-        }
-
         bool GetWager()
         {
 _3060:      _io.WriteLine();
@@ -434,7 +426,7 @@ _3110:      if (T==.5) { return false; }
 _3120:      _io.WriteLine("No small change, please.");
 _3130:      goto _3060;
 _3140:      if (_playerBalance-G-T>=0) { goto _3170; }
-_3150:      if (Line_3830()) { return true; }
+_3150:      if (PlayerCantRaiseFunds()) { return true; }
 _3160:      goto _3060;
 _3170:      if (T!=0) { goto _3200; }
 _3180:      I=3;
@@ -505,15 +497,15 @@ _3560:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { goto _3600; }
 _3570:      _computerBalance=_computerBalance+50;
 _3580:      O=O/2;
 _3590:      return false;
-_3600:      if (O % 3!= 0) { return Line_3670(); }
+_3600:      if (O % 3!= 0) { return CongratulatePlayer(); }
 _3610:      JS = _io.ReadString("Would you like to buy back your tie tack for $50");
-_3630:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { return Line_3670(); }
+_3630:      if (JS.StartsWith("N", InvariantCultureIgnoreCase)) { return CongratulatePlayer(); }
 _3640:      _computerBalance=_computerBalance+50;
 _3650:      O=O/3;
 _3660:      return false;
         }
 
-        bool Line_3670()
+        bool CongratulatePlayer()
         {
 _3670:      _io.WriteLine("I'm busted.  Congratulations!");
 _3680:      return true;  // STOP
@@ -524,10 +516,10 @@ _3680:      return true;  // STOP
 _3690:      _io.Write($"{part1}{part2}");
 _3700:      if (part1!="A FLUS") { goto _3750; }
 _3710:      ;
-_3720:      DisplaySuit(highCard/100);
+_3720:      _io.Write(GetSuitName(highCard/100));
 _3730:      _io.WriteLine();
 _3740:      return;
-_3750:      DisplayRank(GetRank(highCard));
+_3750:      _io.Write(GetRankName(GetRank(highCard)));
 _3770:      if (part1=="Schmal") { goto _3790; }
 _3780:      if (part1!="Straig") { goto _3810; }
 _3790:      _io.WriteLine(" High");
@@ -536,7 +528,7 @@ _3810:      _io.WriteLine("'s");
 _3820:      return;
         }
 
-        bool Line_3830()
+        bool PlayerCantRaiseFunds()
         {
 _3830:      _io.WriteLine();
 _3840:      _io.WriteLine("You can't bet with what you haven't got.");
@@ -566,6 +558,31 @@ _4070:      O=O*3;
 _4080:      return false;
 _4090:      _io.WriteLine("Your wad is shot.  So long, sucker!");
 _4100:      return true;
+        }
+    }
+}
+
+internal static class IReadWriteExtensions
+{
+    internal static bool ReadYesNo(this IReadWrite io, string prompt)
+    {
+        while (true)
+        {
+            var response = io.ReadString("Do you wish to continue");
+            if (response.Equals("YES", InvariantCultureIgnoreCase)) { return true; }
+            if (response.Equals("NO", InvariantCultureIgnoreCase)) { return false; }
+            io.WriteLine("Answer Yes or No, please.");
+        }
+    }
+
+    internal static int ReadNumber(this IReadWrite io, string prompt, int max, string maxPrompt)
+    {
+        io.Write(prompt);
+        while (true)
+        {
+            var response = io.ReadNumber("");
+            if (response <= max) { return (int)response; }
+            io.WriteLine(maxPrompt);
         }
     }
 }
