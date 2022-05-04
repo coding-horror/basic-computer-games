@@ -1,6 +1,10 @@
 #![allow(dead_code)]
 
+mod draw;
+
 use rand::Rng;
+
+use crate::draw::draw_board;
 
 struct Game {
     coords: Vec<Coordinate>,
@@ -26,7 +30,7 @@ impl Game {
         let mut y: i8 = 9;
 
         for i in 0..100 {
-            println!("current pos: {:?}", (x, y));
+            //println!("current pos: {:?}", (x, y));
 
             let mut has_mugwump = false;
             if random_indexes.contains(&i) {
@@ -49,67 +53,6 @@ impl Game {
             state: GameState::Playing,
         }
     }
-
-    fn draw_board(&self) {
-        let draw_top_bottom = |is_top: bool| {
-            let (mut left, mut right) = ("╔", "╗");
-
-            if !is_top {
-                (left, right) = ("╚", "╝");
-            }
-
-            for i in 0..11 {
-                if i == 0 {
-                    print!("{}══", left);
-                } else if i == 10 {
-                    print!("═══{}", right)
-                } else {
-                    print!("══");
-                }
-            }
-            println!("");
-        };
-
-        println!("coords length: {}", self.coords.len());
-
-        draw_top_bottom(true);
-
-        // Draw points
-        let mut y: i8 = 9;
-
-        print!("║ {} ", y);
-
-        for (i, c) in self.coords.iter().enumerate() {
-            let mut char = '-';
-
-            match c.state {
-                CoordState::Normal => (),
-                CoordState::HasMugwump => char = '𑗌',
-                CoordState::Checked => char = '*',
-            }
-
-            print!("{} ", char);
-
-            if (i % 10) == 0 {
-                print!("║");
-                println!("");
-                print!("║ {} ", y);
-                y -= 1;
-            }
-        }
-
-        print!("║ 𑗌 ");
-        for i in 0..10 {
-            print!("{} ", i);
-
-            if i == 9 {
-                print!("║");
-            }
-        }
-        println!("");
-
-        draw_top_bottom(false);
-    }
 }
 
 enum GameState {
@@ -119,7 +62,7 @@ enum GameState {
 }
 
 #[derive(Debug)]
-struct Coordinate {
+pub struct Coordinate {
     x: usize,
     y: usize,
     state: CoordState,
@@ -142,7 +85,7 @@ impl Coordinate {
 }
 
 #[derive(Debug, PartialEq)]
-enum CoordState {
+pub enum CoordState {
     Normal,
     HasMugwump,
     Checked,
@@ -162,5 +105,5 @@ fn main() {
     println!("YOU HOW FAR YOU ARE FROM EACH MUGWUMP.\n");
 
     let game = Game::new();
-    game.draw_board();
+    draw_board(game.coords);
 }
