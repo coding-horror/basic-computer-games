@@ -1,6 +1,6 @@
 use crate::coordinate::{CoordState, Coordinate};
 
-pub fn draw_board(coords: Vec<Coordinate>) {
+pub fn draw_board(coords: &Vec<Coordinate>) {
     let draw_top_bottom = |is_top: bool| {
         let (mut left, mut right) = ("╔", "╗");
 
@@ -26,15 +26,20 @@ pub fn draw_board(coords: Vec<Coordinate>) {
 
     print!("║ {} ", y);
     for (i, c) in coords.iter().enumerate() {
-        let mut _char = ' ';
+        {
+            use CoordState::*;
 
-        match c.state {
-            CoordState::Normal => _char = '-',
-            CoordState::HasMugwump => _char = '𑗌',
-            CoordState::Checked => _char = '*',
+            let mut _char = ' ';
+
+            match c.state {
+                Normal => _char = '-',
+                HasMugwump => _char = 'ü',
+                Checked => _char = '*',
+                FoundMugwump => _char = '𑗌',
+            }
+
+            print!("{} ", _char);
         }
-
-        print!("{} ", _char);
 
         if ((i + 1) % 10) == 0 {
             y -= 1;
@@ -48,7 +53,7 @@ pub fn draw_board(coords: Vec<Coordinate>) {
         }
     }
 
-    print!("║ 𑗌 ");
+    print!("║ ♥︎ ");
     for i in 0..10 {
         print!("{} ", i);
 
