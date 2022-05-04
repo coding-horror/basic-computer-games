@@ -28,7 +28,7 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
-###How the computer deduces your guess.
+### How the computer deduces your guess.
 
 The computer takes the number of black pegs and white pegs that the user reports
 and uses that information as a target. It then assumes its guess is the answer

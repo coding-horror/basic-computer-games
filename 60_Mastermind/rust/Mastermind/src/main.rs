@@ -324,7 +324,7 @@ fn main() {
                 all_possibilities.iter_mut().enumerate().for_each(|b| {
                     if *b.1 { //filter out ones we already know aren't possible
                         let mut tmp_guess = GUESS::new(CODE::new_from_int(b.0, num_colors, num_positions));
-                        tmp_guess.evaluate(&answer);
+                        tmp_guess.evaluate(&guess.code); //compare with computer guess
                         if blacks != tmp_guess.blacks || whites != tmp_guess.whites { //if number of blacks/whites is different, set it to false
                             *b.1 = false;
                         }
@@ -378,7 +378,6 @@ fn print_board(guesses: &Vec<GUESS>) {
     for guess in guesses.iter().enumerate() {
         println!("{}\t{}\t\t{}\t{}", guess.0,guess.1.code._as_human_readible_chars(),guess.1.blacks,guess.1.whites);
     }
-
 }
 
 /**

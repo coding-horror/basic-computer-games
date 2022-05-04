@@ -1,5 +1,5 @@
 [package]
-name = "rust"
+name = "mastermind_refactored_for_conventions"
 version = "0.1.0"
 edition = "2021"
 
