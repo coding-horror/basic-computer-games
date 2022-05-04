@@ -8,7 +8,7 @@ class Canvas
 			end
 			BUFFER << line
 		end
-		
+
 		clear
 	end
 
@@ -253,14 +253,14 @@ end
 def main
 	puts "#{(" " * 32)}HANGMAN"
 
-	shuffled = WORDS.shuffle(random: Random.new(1))
+	shuffled = WORDS.shuffle(random: Random.new)
 	current_word = 0
 	word_count = shuffled.length
 
 	keep_playing = true
 	while keep_playing
 
-		play_game(WORDS[current_word])
+		play_game(shuffled[current_word])
 		current_word += 1
 
 		if current_word == word_count
