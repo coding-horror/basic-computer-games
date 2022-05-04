@@ -1,7 +1,8 @@
-use crate::game::Game;
+use crate::{game::Game, stats::Stats};
 
 mod celestial_body;
 mod game;
+mod stats;
 mod utility;
 
 fn main() {
@@ -12,22 +13,27 @@ fn main() {
     println!("A PARACHUTE JUMP. TRY OPEN YOUR CHUTE AT THE");
     println!("LAST POSSIBLE MOMENT WITHOUT GOING SPLAT.\n");
 
-    //let mut quit = false;
+    let mut stats = Stats::new();
 
-    // while !quit {
     loop {
         let mut game = Game::new();
-        if !game.tick() {
-            break;
+
+        let latest_altitude = game.tick();
+
+        if latest_altitude > 0. {
+            if let Some(s) = &mut stats {
+                s.add_altitude(latest_altitude);
+            }
         }
 
-        /* loop {
-            if let Some(play_again) = game.tick() {
-                if !play_again {
-                    quit = true;
+        use utility::prompt_bool;
+        if !prompt_bool("DO YOU WANT TO PLAY AGAIN?", true) {
+            if !prompt_bool("PLEASE?", false) {
+                if !prompt_bool("YES OR NO PLEASE?", false) {
+                    println!("SSSSSSSSSS.");
+                    break;
                 }
-                break;
             }
-        } */
+        }
     }
 }

@@ -4,7 +4,6 @@ pub struct Game {
     altitude: f32,
     terminal_velocity: f32,
     acceleration: f32,
-    seconds: f32,
     interval: f32,
 }
 
@@ -39,19 +38,18 @@ impl Game {
             altitude,
             terminal_velocity,
             acceleration,
-            seconds,
             interval: seconds / 8.,
         }
     }
 
-    pub fn tick(&mut self) -> bool {
+    pub fn tick(&mut self) -> f32 {
         let mut splat = false;
         let mut terminal_velocity_reached = false;
 
         let (v, a) = (self.terminal_velocity, self.acceleration);
         let terminal_velocity_time = v / a;
 
-        let mut final_altitude;
+        let initial_altitude = self.altitude;
 
         for i in 0..=8 {
             let dt = i as f32 * self.interval;
@@ -67,10 +65,10 @@ impl Game {
 
                 let d1 = v.powi(2) / (2. * a);
                 let d2 = v * (dt - (terminal_velocity_time));
-                final_altitude = self.altitude - (d1 + d2);
+                self.altitude = initial_altitude - (d1 + d2);
 
-                if final_altitude <= 0. {
-                    let t = (self.altitude - d1) / v;
+                if self.altitude <= 0. {
+                    let t = (initial_altitude - d1) / v;
                     utility::print_splat(t + terminal_velocity_time);
 
                     splat = true;
@@ -78,10 +76,10 @@ impl Game {
                 }
             } else {
                 let d1 = (a * 0.5) * (dt.powi(2));
-                final_altitude = self.altitude - d1;
+                self.altitude = initial_altitude - d1;
 
-                if final_altitude <= 0. {
-                    let t = (2. * self.altitude * a).sqrt();
+                if self.altitude <= 0. {
+                    let t = (2. * initial_altitude / a).sqrt();
                     utility::print_splat(t);
 
                     splat = true;
@@ -89,28 +87,19 @@ impl Game {
                 }
             }
 
-            println!("{}\t\t{}", dt, final_altitude);
+            println!("{}\t\t{}", dt, self.altitude);
 
             std::thread::sleep(std::time::Duration::from_secs(1));
         }
 
+        let mut a = -1.;
+
         if !splat {
-            println!("\nCHUTE OPEN\n")
+            println!("\nCHUTE OPEN\n");
 
-            // get saved statistics from previous games
-            // compare and present a message.
+            a = self.altitude;
         }
 
-        use utility::prompt_bool;
-        if !prompt_bool("DO YOU WANT TO PLAY AGAIN?", true) {
-            if !prompt_bool("PLEASE?", false) {
-                if !prompt_bool("YES OR NO PLEASE?", false) {
-                    println!("SSSSSSSSSS.");
-                    return false;
-                }
-            }
-        }
-
-        true
+        a
     }
 }
