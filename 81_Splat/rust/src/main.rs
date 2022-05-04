@@ -10,21 +10,24 @@ fn main() {
 
     println!("WELCOME TO 'SPLAT' -- THE GAME THAT SIMULATES");
     println!("A PARACHUTE JUMP. TRY OPEN YOUR CHUTE AT THE");
-    println!("LAST POSSIBLE MOMENT WITHOUT GOING SPLAT.");
+    println!("LAST POSSIBLE MOMENT WITHOUT GOING SPLAT.\n");
 
-    let mut quit = false;
+    //let mut quit = false;
 
-    while !quit {
-        let game = Game::new();
+    // while !quit {
+    loop {
+        let mut game = Game::new();
+        if !game.tick() {
+            break;
+        }
 
-        loop {
+        /* loop {
             if let Some(play_again) = game.tick() {
                 if !play_again {
-                    println!("SSSSSSSSSS.");
                     quit = true;
                 }
                 break;
             }
-        }
+        } */
     }
 }

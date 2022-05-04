@@ -10,8 +10,12 @@ pub fn read_line() -> String {
     input.trim().to_uppercase()
 }
 
-pub fn prompt_bool(msg: &str) -> bool {
-    println!(" {} (YES OR NO)?", msg);
+pub fn prompt_bool(msg: &str, template: bool) -> bool {
+    if template {
+        println!("{} (YES OR NO)?", msg);
+    } else {
+        println!("{}", msg);
+    }
 
     loop {
         let response = read_line();
@@ -38,23 +42,27 @@ pub fn prompt_numeric(msg: &str) -> f32 {
     }
 }
 
+pub fn get_altitude() -> f32 {
+    9001. * rand::random::<f32>() + 1000.
+}
+
 pub fn get_terminal_velocity(bool_msg: &str, num_msg: &str) -> f32 {
     let mut _num = 0.0;
 
-    if prompt_bool(bool_msg) {
+    if prompt_bool(bool_msg, true) {
         _num = prompt_numeric(num_msg);
     } else {
-        _num = rand::thread_rng().gen_range(0.0..=1000.0);
+        _num = get_random_float(0., 1000.);
         println!("OK. TERMINAL VELOCTY = {} MI/HR", _num);
     }
 
-    _num * ((5280 / 3600) as f32)
+    (_num * ((5280 / 3600) as f32)) * get_random_float(0.95, 1.05)
 }
 
 pub fn get_acceleration(bool_msg: &str, num_msg: &str) -> f32 {
     let mut _num = 0.0;
 
-    if prompt_bool(bool_msg) {
+    if prompt_bool(bool_msg, true) {
         _num = prompt_numeric(num_msg);
     } else {
         let b =
@@ -64,5 +72,14 @@ pub fn get_acceleration(bool_msg: &str, num_msg: &str) -> f32 {
         b.print_acceleration_message();
     }
 
-    _num
+    _num * get_random_float(0.95, 1.05)
+}
+
+fn get_random_float(min: f32, max: f32) -> f32 {
+    rand::thread_rng().gen_range(min..=max)
+}
+
+pub fn print_splat(t: f32) {
+    println!("{}\t\tSPLAT!", t);
+    //get random death message
 }
