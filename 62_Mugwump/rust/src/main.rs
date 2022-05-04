@@ -1,58 +1,51 @@
 #![allow(dead_code)]
 
+use rand::Rng;
+
 struct Game {
     coords: Vec<Coordinate>,
     tries: u8,
-    mugwumps: Vec<Coordinate>,
     pub state: GameState,
 }
 
 impl Game {
     fn new() -> Self {
         let mut coords = Vec::new();
+        let mut random_indexes = Vec::new();
+        let get_random_index = || -> i32 { rand::thread_rng().gen_range(0..100) };
+
+        for _ in 0..4 {
+            let mut i = get_random_index();
+            while random_indexes.contains(&i) {
+                i = get_random_index();
+            }
+            random_indexes.push(i);
+        }
 
         let mut x = 0;
         let mut y: i8 = 9;
 
-        while y >= 0 {
-            for _ in 0..10 {
-                println!("current pos: {:?}", (x, y));
-                coords.push(Coordinate::new((x, y as usize), false));
+        for i in 0..100 {
+            println!("current pos: {:?}", (x, y));
 
-                x += 1;
-
-                if (x % 10) == 0 {
-                    break;
-                }
+            let mut has_mugwump = false;
+            if random_indexes.contains(&i) {
+                has_mugwump = true;
             }
 
-            x = 0;
-            y -= 1;
+            coords.push(Coordinate::new((x, y as usize), has_mugwump));
+
+            x += 1;
+
+            if ((i + 1) % 10) == 0 {
+                x = 0;
+                y -= 1;
+            }
         }
-
-        let mut mugwumps = Vec::new();
-        let mut coords_clone = coords.clone();
-
-        use rand::prelude::IteratorRandom;
-
-        for _ in 0..4 {
-            let (i, &mut mut out) = coords_clone
-                .iter_mut()
-                .enumerate()
-                .choose(&mut rand::thread_rng())
-                .unwrap();
-
-            coords_clone.remove(i);
-            out.state = CoordState::HasMugwump;
-            mugwumps.push(out);
-        }
-
-        println!("{:#?}", mugwumps);
 
         Game {
             coords,
             tries: 0,
-            mugwumps,
             state: GameState::Playing,
         }
     }
@@ -125,7 +118,7 @@ enum GameState {
     Lose,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug)]
 struct Coordinate {
     x: usize,
     y: usize,
@@ -148,7 +141,7 @@ impl Coordinate {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Debug, PartialEq)]
 enum CoordState {
     Normal,
     HasMugwump,
