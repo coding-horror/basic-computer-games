@@ -1,4 +1,4 @@
-use crate::{CoordState, Coordinate};
+use crate::coordinate::{CoordState, Coordinate};
 
 pub fn draw_board(coords: Vec<Coordinate>) {
     let draw_top_bottom = |is_top: bool| {
@@ -19,8 +19,6 @@ pub fn draw_board(coords: Vec<Coordinate>) {
         }
         println!("");
     };
-
-    //println!("coords length: {}", coords.len());
 
     draw_top_bottom(true);
 
