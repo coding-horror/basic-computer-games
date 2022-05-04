@@ -1,6 +1,6 @@
 use crate::coordinate::{CoordState, Coordinate};
 
-pub fn draw_board(coords: &Vec<Coordinate>) {
+pub fn draw_board(coords: &Vec<Coordinate>, show_mugwumps: bool) {
     let draw_top_bottom = |is_top: bool| {
         let (mut left, mut right) = ("╔", "╗");
 
@@ -33,7 +33,7 @@ pub fn draw_board(coords: &Vec<Coordinate>) {
 
             match c.state {
                 Normal => _char = '-',
-                HasMugwump => _char = 'ü',
+                HasMugwump => _char = if show_mugwumps { 'M' } else { '-' },
                 Checked => _char = '*',
                 FoundMugwump => _char = '𑗌',
             }

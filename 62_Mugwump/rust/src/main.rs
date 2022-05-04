@@ -22,11 +22,21 @@ fn main() {
     let mut _quit = false;
 
     while !_quit {
-        let mut game = Game::new();
+        let mut show_board = true;
+
+        if let Some(r) = util::prompt_bool("WOULD YOU LIKE TO SEE THE BOARD?") {
+            show_board = r;
+        }
+
+        let mut game = Game::new(show_board);
 
         loop {
-            if !game.tick() {
-                _quit = true;
+            if let Some(again) = game.tick() {
+                if !again {
+                    _quit = true;
+                } else {
+                    println!("FOUR MORE MUGWUMPS ARE NOW IN HIDING")
+                }
                 break;
             }
         }

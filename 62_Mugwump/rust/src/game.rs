@@ -9,10 +9,11 @@ use crate::{
 pub struct Game {
     pub coords: Vec<Coordinate>,
     tries: u8,
+    show_board: bool,
 }
 
 impl Game {
-    pub fn new() -> Self {
+    pub fn new(show_board: bool) -> Self {
         let mut coords = Vec::new();
         let mut random_indexes = Vec::new();
         let get_random_index = || -> i32 { rand::thread_rng().gen_range(0..100) };
@@ -48,28 +49,50 @@ impl Game {
             }
         }
 
-        Game { coords, tries: 0 }
+        Game {
+            coords,
+            tries: 0,
+            show_board,
+        }
     }
 
-    pub fn tick(&mut self) -> bool {
+    pub fn tick(&mut self) -> Option<bool> {
+        let mut game_over = false;
+
         if self.tries >= 10 {
-            return false;
+            println!("SORRY THAT'S 10 TRIES. HERE IS WHERE THEY ARE HIDING");
+
+            for m in self.get_mugwumps() {
+                println!("MUGWUMP {} IS AT {:?}", m.mugwump_number, m.get_pos());
+            }
+
+            if self.show_board {
+                draw_board(&self.coords, true);
+            }
+
+            game_over = true;
         }
 
         if self.get_mugwumps().len() == 0 {
-            return false;
+            println!("YOU HAVE FOUND ALL MUGWUMPS!");
+
+            game_over = true;
         }
 
-        // ASK FOR PLAY AGAIN!
+        if game_over {
+            return util::prompt_bool("THAT WAS FUN! PLAY AGAIN (Y/n)?");
+        }
 
         self.tries += 1;
 
-        draw_board(&self.coords);
+        if self.show_board {
+            draw_board(&self.coords, true);
+        }
 
         let entered_position = self.input_coordinate();
         self.check_position(entered_position);
 
-        true
+        None
     }
 
     fn check_position(&mut self, pos: (u8, u8)) {
@@ -77,7 +100,10 @@ impl Game {
             use CoordState::*;
 
             match coord.state {
-                Normal => self.print_distances(pos),
+                Normal => {
+                    coord.state = Checked;
+                    self.print_distances(pos);
+                }
                 HasMugwump => {
                     coord.state = FoundMugwump;
                     println!("YOU FOUND MUGWUMP {}", coord.mugwump_number);
@@ -89,8 +115,6 @@ impl Game {
     }
 
     fn print_distances(&self, (x, y): (u8, u8)) {
-        println!("\n");
-
         let print = |m: &Coordinate| {
             let (mx, my) = m.get_pos();
             let (x, y, mx, my) = (x as i32, y as i32, mx as i32, my as i32);
