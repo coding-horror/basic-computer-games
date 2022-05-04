@@ -51,7 +51,7 @@ impl Game {
         let (v, a) = (self.terminal_velocity, self.acceleration);
         let terminal_velocity_time = v / a;
 
-        let mut final_altitude = self.altitude;
+        let mut final_altitude;
 
         for i in 0..=8 {
             let dt = i as f32 * self.interval;

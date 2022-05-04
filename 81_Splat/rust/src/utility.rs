@@ -2,6 +2,19 @@ use crate::celestial_body;
 use rand::Rng;
 use std::io;
 
+const DEATH_MESSAGES: [&str; 10] = [
+    "REQUIESCAT IN PACE.",
+    "MAY THE ANGEL OF HEAVEN LEAD YOU INTO PARADISE.",
+    "REST IN PEACE.",
+    "SON-OF-A-GUN.",
+    "#$%&&%!$",
+    "A KICK IN THE PANTS IS A BOOST IF YOU'RE HEADED RIGHT.",
+    "HMMM. SHOULD HAVE PICKED A SHORTER TIME.",
+    "MUTTER. MUTTER. MUTTER.",
+    "PUSHING UP DAISIES.",
+    "EASY COME, EASY GO.",
+];
+
 pub fn read_line() -> String {
     let mut input = String::new();
     io::stdin()
@@ -80,6 +93,15 @@ fn get_random_float(min: f32, max: f32) -> f32 {
 }
 
 pub fn print_splat(t: f32) {
-    println!("{}\t\tSPLAT!", t);
-    //get random death message
+    print_random(format!("{}\t\tSPLAT!", t).as_str(), &DEATH_MESSAGES);
+}
+
+fn print_random(msg: &str, choices: &[&str]) {
+    use rand::seq::SliceRandom;
+    use rand::thread_rng;
+
+    let mut rng = thread_rng();
+
+    println!("{}", msg);
+    println!("\n{}", choices.choose(&mut rng).unwrap());
 }
