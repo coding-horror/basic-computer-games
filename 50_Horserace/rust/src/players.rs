@@ -34,6 +34,8 @@ impl Players {
             if let PromptResult::Numeric(n) = util::prompt(Some(true), "HOW MANY WANT TO BET?") {
                 if n <= 0 {
                     println!("THERE CAN'T BE (LESS THAN) ZERO PLAYERS!");
+                } else if n > 10 {
+                    println!("THERE CAN'T BE MORE THAN TEN PLAYERS!");
                 } else {
                     println!("WHEN ? APPEARS, TYPE NAME");
                     players = Players::generate_players(n);
