@@ -9,15 +9,14 @@ impl Game {
     pub fn new() -> Self {
         let mut needles = Vec::new();
 
-        for i in 0..3 {
-            let number = (i + 1) as u8;
-            let disks = match number {
+        for i in 1..=3 {
+            let disks = match i {
                 1 => util::generate_disks(4),
                 2 => util::generate_disks(3),
                 _ => Vec::new(),
             };
 
-            needles.push(Needle { disks, number });
+            needles.push(Needle { disks, number:i });
         }
 
         Game { needles, _moves: 0 }

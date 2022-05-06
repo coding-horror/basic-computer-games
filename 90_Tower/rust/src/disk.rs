@@ -8,9 +8,9 @@ impl Disk {
     }
 
     pub fn draw(&self) {
-        let space_amount = (15 - self.size) / 2;
-
         let draw_space = || {
+            let space_amount = (15 - self.size) / 2;
+
             if space_amount > 0 {
                 for _ in 0..space_amount {
                     print!(" ");
@@ -23,5 +23,6 @@ impl Disk {
             print!("*");
         }
         draw_space();
+        print!("   ");
     }
 }

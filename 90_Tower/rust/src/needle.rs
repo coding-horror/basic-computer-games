@@ -9,18 +9,16 @@ impl Needle {
     pub fn draw(&self, row: u8) {
         //println!("printing row: {}", row);
 
-        let offset = match self.number {
-            1 => "       ",
-            _ => "\t\t\t",
-        };
-
         let row = row as usize;
 
         if self.disks.len() >= row {
             self.disks[row - 1].draw();
         } else {
+            let offset = "       ";
+
             print!("{offset}");
             print!("*");
+            print!("{offset}   ");
         }
     }
 }
