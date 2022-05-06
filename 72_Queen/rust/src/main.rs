@@ -1,9 +1,29 @@
-use draw::draw_board;
+use crate::{
+    game::Game,
+    util::{prompt, PromptResult::*},
+};
 
-mod draw;
+mod game;
 mod util;
+mod ai;
 
 fn main() {
-    draw_board(158);
-    println!("{}",util::is_move_legal(32,63));
+    util::intro();
+
+    loop {
+        let mut game = Game::new();
+
+        loop {
+            if !game.update() {
+                break;
+            }
+        }
+
+        if let YesNo(y) = prompt(Some(false), "\nANYONE ELSE CARE TO TRY?") {
+            if !y {
+                println!("OK --- THANKS AGAIN.");
+                break;
+            }
+        }
+    }
 }
