@@ -7,8 +7,6 @@ pub struct Needle {
 
 impl Needle {
     pub fn draw(&self, row: u8) {
-        //println!("printing row: {}", row);
-
         let row = row as usize;
 
         if self.disks.len() >= row {
@@ -20,5 +18,9 @@ impl Needle {
             print!("*");
             print!("{offset}   ");
         }
+    }
+
+    pub fn add(&mut self, size: u8) {
+        self.disks.push(Disk { size });
     }
 }

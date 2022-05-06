@@ -1,5 +1,5 @@
 pub struct Disk {
-    size: u8,
+    pub size: u8,
 }
 
 impl Disk {
