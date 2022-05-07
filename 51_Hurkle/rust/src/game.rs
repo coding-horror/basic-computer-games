@@ -58,7 +58,7 @@ impl Game {
                             is_y = true;
                         }
                     }
-                    Err(e) => println!("INVALID GUESS - TRY AGAIN! Error: {e}"),
+                    Err(e) => println!("{} - TRY AGAIN!", e.to_string().to_uppercase()),
                 }
             }
         }
