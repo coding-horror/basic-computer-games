@@ -36,6 +36,11 @@ pub const INSTRUCTIONS: [&str; 38] = [
     "AND THE AMOUNT,SEPARATED BY A COMMA",
     "FOR EXAMPLE:TO BET $500 ON BLACK,TYPE 48,500",
     "WHEN I ASK FOR A BET\n",
-    "MINIMUM BET IS $5,MAXIMUM IS $500\n"
+    "MINIMUM BET IS $5,MAXIMUM IS $500\n",
 ];
 
+pub fn print_check(money: usize) {
+    let name = morristown::prompt_string("TO WHOM SHALL I MAKE THE CHECK?");
+    let check_no; //  random
+                  /*PRINT THE CHECK */
+}

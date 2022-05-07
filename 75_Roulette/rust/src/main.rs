@@ -1,7 +1,10 @@
 mod util;
 
 use morristown::Instructions;
+use rand::Rng;
 use util::INSTRUCTIONS;
+
+use crate::util::print_check;
 
 fn main() {
     morristown::print_intro("ROULETTE");
@@ -45,11 +48,25 @@ fn main() {
         }
 
         /*SPIN AND CHECK RESULTS */
+        println!("\nSPINNING");
+        let spin: u8 = rand::thread_rng().gen_range(1..=38);
 
-        /*CHECK PLAYER AND HOUSE WALLETS */
+        if player <= 0 {
+            println!("OOPS! YOU JUST SPENT YOUR LAST DOLLAR");
+            println!("THANKS FOR YOUR MONEY");
+            println!("I'LL USE IT TO BUY A SOLID GOLD ROULETTE WHEEL");
+            break;
+        }
 
-        /*ASK FOR PLAY AGAIN */
+        if house <= 0 {
+            println!("YOU BROKE THE HOUSE!");
+            print_check(player);
+            break;
+        }
 
-        /*IF NOT PRINT THE CHECK */
+        if !morristown::prompt_bool("AGAIN?", false) {
+            print_check(player);
+            break;
+        }
     }
 }
