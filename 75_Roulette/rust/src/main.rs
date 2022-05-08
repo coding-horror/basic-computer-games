@@ -1,16 +1,16 @@
 mod util;
 
-use morristown::Instructions;
+use morristown::{Instructions, PromptMultiOption};
 use rand::Rng;
 use util::INSTRUCTIONS;
 
 fn main() {
     morristown::print_intro("ROULETTE");
 
-    let date = morristown::prompt_multi(
+    let date = morristown::prompt_multi_string(
         "ENTER CURRENT DATE (AS IN 'JANUARY 23, 1978)",
         ",",
-        Some((2, 2)),
+        Some(PromptMultiOption::UnitAmount(2)),
     );
 
     Instructions::new_multiline(
@@ -25,14 +25,18 @@ fn main() {
     let mut player: usize = 1000;
 
     loop {
-        let bet_count = morristown::prompt_number_range::<u8>("HOW MANY BETS?", 1, std::u8::MAX);
+        let bet_count = morristown::prompt_number_range::<u8>("HOW MANY BETS?", 1..=10);
         let mut bets: Vec<Vec<usize>> = Vec::new();
 
         for i in 1..=bet_count {
             loop {
                 let msg = format!("NUMBER {}?", i);
-                let bet_input =
-                    morristown::prompt_multi_number::<usize>(msg.as_str(), ",", Some((2, 2)));
+                let bet_input = morristown::prompt_multi_number::<usize>(
+                    msg.as_str(),
+                    ",",
+                    Some(PromptMultiOption::UnitAmount(2)),
+                    None,
+                );
                 let (bet_num, wager) = (bet_input[0], bet_input[1]);
 
                 if let Some(_) = bets.iter().find(|bet| bet[0] == bet_num) {
