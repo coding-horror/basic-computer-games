@@ -1,3 +1,5 @@
+use std::ops::RangeInclusive;
+
 pub const INSTRUCTIONS: [&str; 38] = [
     "\nTHIS IS THE BETTING LAYOUT",
     "\n(*=RED)\n",
@@ -39,8 +41,39 @@ pub const INSTRUCTIONS: [&str; 38] = [
     "MINIMUM BET IS $5,MAXIMUM IS $500\n",
 ];
 
+pub const REDS: [u8; 18] = [
+    1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
+];
+
 pub fn print_check(money: usize) {
     let name = morristown::prompt_string("TO WHOM SHALL I MAKE THE CHECK?");
-    let check_no; //  random
-                  /*PRINT THE CHECK */
+    //let _check_no; //  random
+    /*PRINT THE CHECK */
+    todo!()
+}
+
+pub fn process_bet(bet_num: u8, spin: u8) -> (bool, u8) {
+    match bet_num {
+        1..=36 => (bet_num == spin, 35),
+        37 => (is_within_range(1..=12, spin), 2),
+        38 => (is_within_range(13..=24, spin), 2),
+        39 => (is_within_range(25..=36, spin), 2),
+        40 => (spin % 3 == 1, 2),
+        41 => (spin % 3 == 2, 2),
+        42 => (spin % 3 == 0, 2),
+        43 => (is_within_range(1..=18, spin), 1),
+        44 => (is_within_range(19..=36, spin), 1),
+        45 => (spin % 2 == 0, 1),
+        46 => (spin % 2 == 1, 1),
+        47 => (REDS.contains(&spin), 1),
+        48 => (!REDS.contains(&spin), 1),
+        _ => {
+            println!("##INVALID BET##");
+            return (false, 0);
+        }
+    }
+}
+
+fn is_within_range(r: RangeInclusive<u8>, n: u8) -> bool {
+    r.contains(&n)
 }
