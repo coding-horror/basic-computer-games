@@ -1,5 +1,7 @@
 use std::ops::RangeInclusive;
 
+use rand::{thread_rng, Rng};
+
 pub const INSTRUCTIONS: [&str; 38] = [
     "\nTHIS IS THE BETTING LAYOUT",
     "\n(*=RED)\n",
@@ -7,18 +9,18 @@ pub const INSTRUCTIONS: [&str; 38] = [
     "4\t5*\t6",
     "7*\t8\t9*",
     "10\t11\t12*",
-    "---------------------",
+    "--------------------",
     "13\t14*\t15",
     "16*\t17\t18*",
     "19*\t20\t21*",
     "22\t23*\t24",
-    "---------------------",
+    "--------------------",
     "25*\t26\t27*",
     "28\t29\t30*",
     "31\t32*\t33",
     "34*\t35\t36*",
-    "---------------------",
-    "\t\t00\t0\n",
+    "--------------------",
+    "     00      0\n",
     "TYPES OF BETS\n",
     "THE NUMBERS 1 TO 36 SIGNIFY A STRAIGHT BET",
     "ON THAT NUMBER",
@@ -45,13 +47,6 @@ pub const REDS: [u8; 18] = [
     1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
 ];
 
-pub fn print_check(money: usize) {
-    let name = morristown::prompt_string("TO WHOM SHALL I MAKE THE CHECK?");
-    //let _check_no; //  random
-    /*PRINT THE CHECK */
-    todo!()
-}
-
 pub fn process_bet(bet_num: u8, spin: u8) -> (bool, u8) {
     match bet_num {
         1..=36 => (bet_num == spin, 35),
@@ -76,4 +71,21 @@ pub fn process_bet(bet_num: u8, spin: u8) -> (bool, u8) {
 
 fn is_within_range(r: RangeInclusive<u8>, n: u8) -> bool {
     r.contains(&n)
+}
+
+pub fn print_check(money: usize, date: Vec<String>) {
+    let name = morristown::prompt_string("TO WHOM SHALL I MAKE THE CHECK?");
+    let check_no = thread_rng().gen_range(1..=100);
+
+    let dashes = 60;
+
+    println!("\n{}", "-".repeat(dashes));
+    println!("CHECK NO.  {}\n", check_no);
+    println!("{}{}, {}\n\n", "\t".repeat(4), date[0], date[1]);
+    println!("PAY TO THE ORDER OF-----{name}-----$  {money}\n\n");
+    println!("\t\tTHE MEMORY BANK OF VIRGINIA\n");
+    println!("\t\t\t\tTHE COMPUTER");
+    println!("\t\t\t      ----------X-----\t");
+    println!("{}", "-".repeat(dashes));
+    println!("COME BACK SOON!\n")
 }
