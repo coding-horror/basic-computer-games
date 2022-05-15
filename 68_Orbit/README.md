@@ -23,7 +23,7 @@ of orbit    <       ^ ship
 The distance of the bomb from the ship is computed using the law of consines. The law of cosines states:
 
 ```
-D = SQUAREROOT( R**2+D1**2+R*D1*COS(A-A1) )
+D = SQUAREROOT( R**2 + D1**2 - 2*R*D1*COS(A-A1) )
 ```
 
 Where D is the distance between the ship and the bomb, R is the altitude of the ship, D1 is the altitude of the bomb, and A-A1 is the angle between the ship and the bomb.
