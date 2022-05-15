@@ -4,6 +4,9 @@ namespace Program
 {
   class Program
   {
+
+    public static int numberOfMatches;
+    public static int numberOfMatchesRemovedByPlayer;
     static void Main(string[] args)
     {
       // Print introduction text
@@ -26,7 +29,7 @@ namespace Program
       Console.Write("\n");
 
       
-      int numberOfMatches = 23;
+      numberOfMatches = 23;
 
       // Create a random class object to generate the coin toss
       Random random = new Random();
@@ -38,8 +41,7 @@ namespace Program
       if (coinTossResult == 1)
       {
         Console.WriteLine("TAILS! YOU GO FIRST. ");
-        Console.Write("\n");
-        numberOfMatches = PlayerTurn(numberOfMatches)[0];
+        PlayerTurn();
       }
       else
       {
@@ -52,42 +54,38 @@ namespace Program
 
       do
       {
-        Console.WriteLine("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
-        int[] totalNumberAndNumberRemoved = PlayerTurn(numberOfMatches);
-        numberOfMatches = ComputerTurn(totalNumberAndNumberRemoved);        
+        Console.Write("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
+        PlayerTurn();
+        ComputerTurn();        
       } while (numberOfMatches > 1);
 
     }
 
 
-    static int[] PlayerTurn(int numberOfMatches)
+    static void PlayerTurn()
     {
+      Console.WriteLine("\n");
       Console.WriteLine("YOUR TURN -- YOU MAY TAKE 1, 2, OR 3 MATCHES.");
       Console.Write("HOW MANY DO YOU WISH TO REMOVE ?? ");
       // Get player input
-      int numberOfMatchesRemove = ReadPlayerInput();
+      numberOfMatchesRemovedByPlayer = ReadPlayerInput();
       // If the input is invalid (not 1, 2, or 3)
       // then ask the player to input again
-      while (numberOfMatchesRemove > 3 || numberOfMatchesRemove <= 0)
+      while (numberOfMatchesRemovedByPlayer > 3 || numberOfMatchesRemovedByPlayer <= 0)
       {
         Console.WriteLine("VERY FUNNY! DUMMY!");
         Console.WriteLine("DO YOU WANT TO PLAY OR GOOF AROUND?");
         Console.Write("NOW, HOW MANY MATCHES DO YOU WANT                 ??");
-        numberOfMatchesRemove = ReadPlayerInput();
+        numberOfMatchesRemovedByPlayer = ReadPlayerInput();
       }
 
       // Remove the player specified number of matches
-      numberOfMatches = numberOfMatches - numberOfMatchesRemove;
+      numberOfMatches = numberOfMatches - numberOfMatchesRemovedByPlayer;
 
-      Console.WriteLine("THE ARE NOW " + numberOfMatches + " MATCHES REMAINING");
-      int[] totalNumberAndNumberRemoved = {numberOfMatches, numberOfMatchesRemove};
-      return totalNumberAndNumberRemoved;
-      
+      Console.WriteLine("THE ARE NOW " + numberOfMatches + " MATCHES REMAINING");      
     }
-    static int ComputerTurn(int[] totalNumberAndNumberRemoved)
+    static void ComputerTurn()
     {
-      int numberOfMatches = totalNumberAndNumberRemoved[0];
-      int numberOfMatchesRemovedByPlayer = totalNumberAndNumberRemoved[1];
 
       int numberOfMatchesRemovedByComputer = 0;
       switch (numberOfMatches)
@@ -114,6 +112,7 @@ namespace Program
       if (numberOfMatchesRemovedByComputer != 0)
       {
         Console.WriteLine("MY TURN ! I REMOVE " + numberOfMatchesRemovedByComputer + " MATCHES");
+        numberOfMatches = numberOfMatches - numberOfMatchesRemovedByComputer;
         if (numberOfMatches <= 1)
         {
           Console.Write("\n");
@@ -123,17 +122,22 @@ namespace Program
           Console.WriteLine("GOOD BYE LOSER!");
         }
       }
-
-
-
-      
-      return numberOfMatches;
     }
 
     static int ReadPlayerInput()
     {
       // Read user input and convert to integer
-      int playerInput = Convert.ToInt32(Console.ReadLine());
+      int playerInput = 0;
+      try
+      {
+        playerInput = Convert.ToInt32(Console.ReadLine());
+      }
+      catch (System.Exception)
+      {
+        Console.WriteLine("?REENTER");
+        Console.Write("?? ");
+        playerInput = ReadPlayerInput();
+      }
       return playerInput;      
     }
 
