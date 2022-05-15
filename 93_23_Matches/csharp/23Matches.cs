@@ -7,6 +7,7 @@ namespace Program
 
     public static int numberOfMatches;
     public static int numberOfMatchesRemovedByPlayer;
+    public static bool playerGoesFirst = false;
     static void Main(string[] args)
     {
       // Print introduction text
@@ -41,6 +42,7 @@ namespace Program
       if (coinTossResult == 1)
       {
         Console.WriteLine("TAILS! YOU GO FIRST. ");
+        playerGoesFirst = true;
         PlayerTurn();
       }
       else
@@ -54,8 +56,12 @@ namespace Program
 
       do
       {
-        Console.Write("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
-        PlayerTurn();
+        if (playerGoesFirst == false)
+        {
+          Console.Write("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
+          PlayerTurn();
+        }
+        playerGoesFirst = false;
         ComputerTurn();        
       } while (numberOfMatches > 1);
 
