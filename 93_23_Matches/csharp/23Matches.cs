@@ -88,7 +88,7 @@ namespace Program
       {
         Console.WriteLine("VERY FUNNY! DUMMY!");
         Console.WriteLine("DO YOU WANT TO PLAY OR GOOF AROUND?");
-        Console.Write("NOW, HOW MANY MATCHES DO YOU WANT                 ??");
+        Console.Write("NOW, HOW MANY MATCHES DO YOU WANT                 ?? ");
         numberOfMatchesRemovedByPlayer = ReadPlayerInput();
       }
 
