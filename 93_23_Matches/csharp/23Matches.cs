@@ -5,9 +5,10 @@ namespace Program
   class Program
   {
 
+    // Initialize 3 public variables so that they can be ascessed anywhere in the code
     public static int numberOfMatches;
     public static int numberOfMatchesRemovedByPlayer;
-    public static bool playerGoesFirst = false;
+    public static bool playerGoesFirst = false; // a flag to show if the player won the coin toss
     static void Main(string[] args)
     {
       // Print introduction text
@@ -29,7 +30,7 @@ namespace Program
       Console.WriteLine("IF IT COMES UP HEADS, I WILL WIN THE TOSS.");
       Console.Write("\n");
 
-      
+      // Set the number of matches to 23
       numberOfMatches = 23;
 
       // Create a random class object to generate the coin toss
@@ -42,6 +43,7 @@ namespace Program
       if (coinTossResult == 1)
       {
         Console.WriteLine("TAILS! YOU GO FIRST. ");
+        // Sets the player coin toss flag to true
         playerGoesFirst = true;
         PlayerTurn();
       }
@@ -54,19 +56,24 @@ namespace Program
         numberOfMatches = numberOfMatches - 2;
       }
 
+      // loops the code until there is 1 or fewer matches
       do
       {
+        // Checks if the player has already gone 
+        // because they won the coin toss
+        // if they have not then the player can go
         if (playerGoesFirst == false)
         {
           Console.Write("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
           PlayerTurn();
         }
+        // sets the coint toss flag to false since
+        // this is only needed on the first loop of the code
         playerGoesFirst = false;
         ComputerTurn();        
       } while (numberOfMatches > 1);
 
     }
-
 
     static void PlayerTurn()
     {
@@ -92,7 +99,7 @@ namespace Program
     }
     static void ComputerTurn()
     {
-
+      // Initialize the numberOfMatchesRemovedByComputer
       int numberOfMatchesRemovedByComputer = 0;
       switch (numberOfMatches)
       {
@@ -105,20 +112,23 @@ namespace Program
         case 2:
           numberOfMatchesRemovedByComputer = 1;
           break;
-        case 1: case 0:
+        case 1: case 0: // If the computer losses call this case
           Console.WriteLine("YOU WON, FLOPPY EARS !");
           Console.WriteLine("THING YOU'RE PRETTY SMART !");
           Console.WriteLine("LETS PLAY AGAIN AND I'LL BLOW YOUR SHOES OFF !!");
           break;
-        default:
+        default: // If there are > than 4 matches call this case
           numberOfMatchesRemovedByComputer = 4 - numberOfMatchesRemovedByPlayer;
           break;
       }
-
+      // If the numberOfMatchesRemovedByComputer has been updated run this code,
+      // if not them the computer has lost
       if (numberOfMatchesRemovedByComputer != 0)
       {
         Console.WriteLine("MY TURN ! I REMOVE " + numberOfMatchesRemovedByComputer + " MATCHES");
         numberOfMatches = numberOfMatches - numberOfMatchesRemovedByComputer;
+        // If there are less than or equal to 1 matches
+        // then the player has lost        
         if (numberOfMatches <= 1)
         {
           Console.Write("\n");
@@ -130,18 +140,24 @@ namespace Program
       }
     }
 
+
+    // This method handles the player input 
+    // and will handle inncorrect input
     static int ReadPlayerInput()
     {
       // Read user input and convert to integer
       int playerInput = 0;
+      // Try to read player input
       try
       {
         playerInput = Convert.ToInt32(Console.ReadLine());
       }
+      // If there is an error in the player input
       catch (System.Exception)
       {
         Console.WriteLine("?REENTER");
         Console.Write("?? ");
+        // Ask the player to reenter their input
         playerInput = ReadPlayerInput();
       }
       return playerInput;      
