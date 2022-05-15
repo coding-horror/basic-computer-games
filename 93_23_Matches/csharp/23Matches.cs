@@ -39,7 +39,7 @@ namespace Program
       {
         Console.WriteLine("TAILS! YOU GO FIRST. ");
         Console.Write("\n");
-        Game();
+        numberOfMatches = PlayerTurn(numberOfMatches)[0];
       }
       else
       {
@@ -48,14 +48,93 @@ namespace Program
         Console.Write("\n");
         Console.WriteLine("I TAKE 2 MATCHES");
         numberOfMatches = numberOfMatches - 2;
-        Game();
       }
+
+      do
+      {
+        Console.WriteLine("THE NUMBER OF MATCHES IS NOW " + numberOfMatches);
+        int[] totalNumberAndNumberRemoved = PlayerTurn(numberOfMatches);
+        numberOfMatches = ComputerTurn(totalNumberAndNumberRemoved);        
+      } while (numberOfMatches > 1);
 
     }
 
-    static void Game()
-    {
 
+    static int[] PlayerTurn(int numberOfMatches)
+    {
+      Console.WriteLine("YOUR TURN -- YOU MAY TAKE 1, 2, OR 3 MATCHES.");
+      Console.Write("HOW MANY DO YOU WISH TO REMOVE ?? ");
+      // Get player input
+      int numberOfMatchesRemove = ReadPlayerInput();
+      // If the input is invalid (not 1, 2, or 3)
+      // then ask the player to input again
+      while (numberOfMatchesRemove > 3 || numberOfMatchesRemove <= 0)
+      {
+        Console.WriteLine("VERY FUNNY! DUMMY!");
+        Console.WriteLine("DO YOU WANT TO PLAY OR GOOF AROUND?");
+        Console.Write("NOW, HOW MANY MATCHES DO YOU WANT                 ??");
+        numberOfMatchesRemove = ReadPlayerInput();
+      }
+
+      // Remove the player specified number of matches
+      numberOfMatches = numberOfMatches - numberOfMatchesRemove;
+
+      Console.WriteLine("THE ARE NOW " + numberOfMatches + " MATCHES REMAINING");
+      int[] totalNumberAndNumberRemoved = {numberOfMatches, numberOfMatchesRemove};
+      return totalNumberAndNumberRemoved;
+      
+    }
+    static int ComputerTurn(int[] totalNumberAndNumberRemoved)
+    {
+      int numberOfMatches = totalNumberAndNumberRemoved[0];
+      int numberOfMatchesRemovedByPlayer = totalNumberAndNumberRemoved[1];
+
+      int numberOfMatchesRemovedByComputer = 0;
+      switch (numberOfMatches)
+      {
+        case 4:
+          numberOfMatchesRemovedByComputer = 3;
+          break;
+        case 3:
+          numberOfMatchesRemovedByComputer = 2;
+          break;
+        case 2:
+          numberOfMatchesRemovedByComputer = 1;
+          break;
+        case 1: case 0:
+          Console.WriteLine("YOU WON, FLOPPY EARS !");
+          Console.WriteLine("THING YOU'RE PRETTY SMART !");
+          Console.WriteLine("LETS PLAY AGAIN AND I'LL BLOW YOUR SHOES OFF !!");
+          break;
+        default:
+          numberOfMatchesRemovedByComputer = 4 - numberOfMatchesRemovedByPlayer;
+          break;
+      }
+
+      if (numberOfMatchesRemovedByComputer != 0)
+      {
+        Console.WriteLine("MY TURN ! I REMOVE " + numberOfMatchesRemovedByComputer + " MATCHES");
+        if (numberOfMatches <= 1)
+        {
+          Console.Write("\n");
+          Console.WriteLine("YOU POOR BOOB! YOU TOOK THE LAST MATCH! I GOTCHA!!");
+          Console.WriteLine("HA ! HA ! I BEAT YOU !!!");
+          Console.Write("\n");
+          Console.WriteLine("GOOD BYE LOSER!");
+        }
+      }
+
+
+
+      
+      return numberOfMatches;
+    }
+
+    static int ReadPlayerInput()
+    {
+      // Read user input and convert to integer
+      int playerInput = Convert.ToInt32(Console.ReadLine());
+      return playerInput;      
     }
 
   }
