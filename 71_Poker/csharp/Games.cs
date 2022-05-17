@@ -1,29 +1,32 @@
 using Poker.Resources;
 using static System.StringComparison;
+using static Poker.Rank;
+
+namespace Poker;
 
 internal class Game
 {
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-    private class FloatArray
+    private class CardArray
     {
-        private float[] _values;
+        private Card[] _values;
 
-        public FloatArray(float[] values)
+        public CardArray(Card[] values)
         {
             _values = values;
         }
 
-        public float this[float index]
+        public Card this[float index]
         {
             get => _values[(int)index];
             set => _values[(int)index] = value;
         }
     }
 
-    private readonly FloatArray _cards = new(new float[51]);
-    private readonly FloatArray _cardRanks = new(new float[16]);
+    private readonly CardArray _cards = new(new Card[51]);
+    private readonly CardArray _cardRanks = new(new Card[16]);
     private bool _hasWatch;
     private float _computerBalance;
     private float _playerBalance;
@@ -61,6 +64,8 @@ internal class Game
 
     internal void Play()
     {
+        var deck = new Deck();
+
         _io.Write(Resource.Streams.Title);
         _io.Write(Resource.Streams.Instructions);
 
@@ -68,10 +73,13 @@ internal class Game
         _computerBalance = 200;
         _playerBalance = 200;
 
-        while(PlayHand());
+        do
+        {
+            deck.Shuffle(_random);
+        } while (PlayHand(deck));
     }
 
-    internal bool PlayHand()
+    internal bool PlayHand(Deck deck)
     {
         _pot=0;
         while(true)
@@ -248,23 +256,7 @@ _1460:      _io.WriteLine();
 
         void DealCard(int index, int indexToReplace = 0)
         {
-            while(true)
-            {
-                _cards[index]=100*_random.Next(4) + _random.Next(100);
-                if (GetSuit(_cards[index]) > 3) { continue; }
-                if (GetRank(_cards[index]) > 12) { continue; }
-                if (index==1) { break; }
-                var matchFound = false;
-                for (var i=1; i <= index-1; i++)
-                {
-                    if (_cards[index]==_cards[i])
-                    {
-                        matchFound = true;
-                        break;
-                    }
-                }
-                if (!matchFound) { break; }
-            }
+            _cards[index] = deck.Deal();
             if (index > 10)
             {
                 (_cards[indexToReplace], _cards[index]) = (_cards[index], _cards[indexToReplace]);
@@ -276,11 +268,7 @@ _1460:      _io.WriteLine();
         {
             for (Z = firstCard; Z <= firstCard+4; Z++)
             {
-                var card = _cards[Z];
-                _io.Write($"{Z}--  ");
-                _io.Write(GetRankName(GetRank(card)));
-                _io.Write(" of");
-                _io.Write(GetSuitName(GetSuit(card)));
+                _io.Write($"{Z}--  {_cards[Z]}");
                 if (Z % 2 == 0)
                 {
                     _io.WriteLine();
@@ -312,35 +300,33 @@ _1460:      _io.WriteLine();
             var suitMatchCount = 0;
             for (var i = firstCard; i <= firstCard+4; i++)
             {
-               _cardRanks[i]=GetRank(_cards[i]);
-               if (i < firstCard+4 && GetSuit(_cards[i]) == GetSuit(_cards[i+1]))
+               if (i < firstCard+4 && _cards[i].Suit == _cards[i+1].Suit)
                {
                    suitMatchCount++;
                }
             }
             if (suitMatchCount == 4)
             {
-                return (15, "A Flus", "h in", _cards[firstCard], 11111);
+                return (15, "A Flus", "h in", _cards[firstCard].Value, 11111);
             }
             for (var i = firstCard; i <= firstCard+3; i++)
             {
                 for (var j = i+1; j <= firstCard+4; j++)
                 {
-                    if (_cardRanks[i] > _cardRanks[j])
+                    if (_cards[i].Rank > _cards[j].Rank)
                     {
                         (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
-                        (_cardRanks[i], _cardRanks[j]) = (_cardRanks[j], _cardRanks[i]);
                     }
                 }
             }
             var handRank = 0;
             var keepMask = 0;
-            var highCard = 0f;
+            Card highCard = default;
             var handName1 = "";
             var handName2 = "";
             for (var i = firstCard; i <= firstCard+3; i++)
             {
-                if (_cardRanks[i] == _cardRanks[i+1])
+                if (_cards[i].Rank == _cards[i+1].Rank)
                 {
                     keepMask += 11*(int)Math.Pow(10, i-firstCard);
                     highCard = _cards[i];
@@ -349,16 +335,16 @@ _1460:      _io.WriteLine();
             }
             if (keepMask == 0)
             {
-                if (_cardRanks[firstCard]+3 == _cardRanks[firstCard+3])
+                if (_cards[firstCard].Rank.Value + 3 == _cards[firstCard+3].Rank.Value)
                 {
                     keepMask=1111;
                     handRank=10;
                 }
-                if (_cardRanks[firstCard+1]+3 == _cardRanks[firstCard+4])
+                if (_cards[firstCard+1].Rank.Value + 3 == _cards[firstCard+4].Rank.Value)
                 {
                     if (handRank == 10)
                     {
-                        return (14, "Straig", "ht", _cards[firstCard+4], 11111);
+                        return (14, "Straig", "ht", _cards[firstCard+4].Value, 11111);
                     }
                     handRank=10;
                     keepMask=11110;
@@ -367,21 +353,21 @@ _1460:      _io.WriteLine();
             if (handRank < 10)
             {
                 I = 6;
-                return (9, "Schmal", "tz, ", _cards[firstCard+4], 11000);
+                return (9, "Schmal", "tz, ", _cards[firstCard+4].Value, 11000);
             }
             else if (handRank == 10)
             {
                 if (I == 1) { I = 6; }
             }
-            else if (handRank <= 12 && GetRank(highCard) <= 6)
+            else if (handRank <= 12 && highCard.Rank <= 6)
             {
                 I = 6;
             }
-            return (handRank, handName1, handName2, highCard, keepMask);
+            return (handRank, handName1, handName2, highCard.Value, keepMask);
         }
 
         (int, string, string) AnalyzeMultiples(int handStrength, int index) =>
-            (handStrength, _cardRanks[index] == _cardRanks[index - 1]) switch
+            (handStrength, _cards[index].Rank == _cards[index - 1].Rank) switch
             {
                 (<11, _) => (11, "A Pair", " of "),
                 (11, true) => (13, "Three", " "),
@@ -509,6 +495,7 @@ _3340:      return false;
         {
             _io.WriteLine();
             _io.WriteLine("You can't bet with what you haven't got.");
+
             if (_hasWatch)
             {
                 var response = _io.ReadString("Would you like to sell your watch");
@@ -529,10 +516,95 @@ _3340:      return false;
                 }
             }
 
+            // The original program had some code about selling a tie tack, but due to a fault
+            // in the logic the code was unreachable. I've omitted it in this port.
+
             _io.WriteLine("Your wad is shot.  So long, sucker!");
             return true;
         }
     }
+}
+
+internal enum Suit
+{
+    Clubs,
+    Diamonds,
+    Hearts,
+    Spades
+}
+
+internal class Deck
+{
+    private readonly Card[] _cards;
+    private int _nextCard;
+
+    public Deck()
+    {
+        _cards = Ranks.SelectMany(r => Enum.GetValues<Suit>().Select(s => new Card(r, s))).ToArray();
+    }
+
+    public void Shuffle(IRandom _random)
+    {
+        for (int i = 0; i < _cards.Length; i++)
+        {
+            var j = _random.Next(_cards.Length);
+            (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
+        }
+    }
+
+    public Card Deal() => _cards[_nextCard++];
+}
+
+internal record struct Card (Rank Rank, Suit Suit)
+{
+    public float Value => Rank.Value + (int)Suit * 100;
+
+    public override string ToString() => $"{Rank} of {Suit}";
+
+    public static bool operator <(Card x, Card y) => x.Rank < y.Rank;
+    public static bool operator >(Card x, Card y) => x.Rank > y.Rank;
+}
+
+internal struct Rank
+{
+    public static IEnumerable<Rank> Ranks => new[]
+    {
+        Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace
+    };
+
+    public static Rank Two = new Rank(2);
+    public static Rank Three = new Rank(3);
+    public static Rank Four = new Rank(4);
+    public static Rank Five = new Rank(5);
+    public static Rank Six = new Rank(6);
+    public static Rank Seven = new Rank(7);
+    public static Rank Eight = new Rank(8);
+    public static Rank Nine = new Rank(9);
+    public static Rank Ten = new Rank(10);
+    public static Rank Jack = new Rank(11, "Jack");
+    public static Rank Queen = new Rank(12, "Queen");
+    public static Rank King = new Rank(13, "King");
+    public static Rank Ace = new Rank(14, "Ace");
+
+    private readonly int _value;
+    private readonly string _name;
+
+    private Rank(int value, string? name = null)
+    {
+        _value = value;
+        _name = name ?? $" {value} ";
+    }
+
+    public int Value => _value - 2;
+    public override string ToString() => _name;
+
+    public static bool operator <(Rank x, Rank y) => x._value < y._value;
+    public static bool operator >(Rank x, Rank y) => x._value > y._value;
+    public static bool operator ==(Rank x, Rank y) => x._value == y._value;
+    public static bool operator !=(Rank x, Rank y) => x._value != y._value;
+
+    public static bool operator <=(Rank rank, int value) => rank._value <= value;
+    public static bool operator >=(Rank rank, int value) => rank._value >= value;
 }
 
 internal static class IReadWriteExtensions
@@ -541,7 +613,7 @@ internal static class IReadWriteExtensions
     {
         while (true)
         {
-            var response = io.ReadString("Do you wish to continue");
+            var response = io.ReadString(prompt);
             if (response.Equals("YES", InvariantCultureIgnoreCase)) { return true; }
             if (response.Equals("NO", InvariantCultureIgnoreCase)) { return false; }
             io.WriteLine("Answer Yes or No, please.");
