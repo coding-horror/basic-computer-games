@@ -26,16 +26,15 @@ internal class Game
     }
 
     private readonly CardArray _cards = new(new Card[51]);
-    private readonly CardArray _cardRanks = new(new Card[16]);
     private bool _hasWatch;
     private float _computerBalance;
     private float _playerBalance;
     private float _pot;
 
     private float B;
-    private float M;
+    private Card _computerHighCard;
     private float T;
-    private float D;
+    private Card _playerHighCard;
     private float G;
     private float I;
     private float U;
@@ -57,10 +56,6 @@ internal class Game
     }
 
     private int Get0To9() => _random.Next(10);
-
-    private static int GetRank(float x) => (int)x % 100;
-
-    private static int GetSuit(float x) => (int)x / 100;
 
     internal void Play()
     {
@@ -103,7 +98,7 @@ internal class Game
             _io.WriteLine("Your hand:");
             DisplayHand(1);
             I=2;
-            (B, JS, KS, M, X) = AnalyzeHand(6);
+            (B, JS, KS, _computerHighCard, X) = AnalyzeHand(6);
             _io.WriteLine();
 _330:       if (I!=6) { goto _470; }
 _340:       if (Get0To9()<=7) { goto _370; }
@@ -167,7 +162,7 @@ _630:       var response = IsThereAWinner();
             _io.WriteLine();
             V=I;
             I=1;
-            (B, JS, KS, M, X) = AnalyzeHand(6);
+            (B, JS, KS, _computerHighCard, X) = AnalyzeHand(6);
             if (V == 7)
             {
                 Z = 28;
@@ -210,14 +205,14 @@ _1460:      _io.WriteLine();
             _io.WriteLine("Now we compare hands:");
             _io.WriteLine("My hand:");
             DisplayHand(6);
-            (U, HS, IS, D, X) = AnalyzeHand(1);
+            (U, HS, IS, _playerHighCard, X) = AnalyzeHand(1);
             _io.WriteLine();
             _io.Write("You have ");
-            DisplayHandRank(HS, IS, (int)D);
+            DisplayHandRank(HS, IS, _playerHighCard);
             _io.Write("and I have ");
-            DisplayHandRank(JS, KS, (int)M);
-            if (B > U || GetRank(M) > GetRank(D)) { return ComputerWins().Value; }
-            if (U > B || GetRank(D) > GetRank(M)) { return PlayerWins().Value; }
+            DisplayHandRank(JS, KS, _computerHighCard);
+            if (B > U || _computerHighCard > _playerHighCard) { return ComputerWins().Value; }
+            if (U > B || _playerHighCard > _computerHighCard) { return PlayerWins().Value; }
              _io.WriteLine("The hand is drawn.");
              _io.WriteLine($"All ${_pot}remains in the pot.");
         }
@@ -278,24 +273,7 @@ _1460:      _io.WriteLine();
             return;
         }
 
-        string GetRankName(int rank) => rank switch
-        {
-            9 => "Jack",
-            10 => "Queen",
-            11 => "King",
-            12 => "Ace",
-            _ => (rank + 2).ToString()
-        };
-
-        string GetSuitName(int suitNumber) => suitNumber switch
-        {
-            0 => " Clubs",
-            1 => " Diamonds",
-            2 => " Hearts",
-            3 => " Spades"
-        };
-
-        (int, string, string, float, int) AnalyzeHand(int firstCard)
+        (int, string, string, Card, int) AnalyzeHand(int firstCard)
         {
             var suitMatchCount = 0;
             for (var i = firstCard; i <= firstCard+4; i++)
@@ -307,7 +285,7 @@ _1460:      _io.WriteLine();
             }
             if (suitMatchCount == 4)
             {
-                return (15, "A Flus", "h in", _cards[firstCard].Value, 11111);
+                return (15, "A Flus", "h in", _cards[firstCard], 11111);
             }
             for (var i = firstCard; i <= firstCard+3; i++)
             {
@@ -335,16 +313,16 @@ _1460:      _io.WriteLine();
             }
             if (keepMask == 0)
             {
-                if (_cards[firstCard].Rank.Value + 3 == _cards[firstCard+3].Rank.Value)
+                if (_cards[firstCard+3] - _cards[firstCard] == 3)
                 {
                     keepMask=1111;
                     handRank=10;
                 }
-                if (_cards[firstCard+1].Rank.Value + 3 == _cards[firstCard+4].Rank.Value)
+                if (_cards[firstCard+4] - _cards[firstCard+1] == 3)
                 {
                     if (handRank == 10)
                     {
-                        return (14, "Straig", "ht", _cards[firstCard+4].Value, 11111);
+                        return (14, "Straig", "ht", _cards[firstCard+4], 11111);
                     }
                     handRank=10;
                     keepMask=11110;
@@ -353,7 +331,7 @@ _1460:      _io.WriteLine();
             if (handRank < 10)
             {
                 I = 6;
-                return (9, "Schmal", "tz, ", _cards[firstCard+4].Value, 11000);
+                return (9, "Schmal", "tz, ", _cards[firstCard+4], 11000);
             }
             else if (handRank == 10)
             {
@@ -363,7 +341,7 @@ _1460:      _io.WriteLine();
             {
                 I = 6;
             }
-            return (handRank, handName1, handName2, highCard.Value, keepMask);
+            return (handRank, handName1, handName2, highCard, keepMask);
         }
 
         (int, string, string) AnalyzeMultiples(int handStrength, int index) =>
@@ -476,17 +454,17 @@ _3340:      return false;
             return true;
         }
 
-        void DisplayHandRank(string part1, string part2, int highCard)
+        void DisplayHandRank(string part1, string part2, Card highCard)
         {
             _io.Write($"{part1}{part2}");
             if (part1 == "A Flus")
             {
-                _io.Write(GetSuitName(highCard/100));
+                _io.Write(highCard.Suit);
                 _io.WriteLine();
             }
             else
             {
-                _io.Write(GetRankName(GetRank(highCard)));
+                _io.Write(highCard.Rank);
                 _io.WriteLine(part1 == "Schmal" || part1 == "Straig" ? " High" : "'s");
             }
         }
@@ -557,12 +535,12 @@ internal class Deck
 
 internal record struct Card (Rank Rank, Suit Suit)
 {
-    public float Value => Rank.Value + (int)Suit * 100;
-
     public override string ToString() => $"{Rank} of {Suit}";
 
     public static bool operator <(Card x, Card y) => x.Rank < y.Rank;
     public static bool operator >(Card x, Card y) => x.Rank > y.Rank;
+
+    public static int operator -(Card x, Card y) => x.Rank - y.Rank;
 }
 
 internal struct Rank
@@ -595,13 +573,14 @@ internal struct Rank
         _name = name ?? $" {value} ";
     }
 
-    public int Value => _value - 2;
     public override string ToString() => _name;
 
     public static bool operator <(Rank x, Rank y) => x._value < y._value;
     public static bool operator >(Rank x, Rank y) => x._value > y._value;
     public static bool operator ==(Rank x, Rank y) => x._value == y._value;
     public static bool operator !=(Rank x, Rank y) => x._value != y._value;
+
+    public static int operator -(Rank x, Rank y) => x._value - y._value;
 
     public static bool operator <=(Rank rank, int value) => rank._value <= value;
     public static bool operator >=(Rank rank, int value) => rank._value >= value;
