@@ -40,7 +40,7 @@ namespace word
                 if ((guess.Length != 5) || (guess.Equals("?")) || (!guess.All(char.IsLetter)))
                 {
                     guess = "";
-                    Console.WriteLine("You must guess a give letter word. Start again.");
+                    Console.WriteLine("You must guess a five letter word. Start again.");
                 }
             }
 
