@@ -1,3 +1,4 @@
+using System.Text;
 using Poker.Resources;
 using static System.StringComparison;
 using static Poker.Rank;
@@ -9,45 +10,21 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-    private class CardArray
-    {
-        private Card[] _values;
+    private Hand _playerHand;
+    private Hand _computerHand;
 
-        public CardArray(Card[] values)
-        {
-            _values = values;
-        }
-
-        public Card this[float index]
-        {
-            get => _values[(int)index];
-            set => _values[(int)index] = value;
-        }
-    }
-
-    private readonly CardArray _cards = new(new Card[51]);
     private bool _hasWatch;
     private float _computerBalance;
     private float _playerBalance;
     private float _pot;
 
-    private float B;
-    private Card _computerHighCard;
     private float T;
-    private Card _playerHighCard;
     private float G;
-    private float I;
-    private float U;
+    private int I;
     private float Z;
     private float X;
     private float K;
     private float V;
-    private float Q;
-
-    private string JS;
-    private string KS;
-    private string HS;
-    private string IS;
 
     public Game(IReadWrite io, IRandom random)
     {
@@ -89,16 +66,15 @@ internal class Game
             _io.WriteLine();
             if (_playerBalance <= 5 && PlayerCantRaiseFunds()) { return false; }
             _pot += 10;
+
             _playerBalance -= 5;
             _computerBalance -= 5;
-            for (Z=1; Z <= 10; Z++)
-            {
-                DealCard((int)Z);
-            }
+            _playerHand = deck.DealHand();
+            _computerHand = deck.DealHand();
+
             _io.WriteLine("Your hand:");
-            DisplayHand(1);
-            I=2;
-            (B, JS, KS, _computerHighCard, X) = AnalyzeHand(6);
+            _io.Write(_playerHand);
+            (X, I) = _computerHand.Analyze(2);
             _io.WriteLine();
 _330:       if (I!=6) { goto _470; }
 _340:       if (Get0To9()<=7) { goto _370; }
@@ -114,16 +90,16 @@ _430:       Z=23;
 _440:       goto _580;
 _450:       Z=1;
 _460:       goto _510;
-_470:       if (B >= 13) { goto _540; }
+_470:       if (_computerHand.Rank >= 13) { goto _540; }
 _480:       if (Get0To9()>=2) { goto _500; }
 _490:       goto _420;
 _500:       Z=0;
 _510:       K=0;
 _520:       _io.WriteLine("I check.");
 _530:       goto _620;
-_540:       Z = B <= 16 || Get0To9() < 1 ? 35 : 2;
+_540:       Z = _computerHand.Rank <= 16 || Get0To9() < 1 ? 35 : 2;
 _580:       V=Z+Get0To9();
-_590:       if (CopmuterCantContinue()) { return false; }
+_590:       if (ComputerCantContinue()) { return false; }
 _600:       _io.WriteLine($"I'll open with ${V}");
 _610:       K=V;
             G = 0;
@@ -132,37 +108,39 @@ _630:       var response = IsThereAWinner();
             if (response.HasValue) { return response.Value; }
 
             _io.WriteLine();
-            T = _io.ReadNumber("Now we draw -- How many cards do you want", 3, "You can't draw more than three cards.");
-            if (T != 0)
+            var playerDrawCount = _io.ReadNumber(
+                "Now we draw -- How many cards do you want",
+                3,
+                "You can't draw more than three cards.");
+            if (playerDrawCount != 0)
             {
                 Z=10;
                 _io.WriteLine("What are their numbers:");
-                for (Q=1; Q <= T; Q++)
+                for (var i = 1; i <= playerDrawCount; i++)
                 {
-                    U = _io.ReadNumber("");
-                    DealCard((int)++Z, (int)U);
+                    _playerHand = _playerHand.Replace((int)_io.ReadNumber(""), deck.DealCard());
                 }
                 _io.WriteLine("Your new hand:");
-                DisplayHand(1);
+                _io.Write(_playerHand);
             }
-            Z=10+T;
-            for (U=6; U <= 10; U++)
+            var computerDrawCount = 0;
+            for (var i = 1; i <= 5; i++)
             {
-                if ((int)(X/Math.Pow(10, U-6)) == 10*(int)(X/Math.Pow(10, U-5)))
+                if ((int)(X/Math.Pow(10, i-1)) == 10*(int)(X/Math.Pow(10, i)))
                 {
-                    DealCard((int)++Z, (int)U);
+                    _computerHand = _computerHand.Replace(i, deck.DealCard());
+                    computerDrawCount++;
                 }
             }
             _io.WriteLine();
-            _io.Write($"I am taking{Z-10-T}card");
-            if (Z != 11 + T)
+            _io.Write($"I am taking {computerDrawCount} card");
+            if (computerDrawCount != 1)
             {
                 _io.WriteLine("s");
             }
             _io.WriteLine();
             V=I;
-            I=1;
-            (B, JS, KS, _computerHighCard, X) = AnalyzeHand(6);
+            (X, I) = _computerHand.Analyze(1);
             if (V == 7)
             {
                 Z = 28;
@@ -171,13 +149,13 @@ _630:       var response = IsThereAWinner();
             {
                 Z = 1;
             }
-            else if (B < 13)
+            else if (_computerHand.Rank < 13)
             {
                 Z = Get0To9() == 6 ? 19 : 2;
             }
             else
             {
-                if (B >= 16)
+                if (_computerHand.Rank >= 16)
                 {
                     Z = 2;
                 }
@@ -195,7 +173,7 @@ _1370:      if (I!=6) { goto _1400; }
 _1380:      _io.WriteLine("I'll check");
 _1390:      goto _1460;
 _1400:      V=Z+Get0To9();
-_1410:      if (CopmuterCantContinue()) { return false; }
+_1410:      if (ComputerCantContinue()) { return false; }
 _1420:      _io.WriteLine($"I'll bet ${V}");
 _1430:      K=V;
 _1440:      if (GetWager()) { return false; }
@@ -204,17 +182,15 @@ _1450:      response = IsThereAWinner();
 _1460:      _io.WriteLine();
             _io.WriteLine("Now we compare hands:");
             _io.WriteLine("My hand:");
-            DisplayHand(6);
-            (U, HS, IS, _playerHighCard, X) = AnalyzeHand(1);
+            _io.Write(_computerHand);
+            (X, I) = _playerHand.Analyze(0);
             _io.WriteLine();
-            _io.Write("You have ");
-            DisplayHandRank(HS, IS, _playerHighCard);
-            _io.Write("and I have ");
-            DisplayHandRank(JS, KS, _computerHighCard);
-            if (B > U || _computerHighCard > _playerHighCard) { return ComputerWins().Value; }
-            if (U > B || _playerHighCard > _computerHighCard) { return PlayerWins().Value; }
-             _io.WriteLine("The hand is drawn.");
-             _io.WriteLine($"All ${_pot}remains in the pot.");
+            _io.Write($"You have {_playerHand.Name}");
+            _io.Write($"and I have {_computerHand.Name}");
+            if (_computerHand > _playerHand) { return ComputerWins().Value; }
+            if (_playerHand > _computerHand) { return PlayerWins().Value; }
+            _io.WriteLine("The hand is drawn.");
+            _io.WriteLine($"All ${_pot}remains in the pot.");
         }
 
         bool? IsThereAWinner()
@@ -248,112 +224,6 @@ _1460:      _io.WriteLine();
             _playerBalance += _pot;
             return ShouldContinue();
         }
-
-        void DealCard(int index, int indexToReplace = 0)
-        {
-            _cards[index] = deck.Deal();
-            if (index > 10)
-            {
-                (_cards[indexToReplace], _cards[index]) = (_cards[index], _cards[indexToReplace]);
-            }
-            return;
-        }
-
-        void DisplayHand(int firstCard)
-        {
-            for (Z = firstCard; Z <= firstCard+4; Z++)
-            {
-                _io.Write($"{Z}--  {_cards[Z]}");
-                if (Z % 2 == 0)
-                {
-                    _io.WriteLine();
-                }
-            }
-            _io.WriteLine();
-            return;
-        }
-
-        (int, string, string, Card, int) AnalyzeHand(int firstCard)
-        {
-            var suitMatchCount = 0;
-            for (var i = firstCard; i <= firstCard+4; i++)
-            {
-               if (i < firstCard+4 && _cards[i].Suit == _cards[i+1].Suit)
-               {
-                   suitMatchCount++;
-               }
-            }
-            if (suitMatchCount == 4)
-            {
-                return (15, "A Flus", "h in", _cards[firstCard], 11111);
-            }
-            for (var i = firstCard; i <= firstCard+3; i++)
-            {
-                for (var j = i+1; j <= firstCard+4; j++)
-                {
-                    if (_cards[i].Rank > _cards[j].Rank)
-                    {
-                        (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
-                    }
-                }
-            }
-            var handRank = 0;
-            var keepMask = 0;
-            Card highCard = default;
-            var handName1 = "";
-            var handName2 = "";
-            for (var i = firstCard; i <= firstCard+3; i++)
-            {
-                if (_cards[i].Rank == _cards[i+1].Rank)
-                {
-                    keepMask += 11*(int)Math.Pow(10, i-firstCard);
-                    highCard = _cards[i];
-                    (handRank, handName1, handName2) = AnalyzeMultiples(handRank, i);
-                }
-            }
-            if (keepMask == 0)
-            {
-                if (_cards[firstCard+3] - _cards[firstCard] == 3)
-                {
-                    keepMask=1111;
-                    handRank=10;
-                }
-                if (_cards[firstCard+4] - _cards[firstCard+1] == 3)
-                {
-                    if (handRank == 10)
-                    {
-                        return (14, "Straig", "ht", _cards[firstCard+4], 11111);
-                    }
-                    handRank=10;
-                    keepMask=11110;
-                }
-            }
-            if (handRank < 10)
-            {
-                I = 6;
-                return (9, "Schmal", "tz, ", _cards[firstCard+4], 11000);
-            }
-            else if (handRank == 10)
-            {
-                if (I == 1) { I = 6; }
-            }
-            else if (handRank <= 12 && highCard.Rank <= 6)
-            {
-                I = 6;
-            }
-            return (handRank, handName1, handName2, highCard, keepMask);
-        }
-
-        (int, string, string) AnalyzeMultiples(int handStrength, int index) =>
-            (handStrength, _cards[index].Rank == _cards[index - 1].Rank) switch
-            {
-                (<11, _) => (11, "A Pair", " of "),
-                (11, true) => (13, "Three", " "),
-                (11, _) => (12, "Two P", "air, "),
-                (12, _) => (16, "Full H", "ouse, "),
-                (_, true) => (17, "Four", " "),
-                _ => (16, "Full H", "ouse, ")
-            };
 
         bool GetWager()
         {
@@ -418,13 +288,13 @@ _3340:      return false;
         bool Line_3430()
         {
             V=G-K+Get0To9();
-            if (CopmuterCantContinue()) { return true; }
+            if (ComputerCantContinue()) { return true; }
             _io.WriteLine($"I'll see you, and raise you{V}");
             K=G+V;
             return GetWager();
         }
 
-        bool CopmuterCantContinue()
+        bool ComputerCantContinue()
         {
             if (_computerBalance - G - V >= 0) { return false; }
             if (G == 0)
@@ -452,21 +322,6 @@ _3340:      return false;
         {
             _io.WriteLine("I'm busted.  Congratulations!");
             return true;
-        }
-
-        void DisplayHandRank(string part1, string part2, Card highCard)
-        {
-            _io.Write($"{part1}{part2}");
-            if (part1 == "A Flus")
-            {
-                _io.Write(highCard.Suit);
-                _io.WriteLine();
-            }
-            else
-            {
-                _io.Write(highCard.Rank);
-                _io.WriteLine(part1 == "Schmal" || part1 == "Straig" ? " High" : "'s");
-            }
         }
 
         bool PlayerCantRaiseFunds()
@@ -503,6 +358,152 @@ _3340:      return false;
     }
 }
 
+internal class Hand
+{
+    private readonly Card[] _cards;
+    private readonly Card _highCard;
+    private readonly string _name1;
+    private readonly string _name2;
+    private readonly int _keepMask;
+    private readonly Func<int, int> _iTransform;
+
+    public Hand(IEnumerable<Card> cards)
+    {
+        _cards = cards.ToArray();
+        (Rank, _name1, _name2, _highCard, _keepMask, _iTransform) = Analyze();
+        Name = GetHandName();
+    }
+
+    public string Name { get; }
+    public int Rank { get; }
+
+    public Hand Replace(int cardNumber, Card newCard)
+    {
+        if (cardNumber < 1 || cardNumber > _cards.Length) { return this; }
+
+        _cards[cardNumber - 1] = newCard;
+        return new Hand(_cards);
+    }
+
+    public (int, int) Analyze(int i) => (_keepMask, _iTransform(i));
+
+    private (int, string, string, Card, int, Func<int, int>) Analyze()
+    {
+        var suitMatchCount = 0;
+        for (var i = 0; i < _cards.Length; i++)
+        {
+            if (i < _cards.Length-1 && _cards[i].Suit == _cards[i+1].Suit)
+            {
+                suitMatchCount++;
+            }
+        }
+        if (suitMatchCount == 4)
+        {
+            return (15, "A Flus", "h in", _cards[0], 11111, x => x);
+        }
+        var sortedCards = _cards.OrderBy(c => c.Rank).ToArray();
+
+        var handRank = 0;
+        var keepMask = 0;
+        Card highCard = default;
+        var handName1 = "";
+        var handName2 = "";
+        for (var i = 0; i < sortedCards.Length - 1; i++)
+        {
+            if (sortedCards[i].Rank == sortedCards[i+1].Rank)
+            {
+                keepMask += 11*(int)Math.Pow(10, i);
+                highCard = sortedCards[i];
+                (handRank, handName1, handName2) =
+                    (handRank, i > 0 && sortedCards[i].Rank == sortedCards[i - 1].Rank) switch
+                    {
+                        (<11, _) => (11, "A Pair", " of "),
+                        (11, true) => (13, "Three", " "),
+                        (11, _) => (12, "Two P", "air, "),
+                        (12, _) => (16, "Full H", "ouse, "),
+                        (_, true) => (17, "Four", " "),
+                        _ => (16, "Full H", "ouse, ")
+                    };
+            }
+        }
+        if (keepMask == 0)
+        {
+            if (sortedCards[3] - sortedCards[0] == 3)
+            {
+                keepMask=1111;
+                handRank=10;
+            }
+            if (sortedCards[4] - sortedCards[1] == 3)
+            {
+                if (handRank == 10)
+                {
+                    return (14, "Straig", "ht", sortedCards[4], 11111, x => x);
+                }
+                handRank=10;
+                keepMask=11110;
+            }
+        }
+        if (handRank < 10)
+        {
+            return (9, "Schmal", "tz, ", sortedCards[4], 11000, _ => 6);
+        }
+        var iTransform = Identity;
+        if (handRank == 10)
+        {
+            iTransform = To6If1;
+        }
+        else if (handRank <= 12 && highCard.Rank <= 6)
+        {
+            iTransform = To6;
+        }
+        return (handRank, handName1, handName2, highCard, keepMask, iTransform);
+
+        int Identity(int x) => x;
+        int To6(int _) => 6;
+        int To6If1(int x) => x == 1 ? 6 : x;
+    }
+
+    private string GetHandName()
+    {
+        var sb = new StringBuilder(_name1).Append(_name2);
+        if (_name1 == "A Flus")
+        {
+            sb.Append(_highCard.Suit).AppendLine();
+        }
+        else
+        {
+            sb.Append(_highCard.Rank)
+                .AppendLine(_name1 == "Schmal" || _name1 == "Straig" ? " High" : "'s");
+        }
+        return sb.ToString();
+    }
+
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        for (var i = 0; i < _cards.Length; i++)
+        {
+            var cardDisplay = $" {i+1} --  {_cards[i]}";
+            // Emulates the effect of the BASIC PRINT statement using the ',' to align text to 14-char print zones
+            sb.Append(cardDisplay.PadRight(cardDisplay.Length + 14 - cardDisplay.Length % 14));
+            if (i % 2 == 1)
+            {
+                sb.AppendLine();
+            }
+        }
+        sb.AppendLine();
+        return sb.ToString();
+    }
+
+    public static bool operator >(Hand x, Hand y) =>
+        x.Rank > y.Rank ||
+        x.Rank == y.Rank && x._highCard > y._highCard;
+
+    public static bool operator <(Hand x, Hand y) =>
+        x.Rank < y.Rank ||
+        x.Rank == y.Rank && x._highCard < y._highCard;
+}
+
 internal enum Suit
 {
     Clubs,
@@ -530,7 +531,9 @@ internal class Deck
         }
     }
 
-    public Card Deal() => _cards[_nextCard++];
+    public Card DealCard() => _cards[_nextCard++];
+
+    public Hand DealHand() => new Hand(Enumerable.Range(0, 5).Select(_ => DealCard()));
 }
 
 internal record struct Card (Rank Rank, Suit Suit)
@@ -543,26 +546,26 @@ internal record struct Card (Rank Rank, Suit Suit)
     public static int operator -(Card x, Card y) => x.Rank - y.Rank;
 }
 
-internal struct Rank
+internal struct Rank : IComparable<Rank>
 {
     public static IEnumerable<Rank> Ranks => new[]
     {
         Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace
     };
 
-    public static Rank Two = new Rank(2);
-    public static Rank Three = new Rank(3);
-    public static Rank Four = new Rank(4);
-    public static Rank Five = new Rank(5);
-    public static Rank Six = new Rank(6);
-    public static Rank Seven = new Rank(7);
-    public static Rank Eight = new Rank(8);
-    public static Rank Nine = new Rank(9);
-    public static Rank Ten = new Rank(10);
-    public static Rank Jack = new Rank(11, "Jack");
-    public static Rank Queen = new Rank(12, "Queen");
-    public static Rank King = new Rank(13, "King");
-    public static Rank Ace = new Rank(14, "Ace");
+    public static Rank Two = new(2);
+    public static Rank Three = new(3);
+    public static Rank Four = new(4);
+    public static Rank Five = new(5);
+    public static Rank Six = new(6);
+    public static Rank Seven = new(7);
+    public static Rank Eight = new(8);
+    public static Rank Nine = new(9);
+    public static Rank Ten = new(10);
+    public static Rank Jack = new(11, "Jack");
+    public static Rank Queen = new(12, "Queen");
+    public static Rank King = new(13, "King");
+    public static Rank Ace = new(14, "Ace");
 
     private readonly int _value;
     private readonly string _name;
@@ -574,6 +577,8 @@ internal struct Rank
     }
 
     public override string ToString() => _name;
+
+    public int CompareTo(Rank other) => this - other;
 
     public static bool operator <(Rank x, Rank y) => x._value < y._value;
     public static bool operator >(Rank x, Rank y) => x._value > y._value;
