@@ -14,17 +14,17 @@ internal class Game
     private Hand _computerHand;
 
     private bool _hasWatch;
-    private float _computerBalance;
-    private float _playerBalance;
-    private float _pot;
+    private int _computerBalance;
+    private int _playerBalance;
+    private int _pot;
 
-    private float T;
-    private float G;
+    private float _playerBet;
+    private int _playerTotalBet;
     private int I;
-    private float Z;
-    private float X;
-    private float K;
-    private float V;
+    private int Z;
+    private int _keepMask;
+    private int _computerTotalBet;
+    private int V;
 
     public Game(IReadWrite io, IRandom random)
     {
@@ -74,17 +74,17 @@ internal class Game
 
             _io.WriteLine("Your hand:");
             _io.Write(_playerHand);
-            (X, I) = _computerHand.Analyze(2);
+            (_keepMask, I) = _computerHand.Analyze(2);
             _io.WriteLine();
 _330:       if (I!=6) { goto _470; }
 _340:       if (Get0To9()<=7) { goto _370; }
-_350:       X=11100;
+_350:       _keepMask = 0b11100;
 _360:       goto _420;
 _370:       if (Get0To9()<=7) { goto _400; }
-_380:       X=11110;
+_380:       _keepMask = 0b11110;
 _390:       goto _420;
 _400:       if (Get0To9()>=1) { goto _450; }
-_410:       X=11111;
+_410:       _keepMask = 0b11111;
 _420:       I=7;
 _430:       Z=23;
 _440:       goto _580;
@@ -94,15 +94,15 @@ _470:       if (_computerHand.Rank >= 13) { goto _540; }
 _480:       if (Get0To9()>=2) { goto _500; }
 _490:       goto _420;
 _500:       Z=0;
-_510:       K=0;
+_510:       _computerTotalBet = 0;
 _520:       _io.WriteLine("I check.");
 _530:       goto _620;
 _540:       Z = _computerHand.Rank <= 16 || Get0To9() < 1 ? 35 : 2;
 _580:       V=Z+Get0To9();
 _590:       if (ComputerCantContinue()) { return false; }
 _600:       _io.WriteLine($"I'll open with ${V}");
-_610:       K=V;
-            G = 0;
+_610:       _computerTotalBet = V;
+            _playerTotalBet = 0;
 _620:       if (GetWager()) { return false; }
 _630:       var response = IsThereAWinner();
             if (response.HasValue) { return response.Value; }
@@ -126,7 +126,7 @@ _630:       var response = IsThereAWinner();
             var computerDrawCount = 0;
             for (var i = 1; i <= 5; i++)
             {
-                if ((int)(X/Math.Pow(10, i-1)) == 10*(int)(X/Math.Pow(10, i)))
+                if ((_keepMask & (1 << (i - 1))) == 0)
                 {
                     _computerHand = _computerHand.Replace(i, deck.DealCard());
                     computerDrawCount++;
@@ -140,7 +140,7 @@ _630:       var response = IsThereAWinner();
             }
             _io.WriteLine();
             V=I;
-            (X, I) = _computerHand.Analyze(1);
+            (_keepMask, I) = _computerHand.Analyze(1);
             if (V == 7)
             {
                 Z = 28;
@@ -164,10 +164,10 @@ _630:       var response = IsThereAWinner();
                     Z = Get0To9() == 8 ? 11 : 19;
                 }
             }
-_1330:      K=0;
-            G=0;
+_1330:      _computerTotalBet = 0;
+            _playerTotalBet = 0;
 _1340:      if (GetWager()) { return false; }
-_1350:      if (T!=.5) { goto _1450; }
+_1350:      if (_playerBet!=.5) { goto _1450; }
 _1360:      if (V==7) { goto _1400; }
 _1370:      if (I!=6) { goto _1400; }
 _1380:      _io.WriteLine("I'll check");
@@ -175,7 +175,7 @@ _1390:      goto _1460;
 _1400:      V=Z+Get0To9();
 _1410:      if (ComputerCantContinue()) { return false; }
 _1420:      _io.WriteLine($"I'll bet ${V}");
-_1430:      K=V;
+_1430:      _computerTotalBet = V;
 _1440:      if (GetWager()) { return false; }
 _1450:      response = IsThereAWinner();
             if (response.HasValue) { return response.Value; }
@@ -183,7 +183,7 @@ _1460:      _io.WriteLine();
             _io.WriteLine("Now we compare hands:");
             _io.WriteLine("My hand:");
             _io.Write(_computerHand);
-            (X, I) = _playerHand.Analyze(0);
+            _playerHand.Analyze(0);
             _io.WriteLine();
             _io.Write($"You have {_playerHand.Name}");
             _io.Write($"and I have {_computerHand.Name}");
@@ -228,31 +228,31 @@ _1460:      _io.WriteLine();
         bool GetWager()
         {
 _3060:      _io.WriteLine();
-            T = _io.ReadNumber("What is your bet");
-_3080:      if ((T-(int)T)==0) { goto _3140; }
-_3090:      if (K!=0) { goto _3120; }
-_3100:      if (G!=0) { goto _3120; }
-_3110:      if (T==.5) { return false; }
+            _playerBet = _io.ReadNumber("What is your bet");
+_3080:      if ((_playerBet - (int)_playerBet) == 0) { goto _3140; }
+_3090:      if (_computerTotalBet != 0) { goto _3120; }
+_3100:      if (_playerTotalBet != 0) { goto _3120; }
+_3110:      if (_playerBet == .5) { return false; }
 _3120:      _io.WriteLine("No small change, please.");
 _3130:      goto _3060;
-_3140:      if (_playerBalance-G-T>=0) { goto _3170; }
+_3140:      if (_playerBalance - _playerTotalBet - _playerBet>=0) { goto _3170; }
 _3150:      if (PlayerCantRaiseFunds()) { return true; }
 _3160:      goto _3060;
-_3170:      if (T!=0) { goto _3200; }
+_3170:      if (_playerBet != 0) { goto _3200; }
 _3180:      I=3;
 _3190:      return Line_3380();
-_3200:      if (G+T>=K) { goto _3230; }
+_3200:      if (_playerTotalBet + _playerBet >= _computerTotalBet) { goto _3230; }
 _3210:      _io.WriteLine("If you can't see my bet, then fold.");
 _3220:      goto _3060;
-_3230:      G += T;
-_3240:      if (G==K) { return Line_3380(); }
+_3230:      _playerTotalBet += (int)_playerBet;
+_3240:      if (_playerTotalBet == _computerTotalBet) { return Line_3380(); }
 _3250:      if (Z!=1) { return Line_3420(); }
-_3260:      if (G>5) { goto _3300; }
+_3260:      if (_playerTotalBet>5) { goto _3300; }
 _3270:      if (Z>=2) { return Line_3350(); }
 _3280:      V=5;
 _3290:      return Line_3420();
 _3300:      if (Z==1) { goto _3320; }
-_3310:      if (T<=25) { return Line_3350(); }
+_3310:      if (_playerBet <= 25) { return Line_3350(); }
 _3320:      I=4;
 _3330:      _io.WriteLine("I fold.");
 _3340:      return false;
@@ -267,41 +267,41 @@ _3340:      return false;
         bool Line_3360()
         {
             _io.WriteLine("I'll see you.");
-            K=G;
+            _computerTotalBet = _playerTotalBet;
             return Line_3380();
         }
 
         bool Line_3380()
         {
-            _playerBalance -= G;
-            _computerBalance -= K;
-            _pot += G+K;
+            _playerBalance -= _playerTotalBet;
+            _computerBalance -= _computerTotalBet;
+            _pot += _playerTotalBet + _computerTotalBet;
             return false;
         }
 
         bool Line_3420()
         {
-            if (G>3*Z) { return Line_3350(); }
+            if (_playerTotalBet>3*Z) { return Line_3350(); }
             return Line_3430();
         }
 
         bool Line_3430()
         {
-            V=G-K+Get0To9();
+            V = _playerTotalBet - _computerTotalBet + Get0To9();
             if (ComputerCantContinue()) { return true; }
             _io.WriteLine($"I'll see you, and raise you{V}");
-            K=G+V;
+            _computerTotalBet = _playerTotalBet + V;
             return GetWager();
         }
 
         bool ComputerCantContinue()
         {
-            if (_computerBalance - G - V >= 0) { return false; }
-            if (G == 0)
+            if (_computerBalance - _playerTotalBet - V >= 0) { return false; }
+            if (_playerTotalBet == 0)
             {
                 V = _computerBalance;
             }
-            else if (_computerBalance - G >= 0)
+            else if (_computerBalance - _playerTotalBet >= 0)
             {
                 return Line_3360();
             }
@@ -310,12 +310,13 @@ _3340:      return false;
                 var response = _io.ReadString("Would you like to buy back your watch for $50");
                 if (!response.StartsWith("N", InvariantCultureIgnoreCase))
                 {
-                    // The original code did not deduct $50 from the player
+                    // The original code does not deduct $50 from the player
                     _computerBalance += 50;
                     _hasWatch = true;
+                    return false;
                 }
             }
-            return false;
+            return CongratulatePlayer();
         }
 
         bool CongratulatePlayer()
@@ -399,7 +400,7 @@ internal class Hand
         }
         if (suitMatchCount == 4)
         {
-            return (15, "A Flus", "h in", _cards[0], 11111, x => x);
+            return (15, "A Flus", "h in", _cards[0], 0b11111, x => x);
         }
         var sortedCards = _cards.OrderBy(c => c.Rank).ToArray();
 
@@ -412,7 +413,7 @@ internal class Hand
         {
             if (sortedCards[i].Rank == sortedCards[i+1].Rank)
             {
-                keepMask += 11*(int)Math.Pow(10, i);
+                keepMask |= 0b11 << i;
                 highCard = sortedCards[i];
                 (handRank, handName1, handName2) =
                     (handRank, i > 0 && sortedCards[i].Rank == sortedCards[i - 1].Rank) switch
@@ -430,22 +431,22 @@ internal class Hand
         {
             if (sortedCards[3] - sortedCards[0] == 3)
             {
-                keepMask=1111;
+                keepMask=0b1111;
                 handRank=10;
             }
             if (sortedCards[4] - sortedCards[1] == 3)
             {
                 if (handRank == 10)
                 {
-                    return (14, "Straig", "ht", sortedCards[4], 11111, x => x);
+                    return (14, "Straig", "ht", sortedCards[4], 0b11111, x => x);
                 }
                 handRank=10;
-                keepMask=11110;
+                keepMask=0b11110;
             }
         }
         if (handRank < 10)
         {
-            return (9, "Schmal", "tz, ", sortedCards[4], 11000, _ => 6);
+            return (9, "Schmal", "tz, ", sortedCards[4], 0b11000, _ => 6);
         }
         var iTransform = Identity;
         if (handRank == 10)
