@@ -1,7 +1,5 @@
-using System.Text;
 using Poker.Resources;
 using static System.StringComparison;
-using static Poker.Rank;
 
 namespace Poker;
 
@@ -188,8 +186,8 @@ _1460:      _io.WriteLine();
             _io.WriteLine();
             _io.Write($"You have {_playerHand.Name}");
             _io.Write($"and I have {_computerHand.Name}");
-            if (_computerHand > _playerHand) { return ComputerWins().Value; }
-            if (_playerHand > _computerHand) { return PlayerWins().Value; }
+            if (_computerHand > _playerHand) { return ComputerWins(); }
+            if (_playerHand > _computerHand) { return PlayerWins(); }
             _io.WriteLine("The hand is drawn.");
             _io.WriteLine($"All $ {_pot} remains in the pot.");
         }
@@ -212,20 +210,20 @@ _1460:      _io.WriteLine();
             }
         }
 
-        bool? ComputerWins()
+        bool ComputerWins()
         {
             _io.WriteLine("I win.");
             _computerBalance += _pot;
             return ShouldContinue();
         }
 
-        bool? ShouldContinue()
+        bool ShouldContinue()
         {
             _io.WriteLine($"Now I have ${_computerBalance}and you have ${_playerBalance}");
             return _io.ReadYesNo("Do you wish to continue");
         }
 
-        bool? PlayerWins()
+        bool PlayerWins()
         {
             _io.WriteLine("You win.");
             _playerBalance += _pot;
@@ -380,283 +378,5 @@ internal record Bet (int Amount) : IAction
     public Bet(float amount)
         : this((int)amount)
     {
-    }
-}
-
-internal class Hand
-{
-    private readonly Card[] _cards;
-    private readonly Card _highCard;
-    private readonly string _name1;
-    private readonly string _name2;
-    private readonly int _keepMask;
-    private readonly Func<int, int> _iTransform;
-
-    public Hand(IEnumerable<Card> cards)
-    {
-        _cards = cards.ToArray();
-        (Rank, _name1, _name2, _highCard, _keepMask, _iTransform) = Analyze();
-        Name = GetHandName();
-    }
-
-    public string Name { get; }
-    public int Rank { get; }
-
-    public Hand Replace(int cardNumber, Card newCard)
-    {
-        if (cardNumber < 1 || cardNumber > _cards.Length) { return this; }
-
-        _cards[cardNumber - 1] = newCard;
-        return new Hand(_cards);
-    }
-
-    public (int, int) Analyze(int i) => (_keepMask, _iTransform(i));
-
-    private (int, string, string, Card, int, Func<int, int>) Analyze()
-    {
-        var suitMatchCount = 0;
-        for (var i = 0; i < _cards.Length; i++)
-        {
-            if (i < _cards.Length-1 && _cards[i].Suit == _cards[i+1].Suit)
-            {
-                suitMatchCount++;
-            }
-        }
-        if (suitMatchCount == 4)
-        {
-            return (15, "A Flus", "h in", _cards[0], 0b11111, Identity);
-        }
-        var sortedCards = _cards.OrderBy(c => c.Rank).ToArray();
-
-        var handRank = 0;
-        var keepMask = 0;
-        Card highCard = default;
-        var handName1 = "";
-        var handName2 = "";
-        for (var i = 0; i < sortedCards.Length - 1; i++)
-        {
-            if (sortedCards[i].Rank == sortedCards[i+1].Rank)
-            {
-                keepMask |= 0b11 << i;
-                highCard = sortedCards[i];
-                (handRank, handName1, handName2) =
-                    (handRank, i > 0 && sortedCards[i].Rank == sortedCards[i - 1].Rank) switch
-                    {
-                        (<11, _) => (11, "A Pair", " of "),
-                        (11, true) => (13, "Three", " "),
-                        (11, _) => (12, "Two P", "air, "),
-                        (12, _) => (16, "Full H", "ouse, "),
-                        (_, true) => (17, "Four", " "),
-                        _ => (16, "Full H", "ouse, ")
-                    };
-            }
-        }
-        if (keepMask == 0)
-        {
-            if (sortedCards[3] - sortedCards[0] == 3)
-            {
-                keepMask=0b1111;
-                handRank=10;
-            }
-            if (sortedCards[4] - sortedCards[1] == 3)
-            {
-                if (handRank == 10)
-                {
-                    return (14, "Straig", "ht", sortedCards[4], 0b11111, Identity);
-                }
-                handRank=10;
-                keepMask=0b11110;
-            }
-        }
-        if (handRank < 10)
-        {
-            return (9, "Schmal", "tz, ", sortedCards[4], 0b11000, To6);
-        }
-        var iTransform = Identity;
-        if (handRank == 10)
-        {
-            iTransform = To6If1;
-        }
-        else if (handRank <= 12 && highCard.Rank <= 6)
-        {
-            iTransform = To6;
-        }
-        return (handRank, handName1, handName2, highCard, keepMask, iTransform);
-
-        int Identity(int x) => x;
-        int To6(int _) => 6;
-        int To6If1(int x) => x == 1 ? 6 : x;
-    }
-
-    private string GetHandName()
-    {
-        var sb = new StringBuilder(_name1).Append(_name2);
-        if (_name1 == "A Flus")
-        {
-            sb.Append(_highCard.Suit).AppendLine();
-        }
-        else
-        {
-            sb.Append(_highCard.Rank)
-                .AppendLine(_name1 == "Schmal" || _name1 == "Straig" ? " High" : "'s");
-        }
-        return sb.ToString();
-    }
-
-    public override string ToString()
-    {
-        var sb = new StringBuilder();
-        for (var i = 0; i < _cards.Length; i++)
-        {
-            var cardDisplay = $" {i+1} --  {_cards[i]}";
-            // Emulates the effect of the BASIC PRINT statement using the ',' to align text to 14-char print zones
-            sb.Append(cardDisplay.PadRight(cardDisplay.Length + 14 - cardDisplay.Length % 14));
-            if (i % 2 == 1)
-            {
-                sb.AppendLine();
-            }
-        }
-        sb.AppendLine();
-        return sb.ToString();
-    }
-
-    public static bool operator >(Hand x, Hand y) =>
-        x.Rank > y.Rank ||
-        x.Rank == y.Rank && x._highCard > y._highCard;
-
-    public static bool operator <(Hand x, Hand y) =>
-        x.Rank < y.Rank ||
-        x.Rank == y.Rank && x._highCard < y._highCard;
-}
-
-internal enum Suit
-{
-    Clubs,
-    Diamonds,
-    Hearts,
-    Spades
-}
-
-internal class Deck
-{
-    private readonly Card[] _cards;
-    private int _nextCard;
-
-    public Deck()
-    {
-        _cards = Ranks.SelectMany(r => Enum.GetValues<Suit>().Select(s => new Card(r, s))).ToArray();
-    }
-
-    public void Shuffle(IRandom _random)
-    {
-        for (int i = 0; i < _cards.Length; i++)
-        {
-            var j = _random.Next(_cards.Length);
-            (_cards[i], _cards[j]) = (_cards[j], _cards[i]);
-        }
-        _nextCard = 0;
-    }
-
-    public Card DealCard() => _cards[_nextCard++];
-
-    public Hand DealHand() => new Hand(Enumerable.Range(0, 5).Select(_ => DealCard()));
-}
-
-internal record struct Card (Rank Rank, Suit Suit)
-{
-    public override string ToString() => $"{Rank} of {Suit}";
-
-    public static bool operator <(Card x, Card y) => x.Rank < y.Rank;
-    public static bool operator >(Card x, Card y) => x.Rank > y.Rank;
-
-    public static int operator -(Card x, Card y) => x.Rank - y.Rank;
-}
-
-internal struct Rank : IComparable<Rank>
-{
-    public static IEnumerable<Rank> Ranks => new[]
-    {
-        Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace
-    };
-
-    public static Rank Two = new(2);
-    public static Rank Three = new(3);
-    public static Rank Four = new(4);
-    public static Rank Five = new(5);
-    public static Rank Six = new(6);
-    public static Rank Seven = new(7);
-    public static Rank Eight = new(8);
-    public static Rank Nine = new(9);
-    public static Rank Ten = new(10);
-    public static Rank Jack = new(11, "Jack");
-    public static Rank Queen = new(12, "Queen");
-    public static Rank King = new(13, "King");
-    public static Rank Ace = new(14, "Ace");
-
-    private readonly int _value;
-    private readonly string _name;
-
-    private Rank(int value, string? name = null)
-    {
-        _value = value;
-        _name = name ?? $" {value} ";
-    }
-
-    public override string ToString() => _name;
-
-    public int CompareTo(Rank other) => this - other;
-
-    public static bool operator <(Rank x, Rank y) => x._value < y._value;
-    public static bool operator >(Rank x, Rank y) => x._value > y._value;
-    public static bool operator ==(Rank x, Rank y) => x._value == y._value;
-    public static bool operator !=(Rank x, Rank y) => x._value != y._value;
-
-    public static int operator -(Rank x, Rank y) => x._value - y._value;
-
-    public static bool operator <=(Rank rank, int value) => rank._value <= value;
-    public static bool operator >=(Rank rank, int value) => rank._value >= value;
-}
-
-internal static class IReadWriteExtensions
-{
-    internal static bool ReadYesNo(this IReadWrite io, string prompt)
-    {
-        while (true)
-        {
-            var response = io.ReadString(prompt);
-            if (response.Equals("YES", InvariantCultureIgnoreCase)) { return true; }
-            if (response.Equals("NO", InvariantCultureIgnoreCase)) { return false; }
-            io.WriteLine("Answer Yes or No, please.");
-        }
-    }
-
-    internal static float ReadNumber(this IReadWrite io) => io.ReadNumber("");
-
-    internal static int ReadNumber(this IReadWrite io, string prompt, int max, string maxPrompt)
-    {
-        io.Write(prompt);
-        while (true)
-        {
-            var response = io.ReadNumber();
-            if (response <= max) { return (int)response; }
-            io.WriteLine(maxPrompt);
-        }
-    }
-
-    internal static IAction ReadPlayerAction(this IReadWrite io, bool noCurrentBets)
-    {
-        while(true)
-        {
-            io.WriteLine();
-            var bet = io.ReadNumber("What is your bet");
-            if (bet != (int)bet)
-            {
-                if (noCurrentBets && bet == .5) { return new Bet(0); }
-                io.WriteLine("No small change, please.");
-                continue;
-            }
-            if (bet == 0) { return new Fold(); }
-            return new Bet(bet);
-        }
     }
 }
