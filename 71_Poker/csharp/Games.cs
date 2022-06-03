@@ -105,7 +105,7 @@ _600:       _io.WriteLine($"I'll open with ${V}");
 _610:       _computerTotalBet = V;
             _playerTotalBet = 0;
 _620:       if (GetWager()) { return false; }
-_630:       if (IsThereAWinner() is {} response) { return response; }
+_630:       if (CheckIfSomeoneFolded() is {} response) { return response; }
 
             _io.WriteLine();
             var playerDrawCount = _io.ReadNumber(
@@ -164,21 +164,27 @@ _630:       if (IsThereAWinner() is {} response) { return response; }
                     Z = Get0To9() == 8 ? 11 : 19;
                 }
             }
-_1330:      _computerTotalBet = 0;
+            _computerTotalBet = 0;
             _playerTotalBet = 0;
-_1340:      if (GetWager()) { return false; }
-_1350:      if (_playerBet != 0) { goto _1450; }
-_1360:      if (V==7) { goto _1400; }
-_1370:      if (I!=6) { goto _1400; }
-_1380:      _io.WriteLine("I'll check");
-_1390:      goto _1460;
-_1400:      V=Z+Get0To9();
-_1410:      if (ComputerCantContinue()) { return false; }
-_1420:      _io.WriteLine($"I'll bet ${V}");
-_1430:      _computerTotalBet = V;
-_1440:      if (GetWager()) { return false; }
-_1450:      if (IsThereAWinner() is {} response2) { return response2; }
-_1460:      _io.WriteLine();
+            if (GetWager()) { return false; }
+            if (_playerBet != 0)
+            {
+                if (CheckIfSomeoneFolded() is {} response2) { return response2; }
+            }
+            else if (V != 7 && I == 6)
+            {
+                _io.WriteLine("I'll check");
+            }
+            else
+            {
+                V=Z+Get0To9();
+                if (ComputerCantContinue()) { return false; }
+                _io.WriteLine($"I'll bet ${V}");
+                _computerTotalBet = V;
+                if (GetWager()) { return false; }
+                if (CheckIfSomeoneFolded() is {} response3) { return response3; }
+            }
+            _io.WriteLine();
             _io.WriteLine("Now we compare hands:");
             _io.WriteLine("My hand:");
             _io.Write(_computerHand);
@@ -192,7 +198,7 @@ _1460:      _io.WriteLine();
             _io.WriteLine($"All $ {_pot} remains in the pot.");
         }
 
-        bool? IsThereAWinner()
+        bool? CheckIfSomeoneFolded()
         {
             if (_playerFolds)
             {
@@ -232,6 +238,7 @@ _1460:      _io.WriteLine();
 
         bool GetWager()
         {
+            _playerBet = 0;
             while(true)
             {
                 if (_io.ReadPlayerAction(_computerTotalBet == 0 && _playerTotalBet == 0) is Bet bet)
