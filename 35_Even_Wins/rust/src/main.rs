@@ -42,12 +42,9 @@ impl Game {
     }
 
     fn take(&mut self, num: u32) -> bool {
-        if num > self.max_take {
-            println!("You can take at most {} marbles", self.max_take);
-            return false;
-        }
-        if num > self.middle {
-            println!("You can take at most {} marbles", self.middle);
+        let max_take = self.get_max_take();
+        if num > max_take {
+            println!("You can take at most {} marbles", max_take);
             return false;
         }
         if num < self.min_take {
@@ -130,7 +127,7 @@ fn human_play(game: &mut Game) {
 fn compute_play(game: &mut Game) {
     println!("It's the computer's turn ...");
 
-    let mut marbles_to_take: u32 = 0;
+    let marbles_to_take: u32;
 
     // the magic 6 and 1.5, 5.3 3.4 4.7 3.5 was copy from python implement
     let r: f32 = (game.middle % 6) as f32;
