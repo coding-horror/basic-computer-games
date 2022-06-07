@@ -1,3 +1,8 @@
+-- rockscissors.lua
+-- Ported by Brian Wilkins (BrianWilkinsFL)
+-- Utilized has_key again and choice. A lot of these basic programs
+-- follow a similar choice structure so I think I'll use these functions alot.
+
 function getInput(prompt)
     io.write(prompt)
     io.flush()
@@ -41,6 +46,10 @@ function playGame(n)
 
    print("... " .. itemChoices[tostring(computerChoice)])
 
+   -- Working around a Lua thing where I can't seem to interact
+   -- with function values outside of the function itself
+   -- So the total wins are calculated outside of this function
+   -- and summarized. 
    if computerChoice == humanChoice then 
       print("TIE GAME.  NO WINNER.")
    elseif computerChoice > humanChoice then
