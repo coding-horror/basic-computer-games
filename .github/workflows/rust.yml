@@ -16,7 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+
+    - name: Build All
+      run: find */rust/Cargo.toml|xargs -I {} dirname {}|xargs -I {} bash -c 'cd {} && cargo build --verbose'
+
+    - name: Run All tests
+      run: find */rust/Cargo.toml|xargs -I {} dirname {}|xargs -I {} bash -c 'cd {} && cargo test --verbose'
