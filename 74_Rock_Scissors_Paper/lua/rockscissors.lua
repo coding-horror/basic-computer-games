@@ -35,7 +35,6 @@ function playGame(n)
    math.randomseed(os.time())
    computerChoice = math.random(1,3)
   
-   print(computerChoice)
    humanChoice = choice("3=ROCK...2=SCISSORS...1=PAPER\n1...2...3...WHAT'S YOUR CHOICE? ", itemChoices)
    humanChoice = tonumber(humanChoice)
    print("THIS IS MY CHOICE...")
