@@ -4,12 +4,23 @@ namespace Poker;
 
 internal class Hand
 {
+    public static readonly Hand Empty = new Hand();
+
     private readonly Card[] _cards;
     private readonly Card _highCard;
     private readonly string _name1;
     private readonly string _name2;
     private readonly int _keepMask;
     private readonly Func<int, int> _iTransform;
+
+    private Hand()
+    {
+        _cards = Array.Empty<Card>();
+        _name1 = "";
+        _name2 = "";
+        _iTransform = Identity;
+        Name = "";
+    }
 
     public Hand(IEnumerable<Card> cards)
     {
@@ -101,11 +112,11 @@ internal class Hand
             iTransform = To6;
         }
         return (handRank, handName1, handName2, highCard, keepMask, iTransform);
-
-        int Identity(int x) => x;
-        int To6(int _) => 6;
-        int To6If1(int x) => x == 1 ? 6 : x;
     }
+
+    private int Identity(int x) => x;
+    private int To6(int _) => 6;
+    private int To6If1(int x) => x == 1 ? 6 : x;
 
     private string GetHandName()
     {
