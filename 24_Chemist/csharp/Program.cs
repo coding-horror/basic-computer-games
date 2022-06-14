@@ -10,7 +10,7 @@ The fictitious chemical kryptocyanic acid can only be
 diluted by the ratio of 7 parts water to 3 parts acid.
 If any other ratio is attempted, the acid becomes unstable
 and soon explodes.  Given the amount of acid, you must
-decide who much water to add for dilution.  If you miss
+decide how much water to add for dilution.  If you miss
 you face the consequences.
 ");
 
