@@ -8,7 +8,6 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-    private bool _hasWatch;
 
     private int _playerBet;
     private int _playerTotalBet;
@@ -37,8 +36,6 @@ internal class Game
         _io.Write(Resource.Streams.Title);
         _io.Write(Resource.Streams.Instructions);
 
-        _hasWatch = true;
-
         do
         {
             deck.Shuffle(_random);
@@ -59,7 +56,7 @@ internal class Game
             }
             _io.WriteLine("The ante is $5.  I will deal:");
             _io.WriteLine();
-            if (table.Human.Balance <= 5 && PlayerCantRaiseFunds()) { return false; }
+            if (table.Human.Balance <= 5 && PlayerIsBroke()) { return false; }
 
             table.Deal();
 
@@ -233,7 +230,7 @@ internal class Game
                         _playerTotalBet += bet.Amount;
                         break;
                     }
-                    if (PlayerCantRaiseFunds()) { return true; }
+                    if (PlayerIsBroke()) { return true; }
                     continue;
                 }
                 else
@@ -303,16 +300,9 @@ internal class Game
             {
                 return Line_3360();
             }
-            else if (!_hasWatch)
+            else if (table.Computer.TrySellWatch(table.Human, _io))
             {
-                var response = _io.ReadString("Would you like to buy back your watch for $50");
-                if (!response.StartsWith("N", InvariantCultureIgnoreCase))
-                {
-                    // The original code does not deduct $50 from the player
-                    table.Computer.Balance += 50;
-                    _hasWatch = true;
-                    return false;
-                }
+                return false;
             }
             return CongratulatePlayer();
         }
@@ -323,30 +313,12 @@ internal class Game
             return true;
         }
 
-        bool PlayerCantRaiseFunds()
+        bool PlayerIsBroke()
         {
             _io.WriteLine();
             _io.WriteLine("You can't bet with what you haven't got.");
 
-            if (_hasWatch)
-            {
-                var response = _io.ReadString("Would you like to sell your watch");
-                if (!response.StartsWith("N", InvariantCultureIgnoreCase))
-                {
-                    if (Get0To9() < 7)
-                    {
-                        _io.WriteLine("I'll give you $75 for it.");
-                        table.Human.Balance += 75;
-                    }
-                    else
-                    {
-                        _io.WriteLine("That's a pretty crummy watch - I'll give you $25.");
-                        table.Human.Balance += 25;
-                    }
-                    _hasWatch = false;
-                    return false;
-                }
-            }
+            if (Computer.TryBuyWatch(table.Human, _io, _random)) { return false; }
 
             // The original program had some code about selling a tie tack, but due to a fault
             // in the logic the code was unreachable. I've omitted it in this port.
@@ -390,14 +362,14 @@ internal class Human : Player
     public Human(int bank)
         : base(bank)
     {
+        HasWatch = true;
     }
+
+    public bool HasWatch { get; set; }
 
     public void DrawCards(Deck deck, IReadWrite io)
     {
-        var count = io.ReadNumber(
-            "Now we draw -- How many cards do you want",
-            3,
-            "You can't draw more than three cards.");
+        var count = io.ReadNumber("How many cards do you want", 3, "You can't draw more than three cards.");
         if (count == 0) { return; }
 
         io.WriteLine("What are their numbers:");
@@ -408,6 +380,18 @@ internal class Human : Player
 
         io.WriteLine("Your new hand:");
         io.Write(Hand);
+    }
+
+    public void ReceiveWatch()
+    {
+        // In the original code the player does not pay any money to receive the watch back.
+        HasWatch = true;
+    }
+
+    public void SellWatch(int amount)
+    {
+        HasWatch = false;
+        Balance += amount;
     }
 }
 
@@ -438,6 +422,38 @@ internal class Computer : Player
         {
             io.WriteLine("s");
         }
+    }
+
+    public static bool TryBuyWatch(Human human, IReadWrite io, IRandom random)
+    {
+        if (!human.HasWatch) { return false; }
+
+        var response = io.ReadString("Would you like to sell your watch");
+        if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
+
+        var (value, message) = (random.Next(10) < 7) switch
+        {
+            true => (75, "I'll give you $75 for it."),
+            false => (25, "That's a pretty crummy watch - I'll give you $25.")
+        };
+
+        io.WriteLine(message);
+        human.SellWatch(value);
+
+        return true;
+    }
+
+    public bool TrySellWatch(Human human, IReadWrite io)
+    {
+        if (human.HasWatch) { return false; }
+
+        var response = io.ReadString("Would you like to buy back your watch for $50");
+        if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
+
+        // The original code does not deduct $50 from the player
+        Balance += 50;
+        human.ReceiveWatch();
+        return true;
     }
 }
 
@@ -474,6 +490,7 @@ internal class Table
     public void Draw()
     {
         _io.WriteLine();
+        _io.Write("Now we draw -- ");
         Human.DrawCards(_deck, _io);
         Computer.DrawCards(_deck, _io);
         _io.WriteLine();
