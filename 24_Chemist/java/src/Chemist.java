@@ -103,7 +103,7 @@ public class Chemist {
         System.out.println("DILUTED BY THE RATIO OF 7 PARTS WATER TO 3 PARTS ACID.");
         System.out.println("IF ANY OTHER RATIO IS ATTEMPTED, THE ACID BECOMES UNSTABLE");
         System.out.println("AND SOON EXPLODES.  GIVEN THE AMOUNT OF ACID, YOU MUST");
-        System.out.println("DECIDE WHO MUCH WATER TO ADD FOR DILUTION.  IF YOU MISS");
+        System.out.println("DECIDE HOW MUCH WATER TO ADD FOR DILUTION.  IF YOU MISS");
         System.out.println("YOU FACE THE CONSEQUENCES.");
     }
 
