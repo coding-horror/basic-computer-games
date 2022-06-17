@@ -7,42 +7,48 @@ internal class Hand
     public static readonly Hand Empty = new Hand();
 
     private readonly Card[] _cards;
-    private readonly Card _highCard;
     private readonly string _name1;
     private readonly string _name2;
-    private readonly int _keepMask;
-    private readonly Func<int, int> _iTransform;
 
     private Hand()
     {
         _cards = Array.Empty<Card>();
         _name1 = "";
         _name2 = "";
-        _iTransform = Identity;
         Name = "";
     }
 
     public Hand(IEnumerable<Card> cards)
+        : this(cards, isAfterDraw: false)
+    {
+    }
+
+    private Hand(IEnumerable<Card> cards, bool isAfterDraw)
     {
         _cards = cards.ToArray();
-        (Rank, _name1, _name2, _highCard, _keepMask, _iTransform) = Analyze();
+        (Rank, _name1, _name2, HighCard, KeepMask) = Analyze();
         Name = GetHandName();
+
+        IsWeak = Rank < 10
+            || Rank == 10 && isAfterDraw
+            || Rank <= 12 && HighCard.Rank <= 6;
     }
 
     public string Name { get; }
     public int Rank { get; }
+    public Card HighCard { get; }
+    public int KeepMask { get; set; }
+    public bool IsWeak { get; }
 
     public Hand Replace(int cardNumber, Card newCard)
     {
         if (cardNumber < 1 || cardNumber > _cards.Length) { return this; }
 
         _cards[cardNumber - 1] = newCard;
-        return new Hand(_cards);
+        return new Hand(_cards, isAfterDraw: true);
     }
 
-    public (int, int) Analyze(int i) => (_keepMask, _iTransform(i));
-
-    private (int, string, string, Card, int, Func<int, int>) Analyze()
+    private (int, string, string, Card, int) Analyze()
     {
         var suitMatchCount = 0;
         for (var i = 0; i < _cards.Length; i++)
@@ -54,7 +60,7 @@ internal class Hand
         }
         if (suitMatchCount == 4)
         {
-            return (15, "A Flus", "h in", _cards[0], 0b11111, Identity);
+            return (15, "A Flus", "h in", _cards[0], 0b11111);
         }
         var sortedCards = _cards.OrderBy(c => c.Rank).ToArray();
 
@@ -92,42 +98,27 @@ internal class Hand
             {
                 if (handRank == 10)
                 {
-                    return (14, "Straig", "ht", sortedCards[4], 0b11111, Identity);
+                    return (14, "Straig", "ht", sortedCards[4], 0b11111);
                 }
                 handRank=10;
                 keepMask=0b11110;
             }
         }
-        if (handRank < 10)
-        {
-            return (9, "Schmal", "tz, ", sortedCards[4], 0b11000, To6);
-        }
-        var iTransform = Identity;
-        if (handRank == 10)
-        {
-            iTransform = To6If1;
-        }
-        else if (handRank <= 12 && highCard.Rank <= 6)
-        {
-            iTransform = To6;
-        }
-        return (handRank, handName1, handName2, highCard, keepMask, iTransform);
+        return handRank < 10
+            ? (9, "Schmal", "tz, ", sortedCards[4], 0b11000)
+            : (handRank, handName1, handName2, highCard, keepMask);
     }
-
-    private int Identity(int x) => x;
-    private int To6(int _) => 6;
-    private int To6If1(int x) => x == 1 ? 6 : x;
 
     private string GetHandName()
     {
         var sb = new StringBuilder(_name1).Append(_name2);
         if (_name1 == "A Flus")
         {
-            sb.Append(_highCard.Suit).AppendLine();
+            sb.Append(HighCard.Suit).AppendLine();
         }
         else
         {
-            sb.Append(_highCard.Rank)
+            sb.Append(HighCard.Rank)
                 .AppendLine(_name1 == "Schmal" || _name1 == "Straig" ? " High" : "'s");
         }
         return sb.ToString();
@@ -152,9 +143,9 @@ internal class Hand
 
     public static bool operator >(Hand x, Hand y) =>
         x.Rank > y.Rank ||
-        x.Rank == y.Rank && x._highCard > y._highCard;
+        x.Rank == y.Rank && x.HighCard > y.HighCard;
 
     public static bool operator <(Hand x, Hand y) =>
         x.Rank < y.Rank ||
-        x.Rank == y.Rank && x._highCard < y._highCard;
+        x.Rank == y.Rank && x.HighCard < y.HighCard;
 }

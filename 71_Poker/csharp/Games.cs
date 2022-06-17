@@ -8,15 +8,11 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-
     private int _playerBet;
     private int _playerTotalBet;
-    private int I;
     private int Z;
     private int _computerTotalBet;
     private int V;
-    private bool _playerFolds;
-    private bool _computerFolds;
 
     public Game(IReadWrite io, IRandom random)
     {
@@ -29,8 +25,8 @@ internal class Game
     internal void Play()
     {
         var deck = new Deck();
-        var human = new Human(200);
-        var computer = new Computer(200);
+        var human = new Human(200, _io);
+        var computer = new Computer(200, _io, _random);
         var table = new Table(_io, deck, human, computer);
 
         _io.Write(Resource.Streams.Title);
@@ -44,8 +40,6 @@ internal class Game
 
     internal bool PlayHand(Table table)
     {
-        _playerFolds = _computerFolds = false;
-        table.Pot=0;
         while(true)
         {
             _io.WriteLine();
@@ -56,47 +50,23 @@ internal class Game
             }
             _io.WriteLine("The ante is $5.  I will deal:");
             _io.WriteLine();
-            if (table.Human.Balance <= 5 && PlayerIsBroke()) { return false; }
+            if (table.Human.Balance <= 5 && table.Human.IsBroke()) { return false; }
 
             table.Deal();
 
-            (table.Computer.KeepMask, I) = table.Computer.Hand.Analyze(2);
             _io.WriteLine();
-            if (I == 6)
+            Z = table.Computer.Hand.Rank switch
             {
-                Z=1;
-                if (Get0To9() > 7)
-                {
-                    table.Computer.KeepMask = 0b11100;
-                    I=7;
-                    Z=23;
-                }
-                else if (Get0To9() > 7)
-                {
-                    table.Computer.KeepMask = 0b11110;
-                    I=7;
-                    Z=23;
-                }
-                else if (Get0To9() < 1)
-                {
-                    table.Computer.KeepMask = 0b11111;
-                    I=7;
-                    Z=23;
-                }
-            }
-            else
-            {
-                Z=0;
-                if (table.Computer.Hand.Rank >= 13)
-                {
-                    Z = table.Computer.Hand.Rank <= 16 || Get0To9() < 1 ? 35 : 2;
-                }
-                else if (Get0To9() < 2)
-                {
-                    I=7;
-                    Z=23;
-                }
-            }
+                _ when table.Computer.Hand.IsWeak =>
+                    table.Computer.BluffIf(Get0To9() > 7, 0b11100) ??
+                    table.Computer.BluffIf(Get0To9() > 7, 0b11110) ??
+                    table.Computer.BluffIf(Get0To9() < 1, 0b11111) ??
+                    1,
+                < 13 => table.Computer.BluffIf(Get0To9() < 2) ?? 0,
+                <= 16 => 35,
+                _ when Get0To9() < 1 => 35,
+                _ => 2
+            };
             if (Z <= 1)
             {
                 _computerTotalBet = 0;
@@ -111,43 +81,27 @@ internal class Game
                 _playerTotalBet = 0;
             }
             if (GetWager()) { return false; }
-            if (CheckIfSomeoneFolded() is {} response) { return response; }
+            if (table.SomeoneHasFolded()) { return ShouldContinue(); }
 
             table.Draw();
 
-            V=I;
-            (_, I) = table.Computer.Hand.Analyze(1);
-            if (V == 7)
+            Z = table.Computer.Hand.Rank switch
             {
-                Z = 28;
-            }
-            else if (I == 6)
-            {
-                Z = 1;
-            }
-            else if (table.Computer.Hand.Rank < 13)
-            {
-                Z = Get0To9() == 6 ? 19 : 2;
-            }
-            else
-            {
-                if (table.Computer.Hand.Rank >= 16)
-                {
-                    Z = 2;
-                }
-                else
-                {
-                    Z = Get0To9() == 8 ? 11 : 19;
-                }
-            }
+                _ when table.Computer.IsBluffing => 28,
+                _ when table.Computer.Hand.IsWeak => 1,
+                < 13 => Get0To9() == 0 ? 19 : 2,
+                < 16 => Get0To9() == 8 ? 11 : 19,
+                _ => 2
+            };
+
             _computerTotalBet = 0;
             _playerTotalBet = 0;
             if (GetWager()) { return false; }
             if (_playerBet != 0)
             {
-                if (CheckIfSomeoneFolded() is {} response2) { return response2; }
+                if (table.SomeoneHasFolded()) { return ShouldContinue(); }
             }
-            else if (V != 7 && I == 6)
+            else if (!table.Computer.IsBluffing && table.Computer.Hand.IsWeak)
             {
                 _io.WriteLine("I'll check");
             }
@@ -158,58 +112,19 @@ internal class Game
                 _io.WriteLine($"I'll bet ${V}");
                 _computerTotalBet = V;
                 if (GetWager()) { return false; }
-                if (CheckIfSomeoneFolded() is {} response3) { return response3; }
+                if (table.SomeoneHasFolded()) { return ShouldContinue(); }
             }
-            _io.WriteLine();
-            _io.WriteLine("Now we compare hands:");
-            _io.WriteLine("My hand:");
-            _io.Write(table.Computer.Hand);
-            table.Human.Hand.Analyze(0);
-            _io.WriteLine();
-            _io.Write($"You have {table.Human.Hand.Name}");
-            _io.Write($"and I have {table.Computer.Hand.Name}");
-            if (table.Computer.Hand > table.Human.Hand) { return ComputerWins(); }
-            if (table.Human.Hand > table.Computer.Hand) { return PlayerWins(); }
-            _io.WriteLine("The hand is drawn.");
-            _io.WriteLine($"All $ {table.Pot} remains in the pot.");
-        }
-
-        bool? CheckIfSomeoneFolded()
-        {
-            if (_playerFolds)
+            if (table.GetWinner() is { } winner)
             {
-                _io.WriteLine();
-                return ComputerWins();
+                winner.TakeWinnings();
+                return ShouldContinue();
             }
-            else if (_computerFolds)
-            {
-                _io.WriteLine();
-                return PlayerWins();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        bool ComputerWins()
-        {
-            _io.WriteLine("I win.");
-            table.Computer.Balance += table.Pot;
-            return ShouldContinue();
         }
 
         bool ShouldContinue()
         {
-            _io.WriteLine($"Now I have ${table.Computer.Balance}and you have ${table.Human.Balance}");
+            _io.WriteLine($"Now I have $ {table.Computer.Balance} and you have $ {table.Human.Balance} ");
             return _io.ReadYesNo("Do you wish to continue");
-        }
-
-        bool PlayerWins()
-        {
-            _io.WriteLine("You win.");
-            table.Human.Balance += table.Pot;
-            return ShouldContinue();
         }
 
         bool GetWager()
@@ -230,12 +145,12 @@ internal class Game
                         _playerTotalBet += bet.Amount;
                         break;
                     }
-                    if (PlayerIsBroke()) { return true; }
+                    if (table.Human.IsBroke()) { return true; }
                     continue;
                 }
                 else
                 {
-                    _playerFolds = true;
+                    table.Human.Fold();
                     return UpdatePot();
                 }
             }
@@ -244,7 +159,7 @@ internal class Game
             {
                 if (_playerTotalBet > 5)
                 {
-                    _computerFolds = true;
+                    table.Computer.Fold();
                     _io.WriteLine("I fold.");
                     return false;
                 }
@@ -300,7 +215,7 @@ internal class Game
             {
                 return Line_3360();
             }
-            else if (table.Computer.TrySellWatch(table.Human, _io))
+            else if (table.Computer.TrySellWatch(table.Human))
             {
                 return false;
             }
@@ -310,20 +225,6 @@ internal class Game
         bool CongratulatePlayer()
         {
             _io.WriteLine("I'm busted.  Congratulations!");
-            return true;
-        }
-
-        bool PlayerIsBroke()
-        {
-            _io.WriteLine();
-            _io.WriteLine("You can't bet with what you haven't got.");
-
-            if (Computer.TryBuyWatch(table.Human, _io, _random)) { return false; }
-
-            // The original program had some code about selling a tie tack, but due to a fault
-            // in the logic the code was unreachable. I've omitted it in this port.
-
-            _io.WriteLine("Your wad is shot.  So long, sucker!");
             return true;
         }
     }
@@ -341,6 +242,9 @@ internal record Bet (int Amount) : IAction
 
 internal abstract class Player
 {
+    private Table? _table;
+    private bool _hasFolded;
+
     protected Player(int bank)
     {
         Hand = Hand.Empty;
@@ -350,36 +254,76 @@ internal abstract class Player
     public Hand Hand { get; set; }
     public int Balance { get; set; }
     public int Bet { get; private set; }
+    public bool HasFolded => _hasFolded;
+
+    protected Table Table =>
+        _table ?? throw new InvalidOperationException("The player must be sitting at the table.");
+
+    public void Sit(Table table) => _table = table;
+
+    public virtual void NewHand(Hand hand)
+    {
+        Hand = hand;
+        _hasFolded = false;
+    }
 
     public void Pay(int amount)
     {
         Balance -= amount;
     }
+
+    public virtual void TakeWinnings()
+    {
+        Balance += Table.Pot;
+        Table.Pot = 0;
+    }
+
+    public void Fold()
+    {
+        _hasFolded = true;
+    }
 }
 
 internal class Human : Player
 {
-    public Human(int bank)
+    private readonly IReadWrite _io;
+
+    public Human(int bank, IReadWrite io)
         : base(bank)
     {
         HasWatch = true;
+        _io = io;
     }
 
     public bool HasWatch { get; set; }
 
-    public void DrawCards(Deck deck, IReadWrite io)
+    public void DrawCards(Deck deck)
     {
-        var count = io.ReadNumber("How many cards do you want", 3, "You can't draw more than three cards.");
+        var count = _io.ReadNumber("How many cards do you want", 3, "You can't draw more than three cards.");
         if (count == 0) { return; }
 
-        io.WriteLine("What are their numbers:");
+        _io.WriteLine("What are their numbers:");
         for (var i = 1; i <= count; i++)
         {
-            Hand = Hand.Replace((int)io.ReadNumber(), deck.DealCard());
+            Hand = Hand.Replace((int)_io.ReadNumber(), deck.DealCard());
         }
 
-        io.WriteLine("Your new hand:");
-        io.Write(Hand);
+        _io.WriteLine("Your new hand:");
+        _io.Write(Hand);
+    }
+
+    public bool IsBroke()
+    {
+        _io.WriteLine();
+        _io.WriteLine("You can't bet with what you haven't got.");
+
+        if (Table.Computer.TryBuyWatch(this)) { return false; }
+
+        // The original program had some code about selling a tie tack, but due to a fault
+        // in the logic the code was unreachable. I've omitted it in this port.
+
+        _io.WriteLine("Your wad is shot.  So long, sucker!");
+        return true;
     }
 
     public void ReceiveWatch()
@@ -393,67 +337,102 @@ internal class Human : Player
         HasWatch = false;
         Balance += amount;
     }
+
+    public override void TakeWinnings()
+    {
+        _io.WriteLine("You win.");
+        base.TakeWinnings();
+    }
 }
 
 internal class Computer : Player
 {
-    public Computer(int bank)
+    private readonly IReadWrite _io;
+    private readonly IRandom _random;
+    private bool _isBluffing;
+
+    public Computer(int bank, IReadWrite io, IRandom random)
         : base(bank)
     {
+        _io = io;
+        _random = random;
     }
 
-    public int KeepMask { get; set; }
+    public bool IsBluffing => _isBluffing;
 
-    public void DrawCards(Deck deck, IReadWrite io)
+    public override void NewHand(Hand hand)
     {
+        base.NewHand(hand);
+        _isBluffing = false;
+    }
+
+    public int? BluffIf(bool shouldBluff, int? keepMask = null)
+    {
+        if (!shouldBluff) { return null; }
+
+        _isBluffing = true;
+        Hand.KeepMask = keepMask ?? Hand.KeepMask;
+        return 23;
+    }
+
+    public void DrawCards(Deck deck)
+    {
+        var keepMask = Hand.KeepMask;
         var count = 0;
         for (var i = 1; i <= 5; i++)
         {
-            if ((KeepMask & (1 << (i - 1))) == 0)
+            if ((keepMask & (1 << (i - 1))) == 0)
             {
                 Hand = Hand.Replace(i, deck.DealCard());
                 count++;
             }
         }
 
-        io.WriteLine();
-        io.Write($"I am taking {count} card");
+        _io.WriteLine();
+        _io.Write($"I am taking {count} card");
         if (count != 1)
         {
-            io.WriteLine("s");
+            _io.WriteLine("s");
         }
     }
 
-    public static bool TryBuyWatch(Human human, IReadWrite io, IRandom random)
+    public bool TryBuyWatch(Human human)
     {
         if (!human.HasWatch) { return false; }
 
-        var response = io.ReadString("Would you like to sell your watch");
+        var response = _io.ReadString("Would you like to sell your watch");
         if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
 
-        var (value, message) = (random.Next(10) < 7) switch
+        var (value, message) = (_random.Next(10) < 7) switch
         {
             true => (75, "I'll give you $75 for it."),
             false => (25, "That's a pretty crummy watch - I'll give you $25.")
         };
 
-        io.WriteLine(message);
+        _io.WriteLine(message);
         human.SellWatch(value);
+        // The original code does not have the computer part with any money
 
         return true;
     }
 
-    public bool TrySellWatch(Human human, IReadWrite io)
+    public bool TrySellWatch(Human human)
     {
         if (human.HasWatch) { return false; }
 
-        var response = io.ReadString("Would you like to buy back your watch for $50");
+        var response = _io.ReadString("Would you like to buy back your watch for $50");
         if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
 
         // The original code does not deduct $50 from the player
         Balance += 50;
         human.ReceiveWatch();
         return true;
+    }
+
+    public override void TakeWinnings()
+    {
+        _io.WriteLine("I win.");
+        base.TakeWinnings();
     }
 }
 
@@ -469,6 +448,9 @@ internal class Table
         _deck = deck;
         Human = human;
         Computer = computer;
+
+        human.Sit(this);
+        computer.Sit(this);
     }
 
     public Human Human { get; }
@@ -476,12 +458,12 @@ internal class Table
 
     public void Deal()
     {
-        Pot += 10;
+        Pot = 10;
         Human.Pay(5);
         Computer.Pay(5);
 
-        Human.Hand = _deck.DealHand();
-        Computer.Hand = _deck.DealHand();
+        Human.NewHand(_deck.DealHand());
+        Computer.NewHand(_deck.DealHand());
 
         _io.WriteLine("Your hand:");
         _io.Write(Human.Hand);
@@ -491,13 +473,50 @@ internal class Table
     {
         _io.WriteLine();
         _io.Write("Now we draw -- ");
-        Human.DrawCards(_deck, _io);
-        Computer.DrawCards(_deck, _io);
+        Human.DrawCards(_deck);
+        Computer.DrawCards(_deck);
         _io.WriteLine();
     }
 
     public void AcceptBets()
     {
 
+    }
+
+    public bool SomeoneHasFolded()
+    {
+        if (Human.HasFolded)
+        {
+            _io.WriteLine();
+            Computer.TakeWinnings();
+        }
+        else if (Computer.HasFolded)
+        {
+            _io.WriteLine();
+            Human.TakeWinnings();
+        }
+        else
+        {
+            return false;
+        }
+
+        Pot = 0;
+        return true;
+    }
+
+    public Player? GetWinner()
+    {
+        _io.WriteLine();
+        _io.WriteLine("Now we compare hands:");
+        _io.WriteLine("My hand:");
+        _io.Write(Computer.Hand);
+        _io.WriteLine();
+        _io.Write($"You have {Human.Hand.Name}");
+        _io.Write($"and I have {Computer.Hand.Name}");
+        if (Computer.Hand > Human.Hand) { return Computer; }
+        if (Human.Hand > Computer.Hand) { return Human; }
+        _io.WriteLine("The hand is drawn.");
+        _io.WriteLine($"All $ {Pot} remains in the pot.");
+        return null;
     }
 }
