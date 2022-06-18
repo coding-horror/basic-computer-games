@@ -1,4 +1,4 @@
-namespace Poker;
+namespace Poker.Cards;
 
 internal struct Rank : IComparable<Rank>
 {
@@ -43,4 +43,8 @@ internal struct Rank : IComparable<Rank>
 
     public static bool operator <=(Rank rank, int value) => rank._value <= value;
     public static bool operator >=(Rank rank, int value) => rank._value >= value;
+
+    public override bool Equals(object? obj) => obj is Rank other && this == other;
+
+    public override int GetHashCode() => _value.GetHashCode();
 }

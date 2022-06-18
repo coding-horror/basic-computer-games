@@ -1,6 +1,6 @@
-using static Poker.Rank;
+using static Poker.Cards.Rank;
 
-namespace Poker;
+namespace Poker.Cards;
 
 internal class Deck
 {

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace Poker;
+namespace Poker.Cards;
 
 internal class Hand
 {
