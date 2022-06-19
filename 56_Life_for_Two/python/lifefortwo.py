@@ -52,3 +52,6 @@ def main():
                     na[xa[b] + 1][ya[b] + 1] = 0
                     b = 99
             na[xa[b]][ya[b]] = p1
+
+if __name__ == "__main__":
+    main()
