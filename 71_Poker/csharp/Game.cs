@@ -59,12 +59,12 @@ internal class Game
             Z = table.Computer.Hand.Rank switch
             {
                 _ when table.Computer.Hand.IsWeak =>
-                    table.Computer.BluffIf(Get0To9() > 7, 0b11100) ??
-                    table.Computer.BluffIf(Get0To9() > 7, 0b11110) ??
+                    table.Computer.BluffIf(Get0To9() < 2, 0b11100) ??
+                    table.Computer.BluffIf(Get0To9() < 2, 0b11110) ??
                     table.Computer.BluffIf(Get0To9() < 1, 0b11111) ??
                     1,
-                < 13 => table.Computer.BluffIf(Get0To9() < 2) ?? 0,
-                <= 16 => 35,
+                _ when table.Computer.Hand.Rank < HandRank.Three => table.Computer.BluffIf(Get0To9() < 2) ?? 0,
+                _ when table.Computer.Hand.Rank < HandRank.FullHouse => 35,
                 _ when Get0To9() < 1 => 35,
                 _ => 2
             };
@@ -90,8 +90,8 @@ internal class Game
             {
                 _ when table.Computer.IsBluffing => 28,
                 _ when table.Computer.Hand.IsWeak => 1,
-                < 13 => Get0To9() == 0 ? 19 : 2,
-                < 16 => Get0To9() == 8 ? 11 : 19,
+                _ when table.Computer.Hand.Rank < HandRank.Three => Get0To9() == 0 ? 19 : 2,
+                _ when table.Computer.Hand.Rank < HandRank.FullHouse => Get0To9() == 0 ? 11 : 19,
                 _ => 2
             };
 
