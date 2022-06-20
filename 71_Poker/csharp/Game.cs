@@ -30,10 +30,14 @@ internal class Game
         _io.Write(Resource.Streams.Title);
         _io.Write(Resource.Streams.Instructions);
 
-        do
+        while (true)
         {
-            deck.Shuffle(_random);
-        } while (PlayHand(table));
+            var gameOver = PlayHand(table);
+            if (gameOver) { break; }
+
+            _io.WriteLine($"Now I have $ {table.Computer.Balance} and you have $ {table.Human.Balance}");
+            if (!_io.ReadYesNo("Do you wish to continue")) { break; }
+        }
     }
 
     internal bool PlayHand(Table table)

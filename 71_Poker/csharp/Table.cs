@@ -26,6 +26,8 @@ internal class Table
 
     public void Deal()
     {
+        Deck.Shuffle();
+
         Pot = Human.AnteUp() + Computer.AnteUp();
 
         Human.NewHand();
