@@ -54,9 +54,9 @@ internal class Computer : Player
         }
     }
 
-    public bool TryBuyWatch(Human human)
+    public bool TryBuyWatch()
     {
-        if (!human.HasWatch) { return false; }
+        if (!Table.Human.HasWatch) { return false; }
 
         var response = _io.ReadString("Would you like to sell your watch");
         if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
@@ -68,22 +68,22 @@ internal class Computer : Player
         };
 
         _io.WriteLine(message);
-        human.SellWatch(value);
+        Table.Human.SellWatch(value);
         // The original code does not have the computer part with any money
 
         return true;
     }
 
-    public bool TrySellWatch(Human human)
+    public bool TrySellWatch()
     {
-        if (human.HasWatch) { return false; }
+        if (Table.Human.HasWatch) { return false; }
 
         var response = _io.ReadString("Would you like to buy back your watch for $50");
         if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
 
         // The original code does not deduct $50 from the player
         Balance += 50;
-        human.ReceiveWatch();
+        Table.Human.ReceiveWatch();
         return true;
     }
 

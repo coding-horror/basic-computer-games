@@ -29,9 +29,10 @@ internal abstract class Player
         _hasFolded = false;
     }
 
-    public void Pay(int amount)
+    public int AnteUp()
     {
-        Balance -= amount;
+        Balance -= Table.Ante;
+        return Table.Ante;
     }
 
     public virtual void TakeWinnings()

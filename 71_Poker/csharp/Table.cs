@@ -20,14 +20,13 @@ internal class Table
         computer.Sit(this);
     }
 
+    public int Ante { get; } = 5;
     public Human Human { get; }
     public Computer Computer { get; }
 
     public void Deal()
     {
-        Pot = 10;
-        Human.Pay(5);
-        Computer.Pay(5);
+        Pot = Human.AnteUp() + Computer.AnteUp();
 
         Human.NewHand(_deck.DealHand());
         Computer.NewHand(_deck.DealHand());

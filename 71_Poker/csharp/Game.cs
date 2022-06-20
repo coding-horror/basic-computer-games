@@ -44,19 +44,19 @@ internal class Game
         while(true)
         {
             _io.WriteLine();
-            if (table.Computer.Balance<=5)
+            if (table.Computer.Balance <= table.Ante)
             {
                 CongratulatePlayer();
                 return false;
             }
-            _io.WriteLine("The ante is $5.  I will deal:");
+            _io.WriteLine($"The ante is ${table.Ante}.  I will deal:");
             _io.WriteLine();
-            if (table.Human.Balance <= 5 && table.Human.IsBroke()) { return false; }
+            if (table.Human.Balance <= table.Ante && table.Human.IsBroke()) { return false; }
 
             table.Deal();
 
             _io.WriteLine();
-            Z = table.Computer.Hand.Rank switch
+            Z = true switch
             {
                 _ when table.Computer.Hand.IsWeak =>
                     table.Computer.BluffIf(Get0To9() < 2, 0b11100) ??
@@ -76,7 +76,7 @@ internal class Game
             else
             {
                 V=Z+Get0To9();
-                if (ComputerCantContinue()) { return false; }
+                if (ComputerIsBroke()) { return false; }
                 _io.WriteLine($"I'll open with ${V}");
                 _computerTotalBet = V;
                 _playerTotalBet = 0;
@@ -86,7 +86,7 @@ internal class Game
 
             table.Draw();
 
-            Z = table.Computer.Hand.Rank switch
+            Z = true switch
             {
                 _ when table.Computer.IsBluffing => 28,
                 _ when table.Computer.Hand.IsWeak => 1,
@@ -109,7 +109,7 @@ internal class Game
             else
             {
                 V=Z+Get0To9();
-                if (ComputerCantContinue()) { return false; }
+                if (ComputerIsBroke()) { return false; }
                 _io.WriteLine($"I'll bet ${V}");
                 _computerTotalBet = V;
                 if (GetWager()) { return false; }
@@ -130,82 +130,75 @@ internal class Game
 
         bool GetWager()
         {
-            _playerBet = 0;
-            while(true)
+            while (true)
             {
-                if (_io.ReadPlayerAction(_computerTotalBet == 0 && _playerTotalBet == 0) is Bet bet)
+                _playerBet = 0;
+                while(true)
                 {
-                    if (_playerTotalBet + bet.Amount < _computerTotalBet)
+                    if (_io.ReadPlayerAction(_computerTotalBet == 0 && _playerTotalBet == 0) is Bet bet)
                     {
-                        _io.WriteLine("If you can't see my bet, then fold.");
+                        if (_playerTotalBet + bet.Amount < _computerTotalBet)
+                        {
+                            _io.WriteLine("If you can't see my bet, then fold.");
+                            continue;
+                        }
+                        if (table.Human.Balance - _playerTotalBet - bet.Amount >= 0)
+                        {
+                            _playerBet = bet.Amount;
+                            _playerTotalBet += bet.Amount;
+                            break;
+                        }
+                        if (table.Human.IsBroke()) { return true; }
                         continue;
                     }
-                    if (table.Human.Balance - _playerTotalBet - bet.Amount >= 0)
+                    else
                     {
-                        _playerBet = bet.Amount;
-                        _playerTotalBet += bet.Amount;
-                        break;
+                        table.Human.Fold();
+                        UpdatePot();
+                        return false;
                     }
-                    if (table.Human.IsBroke()) { return true; }
-                    continue;
                 }
-                else
+                if (_playerTotalBet == _computerTotalBet)
                 {
-                    table.Human.Fold();
-                    return UpdatePot();
-                }
-            }
-            if (_playerTotalBet == _computerTotalBet) { return UpdatePot(); }
-            if (Z == 1)
-            {
-                if (_playerTotalBet > 5)
-                {
-                    table.Computer.Fold();
-                    _io.WriteLine("I fold.");
+                    UpdatePot();
                     return false;
                 }
-                V = 5;
+                if (Z == 1)
+                {
+                    if (_playerTotalBet > 5)
+                    {
+                        table.Computer.Fold();
+                        _io.WriteLine("I fold.");
+                        return false;
+                    }
+                    V = 5;
+                }
+                if (_playerTotalBet > 3 * Z)
+                {
+                    if (Z != 2)
+                    {
+                        _io.WriteLine("I'll see you.");
+                        _computerTotalBet = _playerTotalBet;
+                        UpdatePot();
+                        return false;
+                    }
+                }
+
+                V = _playerTotalBet - _computerTotalBet + Get0To9();
+                if (ComputerIsBroke()) { return true; }
+                _io.WriteLine($"I'll see you, and raise you{V}");
+                _computerTotalBet = _playerTotalBet + V;
             }
-            return Line_3420();
         }
 
-        bool Line_3350()
-        {
-            if (Z==2) { return Line_3430(); }
-            return Line_3360();
-        }
-
-        bool Line_3360()
-        {
-            _io.WriteLine("I'll see you.");
-            _computerTotalBet = _playerTotalBet;
-            return UpdatePot();
-        }
-
-        bool UpdatePot()
+        void UpdatePot()
         {
             table.Human.Balance -= _playerTotalBet;
             table.Computer.Balance -= _computerTotalBet;
             table.Pot += _playerTotalBet + _computerTotalBet;
-            return false;
         }
 
-        bool Line_3420()
-        {
-            if (_playerTotalBet>3*Z) { return Line_3350(); }
-            return Line_3430();
-        }
-
-        bool Line_3430()
-        {
-            V = _playerTotalBet - _computerTotalBet + Get0To9();
-            if (ComputerCantContinue()) { return true; }
-            _io.WriteLine($"I'll see you, and raise you{V}");
-            _computerTotalBet = _playerTotalBet + V;
-            return GetWager();
-        }
-
-        bool ComputerCantContinue()
+        bool ComputerIsBroke()
         {
             if (table.Computer.Balance - _playerTotalBet - V >= 0) { return false; }
             if (_playerTotalBet == 0)
@@ -214,20 +207,20 @@ internal class Game
             }
             else if (table.Computer.Balance - _playerTotalBet >= 0)
             {
-                return Line_3360();
+                _io.WriteLine("I'll see you.");
+                _computerTotalBet = _playerTotalBet;
+                UpdatePot();
+                return false;
             }
-            else if (table.Computer.TrySellWatch(table.Human))
+            else if (table.Computer.TrySellWatch())
             {
                 return false;
             }
-            return CongratulatePlayer();
-        }
-
-        bool CongratulatePlayer()
-        {
-            _io.WriteLine("I'm busted.  Congratulations!");
+            CongratulatePlayer();
             return true;
         }
+
+        void CongratulatePlayer() => _io.WriteLine("I'm busted.  Congratulations!");
     }
 }
 
