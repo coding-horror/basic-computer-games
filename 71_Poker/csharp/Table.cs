@@ -7,12 +7,11 @@ internal class Table
 {
     private IReadWrite _io;
     public int Pot;
-    private Deck _deck;
 
     public Table(IReadWrite io, Deck deck, Human human, Computer computer)
     {
         _io = io;
-        _deck = deck;
+        Deck = deck;
         Human = human;
         Computer = computer;
 
@@ -21,6 +20,7 @@ internal class Table
     }
 
     public int Ante { get; } = 5;
+    public Deck Deck { get; }
     public Human Human { get; }
     public Computer Computer { get; }
 
@@ -28,8 +28,8 @@ internal class Table
     {
         Pot = Human.AnteUp() + Computer.AnteUp();
 
-        Human.NewHand(_deck.DealHand());
-        Computer.NewHand(_deck.DealHand());
+        Human.NewHand();
+        Computer.NewHand();
 
         _io.WriteLine("Your hand:");
         _io.Write(Human.Hand);
@@ -39,8 +39,8 @@ internal class Table
     {
         _io.WriteLine();
         _io.Write("Now we draw -- ");
-        Human.DrawCards(_deck);
-        Computer.DrawCards(_deck);
+        Human.DrawCards();
+        Computer.DrawCards();
         _io.WriteLine();
     }
 

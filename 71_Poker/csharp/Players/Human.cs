@@ -15,7 +15,7 @@ internal class Human : Player
 
     public bool HasWatch { get; set; }
 
-    public void DrawCards(Deck deck)
+    protected override void DrawCards(Deck deck)
     {
         var count = _io.ReadNumber("How many cards do you want", 3, "You can't draw more than three cards.");
         if (count == 0) { return; }

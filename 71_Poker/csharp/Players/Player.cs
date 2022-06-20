@@ -15,7 +15,8 @@ internal abstract class Player
 
     public Hand Hand { get; set; }
     public int Balance { get; set; }
-    public int Bet { get; private set; }
+    public bool HasBet { get; set; }
+    public int Bet { get; set; }
     public bool HasFolded => _hasFolded;
 
     protected Table Table =>
@@ -23,9 +24,10 @@ internal abstract class Player
 
     public void Sit(Table table) => _table = table;
 
-    public virtual void NewHand(Hand hand)
+    public virtual void NewHand()
     {
-        Hand = hand;
+        Bet = 0;
+        Hand = Table.Deck.DealHand();
         _hasFolded = false;
     }
 
@@ -34,6 +36,14 @@ internal abstract class Player
         Balance -= Table.Ante;
         return Table.Ante;
     }
+
+    public void DrawCards()
+    {
+        Bet = 0;
+        DrawCards(Table.Deck);
+    }
+
+    protected abstract void DrawCards(Deck deck);
 
     public virtual void TakeWinnings()
     {

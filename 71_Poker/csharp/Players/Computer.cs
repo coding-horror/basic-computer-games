@@ -18,9 +18,9 @@ internal class Computer : Player
 
     public bool IsBluffing => _isBluffing;
 
-    public override void NewHand(Hand hand)
+    public override void NewHand()
     {
-        base.NewHand(hand);
+        base.NewHand();
         _isBluffing = false;
     }
 
@@ -33,7 +33,7 @@ internal class Computer : Player
         return 23;
     }
 
-    public void DrawCards(Deck deck)
+    protected override void DrawCards(Deck deck)
     {
         var keepMask = Hand.KeepMask;
         var count = 0;
