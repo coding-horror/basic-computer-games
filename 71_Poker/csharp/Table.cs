@@ -51,6 +51,13 @@ internal class Table
 
     }
 
+    public void UpdatePot()
+    {
+        Human.Balance -= Human.Bet;
+        Computer.Balance -= Computer.Bet;
+        Pot += Human.Bet + Computer.Bet;
+    }
+
     public bool SomeoneHasFolded()
     {
         if (Human.HasFolded)
