@@ -258,6 +258,11 @@ async function main()
         print("START GAME\n");
         while (1) {
             str = await input();
+            // Check if user types anything other than a number
+            if (isNaN(str)) {
+                print("INVALID INPUT. TRY ENTERING A NUMBER INSTEAD.\n")
+                continue
+            }
             x = parseInt(str);
             y = parseInt(str.substr(str.indexOf(",") + 1));
             if (x < 1 || x > 6 || y < 1 || y > 6) {
