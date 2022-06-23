@@ -1,6 +1,7 @@
 using Poker.Cards;
 using Poker.Players;
 using Poker.Resources;
+using Poker.Strategies;
 
 namespace Poker;
 
@@ -9,7 +10,6 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-    private int Z;
     private int V;
 
     public Game(IReadWrite io, IRandom random)
@@ -54,28 +54,22 @@ internal class Game
             _io.WriteLine();
             if (table.Human.Balance <= table.Ante && table.Human.IsBroke()) { return true; }
 
-            table.Deal();
+            table.Deal(_random);
 
             _io.WriteLine();
-            Z = true switch
+            table.Computer.Strategy = (table.Computer.Hand.IsWeak, table.Computer.Hand.Rank < HandRank.Three, table.Computer.Hand.Rank < HandRank.FullHouse) switch
             {
-                _ when table.Computer.Hand.IsWeak =>
-                    table.Computer.BluffIf(Get0To9() < 2, 0b11100) ??
-                    table.Computer.BluffIf(Get0To9() < 2, 0b11110) ??
-                    table.Computer.BluffIf(Get0To9() < 1, 0b11111) ??
-                    1,
-                _ when table.Computer.Hand.Rank < HandRank.Three => table.Computer.BluffIf(Get0To9() < 2) ?? 0,
-                _ when table.Computer.Hand.Rank < HandRank.FullHouse => 35,
-                _ when Get0To9() < 1 => 35,
-                _ => 2
+                (true, _, _) when Get0To9() < 2 => Strategy.Bluff(23, 0b11100),
+                (true, _, _) when Get0To9() < 2 => Strategy.Bluff(23, 0b11110),
+                (true, _, _) when Get0To9() < 1 => Strategy.Bluff(23, 0b11111),
+                (true, _, _) =>  Strategy.Fold,
+                (false, true, _) => Get0To9() < 2 ? Strategy.Bluff(23) : Strategy.Check,
+                (false, false, true) => Strategy.Bet(35),
+                (false, false, false) => Get0To9() < 1 ? Strategy.Bet(35) : Strategy.Raise
             };
-            if (Z <= 1)
+            if (table.Computer.Strategy is Strategies.Bet)
             {
-                _io.WriteLine("I check.");
-            }
-            else
-            {
-                V = Z + Get0To9();
+                V = table.Computer.Strategy.Value + Get0To9();
                 if (table.Computer.Balance - table.Human.Bet - V < 0)
                 {
                     if (table.Human.Bet == 0)
@@ -97,32 +91,32 @@ internal class Game
                 _io.WriteLine($"I'll open with ${V}");
                 table.Computer.Bet = V;
             }
-            if (GetWager()) { return true; }
+            else
+            {
+                _io.WriteLine("I check.");
+            }
+            if (GetWager(table.Computer.Strategy)) { return true; }
             if (table.SomeoneHasFolded()) { return false; }
 
             table.Draw();
 
-            Z = true switch
+            table.Computer.Strategy = (table.Computer.Hand.IsWeak, table.Computer.Hand.Rank < HandRank.Three, table.Computer.Hand.Rank < HandRank.FullHouse) switch
             {
-                _ when table.Computer.IsBluffing => 28,
-                _ when table.Computer.Hand.IsWeak => 1,
-                _ when table.Computer.Hand.Rank < HandRank.Three => Get0To9() == 0 ? 19 : 2,
-                _ when table.Computer.Hand.Rank < HandRank.FullHouse => Get0To9() == 0 ? 11 : 19,
-                _ => 2
+                _ when table.Computer.Strategy is Bluff => Strategy.Bluff(28),
+                (true, _, _) => Strategy.Fold,
+                (false, true, _) => Get0To9() == 0 ? Strategy.Bet(19) : Strategy.Raise,
+                (false, false, true) => Get0To9() == 0 ? Strategy.Bet(11) : Strategy.Bet(19),
+                (false, false, false) => Strategy.Raise
             };
 
-            if (GetWager()) { return true; }
+            if (GetWager(table.Computer.Strategy)) { return true; }
             if (table.Human.HasBet)
             {
                 if (table.SomeoneHasFolded()) { return false; }
             }
-            else if (!table.Computer.IsBluffing && table.Computer.Hand.IsWeak)
+            else if (table.Computer.Strategy is Strategies.Bet)
             {
-                _io.WriteLine("I'll check");
-            }
-            else
-            {
-                V = Z + Get0To9();
+                V = table.Computer.Strategy.Value + Get0To9();
                 if (table.Computer.Balance - table.Human.Bet - V < 0)
                 {
                     if (table.Human.Bet == 0)
@@ -143,8 +137,12 @@ internal class Game
                 }
                 _io.WriteLine($"I'll bet ${V}");
                 table.Computer.Bet = V;
-                if (GetWager()) { return true; }
+                if (GetWager(table.Computer.Strategy)) { return true; }
                 if (table.SomeoneHasFolded()) { return false; }
+            }
+            else
+            {
+                _io.WriteLine("I'll check");
             }
             if (table.GetWinner() is { } winner)
             {
@@ -153,24 +151,25 @@ internal class Game
             }
         }
 
-        bool GetWager()
+        bool GetWager(Strategy computerStrategy)
         {
             while (true)
             {
                 table.Human.HasBet = false;
                 while (true)
                 {
-                    if (_io.ReadPlayerAction(table.Computer.Bet == 0 && table.Human.Bet == 0) is Bet bet)
+                    var humanStrategy = _io.ReadHumanStrategy(table.Computer.Bet == 0 && table.Human.Bet == 0);
+                    if (humanStrategy is Bet or Check)
                     {
-                        if (table.Human.Bet + bet.Amount < table.Computer.Bet)
+                        if (table.Human.Bet + humanStrategy.Value < table.Computer.Bet)
                         {
                             _io.WriteLine("If you can't see my bet, then fold.");
                             continue;
                         }
-                        if (table.Human.Balance - table.Human.Bet - bet.Amount >= 0)
+                        if (table.Human.Balance - table.Human.Bet - humanStrategy.Value >= 0)
                         {
                             table.Human.HasBet = true;
-                            table.Human.Bet += bet.Amount;
+                            table.Human.Bet += humanStrategy.Value;
                             break;
                         }
                         if (table.Human.IsBroke()) { return true; }
@@ -188,7 +187,7 @@ internal class Game
                     table.UpdatePot();
                     return false;
                 }
-                if (Z == 1)
+                if (computerStrategy is Fold)
                 {
                     if (table.Human.Bet > 5)
                     {
@@ -198,9 +197,9 @@ internal class Game
                     }
                     V = 5;
                 }
-                if (table.Human.Bet > 3 * Z)
+                if (table.Human.Bet > 3 * computerStrategy.Value)
                 {
-                    if (Z != 2)
+                    if (computerStrategy is not Raise)
                     {
                         _io.WriteLine("I'll see you.");
                         table.Computer.Bet = table.Human.Bet;
@@ -232,15 +231,5 @@ internal class Game
                 table.Computer.Bet = table.Human.Bet + V;
             }
         }
-    }
-}
-
-internal interface IAction { }
-internal record Fold : IAction;
-internal record Bet(int Amount) : IAction
-{
-    public Bet(float amount)
-        : this((int)amount)
-    {
     }
 }

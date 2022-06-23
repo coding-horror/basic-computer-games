@@ -5,7 +5,7 @@ namespace Poker;
 
 internal class Table
 {
-    private IReadWrite _io;
+    private readonly IReadWrite _io;
     public int Pot;
 
     public Table(IReadWrite io, Deck deck, Human human, Computer computer)
@@ -24,9 +24,9 @@ internal class Table
     public Human Human { get; }
     public Computer Computer { get; }
 
-    public void Deal()
+    public void Deal(IRandom random)
     {
-        Deck.Shuffle();
+        Deck.Shuffle(random);
 
         Pot = Human.AnteUp() + Computer.AnteUp();
 

@@ -1,4 +1,5 @@
 using Poker.Cards;
+using Poker.Strategies;
 using static System.StringComparison;
 
 namespace Poker.Players;
@@ -7,35 +8,25 @@ internal class Computer : Player
 {
     private readonly IReadWrite _io;
     private readonly IRandom _random;
-    private bool _isBluffing;
 
     public Computer(int bank, IReadWrite io, IRandom random)
         : base(bank)
     {
         _io = io;
         _random = random;
+        Strategy = Strategy.Check;
     }
 
-    public bool IsBluffing => _isBluffing;
+    public Strategy Strategy { get; set; }
 
     public override void NewHand()
     {
         base.NewHand();
-        _isBluffing = false;
-    }
-
-    public int? BluffIf(bool shouldBluff, int? keepMask = null)
-    {
-        if (!shouldBluff) { return null; }
-
-        _isBluffing = true;
-        Hand.KeepMask = keepMask ?? Hand.KeepMask;
-        return 23;
     }
 
     protected override void DrawCards(Deck deck)
     {
-        var keepMask = Hand.KeepMask;
+        var keepMask = Strategy.KeepMask ?? Hand.KeepMask;
         var count = 0;
         for (var i = 1; i <= 5; i++)
         {

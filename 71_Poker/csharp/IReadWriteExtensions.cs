@@ -1,3 +1,4 @@
+using Poker.Strategies;
 using static System.StringComparison;
 
 namespace Poker;
@@ -28,7 +29,7 @@ internal static class IReadWriteExtensions
         }
     }
 
-    internal static IAction ReadPlayerAction(this IReadWrite io, bool noCurrentBets)
+    internal static Strategy ReadHumanStrategy(this IReadWrite io, bool noCurrentBets)
     {
         while(true)
         {
@@ -36,12 +37,12 @@ internal static class IReadWriteExtensions
             var bet = io.ReadNumber("What is your bet");
             if (bet != (int)bet)
             {
-                if (noCurrentBets && bet == .5) { return new Bet(0); }
+                if (noCurrentBets && bet == .5) { return Strategy.Check; }
                 io.WriteLine("No small change, please.");
                 continue;
             }
-            if (bet == 0) { return new Fold(); }
-            return new Bet(bet);
+            if (bet == 0) { return Strategy.Fold; }
+            return Strategy.Bet(bet);
         }
     }
 }
