@@ -2,6 +2,7 @@ namespace Poker.Strategies;
 
 internal abstract class Strategy
 {
+    public static Strategy None = new None();
     public static Strategy Fold = new Fold();
     public static Strategy Check = new Check();
     public static Strategy Raise = new Raise();

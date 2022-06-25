@@ -14,15 +14,10 @@ internal class Computer : Player
     {
         _io = io;
         _random = random;
-        Strategy = Strategy.Check;
+        Strategy = Strategy.None;
     }
 
     public Strategy Strategy { get; set; }
-
-    public override void NewHand()
-    {
-        base.NewHand();
-    }
 
     protected override void DrawCards(Deck deck)
     {
@@ -65,18 +60,20 @@ internal class Computer : Player
         return true;
     }
 
-    public bool TrySellWatch()
+    public void RaiseFunds()
     {
-        if (Table.Human.HasWatch) { return false; }
+        if (Table.Human.HasWatch) { return; }
 
         var response = _io.ReadString("Would you like to buy back your watch for $50");
-        if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return false; }
+        if (response.StartsWith("N", InvariantCultureIgnoreCase)) { return; }
 
         // The original code does not deduct $50 from the player
         Balance += 50;
         Table.Human.ReceiveWatch();
-        return true;
+        IsBroke = true;
     }
+
+    public void CheckFunds() { IsBroke = Balance <= Table.Ante; }
 
     public override void TakeWinnings()
     {

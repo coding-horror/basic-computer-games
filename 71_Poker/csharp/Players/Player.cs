@@ -18,6 +18,7 @@ internal abstract class Player
     public bool HasBet { get; set; }
     public int Bet { get; set; }
     public bool HasFolded => _hasFolded;
+    public bool IsBroke { get; protected set; }
 
     protected Table Table =>
         _table ?? throw new InvalidOperationException("The player must be sitting at the table.");

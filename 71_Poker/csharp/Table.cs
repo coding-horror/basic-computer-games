@@ -79,6 +79,8 @@ internal class Table
         return true;
     }
 
+    public bool SomeoneIsBroke() => Human.IsBroke || Computer.IsBroke;
+
     public Player? GetWinner()
     {
         _io.WriteLine();
@@ -93,5 +95,23 @@ internal class Table
         _io.WriteLine("The hand is drawn.");
         _io.WriteLine($"All $ {Pot} remains in the pot.");
         return null;
+    }
+
+    internal bool IsGameOver()
+    {
+        if (Computer.IsBroke)
+        {
+            _io.WriteLine("I'm busted.  Congratulations!");
+            return true;
+        }
+
+        if (Human.IsBroke)
+        {
+            _io.WriteLine("Your wad is shot.  So long, sucker!");
+            return true;
+        }
+
+        _io.WriteLine($"Now I have $ {Computer.Balance} and you have $ {Human.Balance}");
+        return !_io.ReadYesNo("Do you wish to continue");
     }
 }

@@ -30,18 +30,18 @@ internal class Human : Player
         _io.Write(Hand);
     }
 
-    public bool IsBroke()
+    public void RaiseFunds()
     {
         _io.WriteLine();
         _io.WriteLine("You can't bet with what you haven't got.");
 
-        if (Table.Computer.TryBuyWatch()) { return false; }
+        if (Table.Computer.TryBuyWatch()) { return; }
 
         // The original program had some code about selling a tie tack, but due to a fault
         // in the logic the code was unreachable. I've omitted it in this port.
 
         _io.WriteLine("Your wad is shot.  So long, sucker!");
-        return true;
+        IsBroke = true;
     }
 
     public void ReceiveWatch()
