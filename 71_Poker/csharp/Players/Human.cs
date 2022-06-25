@@ -40,7 +40,6 @@ internal class Human : Player
         // The original program had some code about selling a tie tack, but due to a fault
         // in the logic the code was unreachable. I've omitted it in this port.
 
-        _io.WriteLine("Your wad is shot.  So long, sucker!");
         IsBroke = true;
     }
 

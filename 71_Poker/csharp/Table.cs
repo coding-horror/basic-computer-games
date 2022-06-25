@@ -88,8 +88,8 @@ internal class Table
         _io.WriteLine("My hand:");
         _io.Write(Computer.Hand);
         _io.WriteLine();
-        _io.Write($"You have {Human.Hand.Name}");
-        _io.Write($"and I have {Computer.Hand.Name}");
+        _io.WriteLine($"You have {Human.Hand.Name}");
+        _io.WriteLine($"and I have {Computer.Hand.Name}");
         if (Computer.Hand > Human.Hand) { return Computer; }
         if (Human.Hand > Computer.Hand) { return Human; }
         _io.WriteLine("The hand is drawn.");
@@ -97,7 +97,7 @@ internal class Table
         return null;
     }
 
-    internal bool IsGameOver()
+    internal bool ShouldPlayAnotherHand()
     {
         if (Computer.IsBroke)
         {
@@ -112,6 +112,6 @@ internal class Table
         }
 
         _io.WriteLine($"Now I have $ {Computer.Balance} and you have $ {Human.Balance}");
-        return !_io.ReadYesNo("Do you wish to continue");
+        return _io.ReadYesNo("Do you wish to continue");
     }
 }

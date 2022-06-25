@@ -31,7 +31,7 @@ internal class Game
         do
         {
             PlayHand(table);
-        } while (!table.IsGameOver());
+        } while (table.ShouldPlayAnotherHand());
     }
 
     internal void PlayHand(Table table)
