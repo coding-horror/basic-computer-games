@@ -10,8 +10,6 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
-    private int V;
-
     public Game(IReadWrite io, IRandom random)
     {
         _io = io;
@@ -67,12 +65,12 @@ internal class Game
             };
             if (table.Computer.Strategy is Bet)
             {
-                V = table.Computer.Strategy.Value + Get0To9();
-                if (table.Computer.Balance - table.Human.Bet - V < 0)
+                var bet = table.Computer.Strategy.Value + Get0To9();
+                if (table.Computer.Balance - table.Human.Bet - bet < 0)
                 {
                     if (table.Human.Bet == 0)
                     {
-                        V = table.Computer.Balance;
+                        bet = table.Computer.Balance;
                     }
                     else if (table.Computer.Balance - table.Human.Bet >= 0)
                     {
@@ -86,8 +84,8 @@ internal class Game
                         if (table.Computer.IsBroke) { return; }
                     }
                 }
-                _io.WriteLine($"I'll open with ${V}");
-                table.Computer.Bet = V;
+                _io.WriteLine($"I'll open with ${bet}");
+                table.Computer.Bet = bet;
             }
             else
             {
@@ -115,12 +113,12 @@ internal class Game
             }
             else if (table.Computer.Strategy is Bet)
             {
-                V = table.Computer.Strategy.Value + Get0To9();
-                if (table.Computer.Balance - table.Human.Bet - V < 0)
+                var bet = table.Computer.Strategy.Value + Get0To9();
+                if (table.Computer.Balance - table.Human.Bet - bet < 0)
                 {
                     if (table.Human.Bet == 0)
                     {
-                        V = table.Computer.Balance;
+                        bet = table.Computer.Balance;
                     }
                     else if (table.Computer.Balance - table.Human.Bet >= 0)
                     {
@@ -134,8 +132,8 @@ internal class Game
                         if (table.Computer.IsBroke) { return; }
                     }
                 }
-                _io.WriteLine($"I'll bet ${V}");
-                table.Computer.Bet = V;
+                _io.WriteLine($"I'll bet ${bet}");
+                table.Computer.Bet = bet;
                 GetWager(table.Computer.Strategy);
                 if (table.SomeoneIsBroke() || table.SomeoneHasFolded()) { return; }
             }
@@ -195,7 +193,6 @@ internal class Game
                         _io.WriteLine("I fold.");
                         return;
                     }
-                    V = 5;
                 }
                 if (table.Human.Bet > 3 * computerStrategy.Value)
                 {
@@ -208,12 +205,12 @@ internal class Game
                     }
                 }
 
-                V = table.Human.Bet - table.Computer.Bet + Get0To9();
-                if (table.Computer.Balance - table.Human.Bet - V < 0)
+                var raise = table.Human.Bet - table.Computer.Bet + Get0To9();
+                if (table.Computer.Balance - table.Human.Bet - raise < 0)
                 {
                     if (table.Human.Bet == 0)
                     {
-                        V = table.Computer.Balance;
+                        raise = table.Computer.Balance;
                     }
                     else if (table.Computer.Balance - table.Human.Bet >= 0)
                     {
@@ -227,8 +224,8 @@ internal class Game
                         if (table.Computer.IsBroke) { return; }
                     }
                 }
-                _io.WriteLine($"I'll see you, and raise you{V}");
-                table.Computer.Bet = table.Human.Bet + V;
+                _io.WriteLine($"I'll see you, and raise you {raise}");
+                table.Computer.Bet = table.Human.Bet + raise;
             }
         }
     }
