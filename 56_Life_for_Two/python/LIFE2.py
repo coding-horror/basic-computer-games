@@ -6,13 +6,9 @@ m2, m3 = 0, 0
 
 # Initialise the board
 for j in range(6):
-    gn.append([])
+    gn[j] = []
     for k in range(6):
-        gn[j].append(0)
-
-for i in range(3):
-    gx.append(0)
-    gy.append(0)
+        gn[j][k] = 0
 
 # Helper Functions
 def tab(number) -> str:
@@ -22,8 +18,8 @@ def tab(number) -> str:
     return t
 
 def display_header() -> None:
-    print("{}LIFE2".format(tab(33)))
-    print("{}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n".format(tab(15)))
+    print("{}LIFE2\n".format(tab(33)))
+    print("{}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n\n".format(tab(15)))
     print("{}U.B. LIFE GAME".format(tab(10)))
 
 # Board Functions
@@ -31,7 +27,7 @@ def setup_board() -> None:
     # Players add symbols to initially setup the board
     for b in range(1, 3):
         p1 = 30 if b == 2 else 3
-        print("\nPLAYER {} - 3 LIVE PIECES.".format(b))
+        print("\n\nPLAYER {} - 3 LIVE PIECES.".format(b))
         for k1 in range(1, 3):
             query_player(b)
             gn[gx[b]][gy[b]] = p1
@@ -94,15 +90,15 @@ def display_board() -> None:
 def query_player(b) -> None:
     # Query player for symbol placement coordinates
     while True:
-        print("X,Y\nXXXXXX\n$$$$$$\n&&&&&&")
-        x_ = input("??")
-        y_ = input("???")
+        print("X,Y\nXXXXXX\n$$$$$$\n&&&&&&\n")
+        x_ = input("")
+        y_ = input(" ")
         x_ = [int(num) for num in x_.split() if num.isdigit()][0]
         y_ = [int(num) for num in y_.split() if num.isdigit()][0]
-        gx[b], gy[b] = y_, x_
+        gx[b], gy[b] = x_, y_
         if gx[b] in range(1, 6) and gy[b] in range(1, 6) and gn[gx[b]][gy[b]] != 0:
             break
-        print("ILLEGAL COORDS. RETYPE")
+        print("ILLEGAL COORDS. RETYPE\n")
     if b != 1:
         if gx[1] == gx[2] and gy[1] == gy[2]:
             print("SAME COORD. SET TO 0")
