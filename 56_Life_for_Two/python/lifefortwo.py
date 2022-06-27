@@ -30,9 +30,9 @@ def display_header() -> None:
 def setup_board() -> None:
     # Players add symbols to initially setup the board
     for b in range(1, 3):
-        p1 = 30 if b == 2 else 3
+        p1 = 3 if b != 2 else 30
         print("\nPLAYER {} - 3 LIVE PIECES.".format(b))
-        for k1 in range(1, 3):
+        for k1 in range(1, 4):
             query_player(b)
             gn[gx[b]][gy[b]] = p1
 
@@ -53,42 +53,46 @@ def simulate_board() -> None:
         for k in range(1, 6):
             if gn[j][k] > 99:
                 b = 1 if gn[j][k] <= 999 else 10
-                for o1 in range(1, 16, 2):
+                for o1 in range(0, 15, 2):
+                    #print("{} {} {} {}".format(j, k, b, o1))
                     gn[j + ga[o1]][k + ga[o1 + 1]] = gn[j + ga[o1]][k + ga[o1 + 1]] + b
 
 def display_board() -> None:
     # Draws the board with all symbols
     m2, m3 = 0, 0
     for j in range(7):
-        print("\n")
+        print("")
         for k in range(7):
             if j == 0 or j == 6:
                 if k != 6:
-                    print(" " + str(k) + " ")
+                    print(" " + str(k) + " ", end="")
                 else:
-                    print(" 0 ")
-            if k == 0 or k == 6:
+                    print(" 0 ", end="")
+            elif k == 0 or k == 6:
                 if j != 6:
-                    print(" " + str(j) + " ")
+                    print(" " + str(j) + " ", end="")
                 else:
                     print(" 0\n")
             else:
                 if gn[j][k] < 3:
                     gn[j][k] = 0
-                    print("   ")
+                    print("   ", end="")
                 else:
-                    for o1 in range(19):
+                    for o1 in range(18):
                         if gn[j][k] == gk[o1]:
-                            if o1 > 9:
-                                gn[j][k] = 1000
-                                m3 += 1
-                                print(" # ")
-                            else:
-                                gn[j, k] = 100
-                                m2 += 1
-                                print(" * ")
-                    gn[j][k] = 0
-                    print("   ")
+                            break
+                    if o1 <= 18:
+                        if o1 > 9:
+                            gn[j][k] = 1000
+                            m3 += 1
+                            print(" # ", end="")
+                        else:
+                            gn[j][k] = 100
+                            m2 += 1
+                            print(" * ", end="")
+                    else:
+                        gn[j][k] = 0
+                        print("   ", end="")
 
 # Player Functions
 def query_player(b) -> None:
@@ -100,7 +104,7 @@ def query_player(b) -> None:
         x_ = [int(num) for num in x_.split() if num.isdigit()][0]
         y_ = [int(num) for num in y_.split() if num.isdigit()][0]
         gx[b], gy[b] = y_, x_
-        if gx[b] in range(1, 6) and gy[b] in range(1, 6) and gn[gx[b]][gy[b]] != 0:
+        if gx[b] in range(1, 6) and gy[b] in range(1, 6) and gn[gx[b]][gy[b]] == 0:
             break
         print("ILLEGAL COORDS. RETYPE")
     if b != 1:
