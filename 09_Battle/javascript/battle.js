@@ -260,8 +260,8 @@ async function main()
             str = await input();
             // Check if user types anything other than a number
             if (isNaN(str)) {
-                print("INVALID INPUT. TRY ENTERING A NUMBER INSTEAD.\n")
-                continue
+                print("INVALID INPUT. TRY ENTERING A NUMBER INSTEAD.\n");
+                continue;
             }
             x = parseInt(str);
             y = parseInt(str.substr(str.indexOf(",") + 1));
