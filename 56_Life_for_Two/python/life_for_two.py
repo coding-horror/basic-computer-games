@@ -7,10 +7,13 @@ Ported by Sajid Sarker (2022).
 '''
 
 # Global Variable Initialisation
-gn, gk, ga, gx, gy = [], [], [], [], []
-gk = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
-ga = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
-m2, m3 = 0, 0
+gn: List[int] = []
+gx: List[int] = []
+gy: List[int] = []
+gk: List[int] = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
+ga: List[int] = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
+m2: int = 0
+m3: int = 0
 
 # Initialise the board
 for j in range(6):
@@ -107,13 +110,14 @@ def query_player(b) -> None:
     # Query player for symbol placement coordinates
     while True:
         print("X,Y\nXXXXXX\n$$$$$$\n&&&&&&")
-        x_ = input("??")
-        y_ = input("???")
-        x_ = [int(num) for num in x_.split() if num.isdigit()]
-        y_ = [int(num) for num in y_.split() if num.isdigit()]
+        a_: List[str] = input("??")
+        b_: List[str] = input("???")
+        x_: List[int] = [int(num) for num in a_.split() if num.isdigit()]
+        y_: List[int] = [int(num) for num in b_.split() if num.isdigit()]
         x_ = [0] if len(x_) == 0 else x_
         y_ = [0] if len(y_) == 0 else y_
-        gx[b], gy[b] = y_[0], x_[0]
+        gx[b] = y_[0]
+        gy[b] = x_[0]
         if gx[b] in range(1, 6) and gy[b] in range(1, 6) and gn[gx[b]][gy[b]] == 0:
             break
         print("ILLEGAL COORDS. RETYPE")
