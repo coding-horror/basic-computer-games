@@ -8,8 +8,8 @@ Ported by Sajid Sarker (2022).
 
 # Global Variable Initialisation
 gn, gk, ga, gx, gy = [], [], [], [], []
-gk = [-999, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
-ga = [-999, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
+gk = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
+ga = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
 m2, m3 = 0, 0
 
 # Initialise the board
@@ -63,6 +63,7 @@ def simulate_board() -> None:
                 b = 1 if gn[j][k] <= 999 else 10
                 for o1 in range(1, 16, 2):
                     gn[j + ga[o1] - 1][k + ga[o1 + 1] - 1] = gn[j + ga[o1] - 1][k + ga[o1 + 1] - 1] + b
+                    #gn[j + ga[o1]][k + ga[o1 + 1]] = gn[j + ga[o1]][k + ga[o1 + 1]] + b
 
 def display_board() -> None:
     # Draws the board with all symbols
