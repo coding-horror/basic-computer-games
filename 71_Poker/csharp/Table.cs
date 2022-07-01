@@ -113,34 +113,12 @@ internal class Table
             Human.HasBet = false;
             while (true)
             {
-                var humanStrategy = _io.ReadHumanStrategy(Computer.Bet == 0 && Human.Bet == 0);
-                if (humanStrategy is Bet or Check)
-                {
-                    if (Human.Bet + humanStrategy.Value < Computer.Bet)
-                    {
-                        _io.WriteLine("If you can't see my bet, then fold.");
-                        continue;
-                    }
-                    if (Human.Balance - Human.Bet - humanStrategy.Value >= 0)
-                    {
-                        Human.HasBet = true;
-                        Human.Bet += humanStrategy.Value;
-                        break;
-                    }
-                    Human.RaiseFunds();
-                    if (Human.IsBroke) { return; }
-                    continue;
-                }
-                else
-                {
-                    Human.Fold();
-                    UpdatePot();
-                    return;
-                }
+                if (Human.SetWager()) { break; }
+                if (Human.IsBroke || Human.HasFolded) { return; }
             }
             if (Human.Bet == Computer.Bet)
             {
-                UpdatePot();
+                CollectBets();
                 return;
             }
             if (Computer.Strategy is Fold)
@@ -158,7 +136,7 @@ internal class Table
                 {
                     _io.WriteLine("I'll see you.");
                     Computer.Bet = Human.Bet;
-                    UpdatePot();
+                    CollectBets();
                     return;
                 }
             }
@@ -170,7 +148,7 @@ internal class Table
         }
     }
 
-    private void UpdatePot()
+    internal void CollectBets()
     {
         Human.Balance -= Human.Bet;
         Computer.Balance -= Computer.Bet;

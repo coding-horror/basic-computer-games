@@ -1,4 +1,5 @@
 using Poker.Cards;
+using Poker.Strategies;
 
 namespace Poker.Players;
 
@@ -28,6 +29,32 @@ internal class Human : Player
 
         _io.WriteLine("Your new hand:");
         _io.Write(Hand);
+    }
+
+    internal bool SetWager()
+    {
+        var strategy = _io.ReadHumanStrategy(Table.Computer.Bet == 0 && Bet == 0);
+        if (strategy is Strategies.Bet or Check)
+        {
+            if (Bet + strategy.Value < Table.Computer.Bet)
+            {
+                _io.WriteLine("If you can't see my bet, then fold.");
+                return false;
+            }
+            if (Balance - Bet - strategy.Value >= 0)
+            {
+                HasBet = true;
+                Bet += strategy.Value;
+                return true;
+            }
+            RaiseFunds();
+        }
+        else
+        {
+            Fold();
+            Table.CollectBets();
+        }
+        return false;
     }
 
     public void RaiseFunds()

@@ -76,7 +76,7 @@ internal class Computer : Player
             {
                 _io.WriteLine("I'll see you.");
                 Bet = Table.Human.Bet;
-                Table.UpdatePot();
+                Table.CollectBets();
             }
             else
             {
