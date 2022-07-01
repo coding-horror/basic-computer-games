@@ -19,6 +19,22 @@ internal class Computer : Player
 
     public Strategy Strategy { get; set; }
 
+    public override void NewHand()
+    {
+        base.NewHand();
+
+        Strategy = (Hand.IsWeak, Hand.Rank < HandRank.Three, Hand.Rank < HandRank.FullHouse) switch
+        {
+            (true, _, _) when _random.Next(10) < 2 => Strategy.Bluff(23, 0b11100),
+            (true, _, _) when _random.Next(10) < 2 => Strategy.Bluff(23, 0b11110),
+            (true, _, _) when _random.Next(10) < 1 => Strategy.Bluff(23, 0b11111),
+            (true, _, _) => Strategy.Fold,
+            (false, true, _) => _random.Next(10) < 2 ? Strategy.Bluff(23) : Strategy.Check,
+            (false, false, true) => Strategy.Bet(35),
+            (false, false, false) => _random.Next(10) < 1 ? Strategy.Bet(35) : Strategy.Raise
+        };
+    }
+
     protected override void DrawCards(Deck deck)
     {
         var keepMask = Strategy.KeepMask ?? Hand.KeepMask;
@@ -38,6 +54,37 @@ internal class Computer : Player
         {
             _io.WriteLine("s");
         }
+
+        Strategy = (Hand.IsWeak, Hand.Rank < HandRank.Three, Hand.Rank < HandRank.FullHouse) switch
+        {
+            _ when Strategy is Bluff => Strategy.Bluff(28),
+            (true, _, _) => Strategy.Fold,
+            (false, true, _) => _random.Next(10) == 0 ? Strategy.Bet(19) : Strategy.Raise,
+            (false, false, true) => _random.Next(10) == 0 ? Strategy.Bet(11) : Strategy.Bet(19),
+            (false, false, false) => Strategy.Raise
+        };
+    }
+
+    public int GetWager(int wager)
+    {
+        wager += _random.Next(10);
+        if (Balance < Table.Human.Bet + wager)
+        {
+            if (Table.Human.Bet == 0) { return Balance; }
+
+            if (Balance >= Table.Human.Bet)
+            {
+                _io.WriteLine("I'll see you.");
+                Bet = Table.Human.Bet;
+                Table.UpdatePot();
+            }
+            else
+            {
+                RaiseFunds();
+            }
+        }
+
+        return wager;
     }
 
     public bool TryBuyWatch()
