@@ -15,11 +15,11 @@ internal class Game
 
     public void Play()
     {
-        _io.WriteLine(Resource.Streams.Introduction);
+        _io.Write(Resource.Streams.Introduction);
         var response = _io.ReadString("Do you want instructions");
         if (!response.Equals("no", StringComparison.InvariantCultureIgnoreCase))
         {
-            _io.WriteLine(Resource.Streams.Instructions);
+            _io.Write(Resource.Streams.Instructions);
         }
     }
 }

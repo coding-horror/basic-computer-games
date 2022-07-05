@@ -19,6 +19,7 @@ internal static class Resource
     }
 
     private static Stream GetStream([CallerMemberName] string? name = null) =>
-        Assembly.GetExecutingAssembly().GetManifestResourceStream($"Basketball.Resources.{name}.txt")
+        Assembly.GetExecutingAssembly()
+            .GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
             ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
 }
