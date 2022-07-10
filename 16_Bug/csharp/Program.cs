@@ -1,3 +1,4 @@
+using BugGame;
 using Games.Common.IO;
 using Games.Common.Randomness;
 

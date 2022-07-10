@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Bug.Resources;
+namespace BugGame.Resources;
 
 internal static class Resource
 {

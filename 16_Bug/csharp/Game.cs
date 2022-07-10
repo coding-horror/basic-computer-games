@@ -1,6 +1,8 @@
-using Bug.Resources;
+using BugGame.Resources;
 using Games.Common.IO;
 using Games.Common.Randomness;
+
+namespace BugGame;
 
 internal class Game
 {
