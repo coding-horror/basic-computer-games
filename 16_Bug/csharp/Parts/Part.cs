@@ -13,6 +13,8 @@ internal class Part
         _duplicateMessage = duplicateMessage;
     }
 
+    public virtual bool IsComplete => IsPresent;
+
     protected bool IsPresent { get; private set; }
 
     public string Name => GetType().Name;

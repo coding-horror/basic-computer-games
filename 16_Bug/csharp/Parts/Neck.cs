@@ -11,6 +11,8 @@ internal class Neck : ParentPart
     {
     }
 
+    public override bool IsComplete => _head.IsComplete;
+
     protected override bool TryAddCore(IPart part, out Message message)
         => part switch
         {

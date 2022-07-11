@@ -13,6 +13,8 @@ internal class Body : ParentPart
     {
     }
 
+    public override bool IsComplete => _neck.IsComplete && _tail.IsComplete && _legs.IsComplete;
+
     protected override bool TryAddCore(IPart part, out Message message)
         => part switch
         {

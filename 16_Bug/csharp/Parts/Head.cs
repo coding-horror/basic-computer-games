@@ -11,6 +11,8 @@ internal class Head : ParentPart
     {
     }
 
+    public override bool IsComplete => _feelers.IsComplete;
+
     protected override bool TryAddCore(IPart part, out Message message)
         => part switch
         {

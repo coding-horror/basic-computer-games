@@ -1,3 +1,5 @@
+using BugGame.Parts;
+
 namespace BugGame.Resources;
 
 internal class Message

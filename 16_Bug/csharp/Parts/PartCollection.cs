@@ -16,6 +16,8 @@ internal class PartCollection
         _fullMessage = fullMessage;
     }
 
+    public bool IsComplete => _count == _maxCount;
+
     public bool TryAddOne(out Message message)
     {
         if (_count < _maxCount)
