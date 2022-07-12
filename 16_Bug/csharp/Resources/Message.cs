@@ -24,6 +24,8 @@ internal class Message
     public static Message LegAdded = new("now have {0} legs");
     public static Message LegsFull = new("I have 6 feet.", "You have 6 feet already");
 
+    public static Message Complete = new("bug is finished.");
+
     private Message(string common)
         : this("I " + common, "You" + common)
     {
@@ -40,5 +42,5 @@ internal class Message
 
     public static Message DoNotHaveA(Part part) => new($"do no have a {part.Name}");
 
-    public Message ForQuantity(int quantity) => new(string.Format(I, quantity), string.Format(You, quantity));
+    public Message ForValue(int quantity) => new(string.Format(I, quantity), string.Format(You, quantity));
 }

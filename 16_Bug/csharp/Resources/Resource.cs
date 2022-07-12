@@ -9,17 +9,11 @@ internal static class Resource
     {
         public static Stream Introduction => GetStream();
         public static Stream Instructions => GetStream();
-    }
-
-    private static string GetString([CallerMemberName] string? name = null)
-    {
-        using var stream = GetStream(name);
-        using var reader = new StreamReader(stream);
-        return reader.ReadToEnd();
+        public static Stream PlayAgain => GetStream();
     }
 
     private static Stream GetStream([CallerMemberName] string? name = null) =>
         Assembly.GetExecutingAssembly()
-            .GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")
+            .GetManifestResourceStream($"Bug.Resources.{name}.txt")
             ?? throw new Exception($"Could not find embedded resource stream '{name}'.");
 }
