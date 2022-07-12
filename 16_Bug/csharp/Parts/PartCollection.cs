@@ -1,3 +1,4 @@
+using System.Text;
 using BugGame.Resources;
 
 namespace BugGame.Parts;
@@ -23,11 +24,27 @@ internal class PartCollection
         if (_count < _maxCount)
         {
             _count++;
-            message = _addedMessage.ForQuantity(_count);
+            message = _addedMessage.ForValue(_count);
             return true;
         }
 
         message = _fullMessage;
         return false;
+    }
+
+    protected void AppendTo(StringBuilder builder, int offset, int length, char character)
+    {
+        if (_count == 0) { return; }
+
+        builder.Append(' ', offset);
+
+        for (var i = 0; i < length; i++)
+        {
+            for (var j = 0; j < _count; j++)
+            {
+                builder.Append(character).Append(' ');
+            }
+            builder.AppendLine();
+        }
     }
 }

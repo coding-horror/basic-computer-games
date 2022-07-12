@@ -2,7 +2,7 @@ using BugGame.Resources;
 
 namespace BugGame.Parts;
 
-internal class Part
+internal class Part : IPart
 {
     private readonly Message _addedMessage;
     private readonly Message _duplicateMessage;

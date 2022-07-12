@@ -1,3 +1,4 @@
+using System.Text;
 using BugGame.Resources;
 
 namespace BugGame.Parts;
@@ -20,4 +21,10 @@ internal class Neck : ParentPart
             Feeler => _head.TryAdd(part, out message),
             _ => throw new NotSupportedException($"Can't add a {part.Name} to a {Name}.")
         };
+
+    public void AppendTo(StringBuilder builder, char feelerCharacter)
+    {
+        _head.AppendTo(builder, feelerCharacter);
+        builder.AppendLine("          N N").AppendLine("          N N");
+    }
 }
