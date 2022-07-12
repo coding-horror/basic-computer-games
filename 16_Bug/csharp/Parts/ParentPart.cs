@@ -10,7 +10,12 @@ internal abstract class ParentPart : Part
     }
 
     public bool TryAdd(IPart part, out Message message)
-        => IsPresent ? TryAddCore(part, out message) : ReportDoNotHave(out message);
+        => (part.GetType() == GetType(), IsPresent) switch
+        {
+            (true, _) => TryAdd(out message),
+            (false, false) => ReportDoNotHave(out message),
+            _ => TryAddCore(part, out message)
+        };
 
     protected abstract bool TryAddCore(IPart part, out Message message);
 
