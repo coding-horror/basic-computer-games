@@ -48,8 +48,12 @@ internal class Game
 
                 if (!_io.ReadString("Do you want the picture").Equals("no", InvariantCultureIgnoreCase))
                 {
-                    _io.WriteLine(yourBug.ToString("Your", 'A'));
-                    _io.WriteLine(myBug.ToString("My", 'F'));
+                    _io.Write(yourBug.ToString("Your", 'A'));
+                    _io.WriteLine();
+                    _io.WriteLine();
+                    _io.WriteLine();
+                    _io.WriteLine();
+                    _io.Write(myBug.ToString("My", 'F'));
                 }
             }
 
