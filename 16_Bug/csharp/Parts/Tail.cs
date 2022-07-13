@@ -10,5 +10,11 @@ internal class Tail : Part
     {
     }
 
-    public void AppendTo(StringBuilder builder) => builder.AppendLine("TTTTTB          B");
+    public void AppendTo(StringBuilder builder)
+    {
+        if (IsPresent)
+        {
+            builder.AppendLine("TTTTTB          B");
+        }
+    }
 }

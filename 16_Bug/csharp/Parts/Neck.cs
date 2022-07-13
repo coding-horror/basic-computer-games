@@ -24,7 +24,10 @@ internal class Neck : ParentPart
 
     public void AppendTo(StringBuilder builder, char feelerCharacter)
     {
-        _head.AppendTo(builder, feelerCharacter);
-        builder.AppendLine("          N N").AppendLine("          N N");
+        if (IsPresent)
+        {
+            _head.AppendTo(builder, feelerCharacter);
+            builder.AppendLine("          N N").AppendLine("          N N");
+        }
     }
 }

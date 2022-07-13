@@ -23,13 +23,16 @@ internal class Head : ParentPart
 
     public void AppendTo(StringBuilder builder, char feelerCharacter)
     {
-        _feelers.AppendTo(builder, feelerCharacter);
-        builder
-            .AppendLine("        HHHHHHH")
-            .AppendLine("        H     H")
-            .AppendLine("        H O O H")
-            .AppendLine("        H     H")
-            .AppendLine("        H  V  H")
-            .AppendLine("        HHHHHHH");
+        if (IsPresent)
+        {
+            _feelers.AppendTo(builder, feelerCharacter);
+            builder
+                .AppendLine("        HHHHHHH")
+                .AppendLine("        H     H")
+                .AppendLine("        H O O H")
+                .AppendLine("        H     H")
+                .AppendLine("        H  V  H")
+                .AppendLine("        HHHHHHH");
+        }
     }
 }

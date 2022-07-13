@@ -28,14 +28,17 @@ internal class Body : ParentPart
 
     public void AppendTo(StringBuilder builder, char feelerCharacter)
     {
-        _neck.AppendTo(builder, feelerCharacter);
-        builder
-            .AppendLine("     BBBBBBBBBBBB")
-            .AppendLine("     B          B")
-            .AppendLine("     B          B");
-        _tail.AppendTo(builder);
-        builder
-            .AppendLine("     BBBBBBBBBBBB");
-        _legs.AppendTo(builder);
+        if (IsPresent)
+        {
+            _neck.AppendTo(builder, feelerCharacter);
+            builder
+                .AppendLine("     BBBBBBBBBBBB")
+                .AppendLine("     B          B")
+                .AppendLine("     B          B");
+            _tail.AppendTo(builder);
+            builder
+                .AppendLine("     BBBBBBBBBBBB");
+            _legs.AppendTo(builder);
+        }
     }
 }
