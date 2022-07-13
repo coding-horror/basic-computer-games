@@ -36,10 +36,15 @@ internal class Game
 
         while (true)
         {
-            if (TryBuild(yourBug, m => m.You) || TryBuild(myBug, m => m.I))
+            var partAdded = TryBuild(yourBug, m => m.You);
+            Thread.Sleep(500);
+            _io.WriteLine();
+            partAdded |= TryBuild(myBug, m => m.I);
+
+            if (partAdded)
             {
-                if (yourBug.IsComplete) { _io.WriteLine(Message.Complete.You); }
-                if (myBug.IsComplete) { _io.WriteLine(Message.Complete.I); }
+                if (yourBug.IsComplete) { _io.WriteLine("Your bug is finished."); }
+                if (myBug.IsComplete) { _io.WriteLine("My bug is finished."); }
 
                 if (!_io.ReadString("Do you want the picture").Equals("no", InvariantCultureIgnoreCase))
                 {

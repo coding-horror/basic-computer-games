@@ -27,7 +27,7 @@ internal class Message
     public static Message Complete = new("bug is finished.");
 
     private Message(string common)
-        : this("I " + common, "You" + common)
+        : this("I " + common, "You " + common)
     {
     }
 
@@ -40,7 +40,7 @@ internal class Message
     public string I { get; }
     public string You { get; }
 
-    public static Message DoNotHaveA(Part part) => new($"do no have a {part.Name}");
+    public static Message DoNotHaveA(Part part) => new($"do not have a {part.Name}");
 
     public Message ForValue(int quantity) => new(string.Format(I, quantity), string.Format(You, quantity));
 }

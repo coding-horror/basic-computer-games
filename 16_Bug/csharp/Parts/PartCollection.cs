@@ -36,10 +36,10 @@ internal class PartCollection
     {
         if (_count == 0) { return; }
 
-        builder.Append(' ', offset);
-
         for (var i = 0; i < length; i++)
         {
+            builder.Append(' ', offset);
+
             for (var j = 0; j < _count; j++)
             {
                 builder.Append(character).Append(' ');
