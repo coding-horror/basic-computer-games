@@ -6,6 +6,8 @@ Competitive Game of Life (two or more players).
 Ported by Sajid Sarker (2022).
 '''
 
+from typing import List
+
 # Global Variable Initialisation
 gn: List[int] = []
 gx: List[int] = []
