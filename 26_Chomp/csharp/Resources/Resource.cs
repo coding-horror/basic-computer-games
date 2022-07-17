@@ -10,8 +10,7 @@ internal static class Resource
         public static Stream HereWeGo => GetStream();
         public static Stream Introduction => GetStream();
         public static Stream Rules => GetStream();
-        public static Stream TooManyColumns => GetStream();
-        public static Stream TooManyRows => GetStream();
+        public static Stream NoFair => GetStream();
     }
 
     internal static class Formats

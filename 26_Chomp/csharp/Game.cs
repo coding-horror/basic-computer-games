@@ -17,12 +17,19 @@ internal class Game
             _io.Write(Resource.Streams.Rules);
         }
 
-
         while (true)
         {
             _io.Write(Resource.Streams.HereWeGo);
 
             var (playerCount, rowCount, columnCount) = _io.ReadParameters();
+
+            var cookie = new Cookie(rowCount, columnCount);
+            var player = new PlayerNumber(playerCount);
+
+            _io.WriteLine(cookie);
+
+            _io.WriteLine(string.Format(Resource.Formats.Player, player));
+            var (row, column) = _io.Read2Numbers(Resource.Prompts.Coordinates);
 
             if (_io.ReadNumber("Again (1=Yes, 0=No!)") != 1) { break; }
         }

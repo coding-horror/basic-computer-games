@@ -1,1 +1,1 @@
-You lose, player {0}
+You lose, player{0}
