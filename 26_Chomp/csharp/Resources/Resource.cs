@@ -26,6 +26,13 @@ internal static class Resource
         public static string HowManyPlayers => GetString();
         public static string HowManyRows => GetString();
         public static string HowManyColumns => GetString();
+        public static string TooManyColumns => GetString();
+    }
+
+    internal static class Strings
+    {
+        public static string TooManyColumns => GetString();
+        public static string TooManyRows => GetString();
     }
 
     private static string GetString([CallerMemberName] string? name = null)

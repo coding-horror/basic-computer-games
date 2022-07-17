@@ -17,9 +17,12 @@ internal class Game
             _io.Write(Resource.Streams.Rules);
         }
 
+
         while (true)
         {
             _io.Write(Resource.Streams.HereWeGo);
+
+            var (playerCount, rowCount, columnCount) = _io.ReadParameters();
 
             if (_io.ReadNumber("Again (1=Yes, 0=No!)") != 1) { break; }
         }
