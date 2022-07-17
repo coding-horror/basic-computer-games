@@ -23,12 +23,15 @@ internal class Cookie
         _bits[0][0] = 'P';
     }
 
-    public bool TryChomp(int row, int column)
+    public bool TryChomp(int row, int column, out char chomped)
     {
         if (row < 1 || row > _rowCount || column < 1 || column > _columnCount || _bits[row - 1][column - 1] == ' ')
         {
+            chomped = default;
             return false;
         }
+
+        chomped = _bits[row - 1][column - 1];
 
         for (int r = row; r <= _rowCount; r++)
         {

@@ -23,15 +23,42 @@ internal class Game
 
             var (playerCount, rowCount, columnCount) = _io.ReadParameters();
 
-            var cookie = new Cookie(rowCount, columnCount);
-            var player = new PlayerNumber(playerCount);
+            var loser = Play(new Cookie(rowCount, columnCount), new PlayerNumber(playerCount));
 
-            _io.WriteLine(cookie);
-
-            _io.WriteLine(string.Format(Resource.Formats.Player, player));
-            var (row, column) = _io.Read2Numbers(Resource.Prompts.Coordinates);
+            _io.WriteLine(string.Format(Resource.Formats.YouLose, loser));
 
             if (_io.ReadNumber("Again (1=Yes, 0=No!)") != 1) { break; }
+        }
+    }
+
+    private PlayerNumber Play(Cookie cookie, PlayerNumber player)
+    {
+        while (true)
+        {
+            _io.WriteLine(cookie);
+
+            var poisoned = Chomp(cookie, player);
+
+            if (poisoned) { return player; }
+
+            player++;
+        }
+    }
+
+    private bool Chomp(Cookie cookie, PlayerNumber player)
+    {
+        while (true)
+        {
+            _io.WriteLine(string.Format(Resource.Formats.Player, player));
+
+            var (row, column) = _io.Read2Numbers(Resource.Prompts.Coordinates);
+
+            if (cookie.TryChomp((int)row, (int)column, out char chomped))
+            {
+                return chomped == 'P';
+            }
+
+            _io.Write(Resource.Streams.NoFair);
         }
     }
 }
