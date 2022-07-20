@@ -1,0 +1,18 @@
+The object of Bug is to finish your bug before I finish
+mine. Each number stands for a part of the bug body.
+I will roll the die for you, tell you what I rolled for you
+what the number stands for, and if you can get the part.
+If you can get the part I will give it to you.
+The same will happen on my turn.
+If there is a change in either bug I will give you the
+option of seeing the pictures of the bugs.
+The numbers stand for parts as follows:
+Number        Part          Number of part needed
+ 1            Body           1
+ 2            Neck           1
+ 3            Head           1
+ 4            Feelers        2
+ 5            Tail           1
+ 6            Legs           6
+
+
