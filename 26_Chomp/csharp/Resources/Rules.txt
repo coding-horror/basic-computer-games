@@ -1,0 +1,22 @@
+Chomp is for 1 or more players (humans only).
+
+Here's how a board looks (this one is 5 by 7):
+
+       1 2 3 4 5 6 7 8 9
+ 1     P * * * * * *
+ 2     * * * * * * *
+ 3     * * * * * * *
+ 4     * * * * * * *
+ 5     * * * * * * *
+
+
+The board is a big cookie - R rows high and C columns
+wide. You input R and C at the start. In the upper left
+corner of the cookie is a poison square (P). The one who
+chomps the poison square loses. To take a chomp, type the
+row and column of one of the squares on the cookie.
+All of the squares below and to the right of that square
+(including that square, too) disappear -- Chomp!!
+No fair chomping on squares that have already been chomped,
+or that are outside the original dimensions of the cookie.
+
