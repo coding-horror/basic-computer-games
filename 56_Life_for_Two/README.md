@@ -6,6 +6,7 @@ There are two players; the game is played on a 5x5 board and each player has a s
 
 The # and * are regarded as the same except when deciding whether to generate a live cell. An empty cell having two `#` and one `*` for neighbors will generate a `#`, i.e. the live cell generated belongs to the player who has the majority of the 3 live cells surrounding the empty cell where life is to be generated, for example:
 
+```
 |   | 1 | 2 | 3 | 4 | 5 |
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 |   |   |   |   |   |
@@ -13,9 +14,10 @@ The # and * are regarded as the same except when deciding whether to generate a 
 | 3 |   |   |   | # |   |
 | 4 |   |   | # |   |   |
 | 5 |   |   |   |   |   |
+```
 
 A new cell will be generated at (3,3) which will be a `#` since there are two `#` and one `*` surrounding. The board will then become:
-
+```
 |   | 1 | 2 | 3 | 4 | 5 |
 |:-:|:-:|:-:|:-:|:-:|:-:|
 | 1 |   |   |   |   |   |
@@ -23,7 +25,7 @@ A new cell will be generated at (3,3) which will be a `#` since there are two `#
 | 3 |   |   | # | # |   |
 | 4 |   |   |   |   |   |
 | 5 |   |   |   |   |   |
-
+```
 On the first most each player positions 3 pieces of life on the board by typing in the co-ordinates of the pieces. (In the event of the same cell being chosen by both players that cell is left empty.)
 
 The board is then adjusted to the next generation and printed out.
