@@ -25,7 +25,7 @@ for i in range(3):
     gy.append(0)
 
 # Helper Functions
-def tab(number : int) -> str:
+def tab(number) -> str:
     t = ""
     while len(t) < number:
         t += " "
@@ -127,7 +127,7 @@ def query_player(b) -> None:
             b = 99
 
 # Game Functions
-def check_winner(m2 : int, m3 : int) -> None:
+def check_winner(m2, m3) -> None:
     # Check if the game has been won
     if m2 == 0 and m3 == 0:
         print("\nA DRAW\n")
