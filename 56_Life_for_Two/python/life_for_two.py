@@ -109,10 +109,10 @@ def query_player(b) -> None:
     # Query player for symbol placement coordinates
     while True:
         print("X,Y\nXXXXXX\n$$$$$$\n&&&&&&")
-        a_: List[str] = input("??")
-        b_: List[str] = input("???")
-        x_: List[int] = [int(num) for num in a_.split() if num.isdigit()]
-        y_: List[int] = [int(num) for num in b_.split() if num.isdigit()]
+        a_ = input("??")
+        b_ = input("???")
+        x_ = [int(num) for num in a_.split() if num.isdigit()]
+        y_ = [int(num) for num in b_.split() if num.isdigit()]
         x_ = [0] if len(x_) == 0 else x_
         y_ = [0] if len(y_) == 0 else y_
         gx[b] = y_[0]
