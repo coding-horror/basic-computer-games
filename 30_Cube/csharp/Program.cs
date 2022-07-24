@@ -5,4 +5,6 @@ global using static Cube.Resources.Resource;
 
 using Cube;
 
-new Game(new ConsoleIO(), new RandomNumberGenerator()).Play();
+IRandom random = args.Contains("--non-random") ? new ZerosGenerator() : new RandomNumberGenerator();
+
+new Game(new ConsoleIO(), random).Play();
