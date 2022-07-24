@@ -5,17 +5,14 @@ Competitive Game of Life (two or more players).
 
 Ported by Sajid Sarker (2022).
 '''
-
-from typing import List
-
 # Global Variable Initialisation
-gn: List[int] = []
-gx: List[int] = []
-gy: List[int] = []
-gk: List[int] = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
-ga: List[int] = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
-m2: int = 0
-m3: int = 0
+gn = []
+gx = []
+gy = []
+gk = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
+ga = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
+m2 = 0
+m3 = 0
 
 # Initialise the board
 for j in range(6):
