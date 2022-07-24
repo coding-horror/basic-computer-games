@@ -72,7 +72,7 @@ The relation between the Historical and Standard nomenclatures is shown in the s
     - If you don’t zap a Klingon hard enough (relative to his shield strength) you won’t damage him at all. Your sensors will tell the story.
     - Damage control will let you know when out-of-commission devices have been completely repaired.
 
-9. Your engines will automatically shit down if you should attempt to leave the galaxy, or if you should try to maneuver through a star, or Starbase, or—heaven help you—a Klingon warship.
+9. Your engines will automatically shut down if you should attempt to leave the galaxy, or if you should try to maneuver through a star, or Starbase, or—heaven help you—a Klingon warship.
 
 10. In a pinch, or if you should miscalculate slightly, some shield control energy will be automatically diverted to warp engine control (if your shield are operational!).
 
