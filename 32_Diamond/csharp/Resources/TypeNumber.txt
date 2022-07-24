@@ -1,0 +1,2 @@
+For a pretty diamond pattern,
+type in an odd number between 5 and 21
