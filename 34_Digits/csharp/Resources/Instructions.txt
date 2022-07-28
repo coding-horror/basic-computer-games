@@ -1,0 +1,11 @@
+
+Please take a piece of paper and write down
+the digits '0', '1', or '2' thirty times at random.
+Arrange them in three lines of ten digits each.
+I will ask for then ten at a time.
+I will always guess them first and then look at your
+next number to see if I was right. By pure luck,
+I ought to be right ten times. But I hope to do better
+than that *****
+
+
