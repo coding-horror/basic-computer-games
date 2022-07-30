@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Chomp.Resources;
+namespace Digits.Resources;
 
 internal static class Resource
 {
@@ -22,12 +22,6 @@ internal static class Resource
         public static string ForInstructions => GetString();
         public static string TenNumbers => GetString();
         public static string WantToTryAgain => GetString();
-    }
-
-    internal static class Strings
-    {
-        public static string TooManyColumns => GetString();
-        public static string TooManyRows => GetString();
     }
 
     private static string GetString([CallerMemberName] string? name = null)
