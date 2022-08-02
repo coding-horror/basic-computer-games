@@ -24,6 +24,11 @@ internal static class Resource
         public static string WantToTryAgain => GetString();
     }
 
+    internal static class Formats
+    {
+        public static string GuessResult => GetString();
+    }
+
     private static string GetString([CallerMemberName] string? name = null)
     {
         using var stream = GetStream(name);
