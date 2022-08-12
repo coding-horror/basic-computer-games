@@ -1,0 +1,4 @@
+
+You made {0} jumps and had {1} pieces
+remaining on the board.
+
