@@ -3,7 +3,8 @@ namespace OneCheck;
 internal class Board
 {
     private readonly bool[][] _checkers;
-    private int _count;
+    private int _pieceCount;
+    private int _moveCount;
 
     public Board()
     {
@@ -12,16 +13,33 @@ internal class Board
                 .Select(r => Enumerable.Range(0, 8)
                     .Select(c => r <= 1 || r >= 6 || c <= 1 || c >= 6).ToArray())
                 .ToArray();
-        _count = 48;
+        _pieceCount = 48;
     }
 
     private bool this[int index]
     {
-        get => _checkers[(index - 1) / 8][(index-1) % 8];
-        set => _checkers[(index - 1) / 8][(index-1) % 8] = value;
+        get => _checkers[index / 8][index % 8];
+        set => _checkers[index / 8][index % 8] = value;
     }
 
-    public int Count => _count;
+    public bool PlayMove(IReadWrite io)
+    {
+        while (true)
+        {
+            var from = (int)io.ReadNumber(Prompts.From);
+            if (from == 0) { return false; }
+
+            var move = new Move { From = from - 1, To = (int)io.ReadNumber(Prompts.To) - 1 };
+
+            if (TryMove(move)) 
+            { 
+                _moveCount++;
+                return true; 
+            }
+
+            io.Write(Streams.IllegalMove);
+        }
+    }
 
     public bool TryMove(Move move)
     {
@@ -30,7 +48,7 @@ internal class Board
             this[move.From] = false;
             this[move.Jumped] = false;
             this[move.To] = true;
-            _count--;
+            _pieceCount--;
             return true;
         }
 
@@ -38,6 +56,8 @@ internal class Board
     }
 
     private bool IsPieceJumpingPieceToEmptySpace(Move move) => this[move.From] && this[move.Jumped] && !this[move.To];
+
+    public string GetReport() => string.Format(Formats.Results, _moveCount, _pieceCount);
 
     public override string ToString() => 
         string.Join(Environment.NewLine, _checkers.Select(r => string.Join(" ", r.Select(c => c ? " 1" : " 0"))));

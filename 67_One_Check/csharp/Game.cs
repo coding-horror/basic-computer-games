@@ -3,13 +3,10 @@ namespace OneCheck;
 internal class Game
 {
     private readonly IReadWrite _io;
-    private readonly Board _board;
-    private int _moveCount;
 
     public Game(IReadWrite io)
     {
         _io = io;
-        _board = new Board();
     }
 
     public void Play()
@@ -18,29 +15,31 @@ internal class Game
         
         do
         {
-            _io.WriteLine(_board);
-            _io.WriteLine();
-        } while (PlayMove());
+            var board = new Board();
+            do
+            {
+                _io.WriteLine(board);
+                _io.WriteLine();
+            } while (board.PlayMove(_io));
 
-        _io.WriteLine(Formats.Results, _moveCount, _board.Count);
+            _io.WriteLine(board.GetReport());
+        } while (_io.ReadYesNo(Prompts.TryAgain) == "yes");
+
+        _io.Write(Streams.Bye);
     }
+}
 
-    private bool PlayMove()
+internal static class IOExtensions
+{
+    internal static string ReadYesNo(this IReadWrite io, string prompt)
     {
         while (true)
         {
-            var from = (int)_io.ReadNumber(Prompts.From);
-            if (from == 0) { return false; }
+            var response = io.ReadString(prompt).ToLower();
 
-            var move = new Move { From = from, To = (int)_io.ReadNumber(Prompts.To) };
+            if (response == "yes" || response == "no") { return response; }
 
-            if (_board.TryMove(move)) 
-            { 
-                _moveCount++;
-                return true; 
-            }
-
-            _io.Write(Streams.IllegalMove);
+            io.Write(Streams.YesOrNo);
         }
     }
 }
