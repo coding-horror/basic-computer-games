@@ -10,8 +10,7 @@ internal static class Resource
         public static Stream Introduction => GetStream();
         public static Stream TooLow => GetStream();
         public static Stream TooHigh => GetStream();
-        public static Stream Good => GetStream();
-        public static Stream VeryGood => GetStream();
+        public static Stream BlankLines => GetStream();
     }
 
     internal static class Formats
@@ -24,6 +23,12 @@ internal static class Resource
     internal static class Prompts
     {
         public static string Limit => GetString();
+    }
+
+    internal static class Strings
+    {
+        public static string Good => GetString();
+        public static string VeryGood => GetString();
     }
 
     private static string GetString([CallerMemberName] string? name = null)
