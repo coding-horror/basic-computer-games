@@ -1,0 +1,9 @@
+                                 Guezs
+               Creative Computing  Morristown, New Jersey
+
+
+
+This is a number guessing game. I'll think
+of a number between 1 and any limit you want.
+The you have to guess what it is.
+
