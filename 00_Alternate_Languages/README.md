@@ -8,8 +8,8 @@ Implementations here are NOT bound to these three criteria:
 2. Memory safe
 3. Generally considered a 'scripting' language
 
-So for example, (here only) C or PASCAL are allowed. Please still remain faithful to original look-and-feel (console applications),
-and try to keep the code portable (unless it is not possible, and then be very explicit about this limitation in your
+So for example, (here only) C or PASCAL are allowed. Please still remain faithful to original look-and-feel (console applications).
+Try to keep your code portable (unless it is not possible, and then be very explicit about this limitation in your
 README and your folder naming).
 
 We welcome additional ports in whatever language you prefer, but these additional ports are for educational purposes only, and do not count towards the donation total at the end of the project.
