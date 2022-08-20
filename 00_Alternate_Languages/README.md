@@ -1,6 +1,7 @@
 #### Alternate Languages
 
-This folder contains implementations of each program in alternate languages which are _not_ one of the agreed upon 10 languages, intended to meet these three criteria:
+This folder contains implementations of each program in alternate languages which are _not_ one of the agreed upon 10 languages.
+Implementations here are NOT bound to these three criteria:
 
 1. Popular (by TIOBE index)
 2. Memory safe
