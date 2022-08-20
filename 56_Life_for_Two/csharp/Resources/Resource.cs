@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace LifeForTwo.Resources;
+namespace LifeforTwo.Resources;
 
 internal static class Resource
 {
