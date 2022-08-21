@@ -1,15 +1,15 @@
 global using Games.Common.IO;
 global using static LifeforTwo.Resources.Resource;
+global using LifeforTwo;
 
 var io = new ConsoleIO();
 
 io.Write(Streams.Title);
 
-var _cells = new int[7, 7];
+var _board = new Board();
 var _willLive = new[] { 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012 };
 var _offsets = new[] { -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1 };
-var X = new int[3];
-var Y = new int[3];
+var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
 void CalculateNeighbors()
@@ -18,12 +18,12 @@ void CalculateNeighbors()
     {
         for (var k = 1; k <= 5; k++)
         {
-            if (_cells[j, k] > 99)
+            if (_board[j, k] > 99)
             {
-                int B = _cells[j, k] > 999 ? 10 : 1;
+                int B = _board[j, k] > 999 ? 10 : 1;
                 for (var o = 0; o < 15; o += 2)
                 {
-                    _cells[j + _offsets[o], k + _offsets[o + 1]] += B;
+                    _board[j + _offsets[o], k + _offsets[o + 1]] += B;
                 }
             }
         }
@@ -33,50 +33,50 @@ void CalculateNeighbors()
 void CalculateAndDisplayNext()
 {
     _player1Count = _player2Count = 0;
-    for (var j = 0; j <= 6; j++)
+    for (var y = 0; y <= 6; y++)
     {
         io.WriteLine();
-        for (var k = 0; k <= 6; k++)
+        for (var x = 0; x <= 6; x++)
         {
-            if (j % 6 == 0)
+            if (y % 6 == 0)
             {
-                io.Write($" {k % 6} ");
+                io.Write($" {x % 6} ");
             }
-            else if (k % 6 == 0)
+            else if (x % 6 == 0)
             {
-                io.Write($" {j % 6} ");
+                io.Write($" {y % 6} ");
             }
             else
             {
-                CalculateAndDisplayCell(j, k);
+                CalculateAndDisplayCell(y, x);
             }
         }
     }
     return;
 }
 
-void CalculateAndDisplayCell(int j, int k)
+void CalculateAndDisplayCell(int y, int x)
 {
-    if (_cells[j, k] >= 3)
+    if (_board[x, y] >= 3)
     {
-        for (var O1 = 0; O1 < 18; O1++)
+        for (var o = 0; o < 18; o++)
         {
-            if (_cells[j, k] == _willLive[O1])
+            if (_board[x, y] == _willLive[o])
             {
-                if (O1 < 9)
+                if (o < 9)
                 {
-                    _cells[j, k] = 100; _player1Count++; io.Write(" * ");
+                    _board[x, y] = 100; _player1Count++; io.Write(" * ");
                 }
                 else
                 {
-                    _cells[j, k] = 1000; _player2Count++; io.Write(" # ");
+                    _board[x, y] = 1000; _player2Count++; io.Write(" # ");
                 }
                 return;
             }
         }
     }
 
-    _cells[j, k] = 0;
+    _board[x, y] = 0;
     io.Write("   ");
 }
 
@@ -87,7 +87,7 @@ for (var _player = 1; _player <= 2; _player++)
     for (var i = 1; i <= 3; i++)
     {
         ReadCoordinates(_player);
-        _cells[X[_player], Y[_player]] = P1;
+        _board[_coordinates[_player]] = P1;
     }
 }
 
@@ -106,8 +106,8 @@ while (true)
         io.WriteLine(Formats.Player, _player);
         if (ReadCoordinates(_player)) 
         { 
-            _cells[X[1], Y[1]] = 100; 
-            _cells[X[2], Y[2]] = 1000; 
+            _board[_coordinates[1]] = 100; 
+            _board[_coordinates[2]] = 1000; 
         }
     }
 }
@@ -126,20 +126,19 @@ bool ReadCoordinates(int _player)
     while (true)
     {
         io.WriteLine("X,Y");
-        var (y, x) = io.Read2Numbers("&&&&&&\r");
-        (Y[_player], X[_player]) = ((int)y, (int)x);
-        if (X[_player] <= 5 && X[_player] > 0 && Y[_player] <= 5 && Y[_player] > 0 && _cells[X[_player], Y[_player]] == 0)
+        var values = io.Read2Numbers("&&&&&&\r");
+        if (Coordinates.TryCreate(values, out _coordinates[_player]) && _board[_coordinates[_player]] == 0)
         {
             break;
         }
         io.Write(Streams.IllegalCoords);
     }
 
-    if (_player == 2 && X[1] == X[2] && Y[1] == Y[2])
+    if (_player == 2 && _coordinates[1] == _coordinates[2])
     {
         io.Write(Streams.SameCoords);
-        // This is a bug existing in the original code. The line should be N[X[B], Y[B]] = 0;
-        _cells[X[_player] + 1, Y[_player] + 1] = 0;
+        // This is a bug existing in the original code. The line should be _board[_coordinates[_player]] = 0;
+        _board[_coordinates[_player] + 1] = 0;
         return false;
     }
 
