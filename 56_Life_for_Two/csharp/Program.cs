@@ -8,22 +8,22 @@ io.Write(Streams.Title);
 
 var _board = new Board();
 var _willLive = new[] { 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012 };
-var _offsets = new[] { -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1 };
 var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
 void CalculateNeighbors()
 {
-    for (var j = 1; j <= 5; j++)
+    for (var x = 1; x <= 5; x++)
     {
-        for (var k = 1; k <= 5; k++)
+        for (var y = 1; y <= 5; y++)
         {
-            if (_board[j, k] > 99)
+            var coordinates = new Coordinates(x, y);
+            if (_board[coordinates] > 99)
             {
-                int B = _board[j, k] > 999 ? 10 : 1;
-                for (var o = 0; o < 15; o += 2)
+                int B = _board[coordinates] > 999 ? 10 : 1;
+                foreach (var neighbor in coordinates.GetNeighbors())
                 {
-                    _board[j + _offsets[o], k + _offsets[o + 1]] += B;
+                    _board[neighbor] += B;
                 }
             }
         }
@@ -48,14 +48,14 @@ void CalculateAndDisplayNext()
             }
             else
             {
-                CalculateAndDisplayCell(y, x);
+                CalculateAndDisplayCell(x, y);
             }
         }
     }
     return;
 }
 
-void CalculateAndDisplayCell(int y, int x)
+void CalculateAndDisplayCell(int x, int y)
 {
     if (_board[x, y] >= 3)
     {
