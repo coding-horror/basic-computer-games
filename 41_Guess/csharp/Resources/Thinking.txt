@@ -1,0 +1,2 @@
+I'm thinking of a number between 1 and {0}
+Now you try to guess what it is.
