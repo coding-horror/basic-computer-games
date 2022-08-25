@@ -1,0 +1,2 @@
+
+Illegal move. You lose.

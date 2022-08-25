@@ -1,0 +1,24 @@
+This is a game in which you will be playing against the
+random decision od the computer. The field of play is a
+cube of side 3. Any of the 27 locations can be designated
+by inputing three numbers such as 2,3,1. At the start,
+you are automatically at location 1,1,1. The object of
+the game is to get to location 3,3,3. One minor detail:
+the computer will pick, at random, 5 locations at which
+it will play land mines. If you hit one of these locations
+you lose. One other details: you may move only one space
+in one direction each move. For example: from 1,1,2 you
+may move to 2,1,2 or 1,1,3. You may not change
+two of the numbers on the same move. If you make an illegal
+move, you lose and the computer takes the money you may
+have bet on that round.
+
+
+All Yes or No questions will be answered by a 1 for Yes
+or a 0 (zero) for no.
+
+When stating the amount of a wager, print only the number
+of dollars (example: 250)  You are automatically started with
+500 dollars in your account.
+
+Good luck!
