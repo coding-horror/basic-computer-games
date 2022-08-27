@@ -5,6 +5,7 @@
 
 int main()
 {
+    //Setting Seed for the Random Generator
     srand((unsigned int)time(NULL));
     bool isPlaying(true);
     Money = 100;
@@ -40,10 +41,14 @@ void Play(bool& isPlaying)
     short int CurrentCard;
     printf("YOU NOW HAVE %d DOLLARS.\n\n", Money);
     printf("HERE ARE YOUR NEXT TWO CARDS: \n");
+
+    //Draw Dealers Cards
     DrawCard(DealerCards[0]);
     printf("\n");
     DrawCard(DealerCards[1]);
     printf("\n\n\n");
+
+    //Check if Bet is Valid
     do {
         printf("WHAT IS YOUR BET: ");
         std::cin >> Bet;
@@ -52,6 +57,8 @@ void Play(bool& isPlaying)
             printf("CHICKEN!!\n\n");
         }
     } while (Bet > Money || Bet < 0);
+
+    //Draw Players Card
     DrawCard(CurrentCard);
     printf("\n");
     if (CurrentCard > DealerCards[0] && CurrentCard < DealerCards[1])
@@ -91,9 +98,11 @@ bool isGameOver()
 
 void DrawCard(short int& Card)
 {
+    //Basically generate 2 numbers first one is between 2-11 and second one 0-3
     short int RandomNum1 = (rand() % 10) + 2;
-    short int RandomNum2 = rand() % 3;
+    short int RandomNum2 = rand() % 4;
     Card = RandomNum1 + RandomNum2;
+
     switch (Card)
     {
     case 11:
