@@ -1,0 +1,1 @@
+For instructions, type '1', else type '0'
