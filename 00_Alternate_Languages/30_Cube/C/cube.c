@@ -47,9 +47,16 @@ void game(int money){
     player.x = 1;
     player.y = 1;
     player.z = 1;
+    
     printf("You have $%d in your account.\n",account);
     printf("How much do you want to wager? ");
     scanf("%d",&wager);
+    while(wager > account){
+        system(CLEAR);
+        printf("You do not have that much money in your account.\n");
+        printf("How much do you want to wager? ");
+        scanf("%d",&wager);
+    }
     srand(time(NULL));
     for(int i=0;i<5;i++){
         mines[i].x = rand()%3+1;
