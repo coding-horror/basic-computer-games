@@ -11,25 +11,6 @@ var _willLive = new[] { 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 
 var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
-void CalculateNeighbors()
-{
-    for (var x = 1; x <= 5; x++)
-    {
-        for (var y = 1; y <= 5; y++)
-        {
-            var coordinates = new Coordinates(x, y);
-            if (_board[coordinates] > 99)
-            {
-                int B = _board[coordinates] > 999 ? 10 : 1;
-                foreach (var neighbor in coordinates.GetNeighbors())
-                {
-                    _board[neighbor] += B;
-                }
-            }
-        }
-    }
-}
-
 void CalculateAndDisplayNext()
 {
     _player1Count = _player2Count = 0;
@@ -96,7 +77,7 @@ CalculateAndDisplayNext();
 while (true)
 {
     io.WriteLine();
-    CalculateNeighbors();
+    _board.CalculateNeighbours();
     CalculateAndDisplayNext();
 
     if (_player1Count == 0 || _player2Count == 0) { break; }
