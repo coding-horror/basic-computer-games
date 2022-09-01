@@ -7,7 +7,8 @@ var io = new ConsoleIO();
 io.Write(Streams.Title);
 
 var _board = new Board();
-var _willLive = new[] { 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012 };
+var _willLive = new[] { 0x0003, 0x0102, 0x0103, 0x0120, 0x0130, 0x0121, 0x0112, 0x0111, 0x0012, 
+                        0x0021, 0x0030, 0x1020, 0x1030, 0x1011, 0x1021, 0x1003, 0x1002, 0x1012 };
 var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
@@ -46,11 +47,11 @@ void CalculateAndDisplayCell(int x, int y)
             {
                 if (o < 9)
                 {
-                    _board[x, y] = 100; _player1Count++; io.Write(" * ");
+                    _board[x, y] = 0x0100; _player1Count++; io.Write(" * ");
                 }
                 else
                 {
-                    _board[x, y] = 1000; _player2Count++; io.Write(" # ");
+                    _board[x, y] = 0x1000; _player2Count++; io.Write(" # ");
                 }
                 return;
             }
@@ -63,7 +64,7 @@ void CalculateAndDisplayCell(int x, int y)
 
 for (var _player = 1; _player <= 2; _player++)
 {
-    var P1 = _player == 2 ? 30 : 3;
+    var P1 = _player == 2 ? 0x30 : 0x03;
     io.WriteLine(Formats.InitialPieces, _player);
     for (var i = 1; i <= 3; i++)
     {
@@ -87,8 +88,8 @@ while (true)
         io.WriteLine(Formats.Player, _player);
         if (ReadCoordinates(_player)) 
         { 
-            _board[_coordinates[1]] = 100; 
-            _board[_coordinates[2]] = 1000; 
+            _board[_coordinates[1]] = 0x0100; 
+            _board[_coordinates[2]] = 0x1000; 
         }
     }
 }
