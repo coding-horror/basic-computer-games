@@ -281,7 +281,7 @@ class TicTacToe3D:
 
 class Qubit:
     def move_code(self, board, m) -> str:
-        x, y, z = board.get3DPosition(m)
+        x, y, z = board.get_3d_position(m)
         return f"{z + 1:d}{y + 1:d}{x + 1:d}"
 
     def show_win(self, board, i) -> None:
@@ -313,7 +313,7 @@ class Qubit:
                 x = c.find(h[2])
                 y = c.find(h[1])
                 z = c.find(h[0])
-                if board.move3D(x, y, z, Player.HUMAN):
+                if board.move_3d(x, y, z, Player.HUMAN):
                     break
 
                 print("That square is used. Try again.")
