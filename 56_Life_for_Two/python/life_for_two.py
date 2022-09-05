@@ -6,23 +6,14 @@ Competitive Game of Life (two or more players).
 Ported by Sajid Sarker (2022).
 '''
 # Global Variable Initialisation
-gn = []
-gx = []
-gy = []
+# Initialise the board
+gn = [[0 for i in range(6)] for j in range(6)]
+gx = [0 for x in range(3)]
+gy = [0 for x in range(3)]
 gk = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
 ga = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
 m2 = 0
 m3 = 0
-
-# Initialise the board
-for j in range(6):
-    gn.append([])
-    for k in range(6):
-        gn[j].append(0)
-
-for i in range(3):
-    gx.append(0)
-    gy.append(0)
 
 # Helper Functions
 def tab(number) -> str:
