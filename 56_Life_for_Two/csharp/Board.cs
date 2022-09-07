@@ -2,7 +2,10 @@ namespace LifeforTwo;
 
 internal class Board
 {
-    private const int PieceMask = 0x1100;
+    private const int Empty = 0x0000;
+    private const int Player1 = 0x0100;
+    private const int Player2 = 0x1000;
+    private const int PieceMask = Player1 | Player2;
     private const int NeighbourValueOffset = 8;
     private readonly int[,] _cells = new int[7,7];
 
@@ -36,4 +39,27 @@ internal class Board
             }
         }
     }
+
+    public void Display(IReadWrite io)
+    {
+        for (var y = 0; y <= 6; y++)
+        {
+            io.WriteLine();
+            for (var x = 0; x <= 6; x++)
+            {
+                io.Write(GetDisplay(x, y));
+            }
+        }
+    }
+
+    private string GetDisplay(int x, int y) =>
+        (x, y, this[x, y]) switch
+        {
+            (0 or 6, _, _) => $" {y % 6} ",
+            (_, 0 or 6, _) => $" {x % 6} ",
+            (_, _, Empty) => "   ",
+            (_, _, Player1) => " * ",
+            (_, _, Player2) => " # ",
+            _ => throw new InvalidOperationException($"Unexpected cell value at ({x}, {y}): {this[x, y]}")
+        };
 }

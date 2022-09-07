@@ -12,32 +12,20 @@ var _willLive = new[] { 0x0003, 0x0102, 0x0103, 0x0120, 0x0130, 0x0121, 0x0112, 
 var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
-void CalculateAndDisplayNext()
+void CalculateNext()
 {
     _player1Count = _player2Count = 0;
-    for (var y = 0; y <= 6; y++)
+    for (var y = 1; y <= 5; y++)
     {
-        io.WriteLine();
-        for (var x = 0; x <= 6; x++)
+        for (var x = 1; x <= 5; x++)
         {
-            if (y % 6 == 0)
-            {
-                io.Write($" {x % 6} ");
-            }
-            else if (x % 6 == 0)
-            {
-                io.Write($" {y % 6} ");
-            }
-            else
-            {
-                CalculateAndDisplayCell(x, y);
-            }
+            CalculateNextCell(x, y);
         }
     }
     return;
 }
 
-void CalculateAndDisplayCell(int x, int y)
+void CalculateNextCell(int x, int y)
 {
     if (_board[x, y] >= 3)
     {
@@ -47,11 +35,11 @@ void CalculateAndDisplayCell(int x, int y)
             {
                 if (o < 9)
                 {
-                    _board[x, y] = 0x0100; _player1Count++; io.Write(" * ");
+                    _board[x, y] = 0x0100; _player1Count++;
                 }
                 else
                 {
-                    _board[x, y] = 0x1000; _player2Count++; io.Write(" # ");
+                    _board[x, y] = 0x1000; _player2Count++;
                 }
                 return;
             }
@@ -59,7 +47,6 @@ void CalculateAndDisplayCell(int x, int y)
     }
 
     _board[x, y] = 0;
-    io.Write("   ");
 }
 
 for (var _player = 1; _player <= 2; _player++)
@@ -73,13 +60,15 @@ for (var _player = 1; _player <= 2; _player++)
     }
 }
 
-CalculateAndDisplayNext();
+CalculateNext();
+_board.Display(io);
 
 while (true)
 {
     io.WriteLine();
     _board.CalculateNeighbours();
-    CalculateAndDisplayNext();
+    CalculateNext();
+    _board.Display(io);
 
     if (_player1Count == 0 || _player2Count == 0) { break; }
 
