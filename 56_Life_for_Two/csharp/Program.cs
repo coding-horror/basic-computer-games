@@ -7,7 +7,6 @@ var io = new ConsoleIO();
 io.Write(Streams.Title);
 
 var _board = new Board();
-var _coordinates = new Coordinates[3];
 int _player1Count, _player2Count;
 
 for (var _player = 1; _player <= 2; _player++)
@@ -16,8 +15,7 @@ for (var _player = 1; _player <= 2; _player++)
     io.WriteLine(Formats.InitialPieces, _player);
     for (var i = 1; i <= 3; i++)
     {
-        ReadCoordinates(_player);
-        _board[_coordinates[_player]] = P1;
+        _board[io.ReadCoordinates(_board)] = P1;
     }
 }
 
@@ -33,14 +31,19 @@ while (true)
 
     if (_player1Count == 0 || _player2Count == 0) { break; }
 
-    for (var _player = 1; _player <= 2; _player++)
+    var player1Coordinate = io.ReadCoordinates(1, _board);
+    var player2Coordinate = io.ReadCoordinates(2, _board);
+
+    if (player1Coordinate == player2Coordinate)
     {
-        io.WriteLine(Formats.Player, _player);
-        if (ReadCoordinates(_player)) 
-        { 
-            _board[_coordinates[1]] = 0x0100; 
-            _board[_coordinates[2]] = 0x1000; 
-        }
+        io.Write(Streams.SameCoords);
+        // This is a bug existing in the original code. The line should be _board[_coordinates[_player]] = 0;
+        _board[player1Coordinate + 1] = 0;
+    }
+    else
+    {
+        _board[player1Coordinate] = 0x0100;
+        _board[player2Coordinate] = 0x1000;
     }
 }
 
@@ -51,28 +54,4 @@ if (_player1Count == 0 && _player2Count == 0)
 else
 {
     io.WriteLine(Formats.Winner, _player2Count == 0 ? 1 : 2);
-}
-
-bool ReadCoordinates(int _player)
-{
-    while (true)
-    {
-        io.WriteLine("X,Y");
-        var values = io.Read2Numbers("&&&&&&\r");
-        if (Coordinates.TryCreate(values, out _coordinates[_player]) && _board[_coordinates[_player]] == 0)
-        {
-            break;
-        }
-        io.Write(Streams.IllegalCoords);
-    }
-
-    if (_player == 2 && _coordinates[1] == _coordinates[2])
-    {
-        io.Write(Streams.SameCoords);
-        // This is a bug existing in the original code. The line should be _board[_coordinates[_player]] = 0;
-        _board[_coordinates[_player] + 1] = 0;
-        return false;
-    }
-
-    return _player == 2;
 }
