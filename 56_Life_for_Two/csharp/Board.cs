@@ -17,6 +17,8 @@ internal class Board
 
     private readonly int[,] _cells = new int[7,7];
 
+    private readonly Dictionary<int, int> _cellCounts = new();
+
     public int this[Coordinates coordinates]
     {
         get => _cells[coordinates.X, coordinates.Y];
@@ -29,9 +31,21 @@ internal class Board
         set => _cells[x, y] = value;
     }
 
-    public (int Player1Count, int Player2Count) CalculateNextGeneration()
+    public int Player1Count => _cellCounts[Player1];
+    public int Player2Count => _cellCounts[Player2];
+
+    public string? Result => 
+        (Player1Count, Player2Count) switch
+        {
+            (0, 0) => Strings.Draw,
+            (_, 0) => string.Format(Formats.Winner, 1),
+            (0, _) => string.Format(Formats.Winner, 2),
+            _ => null
+        };
+
+    public void CalculateNextGeneration()
     {
-        var _cellCounts = new Dictionary<int, int>() { [Empty] = 0, [Player1] = 0, [Player2] = 0 };
+        _cellCounts[Empty] = _cellCounts[Player1] = _cellCounts[Player2] = 0;
 
         for (var x = 1; x <= 5; x++)
         {
@@ -49,8 +63,6 @@ internal class Board
                 _cellCounts[newValue]++;
             }
         }
-
-        return (_cellCounts[Player1], _cellCounts[Player2]);
     }
 
     public void CalculateNeighbours()

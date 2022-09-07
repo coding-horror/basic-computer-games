@@ -7,7 +7,6 @@ var io = new ConsoleIO();
 io.Write(Streams.Title);
 
 var _board = new Board();
-int _player1Count, _player2Count;
 
 for (var _player = 1; _player <= 2; _player++)
 {
@@ -26,10 +25,10 @@ while (true)
 {
     io.WriteLine();
     _board.CalculateNeighbours();
-    (_player1Count, _player2Count) = _board.CalculateNextGeneration();
+    _board.CalculateNextGeneration();
     _board.Display(io);
 
-    if (_player1Count == 0 || _player2Count == 0) { break; }
+    if (_board.Result is not null) { break; }
 
     var player1Coordinate = io.ReadCoordinates(1, _board);
     var player2Coordinate = io.ReadCoordinates(2, _board);
@@ -47,11 +46,4 @@ while (true)
     }
 }
 
-if (_player1Count == 0 && _player2Count == 0)
-{
-    io.Write(Streams.Draw);
-}
-else
-{
-    io.WriteLine(Formats.Winner, _player2Count == 0 ? 1 : 2);
-}
+io.WriteLine(_board.Result);

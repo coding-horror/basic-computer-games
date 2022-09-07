@@ -8,7 +8,6 @@ internal static class Resource
     internal static class Streams
     {
         public static Stream Title => GetStream();
-        public static Stream Draw => GetStream();
         public static Stream IllegalCoords => GetStream();
         public static Stream SameCoords => GetStream();
     }
@@ -18,6 +17,11 @@ internal static class Resource
         public static string InitialPieces => GetString();
         public static string Player => GetString();
         public static string Winner => GetString();
+    }
+
+    internal static class Strings
+    {
+        public static string Draw => GetString();
     }
 
     private static string GetString([CallerMemberName] string? name = null)
