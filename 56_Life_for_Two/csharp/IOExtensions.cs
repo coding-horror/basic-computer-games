@@ -12,7 +12,7 @@ internal static class IOExtensions
         {
             io.WriteLine("X,Y");
             var values = io.Read2Numbers("&&&&&&\r");
-            if (Coordinates.TryCreate(values, out var coordinates) && board[coordinates] == 0)
+            if (Coordinates.TryCreate(values, out var coordinates) && board.IsEmptyAt(coordinates))
             {
                 return coordinates;
             }

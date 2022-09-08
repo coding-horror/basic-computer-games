@@ -1,17 +1,17 @@
 internal class Game
 {
     private readonly IReadWrite _io;
+    private readonly Board _board;
 
     public Game(IReadWrite io)
     {
         _io = io;
+        _board = new Board();
     }
 
     public void Play()
     {
         _io.Write(Streams.Title);
-
-        var _board = new Board();
 
         for (var _player = 1; _player <= 2; _player++)
         {
@@ -26,11 +26,10 @@ internal class Game
         _board.CalculateNextGeneration();
         _board.Display(_io);
 
-        while (true)
+        while(true)
         {
-            _io.WriteLine();
-            _board.CalculateNeighbours();
             _board.CalculateNextGeneration();
+            _io.WriteLine();
             _board.Display(_io);
 
             if (_board.Result is not null) { break; }
@@ -42,12 +41,12 @@ internal class Game
             {
                 _io.Write(Streams.SameCoords);
                 // This is a bug existing in the original code. The line should be _board[_coordinates[_player]] = 0;
-                _board[player1Coordinate + 1] = 0;
+                _board.ClearCell(player1Coordinate + 1);
             }
             else
             {
-                _board[player1Coordinate] = 0x0100;
-                _board[player2Coordinate] = 0x1000;
+                _board.AddPlayer1Piece(player1Coordinate);
+                _board.AddPlayer2Piece(player2Coordinate);
             }
         }
 

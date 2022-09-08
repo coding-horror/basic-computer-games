@@ -34,6 +34,8 @@ internal class Board
     public int Player1Count => _cellCounts[Player1];
     public int Player2Count => _cellCounts[Player2];
 
+    internal bool IsEmptyAt(Coordinates coordinates) => (this[coordinates] & PieceMask) == Empty;
+
     public string? Result => 
         (Player1Count, Player2Count) switch
         {
@@ -42,6 +44,12 @@ internal class Board
             (0, _) => string.Format(Formats.Winner, 2),
             _ => null
         };
+
+    internal void ClearCell(Coordinates coordinates) => this[coordinates] = Empty;
+
+    internal void AddPlayer1Piece(Coordinates coordinates) => this[coordinates] = Player1;
+
+    internal void AddPlayer2Piece(Coordinates coordinates) => this[coordinates] = Player2;
 
     public void CalculateNextGeneration()
     {
@@ -63,9 +71,11 @@ internal class Board
                 _cellCounts[newValue]++;
             }
         }
+
+        CountNeighbours();
     }
 
-    public void CalculateNeighbours()
+    private void CountNeighbours()
     {
         for (var x = 1; x <= 5; x++)
         {
@@ -97,7 +107,7 @@ internal class Board
     }
 
     private string GetDisplay(int x, int y) =>
-        (x, y, this[x, y]) switch
+        (x, y, this[x, y] & PieceMask) switch
         {
             (0 or 6, _, _) => $" {y % 6} ",
             (_, 0 or 6, _) => $" {x % 6} ",
