@@ -2,7 +2,7 @@ internal static class IOExtensions
 {
     internal static Coordinates ReadCoordinates(this IReadWrite io, int player, Board board)
     {
-        io.WriteLine(Formats.Player, player);
+        io.Write(Formats.Player, player);
         return io.ReadCoordinates(board);
     }
 
