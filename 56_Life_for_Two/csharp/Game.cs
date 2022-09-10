@@ -13,17 +13,16 @@ internal class Game
     {
         _io.Write(Streams.Title);
 
-        for (var _player = 1; _player <= 2; _player++)
+        for (var player = 1; player <= 2; player++)
         {
-            var P1 = _player == 2 ? 0x30 : 0x03;
-            _io.WriteLine(Formats.InitialPieces, _player);
+            _io.WriteLine(Formats.InitialPieces, player);
             for (var i = 1; i <= 3; i++)
             {
-                _board[_io.ReadCoordinates(_board)] = P1;
+                _board[_io.ReadCoordinates(_board)] = player == 1 ? Piece.NewPlayer1() : Piece.NewPlayer2();
             }
         }
 
-        _board.CalculateNextGeneration();
+        _board.CountNeighbours();
         _board.Display(_io);
 
         while(true)

@@ -1,40 +1,27 @@
-using System.Collections.Immutable;
-
 namespace LifeforTwo;
 
 internal class Board
 {
-    private const int Empty = 0x0000;
-    private const int Player1 = 0x0100;
-    private const int Player2 = 0x1000;
-    private const int PieceMask = Player1 | Player2;
-    private const int NeighbourValueOffset = 8;
-
-    private readonly ImmutableHashSet<int> _willBePlayer1 = 
-        new[] { 0x0003, 0x0102, 0x0103, 0x0120, 0x0130, 0x0121, 0x0112, 0x0111, 0x0012 }.ToImmutableHashSet();
-    private readonly ImmutableHashSet<int> _willBePlayer2 = 
-        new[] { 0x0021, 0x0030, 0x1020, 0x1030, 0x1011, 0x1021, 0x1003, 0x1002, 0x1012 }.ToImmutableHashSet();
-
-    private readonly int[,] _cells = new int[7,7];
+    private readonly Piece[,] _cells = new Piece[7,7];
 
     private readonly Dictionary<int, int> _cellCounts = new();
 
-    public int this[Coordinates coordinates]
+    public Piece this[Coordinates coordinates]
     {
         get => _cells[coordinates.X, coordinates.Y];
         set => _cells[coordinates.X, coordinates.Y] = value;
     }
 
-    public int this[int x, int y]
+    public Piece this[int x, int y]
     {
         get => _cells[x, y];
         set => _cells[x, y] = value;
     }
 
-    public int Player1Count => _cellCounts[Player1];
-    public int Player2Count => _cellCounts[Player2];
+    public int Player1Count => _cellCounts[Piece.Player1];
+    public int Player2Count => _cellCounts[Piece.Player2];
 
-    internal bool IsEmptyAt(Coordinates coordinates) => (this[coordinates] & PieceMask) == Empty;
+    internal bool IsEmptyAt(Coordinates coordinates) => this[coordinates].IsEmpty;
 
     public string? Result => 
         (Player1Count, Player2Count) switch
@@ -45,49 +32,41 @@ internal class Board
             _ => null
         };
 
-    internal void ClearCell(Coordinates coordinates) => this[coordinates] = Empty;
+    internal void ClearCell(Coordinates coordinates) => this[coordinates] = Piece.NewEmpty();
 
-    internal void AddPlayer1Piece(Coordinates coordinates) => this[coordinates] = Player1;
+    internal void AddPlayer1Piece(Coordinates coordinates) => this[coordinates] = Piece.NewPlayer1();
 
-    internal void AddPlayer2Piece(Coordinates coordinates) => this[coordinates] = Player2;
+    internal void AddPlayer2Piece(Coordinates coordinates) => this[coordinates] = Piece.NewPlayer2();
 
     public void CalculateNextGeneration()
     {
-        _cellCounts[Empty] = _cellCounts[Player1] = _cellCounts[Player2] = 0;
+        _cellCounts[Piece.None] = _cellCounts[Piece.Player1] = _cellCounts[Piece.Player2] = 0;
 
         for (var x = 1; x <= 5; x++)
         {
             for (var y = 1; y <= 5; y++)
             {
-                var currentValue = this[x, y];
-                var newValue = currentValue switch
-                {
-                    _ when _willBePlayer1.Contains(currentValue) => Player1,
-                    _ when _willBePlayer2.Contains(currentValue) => Player2,
-                    _ => Empty
-                };
-
-                this[x, y] = newValue;
-                _cellCounts[newValue]++;
+                this[x, y] = this[x, y].GetNext();
+                _cellCounts[this[x, y].Value]++;
             }
         }
 
         CountNeighbours();
     }
 
-    private void CountNeighbours()
+    public void CountNeighbours()
     {
         for (var x = 1; x <= 5; x++)
         {
             for (var y = 1; y <= 5; y++)
             {
                 var coordinates = new Coordinates(x, y);
-                var neighbourValue = (this[coordinates] & PieceMask) >> NeighbourValueOffset;
-                if (neighbourValue > 0)
+                var piece = this[coordinates];
+                if (!piece.IsEmpty)
                 {
                     foreach (var neighbour in coordinates.GetNeighbors())
                     {
-                        this[neighbour] += neighbourValue;
+                        this[neighbour] = this[neighbour].AddNeighbour(piece);
                     }
                 }
             }
@@ -107,13 +86,10 @@ internal class Board
     }
 
     private string GetDisplay(int x, int y) =>
-        (x, y, this[x, y] & PieceMask) switch
+        (x, y) switch
         {
-            (0 or 6, _, _) => $" {y % 6} ",
-            (_, 0 or 6, _) => $" {x % 6} ",
-            (_, _, Empty) => "   ",
-            (_, _, Player1) => " * ",
-            (_, _, Player2) => " # ",
-            _ => throw new InvalidOperationException($"Unexpected cell value at ({x}, {y}): {this[x, y]}")
+            (0 or 6, _) => $" {y % 6} ",
+            (_, 0 or 6) => $" {x % 6} ",
+            _ => $" {this[x, y]} "
         };
 }
