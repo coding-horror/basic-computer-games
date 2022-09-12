@@ -1,0 +1,1 @@
+That's it! You got it in {0} tries.

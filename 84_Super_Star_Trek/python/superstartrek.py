@@ -902,7 +902,10 @@ class Game:
             if len(command) == 0:
                 com = 6
             else:
-                com = int(command)
+                try:
+                    com = int(command)
+                except ValueError:
+                    com = 6
             if com < 0:
                 return
 

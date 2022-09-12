@@ -1,0 +1,30 @@
+                              One Check
+               Creative Computing  Morristown, New Jersey
+
+
+
+Solitaire checker puzzle by David Ahl
+
+48 checkers and placed on the 2 outside spaces of a
+standard 64-square checkerboard.  The object is to
+remove as many checkers as possible by diagonal jumps
+(as in standard checkers).  Use the numbered board to
+indicate the square you wish to jump from and to.  On
+the board printed out on each turn '1' indicates a
+checker and '0' an empty square.  When you have no
+possible jumps remaining, input a '0' in response to
+question 'Jump from ?'
+
+Here is the numerical board:
+
+ 1   2   3   4   5   6   7   8
+ 9   10  11  12  13  14  15  16
+ 17  18  19  20  21  22  23  24
+ 25  26  27  28  29  30  31  32
+ 33  34  35  36  37  38  39  40
+ 41  42  43  44  45  46  47  48
+ 49  50  51  52  53  54  55  56
+ 57  58  59  60  61  62  63  64
+
+And here is the opening position of the checkers.
+
