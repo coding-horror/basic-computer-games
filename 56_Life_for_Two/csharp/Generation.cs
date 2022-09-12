@@ -45,12 +45,9 @@ internal class Generation
     {
         var board = new Board();
 
-        for (var x = 1; x <= 5; x++)
+        foreach (var coordinates in _board)
         {
-            for (var y = 1; y <= 5; y++)
-            {
-                board[x, y] = _board[x, y].GetNext();
-            }
+            board[coordinates] = _board[coordinates].GetNext();
         }
 
         return new(board);
@@ -76,18 +73,14 @@ internal class Generation
 
     private void CountNeighbours()
     {
-        for (var x = 1; x <= 5; x++)
+        foreach (var coordinates in _board)
         {
-            for (var y = 1; y <= 5; y++)
-            {
-                var coordinates = new Coordinates(x, y);
-                var piece = _board[coordinates];
-                if (piece.IsEmpty) { continue; }
+            var piece = _board[coordinates];
+            if (piece.IsEmpty) { continue; }
 
-                foreach (var neighbour in coordinates.GetNeighbors())
-                {
-                    _board[neighbour] = _board[neighbour].AddNeighbour(piece);
-                }
+            foreach (var neighbour in coordinates.GetNeighbors())
+            {
+                _board[neighbour] = _board[neighbour].AddNeighbour(piece);
             }
         }
     }

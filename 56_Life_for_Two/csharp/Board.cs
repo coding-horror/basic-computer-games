@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Text;
 
 namespace LifeforTwo;
 
-internal class Board
+internal class Board : IEnumerable<Coordinates>
 {
     private readonly Piece[,] _cells = new Piece[7, 7];
     private readonly Dictionary<int, int> _cellCounts = 
@@ -14,7 +15,7 @@ internal class Board
         set => this[coordinates.X, coordinates.Y] = value;
     }
 
-    public Piece this[int x, int y]
+    private Piece this[int x, int y]
     {
         get => _cells[x, y];
         set
@@ -57,4 +58,17 @@ internal class Board
             (_, 0 or 6) => $" {x % 6} ",
             _ => $" {this[x, y]} "
         };
+
+    public IEnumerator<Coordinates> GetEnumerator()
+    {
+        for (var x = 1; x <= 5; x++)
+        {
+            for (var y = 1; y <= 5; y++)
+            {
+                yield return new(x, y);
+            }
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
