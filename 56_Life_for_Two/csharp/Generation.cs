@@ -55,6 +55,24 @@ internal class Generation
 
         return new(board);
     }
+    
+    public void AddPieces(IReadWrite io)
+    {
+        var player1Coordinate = io.ReadCoordinates(1, _board);
+        var player2Coordinate = io.ReadCoordinates(2, _board);
+
+        if (player1Coordinate == player2Coordinate)
+        {
+            io.Write(Streams.SameCoords);
+            // This is a bug existing in the original code. The line should be _board[_coordinates[_player]] = 0;
+            _board.ClearCell(player1Coordinate + 1);
+        }
+        else
+        {
+            _board.AddPlayer1Piece(player1Coordinate);
+            _board.AddPlayer2Piece(player2Coordinate);
+        }
+    }
 
     private void CountNeighbours()
     {
