@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LifeforTwo;
 
@@ -19,10 +20,10 @@ public struct Piece
 
     private Piece(int value) => _value = value;
 
-    public int Value => _value;
+    public int Value => _value & PieceMask;
     public bool IsEmpty => (_value & PieceMask) == None;
 
-    public static Piece NewEmpty() => new(None);
+    public static Piece NewNone() => new(None);
     public static Piece NewPlayer1() => new(Player1);
     public static Piece NewPlayer2() => new(Player2);
 
@@ -47,4 +48,7 @@ public struct Piece
             Player2 => "#",
             _ => " "
         };
+
+    public static implicit operator Piece(int value) => new(value);
+    public static implicit operator int(Piece piece) => piece.Value;
 }
