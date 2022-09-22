@@ -62,7 +62,7 @@ def simulate_board() -> None:
             if gn[j][k] > 99:
                 b = 1 if gn[j][k] <= 999 else 10
                 for o1 in range(1, 16, 2):
-                    gn[j+ga[o1]-1][k+ga[o1+1]-1] += b
+                    gn[j + ga[o1] - 1][k + ga[o1 + 1] - 1] += b
                     # gn[j+ga[o1]][k+ga[o1+1]-1] = gn[j+ga[o1]][k+ga[o1+1]]+b
 
 
