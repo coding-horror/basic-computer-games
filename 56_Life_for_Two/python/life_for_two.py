@@ -10,10 +10,13 @@ Ported by Sajid Sarker (2022).
 gn = [[0 for i in range(6)] for j in range(6)]
 gx = [0 for x in range(3)]
 gy = [0 for x in range(3)]
-gk = [0, 3, 102, 103, 120, 130, 121, 112, 111, 12, 21, 30, 1020, 1030, 1011, 1021, 1003, 1002, 1012]
+gk = [0, 3, 102, 103, 120, 130, 121,
+      112, 111, 12, 21, 30, 1020, 1030,
+      1011, 1021, 1003, 1002, 1012]
 ga = [0, -1, 0, 1, 0, 0, -1, 0, 1, -1, -1, 1, -1, -1, 1, 1, 1]
 m2 = 0
 m3 = 0
+
 
 # Helper Functions
 def tab(number) -> str:
@@ -22,10 +25,12 @@ def tab(number) -> str:
         t += " "
     return t
 
+
 def display_header() -> None:
     print("{}LIFE2".format(tab(33)))
     print("{}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n".format(tab(15)))
     print("{}U.B. LIFE GAME".format(tab(10)))
+
 
 # Board Functions
 def setup_board() -> None:
@@ -36,6 +41,7 @@ def setup_board() -> None:
         for k1 in range(1, 4):
             query_player(b)
             gn[gx[b]][gy[b]] = p1
+
 
 def modify_board() -> None:
     # Players take turns to add symbols and modify the board
@@ -48,6 +54,7 @@ def modify_board() -> None:
         gn[gx[1]][gy[1]] = 100
         gn[gx[2]][gy[2]] = 1000
 
+
 def simulate_board() -> None:
     # Simulate the board for one step
     for j in range(1, 6):
@@ -55,8 +62,9 @@ def simulate_board() -> None:
             if gn[j][k] > 99:
                 b = 1 if gn[j][k] <= 999 else 10
                 for o1 in range(1, 16, 2):
-                    gn[j + ga[o1] - 1][k + ga[o1 + 1] - 1] = gn[j + ga[o1] - 1][k + ga[o1 + 1] - 1] + b
-                    #gn[j + ga[o1]][k + ga[o1 + 1]] = gn[j + ga[o1]][k + ga[o1 + 1]] + b
+                    gn[j+ga[o1]-1][k+ga[o1+1]-1] += b
+                    # gn[j+ga[o1]][k+ga[o1+1]-1] = gn[j+ga[o1]][k+ga[o1+1]]+b
+
 
 def display_board() -> None:
     # Draws the board with all symbols
@@ -95,6 +103,7 @@ def display_board() -> None:
                         gn[j][k] = 0
                         print("   ", end="")
 
+
 # Player Functions
 def query_player(b) -> None:
     # Query player for symbol placement coordinates
@@ -108,7 +117,9 @@ def query_player(b) -> None:
         y_ = [0] if len(y_) == 0 else y_
         gx[b] = y_[0]
         gy[b] = x_[0]
-        if gx[b] in range(1, 6) and gy[b] in range(1, 6) and gn[gx[b]][gy[b]] == 0:
+        if gx[b] in range(1, 6)\
+                and gy[b] in range(1, 6)\
+                and gn[gx[b]][gy[b]] == 0:
             break
         print("ILLEGAL COORDS. RETYPE")
     if b != 1:
@@ -116,6 +127,7 @@ def query_player(b) -> None:
             print("SAME COORD. SET TO 0")
             gn[gx[b] + 1][gy[b] + 1] = 0
             b = 99
+
 
 # Game Functions
 def check_winner(m2, m3) -> None:
@@ -130,6 +142,7 @@ def check_winner(m2, m3) -> None:
         print("\nPLAYER 2 IS THE WINNER\n")
         return
 
+
 # Program Flow
 def main() -> None:
     display_header()
@@ -141,6 +154,7 @@ def main() -> None:
         display_board()
         check_winner(m2, m3)
         modify_board()
+
 
 if __name__ == "__main__":
     main()
