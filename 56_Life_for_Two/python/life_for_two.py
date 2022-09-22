@@ -38,7 +38,7 @@ def setup_board() -> None:
     for b in range(1, 3):
         p1 = 3 if b != 2 else 30
         print("\nPLAYER {} - 3 LIVE PIECES.".format(b))
-        for k1 in range(1, 4):
+        for _ in range(1, 4):
             query_player(b)
             gn[gx[b]][gy[b]] = p1
 
