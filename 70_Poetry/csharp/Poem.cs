@@ -1,9 +1,13 @@
+using static Poetry.Resources.Resource;
+
 namespace Poetry;
 
 internal class Poem
 {
     internal static void Compose(IReadWrite io, IRandom random)
     {
+        io.Write(Streams.Title);
+
         var context = new Context();
 
         while (true)
