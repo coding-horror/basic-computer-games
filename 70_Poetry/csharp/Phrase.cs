@@ -16,7 +16,7 @@ internal class Phrase
         {
             new("beguiling me", ctx => ctx.U = 2),
             new("thrilled me"),
-            new("still sitting....", ctx => ctx.SkipComma = true),
+            new("still sitting....", ctx => ctx.SkipNextComma()),
             new("never flitting", ctx => ctx.U = 2),
             new("burned")
         },
@@ -72,7 +72,6 @@ internal class Phrase
     }
 
     private static Phrase[] GetGroup(int groupNumber) => _phrases[Math.Max(groupNumber - 1, 0)];
-
 
     public void Write(IReadWrite io, Context context)
     {

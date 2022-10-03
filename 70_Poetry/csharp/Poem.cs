@@ -8,53 +8,24 @@ internal class Poem
     {
         io.Write(Streams.Title);
 
-        var context = new Context();
+        var context = new Context(io, random);
 
         while (true)
         {
-            io.WritePhrase(context);
-
-            if (!context.SkipComma && random.NextFloat() <= 0.19F && context.U != 0)
-            {
-                io.Write(",");
-                context.U = 2;
-            }
-            context.SkipComma = false;
-
-            if (random.NextFloat() <= 0.65F)
-            {
-                io.Write(" ");
-                context.U += 1;
-            }
-            else
-            {
-                io.WriteLine();
-                context.U = 0;
-            }
+            context.WritePhrase();
+            context.MaybeWriteComma();
+            context.WriteSpaceOrNewLine();
 
             while (true)
             {
-                context.I = random.Next(1, 6);
-                context.J += 1;
-                context.K += 1;
+                context.Update(random);
+                context.MaybeIndent();
 
-                if (context.U == 0 && context.J % 2 == 0)
-                {
-                    io.Write("     ");
-                }
+                if (context.GroupNumberIsValid) { break; }
 
-                if (context.J < 5) { break; }
+                context.ResetGroup(io);
 
-                context.J = 0;
-                io.WriteLine();
-
-                if (context.K > 20)
-                {
-                    io.WriteLine();
-                    context.U = context.K = 0;
-                    context.UseGroup2 = true;
-                    break;
-                }
+                if (context.MaybeCompleteStanza()) { break; }
             }
         }
     }
