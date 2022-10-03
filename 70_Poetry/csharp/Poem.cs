@@ -10,13 +10,14 @@ internal class Poem
         {
             io.WritePhrase(context);
 
-            if (!context.SkipComma && context.U != 0 && random.NextFloat() <= 0.19)
+            if (!context.SkipComma && random.NextFloat() <= 0.19F && context.U != 0)
             {
                 io.Write(",");
                 context.U = 2;
             }
+            context.SkipComma = false;
 
-            if (random.NextFloat() <= 0.65)
+            if (random.NextFloat() <= 0.65F)
             {
                 io.Write(" ");
                 context.U += 1;
@@ -38,7 +39,7 @@ internal class Poem
                     io.Write("     ");
                 }
 
-                if (context.J < 4) { break; }
+                if (context.J < 5) { break; }
 
                 context.J = 0;
                 io.WriteLine();

@@ -66,10 +66,13 @@ internal class Phrase
 
     public static Phrase GetPhrase(Context context)
     {
-        var group = context.UseGroup2 ? _phrases[1] : _phrases[context.J];
+        var group = GetGroup(context.UseGroup2 ? 2 : context.J);
         context.UseGroup2 = false;
-        return group[context.I % 5];
+        return group[Math.Max(context.I - 1, 0)];
     }
+
+    private static Phrase[] GetGroup(int groupNumber) => _phrases[Math.Max(groupNumber - 1, 0)];
+
 
     public void Write(IReadWrite io, Context context)
     {
