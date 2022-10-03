@@ -4,6 +4,11 @@ internal class Context
 {
     private readonly IReadWrite _io;
     private readonly IRandom _random;
+    private int _phraseNumber;
+    private int _groupNumber;
+    private bool _skipComma;
+    private int _lineCount;
+    private bool _useGroup2;
 
     public Context(IReadWrite io, IRandom random)
     {
@@ -11,14 +16,20 @@ internal class Context
         _random = random;
     }
 
-    public int I { get; set; }
-    public int J { get; set; }
-    public int K { get; set; }
-    public int U { get; set; }
-    public bool SkipComma { get; set; }
-    public bool UseGroup2 { get; set; }
-    public bool ShouldIndent => U == 0 && J % 2 == 0;
-    public bool GroupNumberIsValid => J < 5;
+    public int PhraseNumber => Math.Max(_phraseNumber - 1, 0); 
+
+    public int GroupNumber 
+    { 
+        get
+        {
+            var value = _useGroup2 ? 2 : _groupNumber;
+            _useGroup2 = false;
+            return Math.Max(value - 1, 0);
+        }
+    }
+
+    public int PhraseCount { get; set; }
+    public bool GroupNumberIsValid => _groupNumber < 5;
 
     public void WritePhrase()
     {
@@ -27,12 +38,12 @@ internal class Context
 
     public void MaybeWriteComma()
     {
-        if (!SkipComma && _random.NextFloat() <= 0.19F && U != 0)
+        if (!_skipComma && _random.NextFloat() <= 0.19F && PhraseCount != 0)
         {
             _io.Write(",");
-            U = 2;
+            PhraseCount = 2;
         }
-        SkipComma = false;
+        _skipComma = false;
     }
 
     public void WriteSpaceOrNewLine()
@@ -40,25 +51,25 @@ internal class Context
         if (_random.NextFloat() <= 0.65F)
         {
             _io.Write(" ");
-            U += 1;
+            PhraseCount += 1;
         }
         else
         {
             _io.WriteLine();
-            U = 0;
+            PhraseCount = 0;
         }
     }
 
     public void Update(IRandom random)
     {
-        I = random.Next(1, 6);
-        J += 1;
-        K += 1;
+        _phraseNumber = random.Next(1, 6);
+        _groupNumber += 1;
+        _lineCount += 1;
     }
 
     public void MaybeIndent()
     {
-        if (U == 0 && J % 2 == 0)
+        if (PhraseCount == 0 && _groupNumber % 2 == 0)
         {
             _io.Write("     ");
         }
@@ -66,22 +77,22 @@ internal class Context
     
     public void ResetGroup(IReadWrite io)
     {
-        J = 0;
+        _groupNumber = 0;
         io.WriteLine();
     }
 
     public bool MaybeCompleteStanza()
     {
-        if (K > 20)
+        if (_lineCount > 20)
         {
             _io.WriteLine();
-            U = K = 0;
-            UseGroup2 = true;
+            PhraseCount = _lineCount = 0;
+            _useGroup2 = true;
             return true;
         }
 
         return false;
     }
 
-    public void SkipNextComma() => SkipComma = true;
+    public void SkipNextComma() => _skipComma = true;
 }

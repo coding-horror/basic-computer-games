@@ -2,7 +2,7 @@ namespace Poetry;
 
 internal class Phrase
 {
-    private static Phrase[][] _phrases = new Phrase[][]
+    private readonly static Phrase[][] _phrases = new Phrase[][]
     {
         new Phrase[]
         {
@@ -14,10 +14,10 @@ internal class Phrase
         },
         new Phrase[]
         {
-            new("beguiling me", ctx => ctx.U = 2),
+            new("beguiling me", ctx => ctx.PhraseCount = 2),
             new("thrilled me"),
             new("still sitting....", ctx => ctx.SkipNextComma()),
-            new("never flitting", ctx => ctx.U = 2),
+            new("never flitting", ctx => ctx.PhraseCount = 2),
             new("burned")
         },
         new Phrase[]
@@ -26,7 +26,7 @@ internal class Phrase
             new("darkness there"),
             new("shall be lifted"),
             new("quoth the raven"),
-            new(ctx => ctx.U != 0, "sign of parting")
+            new(ctx => ctx.PhraseCount != 0, "sign of parting")
         },
         new Phrase[]
         {
@@ -64,14 +64,7 @@ internal class Phrase
         _update = update;
     }
 
-    public static Phrase GetPhrase(Context context)
-    {
-        var group = GetGroup(context.UseGroup2 ? 2 : context.J);
-        context.UseGroup2 = false;
-        return group[Math.Max(context.I - 1, 0)];
-    }
-
-    private static Phrase[] GetGroup(int groupNumber) => _phrases[Math.Max(groupNumber - 1, 0)];
+    public static Phrase GetPhrase(Context context) => _phrases[context.GroupNumber][context.PhraseNumber];
 
     public void Write(IReadWrite io, Context context)
     {
