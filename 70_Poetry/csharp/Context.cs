@@ -9,6 +9,7 @@ internal class Context
     private bool _skipComma;
     private int _lineCount;
     private bool _useGroup2;
+    private bool _atStartOfLine = true;
 
     public Context(IReadWrite io, IRandom random)
     {
@@ -34,6 +35,7 @@ internal class Context
     public void WritePhrase()
     {
         Phrase.GetPhrase(this).Write(_io, this);
+        _atStartOfLine = false;
     }
 
     public void MaybeWriteComma()
@@ -55,7 +57,7 @@ internal class Context
         }
         else
         {
-            _io.WriteLine();
+            EndLine();
             PhraseCount = 0;
         }
     }
@@ -75,10 +77,10 @@ internal class Context
         }
     }
     
-    public void ResetGroup(IReadWrite io)
+    public void ResetGroup()
     {
         _groupNumber = 0;
-        io.WriteLine();
+        EndLine();
     }
 
     public bool MaybeCompleteStanza()
@@ -94,5 +96,14 @@ internal class Context
         return false;
     }
 
+    internal string MaybeCapitalise(string text) =>
+        _atStartOfLine ? (char.ToUpper(text[0]) + text[1..]) : text;
+
     public void SkipNextComma() => _skipComma = true;
+
+    public void EndLine()
+    {
+        _io.WriteLine();
+        _atStartOfLine = true;
+    }
 }

@@ -23,7 +23,7 @@ internal class Poem
 
                 if (context.GroupNumberIsValid) { break; }
 
-                context.ResetGroup(io);
+                context.ResetGroup();
 
                 if (context.MaybeCompleteStanza()) { break; }
             }

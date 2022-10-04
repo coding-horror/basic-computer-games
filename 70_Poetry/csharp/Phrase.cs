@@ -70,7 +70,7 @@ internal class Phrase
     {
         if (_condition.Invoke(context))
         {
-            io.Write(_text);
+            io.Write(context.MaybeCapitalise(_text));
         }
 
         _update.Invoke(context);
