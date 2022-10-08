@@ -26,9 +26,8 @@ Lua port by Alex Conconi, 2022.
 
 
 local function print_intro()
-    print("\n                   Dice")
-    print("Creative Computing  Morristown, New Jersey")
-    print("\n\n")
+    print("\n" .. string.rep(" ", 19) .. "Dice")
+    print("Creative Computing  Morristown, New Jersey\n\n")
     print("This program simulates the rolling of a")
     print("pair of dice.")
     print("You enter the number of times you want the computer to")
@@ -85,7 +84,7 @@ local function roll_dice(num_rolls)
 end
 
 
-function print_results(counts)
+local function print_results(counts)
     print("\nTotal Spots   Number of Times")
     for roll_total, count in pairs(counts) do
         print(string.format(" %-14d%d", roll_total, count))
