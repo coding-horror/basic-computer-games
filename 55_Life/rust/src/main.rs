@@ -52,7 +52,6 @@ fn main() {
     loop {
         finish_cell_transitions(&mut board);
         print_board(&board);
-        update_bounds(&mut board);
         update_board(&mut board);
         if board.population == 0 {
             break; // this isn't in the original implementation but I wanted it
@@ -135,8 +134,16 @@ fn parse_pattern(rows: Vec<String>) -> Board {
 }
 
 fn finish_cell_transitions(board: &mut Board) {
-    for row in board.cells[board.min_row-1..=board.max_row+1].iter_mut() {
-        for cell in row[board.min_col-1..=board.max_col+1].iter_mut() {
+    // In the BASIC implementation, this happens in the same loop that prints the board.
+    // We're breaking it out to improve separation of concerns.
+    let mut min_row = HEIGHT - 1;
+    let mut max_row = 0usize;
+    let mut min_col = WIDTH - 1;
+    let mut max_col = 0usize;
+    for row_index in board.min_row-1..=board.max_row+1 {
+        let mut any_alive_this_row = false;
+        for col_index in board.min_col-1..=board.max_col+1 {
+            let cell = &mut board.cells[row_index][col_index];
             if *cell == CellState::AboutToBeBorn {
                 *cell = CellState::Alive;
                 board.population += 1;
@@ -144,8 +151,50 @@ fn finish_cell_transitions(board: &mut Board) {
                 *cell = CellState::Empty;
                 board.population -= 1;
             }
+            if *cell == CellState::Alive {
+                any_alive_this_row = true;
+                if min_col > col_index {
+                    min_col = col_index;
+                }
+                if max_col < col_index {
+                    max_col = col_index;
+                }
+            }
+        }
+        if any_alive_this_row {
+            if min_row > row_index {
+                min_row = row_index;
+            }
+            if max_row < row_index {
+                max_row = row_index;
+            }
         }
     }
+    // If anything is alive within two cells of the boundary, mark the board invalid and
+    // clamp the bounds. We need a two-cell margin because we'll count neighbors on cells
+    // one space outside the min/max, and when we count neighbors we go out by an
+    // additional space.
+    if min_row < 2 {
+        min_row = 2;
+        board.invalid = true;
+    }
+    if max_row > HEIGHT - 3 {
+        max_row = HEIGHT - 3;
+        board.invalid = true;
+    }
+    if min_col < 2 {
+        min_col = 2;
+        board.invalid = true;
+    }
+    if max_col > WIDTH - 3 {
+        max_col = WIDTH - 3;
+        board.invalid = true;
+    }
+
+    board.min_row = min_row;
+    board.max_row = max_row;
+    board.min_col = min_col;
+    board.max_col = max_col;
 }
 
 fn print_board(board: &Board) {
@@ -161,58 +210,6 @@ fn print_board(board: &Board) {
             print!("{rep}");
         }
         println!();
-    }
-}
-
-fn update_bounds(board: &mut Board) {
-    // In the BASIC implementation, this happens in the same loop that prints the board.
-    // We're breaking it out to improve separation of concerns.
-    // We could improve efficiency here by only searching one row outside the previous bounds.
-    board.min_row = HEIGHT;
-    board.max_row = 0;
-    board.min_col = WIDTH;
-    board.max_col = 0;
-    for (irow, row) in board.cells.iter().enumerate() {
-        let mut any_set = false;
-        for (icol, cell) in row.iter().enumerate() {
-            if *cell == CellState::Alive {
-                any_set = true;
-                if board.min_col > icol {
-                    board.min_col = icol;
-                }
-                if board.max_col < icol {
-                    board.max_col = icol;
-                }
-            }
-        }
-        if any_set {
-            if board.min_row > irow {
-                board.min_row = irow;
-            }
-            if board.max_row < irow {
-                board.max_row = irow;
-            }
-        }
-    }
-    // If anything is alive within two cells of the boundary, mark the board invalid and
-    // clamp the bounds. We need a two-cell margin because we'll count neighbors on cells
-    // one space outside the min/max, and when we count neighbors we go out by an
-    // additional space.
-    if board.min_row < 2 {
-        board.min_row = 2;
-        board.invalid = true;
-    }
-    if board.max_row > HEIGHT - 3 {
-        board.max_row = HEIGHT - 3;
-        board.invalid = true;
-    }
-    if board.min_col < 2 {
-        board.min_col = 2;
-        board.invalid = true;
-    }
-    if board.max_col > WIDTH - 3 {
-        board.max_col = WIDTH - 3;
-        board.invalid = true;
     }
 }
 
