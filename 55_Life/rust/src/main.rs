@@ -5,7 +5,7 @@
 
 // I am a Rust newbie. Corrections and suggestions are welcome.
 
-use std::{fmt, io, thread, time};
+use std::{cmp, fmt, io, thread, time};
 
 const HEIGHT: usize = 24;
 const WIDTH: usize = 70;
@@ -42,9 +42,8 @@ impl fmt::Display for CellState {
 }
 
 // Following the BASIC implementation, we will bound the board at 24 rows x 70 columns.
-// Since that isn't too big (even in the 70's), we just store the whole board as an
-// array of CellState. I'm experimenting with using an array-of-arrays to make references
-// more convenient.
+// The board is an array of CellState. Using an array of arrays gives us bounds checking
+// in both dimensions.
 struct Board {
     cells: [[CellState; WIDTH]; HEIGHT],
     min_row: usize,
@@ -145,12 +144,13 @@ fn parse_pattern(rows: Vec<Vec<char>>) -> Board {
     board.max_row = board.min_row + nrows - 1;
     board.max_col = board.min_col + ncols - 1;
 
-    // Loop over the rows provided. The enumerate() method augments the iterator with an index.
+    // Loop over the rows provided. enumerate() augments the iterator with an index.
     for (row_index, pattern) in rows.iter().enumerate() {
         let row = board.min_row + row_index;
-        // Now loop over the non-empty cells in the current row. filter_map takes a closure that
-        // returns an Option. If the Option is None, filter_map filters out that entry from the
-        // for loop. If it's Some(x), filter_map executes the loop body with the value x.
+        // Now loop over the non-empty cells in the current row. filter_map takes a
+        // closure that returns an Option. If the Option is None, filter_map filters out
+        // that entry from the for loop. If it's Some(x), filter_map executes the loop
+        // body with the value x.
         for col in pattern.iter().enumerate().filter_map(|(col_index, chr)| {
             if *chr == ' ' || (*chr == '.' && col_index == 0) {
                 None
@@ -186,22 +186,14 @@ fn finish_cell_transitions(board: &mut Board) {
             }
             if *cell == CellState::Alive {
                 any_alive_this_row = true;
-                if min_col > col_index {
-                    min_col = col_index;
-                }
-                if max_col < col_index {
-                    max_col = col_index;
-                }
+                min_col = cmp::min(min_col, col_index);
+                max_col = cmp::max(max_col, col_index);
             }
         }
         if any_alive_this_row {
-            if min_row > row_index {
-                min_row = row_index;
-            }
-            if max_row < row_index {
-                max_row = row_index;
-            }
-        }
+            min_row = cmp::min(min_row, row_index);
+            max_row = cmp::max(max_row, row_index);
+    }
     }
     // If anything is alive within two cells of the boundary, mark the board invalid and
     // clamp the bounds. We need a two-cell margin because we'll count neighbors on cells
@@ -232,14 +224,14 @@ fn finish_cell_transitions(board: &mut Board) {
 
 fn print_board(board: &Board) {
     println!(); println!(); println!();
-    print!("Generation: {} Population: {}", board.generation, board.population);
+    print!("Generation: {}  Population: {}", board.generation, board.population);
     if board.invalid {
-        print!("Invalid!");
+        print!("  Invalid!");
     }
     println!();
     for row_index in 0..HEIGHT {
         for col_index in 0..WIDTH {
-            // This print will use the Display implementation for cell_state, above.
+            // This print uses the Display implementation for cell_state, above.
             print!("{}", board.cells[row_index][col_index]);
         }
         println!();
@@ -268,7 +260,8 @@ fn mark_cell_transitions(board: &mut Board) {
     for row_index in board.min_row-1..=board.max_row+1 {
         for col_index in board.min_col-1..=board.max_col+1 {
             let neighbors = count_neighbors(board, row_index, col_index);
-            let this_cell_state = &mut board.cells[row_index][col_index]; // borrow a mutable reference to the array cell
+            // Borrow a mutable reference to the array cell
+            let this_cell_state = &mut board.cells[row_index][col_index];
             *this_cell_state = match *this_cell_state {
                 CellState::Empty if neighbors == 3 => CellState::AboutToBeBorn,
                 CellState::Alive if !(2..=3).contains(&neighbors) => CellState::AboutToDie,
