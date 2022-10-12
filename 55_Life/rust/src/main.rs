@@ -1,4 +1,4 @@
-// Rust implementation of David Ahl's implementation of Conway's Life
+// Rust implementation of the "Basic Computer Games" version of Conway's Life
 //
 // Jon Fetter-Degges
 // October 2022
@@ -7,19 +7,14 @@
 
 use std::{cmp, fmt, io, thread, time};
 
-const HEIGHT: usize = 24;
-const WIDTH: usize = 70;
-
-// The BASIC implementation uses a 24x70 array of integers to represent the board state.
-// 1 is alive, 2 is about to die, 3 is about to be born, 0 is dead. Here, we'll use an
-// enum instead.
-// Deriving Copy (which requires Clone) allows us to use this enum value in assignments.
-// Without that we would only be able to borrow it. That seems silly for a simple enum
-// like this one - it is required because enums can have large amounts of associated
-// data, so the programmer needs to decide whether to allow copying. Similarly, PartialEq
-// allows use of the == comparison. Again, this seems silly for a simple enum, but if
-// some enum cases have associated data, it may require some thought.
-#[derive(Clone, Copy, PartialEq)]
+// The BASIC implementation uses integers to represent the state of each cell: 1 is
+// alive, 2 is about to die, 3 is about to be born, 0 is dead. Here, we'll use an enum
+// instead.
+// Deriving Copy (which requires Clone) allows us to use this enum value in assignments,
+// and deriving Eq (or PartialEq) allows us to use the == operator. These need to be
+// explicitly specified because some enums may have associated data that makes copies and
+// comparisons more complicated or expensive.
+#[derive(Clone, Copy, PartialEq, Eq)]
 enum CellState {
     Empty,
     Alive,
@@ -44,6 +39,9 @@ impl fmt::Display for CellState {
 // Following the BASIC implementation, we will bound the board at 24 rows x 70 columns.
 // The board is an array of CellState. Using an array of arrays gives us bounds checking
 // in both dimensions.
+const HEIGHT: usize = 24;
+const WIDTH: usize = 70;
+
 struct Board {
     cells: [[CellState; WIDTH]; HEIGHT],
     min_row: usize,
@@ -104,8 +102,8 @@ fn get_pattern() -> Vec<Vec<char>> {
             return lines;
         }
         // Handle Unicode by converting the string to a vector of characters up front. We
-        // do this here because we care about lengths and column alignment, so we might
-        // as well just do the Unicode parsing once.
+        // do this here because we check the number of characters several times, so we
+        // might as well just do the Unicode parsing once.
         let line = Vec::from_iter(line.chars());
         if line.len() > max_line_len {
             println!("Line too long - the maximum is {max_line_len} characters.");
