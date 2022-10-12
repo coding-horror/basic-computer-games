@@ -1,18 +1,44 @@
-use std::{io, thread, time};
+// Rust implementation of David Ahl's implementation of Conway's Life
+//
+// Jon Fetter-Degges
+// October 2022
+
+// I am a Rust newbie. Corrections and suggestions are welcome.
+
+use std::{fmt, io, thread, time};
 
 const HEIGHT: usize = 24;
 const WIDTH: usize = 70;
 
 // The BASIC implementation uses a 24x70 array of integers to represent the board state.
-// 1 is alive, 2 is about to die, 3 is about to be born, all other values are dead.
-// (I'm not actually sure whether there are other values besides zero.)
-// Here, we'll use an enum instead.
+// 1 is alive, 2 is about to die, 3 is about to be born, 0 is dead. Here, we'll use an
+// enum instead.
+// Deriving Copy (which requires Clone) allows us to use this enum value in assignments.
+// Without that we would only be able to borrow it. That seems silly for a simple enum
+// like this one - it is required because enums can have large amounts of associated
+// data, so the programmer needs to decide whether to allow copying. Similarly, PartialEq
+// allows use of the == comparison. Again, this seems silly for a simple enum, but if
+// some enum cases have associated data, it may require some thought.
 #[derive(Clone, Copy, PartialEq)]
 enum CellState {
     Empty,
     Alive,
     AboutToDie,
     AboutToBeBorn,
+}
+
+// Support direct printing of the cell. In this program cells will only be Alive or Empty
+// when they are printed.
+impl fmt::Display for CellState {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let rep = match *self {
+            CellState::Empty => ' ',
+            CellState::Alive => '*',
+            CellState::AboutToDie => 'o',
+            CellState::AboutToBeBorn => '.',
+        };
+        write!(f, "{}", rep)
+    }
 }
 
 // Following the BASIC implementation, we will bound the board at 24 rows x 70 columns.
@@ -39,7 +65,7 @@ impl Board {
             min_col: 0,
             max_col: 0,
             population: 0,
-            generation: 1,
+            generation: 0,
             invalid: false,
         }
     }
@@ -47,6 +73,8 @@ impl Board {
 
 fn main() {
     println!(); println!(); println!();
+    println!("{:33}{}", " ", "Life");
+    println!("{:14}{}", " ", "Creative Computing  Morristown, New Jersey");
     println!("Enter your pattern: ");
     let mut board = parse_pattern(get_pattern());
     loop {
@@ -104,11 +132,14 @@ fn parse_pattern(rows: Vec<Vec<char>>) -> Board {
     // at the beginning or end of every row. It wouldn't be hard to check for that, but
     // for now we'll preserve the original behavior.
     let nrows = rows.len();
-    let ncols = rows.iter().map(|l| l.len()).max().unwrap_or(0); // handles the case where rows is empty
+    // If rows is empty, the call to max will return None. The unwrap_or then provides a
+    // default value
+    let ncols = rows.iter().map(|l| l.len()).max().unwrap_or(0);
 
-    // If nrows >= 24 or ncols >= 68, these assignments will wrap around to large values.
-    // The array accesses below will then be out of bounds. Rust will bounds-check them
-    // and panic rather than performing an invalid access.
+    // The min and max values here are unsigned. If nrows >= 24 or ncols >= 68, these
+    // assignments will panic - they do not wrap around unless we use a function with
+    // that specific behavior. Again, we expect bounds checking on the input before this
+    // function is called.
     board.min_row = 11 - nrows / 2;
     board.min_col = 33 - ncols / 2;
     board.max_row = board.min_row + nrows - 1;
@@ -201,15 +232,15 @@ fn finish_cell_transitions(board: &mut Board) {
 
 fn print_board(board: &Board) {
     println!(); println!(); println!();
-    println!("Generation: {}", board.generation);
-    println!("Population: {}", board.population);
+    print!("Generation: {} Population: {}", board.generation, board.population);
     if board.invalid {
-        println!("Invalid!");
+        print!("Invalid!");
     }
+    println!();
     for row_index in 0..HEIGHT {
         for col_index in 0..WIDTH {
-            let rep = if board.cells[row_index][col_index] == CellState::Alive { "*" } else { " " };
-            print!("{rep}");
+            // This print will use the Display implementation for cell_state, above.
+            print!("{}", board.cells[row_index][col_index]);
         }
         println!();
     }
