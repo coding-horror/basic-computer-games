@@ -1,7 +1,7 @@
 use std::{io, thread, time};
 
-const HEIGHT:usize = 24;
-const WIDTH:usize = 70;
+const HEIGHT: usize = 24;
+const WIDTH: usize = 70;
 
 // The BASIC implementation uses a 24x70 array of integers to represent the board state.
 // 1 is alive, 2 is about to die, 3 is about to be born, all other values are dead.
@@ -12,7 +12,7 @@ enum CellState {
     Empty,
     Alive,
     AboutToDie,
-    AboutToBeBorn
+    AboutToBeBorn,
 }
 
 // Following the BASIC implementation, we will bound the board at 24 rows x 70 columns.
@@ -27,7 +27,7 @@ struct Board {
     max_col: usize,
     population: usize,
     generation: usize,
-    invalid: bool
+    invalid: bool,
 }
 
 impl Board {
@@ -52,83 +52,85 @@ fn main() {
     loop {
         finish_cell_transitions(&mut board);
         print_board(&board);
-        update_board(&mut board);
+        mark_cell_transitions(&mut board);
         if board.population == 0 {
-            break; // this isn't in the original implementation but I wanted it
+            break; // this isn't in the original implementation but it seemed better than
+                   // spewing blank screens
         }
         delay();
     }
 }
 
-fn get_pattern() -> Vec<String> {
+fn get_pattern() -> Vec<Vec<char>> {
+    let max_line_len = WIDTH - 4;
+    let max_line_count = HEIGHT - 4;
     let mut lines = Vec::new();
     loop {
         let mut line = String::new();
-        // read_line reads into the buffer (appending if it's not empty).
-        // It returns the number of characters read, including the newline. This will be 0 on EOF.
-        // unwrap() will panic and terminate the program if there is an error reading from stdin.
-        // I think that's reasonable behavior in this case.
+        // read_line reads into the buffer (appending if it's not empty). It returns the
+        // number of characters read, including the newline. This will be 0 on EOF.
+        // unwrap() will panic and terminate the program if there is an error reading
+        // from stdin. That's reasonable behavior in this case.
         let nread = io::stdin().read_line(&mut line).unwrap();
         let line = line.trim_end();
         if nread == 0 || line.eq_ignore_ascii_case("DONE") {
             return lines;
         }
-        lines.push(line.to_string());
+        // Handle Unicode by converting the string to a vector of characters up front. We
+        // do this here because we care about lengths and column alignment, so we might
+        // as well just do the Unicode parsing once.
+        let line = Vec::from_iter(line.chars());
+        if line.len() > max_line_len {
+            println!("Line too long - the maximum is {max_line_len} characters.");
+            continue;
+        }
+        lines.push(line);
+        if lines.len() == max_line_count {
+            println!("Maximum line count reached. Starting simulation.");
+            return lines;
+        }
     }
 }
 
-fn parse_pattern(rows: Vec<String>) -> Board {
-    // A robust program would check the bounds of the inputs here. I'm not doing that,
-    // because the BASIC implementation didn't, and for me, part of the joy of these
-    // books back in the day was learning how my inputs could break things.
+fn parse_pattern(rows: Vec<Vec<char>>) -> Board {
+    // This function assumes that the input pattern in rows is in-bounds. If the pattern
+    // is too large, this function will panic. get_pattern checks the size of the input,
+    // so it is safe to call this function with its results.
 
     let mut board = Board::new();
-
-    // Strings are UTF-8 in Rust, so characters can take multiple bytes. We will convert
-    // each to a Vec<char> up front so that we don't have to do that conversion multiple
-    // times (to find the length of the strings in chars, then to parse each char).
-    // The into_iter() method consumes rows() so it can no longer be used.
-    let char_vecs = Vec::from_iter(rows.into_iter().map(|s| Vec::from_iter(s.chars())));
 
     // The BASIC implementation puts the pattern roughly in the center of the board,
     // assuming that there are no blank rows at the beginning or end, or blanks entered
     // at the beginning or end of every row. It wouldn't be hard to check for that, but
     // for now we'll preserve the original behavior.
-    let nrows = char_vecs.len();
-    let ncols = char_vecs.iter()
-        .map(|l| l.len())
-        .max()
-        .unwrap_or(0);  // handles the case where rows is empty
+    let nrows = rows.len();
+    let ncols = rows.iter().map(|l| l.len()).max().unwrap_or(0); // handles the case where rows is empty
 
-    // Note that there's a subtlety here. The len() method returns a usize, i.e., an
-    // unsigned int, so the result type is the same. If nlines >= 24 or ncols >= 68, the
-    // result will wrap around to a giant value. These are stricter limits than you'd
-    // expect from just looking at the 24x70 bounds, but again, we're preserving the
-    // original behavior.
+    // If nrows >= 24 or ncols >= 68, these assignments will wrap around to large values.
+    // The array accesses below will then be out of bounds. Rust will bounds-check them
+    // and panic rather than performing an invalid access.
     board.min_row = 11 - nrows / 2;
     board.min_col = 33 - ncols / 2;
     board.max_row = board.min_row + nrows - 1;
     board.max_col = board.min_col + ncols - 1;
 
     // Loop over the rows provided. The enumerate() method augments the iterator with an index.
-    for (row_index, pattern) in char_vecs.iter().enumerate()
-    {
+    for (row_index, pattern) in rows.iter().enumerate() {
         let row = board.min_row + row_index;
         // Now loop over the non-empty cells in the current row. filter_map takes a closure that
         // returns an Option. If the Option is None, filter_map filters out that entry from the
         // for loop. If it's Some(x), filter_map executes the loop body with the value x.
         for col in pattern.iter().enumerate().filter_map(|(col_index, chr)| {
-                                if *chr == ' ' || (*chr == '.' && col_index == 0) {
-                                    None
-                                } else {
-                                    Some(board.min_col + col_index)
-                                }})
-        {
+            if *chr == ' ' || (*chr == '.' && col_index == 0) {
+                None
+            } else {
+                Some(board.min_col + col_index)
+            }
+        }) {
             board.cells[row][col] = CellState::Alive;
             board.population += 1;
         }
     }
-
 
     board
 }
@@ -214,15 +216,16 @@ fn print_board(board: &Board) {
 }
 
 fn count_neighbors(board: &Board, row_index: usize, col_index: usize) -> i32 {
+    // Simply loop over all the immediate neighbors of a cell. We assume that the row and
+    // column indices are not on (or outside) the boundary of the arrays; if they are,
+    // the function will panic instead of going out of bounds.
     let mut count = 0;
-    assert!((1..=HEIGHT-2).contains(&row_index));
-    assert!((1..=WIDTH-2).contains(&col_index));
     for i in row_index-1..=row_index+1 {
         for j in col_index-1..=col_index+1 {
             if i == row_index && j == col_index {
                 continue;
             }
-            if board.cells[i][j] == CellState::Alive || board.cells [i][j] == CellState::AboutToDie {
+            if board.cells[i][j] == CellState::Alive || board.cells[i][j] == CellState::AboutToDie {
                 count += 1;
             }
         }
@@ -230,7 +233,7 @@ fn count_neighbors(board: &Board, row_index: usize, col_index: usize) -> i32 {
     count
 }
 
-fn update_board(board: &mut Board) {
+fn mark_cell_transitions(board: &mut Board) {
     for row_index in board.min_row-1..=board.max_row+1 {
         for col_index in board.min_col-1..=board.max_col+1 {
             let neighbors = count_neighbors(board, row_index, col_index);
@@ -238,7 +241,7 @@ fn update_board(board: &mut Board) {
             *this_cell_state = match *this_cell_state {
                 CellState::Empty if neighbors == 3 => CellState::AboutToBeBorn,
                 CellState::Alive if !(2..=3).contains(&neighbors) => CellState::AboutToDie,
-                _ => *this_cell_state
+                _ => *this_cell_state,
             }
         }
     }
