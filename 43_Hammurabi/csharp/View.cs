@@ -133,7 +133,7 @@ namespace Hammurabi
                     break;
                 case PerformanceRating.Bad:
                     Console.WriteLine("YOUR HEAVY-HANDED PERFORMANCE SMACKS OF NERO AND IVAN IV.");
-                    Console.WriteLine("THE PEOPLE (REMIANING) FIND YOU AN UNPLEASANT RULER, AND,");
+                    Console.WriteLine("THE PEOPLE (REMAINING) FIND YOU AN UNPLEASANT RULER, AND,");
                     Console.WriteLine("FRANKLY, HATE YOUR GUTS!!");
                     break;
                 case PerformanceRating.Ok:
