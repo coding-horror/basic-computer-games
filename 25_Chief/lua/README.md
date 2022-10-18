@@ -7,7 +7,7 @@ Conversion to [Lua](https://www.lua.org/) by Alex Conconi
 ### Lua porting notes
 
 - I did not like the old Western movie language style in the game introduction
-and decided to tone it down even if this deviates from the original BASIC
+and decided to tone it down, even if this deviates from the original BASIC
 version.
 
 - The `craps_game` function contains the main game logic: it
