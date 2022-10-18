@@ -19,24 +19,24 @@ Lua port by Alex Conconi, 2022.
 
 
 --- Helper function for tabulating messages.
-local function tab(n) return string.rep(" ", n) end
+local function space(n) return string.rep(" ", n) end
 
 
 --- Generates a multi-line string representing a lightning bolt
 local function bolt()
     local bolt_lines = {}
     for n = 29, 21, -1 do
-        table.insert(bolt_lines, tab(n) .. "x x")
+        table.insert(bolt_lines, space(n) .. "x x")
     end
-    table.insert(bolt_lines, tab(20) .. "x xxx")
-    table.insert(bolt_lines, tab(19) .. "x   x")
-    table.insert(bolt_lines, tab(18) .. "xx x")
+    table.insert(bolt_lines, space(20) .. "x xxx")
+    table.insert(bolt_lines, space(19) .. "x   x")
+    table.insert(bolt_lines, space(18) .. "xx x")
     for n = 19, 12, -1 do
-        table.insert(bolt_lines, tab(n) .. "x x")
+        table.insert(bolt_lines, space(n) .. "x x")
     end
-    table.insert(bolt_lines, tab(11) .. "xx")
-    table.insert(bolt_lines, tab(10) .. "x")
-    table.insert(bolt_lines, tab(9) .. "*\n")
+    table.insert(bolt_lines, space(11) .. "xx")
+    table.insert(bolt_lines, space(10) .. "x")
+    table.insert(bolt_lines, space(9) .. "*\n")
     table.insert(bolt_lines, string.rep("#", 25) .. "\n")
     return table.concat(bolt_lines, "\n")
 end
@@ -85,8 +85,8 @@ end
 --- Main game function.
 local function chief_game()
     --- Print game introduction and challenge
-    print(tab(29) .. "Chief")
-    print(tab(14) .. "Creative Computing  Morristown, New Jersey\n\n")
+    print(space(29) .. "Chief")
+    print(space(14) .. "Creative Computing  Morristown, New Jersey\n\n")
     print("I am Chief Numbers Freek, the great math god.")
     if not ask_yes_or_no("Are you ready to take the test you called me out for?") then
         print("Shut up, wise tongue.")
