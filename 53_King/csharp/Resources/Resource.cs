@@ -7,9 +7,17 @@ internal static class Resource
 {
     public static Stream Title => GetStream();
     
-    public static string Instructions_Prompt => GetString();
-    public static string Instructions_Text(int years) => string.Format(GetString(), years);
+    public static string InstructionsPrompt => GetString();
+    public static string InstructionsText(int years) => string.Format(GetString(), years);
 
+    public static string SavedYearsPrompt => GetString();
+    public static string SavedYearsError(int years) => string.Format(GetString(), years);
+    public static string SavedTreasuryPrompt => GetString();
+    public static string SavedCountrymenPrompt => GetString();
+    public static string SavedWorkersPrompt => GetString();
+    public static string SavedLandPrompt => GetString();
+    public static string SavedLandError => GetString();
+    
     internal static class Formats
     {
         public static string Player => GetString();

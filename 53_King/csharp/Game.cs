@@ -17,12 +17,30 @@ internal class Game
     {
         _io.Write(Resource.Title);
 
-        var response = _io.ReadString(Resource.Instructions_Prompt).ToUpper();
-        if (!response.StartsWith('N'))
+        if (SetUpReign() is Reign reign)
         {
-            _io.Write(Resource.Instructions_Text(TermOfOffice));
+            _io.Write(reign);
         }
 
         _io.WriteLine();
+        _io.WriteLine();
+    }
+
+    private Reign? SetUpReign()
+    {
+        var response = _io.ReadString(Resource.InstructionsPrompt).ToUpper();
+
+        if (response.Equals("Again", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return _io.TryReadGameData(_random, out var reign) ? reign : null;
+        }
+        
+        if (!response.StartsWith("N", StringComparison.InvariantCultureIgnoreCase))
+        {
+            _io.Write(Resource.InstructionsText(TermOfOffice));
+        }
+
+        _io.WriteLine();
+        return new Reign(_io, _random);
     }
 }
