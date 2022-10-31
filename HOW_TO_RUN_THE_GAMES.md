@@ -23,9 +23,6 @@ Alternatively, for non-dotnet compatible translations, you will need [Visual Stu
 
 ## java
 
-**TIP:** You can build all the java and kotlin games at once
-using the instructions in the [buildJvm directory](buildJvm/README.md)
-
 The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
 
 To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [Open JDK](https://openjdk.java.net/)).
@@ -58,8 +55,14 @@ _Hint: Normally javascript files have a `*.js` extension. We are using `*.mjs` t
 
 ## kotlin
 
-Use the directions in [buildJvm](buildJvm/README.md) to build for kotlin. You can also use those directions to
-build java games.
+Kotlin programs are compiled with the Kotlin compiler, and run with the java runtime, just like java programs.
+In addition to the java runtime you will need the `kotlinc` compiler, which can be installed using [these instructions](https://kotlinlang.org/docs/command-line.html).
+
+1. Navigate to the corresponding directory.
+1. Compile the program with `kotlinc`:
+   * eg. `kotlinc AceyDuceyGame.kt -include-runtime -d AceyDuceyGame.jar`
+1. Run the compiled program with `java`:
+   * eg. `java -jar AceyDuceyGame.jar`
 
 ## pascal
 
