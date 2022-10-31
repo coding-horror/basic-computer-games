@@ -212,7 +212,7 @@ def main() -> None:
             national_fink()
         elif P1 > 10 or L < 9:
             print("YOUR HEAVY-HANDED PERFORMANCE SMACKS OF NERO AND IVAN IV.")
-            print("THE PEOPLE (REMIANING) FIND YOU AN UNPLEASANT RULER, AND,")
+            print("THE PEOPLE (REMAINING) FIND YOU AN UNPLEASANT RULER, AND,")
             print("FRANKLY, HATE YOUR GUTS!!")
         elif P1 > 3 or L < 10:
             print("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT")
