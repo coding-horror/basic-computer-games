@@ -19,7 +19,7 @@ internal class Game
 
         if (SetUpReign() is Reign reign)
         {
-            _io.Write(reign);
+            reign.PlayYear();
         }
 
         _io.WriteLine();

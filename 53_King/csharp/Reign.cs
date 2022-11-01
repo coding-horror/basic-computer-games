@@ -9,9 +9,8 @@ internal class Reign
     private readonly float _year;
 
     public Reign(IReadWrite io, IRandom random)
-        : this(io, new Country(random), 0)
+        : this(io, new Country(io, random), 0)
     {
-
     }
 
     public Reign(IReadWrite io, Country country, float year)
@@ -19,5 +18,16 @@ internal class Reign
         _io = io;
         _country = country;
         _year = year;
+    }
+
+    public void PlayYear()
+    {
+        _io.Write(_country.Status);
+
+        var playerSoldLand = _country.SellLand();
+        var playerDistributedRallods = _country.DistributeRallods();
+        var playerPlantedLand = _country.PlantLand();
+        var playerControlledPollution = _country.ControlPollution();
+        
     }
 }

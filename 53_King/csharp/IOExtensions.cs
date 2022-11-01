@@ -13,7 +13,7 @@ internal static class IOExtensions
             io.TryReadValue(SavedWorkersPrompt, out var workers) &&
             io.TryReadValue(SavedLandPrompt, v => v is > 1000 and <= 2000, SavedLandError, out var land))
         {
-            reign = new Reign(io, new Country(random, rallods, countrymen, workers, land), years + 1);
+            reign = new Reign(io, new Country(io, random, rallods, countrymen, workers, land), years + 1);
             return true;
         }
 
@@ -21,14 +21,32 @@ internal static class IOExtensions
         return false;
     }
 
-    private static bool TryReadValue(this IReadWrite io, string prompt, out float value)
+    internal static bool TryReadValue(this IReadWrite io, string prompt, out float value, params ValidityTest[] tests)
+    {
+        while (true)
+        {
+            var response = value = io.ReadNumber(prompt);
+            if (response < 0) { return false; }
+            if (tests.All(test => test.IsValid(response, io))) { return true; }
+        } 
+    }
+
+    internal static bool TryReadValue(this IReadWrite io, string prompt, out float value)
         => io.TryReadValue(prompt, _ => true, "", out value);
     
-    private static bool TryReadValue(
+    internal static bool TryReadValue(
         this IReadWrite io,
         string prompt,
         Predicate<float> isValid,
         string error,
+        out float value)
+        => io.TryReadValue(prompt, isValid, () => error, out value);
+
+    internal static bool TryReadValue(
+        this IReadWrite io,
+        string prompt,
+        Predicate<float> isValid,
+        Func<string> getError,
         out float value)
     {
         while (true)
@@ -37,7 +55,7 @@ internal static class IOExtensions
             if (value < 0) { return false; }
             if (isValid(value)) { return true; }
             
-            io.Write(error);
+            io.Write(getError());
         }
     }
 }
