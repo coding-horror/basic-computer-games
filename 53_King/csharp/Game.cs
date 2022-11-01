@@ -17,9 +17,10 @@ internal class Game
     {
         _io.Write(Resource.Title);
 
-        if (SetUpReign() is Reign reign)
+        var reign = SetUpReign();
+        if (reign != null)
         {
-            reign.PlayYear();
+            while (reign.PlayYear());
         }
 
         _io.WriteLine();

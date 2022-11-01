@@ -26,7 +26,7 @@ internal static class IOExtensions
         while (true)
         {
             var response = value = io.ReadNumber(prompt);
-            if (response < 0) { return false; }
+            if (response == 0) { return false; }
             if (tests.All(test => test.IsValid(response, io))) { return true; }
         } 
     }

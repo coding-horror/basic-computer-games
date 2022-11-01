@@ -59,6 +59,8 @@ internal static class Resource
     public static string SavedLandPrompt => GetString();
     public static string SavedLandError => GetString();
 
+    public static string Goodbye => GetString();
+
     private static string GetString([CallerMemberName] string? name = null)
     {
         using var stream = GetStream(name);
