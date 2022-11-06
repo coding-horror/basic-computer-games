@@ -1,22 +1,25 @@
 package bullfight
 
-import bullfight.Yorn.NO
+import bullfight.Yorn.*
+import kotlin.math.pow
 import kotlin.random.Random
 
-val fna: Int get() = Random.nextInt(1, 2)
+val fna: Boolean get() = Random.nextBoolean()
 
-val l = listOf("SUPERB", "GOOD", "FAIR", "POOR", "AWFUL")
+val quality = listOf("SUPERB", "GOOD", "FAIR", "POOR", "AWFUL")
 var aInt: Int = 0
+var l = 1f
+var momentOfTruth = false
+val d = mutableListOf(0f, 0f, 0f, 0f, 0f, 0f)
 
 fun main() {
-    val d = mutableListOf(0f,0f,0f,0f,0f,0f)
     intro()
     instructions()
     d[5] = 1f
     d[4] = 1f
 
     aInt = Random.nextInt(1, 6)
-    println("YOU HAVE DRAWN A ${l[aInt - 1]} BULL.")
+    println("YOU HAVE DRAWN A ${quality[aInt - 1]} BULL.")
     when {
         aInt < 2 -> {
             println("GOOD LUCK.  YOU'LL NEED IT.")
@@ -29,46 +32,197 @@ fun main() {
         else -> Unit
     }
 
+    momentOfTruth()
+
     d[1] = fight(FirstAct.picadores)
     d[2] = fight(FirstAct.toreadores)
     repeat(2) { println() }
+    var gored: Boolean
 
-    d[3]++
-    println("PASS NUMBER ${d[3]}")
-    if (d[3]>=3) {
-        print("HERE COMES THE BULL.  TRY FOR A KILL")
-        if (Yorn.input() == NO) {
-            print("CAPE MOVE")
+    gameLoop@ do {
+        d[3]++
+        println("PASS NUMBER ${d[3].toInt()}")
+        if (d[3] >= 3) {
+            print("HERE COMES THE BULL.  TRY FOR A KILL")
+            gored = killAttempt("CAPE MOVE")
+        } else {
+            println("THE BULL IS CHARGING AT YOU!  YOU ARE THE MATADOR--")
+            print("DO YOU WANT TO KILL THE BULL")
+            gored = killAttempt("WHAT MOVE DO YOU MAKE WITH THE CAPE")
         }
-    }
-    else {
-        println("THE BULL IS CHARGING AT YOU!  YOU ARE THE MATADOR--")
-        print("DO YOU WANT TO KILL THE BULL")
-        if (Yorn.input() == NO) {
-            print("WHAT MOVE DO YOU MAKE WITH THE CAPE")
-        }
-    }
 
+        if (!gored) {
+            val move = restrictedInput(
+                values = Cape.values(),
+                errorMessage = "DON'T PANIC, YOU IDIOT!  PUT DOWN A CORRECT NUMBER"
+            )
+            val m = when (move) {
+                Cape.Veronica -> 3f
+                Cape.Outside -> 2f
+                Cape.Swirl -> 0.5f
+            }
+
+            l += m
+            val f = (6 - aInt + m / 10f) * Random.nextFloat() / ((d[1] + d[2] + d[3] / 10f) * 5f)
+            if (f < 0.51)
+                continue
+        }
+
+        println("THE BULL HAS GORED YOU!")
+        goreLoop@ do {
+            when (fna) {
+                false -> {
+                    println("YOU ARE DEAD.")
+                    d[4] = 1.5f
+                }
+
+                true -> {
+                    println("YOU ARE STILL ALIVE.")
+                    println()
+                    print("DO YOU RUN FROM THE RING")
+                    when (Yorn.input()) {
+
+                        YES -> {
+                            println("COWARD")
+                            d[4] = 0f
+                        }
+
+                        NO -> {
+                            println("YOU ARE BRAVE.  STUPID, BUT BRAVE.")
+                            when (fna) {
+                                true -> {
+                                    d[4] = 2f
+                                    continue@gameLoop
+                                }
+
+                                false -> {
+                                    println("YOU ARE GORED AGAIN!")
+                                    continue@goreLoop
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        } while (true)
+
+    } while (true)
 
 }
 
-enum class Yorn(val s: String) {
-    YES("YES"),NO("NO");
-    override fun toString() = s
+fun fnd() = 4.5 +
+        l / 6 -
+        (d[1] + d[2]) * 2.5 +
+        4 * d[4] +
+        2 * d[5] -
+        d[3].toDouble().pow(2.0) / 120f -
+        aInt
+fun fnc() = fnd() * Random.nextFloat()
+
+private fun killAttempt(capeMessage: String): Boolean {
+    when (Yorn.input()) {
+        YES -> {
+            when (momentOfTruth()) {
+                KillResult.Success -> {
+                    println()
+                    println()
+                    if (d[4] == 0f) {
+                        println(
+                            """
+                            THE CROWD BOOS FOR TEN MINUTES.  IF YOU EVER DARE TO SHOW
+                            YOUR FACE IN A RING AGAIN, THEY SWEAR THEY WILL KILL YOU--
+                            UNLESS THE BULL DOES FIRST.
+                            """.trimIndent()
+                        )
+                    }
+                }
+
+                KillResult.Fail -> return true
+            }
+        }
+
+        NO -> {
+            print(capeMessage)
+        }
+    }
+    return false
+}
+
+enum class KillResult { Success, Fail }
+
+fun momentOfTruth(): KillResult {
+    momentOfTruth = true
+    print(
+        """
+        
+        IT IS THE MOMENT OF TRUTH.
+        
+        HOW DO YOU WANT TO KILL THE BULL
+    """.trimIndent()
+    )
+
+    val k = (6 - aInt) * 10 * Random.nextFloat() / ((d[1] + d[2]) * 5 * d[3])
+
+    val chance = when (stdInput(KillMethod.values())) {
+        KillMethod.OverHorns -> .8
+        KillMethod.Chest -> .2
+        null -> {
+            println("YOU PANICKED.  THE BULL GORED YOU.")
+            return KillResult.Fail
+        }
+    }
+    return if (k <= chance) {
+        println("YOU KILLED THE BULL!")
+        d[5] = 2f
+        KillResult.Success
+    } else {
+        println("THE BULL HAS GORED YOU!")
+        KillResult.Fail
+    }
+}
+
+interface InputOption {
+    val input: String
+}
+
+enum class Cape(override val input: String) : InputOption {
+    Veronica("0"),
+    Outside("1"),
+    Swirl("2"),
+}
+
+enum class KillMethod(override val input: String) : InputOption {
+    OverHorns("4"),
+    Chest("5"),
+}
+
+private fun <T : InputOption> stdInput(values: Array<T>): T? {
+    print("? ")
+    val z1 = readln()
+    return values.firstOrNull { z1 == it.input }
+}
+
+private fun <T : InputOption> restrictedInput(values: Array<T>, errorMessage: String): T {
+    do {
+        stdInput(values)?.let { return it }
+        println(errorMessage)
+    } while (true)
+}
+
+enum class Yorn(override val input: String) : InputOption {
+    YES("YES"), NO("NO");
 
     companion object {
-        fun input() : Yorn {
-            do {
-                print("? ")
-                val z1 = readln()
-                Yorn.values().firstOrNull { z1 == it.s }?.let { return it } ?: println("YES OR NO")
-            } while (true)
+        fun input(): Yorn {
+            return restrictedInput(values(), "YES OR NO")
         }
     }
 }
 
 enum class FirstAct(val str: String) {
     picadores("PICADORES"), toreadores("TOREADORES");
+
     override fun toString() = str
 }
 
@@ -83,21 +237,19 @@ fun fight(firstAct: FirstAct): Float {
         else -> .1f
     }
     val t = (10 * c + .2).toInt()
-    println("THE $firstAct DID A ${l[t - 1]} JOB.")
+    println("THE $firstAct DID A ${quality[t - 1]} JOB.")
 
     if (t >= 4) {
         if (t == 5) {
             if (firstAct != FirstAct.toreadores) {
-                println ("$fna OF THE HORSES OF THE $firstAct KILLED.")
+                println("$fna OF THE HORSES OF THE $firstAct KILLED.")
             }
             println("$fna OF THE $firstAct KILLED.")
-        }
-        else {
+        } else {
             println(
                 when (fna) {
-                    1 -> "ONE OF THE $firstAct WAS KILLED."
-                    2 -> "NO $firstAct WERE KILLED."
-                    else -> ""
+                    true -> "ONE OF THE $firstAct WAS KILLED."
+                    false -> "NO $firstAct WERE KILLED."
                 }
             )
         }
