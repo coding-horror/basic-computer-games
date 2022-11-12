@@ -1,9 +1,11 @@
 package bullfight
 
 import bullfight.Yorn.*
-import kotlin.math.pow
 import kotlin.random.Random
+import kotlin.system.exitProcess
 
+private val Float.squared: Float
+    get() = this * this
 val fna: Boolean get() = Random.nextBoolean()
 
 val quality = listOf("SUPERB", "GOOD", "FAIR", "POOR", "AWFUL")
@@ -31,8 +33,6 @@ fun main() {
 
         else -> Unit
     }
-
-    momentOfTruth()
 
     d[1] = fight(FirstAct.picadores)
     d[2] = fight(FirstAct.toreadores)
@@ -116,13 +116,15 @@ fun fnd() = 4.5 +
         (d[1] + d[2]) * 2.5 +
         4 * d[4] +
         2 * d[5] -
-        d[3].toDouble().pow(2.0) / 120f -
+        d[3].squared / 120f -
         aInt
+
 fun fnc() = fnd() * Random.nextFloat()
 
 private fun killAttempt(capeMessage: String): Boolean {
     when (Yorn.input()) {
-        YES -> {
+
+        YES ->
             when (momentOfTruth()) {
                 KillResult.Success -> {
                     println()
@@ -135,16 +137,40 @@ private fun killAttempt(capeMessage: String): Boolean {
                             UNLESS THE BULL DOES FIRST.
                             """.trimIndent()
                         )
+                    } else {
+                        if (d[4] == 2f)
+                            println("THE CROWD CHEERS WILDLY!")
+                        else
+                            if (d[5] == 2f) {
+                                println("THE CROWD CHEERS!")
+                                println()
+                            }
+                        println("THE CROWD AWARDS YOU")
+                        if (fnc() < 2.4)
+                            println("NOTHING AT ALL.")
+                        else if (fnc() < 4.9)
+                            println("ONE EAR OF THE BULL.")
+                        else
+                            if (fnc() < 7.4)
+                                println("BOTH EARS OF THE BULL!")
+                            else
+                                println("OLE!  YOU ARE 'MUY HOMBRE'!! OLE!  OLE!")
+                        println()
                     }
+                    println()
+                    println("ADIOS")
+                    println()
+                    println()
+                    println()
+                    exitProcess(0)
                 }
 
                 KillResult.Fail -> return true
             }
-        }
 
-        NO -> {
+        NO ->
             print(capeMessage)
-        }
+
     }
     return false
 }
