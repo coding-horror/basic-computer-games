@@ -4,51 +4,80 @@ import bullfight.Yorn.*
 import kotlin.random.Random
 import kotlin.system.exitProcess
 
+private val Boolean.asInteger get() = if (this) 1 else 2
 private val Float.squared: Float
     get() = this * this
-val fna: Boolean get() = Random.nextBoolean()
+val fna: Boolean get() = RandomNumbers.nextBoolean()
 
-val quality = listOf("SUPERB", "GOOD", "FAIR", "POOR", "AWFUL")
-var aInt: Int = 0
+enum class Quality(private val typeName: String) {
+    Superb("SUPERB"),
+    Good("GOOD"),
+    Fair("FAIR"),
+    Poor("POOR"),
+    Awful("AWFUL");
+    override fun toString() = typeName
+
+    val level get() = (ordinal + 1).toFloat()
+}
+
+enum class BullDeath(val factor: Float) {
+    Alive(1f), Dead(2f);
+}
+
 var l = 1f
+lateinit var bullQuality: Quality
 var momentOfTruth = false
-val d = mutableListOf(0f, 0f, 0f, 0f, 0f, 0f)
+var picadoresSuccess = 0f
+var toreadoresSuccess = 0f
+var passNumber = 0f
+var honor = 0f
+var bullDeath = BullDeath.Alive
+
+
+interface RandomNumberSource {
+    fun nextBoolean(): Boolean
+    fun nextInt(from: Int, until: Int): Int
+    fun nextFloat(): Float
+}
+
+object RandomNumbers : RandomNumberSource {
+    override fun nextBoolean() = Random.nextBoolean()
+    override fun nextInt(from: Int, until: Int) = Random.nextInt(from, until)
+    override fun nextFloat() = Random.nextFloat()
+}
+
 
 fun main() {
     intro()
     instructions()
-    d[5] = 1f
-    d[4] = 1f
+    bullDeath = BullDeath.Alive
+    honor = 1f
 
-    aInt = Random.nextInt(1, 6)
-    println("YOU HAVE DRAWN A ${quality[aInt - 1]} BULL.")
-    when {
-        aInt < 2 -> {
-            println("GOOD LUCK.  YOU'LL NEED IT.")
-        }
-
-        aInt > 4 -> {
-            println("YOU'RE LUCKY.")
-        }
-
+    bullQuality = Quality.values()[RandomNumbers.nextInt(1, 6)]
+    println("YOU HAVE DRAWN A $bullQuality BULL.")
+    when (bullQuality) {
+        Quality.Superb -> println("GOOD LUCK.  YOU'LL NEED IT.")
+        Quality.Awful -> println("YOU'RE LUCKY.")
         else -> Unit
     }
 
-    d[1] = fight(FirstAct.picadores)
-    d[2] = fight(FirstAct.toreadores)
-    repeat(2) { println() }
+    picadoresSuccess = fight(FirstAct.picadores)
+    toreadoresSuccess = fight(FirstAct.toreadores)
+    println()
+    println()
+
     var gored: Boolean
 
     gameLoop@ do {
-        d[3]++
-        println("PASS NUMBER ${d[3].toInt()}")
-        if (d[3] >= 3) {
+        passNumber++
+        println("PASS NUMBER ${passNumber.toInt()}")
+        gored = if (passNumber >= 3) {
             print("HERE COMES THE BULL.  TRY FOR A KILL")
-            gored = killAttempt("CAPE MOVE")
+            killAttempt("CAPE MOVE")
         } else {
             println("THE BULL IS CHARGING AT YOU!  YOU ARE THE MATADOR--")
             print("DO YOU WANT TO KILL THE BULL")
-            gored = killAttempt("WHAT MOVE DO YOU MAKE WITH THE CAPE")
+            killAttempt("WHAT MOVE DO YOU MAKE WITH THE CAPE")
         }
 
         if (!gored) {
@@ -63,7 +92,8 @@ fun main() {
             }
 
             l += m
-            val f = (6 - aInt + m / 10f) * Random.nextFloat() / ((d[1] + d[2] + d[3] / 10f) * 5f)
+            val f =
+                (6 - bullQuality.level + m / 10f) * RandomNumbers.nextFloat() / ((picadoresSuccess + toreadoresSuccess + passNumber / 10f) * 5f)
             if (f < 0.51)
                 continue
         }
@@ -73,7 +103,8 @@ fun main() {
             when (fna) {
                 false -> {
                     println("YOU ARE DEAD.")
-                    d[4] = 1.5f
+                    honor = 1.5f
+                    gameResult()
                 }
 
                 true -> {
@@ -84,14 +115,14 @@ fun main() {
 
                         YES -> {
                             println("COWARD")
-                            d[4] = 0f
+                            honor = 0f
                         }
 
                         NO -> {
                             println("YOU ARE BRAVE.  STUPID, BUT BRAVE.")
                             when (fna) {
                                 true -> {
-                                    d[4] = 2f
+                                    honor = 2f
                                     continue@gameLoop
                                 }
 
@@ -113,58 +144,20 @@ fun main() {
 
 fun fnd() = 4.5 +
         l / 6 -
-        (d[1] + d[2]) * 2.5 +
-        4 * d[4] +
-        2 * d[5] -
-        d[3].squared / 120f -
-        aInt
+        (picadoresSuccess + toreadoresSuccess) * 2.5 +
+        4 * honor +
+        2 * bullDeath.factor -
+        passNumber.squared / 120f -
+        bullQuality.level
 
-fun fnc() = fnd() * Random.nextFloat()
+fun fnc() = fnd() * RandomNumbers.nextFloat()
 
 private fun killAttempt(capeMessage: String): Boolean {
     when (Yorn.input()) {
 
         YES ->
             when (momentOfTruth()) {
-                KillResult.Success -> {
-                    println()
-                    println()
-                    if (d[4] == 0f) {
-                        println(
-                            """
-                            THE CROWD BOOS FOR TEN MINUTES.  IF YOU EVER DARE TO SHOW
-                            YOUR FACE IN A RING AGAIN, THEY SWEAR THEY WILL KILL YOU--
-                            UNLESS THE BULL DOES FIRST.
-                            """.trimIndent()
-                        )
-                    } else {
-                        if (d[4] == 2f)
-                            println("THE CROWD CHEERS WILDLY!")
-                        else
-                            if (d[5] == 2f) {
-                                println("THE CROWD CHEERS!")
-                                println()
-                            }
-                        println("THE CROWD AWARDS YOU")
-                        if (fnc() < 2.4)
-                            println("NOTHING AT ALL.")
-                        else if (fnc() < 4.9)
-                            println("ONE EAR OF THE BULL.")
-                        else
-                            if (fnc() < 7.4)
-                                println("BOTH EARS OF THE BULL!")
-                            else
-                                println("OLE!  YOU ARE 'MUY HOMBRE'!! OLE!  OLE!")
-                        println()
-                    }
-                    println()
-                    println("ADIOS")
-                    println()
-                    println()
-                    println()
-                    exitProcess(0)
-                }
-
+                KillResult.Success -> gameResult()
                 KillResult.Fail -> return true
             }
 
@@ -173,6 +166,45 @@ private fun killAttempt(capeMessage: String): Boolean {
 
     }
     return false
+}
+
+private fun gameResult() {
+    println()
+    println()
+    if (honor == 0f) {
+        println(
+            """
+                            THE CROWD BOOS FOR TEN MINUTES.  IF YOU EVER DARE TO SHOW
+                            YOUR FACE IN A RING AGAIN, THEY SWEAR THEY WILL KILL YOU--
+                            UNLESS THE BULL DOES FIRST.
+                            """.trimIndent()
+        )
+    } else {
+        if (honor == 2f)
+            println("THE CROWD CHEERS WILDLY!")
+        else
+            if (bullDeath == BullDeath.Dead) {
+                println("THE CROWD CHEERS!")
+                println()
+            }
+        println("THE CROWD AWARDS YOU")
+        if (fnc() < 2.4)
+            println("NOTHING AT ALL.")
+        else if (fnc() < 4.9)
+            println("ONE EAR OF THE BULL.")
+        else
+            if (fnc() < 7.4)
+                println("BOTH EARS OF THE BULL!")
+            else
+                println("OLE!  YOU ARE 'MUY HOMBRE'!! OLE!  OLE!")
+        println()
+    }
+    println()
+    println("ADIOS")
+    println()
+    println()
+    println()
+    exitProcess(0)
 }
 
 enum class KillResult { Success, Fail }
@@ -188,7 +220,8 @@ fun momentOfTruth(): KillResult {
     """.trimIndent()
     )
 
-    val k = (6 - aInt) * 10 * Random.nextFloat() / ((d[1] + d[2]) * 5 * d[3])
+    val k =
+        (6 - bullQuality.level) * 10 * RandomNumbers.nextFloat() / ((picadoresSuccess + toreadoresSuccess) * 5 * passNumber)
 
     val chance = when (stdInput(KillMethod.values())) {
         KillMethod.OverHorns -> .8
@@ -200,7 +233,7 @@ fun momentOfTruth(): KillResult {
     }
     return if (k <= chance) {
         println("YOU KILLED THE BULL!")
-        d[5] = 2f
+        bullDeath = BullDeath.Dead
         KillResult.Success
     } else {
         println("THE BULL HAS GORED YOU!")
@@ -223,17 +256,17 @@ enum class KillMethod(override val input: String) : InputOption {
     Chest("5"),
 }
 
-private fun <T : InputOption> stdInput(values: Array<T>): T? {
-    print("? ")
-    val z1 = readln()
-    return values.firstOrNull { z1 == it.input }
-}
-
 private fun <T : InputOption> restrictedInput(values: Array<T>, errorMessage: String): T {
     do {
         stdInput(values)?.let { return it }
         println(errorMessage)
     } while (true)
+}
+
+private fun <T : InputOption> stdInput(values: Array<T>): T? {
+    print("? ")
+    val z1 = readln()
+    return values.firstOrNull { z1 == it.input }
 }
 
 enum class Yorn(override val input: String) : InputOption {
@@ -254,23 +287,24 @@ enum class FirstAct(val str: String) {
 
 fun fight(firstAct: FirstAct): Float {
 
-    val b = 3.0 / aInt * Random.nextFloat()
-    val c = when {
-        b < .37 -> .5f
-        b < .5 -> .4f
-        b < .63 -> .3f
-        b < .87 -> .2f
-        else -> .1f
+    val b = 3.0 / bullQuality.level * RandomNumbers.nextFloat()
+    val firstActQuality = when {
+        b < .37 -> Quality.Awful
+        b < .5 -> Quality.Poor
+        b < .63 -> Quality.Fair
+        b < .87 -> Quality.Good
+        else -> Quality.Superb
     }
-    val t = (10 * c + .2).toInt()
-    println("THE $firstAct DID A ${quality[t - 1]} JOB.")
+    val c = firstActQuality.level / 10f
+    val t = firstActQuality.level
+    println("THE $firstAct DID A $firstActQuality JOB.")
 
-    if (t >= 4) {
-        if (t == 5) {
+    if (t >= 4f) {
+        if (t == 5f) {
             if (firstAct != FirstAct.toreadores) {
-                println("$fna OF THE HORSES OF THE $firstAct KILLED.")
+                println("${fna.asInteger} OF THE HORSES OF THE $firstAct KILLED.")
             }
-            println("$fna OF THE $firstAct KILLED.")
+            println("${fna.asInteger} OF THE $firstAct KILLED.")
         } else {
             println(
                 when (fna) {
@@ -316,7 +350,7 @@ private fun instructions() {
 fun intro() {
     println(" ".repeat(34) + "BULL")
     println(" ".repeat(15) + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY")
-    repeat(3) {
-        println()
-    }
+    println()
+    println()
+    println()
 }
