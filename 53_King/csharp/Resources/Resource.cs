@@ -51,6 +51,28 @@ internal static class Resource
     public static string PollutionPrompt => GetString();
     public static string PollutionError(float rallods) => string.Format(GetString(), rallods);
 
+    public static string DeathsStarvation(float deaths) => string.Format(GetString(), (int)deaths);
+    public static string DeathsPollution(int deaths) => string.Format(GetString(), deaths);
+    public static string FuneralExpenses(int expenses) => string.Format(GetString(), expenses);
+    public static string InsufficientReserves => GetString();
+
+    private static string PollutionEffect(IRandom random) => GetStrings()[random.Next(5)];
+
+    private static string EndAlso(IRandom random)
+        => random.Next(10) switch
+        {
+            <= 3 => GetStrings()[0],
+            <= 6 => GetStrings()[1],
+            _ => GetStrings()[2]
+        };
+
+    public static string EndCongratulations(int termLength) => string.Format(GetString(), termLength);
+    private static string EndConsequences(IRandom random) => GetStrings()[random.Next(2)];
+    public static string EndForeignWorkers(IRandom random) => string.Format(GetString(), EndConsequences(random));
+    public static string EndManyDead(int deaths, IRandom random) => string.Format(GetString(), deaths, EndAlso(random));
+    public static string EndMoneyLeftOver(int termLength) => string.Format(GetString(), termLength);
+    public static string EndOneThirdDead(IRandom random) => string.Format(GetString(), EndConsequences(random));
+    
     public static string SavedYearsPrompt => GetString();
     public static string SavedYearsError(int years) => string.Format(GetString(), years);
     public static string SavedTreasuryPrompt => GetString();
@@ -60,6 +82,8 @@ internal static class Resource
     public static string SavedLandError => GetString();
 
     public static string Goodbye => GetString();
+
+    private static string[] GetStrings([CallerMemberName] string? name = null) => GetString(name).Split(';');
 
     private static string GetString([CallerMemberName] string? name = null)
     {

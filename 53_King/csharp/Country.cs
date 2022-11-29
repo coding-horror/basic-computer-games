@@ -2,14 +2,15 @@ namespace King;
 
 internal class Country
 {
+    private const int InitialLand = 1000;
+
     private readonly IReadWrite _io;
     private readonly IRandom _random;
     private float _rallods;
     private float _countrymen;
     private float _foreigners;
-    private float _land;
-    private float _plantingCost;
-    private float _landValue;
+    private float _arableLand;
+    private float _industryLand;
 
     public Country(IReadWrite io, IRandom random)
         : this(
@@ -18,7 +19,7 @@ internal class Country
             (int)(60000 + random.NextFloat(1000) - random.NextFloat(1000)),
             (int)(500 + random.NextFloat(10) - random.NextFloat(10)),
             0,
-            2000)
+            InitialLand)
     {
     }
 
@@ -29,35 +30,38 @@ internal class Country
         _rallods = rallods;
         _countrymen = countrymen;
         _foreigners = foreigners;
-        _land = land;
-
-        _plantingCost = random.Next(10, 15);
-        _landValue = random.Next(95, 105);
+        _arableLand = land;
     }
 
-    public string Status => Resource.Status(_rallods, _countrymen, _foreigners, _land, _landValue, _plantingCost);
-    private float FarmLand => _land - 1000;
+    public string GetStatus(int landValue, int plantingCost) 
+        => Resource.Status(_rallods, _countrymen, _foreigners, _arableLand, landValue, plantingCost);
+    
+    public float Countrymen => _countrymen;
+    private float FarmLand => _arableLand;
+    public bool HasRallods => _rallods > 0;
+    public float Rallods => _rallods;
+    public float IndustryLand => InitialLand - _arableLand;
 
-    public bool SellLand()
+    public bool SellLand(int landValue, out float landSold)
     {
         if (_io.TryReadValue(
                 SellLandPrompt, 
-                out var landSold, 
+                out landSold, 
                 new ValidityTest(v => v <= FarmLand, () => SellLandError(FarmLand))))
         {
-            _land = (int)(_land - landSold);
-            _rallods = (int)(_rallods + landSold * _landValue);
+            _arableLand = (int)(_arableLand - landSold);
+            _rallods = (int)(_rallods + landSold * landValue);
             return true;
         }
 
         return false;
     }
 
-    public bool DistributeRallods()
+    public bool DistributeRallods(out float rallodsGiven)
     {
         if (_io.TryReadValue(
                 GiveRallodsPrompt,
-                out var rallodsGiven, 
+                out rallodsGiven, 
                 new ValidityTest(v => v <= _rallods, () => GiveRallodsError(_rallods))))
         {
             _rallods = (int)(_rallods - rallodsGiven);
@@ -67,35 +71,48 @@ internal class Country
         return false;
     }
 
-    public bool PlantLand()
+    public bool PlantLand(int plantingCost, out float landPlanted)
     {
-        if (_rallods > 0 && 
-            _io.TryReadValue(
+        if (_io.TryReadValue(
                 PlantLandPrompt, 
-                out var landPlanted, 
+                out landPlanted, 
                 new ValidityTest(v => v <= _countrymen * 2, PlantLandError1),
                 new ValidityTest(v => v <= FarmLand, PlantLandError2(FarmLand)),
-                new ValidityTest(v => v * _plantingCost <= _rallods, PlantLandError3(_rallods))))
+                new ValidityTest(v => v * plantingCost <= _rallods, PlantLandError3(_rallods))))
         {
-            _rallods -= (int)(landPlanted * _plantingCost);
+            _rallods -= (int)(landPlanted * plantingCost);
             return true;
         }
 
         return false;
     }
 
-    public bool ControlPollution()
+    public bool ControlPollution(out float rallodsSpent)
     {
-        if (_rallods > 0 &&
-            _io.TryReadValue(
+        if (_io.TryReadValue(
                 PollutionPrompt,
-                out var rallodsGiven, 
+                out rallodsSpent, 
                 new ValidityTest(v => v <= _rallods, () => PollutionError(_rallods))))
         {
-            _rallods = (int)(_rallods - rallodsGiven);
+            _rallods = (int)(_rallods - rallodsSpent);
             return true;
         }
 
         return false;
     }
+
+    public bool TrySpend(float amount, float landValue)
+    {
+        if (_rallods >= amount)
+        {
+            _rallods -= amount;
+            return true;
+        }
+        
+        _arableLand = (int)(_arableLand - (int)(amount - _rallods) / landValue);
+        _rallods = 0;
+        return false;
+    }
+
+    public void RemoveTheDead(int deaths) => _countrymen = (int)(_countrymen - deaths);
 }

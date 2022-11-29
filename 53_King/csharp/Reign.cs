@@ -5,37 +5,40 @@ internal class Reign
     public const int MaxTerm = 8;
 
     private readonly IReadWrite _io;
+    private readonly IRandom _random;
     private readonly Country _country;
-    private float _year;
+    private float _yearNumber;
 
     public Reign(IReadWrite io, IRandom random)
-        : this(io, new Country(io, random), 1)
+        : this(io, random, new Country(io, random), 1)
     {
     }
 
-    public Reign(IReadWrite io, Country country, float year)
+    public Reign(IReadWrite io, IRandom random, Country country, float year)
     {
         _io = io;
+        _random = random;
         _country = country;
-        _year = year;
+        _yearNumber = year;
     }
 
     public bool PlayYear()
     {
-        _io.Write(_country.Status);
+        var year = new Year(_country, _random);
 
-        var playerSoldLand = _country.SellLand();
-        var playerDistributedRallods = _country.DistributeRallods();
-        var playerPlantedLand = _country.PlantLand();
-        var playerControlledPollution = _country.ControlPollution();
+        _io.Write(year.Status);
 
-        if (playerSoldLand || playerDistributedRallods || playerPlantedLand || playerControlledPollution)
+        if (year.GetPlayerActions())
         {
-            _year++;
+            _io.WriteLine();
+            _io.WriteLine();
+            year.EvaluateResults(_io, _random);
+            _yearNumber++;
             return true;
         }
         else
         {
+            _io.WriteLine();
             _io.Write(Goodbye);
             return false;
         }

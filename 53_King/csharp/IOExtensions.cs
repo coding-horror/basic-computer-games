@@ -13,7 +13,7 @@ internal static class IOExtensions
             io.TryReadValue(SavedWorkersPrompt, out var workers) &&
             io.TryReadValue(SavedLandPrompt, v => v is > 1000 and <= 2000, SavedLandError, out var land))
         {
-            reign = new Reign(io, new Country(io, random, rallods, countrymen, workers, land), years + 1);
+            reign = new Reign(io, random, new Country(io, random, rallods, countrymen, workers, land), years + 1);
             return true;
         }
 
