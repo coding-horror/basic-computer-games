@@ -37,6 +37,7 @@ internal class Country
         => Resource.Status(_rallods, _countrymen, _foreigners, _arableLand, landValue, plantingCost);
     
     public float Countrymen => _countrymen;
+    public bool HasWorkers => _foreigners > 0;
     private float FarmLand => _arableLand;
     public bool HasRallods => _rallods > 0;
     public float Rallods => _rallods;
@@ -115,4 +116,10 @@ internal class Country
     }
 
     public void RemoveTheDead(int deaths) => _countrymen = (int)(_countrymen - deaths);
+
+    public void Migration(int migration) => _countrymen = (int)(_countrymen + migration);
+
+    public void AddWorkers(int newWorkers) => _foreigners = (int)(_foreigners + newWorkers);
+
+    public void SellCrops(int income) => _rallods = (int)(_rallods + income);
 }

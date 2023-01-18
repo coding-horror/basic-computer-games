@@ -24,7 +24,7 @@ internal class Reign
 
     public bool PlayYear()
     {
-        var year = new Year(_country, _random);
+        var year = new Year(_country, _random, _io);
 
         _io.Write(year.Status);
 
@@ -32,7 +32,7 @@ internal class Reign
         {
             _io.WriteLine();
             _io.WriteLine();
-            year.EvaluateResults(_io, _random);
+            year.EvaluateResults();
             _yearNumber++;
             return true;
         }

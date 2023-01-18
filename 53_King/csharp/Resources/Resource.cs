@@ -56,6 +56,18 @@ internal static class Resource
     public static string FuneralExpenses(int expenses) => string.Format(GetString(), expenses);
     public static string InsufficientReserves => GetString();
 
+    public static string WorkerMigration(int newWorkers) => string.Format(GetString(), newWorkers);
+    public static string Migration(int migration) 
+        => string.Format(migration < 0 ? Emigration : Immigration, Math.Abs(migration));
+    public static string Emigration => GetString();
+    public static string Immigration => GetString();
+
+    public static string LandPlanted(float landPlanted) 
+        => landPlanted > 0 ? string.Format(GetString(), (int)landPlanted) : "";
+    public static string Harvest(int yield, int income, bool hasIndustry) 
+        => string.Format(GetString(), yield, HarvestReason(hasIndustry), income);
+    private static string HarvestReason(bool hasIndustry) => hasIndustry ? GetString() : "";
+
     private static string PollutionEffect(IRandom random) => GetStrings()[random.Next(5)];
 
     private static string EndAlso(IRandom random)
