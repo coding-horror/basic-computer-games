@@ -68,7 +68,9 @@ internal static class Resource
         => string.Format(GetString(), yield, HarvestReason(hasIndustry), income);
     private static string HarvestReason(bool hasIndustry) => hasIndustry ? GetString() : "";
 
-    private static string PollutionEffect(IRandom random) => GetStrings()[random.Next(5)];
+    public static string TourismEarnings(int income) => string.Format(GetString(), income);
+    public static string TourismDecrease(IRandom random) => string.Format(GetString(), TourismReason(random));
+    private static string TourismReason(IRandom random) => GetStrings()[random.Next(5)];
 
     private static string EndAlso(IRandom random)
         => random.Next(10) switch
@@ -82,7 +84,7 @@ internal static class Resource
     private static string EndConsequences(IRandom random) => GetStrings()[random.Next(2)];
     public static string EndForeignWorkers(IRandom random) => string.Format(GetString(), EndConsequences(random));
     public static string EndManyDead(int deaths, IRandom random) => string.Format(GetString(), deaths, EndAlso(random));
-    public static string EndMoneyLeftOver(int termLength) => string.Format(GetString(), termLength);
+    public static string EndMoneyLeftOver() => GetString();
     public static string EndOneThirdDead(IRandom random) => string.Format(GetString(), EndConsequences(random));
     
     public static string SavedYearsPrompt => GetString();
@@ -103,7 +105,6 @@ internal static class Resource
         using var reader = new StreamReader(stream);
         return reader.ReadToEnd();
     }
-
 
     private static Stream GetStream([CallerMemberName] string? name = null) =>
         Assembly.GetExecutingAssembly().GetManifestResourceStream($"{typeof(Resource).Namespace}.{name}.txt")

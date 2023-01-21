@@ -15,7 +15,7 @@ internal class Game
 
     public void Play()
     {
-        _io.Write(Resource.Title);
+        _io.Write(Title);
 
         var reign = SetUpReign();
         if (reign != null)
@@ -29,7 +29,7 @@ internal class Game
 
     private Reign? SetUpReign()
     {
-        var response = _io.ReadString(Resource.InstructionsPrompt).ToUpper();
+        var response = _io.ReadString(InstructionsPrompt).ToUpper();
 
         if (response.Equals("Again", StringComparison.InvariantCultureIgnoreCase))
         {
@@ -38,7 +38,7 @@ internal class Game
         
         if (!response.StartsWith("N", StringComparison.InvariantCultureIgnoreCase))
         {
-            _io.Write(Resource.InstructionsText(TermOfOffice));
+            _io.Write(InstructionsText(TermOfOffice));
         }
 
         _io.WriteLine();

@@ -28,19 +28,18 @@ internal class Reign
 
         _io.Write(year.Status);
 
-        if (year.GetPlayerActions())
+        var result = year.GetPlayerActions() ?? year.EvaluateResults() ?? IsAtEndOfTerm();
+        if (result.IsGameOver)
         {
-            _io.WriteLine();
-            _io.WriteLine();
-            year.EvaluateResults();
-            _yearNumber++;
-            return true;
-        }
-        else
-        {
-            _io.WriteLine();
-            _io.Write(Goodbye);
+            _io.WriteLine(result.Message);
             return false;
         }
+
+        return true;
     }
+
+    private Result IsAtEndOfTerm() 
+        => _yearNumber == MaxTerm 
+            ? Result.GameOver(EndCongratulations(MaxTerm)) 
+            : Result.Continue;
 }

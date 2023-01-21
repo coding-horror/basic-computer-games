@@ -37,11 +37,13 @@ internal class Country
         => Resource.Status(_rallods, _countrymen, _foreigners, _arableLand, landValue, plantingCost);
     
     public float Countrymen => _countrymen;
+    public float Workers => _foreigners;
     public bool HasWorkers => _foreigners > 0;
     private float FarmLand => _arableLand;
     public bool HasRallods => _rallods > 0;
     public float Rallods => _rallods;
     public float IndustryLand => InitialLand - _arableLand;
+    public int PreviousTourismIncome { get; private set; }
 
     public bool SellLand(int landValue, out float landSold)
     {
@@ -122,4 +124,10 @@ internal class Country
     public void AddWorkers(int newWorkers) => _foreigners = (int)(_foreigners + newWorkers);
 
     public void SellCrops(int income) => _rallods = (int)(_rallods + income);
+
+    public void EntertainTourists(int income)
+    {
+        PreviousTourismIncome = income;
+        _rallods = (int)(_rallods + income);
+    }
 }

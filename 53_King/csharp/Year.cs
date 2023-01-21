@@ -17,13 +17,15 @@ internal class Year
 
     private float _citizenSupport;
     private int _deaths;
+    private float _starvationDeaths;
     private int _pollutionDeaths;
-
+    private int _migration;
 
     public Year(Country country, IRandom random, IReadWrite io)
     {
         _country = country;
         _random = random;
+        _io = io;
         
         _plantingCost = random.Next(10, 15);
         _landValue = random.Next(95, 105);
@@ -31,34 +33,41 @@ internal class Year
 
     public string Status => _country.GetStatus(_landValue, _plantingCost);
 
-    public bool GetPlayerActions()
+    public Result? GetPlayerActions()
     {
         var playerSoldLand = _country.SellLand(_landValue, out _landSold);
         var playerDistributedRallods = _country.DistributeRallods(out _rallodsDistributed);
         var playerPlantedLand = _country.HasRallods && _country.PlantLand(_plantingCost, out _landPlanted);
         var playerControlledPollution = _country.HasRallods && _country.ControlPollution(out _pollutionControlCost);
 
-        return playerSoldLand || playerDistributedRallods || playerPlantedLand || playerControlledPollution;
+        return playerSoldLand || playerDistributedRallods || playerPlantedLand || playerControlledPollution
+            ? null
+            : Result.GameOver(Goodbye);
     }
 
-    public Result EvaluateResults()
+    public Result? EvaluateResults()
     {
-        var unspentRallods = _country.Rallods;
+        var rallodsUnspent = _country.Rallods;
 
-        var result = EvaluateDeaths();
+        _io.WriteLine();
+        _io.WriteLine();
 
-        return Result.Continue;
+        return EvaluateDeaths() 
+            ?? EvaluateMigration() 
+            ?? EvaluateAgriculture()
+            ?? EvaluateTourism()
+            ?? DetermineResult(rallodsUnspent);
     }
 
     public Result? EvaluateDeaths()
     {
         var supportedCountrymen = _rallodsDistributed / 100;
         _citizenSupport = supportedCountrymen - _country.Countrymen;
-        var starvationDeaths = -_citizenSupport;
-        if (starvationDeaths > 0)
+        _starvationDeaths = -_citizenSupport;
+        if (_starvationDeaths > 0)
         {
             if (supportedCountrymen < 50) { return Result.GameOver(EndOneThirdDead(_random)); }
-            _io.WriteLine(DeathsStarvation(starvationDeaths));
+            _io.WriteLine(DeathsStarvation(_starvationDeaths));
         }
 
         var pollutionControl = _pollutionControlCost >= 25 ? _pollutionControlCost / 25 : 1;
@@ -68,7 +77,7 @@ internal class Year
             _io.WriteLine(DeathsPollution(_pollutionDeaths));
         }
 
-        _deaths = (int)(starvationDeaths + _pollutionDeaths);
+        _deaths = (int)(_starvationDeaths + _pollutionDeaths);
         if (_deaths > 0)
         {
             var funeralCosts = _deaths * 9;
@@ -95,10 +104,10 @@ internal class Year
             _country.AddWorkers(newWorkers);
         }
 
-        var migration = 
+        _migration = 
             (int)(_citizenSupport / 10 + _pollutionControlCost / 25 - _country.IndustryLand / 50 - _pollutionDeaths / 2);
-        _io.WriteLine(Migration(migration));
-        _country.Migration(migration);
+        _io.WriteLine(Migration(_migration));
+        _country.Migration(_migration);
 
         return null;
     }
@@ -117,10 +126,29 @@ internal class Year
         return null;
     }
 
-    internal record struct Result (bool IsGameOver, string Message)
+    private Result? EvaluateTourism()
     {
-        internal static Result GameOver(string message) => new(true, message);
-        internal static Result Continue => new(false, "");
+        var reputationValue = (int)((_country.Countrymen - _migration) * 22 + _random.NextFloat(500));
+        var industryAdjustment = (int)(_country.IndustryLand * 15);
+        var tourismIncome = Math.Abs(reputationValue - industryAdjustment);
+
+        _io.WriteLine(TourismEarnings(tourismIncome));
+        if (industryAdjustment > 0 && tourismIncome < _country.PreviousTourismIncome)
+        {
+            _io.Write(TourismDecrease(_random));
+        }
+
+        _country.EntertainTourists(tourismIncome);
+
+        return null;
+    }
+
+    private Result? DetermineResult(float rallodsUnspent)
+    {
+        if (_deaths > 200) { return Result.GameOver(EndManyDead(_deaths, _random)); }
+        if (_country.Countrymen < 343) { return Result.GameOver(EndOneThirdDead(_random)); }
+        if (rallodsUnspent / 100 > 5 && _starvationDeaths >= 2) { return Result.GameOver(EndMoneyLeftOver()); }
+        if (_country.Workers > _country.Countrymen) { return Result.GameOver(EndForeignWorkers(_random)); }
+        return null;
     }
 }
-
