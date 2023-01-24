@@ -1,0 +1,16 @@
+We are going to play a game based on one of the chess
+moves.  Our queen will be able to move only to the left,
+down, or diagonally down and to the left.
+
+The object of the game is to place the queen in the lower
+left hand square by alternating moves between you and the
+computer.  The first one to place the queen there wins.
+
+You go first and place the queen in any one of the squares
+on the top row or right hand column.
+That will be your first move.
+We alternate moves.
+You may forfeit by typing '0' as your move.
+Be sure to press the return key after each response.
+
+
