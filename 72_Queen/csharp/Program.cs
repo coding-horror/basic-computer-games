@@ -1,3 +1,7 @@
-using Games.Common.IO;
+global using Games.Common.IO;
+global using Games.Common.Randomness;
+global using static Queen.Resources.Resource;
 
-var io = new ConsoleIO();
+using Queen;
+
+new Game(new ConsoleIO(), new RandomNumberGenerator()).Play();
