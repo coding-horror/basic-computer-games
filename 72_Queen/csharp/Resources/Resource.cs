@@ -10,6 +10,7 @@ internal static class Resource
         public static Stream Title => GetStream();
         public static Stream Instructions => GetStream();
         public static Stream YesOrNo => GetStream();
+        public static Stream Board => GetStream();
         public static Stream IllegalStart => GetStream();
         public static Stream ComputerMove => GetStream();
         public static Stream IllegalMove => GetStream();
