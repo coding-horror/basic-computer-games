@@ -12,7 +12,6 @@ internal static class Resource
         public static Stream YesOrNo => GetStream();
         public static Stream Board => GetStream();
         public static Stream IllegalStart => GetStream();
-        public static Stream ComputerMove => GetStream();
         public static Stream IllegalMove => GetStream();
         public static Stream Forfeit => GetStream();
         public static Stream IWin => GetStream();
@@ -28,9 +27,9 @@ internal static class Resource
         public static string Anyone => GetPrompt();
     }
 
-    internal static class Formats
+    internal static class Strings
     {
-        public static string Balance => GetString();
+        public static string ComputerMove(Position position) => string.Format(GetString(), position);
     }
 
     private static string GetPrompt([CallerMemberName] string? name = null) => GetString($"{name}Prompt");
