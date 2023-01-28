@@ -4,4 +4,4 @@ global using static Queen.Resources.Resource;
 
 using Queen;
 
-new Games(new ConsoleIO(), new RandomNumberGenerator()).Play();
+new Game(new ConsoleIO(), new RandomNumberGenerator()).PlaySeries();

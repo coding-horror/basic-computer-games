@@ -13,4 +13,3 @@ We alternate moves.
 You may forfeit by typing '0' as your move.
 Be sure to press the return key after each response.
 
-
