@@ -15,4 +15,4 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+Contrary to the description, the computer picks *five* random numbers per turn, not one.  You are not rewarded based on how close your guess is to one number, but rather to which of these five random numbers (if any) it happens to match exactly.
