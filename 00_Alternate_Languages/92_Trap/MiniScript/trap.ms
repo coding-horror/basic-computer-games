@@ -2,9 +2,9 @@
 // STEVE ULLMAN, 8-1-72
 // Ported to MiniScript by Ryushinaka and Joe Strout, 2023
 
-print "TRAP"
-print "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
-print ""
+print " "*34 + "TRAP"
+print " "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+print 
 
 // constants:
 G = 6    // number of guesses
