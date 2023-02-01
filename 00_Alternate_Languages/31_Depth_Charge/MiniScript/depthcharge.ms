@@ -86,7 +86,7 @@ playGame = function
 	subPos = [floor(rnd*size), floor(rnd*size), floor(rnd*size)]
 	
 	// For debugging, you can give away the answer:
-	print "(Sub is hidden at: " + subPos.join(" ") + ")"
+	//print "(Sub is hidden at: " + subPos.join(" ") + ")"
 	
 	for c in range(1, numCharges)
 		print "Trial " + c
