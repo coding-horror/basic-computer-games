@@ -1,0 +1,1 @@
+   Think again, You've only {0}  rallods left in the treasury.

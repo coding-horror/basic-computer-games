@@ -1,0 +1,17 @@
+
+
+
+Congratulations! You've just been elected Premier of Setats
+Detinu, a small communist island 30 by 70 miles long. Your
+job is to decide upon the country's budget and distribute
+money to your countrymen from the communal treasury.
+The money system is rallods, and each person needs 100
+rallods per year to survive. Your country's income comes
+from farm produce and tourists visiting your magnificent
+forests, hunting, fishing, etc. Half your land if farm land
+which also has an excellent mineral content and may be sold
+to foreign industry (strip mining) who import and support
+their own workers. Crops cost between 10 and 15 rallods per
+square mile to plant.
+Your goal is to complete your {0} year term of office.
+Good luck!

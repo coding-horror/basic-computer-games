@@ -1,0 +1,2 @@
+*** Think again. You only have {0} square miles of farm land.
+{1}

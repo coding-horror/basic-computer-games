@@ -1,0 +1,6 @@
+
+You now have  {0}  rallods in the treasury.
+ {1} countrymen,  {2} foreign workers and {3} sq. miles of land.
+This year industry will buy land for {4} rallods per square mile.
+Land currently costs {5} rallods per square mile to plant.
+
