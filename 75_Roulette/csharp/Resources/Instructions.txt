@@ -1,0 +1,48 @@
+
+This is the betting layout
+  (*=RED)
+
+ 1*    2     3*
+ 4     5*    6 
+ 7*    8     9*
+10    11    12*
+---------------
+13    14*   15 
+16*   17    18*
+19*   20    21*
+22    23*   24 
+---------------
+25*   26    27*
+28    29    30*
+31    32*   33 
+34*   35    36*
+---------------
+    00    0    
+
+Types of bets
+
+The numbers 1 to 36 signify a straight bet
+on that number.
+These pay off 35:1
+
+The 2:1 bets are:
+ 37) 1-12     40) First column
+ 38) 13-24    41) Second column
+ 39) 25-36    42) Third column
+
+The even money bets are:
+ 43) 1-18     46) Odd
+ 44) 19-36    47) Red
+ 45) Even     48) Black
+
+49)0 and 50)00 pay off 35:1
+Note: 0 and 00 do not count under any
+      bets except their own.
+
+When I ask for each bet, type the number
+and the amount, separated by a comma.
+For example: to bet $500 on Black, type 48,500
+when I ask for a bet.
+
+The minimum bet is $5, the maximum is $500.
+

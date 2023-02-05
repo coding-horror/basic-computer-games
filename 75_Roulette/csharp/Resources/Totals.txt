@@ -1,0 +1,2 @@
+Totals        Me            You
+               {0,-14}{1}

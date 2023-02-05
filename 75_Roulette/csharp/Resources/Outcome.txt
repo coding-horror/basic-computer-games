@@ -1,0 +1,1 @@
+You {0} {1} dollars on bet {2}
