@@ -24,10 +24,10 @@ internal static class Resource
         private static string Slot(int number, [CallerMemberName] string? colour = null)
             => string.Format(GetString(), number, colour);
 
-        public static string Lose(int amount, int bet) => Outcome(amount, bet);
-        public static string Win(int amount, int bet) => Outcome(amount, bet);
-        private static string Outcome(int amount, int bet, [CallerMemberName] string? winlose = null)
-            => string.Format(GetString(), winlose, amount, bet);
+        public static string Lose(Bet bet) => Outcome(bet.Wager, bet.Number);
+        public static string Win(Bet bet) => Outcome(bet.Payout, bet.Number);
+        private static string Outcome(int amount, int number, [CallerMemberName] string? winlose = null)
+            => string.Format(GetString(), winlose, amount, number);
 
         public static string Totals(int me, int you) => string.Format(GetString(), me, you);
 
