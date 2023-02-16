@@ -4,11 +4,11 @@ internal class Table
 {
     private readonly IReadWrite _io;
     private readonly Wheel _wheel;
-    private readonly Croupier _house;
+    private readonly Croupier _croupier;
 
-    public Table(Croupier house, IReadWrite io, IRandom random)
+    public Table(Croupier croupier, IReadWrite io, IRandom random)
     {
-        _house = house;
+        _croupier = croupier;
         _io = io;
         _wheel = new(random);
     }
@@ -19,20 +19,9 @@ internal class Table
         var slot = SpinWheel();
         SettleBets(bets, slot);
 
-        _io.Write(_house.Totals);
+        _io.Write(_croupier.Totals);
 
-        if (_house.PlayerIsBroke)
-        {
-            _io.Write(Streams.LastDollar);
-            _io.Write(Streams.Thanks);
-            return false;
-        }
-
-        if (_house.HouseIsBroke)
-        {
-            _io.Write(Streams.BrokeHouse);
-            return false;
-        }
+        if (_croupier.PlayerIsBroke || _croupier.HouseIsBroke) { return false; }
 
         return _io.ReadString(Prompts.Again).ToLowerInvariant().StartsWith('y');
     }
@@ -76,7 +65,7 @@ internal class Table
     {
         foreach (var bet in bets)
         {
-            _io.Write(slot.IsCoveredBy(bet) ? _house.Pay(bet) : _house.Take(bet));
+            _io.Write(slot.IsCoveredBy(bet) ? _croupier.Pay(bet) : _croupier.Take(bet));
         }
     }
 }

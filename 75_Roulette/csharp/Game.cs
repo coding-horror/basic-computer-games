@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Roulette;
 
 internal class Game
@@ -7,14 +5,14 @@ internal class Game
     private readonly IReadWrite _io;
     private readonly IRandom _random;
     private readonly Table _table;
-    private readonly Croupier _house;
+    private readonly Croupier _croupier;
 
     public Game(IReadWrite io, IRandom random)
     {
         _io = io;
         _random = random;
-        _house = new();
-        _table = new(_house, io, random);
+        _croupier = new();
+        _table = new(_croupier, io, random);
     }
 
     public void Play()
@@ -27,13 +25,18 @@ internal class Game
 
         while (_table.Play());
 
-        if (!_house.PlayerIsBroke)
+        if (_croupier.PlayerIsBroke)
         {
-            _house.CutCheck(_io, _random);
-        }
-        else
-        {
+            _io.Write(Streams.LastDollar);
             _io.Write(Streams.Thanks);
+            return;
         }
+
+        if (_croupier.HouseIsBroke)
+        {
+            _io.Write(Streams.BrokeHouse);
+        }
+
+        _croupier.CutCheck(_io, _random);
     }
 }
