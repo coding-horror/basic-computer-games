@@ -5,7 +5,8 @@ pub struct Galaxy {
     pub game_status: GameStatus
 }
 
-pub struct Pos(u8, u8);
+#[derive(PartialEq)]
+pub struct Pos(pub u8, pub u8);
 
 impl Pos {
     pub fn as_index(&self) -> usize {

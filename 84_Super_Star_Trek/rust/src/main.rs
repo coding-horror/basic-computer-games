@@ -1,34 +1,54 @@
-use model::{Galaxy, GameStatus, Pos, Quadrant};
+use std::io::stdin;
+
+use model::{Galaxy, GameStatus};
+use update::Message;
 
 mod model;
+mod view;
+mod update;
 
 fn main() {
     let mut galaxy = Galaxy::generate_new();
-    // create the model
-    // start the loop
     loop {
-        view(&galaxy);
-        galaxy = wait_for_command(&galaxy);
+        view::view(&galaxy);
+        let command = wait_for_command(&galaxy.game_status);
+        galaxy = update::update(command, galaxy)
     }
-    // rather than using a loop, recursion and passing the ownership might be better
 }
 
-fn view(model: &Galaxy) {
-    match model.game_status {
-        GameStatus::ShortRangeScan => {
-            let quadrant = &model.quadrants[model.enterprise.sector.as_index()];
-            render_quadrant(&model.enterprise.sector, quadrant)
+fn wait_for_command(game_status: &GameStatus) -> Message {
+    let stdin = stdin();
+    loop {
+        match game_status {
+            _ => {
+                println!("Command?");
+                let mut buffer = String::new();
+                if let Ok(_) = stdin.read_line(&mut buffer) {
+                    let text = buffer.trim_end();
+                    if let Some(msg) = as_message(text, game_status) {
+                        return msg
+                    }
+                    print_command_help();
+                }
+            }
         }
     }
 }
 
-fn render_quadrant(enterprise_sector: &Pos, quadrant: &Quadrant) {
-    
+fn as_message(text: &str, game_status: &GameStatus) -> Option<Message> {
+    if text == "" {
+        return None
+    }
+    match game_status {
+        _ => {
+            match text {
+                "SRS" => Some(Message::RequestShortRangeScan),
+                _ => None
+            }
+        }
+    }
 }
 
-fn wait_for_command(galaxy: &Galaxy) -> Galaxy {
-    // listen for command from readline
-    // handle bad commands
-    // update model
-    Galaxy::generate_new()
+fn print_command_help() {
+    println!("valid commands are just SRS at the mo")
 }
