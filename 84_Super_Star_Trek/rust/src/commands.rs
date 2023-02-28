@@ -3,6 +3,17 @@ use crate::model::{Galaxy, Pos, SectorStatus, COURSES};
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
 
+    let data : [String; 8] = [
+        format!("Stardate           {}", model.stardate),
+        format!("Condition          {:?}", model.enterprise.condition),
+        format!("Quadrant           {}", model.enterprise.quadrant),
+        format!("Sector             {}", model.enterprise.sector),
+        format!("Photon torpedoes   {}", model.enterprise.photon_torpedoes),
+        format!("Total energy       {}", model.enterprise.total_energy),
+        format!("Shields            {}", model.enterprise.shields),
+        format!("Klingons remaining {}", model.remaining_klingons()),
+    ];
+
     println!("{:-^33}", "");
     for y in 0..=7 {
         for x in 0..=7 {
@@ -14,11 +25,11 @@ pub fn short_range_scan(model: &Galaxy) {
                     SectorStatus::Star => print!(" *  "),
                     SectorStatus::StarBase => print!(">!< "),
                     SectorStatus::Klingon => print!("+K+ "),
-                    _ => print!("   "),
+                    _ => print!("    "),
                 }                
             } 
         }
-        print!("\n")
+        println!("{:>9}{}", "", data[y as usize])
     }
     println!("{:-^33}", "");
 }

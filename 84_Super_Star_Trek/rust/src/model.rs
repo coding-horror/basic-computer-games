@@ -3,6 +3,7 @@ use std::{ops::{Mul, Add}, fmt::Display};
 use rand::Rng;
 
 pub struct Galaxy {
+    pub stardate: f32,
     pub quadrants: Vec<Quadrant>,
     pub enterprise: Enterprise
 }
@@ -18,8 +19,17 @@ pub struct Klingon {
 }
 
 pub struct Enterprise {
+    pub condition: Condition,
     pub quadrant: Pos,
     pub sector: Pos,
+    pub photon_torpedoes: u8,
+    pub total_energy: u16,
+    pub shields: u16,
+}
+
+#[derive(Debug)]
+pub enum Condition {
+    Green, Yellow, Red
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -70,6 +80,11 @@ pub enum SectorStatus {
 }
 
 impl Galaxy {
+    pub fn remaining_klingons(&self) -> u8 {
+        let quadrants = &self.quadrants;
+        quadrants.into_iter().map(|q| { q.klingons.len() as u8 }).sum::<u8>()
+    }
+
     pub fn generate_new() -> Self {
         let quadrants = Self::generate_quadrants();
 
@@ -78,8 +93,15 @@ impl Galaxy {
         let enterprise_sector = quadrants[enterprise_quadrant.as_index()].find_empty_sector();
 
         Galaxy { 
+            stardate: 3800.0,
             quadrants: quadrants, 
-            enterprise: Enterprise { quadrant: enterprise_quadrant, sector: enterprise_sector }
+            enterprise: Enterprise { 
+                condition: Condition::Green, 
+                quadrant: enterprise_quadrant, 
+                sector: enterprise_sector,
+                photon_torpedoes: 28,
+                total_energy: 3000,
+                shields: 0 }
         }
     }    
 
