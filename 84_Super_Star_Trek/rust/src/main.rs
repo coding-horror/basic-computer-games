@@ -2,6 +2,8 @@ use std::{io::{stdin, stdout, Write}, process::exit, str::FromStr};
 
 use model::{Galaxy, Pos};
 
+use crate::model::DIRECTIONS;
+
 mod model;
 mod commands;
 
@@ -14,7 +16,7 @@ fn main() {
     commands::short_range_scan(&galaxy);
 
     loop {
-        match prompt("Command?").as_str() {
+        match prompt("Command?").to_uppercase().as_str() {
             "SRS" => commands::short_range_scan(&galaxy),
             "NAV" => gather_dir_and_speed_then_move(&mut galaxy),
             _ => print_command_help()
@@ -28,22 +30,25 @@ fn main() {
 
 fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
     const BAD_NAV: &str = "   Lt. Sulu reports, 'Incorrect course data, sir!'";
-    
+
     let dir = prompt_value::<u8>("Course (1-9)?", 1, 9);
     if dir.is_none() {
         println!("{}", BAD_NAV); 
         return;
     }
 
-    let speed = prompt_value::<f32>("Course (1-9)?", 0.0, 8.0);
+    let speed = prompt_value::<f32>("Warp Factor (0-8)?", 0.0, 8.0);
     if speed.is_none() {
         println!("{}", BAD_NAV); 
         return;
     }
 
-    let distance = (speed.unwrap() * 8.0) as u8;
+    let distance = (speed.unwrap() * 8.0) as i8;
     let galaxy_pos = galaxy.enterprise.quadrant * 8u8 + galaxy.enterprise.sector;
-    let (mut nx, mut ny) = galaxy_pos.translate(dir.unwrap(), distance);
+
+    let (dx, dy): (i8, i8) = DIRECTIONS[(dir.unwrap() - 1) as usize];
+    let mut nx = (galaxy_pos.0 as i8) + dx * distance;
+    let mut ny = (galaxy_pos.1 as i8) + dy * distance;
 
     let mut hit_edge = false;
     if nx < 0 {
@@ -77,12 +82,9 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
     galaxy.enterprise.quadrant = new_quadrant;
     galaxy.enterprise.sector = new_sector;
         
-    // could be done with a step function - while distance > 0, move by digit.
-    // if passing a boundary, test for the next quadrant in that direction
-    // if present, change quadrant and move to border
-    // else stop.
-    // one way to sort this would be to convert current pos to a galaxy pos (e.g. sector.x, y * 8), 
-    // add dist, then mod/divide to get quadrant and new sector
+    // if new_quadrant isnt old quadrant print intro
+
+    commands::short_range_scan(&galaxy)
 }
 
 fn prompt(prompt_text: &str) -> String {

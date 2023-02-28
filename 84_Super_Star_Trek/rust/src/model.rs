@@ -11,26 +11,8 @@ pub struct Galaxy {
 pub struct Pos(pub u8, pub u8);
 
 impl Pos {
-    const DIRECTIONS : [(i8, i8); 8] = [
-        (1, 0),
-        (1, -1),
-        (0, -1),
-        (-1, -1),
-        (-1, 0),
-        (-1, 1),
-        (0, 1),
-        (1, 1),
-    ];
-
     pub fn as_index(&self) -> usize {
         (self.0 * 8 + self.1).into()
-    }
-
-    pub fn translate(&self, dir: u8, dist: u8) -> (i8, i8) {
-        let (dx, dy): (i8, i8) = Self::DIRECTIONS[dir as usize];
-        let x = (self.0 as i8) + dx * dist as i8;
-        let y = (self.1 as i8) + dy * dist as i8;
-        (x, y)
     }
 }
 
@@ -52,9 +34,20 @@ impl Add<Pos> for Pos {
 
 impl Display for Pos {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        write!(f, "{} , {}", self.0, self.1)
     }
 }
+
+pub const DIRECTIONS : [(i8, i8); 8] = [
+    (1, 0),
+    (1, -1),
+    (0, -1),
+    (-1, -1),
+    (-1, 0),
+    (-1, 1),
+    (0, 1),
+    (1, 1),
+];
 
 #[derive(PartialEq)]
 pub enum SectorStatus {
