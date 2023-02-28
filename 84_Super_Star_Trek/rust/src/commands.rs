@@ -1,7 +1,7 @@
 use crate::model::{Galaxy, Pos, SectorStatus, COURSES};
 
 pub fn short_range_scan(model: &Galaxy) {
-    let quadrant = &model.quadrants[model.enterprise.sector.as_index()];
+    let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
 
     println!("{:-^33}", "");
     for y in 0..=7 {
