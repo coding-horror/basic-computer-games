@@ -1,12 +1,9 @@
 use std::{io::{stdin, stdout, Write}, process::exit, str::FromStr};
 
-use model::Galaxy;
-
-use crate::text_constants::BAD_NAV;
+use model::{Galaxy, Pos};
 
 mod model;
 mod commands;
-mod text_constants;
 
 fn main() {
     ctrlc::set_handler(move || { exit(0) })
@@ -30,6 +27,8 @@ fn main() {
 }
 
 fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
+    const BAD_NAV: &str = "   Lt. Sulu reports, 'Incorrect course data, sir!'";
+    
     let dir = prompt_value::<u8>("Course (1-9)?", 1, 9);
     if dir.is_none() {
         println!("{}", BAD_NAV); 
@@ -42,7 +41,42 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
         return;
     }
 
-    let distance = (speed.unwrap() * 8.0) as i32;
+    let distance = (speed.unwrap() * 8.0) as u8;
+    let galaxy_pos = galaxy.enterprise.quadrant * 8u8 + galaxy.enterprise.sector;
+    let (mut nx, mut ny) = galaxy_pos.translate(dir.unwrap(), distance);
+
+    let mut hit_edge = false;
+    if nx < 0 {
+        nx = 0;
+        hit_edge = true;
+    }
+    if ny < 0 {
+        ny = 0;
+        hit_edge = true;
+    }
+    if nx >= 64 {
+        ny = 63;
+        hit_edge = true;
+    }
+    if nx >= 64 {
+        ny = 63;
+        hit_edge = true;
+    }
+    
+    let new_quadrant = Pos((nx / 8) as u8, (ny / 8) as u8);
+    let new_sector = Pos((nx % 8) as u8, (ny % 8) as u8);
+
+    if hit_edge {
+        println!("Lt. Uhura report message from Starfleet Command:
+        'Permission to attempt crossing of galactic perimeter
+        is hereby *Denied*. Shut down your engines.'
+      Chief Engineer Scott reports, 'Warp engines shut down
+        at sector {} of quadrant {}.'", new_quadrant, new_sector);
+    }
+
+    galaxy.enterprise.quadrant = new_quadrant;
+    galaxy.enterprise.sector = new_sector;
+        
     // could be done with a step function - while distance > 0, move by digit.
     // if passing a boundary, test for the next quadrant in that direction
     // if present, change quadrant and move to border

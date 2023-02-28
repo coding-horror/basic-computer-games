@@ -1,3 +1,5 @@
+use std::{ops::{Mul, Add}, fmt::Display};
+
 use rand::Rng;
 
 pub struct Galaxy {
@@ -5,12 +7,52 @@ pub struct Galaxy {
     pub enterprise: Enterprise
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 pub struct Pos(pub u8, pub u8);
 
 impl Pos {
+    const DIRECTIONS : [(i8, i8); 8] = [
+        (1, 0),
+        (1, -1),
+        (0, -1),
+        (-1, -1),
+        (-1, 0),
+        (-1, 1),
+        (0, 1),
+        (1, 1),
+    ];
+
     pub fn as_index(&self) -> usize {
         (self.0 * 8 + self.1).into()
+    }
+
+    pub fn translate(&self, dir: u8, dist: u8) -> (i8, i8) {
+        let (dx, dy): (i8, i8) = Self::DIRECTIONS[dir as usize];
+        let x = (self.0 as i8) + dx * dist as i8;
+        let y = (self.1 as i8) + dy * dist as i8;
+        (x, y)
+    }
+}
+
+impl Mul<u8> for Pos {
+    type Output = Self;
+
+    fn mul(self, rhs: u8) -> Self::Output {
+        Pos(self.0 * rhs, self.1 * rhs)
+    }
+}
+
+impl Add<Pos> for Pos {
+    type Output = Self;
+
+    fn add(self, rhs: Pos) -> Self::Output {
+        Pos(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+
+impl Display for Pos {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        todo!()
     }
 }
 
