@@ -5,8 +5,9 @@ pub fn view(model: &Galaxy) {
     match model.game_status {
         GameStatus::ShortRangeScan => {
             let quadrant = &model.quadrants[model.enterprise.sector.as_index()];
-            render_quadrant(&model.enterprise.sector, quadrant)
-        }
+            render_quadrant(&model.enterprise.sector, quadrant);
+        },
+        _ => ()
     }
 }
 

@@ -36,7 +36,9 @@ pub struct Enterprise {
 }
 
 pub enum GameStatus {
-    ShortRangeScan
+    ShortRangeScan,
+    NeedDirectionForNav,
+    NeedSpeedForNav(u8),
 }
 
 impl Galaxy {

@@ -17,35 +17,63 @@ fn main() {
 }
 
 fn wait_for_command(game_status: &GameStatus) -> Message {
-    let stdin = stdin();
-    let mut stdout = stdout();
     loop {
         match game_status {
-            _ => {
-                print!("Command? ");
-                let _ = stdout.flush();
-
-                let mut buffer = String::new();
-                if let Ok(_) = stdin.read_line(&mut buffer) {
-                    let text = buffer.trim_end();
-                    if let Some(msg) = as_message(text, game_status) {
-                        return msg
-                    }
-                    print_command_help();
+            GameStatus::NeedDirectionForNav => {
+                let text = prompt("Course (1-9)?");
+                if let Some(msg) = as_message(&text, game_status) {
+                    return msg
                 }
+            },
+            GameStatus::NeedSpeedForNav(_) => {
+                let text = prompt("Warp Factor (0-8)?");
+                if let Some(msg) = as_message(&text, game_status) {
+                    return msg
+                }
+            },
+            _ => {
+                let text = prompt("Command?");
+                if let Some(msg) = as_message(&text, game_status) {
+                    return msg
+                }
+                print_command_help();
             }
         }
     }
 }
 
-fn as_message(text: &str, game_status: &GameStatus) -> Option<Message> {
-    if text == "" {
-        return None
+fn prompt(prompt: &str) -> String {
+    let stdin = stdin();
+    let mut stdout = stdout();
+
+    print!("{prompt} ");
+    let _ = stdout.flush();
+
+    let mut buffer = String::new();
+    if let Ok(_) = stdin.read_line(&mut buffer) {
+        return buffer.trim_end().into();
     }
+    "".into()
+}
+
+fn as_message(text: &str, game_status: &GameStatus) -> Option<Message> {
     match game_status {
+        GameStatus::NeedDirectionForNav => {
+            match text.parse::<u8>() {
+                Ok(n) if (n >= 1 && n <= 8) => Some(Message::DirectionForNav(n)),
+                _ => None
+            }
+        },
+        GameStatus::NeedSpeedForNav(dir) => {
+            match text.parse::<u8>() {
+                Ok(n) if (n >= 1 && n <= 8) => Some(Message::DirectionAndSpeedForNav(*dir, n)),
+                _ => None
+            }
+        }
         _ => {
             match text {
                 "SRS" => Some(Message::RequestShortRangeScan),
+                "NAV" => Some(Message::RequestNavigation),
                 _ => None
             }
         }
@@ -53,5 +81,5 @@ fn as_message(text: &str, game_status: &GameStatus) -> Option<Message> {
 }
 
 fn print_command_help() {
-    println!("valid commands are just SRS at the mo")
+    println!("valid commands are just SRS and NAV at the mo")
 }
