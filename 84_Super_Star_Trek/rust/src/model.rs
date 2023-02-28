@@ -7,6 +7,21 @@ pub struct Galaxy {
     pub enterprise: Enterprise
 }
 
+pub struct Quadrant {
+    pub stars: Vec<Pos>,
+    pub star_base: Option<Pos>,
+    pub klingons: Vec<Klingon>
+}
+
+pub struct Klingon {
+    pub sector: Pos
+}
+
+pub struct Enterprise {
+    pub quadrant: Pos,
+    pub sector: Pos,
+}
+
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Pos(pub u8, pub u8);
 
@@ -52,21 +67,6 @@ pub const COURSES : [(i8, i8); 8] = [
 #[derive(PartialEq)]
 pub enum SectorStatus {
     Empty, Star, StarBase, Klingon
-}
-
-pub struct Quadrant {
-    pub stars: Vec<Pos>,
-    pub star_base: Option<Pos>,
-    pub klingons: Vec<Klingon>
-}
-
-pub struct Klingon {
-    pub sector: Pos
-}
-
-pub struct Enterprise {
-    pub quadrant: Pos,
-    pub sector: Pos,
 }
 
 impl Galaxy {
