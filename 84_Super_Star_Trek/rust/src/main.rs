@@ -1,44 +1,27 @@
-use std::io::{stdin, stdout, Write};
+use std::{io::{stdin, stdout, Write}, process::exit};
 
-use model::{Galaxy, GameStatus};
-use update::Message;
+use model::Galaxy;
 
 mod model;
-mod view;
-mod update;
+mod commands;
 
 fn main() {
-    let mut galaxy = Galaxy::generate_new();
-    loop {
-        view::view(&galaxy);
-        let command = wait_for_command(&galaxy.game_status);
-        galaxy = update::update(command, galaxy)
-    }
-}
+    ctrlc::set_handler(move || { exit(0) })
+    .expect("Error setting Ctrl-C handler");
 
-fn wait_for_command(game_status: &GameStatus) -> Message {
+    let galaxy = Galaxy::generate_new();
+    // init ops, starting state and notes
+    commands::short_range_scan(&galaxy);
+
     loop {
-        match game_status {
-            GameStatus::NeedDirectionForNav => {
-                let text = prompt("Course (1-9)?");
-                if let Some(msg) = as_message(&text, game_status) {
-                    return msg
-                }
-            },
-            GameStatus::NeedSpeedForNav(_) => {
-                let text = prompt("Warp Factor (0-8)?");
-                if let Some(msg) = as_message(&text, game_status) {
-                    return msg
-                }
-            },
-            _ => {
-                let text = prompt("Command?");
-                if let Some(msg) = as_message(&text, game_status) {
-                    return msg
-                }
-                print_command_help();
-            }
+        match prompt("Command?").as_str() {
+            "SRS" => commands::short_range_scan(&galaxy),
+            _ => print_command_help()
         }
+
+        // process the next command, based on it render something or update the galaxy or whatever
+        // this would be: read command, and based on it run dedicated function
+        // the function might get passed a mutable reference to the galaxy
     }
 }
 
@@ -56,30 +39,11 @@ fn prompt(prompt: &str) -> String {
     "".into()
 }
 
-fn as_message(text: &str, game_status: &GameStatus) -> Option<Message> {
-    match game_status {
-        GameStatus::NeedDirectionForNav => {
-            match text.parse::<u8>() {
-                Ok(n) if (n >= 1 && n <= 8) => Some(Message::DirectionForNav(n)),
-                _ => None
-            }
-        },
-        GameStatus::NeedSpeedForNav(dir) => {
-            match text.parse::<u8>() {
-                Ok(n) if (n >= 1 && n <= 8) => Some(Message::DirectionAndSpeedForNav(*dir, n)),
-                _ => None
-            }
-        }
-        _ => {
-            match text {
-                "SRS" => Some(Message::RequestShortRangeScan),
-                "NAV" => Some(Message::RequestNavigation),
-                _ => None
-            }
-        }
-    }
-}
-
 fn print_command_help() {
     println!("valid commands are just SRS and NAV at the mo")
 }
+
+// match text.parse::<u8>() {
+//     Ok(n) if (n >= 1 && n <= 8) => Some(Message::DirectionForNav(n)),
+//     _ => None
+// }

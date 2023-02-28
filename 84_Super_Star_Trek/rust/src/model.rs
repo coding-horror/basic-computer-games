@@ -2,8 +2,7 @@ use rand::Rng;
 
 pub struct Galaxy {
     pub quadrants: Vec<Quadrant>,
-    pub enterprise: Enterprise,
-    pub game_status: GameStatus
+    pub enterprise: Enterprise
 }
 
 #[derive(PartialEq)]
@@ -35,12 +34,6 @@ pub struct Enterprise {
     pub sector: Pos,
 }
 
-pub enum GameStatus {
-    ShortRangeScan,
-    NeedDirectionForNav,
-    NeedSpeedForNav(u8),
-}
-
 impl Galaxy {
     pub fn generate_new() -> Self {
         let quadrants = Self::generate_quadrants();
@@ -51,8 +44,7 @@ impl Galaxy {
 
         Galaxy { 
             quadrants: quadrants, 
-            enterprise: Enterprise { quadrant: enterprise_quadrant, sector: enterprise_sector }, 
-            game_status: GameStatus::ShortRangeScan 
+            enterprise: Enterprise { quadrant: enterprise_quadrant, sector: enterprise_sector }
         }
     }    
 
