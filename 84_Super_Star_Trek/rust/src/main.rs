@@ -47,6 +47,8 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
     // if passing a boundary, test for the next quadrant in that direction
     // if present, change quadrant and move to border
     // else stop.
+    // one way to sort this would be to convert current pos to a galaxy pos (e.g. sector.x, y * 8), 
+    // add dist, then mod/divide to get quadrant and new sector
 }
 
 fn prompt(prompt_text: &str) -> String {
