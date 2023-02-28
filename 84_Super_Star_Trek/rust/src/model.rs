@@ -7,7 +7,7 @@ pub struct Galaxy {
     pub enterprise: Enterprise
 }
 
-#[derive(PartialEq, Clone, Copy)]
+#[derive(PartialEq, Clone, Copy, Debug)]
 pub struct Pos(pub u8, pub u8);
 
 impl Pos {
