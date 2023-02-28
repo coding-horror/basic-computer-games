@@ -38,7 +38,7 @@ impl Display for Pos {
     }
 }
 
-pub const DIRECTIONS : [(i8, i8); 8] = [
+pub const COURSES : [(i8, i8); 8] = [
     (1, 0),
     (1, -1),
     (0, -1),
