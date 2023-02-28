@@ -1,4 +1,4 @@
-use std::io::stdin;
+use std::io::{stdin, stdout, Write};
 
 use model::{Galaxy, GameStatus};
 use update::Message;
@@ -18,10 +18,13 @@ fn main() {
 
 fn wait_for_command(game_status: &GameStatus) -> Message {
     let stdin = stdin();
+    let mut stdout = stdout();
     loop {
         match game_status {
             _ => {
-                println!("Command?");
+                print!("Command? ");
+                let _ = stdout.flush();
+
                 let mut buffer = String::new();
                 if let Ok(_) = stdin.read_line(&mut buffer) {
                     let text = buffer.trim_end();

@@ -1,4 +1,4 @@
-use crate::model::{Galaxy, GameStatus, Quadrant, Pos, Klingon};
+use crate::model::{Galaxy, GameStatus, Quadrant, Pos, SectorStatus};
 
 
 pub fn view(model: &Galaxy) {
@@ -17,19 +17,16 @@ fn render_quadrant(enterprise_sector: &Pos, quadrant: &Quadrant) {
             let pos = Pos(x, y);
             if &pos == enterprise_sector {
                 print!("<*> ")
-            } else if quadrant.stars.contains(&pos) {
-                print!(" *  ")
-            } else if quadrant.star_bases.contains(&pos) {
-                print!(">!< ")
-            } else if let Some(_) = find_klingon(&pos, &quadrant.klingons) {
-                print!("+K+ ")
-            }
+            } else {
+                match quadrant.sector_status(&pos) {
+                    SectorStatus::Star => print!(" *  "),
+                    SectorStatus::StarBase => print!(">!< "),
+                    SectorStatus::Klingon => print!("+K+ "),
+                    _ => print!("   "),
+                }                
+            } 
         }
         print!("\n")
     }
     println!("{:-^33}", "");
-}
-
-fn find_klingon<'a>(sector: &Pos, klingons: &'a Vec<Klingon>) -> Option<&'a Klingon> {
-    klingons.into_iter().find(|k| &k.sector == sector)
 }
