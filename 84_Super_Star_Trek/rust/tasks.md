@@ -19,3 +19,9 @@ Started after movement and display of stats was finished (no energy management o
     - when moving across a sector, the enterprise should stop before it runs into something
     - the current move is a jump, which makes this problematic. would need to rewrite it
 - [x] better command reading - support entering multiple values on a line (e.g. nav 3 0.1)
+- [ ] starbases
+    - [ ] repair
+- [ ] weapons
+    - [ ] phasers
+    - [ ] torpedoes
+- [ ] restarting the game
