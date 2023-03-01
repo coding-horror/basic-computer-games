@@ -174,3 +174,20 @@ pub fn insuffient_warp_energy(warp_speed: f32) {
 pub fn divert_energy_from_shields() {
     println!("Shield Control supplies energy to complete the maneuver.")
 }
+
+pub fn energy_available(total_energy: u16) {
+    println!("Energy available = {{{total_energy}}}")
+}
+
+pub fn shields_unchanged() {
+    println!("<SHIELDS UNCHANGED>")
+}
+
+pub fn ridiculous() {
+    println!("Shield Control reports, 'This is not the Federation Treasury.'")
+}
+
+pub fn shields_set(value: u16) {
+    println!("Deflector control room report:
+  'Shields now at {value} units per your command.'")
+}

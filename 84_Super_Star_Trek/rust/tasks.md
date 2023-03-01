@@ -7,9 +7,9 @@ Started after movement and display of stats was finished (no energy management o
 - [x] add intro
 - [x] add entering (and starting in) sector headers
 - [x] conditions and danger messages
-- [ ] remove energy on move
-- [ ] shields
-    - [ ] shield control
+- [x] remove energy on move
+- [x] shields
+    - [x] shield control
     - [ ] shield hit absorption
 - [ ] subsystem damage
     - and support for reports

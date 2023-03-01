@@ -27,6 +27,7 @@ fn main() {
         match command[0].to_uppercase().as_str() {
             "SRS" => view::short_range_scan(&galaxy),
             "NAV" => gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
+            "SHE" => get_amount_and_set_shields(&mut galaxy, command[1..].into()),
             _ => view::print_command_help()
         }
 
@@ -35,6 +36,27 @@ fn main() {
             break;
         }
     }
+}
+
+fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
+
+    // todo check for damaged module
+
+    view::energy_available(galaxy.enterprise.total_energy);
+    let value = param_or_prompt_value(&provided, 0, "Number of units to shields", 0, i32::MAX);
+    if value.is_none() {
+        view::shields_unchanged();
+        return;
+    }
+    let value = value.unwrap() as u16;
+    if value > galaxy.enterprise.total_energy {
+        view::ridiculous();
+        view::shields_unchanged();
+        return;
+    }
+
+    galaxy.enterprise.shields = value;
+    view::shields_set(value);
 }
 
 fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>) {
