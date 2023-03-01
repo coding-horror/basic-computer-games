@@ -2,6 +2,8 @@ use std::{io::{stdin, stdout, Write}, process::exit, str::FromStr};
 
 use model::Galaxy;
 
+use crate::model::Condition;
+
 mod model;
 mod commands;
 
@@ -10,7 +12,7 @@ fn main() {
     .expect("Error setting Ctrl-C handler");
 
     let mut galaxy = Galaxy::generate_new();
-    // init options, starting state and notes
+    // todo: init options, starting state and notes
     commands::short_range_scan(&galaxy);
 
     loop {
@@ -18,6 +20,14 @@ fn main() {
             "SRS" => commands::short_range_scan(&galaxy),
             "NAV" => gather_dir_and_speed_then_move(&mut galaxy),
             _ => print_command_help()
+        }
+
+        if galaxy.enterprise.condition == Condition::Destroyed { // todo: also check if stranded
+            println!("Is is stardate {}.
+            There were {} Klingon battle cruisers left at
+            the end of your mission.
+            ", galaxy.stardate, galaxy.remaining_klingons());
+            break;
         }
     }
 }
@@ -37,6 +47,21 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
         return;
     }
 
+    let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
+    for k in 0..quadrant.klingons.len() {
+        let new_sector = quadrant.find_empty_sector();
+        quadrant.klingons[k].sector = new_sector;
+    }
+
+    // todo: check if enterprise is protected by a starbase
+
+    for k in 0..quadrant.klingons.len() {
+        quadrant.klingons[k].fire_on(&mut galaxy.enterprise);
+    }
+
+    if galaxy.enterprise.condition == Condition::Destroyed {
+        return;
+    }
     commands::move_enterprise(course.unwrap(), speed.unwrap(), galaxy);
 }
 

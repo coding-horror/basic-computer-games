@@ -15,7 +15,21 @@ pub struct Quadrant {
 }
 
 pub struct Klingon {
-    pub sector: Pos
+    pub sector: Pos,
+    energy: f32
+}
+
+impl Klingon {
+    pub fn fire_on(&mut self, enterprise: &mut Enterprise) {
+        let mut rng = rand::thread_rng();
+        let attack_strength = rng.gen::<f32>();
+        let dist_to_enterprise = self.sector.abs_diff(enterprise.sector) as f32;
+        let hit_strength = self.energy * (2.0 + attack_strength) / dist_to_enterprise;
+        
+        self.energy /= 3.0 + attack_strength;
+
+        enterprise.take_hit(self.sector, hit_strength as u16);
+    }
 }
 
 pub struct Enterprise {
@@ -26,10 +40,30 @@ pub struct Enterprise {
     pub total_energy: u16,
     pub shields: u16,
 }
+impl Enterprise {
+    fn take_hit(&mut self, sector: Pos, hit_strength: u16) {
+        if self.condition == Condition::Destroyed {
+            return;
+        }
+        
+        println!("{hit_strength} unit hit on Enterprise from sector {sector}");
 
-#[derive(Debug)]
+        // absorb into shields
+
+        if self.shields <= 0 {
+            println!("The Enterprise has been destroyed.  The Federation will be conquered.");
+            self.condition = Condition::Destroyed;
+        }
+
+        // report shields
+        // take damage if strength is greater than 20
+    }
+}
+
+#[derive(PartialEq, Debug)]
 pub enum Condition {
-    Green, Yellow, Red
+    Green, Yellow, Red,
+    Destroyed,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
@@ -38,6 +72,10 @@ pub struct Pos(pub u8, pub u8);
 impl Pos {
     pub fn as_index(&self) -> usize {
         (self.0 * 8 + self.1).into()
+    }
+
+    fn abs_diff(&self, other: Pos) -> u8 {
+        self.0.abs_diff(other.0) + self.1.abs_diff(other.1)
     }
 }
 
@@ -128,7 +166,7 @@ impl Galaxy {
                     _ => 0
                 };
                 for _ in 0..klingon_count {
-                    quadrant.klingons.push(Klingon { sector: quadrant.find_empty_sector() });
+                    quadrant.klingons.push(Klingon { sector: quadrant.find_empty_sector(), energy: rng.gen_range(100..=300) as f32 });
                 }
 
             result.push(quadrant);
@@ -162,7 +200,7 @@ impl Quadrant {
         klingons.into_iter().find(|k| &k.sector == sector).is_some()
     }
 
-    fn find_empty_sector(&self) -> Pos {
+    pub fn find_empty_sector(&self) -> Pos {
         let mut rng = rand::thread_rng();
         loop {
             let pos = Pos(rng.gen_range(0..8), rng.gen_range(0..8));

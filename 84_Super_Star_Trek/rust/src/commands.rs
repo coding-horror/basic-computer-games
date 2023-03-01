@@ -1,4 +1,4 @@
-use crate::model::{Galaxy, Pos, SectorStatus, COURSES};
+use crate::model::{Galaxy, Pos, SectorStatus, COURSES, Quadrant};
 
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
@@ -35,7 +35,7 @@ pub fn short_range_scan(model: &Galaxy) {
 }
 
 pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
-        
+
     let end = find_end_quadrant_sector(galaxy.enterprise.quadrant, galaxy.enterprise.sector, course, warp_speed);
 
     if end.hit_edge {
