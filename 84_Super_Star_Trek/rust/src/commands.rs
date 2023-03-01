@@ -8,10 +8,12 @@ pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
         view::hit_edge(&end);
     }
 
+    if galaxy.enterprise.quadrant != end.quadrant {
+        view::enter_quadrant(&end.quadrant);
+    }
+
     galaxy.enterprise.quadrant = end.quadrant;
     galaxy.enterprise.sector = end.sector;
-        
-    // if new_quadrant isnt old quadrant print intro
 
     view::short_range_scan(&galaxy)
 }

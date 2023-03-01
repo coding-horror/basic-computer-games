@@ -14,6 +14,7 @@ fn main() {
 
     let mut galaxy = Galaxy::generate_new();
     
+    view::enterprise();
     view::intro(&galaxy);
     let _ = prompt("Press Enter when ready to accept command");
 

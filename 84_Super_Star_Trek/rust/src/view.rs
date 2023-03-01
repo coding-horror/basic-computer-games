@@ -1,5 +1,33 @@
 use crate::model::{Galaxy, Pos, EndPosition, SectorStatus};
 
+pub fn enterprise() {
+    println!("
+
+
+
+
+
+
+
+
+
+
+                                    ,------*------,
+                    ,-------------   '---  ------'
+                     '-------- --'      / /
+                         ,---' '-------/ /--,
+                          '----------------'
+
+                    THE USS ENTERPRISE --- NCC-1701
+
+
+
+
+
+
+")
+}
+
 pub fn intro(model: &Galaxy) {
     let star_bases = model.remaining_starbases();
     let mut star_base_message: String = "There is 1 starbase".into();
@@ -9,7 +37,7 @@ pub fn intro(model: &Galaxy) {
     println!("Your orders are as follows:
     Destroy the {} Klingon warships which have invaded
   the galaxy before they can attack federation headquarters
-  on stardate {}. This gives you {} days. {} in the galaxy for resupplying your ship.", 
+  on stardate {}. This gives you {} days. {} in the galaxy for resupplying your ship.\n", 
     model.remaining_klingons(), model.final_stardate, model.final_stardate - model.stardate, star_base_message)
 }
 
@@ -36,13 +64,17 @@ const SUB_REGION_NAMES: [&str; 4] = ["I", "II", "III", "IV"];
 
 fn quadrant_name(quadrant: &Pos) -> String {
     format!("{} {}", 
-        REGION_NAMES[(quadrant.0 << 1 + quadrant.1 >> 1) as usize],
+        REGION_NAMES[((quadrant.0 << 1) + (quadrant.1 >> 2)) as usize],
         SUB_REGION_NAMES[(quadrant.1 % 4) as usize])
 }
 
 pub fn starting_quadrant(quadrant: &Pos) {
-    println!("Your mission begins with your starship located
-in the galactic quadrant, '{}'.", quadrant_name(quadrant))
+    println!("\nYour mission begins with your starship located
+in the galactic quadrant, '{}'.\n", quadrant_name(quadrant))
+}
+
+pub fn enter_quadrant(quadrant: &Pos) {
+    println!("\nNow entering {} quadrant . . .\n", quadrant_name(quadrant))
 }
 
 pub fn short_range_scan(model: &Galaxy) {
