@@ -2,25 +2,43 @@ use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view};
 
 pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
 
-    let end = find_end_quadrant_sector(galaxy.enterprise.quadrant, galaxy.enterprise.sector, course, warp_speed);
+    let ship = &mut galaxy.enterprise;
+
+    // todo account for being blocked
+
+    let end = find_end_quadrant_sector(ship.quadrant, ship.sector, course, warp_speed);
+
+    // todo account for engine damage
+
+    if end.energy_cost > ship.total_energy {
+        view::insuffient_warp_energy(warp_speed);
+        return
+    }
 
     if end.hit_edge {
         view::hit_edge(&end);
     }
+    
 
-    if galaxy.enterprise.quadrant != end.quadrant {
+    if ship.quadrant != end.quadrant {
         view::enter_quadrant(&end.quadrant);
         
         if galaxy.quadrants[end.quadrant.as_index()].klingons.len() > 0 {
             view::condition_red();
-            if galaxy.enterprise.shields <= 200 {
+            if ship.shields <= 200 {
                 view::danger_shields();
             }
         }
     }
 
-    galaxy.enterprise.quadrant = end.quadrant;
-    galaxy.enterprise.sector = end.sector;
+    ship.quadrant = end.quadrant;
+    ship.sector = end.sector;
+
+    ship.total_energy = (ship.total_energy - end.energy_cost).max(0);
+    if ship.shields > ship.total_energy {
+        view::divert_energy_from_shields();
+        ship.shields = ship.total_energy;
+    }
 
     view::short_range_scan(&galaxy)
 }
@@ -58,8 +76,9 @@ fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, 
     
     let quadrant = Pos((nx / 8) as u8, (ny / 8) as u8);
     let sector = Pos((nx % 8) as u8, (ny % 8) as u8);
+    let energy_cost = distance as u16 + 10;
 
-    EndPosition { quadrant, sector, hit_edge }
+    EndPosition { quadrant, sector, hit_edge, energy_cost }
 }
 
 pub fn move_klingons_and_fire(galaxy: &mut Galaxy) {

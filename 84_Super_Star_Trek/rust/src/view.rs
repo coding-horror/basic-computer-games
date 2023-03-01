@@ -165,3 +165,12 @@ pub fn condition_red() {
 pub fn danger_shields() {
     println!("   SHIELDS DANGEROUSLY LOW    ")
 }
+
+pub fn insuffient_warp_energy(warp_speed: f32) {
+    println!("Engineering reports, 'Insufficient energy available
+    for maneuvering at warp {warp_speed} !'")
+}
+
+pub fn divert_energy_from_shields() {
+    println!("Shield Control supplies energy to complete the maneuver.")
+}

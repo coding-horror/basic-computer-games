@@ -67,7 +67,8 @@ impl Enterprise {
 pub struct EndPosition {
     pub quadrant: Pos,
     pub sector: Pos,
-    pub hit_edge: bool
+    pub hit_edge: bool,
+    pub energy_cost: u16,
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]
