@@ -2,6 +2,8 @@ use std::{ops::{Mul, Add}, fmt::Display};
 
 use rand::Rng;
 
+use crate::text_display;
+
 pub struct Galaxy {
     pub stardate: f32,
     pub quadrants: Vec<Quadrant>,
@@ -46,12 +48,12 @@ impl Enterprise {
             return;
         }
         
-        println!("{hit_strength} unit hit on Enterprise from sector {sector}");
+        text_display::enterprise_hit(&hit_strength, &sector);
 
         // absorb into shields
 
         if self.shields <= 0 {
-            println!("The Enterprise has been destroyed.  The Federation will be conquered.");
+            text_display::enterprise_destroyed();
             self.condition = Condition::Destroyed;
         }
 
@@ -64,6 +66,12 @@ impl Enterprise {
 pub enum Condition {
     Green, Yellow, Red,
     Destroyed,
+}
+
+pub struct EndPosition {
+    pub quadrant: Pos,
+    pub sector: Pos,
+    pub hit_edge: bool
 }
 
 #[derive(PartialEq, Clone, Copy, Debug)]

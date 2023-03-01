@@ -1,4 +1,4 @@
-use crate::model::{Galaxy, Pos, SectorStatus, COURSES, Quadrant};
+use crate::{model::{Galaxy, Pos, SectorStatus, COURSES, Quadrant, EndPosition}, text_display};
 
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
@@ -39,11 +39,7 @@ pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     let end = find_end_quadrant_sector(galaxy.enterprise.quadrant, galaxy.enterprise.sector, course, warp_speed);
 
     if end.hit_edge {
-        println!("Lt. Uhura report message from Starfleet Command:
-        'Permission to attempt crossing of galactic perimeter
-        is hereby *Denied*. Shut down your engines.'
-      Chief Engineer Scott reports, 'Warp engines shut down
-        at sector {} of quadrant {}.'", end.quadrant, end.sector);
+        text_display::hit_edge(&end);
     }
 
     galaxy.enterprise.quadrant = end.quadrant;
@@ -52,12 +48,6 @@ pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     // if new_quadrant isnt old quadrant print intro
 
     short_range_scan(&galaxy)
-}
-
-struct EndPosition {
-    quadrant: Pos,
-    sector: Pos,
-    hit_edge: bool
 }
 
 fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, warp_speed: f32) -> EndPosition {
