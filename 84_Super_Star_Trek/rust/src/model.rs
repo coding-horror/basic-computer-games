@@ -36,7 +36,8 @@ impl Klingon {
 }
 
 pub struct Enterprise {
-    pub condition: Condition,
+    pub destroyed: bool,
+    pub damaged: bool, // later this could be by subsystem
     pub quadrant: Pos,
     pub sector: Pos,
     pub photon_torpedoes: u8,
@@ -45,7 +46,7 @@ pub struct Enterprise {
 }
 impl Enterprise {
     fn take_hit(&mut self, sector: Pos, hit_strength: u16) {
-        if self.condition == Condition::Destroyed {
+        if self.destroyed {
             return;
         }
         
@@ -55,18 +56,12 @@ impl Enterprise {
 
         if self.shields <= 0 {
             view::enterprise_destroyed();
-            self.condition = Condition::Destroyed;
+            self.destroyed = true
         }
 
         // report shields
         // take damage if strength is greater than 20
     }
-}
-
-#[derive(PartialEq, Debug)]
-pub enum Condition {
-    Green, Yellow, Red,
-    Destroyed,
 }
 
 pub struct EndPosition {
@@ -150,7 +145,8 @@ impl Galaxy {
             final_stardate: stardate + rng.gen_range(25..=35) as f32,
             quadrants: quadrants, 
             enterprise: Enterprise { 
-                condition: Condition::Green, 
+                destroyed: false,
+                damaged: false,
                 quadrant: enterprise_quadrant, 
                 sector: enterprise_sector,
                 photon_torpedoes: 28,

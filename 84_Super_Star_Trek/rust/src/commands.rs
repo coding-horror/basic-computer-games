@@ -10,6 +10,13 @@ pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
 
     if galaxy.enterprise.quadrant != end.quadrant {
         view::enter_quadrant(&end.quadrant);
+        
+        if galaxy.quadrants[end.quadrant.as_index()].klingons.len() > 0 {
+            view::condition_red();
+            if galaxy.enterprise.shields <= 200 {
+                view::danger_shields();
+            }
+        }
     }
 
     galaxy.enterprise.quadrant = end.quadrant;

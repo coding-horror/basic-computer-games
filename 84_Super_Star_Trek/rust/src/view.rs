@@ -79,10 +79,16 @@ pub fn enter_quadrant(quadrant: &Pos) {
 
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
+    let mut condition = "GREEN";
+    if quadrant.klingons.len() > 0 {
+        condition = "*RED*";
+    } else if model.enterprise.damaged {
+        condition = "YELLOW";
+    }
 
     let data : [String; 8] = [
         format!("Stardate           {}", model.stardate),
-        format!("Condition          {:?}", model.enterprise.condition),
+        format!("Condition          {}", condition),
         format!("Quadrant           {}", model.enterprise.quadrant),
         format!("Sector             {}", model.enterprise.sector),
         format!("Photon torpedoes   {}", model.enterprise.photon_torpedoes),
@@ -150,4 +156,12 @@ pub fn hit_edge(end: &EndPosition) {
         is hereby *Denied*. Shut down your engines.'
       Chief Engineer Scott reports, 'Warp engines shut down
         at sector {} of quadrant {}.'", end.quadrant, end.sector);
+}
+
+pub fn condition_red() {
+    println!("COMBAT AREA      CONDITION RED")
+}
+
+pub fn danger_shields() {
+    println!("   SHIELDS DANGEROUSLY LOW    ")
 }

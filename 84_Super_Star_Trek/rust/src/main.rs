@@ -2,8 +2,6 @@ use std::{io::{stdin, stdout, Write, Read}, process::exit, str::FromStr};
 
 use model::Galaxy;
 
-use crate::model::Condition;
-
 mod model;
 mod commands;
 mod view;
@@ -28,7 +26,7 @@ fn main() {
             _ => view::print_command_help()
         }
 
-        if galaxy.enterprise.condition == Condition::Destroyed { // todo: also check if stranded
+        if galaxy.enterprise.destroyed { // todo: also check if stranded
             view::end_game_failure(&galaxy);
             break;
         }
@@ -50,7 +48,7 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
     }
 
     commands::move_klingons_and_fire(galaxy);
-    if galaxy.enterprise.condition == Condition::Destroyed {
+    if galaxy.enterprise.destroyed {
         return;
     }
     commands::move_enterprise(course.unwrap(), speed.unwrap(), galaxy);

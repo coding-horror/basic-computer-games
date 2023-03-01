@@ -6,10 +6,16 @@ Started after movement and display of stats was finished (no energy management o
 - [x] klingon firing, game over etc
 - [x] add intro
 - [x] add entering (and starting in) sector headers
-- [ ] conditions and danger messages
+- [x] conditions and danger messages
 - [ ] remove energy on move
 - [ ] shields
+    - [ ] shield control
+    - [ ] shield hit absorption
+- [ ] subsystem damage
+    - and support for reports
+- [ ] lrs?
 - [ ] stranded...
 - [ ] stop before hitting an object
     - when moving across a sector, the enterprise should stop before it runs into something
     - the current move is a jump, which makes this problematic. would need to rewrite it
+- [ ] better command reading - support entering multiple values on a line (e.g. nav 3 0.1)
