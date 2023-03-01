@@ -47,18 +47,7 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
         return;
     }
 
-    let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
-    for k in 0..quadrant.klingons.len() {
-        let new_sector = quadrant.find_empty_sector();
-        quadrant.klingons[k].sector = new_sector;
-    }
-
-    // todo: check if enterprise is protected by a starbase
-
-    for k in 0..quadrant.klingons.len() {
-        quadrant.klingons[k].fire_on(&mut galaxy.enterprise);
-    }
-
+    commands::move_klingons_and_fire(galaxy);
     if galaxy.enterprise.condition == Condition::Destroyed {
         return;
     }
@@ -88,6 +77,16 @@ fn prompt_value<T: FromStr + PartialOrd>(prompt_text: &str, min: T, max: T) -> O
 }
 
 fn print_command_help() {
-    println!("valid commands are just SRS and NAV at the mo")
+    println!("Enter one of the following:
+  NAV  (To set course)
+  SRS  (For short range sensor scan)
+  LRS  (For long range sensor scan)
+  PHA  (To fire phasers)
+  TOR  (To fire photon torpedoes)
+  SHE  (To raise or lower shields)
+  DAM  (For damage control reports)
+  COM  (To call on library-computer)
+  XXX  (To resign your command)
+    ")
 }
 
