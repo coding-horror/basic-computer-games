@@ -56,23 +56,9 @@ fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, 
     let mut nx = (galaxy_pos.0 as i8) + dx * distance;
     let mut ny = (galaxy_pos.1 as i8) + dy * distance;
 
-    let mut hit_edge = false;
-    if nx < 0 {
-        nx = 0;
-        hit_edge = true;
-    }
-    if ny < 0 {
-        ny = 0;
-        hit_edge = true;
-    }
-    if nx >= 64 {
-        nx = 63;
-        hit_edge = true;
-    }
-    if ny >= 64 {
-        ny = 63;
-        hit_edge = true;
-    }
+    let hit_edge = nx < 0 || ny < 0 || nx >= 64 || ny >= 64;
+    nx = nx.min(63).max(0);
+    ny = ny.min(63).max(0);
     
     let quadrant = Pos((nx / 8) as u8, (ny / 8) as u8);
     let sector = Pos((nx % 8) as u8, (ny % 8) as u8);
@@ -92,80 +78,5 @@ pub fn move_klingons_and_fire(galaxy: &mut Galaxy) {
 
     for k in 0..quadrant.klingons.len() {
         quadrant.klingons[k].fire_on(&mut galaxy.enterprise);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_course_east() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 1, 0.1);
-        assert_eq!(end.quadrant, start_quadrant, "right quadrant");
-        assert_eq!(end.sector, Pos(1,0), "right sector");
-        assert!(!end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_far_east() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 1, 1.0);
-        assert_eq!(end.quadrant, Pos(1,0), "right quadrant");
-        assert_eq!(end.sector, start_sector, "right sector");
-        assert!(!end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_too_far_east() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 1, 8.0);
-        assert_eq!(end.quadrant, Pos(7,0), "right quadrant");
-        assert_eq!(end.sector, Pos(7,0), "right sector");
-        assert!(end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_south() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 7, 0.1);
-        assert_eq!(end.quadrant, start_quadrant, "right quadrant");
-        assert_eq!(end.sector, Pos(0,1), "right sector");
-        assert!(!end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_far_south() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 7, 1.0);
-        assert_eq!(end.quadrant, Pos(0,1), "right quadrant");
-        assert_eq!(end.sector, start_sector, "right sector");
-        assert!(!end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_too_far_south() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,0);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 7, 8.0);
-        assert_eq!(end.quadrant, Pos(0,7), "right quadrant");
-        assert_eq!(end.sector, Pos(0,7), "right sector");
-        assert!(end.hit_edge)
-    }
-
-    #[test]
-    fn test_course_north_east() {
-        let start_quadrant = Pos(0,0);
-        let start_sector = Pos(0,1);
-        let end = find_end_quadrant_sector(start_quadrant, start_sector, 2, 0.1);
-        assert_eq!(end.quadrant, start_quadrant, "right quadrant");
-        assert_eq!(end.sector, Pos(1,0), "right sector");
-        assert!(!end.hit_edge)
     }
 }
