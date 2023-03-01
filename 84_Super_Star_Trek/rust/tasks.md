@@ -10,7 +10,7 @@ Started after movement and display of stats was finished (no energy management o
 - [x] remove energy on move
 - [x] shields
     - [x] shield control
-    - [ ] shield hit absorption
+    - [x] shield hit absorption
 - [ ] subsystem damage
     - and support for reports
 - [ ] lrs?

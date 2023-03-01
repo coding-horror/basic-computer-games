@@ -52,14 +52,14 @@ impl Enterprise {
         
         view::enterprise_hit(&hit_strength, &sector);
 
-        // absorb into shields
+        self.shields = (self.shields - hit_strength).max(0);
 
         if self.shields <= 0 {
             view::enterprise_destroyed();
             self.destroyed = true
         }
 
-        // report shields
+        view::shields_hit(self.shields);
         // take damage if strength is greater than 20
     }
 }

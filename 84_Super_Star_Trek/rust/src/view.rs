@@ -191,3 +191,7 @@ pub fn shields_set(value: u16) {
     println!("Deflector control room report:
   'Shields now at {value} units per your command.'")
 }
+
+pub fn shields_hit(shields: u16) {
+    println!("      <Shields down to {shields} units>")
+}
