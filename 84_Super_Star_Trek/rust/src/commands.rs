@@ -1,6 +1,48 @@
-use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view};
+use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view, input};
 
-pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
+pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
+
+    // todo check for damaged module
+
+    view::energy_available(galaxy.enterprise.total_energy);
+    let value = input::param_or_prompt_value(&provided, 0, "Number of units to shields", 0, i32::MAX);
+    if value.is_none() {
+        view::shields_unchanged();
+        return;
+    }
+    let value = value.unwrap() as u16;
+    if value > galaxy.enterprise.total_energy {
+        view::ridiculous();
+        view::shields_unchanged();
+        return;
+    }
+
+    galaxy.enterprise.shields = value;
+    view::shields_set(value);
+}
+
+pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>) {
+
+    let course = input::param_or_prompt_value(&provided, 0, "Course (1-9)?", 1, 9);
+    if course.is_none() {
+        view::bad_nav();
+        return;
+    }
+
+    let speed = input::param_or_prompt_value(&provided, 1, "Warp Factor (0-8)?", 0.0, 8.0);
+    if speed.is_none() {
+        view::bad_nav();
+        return;
+    }
+
+    move_klingons_and_fire(galaxy);
+    if galaxy.enterprise.destroyed {
+        return;
+    }
+    move_enterprise(course.unwrap(), speed.unwrap(), galaxy);
+}
+
+fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
 
     let ship = &mut galaxy.enterprise;
 
@@ -67,7 +109,7 @@ fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, 
     EndPosition { quadrant, sector, hit_edge, energy_cost }
 }
 
-pub fn move_klingons_and_fire(galaxy: &mut Galaxy) {
+fn move_klingons_and_fire(galaxy: &mut Galaxy) {
     let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
     for k in 0..quadrant.klingons.len() {
         let new_sector = quadrant.find_empty_sector();
