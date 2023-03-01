@@ -20,9 +20,13 @@ fn main() {
     view::short_range_scan(&galaxy);
 
     loop {
-        match prompt("Command?").to_uppercase().as_str() {
+        let command = prompt("Command?");
+        if command.len() == 0 {
+            continue;
+        }
+        match command[0].to_uppercase().as_str() {
             "SRS" => view::short_range_scan(&galaxy),
-            "NAV" => gather_dir_and_speed_then_move(&mut galaxy),
+            "NAV" => gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
             _ => view::print_command_help()
         }
 
@@ -33,15 +37,15 @@ fn main() {
     }
 }
 
-fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
+fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    let course = prompt_value::<u8>("Course (1-9)?", 1, 9);
+    let course = param_or_prompt_value(&provided, 0, "Course (1-9)?", 1, 9);
     if course.is_none() {
         view::bad_nav();
         return;
     }
 
-    let speed = prompt_value::<f32>("Warp Factor (0-8)?", 0.0, 8.0);
+    let speed = param_or_prompt_value(&provided, 1, "Warp Factor (0-8)?", 0.0, 8.0);
     if speed.is_none() {
         view::bad_nav();
         return;
@@ -54,7 +58,7 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
     commands::move_enterprise(course.unwrap(), speed.unwrap(), galaxy);
 }
 
-fn prompt(prompt_text: &str) -> String {
+fn prompt(prompt_text: &str) -> Vec<String> {
     let stdin = stdin();
     let mut stdout = stdout();
 
@@ -63,15 +67,29 @@ fn prompt(prompt_text: &str) -> String {
 
     let mut buffer = String::new();
     if let Ok(_) = stdin.read_line(&mut buffer) {
-        return buffer.trim_end().into();
+        return buffer.trim_end().split(" ").map(|s| s.to_string()).collect();
     }
-    "".into()
+    Vec::new()
 }
 
 fn prompt_value<T: FromStr + PartialOrd>(prompt_text: &str, min: T, max: T) -> Option<T> {
     let passed = prompt(prompt_text);
-    match passed.parse::<T>() {
+    if passed.len() != 1 {
+        return None
+    }
+    match passed[0].parse::<T>() {
         Ok(n) if (n >= min && n <= max) => Some(n),
         _ => None
+    }
+}
+
+fn param_or_prompt_value<T: FromStr + PartialOrd>(params: &Vec<String>, param_pos: usize, prompt_text: &str, min: T, max: T) -> Option<T> {
+    if params.len() > param_pos {
+        match params[param_pos].parse::<T>() {
+            Ok(n) => Some(n),
+            _ => None
+        }
+    } else {
+        return prompt_value::<T>(prompt_text, min, max);
     }
 }
