@@ -1,4 +1,4 @@
-use std::{io::{stdin, stdout, Write}, process::exit, str::FromStr};
+use std::{io::{stdin, stdout, Write, Read}, process::exit, str::FromStr};
 
 use model::Galaxy;
 
@@ -13,7 +13,11 @@ fn main() {
     .expect("Error setting Ctrl-C handler");
 
     let mut galaxy = Galaxy::generate_new();
-    // todo: init options, starting state and notes
+    
+    view::intro(&galaxy);
+    let _ = prompt("Press Enter when ready to accept command");
+
+    view::starting_quadrant(&galaxy.enterprise.quadrant);
     view::short_range_scan(&galaxy);
 
     loop {

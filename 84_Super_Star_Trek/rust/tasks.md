@@ -4,6 +4,8 @@ Started after movement and display of stats was finished (no energy management o
 
 - [x] klingon movement
 - [x] klingon firing, game over etc
+- [ ] add intro
+- [ ] add entering (and starting in) sector headers
 - [ ] remove energy on move
 - [ ] shields
 - [ ] stranded...

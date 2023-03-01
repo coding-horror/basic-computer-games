@@ -1,5 +1,50 @@
 use crate::model::{Galaxy, Pos, EndPosition, SectorStatus};
 
+pub fn intro(model: &Galaxy) {
+    let star_bases = model.remaining_starbases();
+    let mut star_base_message: String = "There is 1 starbase".into();
+    if star_bases > 1 {
+        star_base_message = format!("There are {} starbases", star_bases);
+    }
+    println!("Your orders are as follows:
+    Destroy the {} Klingon warships which have invaded
+  the galaxy before they can attack federation headquarters
+  on stardate {}. This gives you {} days. {} in the galaxy for resupplying your ship.", 
+    model.remaining_klingons(), model.final_stardate, model.final_stardate - model.stardate, star_base_message)
+}
+
+const REGION_NAMES: [&str; 16] = [
+    "Antares",
+    "Sirius",
+    "Rigel",
+    "Deneb",
+    "Procyon",
+    "Capella",
+    "Vega",
+    "Betelgeuse",
+    "Canopus",
+    "Aldebaran",
+    "Altair",
+    "Regulus",
+    "Sagittarius",
+    "Arcturus",
+    "Pollux",
+    "Spica"
+];
+
+const SUB_REGION_NAMES: [&str; 4] = ["I", "II", "III", "IV"];
+
+fn quadrant_name(quadrant: &Pos) -> String {
+    format!("{} {}", 
+        REGION_NAMES[(quadrant.0 << 1 + quadrant.1 >> 1) as usize],
+        SUB_REGION_NAMES[(quadrant.1 % 4) as usize])
+}
+
+pub fn starting_quadrant(quadrant: &Pos) {
+    println!("Your mission begins with your starship located
+in the galactic quadrant, '{}'.", quadrant_name(quadrant))
+}
+
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
 

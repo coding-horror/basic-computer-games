@@ -6,6 +6,7 @@ use crate::view;
 
 pub struct Galaxy {
     pub stardate: f32,
+    pub final_stardate: f32,
     pub quadrants: Vec<Quadrant>,
     pub enterprise: Enterprise
 }
@@ -131,15 +132,22 @@ impl Galaxy {
         quadrants.into_iter().map(|q| { q.klingons.len() as u8 }).sum::<u8>()
     }
 
+    pub fn remaining_starbases(&self) -> u8 {
+        let quadrants = &self.quadrants;
+        quadrants.into_iter().filter(|q| q.star_base.is_some()).count() as u8
+    }
+
     pub fn generate_new() -> Self {
         let quadrants = Self::generate_quadrants();
 
         let mut rng = rand::thread_rng();
         let enterprise_quadrant = Pos(rng.gen_range(0..8), rng.gen_range(0..8));
         let enterprise_sector = quadrants[enterprise_quadrant.as_index()].find_empty_sector();
+        let stardate = rng.gen_range(20..=40) as f32 * 100.0;
 
         Galaxy { 
-            stardate: 3800.0,
+            stardate,
+            final_stardate: stardate + rng.gen_range(25..=35) as f32,
             quadrants: quadrants, 
             enterprise: Enterprise { 
                 condition: Condition::Green, 
