@@ -6,7 +6,7 @@ use crate::model::Condition;
 
 mod model;
 mod commands;
-mod text_display;
+mod view;
 
 fn main() {
     ctrlc::set_handler(move || { exit(0) })
@@ -14,17 +14,17 @@ fn main() {
 
     let mut galaxy = Galaxy::generate_new();
     // todo: init options, starting state and notes
-    commands::short_range_scan(&galaxy);
+    view::short_range_scan(&galaxy);
 
     loop {
         match prompt("Command?").to_uppercase().as_str() {
-            "SRS" => commands::short_range_scan(&galaxy),
+            "SRS" => view::short_range_scan(&galaxy),
             "NAV" => gather_dir_and_speed_then_move(&mut galaxy),
-            _ => text_display::print_command_help()
+            _ => view::print_command_help()
         }
 
         if galaxy.enterprise.condition == Condition::Destroyed { // todo: also check if stranded
-            text_display::end_game_failure(&galaxy);
+            view::end_game_failure(&galaxy);
             break;
         }
     }
@@ -34,13 +34,13 @@ fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy) {
 
     let course = prompt_value::<u8>("Course (1-9)?", 1, 9);
     if course.is_none() {
-        text_display::bad_nav();
+        view::bad_nav();
         return;
     }
 
     let speed = prompt_value::<f32>("Warp Factor (0-8)?", 0.0, 8.0);
     if speed.is_none() {
-        text_display::bad_nav();
+        view::bad_nav();
         return;
     }
 

@@ -2,7 +2,7 @@ use std::{ops::{Mul, Add}, fmt::Display};
 
 use rand::Rng;
 
-use crate::text_display;
+use crate::view;
 
 pub struct Galaxy {
     pub stardate: f32,
@@ -48,12 +48,12 @@ impl Enterprise {
             return;
         }
         
-        text_display::enterprise_hit(&hit_strength, &sector);
+        view::enterprise_hit(&hit_strength, &sector);
 
         // absorb into shields
 
         if self.shields <= 0 {
-            text_display::enterprise_destroyed();
+            view::enterprise_destroyed();
             self.condition = Condition::Destroyed;
         }
 

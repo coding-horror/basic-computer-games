@@ -1,45 +1,11 @@
-use crate::{model::{Galaxy, Pos, SectorStatus, COURSES, Quadrant, EndPosition}, text_display};
-
-pub fn short_range_scan(model: &Galaxy) {
-    let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
-
-    let data : [String; 8] = [
-        format!("Stardate           {}", model.stardate),
-        format!("Condition          {:?}", model.enterprise.condition),
-        format!("Quadrant           {}", model.enterprise.quadrant),
-        format!("Sector             {}", model.enterprise.sector),
-        format!("Photon torpedoes   {}", model.enterprise.photon_torpedoes),
-        format!("Total energy       {}", model.enterprise.total_energy),
-        format!("Shields            {}", model.enterprise.shields),
-        format!("Klingons remaining {}", model.remaining_klingons()),
-    ];
-
-    println!("{:-^33}", "");
-    for y in 0..=7 {
-        for x in 0..=7 {
-            let pos = Pos(x, y);
-            if &pos == &model.enterprise.sector {
-                print!("<*> ")
-            } else {
-                match quadrant.sector_status(&pos) {
-                    SectorStatus::Star => print!(" *  "),
-                    SectorStatus::StarBase => print!(">!< "),
-                    SectorStatus::Klingon => print!("+K+ "),
-                    _ => print!("    "),
-                }                
-            } 
-        }
-        println!("{:>9}{}", "", data[y as usize])
-    }
-    println!("{:-^33}", "");
-}
+use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view};
 
 pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
 
     let end = find_end_quadrant_sector(galaxy.enterprise.quadrant, galaxy.enterprise.sector, course, warp_speed);
 
     if end.hit_edge {
-        text_display::hit_edge(&end);
+        view::hit_edge(&end);
     }
 
     galaxy.enterprise.quadrant = end.quadrant;
@@ -47,7 +13,7 @@ pub fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
         
     // if new_quadrant isnt old quadrant print intro
 
-    short_range_scan(&galaxy)
+    view::short_range_scan(&galaxy)
 }
 
 fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, warp_speed: f32) -> EndPosition {
