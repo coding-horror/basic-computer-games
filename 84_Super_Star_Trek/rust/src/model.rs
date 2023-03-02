@@ -85,7 +85,7 @@ impl Enterprise {
 
     pub fn repair_system(&mut self, system: &str, amount: f32) -> bool {
         let existing_damage = self.damaged[system];
-        if existing_damage + amount >= 0.0 {
+        if existing_damage + amount >= -0.1 {
             self.damaged.remove(system);
             return true;
         }
