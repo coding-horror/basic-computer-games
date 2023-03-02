@@ -22,12 +22,14 @@ Started after movement and display of stats was finished (no energy management o
     - also, movement courses could be floats, according to the instructions, allowing for more precise movement and aiming
 - [x] better command reading - support entering multiple values on a line (e.g. nav 3 0.1)
 - [ ] starbases
-    - [ ] repair
+    - [ ] proximity detection for docking
+    - [ ] repair on damage control
+    - [ ] protection from shots
 - [ ] weapons
     - [ ] phasers
     - [ ] torpedoes
 - [ ] computer
-    - [ ] 0 - output of all short and long range scans (requires tracking if a system has been scanned)
+    - [x] 0 - output of all short and long range scans (requires tracking if a system has been scanned)
     - [ ] 1 - klingons, starbases, stardate and damage control
     - [ ] 2 - photon torpedo data: direction and distance to all local klingons
     - [ ] 3 - starbase distance and dir locally

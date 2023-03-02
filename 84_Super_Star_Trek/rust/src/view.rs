@@ -425,3 +425,17 @@ pub(crate) fn galaxy_scanned_map(galaxy: &Galaxy) {
 "\n    ----- ----- ----- ----- ----- ----- ----- -----")
     }
 }
+
+pub fn no_local_enemies() {
+    println!(
+"Science Officer Spock reports, 'Sensors show no enemy ships
+                                 in this quadrant'")
+}
+
+pub fn computer_accuracy_issue() {
+    println!("Computer failure hampers accuracy")
+}
+
+pub fn phasers_locked(available_energy: u16) {
+    println!("Phasers locked on target;  Energy available = {available_energy} units")
+}

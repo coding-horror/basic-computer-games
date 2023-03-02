@@ -1,9 +1,9 @@
 use rand::Rng;
 
-use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self, Enterprise, systems}, view, input};
+use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self, Enterprise, systems}, view, input::{self, prompt_value, param_or_prompt_value}};
 
 pub fn perform_short_range_scan(galaxy: &Galaxy) {
-    if galaxy.enterprise.damaged.contains_key(model::systems::SHORT_RANGE_SCAN) {
+    if galaxy.enterprise.damaged.contains_key(systems::SHORT_RANGE_SCAN) {
         view::scanners_out();
         return;
     }
@@ -13,7 +13,7 @@ pub fn perform_short_range_scan(galaxy: &Galaxy) {
 
 pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    if galaxy.enterprise.damaged.contains_key(model::systems::SHIELD_CONTROL) {
+    if galaxy.enterprise.damaged.contains_key(systems::SHIELD_CONTROL) {
         view::inoperable(&systems::name_for(systems::SHIELD_CONTROL));
         return;
     }
@@ -47,7 +47,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
     let course = course.unwrap();
 
     let mut max_warp = 8.0;
-    if galaxy.enterprise.damaged.contains_key(model::systems::WARP_ENGINES) {
+    if galaxy.enterprise.damaged.contains_key(systems::WARP_ENGINES) {
         max_warp = 0.2;
     }
 
@@ -204,7 +204,7 @@ fn move_klingons_and_fire(galaxy: &mut Galaxy) {
 }
 
 pub fn display_damage_control(enterprise: &Enterprise) {
-    if enterprise.damaged.contains_key(model::systems::DAMAGE_CONTROL) {
+    if enterprise.damaged.contains_key(systems::DAMAGE_CONTROL) {
         view::inoperable(&systems::name_for(systems::DAMAGE_CONTROL));
         return;
     }
@@ -218,7 +218,7 @@ pub fn display_damage_control(enterprise: &Enterprise) {
 }
 
 pub fn perform_long_range_scan(galaxy: &mut Galaxy) {
-    if galaxy.enterprise.damaged.contains_key(model::systems::LONG_RANGE_SCAN) {
+    if galaxy.enterprise.damaged.contains_key(systems::LONG_RANGE_SCAN) {
         view::inoperable(&systems::name_for(systems::LONG_RANGE_SCAN));
         return;
     }
@@ -230,7 +230,7 @@ pub fn perform_long_range_scan(galaxy: &mut Galaxy) {
 }
 
 pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
-    if galaxy.enterprise.damaged.contains_key(model::systems::COMPUTER) {
+    if galaxy.enterprise.damaged.contains_key(systems::COMPUTER) {
         view::inoperable(&systems::name_for(systems::COMPUTER));
         return;
     }
@@ -250,5 +250,53 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
         0 => view::galaxy_scanned_map(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
+    }
+}
+
+pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
+    if galaxy.enterprise.damaged.contains_key(systems::PHASERS) {
+        view::inoperable(&systems::name_for(systems::PHASERS));
+        return;
+    }
+
+    let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
+    if quadrant.klingons.len() == 0 {
+        view::no_local_enemies();
+        return;
+    }
+
+    let computer_damaged = galaxy.enterprise.damaged.contains_key(systems::COMPUTER);
+    if computer_damaged {
+        view::computer_accuracy_issue();
+    }
+
+    let available_energy = galaxy.enterprise.total_energy - galaxy.enterprise.shields;
+    view::phasers_locked(available_energy);
+    let mut power: f32;
+    loop {
+        let setting = param_or_prompt_value(&provided, 0, "Number of units to fire", 0, available_energy);
+        if setting.is_some() {
+            power = setting.unwrap() as f32;
+            break;
+        }
+    }
+
+    if power == 0.0 {
+        return;
+    }
+
+    galaxy.enterprise.total_energy -= power as u16;
+    
+    let mut rng = rand::thread_rng();
+    if computer_damaged {
+        power *= rng.gen::<f32>();
+    }
+
+    let per_enemy = power / quadrant.klingons.len() as f32;
+
+    // fire on each klingon
+
+    for klingon in &mut quadrant.klingons {
+        klingon.fire_on(&mut galaxy.enterprise)
     }
 }

@@ -25,6 +25,8 @@ pub struct Klingon {
 
 impl Klingon {
     pub fn fire_on(&mut self, enterprise: &mut Enterprise) {
+        // todo check if enterprise is protected
+
         let mut rng = rand::thread_rng();
         let attack_strength = rng.gen::<f32>();
         let dist_to_enterprise = self.sector.abs_diff(enterprise.sector) as f32;
@@ -112,9 +114,10 @@ pub mod systems {
     pub const DAMAGE_CONTROL: &str = "DAM";
     pub const LONG_RANGE_SCAN: &str = "LRS";
     pub const COMPUTER: &str = "COM";
+    pub const PHASERS: &str = "PHA";
 
-    pub const KEYS: [&str; 6] = [
-        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN, COMPUTER
+    pub const KEYS: [&str; 7] = [
+        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN, COMPUTER, PHASERS
     ];
 
     pub fn name_for(key: &str) -> String {
@@ -125,6 +128,7 @@ pub mod systems {
             DAMAGE_CONTROL => "Damage Control".into(),
             LONG_RANGE_SCAN => "Long Range Scanners".into(),
             COMPUTER => "Library-Computer".into(),
+            PHASERS => "Phaser Control".into(),
             _ => "Unknown".into()
         }
     }
