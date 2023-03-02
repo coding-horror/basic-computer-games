@@ -14,7 +14,7 @@ pub fn perform_short_range_scan(galaxy: &Galaxy) {
 pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
     if galaxy.enterprise.damaged.contains_key(model::systems::SHIELD_CONTROL) {
-        view::inoperable("Shield Control");
+        view::inoperable(&systems::name_for(systems::SHIELD_CONTROL));
         return;
     }
 
@@ -204,7 +204,7 @@ fn move_klingons_and_fire(galaxy: &mut Galaxy) {
 
 pub fn display_damage_control(enterprise: &Enterprise) {
     if enterprise.damaged.contains_key(model::systems::DAMAGE_CONTROL) {
-        view::inoperable("Damage Control");
+        view::inoperable(&systems::name_for(systems::DAMAGE_CONTROL));
         return;
     }
 
@@ -217,10 +217,33 @@ pub fn display_damage_control(enterprise: &Enterprise) {
 }
 
 pub fn perform_long_range_scan(galaxy: &Galaxy) {
-    if galaxy.enterprise.damaged.contains_key(model::systems::SHORT_RANGE_SCAN) {
-        view::inoperable("Long Range Scanners");
+    if galaxy.enterprise.damaged.contains_key(model::systems::LONG_RANGE_SCAN) {
+        view::inoperable(&systems::name_for(systems::LONG_RANGE_SCAN));
         return;
     }
 
     view::long_range_scan(galaxy);
+}
+
+pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
+    if galaxy.enterprise.damaged.contains_key(model::systems::COMPUTER) {
+        view::inoperable(&systems::name_for(systems::COMPUTER));
+        return;
+    }
+
+    let operation : i32;
+    loop {
+        let entered = input::param_or_prompt_value(&provided, 0, "Computer active and waiting command?", 0, 5);
+        if entered.is_none() {
+            view::computer_options();
+        } else {
+            operation = entered.unwrap();
+            break;
+        }
+    } 
+    
+    match operation {
+        5 => view::galaxy_region_map(),
+        _ => todo!() // todo implement others
+    }
 }

@@ -110,9 +110,10 @@ pub mod systems {
     pub const SHIELD_CONTROL: &str = "SHE";
     pub const DAMAGE_CONTROL: &str = "DAM";
     pub const LONG_RANGE_SCAN: &str = "LRS";
+    pub const COMPUTER: &str = "COM";
 
-    pub const KEYS: [&str; 5] = [
-        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN
+    pub const KEYS: [&str; 6] = [
+        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN, COMPUTER
     ];
 
     pub fn name_for(key: &str) -> String {
@@ -122,6 +123,7 @@ pub mod systems {
             SHIELD_CONTROL => "Shield Control".into(),
             DAMAGE_CONTROL => "Damage Control".into(),
             LONG_RANGE_SCAN => "Long Range Scanners".into(),
+            COMPUTER => "Library-Computer".into(),
             _ => "Unknown".into()
         }
     }
