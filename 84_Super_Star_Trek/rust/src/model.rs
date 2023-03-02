@@ -60,7 +60,24 @@ impl Enterprise {
         }
 
         view::shields_hit(self.shields);
+        
         // take damage if strength is greater than 20
+        if hit_strength >= 20 {
+            self.take_damage(hit_strength)
+        }
+    }
+
+    fn take_damage(&mut self, hit_strength: u16) {
+        let mut rng = rand::thread_rng();
+
+        let hit_past_shield = hit_strength as f32 / self.shields as f32;
+        if rng.gen::<f32>() > 0.6 || hit_past_shield < 0.02 {
+            return
+        }
+
+        let system = systems::ALL[rng.gen_range(0..systems::ALL.len())].to_string();
+        let damage = hit_past_shield + rng.gen::<f32>() * 0.5;
+        self.damaged.entry(system).and_modify(|d| *d += damage).or_insert(damage);
     }
 }
 

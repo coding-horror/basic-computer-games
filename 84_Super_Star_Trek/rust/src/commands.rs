@@ -86,7 +86,6 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
         view::hit_edge(&end);
     }
     
-
     if ship.quadrant != end.quadrant {
         view::enter_quadrant(&end.quadrant);
         
