@@ -251,3 +251,9 @@ pub fn long_range_scan(galaxy: &Galaxy) {
         println!("{:-^19}", "");
     } 
 }
+
+pub fn stranded() {
+    println!("** FATAL ERROR **   You've just stranded your ship in space
+You have insufficient maneuvering energy, and shield control
+is presently incapable of cross-circuiting to engine room!!")
+}

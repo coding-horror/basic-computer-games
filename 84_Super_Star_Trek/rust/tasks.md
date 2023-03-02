@@ -14,8 +14,8 @@ Started after movement and display of stats was finished (no energy management o
 - [x] subsystem damage
     - [x] and support for reports
 - [x] random system damage or repairs on move
-- [ ] lrs?
-- [ ] stranded...
+- [x] lrs?
+- [x] stranded...
 - [ ] stop before hitting an object
     - when moving across a sector, the enterprise should stop before it runs into something
     - the current move is a jump, which makes this problematic. would need to rewrite it
@@ -29,3 +29,4 @@ Started after movement and display of stats was finished (no energy management o
 - [ ] restarting the game
 - [ ] time progression
     - check all areas where time should move, and adjust accordingly
+- [ ] intro instructions

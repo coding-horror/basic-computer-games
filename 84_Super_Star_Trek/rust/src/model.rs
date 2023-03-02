@@ -93,6 +93,14 @@ impl Enterprise {
         self.damaged.entry(system.to_string()).and_modify(|d| *d += amount);
         return false;
     }
+
+    pub fn check_stranded(&self) -> bool {
+        if self.total_energy < 10 || (self.total_energy - self.shields < 10 && self.damaged.contains_key(systems::SHIELD_CONTROL)) {
+            view::stranded();
+            return true;
+        }
+        return false;
+    }
 }
 
 pub mod systems {

@@ -34,7 +34,7 @@ fn main() {
             _ => view::print_command_help()
         }
 
-        if galaxy.enterprise.destroyed { // todo: also check if stranded
+        if galaxy.enterprise.destroyed || galaxy.enterprise.check_stranded() {
             view::end_game_failure(&galaxy);
             // todo check if can restart
             break;
