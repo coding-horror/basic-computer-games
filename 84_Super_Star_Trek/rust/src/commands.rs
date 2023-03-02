@@ -1,8 +1,20 @@
 use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view, input};
 
+pub fn perform_short_range_scan(galaxy: &Galaxy) {
+    if galaxy.enterprise.damaged.contains_key(view::keys::SHORT_RANGE_SCAN) {
+        view::scanners_out();
+        return;
+    }
+
+    view::short_range_scan(&galaxy)
+}
+
 pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    // todo check for damaged module
+    if galaxy.enterprise.damaged.contains_key(view::keys::SHIELD_CONTROL) {
+        view::inoperable("Shield Control");
+        return;
+    }
 
     view::energy_available(galaxy.enterprise.total_energy);
     let value = input::param_or_prompt_value(&provided, 0, "Number of units to shields", 0, i32::MAX);
@@ -10,6 +22,7 @@ pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
         view::shields_unchanged();
         return;
     }
+
     let value = value.unwrap() as u16;
     if value > galaxy.enterprise.total_energy {
         view::ridiculous();
@@ -29,9 +42,23 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
         return;
     }
 
-    let speed = input::param_or_prompt_value(&provided, 1, "Warp Factor (0-8)?", 0.0, 8.0);
+    let course = course.unwrap();
+
+    let mut max_warp = 8.0;
+    if galaxy.enterprise.damaged.contains_key(view::keys::NAVIGATION) {
+        max_warp = 0.2;
+    }
+
+    let speed = input::param_or_prompt_value(&provided, 1, format!("Warp Factor (0-{})?", max_warp).as_str(), 0.0, 8.0);
     if speed.is_none() {
         view::bad_nav();
+        return;
+    }
+    
+    let speed = speed.unwrap();
+
+    if speed > max_warp {
+        view::damaged_engines(max_warp, speed);
         return;
     }
 
@@ -39,7 +66,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
     if galaxy.enterprise.destroyed {
         return;
     }
-    move_enterprise(course.unwrap(), speed.unwrap(), galaxy);
+    move_enterprise(course, speed, galaxy);
 }
 
 fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {

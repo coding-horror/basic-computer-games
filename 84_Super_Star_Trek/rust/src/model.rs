@@ -1,4 +1,4 @@
-use std::{ops::{Mul, Add}, fmt::Display};
+use std::{ops::{Mul, Add}, fmt::Display, collections::HashMap};
 
 use rand::Rng;
 
@@ -37,7 +37,7 @@ impl Klingon {
 
 pub struct Enterprise {
     pub destroyed: bool,
-    pub damaged: bool, // later this could be by subsystem
+    pub damaged: HashMap<String, f32>,
     pub quadrant: Pos,
     pub sector: Pos,
     pub photon_torpedoes: u8,
@@ -147,7 +147,7 @@ impl Galaxy {
             quadrants: quadrants, 
             enterprise: Enterprise { 
                 destroyed: false,
-                damaged: false,
+                damaged: HashMap::new(),
                 quadrant: enterprise_quadrant, 
                 sector: enterprise_sector,
                 photon_torpedoes: 28,

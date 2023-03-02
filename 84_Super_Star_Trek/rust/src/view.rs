@@ -1,5 +1,15 @@
 use crate::model::{Galaxy, Pos, EndPosition, SectorStatus};
 
+pub mod keys {
+    pub const SHORT_RANGE_SCAN: &str = "SRS";
+    pub const NAVIGATION: &str = "NAV";
+    pub const SHIELD_CONTROL: &str = "SHE";
+
+    pub const ALL_SYSTEMS: [&str; 3] = [
+        SHORT_RANGE_SCAN, NAVIGATION, SHIELD_CONTROL
+    ];
+}
+
 pub fn enterprise() {
     println!("
 
@@ -82,7 +92,7 @@ pub fn short_range_scan(model: &Galaxy) {
     let mut condition = "GREEN";
     if quadrant.klingons.len() > 0 {
         condition = "*RED*";
-    } else if model.enterprise.damaged {
+    } else if model.enterprise.damaged.len() > 0 {
         condition = "YELLOW";
     }
 
@@ -194,4 +204,17 @@ pub fn shields_set(value: u16) {
 
 pub fn shields_hit(shields: u16) {
     println!("      <Shields down to {shields} units>")
+}
+
+pub fn inoperable(arg: &str) {
+    println!("{} inoperable", arg)
+}
+
+pub fn scanners_out() {
+    println!("*** Short Range Sensors are out ***")
+}
+
+pub fn damaged_engines(max_warp: f32, warp_factor: f32) {
+    println!("Warp engines are damaged.  Maximum speed = warp {max_warp}
+    Chief Engineer Scott reports, 'The engines won't take warp {warp_factor} !'")
 }
