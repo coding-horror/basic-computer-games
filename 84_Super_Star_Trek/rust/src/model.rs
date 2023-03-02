@@ -64,6 +64,16 @@ impl Enterprise {
     }
 }
 
+pub mod systems {
+    pub const SHORT_RANGE_SCAN: &str = "SRS";
+    pub const WARP_ENGINES: &str = "NAV";
+    pub const SHIELD_CONTROL: &str = "SHE";
+
+    pub const ALL: [&str; 3] = [
+        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL
+    ];
+}
+
 pub struct EndPosition {
     pub quadrant: Pos,
     pub sector: Pos,

@@ -1,7 +1,7 @@
-use crate::{model::{Galaxy, Pos, COURSES, EndPosition}, view, input};
+use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self}, view, input};
 
 pub fn perform_short_range_scan(galaxy: &Galaxy) {
-    if galaxy.enterprise.damaged.contains_key(view::keys::SHORT_RANGE_SCAN) {
+    if galaxy.enterprise.damaged.contains_key(model::systems::SHORT_RANGE_SCAN) {
         view::scanners_out();
         return;
     }
@@ -11,7 +11,7 @@ pub fn perform_short_range_scan(galaxy: &Galaxy) {
 
 pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    if galaxy.enterprise.damaged.contains_key(view::keys::SHIELD_CONTROL) {
+    if galaxy.enterprise.damaged.contains_key(model::systems::SHIELD_CONTROL) {
         view::inoperable("Shield Control");
         return;
     }
@@ -45,7 +45,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
     let course = course.unwrap();
 
     let mut max_warp = 8.0;
-    if galaxy.enterprise.damaged.contains_key(view::keys::NAVIGATION) {
+    if galaxy.enterprise.damaged.contains_key(model::systems::WARP_ENGINES) {
         max_warp = 0.2;
     }
 
@@ -76,8 +76,6 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     // todo account for being blocked
 
     let end = find_end_quadrant_sector(ship.quadrant, ship.sector, course, warp_speed);
-
-    // todo account for engine damage
 
     if end.energy_cost > ship.total_energy {
         view::insuffient_warp_energy(warp_speed);

@@ -26,9 +26,9 @@ fn main() {
             continue;
         }
         match command[0].to_uppercase().as_str() {
-            view::keys::SHORT_RANGE_SCAN => commands::perform_short_range_scan(&galaxy),
-            view::keys::NAVIGATION => commands::gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
-            view::keys::SHIELD_CONTROL => commands::get_amount_and_set_shields(&mut galaxy, command[1..].into()),
+            model::systems::SHORT_RANGE_SCAN => commands::perform_short_range_scan(&galaxy),
+            model::systems::WARP_ENGINES => commands::gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
+            model::systems::SHIELD_CONTROL => commands::get_amount_and_set_shields(&mut galaxy, command[1..].into()),
             _ => view::print_command_help()
         }
 

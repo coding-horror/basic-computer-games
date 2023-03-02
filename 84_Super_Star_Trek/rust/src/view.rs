@@ -1,15 +1,5 @@
 use crate::model::{Galaxy, Pos, EndPosition, SectorStatus};
 
-pub mod keys {
-    pub const SHORT_RANGE_SCAN: &str = "SRS";
-    pub const NAVIGATION: &str = "NAV";
-    pub const SHIELD_CONTROL: &str = "SHE";
-
-    pub const ALL_SYSTEMS: [&str; 3] = [
-        SHORT_RANGE_SCAN, NAVIGATION, SHIELD_CONTROL
-    ];
-}
-
 pub fn enterprise() {
     println!("
 
