@@ -201,7 +201,14 @@ fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, 
 fn klingons_move(galaxy: &mut Galaxy) {
     let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
     for k in 0..quadrant.klingons.len() {
-        let new_sector = quadrant.find_empty_sector();
+        let new_sector: Pos;
+        loop {
+            let candidate = quadrant.find_empty_sector();
+            if candidate != galaxy.enterprise.sector {
+                new_sector = candidate;
+                break;
+            }
+        }
         quadrant.klingons[k].sector = new_sector;
     }
 }
