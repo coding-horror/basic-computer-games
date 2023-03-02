@@ -12,7 +12,7 @@ Started after movement and display of stats was finished (no energy management o
     - [x] shield control
     - [x] shield hit absorption
 - [x] subsystem damage
-    - [ ] and support for reports
+    - [x] and support for reports
 - [ ] random system damage on move
 - [ ] lrs?
 - [ ] stranded...

@@ -1,4 +1,4 @@
-use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self}, view, input};
+use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self, Enterprise, systems}, view, input};
 
 pub fn perform_short_range_scan(galaxy: &Galaxy) {
     if galaxy.enterprise.damaged.contains_key(model::systems::SHORT_RANGE_SCAN) {
@@ -145,4 +145,18 @@ fn move_klingons_and_fire(galaxy: &mut Galaxy) {
     for k in 0..quadrant.klingons.len() {
         quadrant.klingons[k].fire_on(&mut galaxy.enterprise);
     }
+}
+
+pub fn display_damage_control(enterprise: &Enterprise) {
+    if enterprise.damaged.contains_key(model::systems::DAMAGE_CONTROL) {
+        view::inoperable("Damage Control");
+        return;
+    }
+
+    println!("Device             State of Repair");
+    for i in 0..systems::NAMES.len() {
+        let damage = enterprise.damaged.get(systems::ALL[i]).unwrap_or(&0.0);
+        println!("{:<25}{}", systems::NAMES[i], damage)
+    }
+    println!();
 }

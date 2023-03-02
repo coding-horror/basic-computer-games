@@ -61,7 +61,6 @@ impl Enterprise {
 
         view::shields_hit(self.shields);
         
-        // take damage if strength is greater than 20
         if hit_strength >= 20 {
             self.take_damage(hit_strength)
         }
@@ -77,17 +76,24 @@ impl Enterprise {
 
         let system = systems::ALL[rng.gen_range(0..systems::ALL.len())].to_string();
         let damage = hit_past_shield + rng.gen::<f32>() * 0.5;
-        self.damaged.entry(system).and_modify(|d| *d += damage).or_insert(damage);
+        self.damaged.entry(system).and_modify(|d| *d -= damage).or_insert(-damage);
     }
 }
 
 pub mod systems {
+    use std::collections::HashMap;
+
     pub const SHORT_RANGE_SCAN: &str = "SRS";
     pub const WARP_ENGINES: &str = "NAV";
     pub const SHIELD_CONTROL: &str = "SHE";
+    pub const DAMAGE_CONTROL: &str = "DAM";
 
-    pub const ALL: [&str; 3] = [
-        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL
+    pub const ALL: [&str; 4] = [
+        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL
+    ];
+
+    pub const NAMES: [&str; 4] = [
+        "Short Range Scanners", "Warp Engines", "Shield Control", "Damage Control"
     ];
 }
 
