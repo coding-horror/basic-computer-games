@@ -143,6 +143,7 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     
     if ship.quadrant != end.quadrant {
         view::enter_quadrant(&end.quadrant);
+        galaxy.scanned.insert(end.quadrant);
         
         if galaxy.quadrants[end.quadrant.as_index()].klingons.len() > 0 {
             view::condition_red();
@@ -216,13 +217,16 @@ pub fn display_damage_control(enterprise: &Enterprise) {
     println!();
 }
 
-pub fn perform_long_range_scan(galaxy: &Galaxy) {
+pub fn perform_long_range_scan(galaxy: &mut Galaxy) {
     if galaxy.enterprise.damaged.contains_key(model::systems::LONG_RANGE_SCAN) {
         view::inoperable(&systems::name_for(systems::LONG_RANGE_SCAN));
         return;
     }
 
-    view::long_range_scan(galaxy);
+    let seen = view::long_range_scan(galaxy);
+    for pos in seen {
+        galaxy.scanned.insert(pos);
+    }
 }
 
 pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
@@ -243,6 +247,7 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
     } 
     
     match operation {
+        0 => view::galaxy_scanned_map(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
     }

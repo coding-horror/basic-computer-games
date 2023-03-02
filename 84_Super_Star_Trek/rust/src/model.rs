@@ -1,4 +1,4 @@
-use std::{ops::{Mul, Add}, fmt::Display, collections::HashMap};
+use std::{ops::{Mul, Add}, fmt::Display, collections::{HashMap, HashSet}};
 
 use rand::Rng;
 
@@ -8,6 +8,7 @@ pub struct Galaxy {
     pub stardate: f32,
     pub final_stardate: f32,
     pub quadrants: Vec<Quadrant>,
+    pub scanned: HashSet<Pos>,
     pub enterprise: Enterprise
 }
 
@@ -136,7 +137,7 @@ pub struct EndPosition {
     pub energy_cost: u16,
 }
 
-#[derive(PartialEq, Clone, Copy, Debug)]
+#[derive(PartialEq, Clone, Copy, Debug, Hash, Eq)]
 pub struct Pos(pub u8, pub u8);
 
 impl Pos {
@@ -206,10 +207,14 @@ impl Galaxy {
         let enterprise_sector = quadrants[enterprise_quadrant.as_index()].find_empty_sector();
         let stardate = rng.gen_range(20..=40) as f32 * 100.0;
 
+        let mut scanned = HashSet::new();
+        scanned.insert(enterprise_quadrant);
+
         Galaxy { 
             stardate,
             final_stardate: stardate + rng.gen_range(25..=35) as f32,
             quadrants: quadrants, 
+            scanned: scanned,
             enterprise: Enterprise { 
                 destroyed: false,
                 damaged: HashMap::new(),

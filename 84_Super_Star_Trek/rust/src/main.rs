@@ -30,7 +30,7 @@ fn main() {
             model::systems::WARP_ENGINES => commands::gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
             model::systems::SHIELD_CONTROL => commands::get_amount_and_set_shields(&mut galaxy, command[1..].into()),
             model::systems::DAMAGE_CONTROL => commands::display_damage_control(&galaxy.enterprise),
-            model::systems::LONG_RANGE_SCAN => commands::perform_long_range_scan(&galaxy),
+            model::systems::LONG_RANGE_SCAN => commands::perform_long_range_scan(&mut galaxy),
             model::systems::COMPUTER => commands::access_computer(&galaxy, command[1..].into()),
             _ => view::print_command_help()
         }

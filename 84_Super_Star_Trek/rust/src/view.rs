@@ -174,7 +174,7 @@ const SUB_REGION_NAMES: [&str; 4] = ["I", "II", "III", "IV"];
 
 fn quadrant_name(quadrant: &Pos) -> String {
     format!("{} {}", 
-        REGION_NAMES[((quadrant.0 << 1) + (quadrant.1 >> 2)) as usize],
+        REGION_NAMES[((quadrant.1 << 1) + (quadrant.0 >> 2)) as usize],
         SUB_REGION_NAMES[(quadrant.1 % 4) as usize])
 }
 
@@ -342,10 +342,12 @@ pub fn system_repair_completed(name: String) {
     println!("        {name} repair completed.")
 }
 
-pub fn long_range_scan(galaxy: &Galaxy) {
+pub fn long_range_scan(galaxy: &Galaxy) -> Vec<Pos> {
 
     let cx = galaxy.enterprise.quadrant.0 as i8;
     let cy = galaxy.enterprise.quadrant.1 as i8;
+
+    let mut seen = Vec::new();
 
     println!("Long range scan for quadrant {}", galaxy.enterprise.quadrant);
     println!("{:-^19}", "");
@@ -356,7 +358,10 @@ pub fn long_range_scan(galaxy: &Galaxy) {
             let mut stars = "*".into();
 
             if y >= 0 && y < 8 && x >= 0 && x < 8 {
-                let quadrant = &galaxy.quadrants[Pos(x as u8, y as u8).as_index()];
+                let pos = Pos(x as u8, y as u8);
+                seen.push(pos);
+                
+                let quadrant = &galaxy.quadrants[pos.as_index()];
                 klingons = format!("{}", quadrant.klingons.len());
                 star_bases = quadrant.star_base.map_or("0", |_| "1");
                 stars = format!("{}", quadrant.stars.len());
@@ -367,6 +372,8 @@ pub fn long_range_scan(galaxy: &Galaxy) {
         println!(":");
         println!("{:-^19}", "");
     } 
+
+    seen
 }
 
 pub fn stranded() {
@@ -396,4 +403,25 @@ pub fn galaxy_region_map() {
 "{} {:^23} {:^23}
     ----- ----- ----- ----- ----- ----- ----- -----", (i/2)+1, REGION_NAMES[i], REGION_NAMES[i+1]);
     }    
+}
+
+pub(crate) fn galaxy_scanned_map(galaxy: &Galaxy) {
+    println!(
+"Computer record of galaxy for quadrant {}
+      1     2     3     4     5     6     7     8
+    ----- ----- ----- ----- ----- ----- ----- -----", galaxy.enterprise.quadrant);
+    for y in 0..8 {
+        print!("{}   ", y+1);
+        for x in 0..8 {
+            let pos = Pos(x, y);
+            if galaxy.scanned.contains(&pos) {
+                let quadrant = &galaxy.quadrants[pos.as_index()];
+                print!(" {}{}{}  ", quadrant.klingons.len(), quadrant.stars.len(), quadrant.star_base.map_or("0", |_| "1"))
+            } else {
+                print!(" ***  ");
+            }
+        }
+        println!(
+"\n    ----- ----- ----- ----- ----- ----- ----- -----")
+    }
 }
