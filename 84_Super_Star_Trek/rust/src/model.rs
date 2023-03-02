@@ -74,27 +74,47 @@ impl Enterprise {
             return
         }
 
-        let system = systems::ALL[rng.gen_range(0..systems::ALL.len())].to_string();
+        let system = systems::KEYS[rng.gen_range(0..systems::KEYS.len())].to_string();
         let damage = hit_past_shield + rng.gen::<f32>() * 0.5;
-        self.damaged.entry(system).and_modify(|d| *d -= damage).or_insert(-damage);
+        self.damage_system(&system, damage);
+    }
+
+    pub fn damage_system(&mut self, system: &str, damage: f32) {
+        self.damaged.entry(system.to_string()).and_modify(|d| *d -= damage).or_insert(-damage);
+    }
+
+    pub fn repair_system(&mut self, system: &str, amount: f32) -> bool {
+        let existing_damage = self.damaged[system];
+        if existing_damage + amount >= 0.0 {
+            self.damaged.remove(system);
+            return true;
+        }
+    
+        self.damaged.entry(system.to_string()).and_modify(|d| *d += amount);
+        return false;
     }
 }
 
 pub mod systems {
-    use std::collections::HashMap;
 
     pub const SHORT_RANGE_SCAN: &str = "SRS";
     pub const WARP_ENGINES: &str = "NAV";
     pub const SHIELD_CONTROL: &str = "SHE";
     pub const DAMAGE_CONTROL: &str = "DAM";
 
-    pub const ALL: [&str; 4] = [
+    pub const KEYS: [&str; 4] = [
         SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL
     ];
 
-    pub const NAMES: [&str; 4] = [
-        "Short Range Scanners", "Warp Engines", "Shield Control", "Damage Control"
-    ];
+    pub fn name_for(key: &str) -> String {
+        match key {
+            SHORT_RANGE_SCAN => "Short Range Scanners".into(),
+            WARP_ENGINES => "Warp Engines".into(),
+            SHIELD_CONTROL => "Shield Control".into(),
+            DAMAGE_CONTROL => "Damage Control".into(),
+            _ => "Unknown".into()
+        }
+    }
 }
 
 pub struct EndPosition {

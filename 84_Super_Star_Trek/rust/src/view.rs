@@ -208,3 +208,19 @@ pub fn damaged_engines(max_warp: f32, warp_factor: f32) {
     println!("Warp engines are damaged.  Maximum speed = warp {max_warp}
     Chief Engineer Scott reports, 'The engines won't take warp {warp_factor} !'")
 }
+
+pub fn damage_control_report() {
+    println!("Damage Control report:")
+}
+
+pub fn random_repair_report_for(name: &str, damaged: bool) {
+    let mut message = "state of repair improved";
+    if damaged {
+        message = "damaged";
+    }
+    println!("Damage Control report:  {name} {message}")
+}
+
+pub fn system_repair_completed(name: String) {
+    println!("        {name} repair completed.")
+}
