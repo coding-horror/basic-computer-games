@@ -103,16 +103,25 @@ fn repair_or_damage_random_system(enterprise: &mut Enterprise) {
         return;
     }
 
+    if rng.gen::<f32>() >= 0.6 {
+        if enterprise.damaged.len() == 0 {
+            return;
+        }
+
+        let damaged: Vec<String> = enterprise.damaged.keys().map(|k| k.to_string()).collect();
+        let system = damaged[rng.gen_range(0..damaged.len())].to_string();
+        let system_name = &systems::name_for(&system);
+
+        enterprise.repair_system(&system, rng.gen::<f32>() * 3.0 + 1.0);
+        view::random_repair_report_for(system_name, false);
+        return;
+    }
+    
     let system = systems::KEYS[rng.gen_range(0..systems::KEYS.len())].to_string();
     let system_name = &systems::name_for(&system);
 
-    if rng.gen::<f32>() >= 0.6 {
-        enterprise.repair_system(&system, rng.gen::<f32>() * 3.0 + 1.0);
-        view::random_repair_report_for(system_name, false);
-    } else {
-        enterprise.damage_system(&system, rng.gen::<f32>() * 5.0 + 1.0);
-        view::random_repair_report_for(system_name, true);
-    }
+    enterprise.damage_system(&system, rng.gen::<f32>() * 5.0 + 1.0);
+    view::random_repair_report_for(system_name, true);
 }
 
 fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
