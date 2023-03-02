@@ -25,8 +25,6 @@ pub struct Klingon {
 
 impl Klingon {
     pub fn fire_on(&mut self, enterprise: &mut Enterprise) {
-        // todo check if enterprise is protected
-
         let mut rng = rand::thread_rng();
         let attack_strength = rng.gen::<f32>();
         let dist_to_enterprise = self.sector.abs_diff(enterprise.sector) as f32;
@@ -149,7 +147,7 @@ impl Pos {
         (self.0 * 8 + self.1).into()
     }
 
-    fn abs_diff(&self, other: Pos) -> u8 {
+    pub fn abs_diff(&self, other: Pos) -> u8 {
         self.0.abs_diff(other.0) + self.1.abs_diff(other.1)
     }
 }
@@ -192,6 +190,9 @@ pub enum SectorStatus {
     Empty, Star, StarBase, Klingon
 }
 
+pub const MAX_PHOTON_TORPEDOES: u8 = 28;
+pub const MAX_ENERGY: u16 = 3000;
+
 impl Galaxy {
     pub fn remaining_klingons(&self) -> u8 {
         let quadrants = &self.quadrants;
@@ -224,8 +225,8 @@ impl Galaxy {
                 damaged: HashMap::new(),
                 quadrant: enterprise_quadrant, 
                 sector: enterprise_sector,
-                photon_torpedoes: 28,
-                total_energy: 3000,
+                photon_torpedoes: MAX_PHOTON_TORPEDOES,
+                total_energy: MAX_ENERGY,
                 shields: 0 }
         }
     }    
@@ -295,5 +296,9 @@ impl Quadrant {
                 return pos
             }
         }
+    }
+
+    pub fn docked_at_starbase(&self, enterprise_sector: Pos) -> bool {
+        self.star_base.is_some() && self.star_base.unwrap().abs_diff(enterprise_sector) == 1
     }
 }

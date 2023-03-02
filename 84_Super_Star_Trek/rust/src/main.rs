@@ -29,7 +29,7 @@ fn main() {
             systems::SHORT_RANGE_SCAN => commands::perform_short_range_scan(&galaxy),
             systems::WARP_ENGINES => commands::gather_dir_and_speed_then_move(&mut galaxy, command[1..].into()),
             systems::SHIELD_CONTROL => commands::get_amount_and_set_shields(&mut galaxy, command[1..].into()),
-            systems::DAMAGE_CONTROL => commands::display_damage_control(&galaxy.enterprise),
+            systems::DAMAGE_CONTROL => commands::run_damage_control(&mut galaxy),
             systems::LONG_RANGE_SCAN => commands::perform_long_range_scan(&mut galaxy),
             systems::COMPUTER => commands::access_computer(&galaxy, command[1..].into()),
             systems::PHASERS => commands::get_power_and_fire_phasers(&mut galaxy, command[1..].into()),

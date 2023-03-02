@@ -191,7 +191,10 @@ pub fn enter_quadrant(quadrant: &Pos) {
 pub fn short_range_scan(model: &Galaxy) {
     let quadrant = &model.quadrants[model.enterprise.quadrant.as_index()];
     let mut condition = "GREEN";
-    if quadrant.klingons.len() > 0 {
+    if quadrant.docked_at_starbase(model.enterprise.sector) {
+        println!("Shields dropped for docking purposes");
+        condition = "DOCKED";
+    } else if quadrant.klingons.len() > 0 {
         condition = "*RED*";
     } else if model.enterprise.damaged.len() > 0 {
         condition = "YELLOW";
@@ -447,4 +450,8 @@ pub fn computer_accuracy_issue() {
 
 pub fn phasers_locked(available_energy: u16) {
     println!("Phasers locked on target;  Energy available = {available_energy} units")
+}
+
+pub fn starbase_shields() {
+    println!("Starbase shields protect the Enterprise")
 }

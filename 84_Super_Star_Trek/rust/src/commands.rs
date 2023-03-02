@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use crate::{model::{Galaxy, Pos, COURSES, EndPosition, self, Enterprise, systems}, view, input::{self, prompt_value, param_or_prompt_value}};
+use crate::{model::*, view, input::{self, param_or_prompt_value}};
 
 pub fn perform_short_range_scan(galaxy: &Galaxy) {
     if galaxy.enterprise.damaged.contains_key(systems::SHORT_RANGE_SCAN) {
@@ -64,7 +64,9 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
         return;
     }
 
-    move_klingons_and_fire(galaxy);
+    klingons_move(galaxy);
+    klingons_fire(galaxy);
+
     if galaxy.enterprise.destroyed {
         return;
     }
@@ -156,10 +158,17 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     ship.quadrant = end.quadrant;
     ship.sector = end.sector;
 
-    ship.total_energy = (ship.total_energy - end.energy_cost).max(0);
-    if ship.shields > ship.total_energy {
-        view::divert_energy_from_shields();
-        ship.shields = ship.total_energy;
+    let quadrant = &galaxy.quadrants[end.quadrant.as_index()];
+    if quadrant.docked_at_starbase(ship.sector) {
+        ship.shields = 0;
+        ship.photon_torpedoes = MAX_PHOTON_TORPEDOES;
+        ship.total_energy = MAX_ENERGY;
+    } else {
+        ship.total_energy = (ship.total_energy - end.energy_cost).max(0);
+        if ship.shields > ship.total_energy {
+            view::divert_energy_from_shields();
+            ship.shields = ship.total_energy;
+        }
     }
 
     view::short_range_scan(&galaxy)
@@ -189,27 +198,46 @@ fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, 
     EndPosition { quadrant, sector, hit_edge, energy_cost }
 }
 
-fn move_klingons_and_fire(galaxy: &mut Galaxy) {
+fn klingons_move(galaxy: &mut Galaxy) {
     let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
     for k in 0..quadrant.klingons.len() {
         let new_sector = quadrant.find_empty_sector();
         quadrant.klingons[k].sector = new_sector;
     }
+}
 
-    // todo: check if enterprise is protected by a starbase
+fn klingons_fire(galaxy: &mut Galaxy) {
+    let quadrant = &mut galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
+    if quadrant.docked_at_starbase(galaxy.enterprise.sector) {
+        view::starbase_shields();
+        return;
+    }
 
     for k in 0..quadrant.klingons.len() {
         quadrant.klingons[k].fire_on(&mut galaxy.enterprise);
     }
 }
 
-pub fn display_damage_control(enterprise: &Enterprise) {
-    if enterprise.damaged.contains_key(systems::DAMAGE_CONTROL) {
+pub fn run_damage_control(galaxy: &mut Galaxy) {
+
+    let ship = &mut galaxy.enterprise;
+
+    if ship.damaged.contains_key(systems::DAMAGE_CONTROL) {
         view::inoperable(&systems::name_for(systems::DAMAGE_CONTROL));
         return;
     }
 
-    view::damage_control(enterprise);
+    view::damage_control(&ship);
+
+    if ship.damaged.len() == 0 || !galaxy.quadrants[ship.quadrant.as_index()].docked_at_starbase(ship.sector) {
+        return;
+    }
+
+    // try repeair
+    // if so write dam report
+    // and increment elapsed time
+
+    view::damage_control(&ship);
 }
 
 pub fn perform_long_range_scan(galaxy: &mut Galaxy) {
@@ -291,7 +319,5 @@ pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
 
     // fire on each klingon
 
-    for klingon in &mut quadrant.klingons {
-        klingon.fire_on(&mut galaxy.enterprise)
-    }
+    klingons_fire(galaxy);
 }
