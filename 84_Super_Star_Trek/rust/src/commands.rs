@@ -209,12 +209,7 @@ pub fn display_damage_control(enterprise: &Enterprise) {
         return;
     }
 
-    println!("Device             State of Repair");
-    for key in systems::KEYS {
-        let damage = enterprise.damaged.get(key).unwrap_or(&0.0);
-        println!("{:<25}{}", systems::name_for(key), damage)
-    }
-    println!();
+    view::damage_control(enterprise);
 }
 
 pub fn perform_long_range_scan(galaxy: &mut Galaxy) {

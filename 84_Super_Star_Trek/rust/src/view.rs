@@ -1,4 +1,4 @@
-use crate::model::{Galaxy, Pos, EndPosition, SectorStatus};
+use crate::model::{Galaxy, Pos, EndPosition, SectorStatus, Enterprise, systems};
 
 pub fn full_instructions() {
     println!(
@@ -340,6 +340,15 @@ pub fn random_repair_report_for(name: &str, damaged: bool) {
 
 pub fn system_repair_completed(name: String) {
     println!("        {name} repair completed.")
+}
+
+pub fn damage_control(enterprise: &Enterprise) {
+    println!("Device             State of Repair");
+    for key in systems::KEYS {
+        let damage = enterprise.damaged.get(key).unwrap_or(&0.0);
+        println!("{:<25}{}", systems::name_for(key), damage)
+    }
+    println!();
 }
 
 pub fn long_range_scan(galaxy: &Galaxy) -> Vec<Pos> {
