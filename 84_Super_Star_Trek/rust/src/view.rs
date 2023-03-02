@@ -218,7 +218,7 @@ pub fn short_range_scan(model: &Galaxy) {
             if &pos == &model.enterprise.sector {
                 print!("<*> ")
             } else {
-                match quadrant.sector_status(&pos) {
+                match quadrant.sector_status(pos) {
                     SectorStatus::Star => print!(" *  "),
                     SectorStatus::StarBase => print!(">!< "),
                     SectorStatus::Klingon => print!("+K+ "),
@@ -375,7 +375,7 @@ pub fn long_range_scan(galaxy: &Galaxy) -> Vec<Pos> {
                 
                 let quadrant = &galaxy.quadrants[pos.as_index()];
                 klingons = format!("{}", quadrant.klingons.len());
-                star_bases = quadrant.star_base.map_or("0", |_| "1");
+                star_bases = quadrant.star_base.as_ref().map_or("0", |_| "1");
                 stars = format!("{}", quadrant.stars.len());
             }
 
@@ -428,7 +428,7 @@ pub(crate) fn galaxy_scanned_map(galaxy: &Galaxy) {
             let pos = Pos(x, y);
             if galaxy.scanned.contains(&pos) {
                 let quadrant = &galaxy.quadrants[pos.as_index()];
-                print!(" {}{}{}  ", quadrant.klingons.len(), quadrant.stars.len(), quadrant.star_base.map_or("0", |_| "1"))
+                print!(" {}{}{}  ", quadrant.klingons.len(), quadrant.stars.len(), quadrant.star_base.as_ref().map_or("0", |_| "1"))
             } else {
                 print!(" ***  ");
             }
@@ -454,4 +454,10 @@ pub fn phasers_locked(available_energy: u16) {
 
 pub fn starbase_shields() {
     println!("Starbase shields protect the Enterprise")
+}
+
+pub fn repair_estimate(repair_time: f32) {
+    println!(
+"Technicians standing by to effect repairs to your ship;
+Estimated time to repair: {repair_time} stardates.")
 }

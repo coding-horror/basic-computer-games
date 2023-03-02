@@ -21,10 +21,10 @@ Started after movement and display of stats was finished (no energy management o
     - the current move is a jump, which makes this problematic. would need to rewrite it
     - also, movement courses could be floats, according to the instructions, allowing for more precise movement and aiming
 - [x] better command reading - support entering multiple values on a line (e.g. nav 3 0.1)
-- [ ] starbases
-    - [ ] proximity detection for docking
-    - [ ] repair on damage control
-    - [ ] protection from shots
+- [x] starbases
+    - [x] proximity detection for docking
+    - [x] repair on damage control
+    - [x] protection from shots
 - [ ] weapons
     - [ ] phasers
     - [ ] torpedoes

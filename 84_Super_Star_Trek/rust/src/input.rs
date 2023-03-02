@@ -14,6 +14,22 @@ pub fn prompt(prompt_text: &str) -> Vec<String> {
     Vec::new()
 }
 
+pub fn prompt_yes_no(prompt_text: &str) -> bool {
+    loop {
+        let response = prompt(&format!("{prompt_text} (Y/N)"));
+        if response.len() == 0 {
+            continue;
+        }
+        let first_word = response[0].to_uppercase();
+        if first_word.starts_with("Y") {
+            return true;
+        }
+        if first_word.starts_with("N") {
+            return false;
+        }
+    }
+}
+
 pub fn prompt_value<T: FromStr + PartialOrd>(prompt_text: &str, min: T, max: T) -> Option<T> {
     let passed = prompt(prompt_text);
     if passed.len() != 1 {

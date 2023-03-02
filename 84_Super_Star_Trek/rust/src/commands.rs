@@ -229,14 +229,21 @@ pub fn run_damage_control(galaxy: &mut Galaxy) {
 
     view::damage_control(&ship);
 
-    if ship.damaged.len() == 0 || !galaxy.quadrants[ship.quadrant.as_index()].docked_at_starbase(ship.sector) {
+    let quadrant = &galaxy.quadrants[ship.quadrant.as_index()];
+    if ship.damaged.len() == 0 || !quadrant.docked_at_starbase(ship.sector) {
         return;
     }
 
-    // try repeair
-    // if so write dam report
-    // and increment elapsed time
+    let repair_delay = quadrant.star_base.as_ref().unwrap().repair_delay;
+    let repair_time = (ship.damaged.len() as f32 * 0.1 + repair_delay).max(0.9);
 
+    view::repair_estimate(repair_time);
+    if !input::prompt_yes_no("Will you authorize the repair order") {
+        return;
+    }
+
+    ship.damaged.clear();
+    galaxy.stardate += repair_time;
     view::damage_control(&ship);
 }
 

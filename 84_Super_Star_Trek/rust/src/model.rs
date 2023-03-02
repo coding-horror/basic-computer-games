@@ -14,8 +14,13 @@ pub struct Galaxy {
 
 pub struct Quadrant {
     pub stars: Vec<Pos>,
-    pub star_base: Option<Pos>,
+    pub star_base: Option<StarBase>,
     pub klingons: Vec<Klingon>
+}
+
+pub struct StarBase {
+    pub sector: Pos,
+    pub repair_delay: f32,
 }
 
 pub struct Klingon {
@@ -243,7 +248,7 @@ impl Galaxy {
             }
 
             if rng.gen::<f64>() > 0.96 {
-                quadrant.star_base = Some(quadrant.find_empty_sector());
+                quadrant.star_base = Some(StarBase { sector: quadrant.find_empty_sector(), repair_delay: rng.gen::<f32>() * 0.5 });
             }
 
             let klingon_count = 
@@ -264,10 +269,10 @@ impl Galaxy {
 }
 
 impl Quadrant {
-    pub fn sector_status(&self, sector: &Pos) -> SectorStatus {
+    pub fn sector_status(&self, sector: Pos) -> SectorStatus {
         if self.stars.contains(&sector) {
             SectorStatus::Star
-        } else if self.is_starbase(&sector) {
+        } else if self.is_starbase(sector) {
             SectorStatus::StarBase
         } else if self.has_klingon(&sector) {
             SectorStatus::Klingon
@@ -276,10 +281,10 @@ impl Quadrant {
         }
     }
 
-    fn is_starbase(&self, sector: &Pos) -> bool {
+    fn is_starbase(&self, sector: Pos) -> bool {
         match &self.star_base {
             None => false,
-            Some(p) => p == sector
+            Some(p) => p.sector == sector
         }
     }
 
@@ -292,13 +297,13 @@ impl Quadrant {
         let mut rng = rand::thread_rng();
         loop {
             let pos = Pos(rng.gen_range(0..8), rng.gen_range(0..8));
-            if self.sector_status(&pos) == SectorStatus::Empty {
+            if self.sector_status(pos) == SectorStatus::Empty {
                 return pos
             }
         }
     }
 
     pub fn docked_at_starbase(&self, enterprise_sector: Pos) -> bool {
-        self.star_base.is_some() && self.star_base.unwrap().abs_diff(enterprise_sector) == 1
+        self.star_base.is_some() && self.star_base.as_ref().unwrap().sector.abs_diff(enterprise_sector) == 1
     }
 }
