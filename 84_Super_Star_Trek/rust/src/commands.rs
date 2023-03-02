@@ -206,3 +206,12 @@ pub fn display_damage_control(enterprise: &Enterprise) {
     }
     println!();
 }
+
+pub fn perform_long_range_scan(galaxy: &Galaxy) {
+    if galaxy.enterprise.damaged.contains_key(model::systems::SHORT_RANGE_SCAN) {
+        view::inoperable("Long Range Scanners");
+        return;
+    }
+
+    view::long_range_scan(galaxy);
+}

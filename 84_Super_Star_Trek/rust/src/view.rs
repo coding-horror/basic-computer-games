@@ -224,3 +224,30 @@ pub fn random_repair_report_for(name: &str, damaged: bool) {
 pub fn system_repair_completed(name: String) {
     println!("        {name} repair completed.")
 }
+
+pub fn long_range_scan(galaxy: &Galaxy) {
+
+    let cx = galaxy.enterprise.quadrant.0 as i8;
+    let cy = galaxy.enterprise.quadrant.1 as i8;
+
+    println!("Long range scan for quadrant {}", galaxy.enterprise.quadrant);
+    println!("{:-^19}", "");
+    for y in cy - 1..=cy + 1 {
+        for x in cx - 1..=cx + 1 {
+            let mut klingons = "*".into();
+            let mut star_bases = "*".into();
+            let mut stars = "*".into();
+
+            if y >= 0 && y < 8 && x >= 0 && x < 8 {
+                let quadrant = &galaxy.quadrants[Pos(x as u8, y as u8).as_index()];
+                klingons = format!("{}", quadrant.klingons.len());
+                star_bases = quadrant.star_base.map_or("0", |_| "1");
+                stars = format!("{}", quadrant.stars.len());
+            }
+
+            print!(": {}{}{} ", klingons, stars, star_bases)
+        }
+        println!(":");
+        println!("{:-^19}", "");
+    } 
+}
