@@ -2,6 +2,7 @@ use crate::model::{Galaxy, Pos, EndPosition, SectorStatus, Enterprise, systems};
 
 pub mod prompts {
     pub const COURSE: &str = "Course (1-9)?";
+    pub const TORPEDO_COURSE: &str = "Photon torpedo course (1-9)?";
     pub const SHIELDS: &str = "Number of units to shields";
     pub const REPAIR: &str = "Will you authorize the repair order";
     pub const COMPUTER: &str = "Computer active and waiting command?";
@@ -276,6 +277,10 @@ pub fn bad_nav() {
     println!("   Lt. Sulu reports, 'Incorrect course data, sir!'")
 }
 
+pub fn bad_torpedo_course() {
+    println!("   Ensign Chekov reports, 'Incorrect course data, sir!'")
+}
+
 pub fn enterprise_hit(hit_strength: &u16, from_sector: &Pos) {
     println!("{hit_strength} unit hit on Enterprise from sector {from_sector}");
 }
@@ -510,4 +515,8 @@ let him step forward and enter 'Aye'")
 
 pub fn no_torpedoes_remaining() {
     println!("All photon torpedoes expended")
+}
+
+pub fn torpedo_track() {
+    println!("Torpedo track:")
 }

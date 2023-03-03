@@ -38,7 +38,7 @@ pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
 pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    let course = input::param_or_prompt_value(&provided, 0, view::prompts::COURSE, 1, 9);
+    let course = input::param_or_prompt_value(&provided, 0, view::prompts::COURSE, 1.0, 9.0);
     if course.is_none() {
         view::bad_nav();
         return;
@@ -126,28 +126,28 @@ fn repair_or_damage_random_system(enterprise: &mut Enterprise) {
     view::random_repair_report_for(system_name, true);
 }
 
-fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
+fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
 
     let ship = &mut galaxy.enterprise;
 
     // todo account for being blocked
 
-    let end = find_end_quadrant_sector(ship.quadrant, ship.sector, course, warp_speed);
+    let path = find_path(ship.quadrant, ship.sector, course, warp_speed);
 
-    if end.energy_cost > ship.total_energy {
+    if path.energy_cost > ship.total_energy {
         view::insuffient_warp_energy(warp_speed);
         return
     }
 
-    if end.hit_edge {
-        view::hit_edge(&end);
+    if path.hit_edge {
+        view::hit_edge(&path);
     }
     
-    if ship.quadrant != end.quadrant {
-        view::enter_quadrant(&end.quadrant);
-        galaxy.scanned.insert(end.quadrant);
+    if ship.quadrant != path.quadrant {
+        view::enter_quadrant(&path.quadrant);
+        galaxy.scanned.insert(path.quadrant);
         
-        if galaxy.quadrants[end.quadrant.as_index()].klingons.len() > 0 {
+        if galaxy.quadrants[path.quadrant.as_index()].klingons.len() > 0 {
             view::condition_red();
             if ship.shields <= 200 {
                 view::danger_shields();
@@ -155,16 +155,16 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
         }
     }
 
-    ship.quadrant = end.quadrant;
-    ship.sector = end.sector;
+    ship.quadrant = path.quadrant;
+    ship.sector = path.sector;
 
-    let quadrant = &galaxy.quadrants[end.quadrant.as_index()];
+    let quadrant = &galaxy.quadrants[path.quadrant.as_index()];
     if quadrant.docked_at_starbase(ship.sector) {
         ship.shields = 0;
         ship.photon_torpedoes = MAX_PHOTON_TORPEDOES;
         ship.total_energy = MAX_ENERGY;
     } else {
-        ship.total_energy = (ship.total_energy - end.energy_cost).max(0);
+        ship.total_energy = (ship.total_energy - path.energy_cost).max(0);
         if ship.shields > ship.total_energy {
             view::divert_energy_from_shields();
             ship.shields = ship.total_energy;
@@ -174,26 +174,45 @@ fn move_enterprise(course: u8, warp_speed: f32, galaxy: &mut Galaxy) {
     view::short_range_scan(&galaxy)
 }
 
-fn find_end_quadrant_sector(start_quadrant: Pos, start_sector: Pos, course: u8, warp_speed: f32) -> EndPosition {
-    let (dx, dy): (i8, i8) = COURSES[(course - 1) as usize];
+fn find_path(start_quadrant: Pos, start_sector: Pos, course: f32, warp_speed: f32) -> EndPosition {
+
+    // this course delta stuff is a translation (of a translation, of a translation...) of the original basic calcs
+    let dir = (course - 1.0) % 8.0;
+    let (dx1, dy1) = COURSES[dir as usize];
+    let (dx2, dy2) = COURSES[(dir + 1.0) as usize];
+    let frac = dir - (dir as i32) as f32;
+
+    let dx = dx1 + (dx2 - dx1) * frac;
+    let dy = dy1 + (dy2 - dy1) * frac;
 
     let mut distance = (warp_speed * 8.0) as i8;
     if distance == 0 {
         distance = 1;
     }
 
-    let galaxy_pos = start_quadrant * 8u8 + start_sector;
+    let mut last_sector = start_quadrant * 8 + start_sector;
+    let mut path = Vec::new();
+    let mut hit_edge;
 
-    let mut nx = (galaxy_pos.0 as i8) + dx * distance;
-    let mut ny = (galaxy_pos.1 as i8) + dy * distance;
+    loop {
+        let nx = (last_sector.0 as f32 + dx) as i8;
+        let ny = (last_sector.1 as f32 + dy) as i8;
+        hit_edge = nx < 0 || ny < 0 || nx >= 64 || ny >= 64;
+        if hit_edge {
+            break;
+        }
+        last_sector = Pos(nx as u8, ny as u8);
+        path.push(last_sector);
 
-    let hit_edge = nx < 0 || ny < 0 || nx >= 64 || ny >= 64;
-    nx = nx.min(63).max(0);
-    ny = ny.min(63).max(0);
-    
-    let quadrant = Pos((nx / 8) as u8, (ny / 8) as u8);
-    let sector = Pos((nx % 8) as u8, (ny % 8) as u8);
-    let energy_cost = distance as u16 + 10;
+        distance -= 1;
+        if distance == 0 {
+            break;
+        }
+    }
+  
+    let quadrant = Pos((last_sector.0 / 8) as u8, (last_sector.1 / 8) as u8);
+    let sector = Pos((last_sector.0 % 8) as u8, (last_sector.1 % 8) as u8);
+    let energy_cost = path.len() as u16 + 10;
 
     EndPosition { quadrant, sector, hit_edge, energy_cost }
 }
@@ -361,4 +380,19 @@ pub fn gather_dir_and_launch_torpedo(galaxy: &mut Galaxy, provided: Vec<String>)
         view::no_torpedoes_remaining();
         return;
     }
+
+    let course = input::param_or_prompt_value(&provided, 0, view::prompts::TORPEDO_COURSE, 1.0, 9.0);
+    if course.is_none() {
+        view::bad_torpedo_course();
+        return;
+    }
+
+    galaxy.enterprise.photon_torpedoes -= 1;
+    view::torpedo_track();
+
+    // calculate direction
+    // step through sectors
+    // test for hits or final miss
+
+    klingons_fire(galaxy);
 }
