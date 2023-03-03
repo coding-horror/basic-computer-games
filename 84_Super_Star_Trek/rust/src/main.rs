@@ -1,5 +1,6 @@
 use std::process::exit;
 
+use input::prompt;
 use model::{Galaxy, systems};
 
 mod input;
@@ -12,6 +13,8 @@ fn main() {
     .expect("Error setting Ctrl-C handler");
 
     let mut galaxy = Galaxy::generate_new();
+    let initial_klingons = galaxy.remaining_klingons();
+    let initial_stardate = galaxy.stardate;
     
     view::enterprise();
     view::intro(&galaxy);
@@ -36,12 +39,21 @@ fn main() {
             _ => view::print_command_help()
         }
 
-        if galaxy.enterprise.destroyed || galaxy.enterprise.check_stranded() {
+        if galaxy.enterprise.destroyed || galaxy.enterprise.check_stranded() || galaxy.stardate >= galaxy.final_stardate {
             view::end_game_failure(&galaxy);
-            // todo check if can restart
+            if galaxy.remaining_klingons() > 0 && galaxy.remaining_starbases() > 0 && galaxy.stardate < galaxy.final_stardate {
+                view::replay();
+                let result = prompt("");
+                if result.len() > 0 && result[0].to_uppercase() == "AYE" {
+                    galaxy.enterprise = Galaxy::new_captain(&galaxy.quadrants);
+                    continue;
+                }
+            }
+            break;
+        } else if galaxy.remaining_klingons() == 0 {
+            let efficiency = 1000.0 * f32::powi(initial_klingons as f32 / (galaxy.stardate - initial_stardate), 2);
+            view::congratulations(efficiency);
             break;
         }
-
-        // todo check for victory
     }
 }

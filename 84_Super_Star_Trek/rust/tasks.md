@@ -37,7 +37,10 @@ Started after movement and display of stats was finished (no energy management o
     - [x] 5 - galactic name map
  
 - [ ] restarting the game
+    - after defeat
+    - and by resigning
 - [ ] time progression
     - check all areas where time should move, and adjust accordingly
+    - [ ] defeat due to time expired
 - [ ] intro instructions
 - [ ] victory

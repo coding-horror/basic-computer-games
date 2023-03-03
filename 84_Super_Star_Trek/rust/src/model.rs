@@ -101,7 +101,7 @@ impl Enterprise {
     }
 
     pub fn check_stranded(&self) -> bool {
-        if self.total_energy < 10 || (self.total_energy - self.shields < 10 && self.damaged.contains_key(systems::SHIELD_CONTROL)) {
+        if self.total_energy < 10 || (self.shields + 10 > self.total_energy && self.damaged.contains_key(systems::SHIELD_CONTROL)) {
             view::stranded();
             return true;
         }
@@ -213,28 +213,35 @@ impl Galaxy {
         let quadrants = Self::generate_quadrants();
 
         let mut rng = rand::thread_rng();
-        let enterprise_quadrant = Pos(rng.gen_range(0..8), rng.gen_range(0..8));
-        let enterprise_sector = quadrants[enterprise_quadrant.as_index()].find_empty_sector();
         let stardate = rng.gen_range(20..=40) as f32 * 100.0;
 
+        let enterprise = Self::new_captain(&quadrants);
+
         let mut scanned = HashSet::new();
-        scanned.insert(enterprise_quadrant);
+        scanned.insert(enterprise.quadrant);
 
         Galaxy { 
             stardate,
             final_stardate: stardate + rng.gen_range(25..=35) as f32,
             quadrants: quadrants, 
             scanned: scanned,
-            enterprise: Enterprise { 
-                destroyed: false,
-                damaged: HashMap::new(),
-                quadrant: enterprise_quadrant, 
-                sector: enterprise_sector,
-                photon_torpedoes: MAX_PHOTON_TORPEDOES,
-                total_energy: MAX_ENERGY,
-                shields: 0 }
+            enterprise: enterprise
         }
-    }    
+    } 
+
+    pub fn new_captain(quadrants: &Vec<Quadrant>) -> Enterprise {
+        let mut rng = rand::thread_rng();
+        let enterprise_quadrant = Pos(rng.gen_range(0..8), rng.gen_range(0..8));
+        let enterprise_sector = quadrants[enterprise_quadrant.as_index()].find_empty_sector();
+        Enterprise { 
+            destroyed: false,
+            damaged: HashMap::new(),
+            quadrant: enterprise_quadrant, 
+            sector: enterprise_sector,
+            photon_torpedoes: MAX_PHOTON_TORPEDOES,
+            total_energy: MAX_ENERGY,
+            shields: 0 }
+    }   
 
     fn generate_quadrants() -> Vec<Quadrant> {
         let mut rng = rand::thread_rng();
