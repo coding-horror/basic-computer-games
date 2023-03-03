@@ -489,7 +489,6 @@ Your efficiency rating is {efficiency}.
 
 pub fn replay() {
     println!("
-
 The Federation is in need of a new starship commander
 for a similar mission -- if there is a volunteer
 let him step forward and enter 'Aye'")

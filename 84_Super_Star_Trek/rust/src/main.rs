@@ -36,6 +36,7 @@ fn main() {
             systems::LONG_RANGE_SCAN => commands::perform_long_range_scan(&mut galaxy),
             systems::COMPUTER => commands::access_computer(&galaxy, command[1..].into()),
             systems::PHASERS => commands::get_power_and_fire_phasers(&mut galaxy, command[1..].into()),
+            "XXX" => galaxy.enterprise.destroyed = true,
             _ => view::print_command_help()
         }
 

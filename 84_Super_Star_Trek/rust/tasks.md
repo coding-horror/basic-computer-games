@@ -36,11 +36,11 @@ Started after movement and display of stats was finished (no energy management o
     - [ ] 4 - direction/distance calculator (useful for nav actions I guess)
     - [x] 5 - galactic name map
  
-- [ ] restarting the game
-    - after defeat
-    - and by resigning
+- [x] restarting the game
+    - [x] after defeat
+    - [x] and by resigning
 - [ ] time progression
     - check all areas where time should move, and adjust accordingly
-    - [ ] defeat due to time expired
+    - [x] defeat due to time expired
 - [ ] intro instructions
-- [ ] victory
+- [x] victory
