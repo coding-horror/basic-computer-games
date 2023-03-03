@@ -231,10 +231,9 @@ pub fn run_damage_control(galaxy: &mut Galaxy) {
 
     if ship.damaged.contains_key(systems::DAMAGE_CONTROL) {
         view::inoperable(&systems::name_for(systems::DAMAGE_CONTROL));
-        return;
+    } else {
+        view::damage_control(&ship);
     }
-
-    view::damage_control(&ship);
 
     let quadrant = &galaxy.quadrants[ship.quadrant.as_index()];
     if ship.damaged.len() == 0 || !quadrant.docked_at_starbase(ship.sector) {
