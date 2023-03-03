@@ -461,3 +461,19 @@ pub fn repair_estimate(repair_time: f32) {
 "Technicians standing by to effect repairs to your ship;
 Estimated time to repair: {repair_time} stardates.")
 }
+
+pub fn no_damage(sector: Pos) {
+    println!("Sensors show no damage to enemy at {sector}")
+}
+
+pub fn hit_on_klingon(hit_strength: f32, sector: Pos) {
+    println!("{hit_strength} unit hit on Klingon at sector {sector}")
+}
+
+pub fn klingon_remaining_energy(energy: f32) {
+    println!("   (sensors show {energy} units remaining)")
+}
+
+pub fn klingon_destroyed() {
+    println!("   Target Destroyed!") // not standard for game but feedback is good. Sorry Mr. Roddenberry
+}

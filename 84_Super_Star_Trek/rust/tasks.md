@@ -26,7 +26,7 @@ Started after movement and display of stats was finished (no energy management o
     - [x] repair on damage control
     - [x] protection from shots
 - [ ] weapons
-    - [ ] phasers
+    - [x] phasers
     - [ ] torpedoes
 - [ ] computer
     - [x] 0 - output of all short and long range scans (requires tracking if a system has been scanned)

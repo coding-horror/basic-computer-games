@@ -25,7 +25,7 @@ pub struct StarBase {
 
 pub struct Klingon {
     pub sector: Pos,
-    energy: f32
+    pub energy: f32
 }
 
 impl Klingon {

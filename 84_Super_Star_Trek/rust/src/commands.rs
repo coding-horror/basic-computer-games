@@ -331,7 +331,23 @@ pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
 
     let per_enemy = power / quadrant.klingons.len() as f32;
 
-    // fire on each klingon
+    for k in &mut quadrant.klingons {
+        let dist = k.sector.abs_diff(galaxy.enterprise.sector) as f32;
+        let hit_strength = per_enemy / dist * (2.0 + rng.gen::<f32>());
+        if hit_strength < 0.15 * k.energy {
+            view::no_damage(k.sector);
+        } else {
+            k.energy -= hit_strength;
+            view::hit_on_klingon(hit_strength, k.sector);
+            if k.energy > 0.0 {
+                view::klingon_remaining_energy(k.energy);
+            } else {
+                view::klingon_destroyed();
+            }
+        }
+    }
+
+    quadrant.klingons.retain(|k| k.energy > 0.0);
 
     klingons_fire(galaxy);
 }
