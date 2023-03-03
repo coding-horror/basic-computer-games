@@ -1,5 +1,19 @@
 use crate::model::{Galaxy, Pos, EndPosition, SectorStatus, Enterprise, systems};
 
+pub mod prompts {
+    pub const COURSE: &str = "Course (1-9)?";
+    pub const SHIELDS: &str = "Number of units to shields";
+    pub const REPAIR: &str = "Will you authorize the repair order";
+    pub const COMPUTER: &str = "Computer active and waiting command?";
+    pub const PHASERS: &str = "Number of units to fire";
+    pub const WHEN_READY: &str = "Press Enter when ready to accept command";
+    pub const COMMAND: &str = "Command?";
+
+    pub fn warp_factor(max_warp: f32) -> String {
+        format!("Warp Factor (0-{})?", max_warp)
+    }
+}
+
 pub fn full_instructions() {
     println!(
 "        INSTRUCTIONS FOR 'SUPER STAR TREK'
@@ -492,4 +506,8 @@ pub fn replay() {
 The Federation is in need of a new starship commander
 for a similar mission -- if there is a volunteer
 let him step forward and enter 'Aye'")
+}
+
+pub fn no_torpedoes_remaining() {
+    println!("All photon torpedoes expended")
 }

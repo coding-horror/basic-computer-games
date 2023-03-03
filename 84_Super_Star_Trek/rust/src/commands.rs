@@ -19,7 +19,7 @@ pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
     }
 
     view::energy_available(galaxy.enterprise.total_energy);
-    let value = input::param_or_prompt_value(&provided, 0, "Number of units to shields", 0, i32::MAX);
+    let value = input::param_or_prompt_value(&provided, 0, view::prompts::SHIELDS, 0, i32::MAX);
     if value.is_none() {
         view::shields_unchanged();
         return;
@@ -38,7 +38,7 @@ pub fn get_amount_and_set_shields(galaxy: &mut Galaxy, provided: Vec<String>) {
 
 pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>) {
 
-    let course = input::param_or_prompt_value(&provided, 0, "Course (1-9)?", 1, 9);
+    let course = input::param_or_prompt_value(&provided, 0, view::prompts::COURSE, 1, 9);
     if course.is_none() {
         view::bad_nav();
         return;
@@ -51,7 +51,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
         max_warp = 0.2;
     }
 
-    let speed = input::param_or_prompt_value(&provided, 1, format!("Warp Factor (0-{})?", max_warp).as_str(), 0.0, 8.0);
+    let speed = input::param_or_prompt_value(&provided, 1, &view::prompts::warp_factor(max_warp), 0.0, 8.0);
     if speed.is_none() {
         view::bad_nav();
         return;
@@ -244,7 +244,7 @@ pub fn run_damage_control(galaxy: &mut Galaxy) {
     let repair_time = (ship.damaged.len() as f32 * 0.1 + repair_delay).max(0.9);
 
     view::repair_estimate(repair_time);
-    if !input::prompt_yes_no("Will you authorize the repair order") {
+    if !input::prompt_yes_no(view::prompts::REPAIR) {
         return;
     }
 
@@ -273,7 +273,7 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
 
     let operation : i32;
     loop {
-        let entered = input::param_or_prompt_value(&provided, 0, "Computer active and waiting command?", 0, 5);
+        let entered = input::param_or_prompt_value(&provided, 0, view::prompts::COMPUTER, 0, 5);
         if entered.is_none() {
             view::computer_options();
         } else {
@@ -310,7 +310,7 @@ pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
     view::phasers_locked(available_energy);
     let mut power: f32;
     loop {
-        let setting = param_or_prompt_value(&provided, 0, "Number of units to fire", 0, available_energy);
+        let setting = param_or_prompt_value(&provided, 0, view::prompts::PHASERS, 0, available_energy);
         if setting.is_some() {
             power = setting.unwrap() as f32;
             break;
@@ -349,4 +349,16 @@ pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
     quadrant.klingons.retain(|k| k.energy > 0.0);
 
     klingons_fire(galaxy);
+}
+
+pub fn gather_dir_and_launch_torpedo(galaxy: &mut Galaxy, provided: Vec<String>) {
+    if galaxy.enterprise.damaged.contains_key(systems::TORPEDOES) {
+        view::inoperable(&systems::name_for(systems::TORPEDOES));
+        return;
+    }
+
+    if galaxy.enterprise.photon_torpedoes == 0 {
+        view::no_torpedoes_remaining();
+        return;
+    }
 }

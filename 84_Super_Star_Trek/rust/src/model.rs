@@ -118,9 +118,12 @@ pub mod systems {
     pub const LONG_RANGE_SCAN: &str = "LRS";
     pub const COMPUTER: &str = "COM";
     pub const PHASERS: &str = "PHA";
+    pub const TORPEDOES: &str = "TOR";
 
-    pub const KEYS: [&str; 7] = [
-        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN, COMPUTER, PHASERS
+    pub const RESIGN: &str = "XXX";
+
+    pub const KEYS: [&str; 8] = [
+        SHORT_RANGE_SCAN, WARP_ENGINES, SHIELD_CONTROL, DAMAGE_CONTROL, LONG_RANGE_SCAN, COMPUTER, PHASERS, TORPEDOES
     ];
 
     pub fn name_for(key: &str) -> String {
@@ -132,6 +135,7 @@ pub mod systems {
             LONG_RANGE_SCAN => "Long Range Scanners".into(),
             COMPUTER => "Library-Computer".into(),
             PHASERS => "Phaser Control".into(),
+            TORPEDOES => "Photon Tubes".into(),
             _ => "Unknown".into()
         }
     }

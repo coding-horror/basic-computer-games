@@ -18,13 +18,13 @@ fn main() {
     
     view::enterprise();
     view::intro(&galaxy);
-    let _ = input::prompt("Press Enter when ready to accept command");
+    let _ = input::prompt(view::prompts::WHEN_READY);
 
     view::starting_quadrant(&galaxy.enterprise.quadrant);
     view::short_range_scan(&galaxy);
 
     loop {
-        let command = input::prompt("Command?");
+        let command = input::prompt(view::prompts::COMMAND);
         if command.len() == 0 {
             continue;
         }
@@ -36,7 +36,8 @@ fn main() {
             systems::LONG_RANGE_SCAN => commands::perform_long_range_scan(&mut galaxy),
             systems::COMPUTER => commands::access_computer(&galaxy, command[1..].into()),
             systems::PHASERS => commands::get_power_and_fire_phasers(&mut galaxy, command[1..].into()),
-            "XXX" => galaxy.enterprise.destroyed = true,
+            systems::TORPEDOES => commands::gather_dir_and_launch_torpedo(&mut galaxy, command[1..].into()),
+            systems::RESIGN => galaxy.enterprise.destroyed = true,
             _ => view::print_command_help()
         }
 
