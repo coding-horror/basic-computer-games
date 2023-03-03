@@ -39,7 +39,7 @@ fn main() {
             _ => view::print_command_help()
         }
 
-        if galaxy.enterprise.destroyed || galaxy.enterprise.check_stranded() || galaxy.stardate >= galaxy.final_stardate {
+        if galaxy.enterprise.destroyed || galaxy.enterprise.is_stranded() || galaxy.stardate >= galaxy.final_stardate {
             view::end_game_failure(&galaxy);
             if galaxy.remaining_klingons() > 0 && galaxy.remaining_starbases() > 0 && galaxy.stardate < galaxy.final_stardate {
                 view::replay();

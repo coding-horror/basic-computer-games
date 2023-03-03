@@ -58,12 +58,12 @@ impl Enterprise {
         
         view::enterprise_hit(&hit_strength, &sector);
 
-        self.shields = (self.shields - hit_strength).max(0);
-
-        if self.shields <= 0 {
+        if self.shields <= hit_strength {
             view::enterprise_destroyed();
             self.destroyed = true
         }
+
+        self.shields -= hit_strength;
 
         view::shields_hit(self.shields);
         
@@ -100,7 +100,7 @@ impl Enterprise {
         return false;
     }
 
-    pub fn check_stranded(&self) -> bool {
+    pub fn is_stranded(&self) -> bool {
         if self.total_energy < 10 || (self.shields + 10 > self.total_energy && self.damaged.contains_key(systems::SHIELD_CONTROL)) {
             view::stranded();
             return true;
