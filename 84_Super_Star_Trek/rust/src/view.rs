@@ -291,7 +291,7 @@ pub fn hit_edge(end: &EndPosition) {
     'Permission to attempt crossing of galactic perimeter
         is hereby *Denied*. Shut down your engines.'
     Chief Engineer Scott reports, 'Warp engines shut down
-        at sector {} of quadrant {}.'", end.quadrant, end.sector);
+        at sector {} of quadrant {}.'", end.sector, end.quadrant);
 }
 
 pub fn condition_red() {
