@@ -580,3 +580,11 @@ That does it, Captain!!  You are hereby relieved of command
 and sentenced to 99 stardates at hard labor on Cygnus 12!!")
     }
 }
+
+pub fn no_local_starbase() {
+    println!("Mr. Spock reports, 'Sensors show no starbases in this quadrant.'")
+}
+
+pub fn starbase_report() {
+    println!("From Enterprise to Starbase:'")
+}

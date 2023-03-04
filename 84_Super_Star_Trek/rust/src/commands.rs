@@ -307,8 +307,24 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
     
     match operation {
         0 => view::galaxy_scanned_map(galaxy),
+        3 => show_starbase_data(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
+    }
+}
+
+fn show_starbase_data(galaxy: &Galaxy) {
+    let quadrant = &galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
+    match &quadrant.star_base {
+        None => {
+            view::no_local_starbase();
+            return;
+        },
+        Some(s) => {
+            view::starbase_report();
+            let pos = s.sector;
+            // calulcate direction and distance then print
+        }
     }
 }
 
