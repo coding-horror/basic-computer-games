@@ -1,6 +1,7 @@
 use crate::model::{Galaxy, Pos, SectorStatus, Enterprise, systems};
 
 pub mod prompts {
+    pub const INSTRUCTIONS: &str = "Do you need instructions";
     pub const COURSE: &str = "Course (1-9)?";
     pub const TORPEDO_COURSE: &str = "Photon torpedo course (1-9)?";
     pub const SHIELDS: &str = "Number of units to shields";
@@ -13,6 +14,38 @@ pub mod prompts {
     pub fn warp_factor(max_warp: f32) -> String {
         format!("Warp Factor (0-{})?", max_warp)
     }
+}
+
+pub fn title() {
+    println!("
+
+
+
+
+
+
+
+
+
+
+
+          *************************************
+          *                                   *
+          *                                   *
+          *      * * SUPER STAR TREK * *      *
+          *                                   *
+          *                                   *
+          *************************************
+
+
+
+
+
+
+
+
+
+    ");
 }
 
 pub fn full_instructions() {
