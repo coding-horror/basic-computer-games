@@ -43,5 +43,5 @@ Started after movement and display of stats was finished (no energy management o
     - [x] check all areas where time should move, and adjust accordingly
         - looks to only be on nav and repair
     - [x] defeat due to time expired
-- [ ] intro instructions
+- [x] intro instructions
 - [x] victory

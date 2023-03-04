@@ -154,7 +154,9 @@ pub fn full_instructions() {
             direction/distance calculations.
          Option 5 = Galactic Region Name Map
             This option prints the names of the sixteen major
-            galactic regions referred to in the game.")
+            galactic regions referred to in the game.
+
+")
 }
 
 pub fn enterprise() {

@@ -1,6 +1,6 @@
 use std::process::exit;
 
-use input::prompt;
+use input::{prompt, prompt_yes_no};
 use model::{Galaxy, systems};
 
 mod input;
@@ -11,6 +11,12 @@ mod view;
 fn main() {
     ctrlc::set_handler(move || { exit(0) })
     .expect("Error setting Ctrl-C handler");
+
+    view::title();
+    if prompt_yes_no(view::prompts::INSTRUCTIONS) {
+        view::full_instructions();
+        let _ = input::prompt(view::prompts::WHEN_READY);
+    }
 
     let mut galaxy = Galaxy::generate_new();
     let initial_klingons = galaxy.remaining_klingons();
