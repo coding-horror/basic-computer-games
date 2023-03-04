@@ -433,7 +433,7 @@ pub fn long_range_scan(galaxy: &Galaxy) -> Vec<Pos> {
                 stars = format!("{}", quadrant.stars.len());
             }
 
-            print!(": {}{}{} ", klingons, stars, star_bases)
+            print!(": {}{}{} ", klingons, star_bases, stars)
         }
         println!(":");
         println!("{:-^19}", "");
@@ -482,7 +482,7 @@ pub fn galaxy_scanned_map(galaxy: &Galaxy) {
             let pos = Pos(x, y);
             if galaxy.scanned.contains(&pos) {
                 let quadrant = &galaxy.quadrants[pos.as_index()];
-                print!(" {}{}{}  ", quadrant.klingons.len(), quadrant.stars.len(), quadrant.star_base.as_ref().map_or("0", |_| "1"))
+                print!(" {}{}{}  ", quadrant.klingons.len(), quadrant.star_base.as_ref().map_or("0", |_| "1"), quadrant.stars.len())
             } else {
                 print!(" ***  ");
             }
@@ -589,7 +589,7 @@ pub fn starbase_report() {
     println!("From Enterprise to Starbase:'")
 }
 
-pub fn direction_distance(dir: f32, dist: f32) {
+pub fn direction_distance(dir: f32, dist: u8) {
     println!(
 "Direction = {dir}
 Distance = {dist}"

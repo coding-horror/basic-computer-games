@@ -154,16 +154,17 @@ impl Pos {
         self.0.abs_diff(other.0) + self.1.abs_diff(other.1)
     }
 
-    pub fn dist(&self, other: Pos) -> f32 {
+    pub fn dist(&self, other: Pos) -> u8 {
         let dx = other.0 as f32 - self.0 as f32;
         let dy = other.1 as f32 - self.1 as f32;
-        (f32::powi(dx, 2) + f32::powi(dy, 2)).sqrt()
+        (f32::powi(dx, 2) + f32::powi(dy, 2)).sqrt() as u8
     }
 
     pub fn direction(&self, other: Pos) -> f32 {
         // this is a replication of the original BASIC code
-        let dx = other.0 as f32 - self.0 as f32;
-        let dy = other.1 as f32 - self.1 as f32;
+        let dy = other.0 as f32 - self.0 as f32;
+        let dx = other.1 as f32 - self.1 as f32;
+        // note i actually use x,y, but the calculation assumes y,x so they're flipped above
         let dx_dominant = dx.abs() > dy.abs();
 
         let frac = if dx_dominant { dy / dx } else { -dx / dy };
