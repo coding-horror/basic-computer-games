@@ -60,7 +60,8 @@ impl Enterprise {
 
         if self.shields <= hit_strength {
             view::enterprise_destroyed();
-            self.destroyed = true
+            self.destroyed = true;
+            return;
         }
 
         self.shields -= hit_strength;
@@ -141,13 +142,6 @@ pub mod systems {
     }
 }
 
-pub struct EndPosition {
-    pub quadrant: Pos,
-    pub sector: Pos,
-    pub hit_edge: bool,
-    pub energy_cost: u16,
-}
-
 #[derive(PartialEq, Clone, Copy, Debug, Hash, Eq)]
 pub struct Pos(pub u8, pub u8);
 
@@ -158,6 +152,14 @@ impl Pos {
 
     pub fn abs_diff(&self, other: Pos) -> u8 {
         self.0.abs_diff(other.0) + self.1.abs_diff(other.1)
+    }
+
+    pub fn as_galactic_sector(&self, containing_quadrant: Pos) -> Self {
+        Pos(containing_quadrant.0 * 8 + self.0, containing_quadrant.1 * 8 + self.1)
+    }
+
+    pub fn to_local_quadrant_sector(&self) -> (Self, Self) {
+        (Pos(self.0 / 8, self.1 / 8), Pos(self.0 % 8, self.1 % 8))
     }
 }
 
@@ -286,7 +288,7 @@ impl Quadrant {
             SectorStatus::Star
         } else if self.is_starbase(sector) {
             SectorStatus::StarBase
-        } else if self.has_klingon(&sector) {
+        } else if self.has_klingon(sector) {
             SectorStatus::Klingon
         } else {
             SectorStatus::Empty
@@ -300,9 +302,14 @@ impl Quadrant {
         }
     }
 
-    fn has_klingon(&self, sector: &Pos) -> bool {
+    fn has_klingon(&self, sector: Pos) -> bool {
         let klingons = &self.klingons;
-        klingons.into_iter().find(|k| &k.sector == sector).is_some()
+        klingons.into_iter().find(|k| k.sector == sector).is_some()
+    }
+
+    pub fn get_klingon(&mut self, sector: Pos) -> Option<&mut Klingon> {
+        let klingons = &mut self.klingons;
+        klingons.into_iter().find(|k| k.sector == sector)
     }
 
     pub fn find_empty_sector(&self) -> Pos {

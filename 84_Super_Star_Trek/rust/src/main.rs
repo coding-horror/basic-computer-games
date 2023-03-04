@@ -20,7 +20,7 @@ fn main() {
     view::intro(&galaxy);
     let _ = input::prompt(view::prompts::WHEN_READY);
 
-    view::starting_quadrant(&galaxy.enterprise.quadrant);
+    view::starting_quadrant(galaxy.enterprise.quadrant);
     view::short_range_scan(&galaxy);
 
     loop {

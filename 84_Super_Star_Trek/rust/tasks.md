@@ -25,9 +25,9 @@ Started after movement and display of stats was finished (no energy management o
     - [x] proximity detection for docking
     - [x] repair on damage control
     - [x] protection from shots
-- [ ] weapons
+- [x] weapons
     - [x] phasers
-    - [ ] torpedoes
+    - [x] torpedoes
 - [ ] computer
     - [x] 0 - output of all short and long range scans (requires tracking if a system has been scanned)
     - [ ] 1 - klingons, starbases, stardate and damage control

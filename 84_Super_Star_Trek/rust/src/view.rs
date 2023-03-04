@@ -1,4 +1,4 @@
-use crate::model::{Galaxy, Pos, EndPosition, SectorStatus, Enterprise, systems};
+use crate::model::{Galaxy, Pos, SectorStatus, Enterprise, systems};
 
 pub mod prompts {
     pub const COURSE: &str = "Course (1-9)?";
@@ -187,19 +187,19 @@ const REGION_NAMES: [&str; 16] = [
 
 const SUB_REGION_NAMES: [&str; 4] = ["I", "II", "III", "IV"];
 
-fn quadrant_name(quadrant: &Pos) -> String {
+fn quadrant_name(quadrant: Pos) -> String {
     format!("{} {}", 
         REGION_NAMES[((quadrant.1 << 1) + (quadrant.0 >> 2)) as usize],
         SUB_REGION_NAMES[(quadrant.1 % 4) as usize])
 }
 
-pub fn starting_quadrant(quadrant: &Pos) {
+pub fn starting_quadrant(quadrant: Pos) {
     println!(
 "\nYour mission begins with your starship located
 in the galactic quadrant, '{}'.\n", quadrant_name(quadrant))
 }
 
-pub fn enter_quadrant(quadrant: &Pos) {
+pub fn enter_quadrant(quadrant: Pos) {
     println!("\nNow entering {} quadrant . . .\n", quadrant_name(quadrant))
 }
 
@@ -285,13 +285,13 @@ pub fn enterprise_hit(hit_strength: &u16, from_sector: &Pos) {
     println!("{hit_strength} unit hit on Enterprise from sector {from_sector}");
 }
 
-pub fn hit_edge(end: &EndPosition) {
+pub fn hit_edge(quadrant: Pos, sector: Pos) {
     println!(
 "Lt. Uhura report message from Starfleet Command:
     'Permission to attempt crossing of galactic perimeter
         is hereby *Denied*. Shut down your engines.'
     Chief Engineer Scott reports, 'Warp engines shut down
-        at sector {} of quadrant {}.'", end.sector, end.quadrant);
+        at sector {} of quadrant {}.'", sector, quadrant);
 }
 
 pub fn condition_red() {
@@ -494,7 +494,7 @@ pub fn klingon_remaining_energy(energy: f32) {
 }
 
 pub fn klingon_destroyed() {
-    println!("   Target Destroyed!") // not standard for game but feedback is good. Sorry Mr. Roddenberry
+    println!("*** Klingon destroyed ***")
 }
 
 pub fn congratulations(efficiency: f32) {
@@ -519,4 +519,29 @@ pub fn no_torpedoes_remaining() {
 
 pub fn torpedo_track() {
     println!("Torpedo track:")
+}
+
+pub fn torpedo_path(sector: Pos) {
+    println!("{:<16}{}", "", sector)
+}
+
+pub fn torpedo_missed() {
+    println!("Torpedo missed!")
+}
+
+pub fn star_absorbed_torpedo(sector: Pos) {
+    println!("Star at {sector} absorbed torpedo energy.")
+}
+
+pub fn destroyed_starbase(not_the_last_starbase: bool) {
+    println!("*** Starbase destroyed ***");
+    if not_the_last_starbase {
+        println!("
+Starfleet Command reviewing your record to consider
+court martial!")
+    } else {
+        println!("
+That does it, Captain!!  You are hereby relieved of command
+and sentenced to 99 stardates at hard labor on Cygnus 12!!")
+    }
 }

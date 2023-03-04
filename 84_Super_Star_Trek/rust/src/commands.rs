@@ -132,22 +132,24 @@ fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
 
     // todo account for being blocked
 
-    let path = find_path(ship.quadrant, ship.sector, course, warp_speed);
+    let (path, hit_edge) = find_nav_path(ship.quadrant, ship.sector, course, warp_speed);
+    let energy_cost = path.len() as u16 + 10;
 
-    if path.energy_cost > ship.total_energy {
+    if energy_cost > ship.total_energy {
         view::insuffient_warp_energy(warp_speed);
         return
     }
 
-    if path.hit_edge {
-        view::hit_edge(&path);
+    let (end_quadrant, end_sector) = path[path.len() - 1].to_local_quadrant_sector();
+    if hit_edge {
+        view::hit_edge(end_quadrant, end_sector);
     }
     
-    if ship.quadrant != path.quadrant {
-        view::enter_quadrant(&path.quadrant);
-        galaxy.scanned.insert(path.quadrant);
+    if ship.quadrant != end_quadrant {
+        view::enter_quadrant(end_quadrant);
+        galaxy.scanned.insert(end_quadrant);
         
-        if galaxy.quadrants[path.quadrant.as_index()].klingons.len() > 0 {
+        if galaxy.quadrants[end_quadrant.as_index()].klingons.len() > 0 {
             view::condition_red();
             if ship.shields <= 200 {
                 view::danger_shields();
@@ -155,16 +157,16 @@ fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
         }
     }
 
-    ship.quadrant = path.quadrant;
-    ship.sector = path.sector;
+    ship.quadrant = end_quadrant;
+    ship.sector = end_sector;
 
-    let quadrant = &galaxy.quadrants[path.quadrant.as_index()];
+    let quadrant = &galaxy.quadrants[end_quadrant.as_index()];
     if quadrant.docked_at_starbase(ship.sector) {
         ship.shields = 0;
         ship.photon_torpedoes = MAX_PHOTON_TORPEDOES;
         ship.total_energy = MAX_ENERGY;
     } else {
-        ship.total_energy = (ship.total_energy - path.energy_cost).max(0);
+        ship.total_energy = ship.total_energy - energy_cost;
         if ship.shields > ship.total_energy {
             view::divert_energy_from_shields();
             ship.shields = ship.total_energy;
@@ -174,23 +176,16 @@ fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
     view::short_range_scan(&galaxy)
 }
 
-fn find_path(start_quadrant: Pos, start_sector: Pos, course: f32, warp_speed: f32) -> EndPosition {
+fn find_nav_path(start_quadrant: Pos, start_sector: Pos, course: f32, warp_speed: f32) -> (Vec<Pos>, bool) {
 
-    // this course delta stuff is a translation (of a translation, of a translation...) of the original basic calcs
-    let dir = (course - 1.0) % 8.0;
-    let (dx1, dy1) = COURSES[dir as usize];
-    let (dx2, dy2) = COURSES[(dir + 1.0) as usize];
-    let frac = dir - (dir as i32) as f32;
-
-    let dx = dx1 + (dx2 - dx1) * frac;
-    let dy = dy1 + (dy2 - dy1) * frac;
+    let (dx, dy) = calculate_delta(course);
 
     let mut distance = (warp_speed * 8.0) as i8;
     if distance == 0 {
         distance = 1;
     }
 
-    let mut last_sector = start_quadrant * 8 + start_sector;
+    let mut last_sector = start_sector.as_galactic_sector(start_quadrant);
     let mut path = Vec::new();
     let mut hit_edge;
 
@@ -210,11 +205,20 @@ fn find_path(start_quadrant: Pos, start_sector: Pos, course: f32, warp_speed: f3
         }
     }
   
-    let quadrant = Pos((last_sector.0 / 8) as u8, (last_sector.1 / 8) as u8);
-    let sector = Pos((last_sector.0 % 8) as u8, (last_sector.1 % 8) as u8);
-    let energy_cost = path.len() as u16 + 10;
+    (path, hit_edge)
+}
 
-    EndPosition { quadrant, sector, hit_edge, energy_cost }
+fn calculate_delta(course: f32) -> (f32, f32) {
+    // this course delta stuff is a translation (of a translation, of a translation...) of the original basic calcs
+    let dir = (course - 1.0) % 8.0;
+    let (dx1, dy1) = COURSES[dir as usize];
+    let (dx2, dy2) = COURSES[(dir + 1.0) as usize];
+    let frac = dir - (dir as i32) as f32;
+
+    let dx = dx1 + (dx2 - dx1) * frac;
+    let dy = dy1 + (dy2 - dy1) * frac;
+
+    (dx, dy)
 }
 
 fn klingons_move(galaxy: &mut Galaxy) {
@@ -371,12 +375,15 @@ pub fn get_power_and_fire_phasers(galaxy: &mut Galaxy, provided: Vec<String>) {
 }
 
 pub fn gather_dir_and_launch_torpedo(galaxy: &mut Galaxy, provided: Vec<String>) {
-    if galaxy.enterprise.damaged.contains_key(systems::TORPEDOES) {
+    let star_bases = galaxy.remaining_starbases();
+    let ship = &mut galaxy.enterprise;
+
+    if ship.damaged.contains_key(systems::TORPEDOES) {
         view::inoperable(&systems::name_for(systems::TORPEDOES));
         return;
     }
 
-    if galaxy.enterprise.photon_torpedoes == 0 {
+    if ship.photon_torpedoes == 0 {
         view::no_torpedoes_remaining();
         return;
     }
@@ -387,12 +394,68 @@ pub fn gather_dir_and_launch_torpedo(galaxy: &mut Galaxy, provided: Vec<String>)
         return;
     }
 
-    galaxy.enterprise.photon_torpedoes -= 1;
+    ship.photon_torpedoes -= 1;
     view::torpedo_track();
 
-    // calculate direction
-    // step through sectors
-    // test for hits or final miss
+    let path = find_torpedo_path(ship.sector, course.unwrap());
+    let quadrant = &mut galaxy.quadrants[ship.quadrant.as_index()];
+    let mut hit = false;
+    for p in path {
+        view::torpedo_path(p);
+        match quadrant.sector_status(p) {
+            SectorStatus::Empty => continue,
+            SectorStatus::Star => {
+                hit = true;
+                view::star_absorbed_torpedo(p);
+                break;
+            },
+            SectorStatus::Klingon => {
+                hit = true;
+                quadrant.get_klingon(p).unwrap().energy = 0.0;
+                quadrant.klingons.retain(|k| k.energy > 0.0);
+                view::klingon_destroyed();
+                break;
+            },
+            SectorStatus::StarBase => {
+                hit = true;
+                quadrant.star_base = None;
+                let remaining = star_bases - 1;
+                view::destroyed_starbase(remaining > 0);
+                if remaining == 0 {
+                    ship.destroyed = true;
+                }
+                break;
+            }
+        }
+    }
+
+    if ship.destroyed { // if you wiped out the last starbase, trigger game over
+        return;
+    }
+
+    if !hit {
+        view::torpedo_missed();
+    }
 
     klingons_fire(galaxy);
+}
+
+fn find_torpedo_path(start_sector: Pos, course: f32) -> Vec<Pos> {
+
+    let (dx, dy) = calculate_delta(course);
+
+    let mut last_sector = start_sector;
+    let mut path = Vec::new();
+
+    loop {
+        let nx = (last_sector.0 as f32 + dx) as i8;
+        let ny = (last_sector.1 as f32 + dy) as i8;
+        if nx < 0 || ny < 0 || nx >= 8 || ny >= 8 {
+            break;
+        }
+        last_sector = Pos(nx as u8, ny as u8);
+        path.push(last_sector);
+    }
+  
+    path
 }
