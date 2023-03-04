@@ -39,8 +39,9 @@ Started after movement and display of stats was finished (no energy management o
 - [x] restarting the game
     - [x] after defeat
     - [x] and by resigning
-- [ ] time progression
-    - check all areas where time should move, and adjust accordingly
+- [x] time progression
+    - [x] check all areas where time should move, and adjust accordingly
+        - looks to only be on nav and repair
     - [x] defeat due to time expired
 - [ ] intro instructions
 - [x] victory
