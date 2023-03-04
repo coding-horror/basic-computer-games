@@ -595,3 +595,19 @@ pub fn direction_distance(dir: f32, dist: u8) {
 Distance = {dist}"
     )
 }
+
+pub fn status_report(galaxy: &Galaxy) {
+    let klingon_count = galaxy.remaining_klingons();
+    let star_bases = galaxy.remaining_starbases();
+    let time_remaining = galaxy.final_stardate - galaxy.stardate;
+    let mut plural_starbase = "";
+    if star_bases > 1 {
+        plural_starbase = "s";
+    }
+
+    println!("   Status report:
+Klingons left:  {klingon_count}
+Mission must be completed in {time_remaining} stardates.
+The Federation is maintaining {star_bases} starbase{plural_starbase} in the galaxy.
+")
+}

@@ -248,16 +248,17 @@ fn klingons_fire(galaxy: &mut Galaxy) {
     }
 }
 
-pub fn run_damage_control(galaxy: &mut Galaxy) {
-
-    let ship = &mut galaxy.enterprise;
-
-    if ship.damaged.contains_key(systems::DAMAGE_CONTROL) {
+pub fn run_damage_control(galaxy: &Galaxy) {
+    if galaxy.enterprise.damaged.contains_key(systems::DAMAGE_CONTROL) {
         view::inoperable(&systems::name_for(systems::DAMAGE_CONTROL));
-    } else {
-        view::damage_control(&ship);
+        return;
     }
+    
+    view::damage_control(&galaxy.enterprise);
+}
 
+pub fn try_starbase_ship_repair(galaxy: &mut Galaxy) {
+    let ship = &mut galaxy.enterprise;
     let quadrant = &galaxy.quadrants[ship.quadrant.as_index()];
     if ship.damaged.len() == 0 || !quadrant.docked_at_starbase(ship.sector) {
         return;
@@ -307,6 +308,10 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
     
     match operation {
         0 => view::galaxy_scanned_map(galaxy),
+        1 => {
+            view::status_report(galaxy);
+            run_damage_control(galaxy);
+        },
         3 => show_starbase_data(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
