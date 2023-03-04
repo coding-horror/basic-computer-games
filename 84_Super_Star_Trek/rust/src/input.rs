@@ -42,12 +42,15 @@ pub fn prompt_value<T: FromStr + PartialOrd>(prompt_text: &str, min: T, max: T) 
 }
 
 pub fn param_or_prompt_value<T: FromStr + PartialOrd>(params: &Vec<String>, param_pos: usize, prompt_text: &str, min: T, max: T) -> Option<T> {
+    let mut res: Option<T> = None;
     if params.len() > param_pos {
         match params[param_pos].parse::<T>() {
-            Ok(n) => Some(n),
-            _ => None
+            Ok(n) if (n >= min && n <= max) => res = Some(n),
+            _ => ()
         }
-    } else {
-        return prompt_value::<T>(prompt_text, min, max);
     }
+    if res.is_some() {
+        return res;
+    }
+    return prompt_value::<T>(prompt_text, min, max);    
 }

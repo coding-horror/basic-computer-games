@@ -588,3 +588,10 @@ pub fn no_local_starbase() {
 pub fn starbase_report() {
     println!("From Enterprise to Starbase:'")
 }
+
+pub fn direction_distance(dir: f32, dist: f32) {
+    println!(
+"Direction = {dir}
+Distance = {dist}"
+    )
+}

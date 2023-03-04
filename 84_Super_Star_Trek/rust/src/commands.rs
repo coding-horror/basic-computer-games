@@ -322,8 +322,9 @@ fn show_starbase_data(galaxy: &Galaxy) {
         },
         Some(s) => {
             view::starbase_report();
-            let pos = s.sector;
-            // calulcate direction and distance then print
+            let origin = galaxy.enterprise.sector;
+            let target = s.sector;
+            view::direction_distance(origin.direction(target), origin.dist(target))
         }
     }
 }

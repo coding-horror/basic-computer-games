@@ -154,6 +154,33 @@ impl Pos {
         self.0.abs_diff(other.0) + self.1.abs_diff(other.1)
     }
 
+    pub fn dist(&self, other: Pos) -> f32 {
+        let dx = other.0 as f32 - self.0 as f32;
+        let dy = other.1 as f32 - self.1 as f32;
+        (f32::powi(dx, 2) + f32::powi(dy, 2)).sqrt()
+    }
+
+    pub fn direction(&self, other: Pos) -> f32 {
+        // this is a replication of the original BASIC code
+        let dx = other.0 as f32 - self.0 as f32;
+        let dy = other.1 as f32 - self.1 as f32;
+        let dx_dominant = dx.abs() > dy.abs();
+
+        let frac = if dx_dominant { dy / dx } else { -dx / dy };
+        let nearest_cardinal = 
+            if dx_dominant {
+                if dx > 0. { 7. } else { 3. }
+            } else {
+                if dy > 0. { 1. } else { 5. }
+            };
+        
+        let mut dir = nearest_cardinal + frac;
+        if dir < 1. {
+            dir += 8.
+        }
+        dir
+    }
+
     pub fn as_galactic_sector(&self, containing_quadrant: Pos) -> Self {
         Pos(containing_quadrant.0 * 8 + self.0, containing_quadrant.1 * 8 + self.1)
     }
