@@ -151,6 +151,13 @@ fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
         }
     }
 
+    if path.len() == 0 {
+        if hit_edge {
+            view::hit_edge(ship.quadrant, ship.sector);
+        }
+        return;   
+    }
+
     let energy_cost = path.len() as u16 + 10;
 
     if energy_cost > ship.total_energy {

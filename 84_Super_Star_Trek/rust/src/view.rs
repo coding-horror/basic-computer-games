@@ -199,7 +199,7 @@ pub fn intro(model: &Galaxy) {
 "Your orders are as follows:
     Destroy the {} Klingon warships which have invaded
     the galaxy before they can attack federation headquarters
-    on stardate {}. This gives you {} days. {} in the galaxy for resupplying your ship.\n", 
+    on stardate {:.1}. This gives you {} days. {} in the galaxy for resupplying your ship.\n", 
     model.remaining_klingons(), model.final_stardate, model.final_stardate - model.stardate, star_base_message)
 }
 
@@ -253,7 +253,7 @@ pub fn short_range_scan(model: &Galaxy) {
     }
 
     let data : [String; 8] = [
-        format!("Stardate           {}", model.stardate),
+        format!("Stardate           {:.1}", model.stardate),
         format!("Condition          {}", condition),
         format!("Quadrant           {}", model.enterprise.quadrant),
         format!("Sector             {}", model.enterprise.sector),
@@ -300,7 +300,7 @@ pub fn print_command_help() {
 
 pub fn end_game_failure(galaxy: &Galaxy) {
     println!(
-"Is is stardate {}.
+"Is is stardate {:.1}.
 There were {} Klingon battle cruisers left at
 the end of your mission.
 ", galaxy.stardate, galaxy.remaining_klingons());
@@ -519,7 +519,7 @@ pub fn starbase_shields() {
 pub fn repair_estimate(repair_time: f32) {
     println!(
 "Technicians standing by to effect repairs to your ship;
-Estimated time to repair: {repair_time} stardates.")
+Estimated time to repair: {repair_time:.1} stardates.")
 }
 
 pub fn no_damage(sector: Pos) {
@@ -613,7 +613,7 @@ pub fn status_report(galaxy: &Galaxy) {
 
     println!("   Status report:
 Klingons left:  {klingon_count}
-Mission must be completed in {time_remaining} stardates.
+Mission must be completed in {time_remaining:.1} stardates.
 The Federation is maintaining {star_bases} starbase{plural_starbase} in the galaxy.
 ")
 }
