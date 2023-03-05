@@ -56,7 +56,7 @@ impl Enterprise {
             return;
         }
         
-        view::enterprise_hit(&hit_strength, &sector);
+        view::enterprise_hit(&hit_strength, sector);
 
         if self.shields <= hit_strength {
             view::enterprise_destroyed();

@@ -40,7 +40,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
 
     let course = input::param_or_prompt_value(&provided, 0, view::prompts::COURSE, 1.0, 9.0);
     if course.is_none() {
-        view::bad_nav();
+        view::bad_course_data();
         return;
     }
 
@@ -53,7 +53,7 @@ pub fn gather_dir_and_speed_then_move(galaxy: &mut Galaxy, provided: Vec<String>
 
     let speed = input::param_or_prompt_value(&provided, 1, &view::prompts::warp_factor(max_warp), 0.0, 8.0);
     if speed.is_none() {
-        view::bad_nav();
+        view::bad_course_data();
         return;
     }
     
@@ -130,9 +130,27 @@ fn move_enterprise(course: f32, warp_speed: f32, galaxy: &mut Galaxy) {
 
     let ship = &mut galaxy.enterprise;
 
-    // todo account for being blocked
+    let (mut path, mut hit_edge) = find_nav_path(ship.quadrant, ship.sector, course, warp_speed);
+    for i in 0..path.len() {
+        let (quadrant, sector) = path[i].to_local_quadrant_sector();
+        if quadrant != ship.quadrant {
+            break; // have left current quadrant, so collision checks removed. if there is a collision at the dest... /shrug?
+        }
+        let quadrant = &galaxy.quadrants[quadrant.as_index()];
+        if quadrant.sector_status(sector) != SectorStatus::Empty {
+            path = path[..i].into();
+            hit_edge = false;
+            if i > 0 {
+                let (_, last_sector) = path[path.len() - 1].to_local_quadrant_sector();
+                view::bad_nav(last_sector);
+            } else {
+                view::bad_nav(ship.sector);
+                return;
+            }
+            break;
+        }
+    }
 
-    let (path, hit_edge) = find_nav_path(ship.quadrant, ship.sector, course, warp_speed);
     let energy_cost = path.len() as u16 + 10;
 
     if energy_cost > ship.total_energy {

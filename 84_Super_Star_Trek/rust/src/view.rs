@@ -310,15 +310,19 @@ pub fn enterprise_destroyed() {
     println!("The Enterprise has been destroyed.  The Federation will be conquered.");
 }
 
-pub fn bad_nav() {
+pub fn bad_course_data() {
     println!("   Lt. Sulu reports, 'Incorrect course data, sir!'")
+}
+
+pub fn bad_nav(current_sector: Pos) {
+    println!("Warp engines shut down at sector {current_sector} dues to bad navigation")
 }
 
 pub fn bad_torpedo_course() {
     println!("   Ensign Chekov reports, 'Incorrect course data, sir!'")
 }
 
-pub fn enterprise_hit(hit_strength: &u16, from_sector: &Pos) {
+pub fn enterprise_hit(hit_strength: &u16, from_sector: Pos) {
     println!("{hit_strength} unit hit on Enterprise from sector {from_sector}");
 }
 
