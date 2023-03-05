@@ -226,7 +226,7 @@ const SUB_REGION_NAMES: [&str; 4] = ["I", "II", "III", "IV"];
 
 fn quadrant_name(quadrant: Pos) -> String {
     format!("{} {}", 
-        REGION_NAMES[((quadrant.1 << 1) + (quadrant.0 >> 2)) as usize],
+        REGION_NAMES[((quadrant.0 << 1) + (quadrant.1 >> 2)) as usize],
         SUB_REGION_NAMES[(quadrant.1 % 4) as usize])
 }
 
@@ -264,8 +264,8 @@ pub fn short_range_scan(model: &Galaxy) {
     ];
 
     println!("{:-^33}", "");
-    for y in 0..=7 {
-        for x in 0..=7 {
+    for x in 0..=7 {
+        for y in 0..=7 {
             let pos = Pos(x, y);
             if &pos == &model.enterprise.sector {
                 print!("<*> ")
@@ -278,7 +278,7 @@ pub fn short_range_scan(model: &Galaxy) {
                 }                
             } 
         }
-        println!("{:>9}{}", "", data[y as usize])
+        println!("{:>9}{}", "", data[x as usize])
     }
     println!("{:-^33}", "");
 }
@@ -419,8 +419,8 @@ pub fn long_range_scan(galaxy: &Galaxy) -> Vec<Pos> {
 
     println!("Long range scan for quadrant {}", galaxy.enterprise.quadrant);
     println!("{:-^19}", "");
-    for y in cy - 1..=cy + 1 {
-        for x in cx - 1..=cx + 1 {
+    for x in cx - 1..=cx + 1 {
+        for y in cy - 1..=cy + 1 {
             let mut klingons = "*".into();
             let mut star_bases = "*".into();
             let mut stars = "*".into();
@@ -478,9 +478,9 @@ pub fn galaxy_scanned_map(galaxy: &Galaxy) {
 "Computer record of galaxy for quadrant {}
       1     2     3     4     5     6     7     8
     ----- ----- ----- ----- ----- ----- ----- -----", galaxy.enterprise.quadrant);
-    for y in 0..8 {
-        print!("{}   ", y+1);
-        for x in 0..8 {
+    for x in 0..8 {
+        print!("{}   ", x+1);
+        for y in 0..8 {
             let pos = Pos(x, y);
             if galaxy.scanned.contains(&pos) {
                 let quadrant = &galaxy.quadrants[pos.as_index()];

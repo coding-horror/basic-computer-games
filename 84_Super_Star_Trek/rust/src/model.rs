@@ -162,9 +162,8 @@ impl Pos {
 
     pub fn direction(&self, other: Pos) -> f32 {
         // this is a replication of the original BASIC code
-        let dy = other.0 as f32 - self.0 as f32;
-        let dx = other.1 as f32 - self.1 as f32;
-        // note i actually use x,y, but the calculation assumes y,x so they're flipped above
+        let dx = other.0 as f32 - self.0 as f32;
+        let dy = other.1 as f32 - self.1 as f32;
         let dx_dominant = dx.abs() > dy.abs();
 
         let frac = if dx_dominant { dy / dx } else { -dx / dy };
@@ -214,15 +213,15 @@ impl Display for Pos {
 }
 
 pub const COURSES : [(f32, f32); 9] = [
-    (1., 0.),
-    (1., -1.),
-    (0., -1.),
-    (-1., -1.),
-    (-1., 0.),
-    (-1., 1.),
     (0., 1.),
+    (-1., 1.),
+    (-1., 0.),
+    (-1., -1.),
+    (0., -1.),
+    (1., -1.),
+    (1., 0.),
     (1., 1.),
-    (1., 0.), // course 9 is equal to course 1
+    (0., 1.), // course 9 is equal to course 1
 ];
 
 #[derive(PartialEq)]
