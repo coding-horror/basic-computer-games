@@ -33,7 +33,7 @@ Started after movement and display of stats was finished (no energy management o
     - [x] 1 - klingons, starbases, stardate and damage control
     - [ ] 2 - photon torpedo data: direction and distance to all local klingons
     - [x] 3 - starbase distance and dir locally
-    - [ ] 4 - direction/distance calculator (useful for nav actions I guess)
+    - [x] 4 - direction/distance calculator (useful for nav actions I guess)
     - [x] 5 - galactic name map
  
 - [x] restarting the game

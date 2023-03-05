@@ -10,6 +10,8 @@ pub mod prompts {
     pub const PHASERS: &str = "Number of units to fire";
     pub const WHEN_READY: &str = "Press Enter when ready to accept command";
     pub const COMMAND: &str = "Command?";
+    pub const INITIAL_COORDS: &str = "  Initial coordinates (X/Y)";
+    pub const TARGET_COORDS: &str = "  Final coordinates (X/Y)";
 
     pub fn warp_factor(max_warp: f32) -> String {
         format!("Warp Factor (0-{})?", max_warp)
@@ -610,4 +612,12 @@ Klingons left:  {klingon_count}
 Mission must be completed in {time_remaining} stardates.
 The Federation is maintaining {star_bases} starbase{plural_starbase} in the galaxy.
 ")
+}
+
+pub fn direction_dist_intro(enterprise: &Enterprise) {
+    let quadrant = enterprise.quadrant;
+    let sector = enterprise.sector;
+    println!("Direction/distance calculator:
+You are at quadrant {quadrant} sector {sector}
+Please enter")
 }

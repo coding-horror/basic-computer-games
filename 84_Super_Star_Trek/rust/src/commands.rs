@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use crate::{model::*, view, input::{self, param_or_prompt_value}};
+use crate::{model::*, view, input::{self, param_or_prompt_value, prompt_two_values}};
 
 pub fn perform_short_range_scan(galaxy: &Galaxy) {
     if galaxy.enterprise.damaged.contains_key(systems::SHORT_RANGE_SCAN) {
@@ -313,6 +313,7 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
             run_damage_control(galaxy);
         },
         3 => show_starbase_data(galaxy),
+        4 => direction_dist_calculator(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
     }
@@ -331,6 +332,24 @@ fn show_starbase_data(galaxy: &Galaxy) {
             let target = s.sector;
             view::direction_distance(origin.direction(target), origin.dist(target))
         }
+    }
+}
+
+fn direction_dist_calculator(galaxy: &Galaxy) {
+    view::direction_dist_intro(&galaxy.enterprise);
+    loop {
+        let coords1 = prompt_two_values(view::prompts::INITIAL_COORDS, 1, 8).map(|(x, y)| Pos(x, y));
+        if coords1.is_none() {
+            continue;
+        }
+        let coords2 = prompt_two_values(view::prompts::TARGET_COORDS, 1, 8).map(|(x, y)| Pos(x, y));
+        if coords2.is_none() {
+            continue;
+        }
+        let dir = coords1.unwrap().direction(coords2.unwrap());
+        let dist = coords1.unwrap().dist(coords2.unwrap());
+        view::direction_distance(dir, dist);
+        break;
     }
 }
 

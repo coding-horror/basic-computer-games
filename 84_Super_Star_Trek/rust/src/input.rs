@@ -9,7 +9,7 @@ pub fn prompt(prompt_text: &str) -> Vec<String> {
 
     let mut buffer = String::new();
     if let Ok(_) = stdin.read_line(&mut buffer) {
-        return buffer.trim_end().split(" ").map(|s| s.to_string()).collect();
+        return buffer.trim_end().split([' ', ',']).map(|s| s.to_string()).collect();
     }
     Vec::new()
 }
@@ -53,4 +53,21 @@ pub fn param_or_prompt_value<T: FromStr + PartialOrd>(params: &Vec<String>, para
         return res;
     }
     return prompt_value::<T>(prompt_text, min, max);    
+}
+
+pub fn prompt_two_values<T: FromStr + PartialOrd>(prompt_text: &str, min: T, max: T) -> Option<(T, T)> {
+    let passed = prompt(prompt_text);
+    if passed.len() != 2 {
+        return None
+    }
+    match passed[0].parse::<T>() {
+        Ok(n1) if (n1 >= min && n1 <= max) => {
+            match passed[1].parse::<T>() {
+                Ok(n2) if (n2 >= min && n2 <= max) => 
+                    Some((n1, n2)),
+                _ => None
+            }
+        }
+        _ => None
+    }
 }
