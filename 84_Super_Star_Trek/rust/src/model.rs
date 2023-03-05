@@ -257,9 +257,9 @@ impl Galaxy {
         Galaxy { 
             stardate,
             final_stardate: stardate + rng.gen_range(25..=35) as f32,
-            quadrants: quadrants, 
-            scanned: scanned,
-            enterprise: enterprise
+            quadrants, 
+            scanned,
+            enterprise
         }
     } 
 
