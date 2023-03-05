@@ -45,4 +45,5 @@ Started after movement and display of stats was finished (no energy management o
     - [x] defeat due to time expired
 - [x] intro instructions
 - [x] victory
-- [ ] switch from x,y to y,x
+- [x] switch from x,y to y,x
+- [ ] uppercase prompts?
