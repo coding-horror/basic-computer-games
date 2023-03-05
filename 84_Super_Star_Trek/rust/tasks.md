@@ -28,10 +28,10 @@ Started after movement and display of stats was finished (no energy management o
 - [x] weapons
     - [x] phasers
     - [x] torpedoes
-- [ ] computer
+- [x] computer
     - [x] 0 - output of all short and long range scans (requires tracking if a system has been scanned)
     - [x] 1 - klingons, starbases, stardate and damage control
-    - [ ] 2 - photon torpedo data: direction and distance to all local klingons
+    - [x] 2 - photon torpedo data: direction and distance to all local klingons
     - [x] 3 - starbase distance and dir locally
     - [x] 4 - direction/distance calculator (useful for nav actions I guess)
     - [x] 5 - galactic name map

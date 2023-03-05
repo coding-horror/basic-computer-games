@@ -621,3 +621,11 @@ pub fn direction_dist_intro(enterprise: &Enterprise) {
 You are at quadrant {quadrant} sector {sector}
 Please enter")
 }
+
+pub fn klingon_report(more_than_one: bool) {
+    let mut plural = "";
+    if more_than_one {
+        plural = "s";
+    }
+    println!("From Enterprise to Klingon battle cruiser{}", plural)
+}

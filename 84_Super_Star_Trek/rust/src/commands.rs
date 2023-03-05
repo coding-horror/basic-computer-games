@@ -312,14 +312,30 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
             view::status_report(galaxy);
             run_damage_control(galaxy);
         },
-        3 => show_starbase_data(galaxy),
+        2 => show_klingon_direction_data(galaxy),
+        3 => show_starbase_direction_data(galaxy),
         4 => direction_dist_calculator(galaxy),
         5 => view::galaxy_region_map(),
         _ => todo!() // todo implement others
     }
 }
 
-fn show_starbase_data(galaxy: &Galaxy) {
+fn show_klingon_direction_data(galaxy: &Galaxy) {
+    let quadrant = &galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
+    if quadrant.klingons.len() == 0 {
+        view::no_local_enemies();
+        return;
+    }
+
+    view::klingon_report(quadrant.klingons.len() > 1);
+    let origin = galaxy.enterprise.sector;
+    for k in &quadrant.klingons {
+        let target = k.sector;
+        view::direction_distance(origin.direction(target), origin.dist(target))
+    }
+}
+
+fn show_starbase_direction_data(galaxy: &Galaxy) {
     let quadrant = &galaxy.quadrants[galaxy.enterprise.quadrant.as_index()];
     match &quadrant.star_base {
         None => {
