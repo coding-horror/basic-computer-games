@@ -334,7 +334,7 @@ pub fn access_computer(galaxy: &Galaxy, provided: Vec<String>) {
         3 => show_starbase_direction_data(galaxy),
         4 => direction_dist_calculator(galaxy),
         5 => view::galaxy_region_map(),
-        _ => todo!() // todo implement others
+        _ => () // unreachable
     }
 }
 
