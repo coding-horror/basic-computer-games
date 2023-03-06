@@ -311,29 +311,22 @@ L3800:  //REM************************USINGEARRAY
         var tempGrid = new int[11,11];
 L3860:  for (var i = 1; i <= 12; i++)
         {
-L3870:      if (hitTurnRecord[i]<10) { continue; }
-L3880:      for (var x = 1; x <= 10; x++)
+            if (hitTurnRecord[i]<10) { continue; }
+            foreach (var position in Coordinates.All)
             {
-L3890:          for (var y = 1; y <= 10; y++)
-                {
-L3900:              if (humanGrid[x,y]>=10) 
-                    {  
-L3930:                  for (var dX = Math.Sign(1-x); dX <= Math.Sign(10-x); dX++)
+                if (humanGrid[position.X,position.Y]>=10) 
+                {  
+                    foreach (var neighbour in position.Neighbours)    
+                    {
+                        if (humanGrid[neighbour.X,neighbour.Y] == hitTurnRecord[i])
                         {
-L3940:                      for (var dY = Math.Sign(1-y); dY <= Math.Sign(10-y); dY++)
-                            {
-L3950:                          if (dX == 0 && dY ==0) { continue; }
-L3960:                          if (humanGrid[x+dX,y+dY] == hitTurnRecord[i])
-                                {
-L3970:                              tempGrid[x,y] += hitTurnRecord[i]-y*(int)(hitShipValue[i]+.5F);
-                                }
-                            }
+                            tempGrid[position.X,position.Y] += hitTurnRecord[i]-position.Y*(int)(hitShipValue[i]+.5F);
                         }
                     }
-                    else
-                    {
-L3910:                  tempGrid[x,y]=-10000000;
-                    }
+                }
+                else
+                {
+                    tempGrid[position.X,position.Y]=-10000000;
                 }
             }
         }
@@ -341,27 +334,24 @@ L4030:  for (var i = 1; i <= maxShotCount; i++)
         {
 L4040:      temp[i]=i;
         }
-L4070:  for (var x = 1; x <= 10; x++)
+        foreach (var position in Coordinates.All)
         {
-L4080:      for (var y = 1; y <= 10; y++)
+L4090:      var Q9=1;
+L4100:      for (var i = 1; i <= maxShotCount; i++)
             {
-L4090:          var Q9=1;
-L4100:          for (var i = 1; i <= maxShotCount; i++)
-                {
-L4110:              if (tempGrid[temp[i].X,temp[i].Y]>=tempGrid[temp[Q9].X,temp[Q9].Y]) { continue; }
-L4120:              Q9=i;
-                }
-L4131:          if (x>maxShotCount) { goto L4140; }
-L4132:          if (x==y) { goto L4210; }
-L4140:          if (tempGrid[x,y]<tempGrid[temp[Q9].X,temp[Q9].Y]) { goto L4210; }
-L4150:          for (var i = 1; i <= maxShotCount; i++)
-                {
-L4160:              if (temp[i].X != x) { break; }
-L4170:              if (temp[i].Y == y) { goto L4210; }
-                }
-L4190:          temp[Q9]=new(x, y);
-L4210:          x=x;// NoOp -  NEXT S 
+L4110:          if (tempGrid[temp[i].X,temp[i].Y]>=tempGrid[temp[Q9].X,temp[Q9].Y]) { continue; }
+L4120:          Q9=i;
             }
+L4131:      if (x>maxShotCount) { goto L4140; }
+L4132:      if (x==y) { goto L4210; }
+L4140:      if (tempGrid[x,y]<tempGrid[temp[Q9].X,temp[Q9].Y]) { goto L4210; }
+L4150:      for (var i = 1; i <= maxShotCount; i++)
+            {
+L4160:          if (temp[i].X != x) { break; }
+L4170:          if (temp[i].Y == y) { goto L4210; }
+            }
+L4190:      temp[Q9]=position;
+L4210:      x=x;// NoOp -  NEXT S 
         }
 L4230:  goto L3380;
 
@@ -422,6 +412,32 @@ internal record struct Coordinates(int X, int Y)
 
     public bool IsInRange => X is >= 1 and <= 10 && Y is >= 1 and <= 10;
 
+    public static IEnumerable<Coordinates> All
+    {
+        get
+        {
+            for (int x = 1; x <= 10; x++)
+            {
+                for (int y = 1; y <= 10; y++)
+                {
+                    yield return new(x, y);
+                }
+            }
+        }
+    }
+
+    public IEnumerable<Coordinates> Neighbours
+    {
+        get
+        {
+            foreach (var offset in Offset.Units)
+            {
+                var neighbour = this + offset;
+                if (neighbour.IsInRange) { yield return neighbour; }
+            }
+        }
+    }
+
     internal double DistanceTo(Coordinates other)
         => Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
 
@@ -446,8 +462,25 @@ internal record struct Coordinates(int X, int Y)
 
 internal record struct Offset(int X, int Y)
 {
+    public static readonly Offset Zero = 0;
+
     public static Offset operator *(Offset offset, int scale) 
         => new(offset.X * scale, offset.Y * scale);
 
     public static implicit operator Offset(int value) => new(value, value);
+
+    public static IEnumerable<Offset> Units
+    {
+        get
+        {
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    var offset = new Offset(x, y);
+                    if (offset != Zero) { yield return offset; }
+                }
+            }
+        }
+    }
 }
