@@ -21,7 +21,7 @@ internal class Game
     {
         _io.Write(Streams.Title);
 
-L1040:  var humanGrid = new float[11,11];
+L1040:  var humanGrid = new Grid();
         var hitTurnRecord = new int[13];
         var shots = new Coordinates[8];
         var temp = new Coordinates[13];
@@ -31,7 +31,7 @@ L1060:  for (var i = 1; i <= 12; i++)
 L1070:      hitTurnRecord[i] = -1;
 L1080:      hitShipValue[i] = -1;
         }
-L1190:  var computerGrid = new float[11,11];
+L1190:  var computerGrid = new Grid();
 L1240:  for (var K = 3; K >= 0; K--)
         {
 L1250:      var shipGenerationAttempts=0;
@@ -56,36 +56,32 @@ L1430:              if (temp[j].DistanceTo(temp[i]) < 3.59) { goto L1260; }
             // put ship on board
 L1460:      for (var i = firstIndex; i <= firstIndex + _shipSize[K] - 1; i++)
             {
-                computerGrid[temp[i].X, temp[i].Y] = _shipValue[K];
+                computerGrid[temp[i]] = _shipValue[K];
             }
         }
-L1500:  _io.WriteLine("ENTER COORDINATES FOR...");
-L1510:  _io.WriteLine("BATTLESHIP");
-L1520:  for (var i = 1; i <= 5; i++)
+        _io.WriteLine("ENTER COORDINATES FOR...");
+        _io.WriteLine("BATTLESHIP");
+        for (var i = 1; i <= 5; i++)
         {
-            var (x, y) = _io.ReadCoordinates();
-L1540:      humanGrid[x, y] = 3;
+            humanGrid[_io.ReadCoordinates()] = 3;
         }
-L1560:  _io.WriteLine("CRUISER");
-L1570:  for (var i = 1; i <= 3; i++)
+        _io.WriteLine("CRUISER");
+        for (var i = 1; i <= 3; i++)
         {
-            var (x, y) = _io.ReadCoordinates();
-L1590:      humanGrid[x, y] = 2;
+            humanGrid[_io.ReadCoordinates()] = 2;
         }
-L1610:  _io.WriteLine("DESTROYER<A>");
-L1620:  for (var i = 1; i <= 2; i++)
+        _io.WriteLine("DESTROYER<A>");
+        for (var i = 1; i <= 2; i++)
         {
-            var (x, y) = _io.ReadCoordinates();
-L1640:      humanGrid[x, y] = 1;
+            humanGrid[_io.ReadCoordinates()] = 1;
         }
-L1660:  _io.WriteLine("DESTROYER<B>");
-L1670:  for (var i = 1; i <= 2; i++)
+        _io.WriteLine("DESTROYER<B>");
+        for (var i = 1; i <= 2; i++)
         {
-            var (x, y) = _io.ReadCoordinates();
-L1690:      humanGrid[x, y] = 0.5F;
+            humanGrid[_io.ReadCoordinates()] = 0.5F;
         }
-L1710:  var startResponse = _io.ReadString("DO YOU WANT TO START");
-L1730:  while (startResponse == "WHERE ARE YOUR SHIPS?")
+        var startResponse = _io.ReadString("DO YOU WANT TO START");
+        while (startResponse == "WHERE ARE YOUR SHIPS?")
         {
             _io.WriteLine("BATTLESHIP");
             for (var i = 1; i <= 5; i++)
@@ -116,27 +112,23 @@ L1980:  _io.WriteLine($"TURN {turnNumber}");
 L1990:  var maxShotCount=0;
 L2000:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
         {
-L2010:      for (var x = 1; x <= 10; x++)
+            foreach (var position in Coordinates.All)
             {
-L2020:          for (var y = 1; y <= 10; y++)
-                {
-L2030:              if (humanGrid[x,y] == shipValue) { goto L2070; }
+                if (humanGrid[position] == shipValue) 
+                { 
+                    maxShotCount+=(int)(shipValue+.5F);
+                    break;
                 }
             }
-L2060:      continue;
-L2070:      maxShotCount+=(int)(shipValue+.5F);
         }
 L2090:  for (var i = 1; i <= 7; i++)
         {
             shots[i] = temp[i] = 0;
         }
 L2150:  var untriedSquareCount=0;
-L2160:  for (var x = 1; x <= 10; x++)
+        foreach (var position in Coordinates.All)
         {
-L2170:      for (var y = 1; y <= 10; y++)
-            {
-L2180:          if (computerGrid[x,y] <= 10) { untriedSquareCount++; }
-            }
+            if (computerGrid[position.X] <= 10) { untriedSquareCount++; }
         }
 L2220:  _io.WriteLine($"YOU HAVE {maxShotCount} SHOTS.");
         if (maxShotCount == 0) { goto L2270; }
@@ -149,27 +141,27 @@ L2290:  for (var i = 1; i <= maxShotCount; i++)
         {
             while (true)
             {
-                var (x, y) = _io.ReadValidCoordinates();
-L2390:          if (computerGrid[x,y]>10) 
+                var position = _io.ReadValidCoordinates();
+L2390:          if (computerGrid[position]>10) 
                 { 
-                    _io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {computerGrid[x,y]-10}");
+                    _io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {computerGrid[position]-10}");
                     continue;
                 }
-                shots[i]= new(x, y);
+                shots[i]= position;
                 break;
             }
         }
 L2460:  for (var W = 1; W <= maxShotCount; W++)
         {
-            _io.WriteLine(computerGrid[shots[W].X,shots[W].Y] switch
+            _io.WriteLine(computerGrid[shots[W]] switch
             {
                 3 => "YOU HIT MY BATTLESHIP.",
                 2 => "YOU HIT MY CRUISER.",
                 1 => "YOU HIT MY DESTROYER<A>.",
                 .5F => "YOU HIT MY DESTROYER<B>.",
-                _ => throw new InvalidOperationException($"Unexpected value {computerGrid[shots[W].X,shots[W].Y]}")
+                _ => throw new InvalidOperationException($"Unexpected value {computerGrid[shots[W]]}")
             });
-L2510:      computerGrid[shots[W].X,shots[W].Y] = 10+turnNumber;
+L2510:      computerGrid[shots[W]] = 10+turnNumber;
         }
 L2620:  if (startResponse == "YES") { goto L2670; }
 L2640:  turnNumber++;
@@ -178,24 +170,19 @@ L2660:  _io.WriteLine($"TURN {turnNumber}");
 L2670:  maxShotCount = 0;
 L2680:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
         {
-L2690:      for (var x = 1; x <= 10; x++)
+            foreach (var position in Coordinates.All)    
             {
-L2700:          for (var y = 1; y <= 10; y++)
-                {
-L2710:              if (computerGrid[x,y] == shipValue) { goto L2750; }
+                if (computerGrid[position] == shipValue) 
+                { 
+                    maxShotCount += (int)(shipValue+.5F);
+                    break;
                 }
             }
-L2740:      continue;
-L2750:      maxShotCount += (int)(shipValue+.5F);
         }
 L2770:  untriedSquareCount=0;
-L2780:  for (var x = 1; x <= 10; x++)
+        foreach (var position in Coordinates.All)
         {
-L2790:      for (var y = 1; y <= 10; y++)
-            {
-L2800:          if (computerGrid[x,y]>10) { continue; }
-L2810:          untriedSquareCount++;
-            }
+            if (computerGrid[position]<=10) { untriedSquareCount++; }
         }
 L2840:  _io.WriteLine($"I HAVE {maxShotCount} SHOTS.");
 L2850:  if (untriedSquareCount>maxShotCount) { goto L2880; }
@@ -234,7 +221,7 @@ L3250:  shot+=offset;
         // is the shot in range?
 L3270:  if (!shot.IsInRange) { goto L3210; }
         // have we fired here before
-L3310:  if (humanGrid[shot.X,shot.Y]>10) { goto L3210; }
+L3310:  if (humanGrid[shot]>10) { goto L3210; }
         // have we already selected this shot?
 L3320:  for (var i = 1; i <= shotCount; i++)
         {
@@ -250,25 +237,25 @@ L3400:      _io.WriteLine(temp[i]);
         }
 L3420:  for (var i = 1; i <= maxShotCount; i++)
         {
-L3430:      if (humanGrid[temp[i].X,temp[i].Y] == 3) 
+L3430:      if (humanGrid[temp[i]] == 3) 
             { 
                 _io.WriteLine("I HIT YOUR BATTLESHIP");
             }
-            else if (humanGrid[temp[i].X,temp[i].Y] == 2) 
+            else if (humanGrid[temp[i]] == 2) 
             { 
                 _io.WriteLine("I HIT YOUR CRUISER");
             }
-            else if (humanGrid[temp[i].X,temp[i].Y] == 1) 
+            else if (humanGrid[temp[i]] == 1) 
             { 
                 _io.WriteLine("I HIT YOUR DESTROYER<A>");
             }
-            else if (humanGrid[temp[i].X,temp[i].Y] == .5F) 
+            else if (humanGrid[temp[i]] == .5F) 
             { 
                 _io.WriteLine("I HIT YOUR DESTROYER<B>");
             }
             else
             {
-                humanGrid[temp[i].X,temp[i].Y]=10+turnNumber;
+                humanGrid[temp[i]]=10+turnNumber;
                 continue;
             }
 L3570:      for (var j = 1; j <= 12; j++)
@@ -276,7 +263,7 @@ L3570:      for (var j = 1; j <= 12; j++)
                 // record hit
 L3580:          if (hitTurnRecord[j] != -1) { continue; }
 L3590:          hitTurnRecord[j]=10+turnNumber;
-L3600:          hitShipValue[j]=humanGrid[temp[i].X,temp[i].Y];
+L3600:          hitShipValue[j]=humanGrid[temp[i]];
                 // look for past hits on same ship
 L3610:          var shipHits=0;
 L3620:          for (var k = 1; k <= 12; k++)
@@ -304,29 +291,29 @@ L3760:          _io.WriteLine($"{nameof(hitTurnRecord)}( {j} ) = {hitTurnRecord[
 L3770:          _io.WriteLine($"{nameof(hitShipValue)}( {j} ) = {hitShipValue[j]}");
             }
             return;
-L3470:      humanGrid[temp[i].X,temp[i].Y]=10+turnNumber;
+L3470:      humanGrid[temp[i]]=10+turnNumber;
         }
 L3490:  goto L1950;
 L3800:  //REM************************USINGEARRAY
-        var tempGrid = new int[11,11];
+        var tempGrid = new Grid();
 L3860:  for (var i = 1; i <= 12; i++)
         {
             if (hitTurnRecord[i]<10) { continue; }
             foreach (var position in Coordinates.All)
             {
-                if (humanGrid[position.X,position.Y]>=10) 
+                if (humanGrid[position]>=10) 
                 {  
                     foreach (var neighbour in position.Neighbours)    
                     {
-                        if (humanGrid[neighbour.X,neighbour.Y] == hitTurnRecord[i])
+                        if (humanGrid[neighbour] == hitTurnRecord[i])
                         {
-                            tempGrid[position.X,position.Y] += hitTurnRecord[i]-position.Y*(int)(hitShipValue[i]+.5F);
+                            tempGrid[position] += hitTurnRecord[i]-position.Y*(int)(hitShipValue[i]+.5F);
                         }
                     }
                 }
                 else
                 {
-                    tempGrid[position.X,position.Y]=-10000000;
+                    tempGrid[position]=-10000000;
                 }
             }
         }
@@ -339,22 +326,21 @@ L4040:      temp[i]=i;
 L4090:      var Q9=1;
 L4100:      for (var i = 1; i <= maxShotCount; i++)
             {
-L4110:          if (tempGrid[temp[i].X,temp[i].Y]>=tempGrid[temp[Q9].X,temp[Q9].Y]) { continue; }
+L4110:          if (tempGrid[temp[i]]>=tempGrid[temp[Q9]]) { continue; }
 L4120:          Q9=i;
             }
-L4131:      if (x>maxShotCount) { goto L4140; }
-L4132:      if (x==y) { goto L4210; }
-L4140:      if (tempGrid[x,y]<tempGrid[temp[Q9].X,temp[Q9].Y]) { goto L4210; }
+L4131:      if (position.X>maxShotCount) { goto L4140; }
+L4132:      if (position.IsOnDiagonal) { goto L4210; }
+L4140:      if (tempGrid[position]<tempGrid[temp[Q9]]) { goto L4210; }
 L4150:      for (var i = 1; i <= maxShotCount; i++)
             {
-L4160:          if (temp[i].X != x) { break; }
-L4170:          if (temp[i].Y == y) { goto L4210; }
+L4160:          if (temp[i].X != position.X) { break; }
+L4170:          if (temp[i].Y == position.Y) { goto L4210; }
             }
 L4190:      temp[Q9]=position;
-L4210:      x=x;// NoOp -  NEXT S 
+L4210:      ;// NoOp -  NEXT S 
         }
 L4230:  goto L3380;
-
     }
 
     private (Coordinates, Offset) GetRandomShipCoordinates()
@@ -381,22 +367,33 @@ L4230:  goto L3380;
     }
 }
 
+internal class Grid
+{
+    private readonly float[,] _positions = new float[10, 10];
+
+    public float this[Coordinates position] 
+    {
+        get => _positions[position.X - 1, position.Y - 1];
+        set => _positions[position.X - 1, position.Y - 1] = value;
+    }
+}
+
 internal static class IOExtensions
 {
-    internal static (int X, int Y) ReadCoordinates(this IReadWrite io)
+    internal static Coordinates ReadCoordinates(this IReadWrite io)
     {
         var (x, y) = io.Read2Numbers("");
-        return ((int)x, (int)y);
+        return new(x, y);
     }
 
-    internal static (int X, int Y) ReadValidCoordinates(this IReadWrite io)
+    internal static Coordinates ReadValidCoordinates(this IReadWrite io)
     {
         while (true)
         {
             var (x, y) = io.Read2Numbers("");
-            if (x == (int)x && x is >= 1 and <= 10 && y == (int)y && y is >= 1 and <= 10) 
+            if (Coordinates.TryCreateValid(x, y, out var position)) 
             { 
-                return ((int)x, (int)y); 
+                return position; 
             }
             io.WriteLine("ILLEGAL, ENTER AGAIN.");
         }
@@ -411,6 +408,23 @@ internal record struct Coordinates(int X, int Y)
     }
 
     public bool IsInRange => X is >= 1 and <= 10 && Y is >= 1 and <= 10;
+    public bool IsOnDiagonal => X == Y;
+
+    public static bool TryCreateValid(float x, float y, out Coordinates coordinates)
+    {
+        coordinates = default;
+        if (x != (int)x || y != (int)y) { return false; }
+
+        var result = new Coordinates(x, y);
+
+        if (result.IsInRange)
+        {
+            coordinates = result;
+            return true;
+        }
+
+        return false;
+    }
 
     public static IEnumerable<Coordinates> All
     {
