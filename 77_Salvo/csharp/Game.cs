@@ -23,8 +23,8 @@ internal class Game
 
 L1040:  var humanGrid = new Grid();
         var hitTurnRecord = new int[13];
-        var shots = new Coordinates[8];
-        var temp = new Coordinates[13];
+        var shots = new Position[8];
+        var temp = new Position[13];
         var hitShipValue = new float[13];
 L1060:  for (var i = 1; i <= 12; i++)
         {
@@ -35,10 +35,10 @@ L1190:  var computerGrid = new Grid();
 L1240:  for (var K = 3; K >= 0; K--)
         {
 L1250:      var shipGenerationAttempts=0;
-L1260:      var (start, delta) = GetRandomShipCoordinatesInRange(K);
+L1260:      var (start, delta) = GetRandomShipPositionInRange(K);
 L1340:      shipGenerationAttempts++;
 L1350:      if (shipGenerationAttempts>25) { goto L1190; }
-            // determine ship coordinates
+            // determine ship position
 L1360:      for (var i = _shipFirstIndex[K]; i <= _shipFirstIndex[K] + _shipSize[K] - 1; i++)
             {
                 temp[i] = start + delta * i;
@@ -59,26 +59,26 @@ L1460:      for (var i = firstIndex; i <= firstIndex + _shipSize[K] - 1; i++)
                 computerGrid[temp[i]] = _shipValue[K];
             }
         }
-        _io.WriteLine("ENTER COORDINATES FOR...");
+        _io.WriteLine("ENTER POSITION FOR...");
         _io.WriteLine("BATTLESHIP");
         for (var i = 1; i <= 5; i++)
         {
-            humanGrid[_io.ReadCoordinates()] = 3;
+            humanGrid[_io.ReadPosition()] = 3;
         }
         _io.WriteLine("CRUISER");
         for (var i = 1; i <= 3; i++)
         {
-            humanGrid[_io.ReadCoordinates()] = 2;
+            humanGrid[_io.ReadPosition()] = 2;
         }
         _io.WriteLine("DESTROYER<A>");
         for (var i = 1; i <= 2; i++)
         {
-            humanGrid[_io.ReadCoordinates()] = 1;
+            humanGrid[_io.ReadPosition()] = 1;
         }
         _io.WriteLine("DESTROYER<B>");
         for (var i = 1; i <= 2; i++)
         {
-            humanGrid[_io.ReadCoordinates()] = 0.5F;
+            humanGrid[_io.ReadPosition()] = 0.5F;
         }
         var startResponse = _io.ReadString("DO YOU WANT TO START");
         while (startResponse == "WHERE ARE YOUR SHIPS?")
@@ -112,7 +112,7 @@ L1980:  _io.WriteLine($"TURN {turnNumber}");
 L1990:  var maxShotCount=0;
 L2000:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
         {
-            foreach (var position in Coordinates.All)
+            foreach (var position in Position.All)
             {
                 if (humanGrid[position] == shipValue) 
                 { 
@@ -126,7 +126,7 @@ L2090:  for (var i = 1; i <= 7; i++)
             shots[i] = temp[i] = 0;
         }
 L2150:  var untriedSquareCount=0;
-        foreach (var position in Coordinates.All)
+        foreach (var position in Position.All)
         {
             if (computerGrid[position.X] <= 10) { untriedSquareCount++; }
         }
@@ -141,7 +141,7 @@ L2290:  for (var i = 1; i <= maxShotCount; i++)
         {
             while (true)
             {
-                var position = _io.ReadValidCoordinates();
+                var position = _io.ReadValidPosition();
 L2390:          if (computerGrid[position]>10) 
                 { 
                     _io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {computerGrid[position]-10}");
@@ -170,7 +170,7 @@ L2660:  _io.WriteLine($"TURN {turnNumber}");
 L2670:  maxShotCount = 0;
 L2680:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
         {
-            foreach (var position in Coordinates.All)    
+            foreach (var position in Position.All)    
             {
                 if (computerGrid[position] == shipValue) 
                 { 
@@ -180,7 +180,7 @@ L2680:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
             }
         }
 L2770:  untriedSquareCount=0;
-        foreach (var position in Coordinates.All)
+        foreach (var position in Position.All)
         {
             if (computerGrid[position]<=10) { untriedSquareCount++; }
         }
@@ -202,7 +202,7 @@ L2970:      if (hitShipValue[i]>0) { goto L3800; }
         }
 L3000:  var shotCount=0;
 L3010:  var shotAttempts=0;
-L3020:  var (shot, _) = GetRandomShipCoordinates();
+L3020:  var (shot, _) = GetRandomShipPosition();
 L3030:  var strategyNumber=0;  //RESTORE
 L3050:  shotAttempts++;
 L3060:  if (shotAttempts>100) { goto L3010; }
@@ -299,7 +299,7 @@ L3800:  //REM************************USINGEARRAY
 L3860:  for (var i = 1; i <= 12; i++)
         {
             if (hitTurnRecord[i]<10) { continue; }
-            foreach (var position in Coordinates.All)
+            foreach (var position in Position.All)
             {
                 if (humanGrid[position]>=10) 
                 {  
@@ -321,7 +321,7 @@ L4030:  for (var i = 1; i <= maxShotCount; i++)
         {
 L4040:      temp[i]=i;
         }
-        foreach (var position in Coordinates.All)
+        foreach (var position in Position.All)
         {
 L4090:      var Q9=1;
 L4100:      for (var i = 1; i <= maxShotCount; i++)
@@ -343,7 +343,7 @@ L4210:      ;// NoOp -  NEXT S
 L4230:  goto L3380;
     }
 
-    private (Coordinates, Offset) GetRandomShipCoordinates()
+    private (Position, Offset) GetRandomShipPosition()
     {
         var startX = _random.Next(1, 11);
         var startY = _random.Next(1, 11);
@@ -352,11 +352,11 @@ L4230:  goto L3380;
         return (new(startX, startY), new(deltaX, deltaY));
     }
 
-    private (Coordinates, Offset) GetRandomShipCoordinatesInRange(int shipNumber)
+    private (Position, Offset) GetRandomShipPositionInRange(int shipNumber)
     {
         while (true)
         {
-            var (start, delta) = GetRandomShipCoordinates();
+            var (start, delta) = GetRandomShipPosition();
             var shipSizeLessOne = _shipSize[shipNumber] - 1;
             var end = start + delta * shipSizeLessOne;
             if (delta != 0 && end.IsInRange) 
@@ -371,7 +371,7 @@ internal class Grid
 {
     private readonly float[,] _positions = new float[10, 10];
 
-    public float this[Coordinates position] 
+    public float this[Position position] 
     {
         get => _positions[position.X - 1, position.Y - 1];
         set => _positions[position.X - 1, position.Y - 1] = value;
@@ -380,18 +380,18 @@ internal class Grid
 
 internal static class IOExtensions
 {
-    internal static Coordinates ReadCoordinates(this IReadWrite io)
+    internal static Position ReadPosition(this IReadWrite io)
     {
         var (x, y) = io.Read2Numbers("");
         return new(x, y);
     }
 
-    internal static Coordinates ReadValidCoordinates(this IReadWrite io)
+    internal static Position ReadValidPosition(this IReadWrite io)
     {
         while (true)
         {
             var (x, y) = io.Read2Numbers("");
-            if (Coordinates.TryCreateValid(x, y, out var position)) 
+            if (Position.TryCreateValid(x, y, out var position)) 
             { 
                 return position; 
             }
@@ -400,9 +400,9 @@ internal static class IOExtensions
     }
 }
 
-internal record struct Coordinates(int X, int Y)
+internal record struct Position(int X, int Y)
 {
-    internal Coordinates(float x, float y) 
+    internal Position(float x, float y) 
         : this((int)x, (int)y) 
     { 
     }
@@ -410,23 +410,23 @@ internal record struct Coordinates(int X, int Y)
     public bool IsInRange => X is >= 1 and <= 10 && Y is >= 1 and <= 10;
     public bool IsOnDiagonal => X == Y;
 
-    public static bool TryCreateValid(float x, float y, out Coordinates coordinates)
+    public static bool TryCreateValid(float x, float y, out Position position)
     {
-        coordinates = default;
+        position = default;
         if (x != (int)x || y != (int)y) { return false; }
 
-        var result = new Coordinates(x, y);
+        var result = new Position(x, y);
 
         if (result.IsInRange)
         {
-            coordinates = result;
+            position = result;
             return true;
         }
 
         return false;
     }
 
-    public static IEnumerable<Coordinates> All
+    public static IEnumerable<Position> All
     {
         get
         {
@@ -440,7 +440,7 @@ internal record struct Coordinates(int X, int Y)
         }
     }
 
-    public IEnumerable<Coordinates> Neighbours
+    public IEnumerable<Position> Neighbours
     {
         get
         {
@@ -452,13 +452,13 @@ internal record struct Coordinates(int X, int Y)
         }
     }
 
-    internal double DistanceTo(Coordinates other)
+    internal double DistanceTo(Position other)
         => Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
 
-    internal Coordinates BringIntoRange(IRandom random)
+    internal Position BringIntoRange(IRandom random)
         => IsInRange ? this : new(BringIntoRange(X, random), BringIntoRange(Y, random));
 
-    private int BringIntoRange(int value, IRandom random)
+    private static int BringIntoRange(int value, IRandom random)
         => value switch
         {
             < 1 => 1 + (int)random.NextFloat(2.5F),
@@ -466,10 +466,10 @@ internal record struct Coordinates(int X, int Y)
             _ => value
         };
 
-    public static Coordinates operator +(Coordinates coordinates, Offset offset) 
-        => new(coordinates.X + offset.X, coordinates.Y + offset.Y);
+    public static Position operator +(Position position, Offset offset) 
+        => new(position.X + offset.X, position.Y + offset.Y);
 
-    public static implicit operator Coordinates(int value) => new(value, value);
+    public static implicit operator Position(int value) => new(value, value);
 
     public override string ToString() => $" {X}  {Y} ";
 }
@@ -478,8 +478,7 @@ internal record struct Offset(int X, int Y)
 {
     public static readonly Offset Zero = 0;
 
-    public static Offset operator *(Offset offset, int scale) 
-        => new(offset.X * scale, offset.Y * scale);
+    public static Offset operator *(Offset offset, int scale) => new(offset.X * scale, offset.Y * scale);
 
     public static implicit operator Offset(int value) => new(value, value);
 
