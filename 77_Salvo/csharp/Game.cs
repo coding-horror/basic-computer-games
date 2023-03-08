@@ -128,7 +128,7 @@ L2090:  for (var i = 1; i <= 7; i++)
 L2150:  var untriedSquareCount=0;
         foreach (var position in Position.All)
         {
-            if (computerGrid[position.X] <= 10) { untriedSquareCount++; }
+            if (computerGrid[position] <= 10) { untriedSquareCount++; }
         }
 L2220:  _io.WriteLine($"YOU HAVE {maxShotCount} SHOTS.");
         if (maxShotCount == 0) { goto L2270; }
@@ -373,25 +373,20 @@ internal class Grid
 
     public float this[Position position] 
     {
-        get => _positions[position.X - 1, position.Y - 1];
-        set => _positions[position.X - 1, position.Y - 1] = value;
+        get => _positions[position.X, position.Y];
+        set => _positions[position.X, position.Y] = value;
     }
 }
 
 internal static class IOExtensions
 {
-    internal static Position ReadPosition(this IReadWrite io)
-    {
-        var (x, y) = io.Read2Numbers("");
-        return new(x, y);
-    }
+    internal static Position ReadPosition(this IReadWrite io) => Position.Create(io.Read2Numbers(""));
 
     internal static Position ReadValidPosition(this IReadWrite io)
     {
         while (true)
         {
-            var (x, y) = io.Read2Numbers("");
-            if (Position.TryCreateValid(x, y, out var position)) 
+            if (Position.TryCreateValid(io.Read2Numbers(""), out var position)) 
             { 
                 return position; 
             }
@@ -400,45 +395,27 @@ internal static class IOExtensions
     }
 }
 
-internal record struct Position(int X, int Y)
+internal record struct Position(Coordinate X, Coordinate Y)
 {
-    internal Position(float x, float y) 
-        : this((int)x, (int)y) 
-    { 
-    }
-
-    public bool IsInRange => X is >= 1 and <= 10 && Y is >= 1 and <= 10;
+    public bool IsInRange => X.IsInRange && Y.IsInRange;
     public bool IsOnDiagonal => X == Y;
 
-    public static bool TryCreateValid(float x, float y, out Position position)
+    public static Position Create((float X, float Y) coordinates) => new(coordinates.X, coordinates.Y);
+
+    public static bool TryCreateValid((float X, float Y) coordinates, out Position position)
     {
-        position = default;
-        if (x != (int)x || y != (int)y) { return false; }
-
-        var result = new Position(x, y);
-
-        if (result.IsInRange)
+        if (Coordinate.TryCreateValid(coordinates.X, out var x) && Coordinate.TryCreateValid(coordinates.Y, out var y))
         {
-            position = result;
+            position = new(x, y);
             return true;
         }
 
+        position = default;
         return false;
     }
 
     public static IEnumerable<Position> All
-    {
-        get
-        {
-            for (int x = 1; x <= 10; x++)
-            {
-                for (int y = 1; y <= 10; y++)
-                {
-                    yield return new(x, y);
-                }
-            }
-        }
-    }
+        => Coordinate.Range.SelectMany(x => Coordinate.Range.Select(y => new Position(x, y)));
 
     public IEnumerable<Position> Neighbours
     {
@@ -456,22 +433,55 @@ internal record struct Position(int X, int Y)
         => Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
 
     internal Position BringIntoRange(IRandom random)
-        => IsInRange ? this : new(BringIntoRange(X, random), BringIntoRange(Y, random));
-
-    private static int BringIntoRange(int value, IRandom random)
-        => value switch
-        {
-            < 1 => 1 + (int)random.NextFloat(2.5F),
-            > 10 => 10 - (int)random.NextFloat(2.5F),
-            _ => value
-        };
+        => IsInRange ? this : new(X.BringIntoRange(random), Y.BringIntoRange(random));
 
     public static Position operator +(Position position, Offset offset) 
         => new(position.X + offset.X, position.Y + offset.Y);
 
     public static implicit operator Position(int value) => new(value, value);
 
-    public override string ToString() => $" {X}  {Y} ";
+    public override string ToString() => $"{X}{Y}";
+}
+
+internal record struct Coordinate(int Value)
+{
+    public static IEnumerable<Coordinate> Range => Enumerable.Range(0, 10).Select(v => new Coordinate(v));
+
+    public bool IsInRange => Value is >= 0 and <= 9;
+
+    public static Coordinate Create(float value) => new((int)value - 1);
+
+    public static bool TryCreateValid(float value, out Coordinate coordinate)
+    {
+        coordinate = default;
+        if (value != (int)value) { return false; }
+
+        var result = Create(value);
+
+        if (result.IsInRange)
+        {
+            coordinate = result;
+            return true;
+        }
+
+        return false;
+    }
+
+    public Coordinate BringIntoRange(IRandom random)
+        => Value switch
+        {
+            < 0 => new(0 + (int)random.NextFloat(2.5F)),
+            > 9 => new(9 - (int)random.NextFloat(2.5F)),
+            _ => this
+        };
+
+    public static implicit operator Coordinate(float value) => new((int)value);
+    public static implicit operator int(Coordinate coordinate) => coordinate.Value;
+
+    public static Coordinate operator +(Coordinate coordinate, int offset) => new(coordinate.Value + offset);
+    public static int operator -(Coordinate a, Coordinate b) => a.Value - b.Value;
+
+    public override string ToString() => $" {Value + 1} ";
 }
 
 internal record struct Offset(int X, int Y)
