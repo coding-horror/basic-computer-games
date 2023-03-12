@@ -35,13 +35,13 @@ L1190:  var computerGrid = new Grid();
 L1240:  for (var K = 3; K >= 0; K--)
         {
 L1250:      var shipGenerationAttempts=0;
-L1260:      var (start, delta) = GetRandomShipPositionInRange(K);
+L1260:      var (start, delta) = _random.GetRandomShipPositionInRange(_shipSize[K]);
 L1340:      shipGenerationAttempts++;
 L1350:      if (shipGenerationAttempts>25) { goto L1190; }
             // determine ship position
-L1360:      for (var i = _shipFirstIndex[K]; i <= _shipFirstIndex[K] + _shipSize[K] - 1; i++)
+L1360:      for (var i = 0; i < _shipSize[K]; i++)
             {
-                temp[i] = start + delta * i;
+                temp[_shipFirstIndex[K] + i] = start + delta * i;
             }
 L1400:      var firstIndex=_shipFirstIndex[K];
             // detect proximity to previous ships
@@ -153,14 +153,15 @@ L2390:          if (computerGrid[position]>10)
         }
 L2460:  for (var W = 1; W <= maxShotCount; W++)
         {
-            _io.WriteLine(computerGrid[shots[W]] switch
+            var hit = computerGrid[shots[W]] switch
             {
                 3 => "YOU HIT MY BATTLESHIP.",
                 2 => "YOU HIT MY CRUISER.",
                 1 => "YOU HIT MY DESTROYER<A>.",
                 .5F => "YOU HIT MY DESTROYER<B>.",
-                _ => throw new InvalidOperationException($"Unexpected value {computerGrid[shots[W]]}")
-            });
+                _ => null
+            };
+            if (hit is not null) { _io.WriteLine(); }
 L2510:      computerGrid[shots[W]] = 10+turnNumber;
         }
 L2620:  if (startResponse == "YES") { goto L2670; }
@@ -202,7 +203,7 @@ L2970:      if (hitShipValue[i]>0) { goto L3800; }
         }
 L3000:  var shotCount=0;
 L3010:  var shotAttempts=0;
-L3020:  var (shot, _) = GetRandomShipPosition();
+L3020:  var (shot, _) = _random.NextShipPosition();
 L3030:  var strategyNumber=0;  //RESTORE
 L3050:  shotAttempts++;
 L3060:  if (shotAttempts>100) { goto L3010; }
@@ -342,22 +343,30 @@ L4210:      ;// NoOp -  NEXT S
         }
 L4230:  goto L3380;
     }
+}
 
-    private (Position, Offset) GetRandomShipPosition()
+internal static class RandomExtensions
+{
+    internal static (Position, Offset) NextShipPosition(this IRandom random)
     {
-        var startX = _random.Next(1, 11);
-        var startY = _random.Next(1, 11);
-        var deltaY = _random.Next(-1, 2);
-        var deltaX = _random.Next(-1, 2);
+        var startX = random.NextCoordinate();
+        var startY = random.NextCoordinate();
+        var deltaY = random.NextOffset();
+        var deltaX = random.NextOffset();
         return (new(startX, startY), new(deltaX, deltaY));
     }
 
-    private (Position, Offset) GetRandomShipPositionInRange(int shipNumber)
+    private static Coordinate NextCoordinate(this IRandom random)
+        => random.Next(Coordinate.MinValue, Coordinate.MaxValue + 1);
+
+    private static int NextOffset(this IRandom random) => random.Next(-1, 2);
+
+    internal static (Position, Offset) GetRandomShipPositionInRange(this IRandom random, int shipSize)
     {
         while (true)
         {
-            var (start, delta) = GetRandomShipPosition();
-            var shipSizeLessOne = _shipSize[shipNumber] - 1;
+            var (start, delta) = random.NextShipPosition();
+            var shipSizeLessOne = shipSize - 1;
             var end = start + delta * shipSizeLessOne;
             if (delta != 0 && end.IsInRange) 
             {
@@ -445,9 +454,12 @@ internal record struct Position(Coordinate X, Coordinate Y)
 
 internal record struct Coordinate(int Value)
 {
+    public const int MinValue = 0;
+    public const int MaxValue = 9;
+
     public static IEnumerable<Coordinate> Range => Enumerable.Range(0, 10).Select(v => new Coordinate(v));
 
-    public bool IsInRange => Value is >= 0 and <= 9;
+    public bool IsInRange => Value is >= MinValue and <= MaxValue;
 
     public static Coordinate Create(float value) => new((int)value - 1);
 
@@ -470,8 +482,8 @@ internal record struct Coordinate(int Value)
     public Coordinate BringIntoRange(IRandom random)
         => Value switch
         {
-            < 0 => new(0 + (int)random.NextFloat(2.5F)),
-            > 9 => new(9 - (int)random.NextFloat(2.5F)),
+            < MinValue => new(MinValue + (int)random.NextFloat(2.5F)),
+            > MaxValue => new(MaxValue - (int)random.NextFloat(2.5F)),
             _ => this
         };
 
