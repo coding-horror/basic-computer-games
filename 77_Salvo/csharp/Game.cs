@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Games.Common.Randomness;
 
 namespace Salvo;
@@ -21,84 +22,26 @@ internal class Game
     {
         _io.Write(Streams.Title);
 
-L1040:  var humanGrid = new Grid();
         var hitTurnRecord = new int[13];
         var shots = new Position[8];
         var temp = new Position[13];
         var hitShipValue = new float[13];
-L1060:  for (var i = 1; i <= 12; i++)
+        
+        for (var i = 1; i <= 12; i++)
         {
-L1070:      hitTurnRecord[i] = -1;
-L1080:      hitShipValue[i] = -1;
+            hitTurnRecord[i] = -1;
+            hitShipValue[i] = -1;
         }
-L1190:  var computerGrid = new Grid();
-L1240:  for (var K = 3; K >= 0; K--)
-        {
-L1250:      var shipGenerationAttempts=0;
-L1260:      var (start, delta) = _random.GetRandomShipPositionInRange(_shipSize[K]);
-L1340:      shipGenerationAttempts++;
-L1350:      if (shipGenerationAttempts>25) { goto L1190; }
-            // determine ship position
-L1360:      for (var i = 0; i < _shipSize[K]; i++)
-            {
-                temp[_shipFirstIndex[K] + i] = start + delta * i;
-            }
-L1400:      var firstIndex=_shipFirstIndex[K];
-            // detect proximity to previous ships
-            for (var i = firstIndex; i <= firstIndex+_shipSize[K] - 1; i++)
-            {
-L1415:          if (firstIndex<2) { continue; } // Only true for the Battleship
-L1420:          for (var j = 1; j <= firstIndex-1; j++)
-                {
-L1430:              if (temp[j].DistanceTo(temp[i]) < 3.59) { goto L1260; }
-                }
-            }
-            // put ship on board
-L1460:      for (var i = firstIndex; i <= firstIndex + _shipSize[K] - 1; i++)
-            {
-                computerGrid[temp[i]] = _shipValue[K];
-            }
-        }
-        _io.WriteLine("ENTER POSITION FOR...");
-        _io.WriteLine("BATTLESHIP");
-        for (var i = 1; i <= 5; i++)
-        {
-            humanGrid[_io.ReadPosition()] = 3;
-        }
-        _io.WriteLine("CRUISER");
-        for (var i = 1; i <= 3; i++)
-        {
-            humanGrid[_io.ReadPosition()] = 2;
-        }
-        _io.WriteLine("DESTROYER<A>");
-        for (var i = 1; i <= 2; i++)
-        {
-            humanGrid[_io.ReadPosition()] = 1;
-        }
-        _io.WriteLine("DESTROYER<B>");
-        for (var i = 1; i <= 2; i++)
-        {
-            humanGrid[_io.ReadPosition()] = 0.5F;
-        }
+        var computerGrid = new Grid().PositionShips(_random);
+        var humanGrid = new Grid().PositionShips(_io);
+
         var startResponse = _io.ReadString("DO YOU WANT TO START");
         while (startResponse == "WHERE ARE YOUR SHIPS?")
         {
-            _io.WriteLine("BATTLESHIP");
-            for (var i = 1; i <= 5; i++)
+            foreach (var ship in computerGrid.Ships)
             {
-                _io.WriteLine(temp[i]);
+                _io.WriteLine(ship);
             }
-            _io.WriteLine("CRUISER");
-            _io.WriteLine(temp[6]);
-            _io.WriteLine(temp[7]);
-            _io.WriteLine(temp[8]);
-            _io.WriteLine("DESTROYER<A>");
-            _io.WriteLine(temp[9]);
-            _io.WriteLine(temp[10]);
-            _io.WriteLine("DESTROYER<B>");
-            _io.WriteLine(temp[11]);
-            _io.WriteLine(temp[12]);
-
             startResponse = _io.ReadString("DO YOU WANT TO START");
         }
 L1890:  var turnNumber=0;
@@ -109,7 +52,7 @@ L1950:  if (startResponse != "YES") { goto L1990; }
 L1960:  turnNumber++;
 L1970:  _io.WriteLine();
 L1980:  _io.WriteLine($"TURN {turnNumber}");
-L1990:  var maxShotCount=0;
+L1990:  var maxShotCount = 0;
 L2000:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
         {
             foreach (var position in Position.All)
@@ -345,6 +288,73 @@ L4230:  goto L3380;
     }
 }
 
+internal abstract class Ship
+{
+    private readonly List<Position> _positions = new();
+
+    internal virtual string Name => GetType().Name;
+    internal abstract int Shots { get; }
+    internal abstract int Size { get; }
+    internal abstract float Value { get; }
+    internal IEnumerable<Position> Positions => _positions;
+    internal bool IsAfloat => _positions.Count > 0;
+
+    internal void SetPositionInRange(IRandom random)
+    {
+        var (start, delta) = random.GetRandomShipPositionInRange(Size);
+        for (var i = 0; i < Size; i++)
+        {
+            _positions[i] = start + delta * i;
+        }
+    }
+
+    internal void GetPosition(IReadWrite io, Grid grid)
+    {
+        io.WriteLine(Name);
+        for (var i = 0; i < Size; i++)
+        {
+            var position = io.ReadPosition();
+            _positions[i] = position;
+            grid[position] = Value;
+        }
+    }
+
+    internal bool IsHit(Position position) => _positions.Remove(position);
+
+    internal float DistanceTo(Ship other)
+        => _positions.SelectMany(a => other._positions.Select(b => a.DistanceTo(b))).Min();
+
+    public override string ToString() 
+        => string.Join(Environment.NewLine, _positions.Select(p => p.ToString()).Prepend(Name));
+}
+
+internal sealed class Battleship : Ship
+{
+    internal override int Shots => 3;
+    internal override int Size => 5;
+    internal override float Value => 3;
+}
+
+internal sealed class Cruiser : Ship
+{
+    internal override int Shots => 2;
+    internal override int Size => 3;
+    internal override float Value => 2;
+}
+
+internal sealed class Destroyer : Ship
+{
+    internal Destroyer(string nameIndex)
+    {
+        Name = $"{base.Name}<{nameIndex}>";
+    }
+
+    internal override string Name { get; }
+    internal override int Shots => 1;
+    internal override int Size => 2;
+    internal override float Value => Name.EndsWith("<A>") ? 1 : 0.5F;
+}
+
 internal static class RandomExtensions
 {
     internal static (Position, Offset) NextShipPosition(this IRandom random)
@@ -378,6 +388,67 @@ internal static class RandomExtensions
 
 internal class Grid
 {
+    private readonly List<Ship> _ships = new() 
+    { 
+        new Battleship(), 
+        new Cruiser(), 
+        new Destroyer("A"), 
+        new Destroyer("B") 
+    };
+
+    internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
+
+    internal Grid PositionShips(IRandom random)
+    {
+        while (true)
+        {
+            var allPositioned = false;
+            for (var i = 0; i < _ships.Count; i++)
+            {
+                if (!TryPositionShip(i)) { break; }
+                if (i == _ships.Count - 1) { allPositioned = true; }
+            }
+            if (allPositioned) { break; }
+        }
+
+        foreach (var ship in _ships)
+        {
+            foreach (var position in ship.Positions)
+            {
+                this[position] = ship.Value;
+            }
+        }
+
+        return this;
+
+        bool TryPositionShip(int i)
+        {
+            while (true)
+            {
+                var shipGenerationAttempts = 0;
+                _ships[i].SetPositionInRange(random);
+                if (i == 0) { return true; }
+                shipGenerationAttempts++;
+                if (shipGenerationAttempts > 25) { return false; }
+                for (var j = 0; j < i; j++)
+                {
+                    if (_ships[i].DistanceTo(_ships[j]) >= 3.59) { return true; }
+                }
+            }
+        }
+    }
+
+    internal Grid PositionShips(IReadWrite io)
+    {
+        io.WriteLine("ENTER POSITION FOR...");
+        foreach (var ship in _ships)
+        {
+            ship.GetPosition(io, this);
+        }
+
+        return this;
+    }
+
     private readonly float[,] _positions = new float[10, 10];
 
     public float this[Position position] 
@@ -438,8 +509,8 @@ internal record struct Position(Coordinate X, Coordinate Y)
         }
     }
 
-    internal double DistanceTo(Position other)
-        => Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
+    internal float DistanceTo(Position other)
+        => (float)Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
 
     internal Position BringIntoRange(IRandom random)
         => IsInRange ? this : new(X.BringIntoRange(random), Y.BringIntoRange(random));
