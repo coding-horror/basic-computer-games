@@ -8,7 +8,6 @@
 **** LEEDOM - APRIL & DECEMBER 1974,
 **** WITH A LITTLE HELP FROM HIS FRIENDS . . .
 
-Python translation by Jack Boyce - February 2021
   Output is identical to BASIC version except for a few
   fixes (as noted, search `bug`) and minor cleanup.
 """
