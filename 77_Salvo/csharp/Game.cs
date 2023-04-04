@@ -5,10 +5,6 @@ namespace Salvo;
 
 internal class Game 
 {
-    private static readonly float[] _shipValue = new[] { 0.5F, 1, 2, 3 };
-    private static readonly int[] _shipFirstIndex = new[] { 11, 9, 6, 1 };
-    private static readonly int[] _shipSize = new[] { 2, 2, 3, 5 };
-
     private readonly IReadWrite _io;
     private readonly IRandom _random;
 
@@ -34,7 +30,6 @@ internal class Game
         }
         var computerGrid = new Grid().PositionShips(_random);
         var humanGrid = new Grid().PositionShips(_io);
-
         var startResponse = _io.ReadString("DO YOU WANT TO START");
         while (startResponse == "WHERE ARE YOUR SHIPS?")
         {
@@ -52,30 +47,14 @@ L1950:  if (startResponse != "YES") { goto L1990; }
 L1960:  turnNumber++;
 L1970:  _io.WriteLine();
 L1980:  _io.WriteLine($"TURN {turnNumber}");
-L1990:  var maxShotCount = 0;
-L2000:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
-        {
-            foreach (var position in Position.All)
-            {
-                if (humanGrid[position] == shipValue) 
-                { 
-                    maxShotCount+=(int)(shipValue+.5F);
-                    break;
-                }
-            }
-        }
+L1990:  var maxShotCount = humanGrid.Ships.Sum(s => s.Shots);
 L2090:  for (var i = 1; i <= 7; i++)
         {
             shots[i] = temp[i] = 0;
         }
-L2150:  var untriedSquareCount=0;
-        foreach (var position in Position.All)
-        {
-            if (computerGrid[position] <= 10) { untriedSquareCount++; }
-        }
 L2220:  _io.WriteLine($"YOU HAVE {maxShotCount} SHOTS.");
         if (maxShotCount == 0) { goto L2270; }
-L2230:  if (maxShotCount > untriedSquareCount) 
+L2230:  if (maxShotCount > computerGrid.UntriedSquareCount) 
         { 
             _io.WriteLine("YOU HAVE MORE SHOTS THAN THERE ARE BLANK SQUARES.");
 L2250:      goto L2890;
@@ -111,32 +90,15 @@ L2620:  if (startResponse == "YES") { goto L2670; }
 L2640:  turnNumber++;
 L2650:  _io.WriteLine();
 L2660:  _io.WriteLine($"TURN {turnNumber}");
-L2670:  maxShotCount = 0;
-L2680:  for (var shipValue = .5F; shipValue <= 3; shipValue += .5F)
-        {
-            foreach (var position in Position.All)    
-            {
-                if (computerGrid[position] == shipValue) 
-                { 
-                    maxShotCount += (int)(shipValue+.5F);
-                    break;
-                }
-            }
-        }
-L2770:  untriedSquareCount=0;
-        foreach (var position in Position.All)
-        {
-            if (computerGrid[position]<=10) { untriedSquareCount++; }
-        }
+L2670:  maxShotCount = computerGrid.Ships.Sum(s => s.Shots);
 L2840:  _io.WriteLine($"I HAVE {maxShotCount} SHOTS.");
-L2850:  if (untriedSquareCount>maxShotCount) { goto L2880; }
+L2850:  if (humanGrid.UntriedSquareCount > maxShotCount) { goto L2880; }
 L2860:  _io.WriteLine("I HAVE MORE SHOTS THAN BLANK SQUARES.");
-L2870:  goto L2270;
+L2270:  _io.WriteLine("I HAVE WON.");
+        return;
 L2880:  if (maxShotCount != 0) { goto L2960; }
 L2890:  _io.WriteLine("YOU HAVE WON.");
 L2900:  return;
-L2270:  _io.WriteLine("I HAVE WON.");
-        return;
 
 
 L2960:  for (var i = 1; i <= 12; i++)
@@ -304,20 +266,11 @@ internal abstract class Ship
         var (start, delta) = random.GetRandomShipPositionInRange(Size);
         for (var i = 0; i < Size; i++)
         {
-            _positions[i] = start + delta * i;
+            _positions.Add(start + delta * i);
         }
     }
 
-    internal void GetPosition(IReadWrite io, Grid grid)
-    {
-        io.WriteLine(Name);
-        for (var i = 0; i < Size; i++)
-        {
-            var position = io.ReadPosition();
-            _positions[i] = position;
-            grid[position] = Value;
-        }
-    }
+    internal void AddPosition(Position position) => _positions.Add(position);
 
     internal bool IsHit(Position position) => _positions.Remove(position);
 
@@ -395,7 +348,21 @@ internal class Grid
         new Destroyer("A"), 
         new Destroyer("B") 
     };
+    private readonly Dictionary<Position, int> _shots = new();
 
+    public float this[Position position] 
+    {
+        get => _shots.TryGetValue(position, out var value) 
+                ? value + 10
+                : _ships.FirstOrDefault(s => s.Positions.Contains(position))?.Value ?? 0;
+        set
+        {
+            _ = _ships.FirstOrDefault(s => s.IsHit(position));
+            _shots[position] = (int)value - 10;
+        }
+    }
+
+    internal int UntriedSquareCount => 100 - _shots.Count;
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
 
     internal Grid PositionShips(IRandom random)
@@ -439,22 +406,9 @@ internal class Grid
     }
 
     internal Grid PositionShips(IReadWrite io)
-    {
-        io.WriteLine("ENTER POSITION FOR...");
-        foreach (var ship in _ships)
-        {
-            ship.GetPosition(io, this);
-        }
-
+    { 
+        io.ReadShipPositions(this);
         return this;
-    }
-
-    private readonly float[,] _positions = new float[10, 10];
-
-    public float this[Position position] 
-    {
-        get => _positions[position.X, position.Y];
-        set => _positions[position.X, position.Y] = value;
     }
 }
 
@@ -473,6 +427,28 @@ internal static class IOExtensions
             io.WriteLine("ILLEGAL, ENTER AGAIN.");
         }
     }
+
+
+    internal static void ReadShipPositions(this IReadWrite io, Grid grid)
+    {
+        io.WriteLine("ENTER POSITION FOR...");
+        foreach (var ship in grid.Ships)
+        {
+            io.ReadPosition(ship, grid);
+        }
+    }
+
+    internal static void ReadPosition(this IReadWrite io, Ship ship, Grid grid)
+    {
+        io.WriteLine(ship.Name);
+        for (var i = 0; i < ship.Size; i++)
+        {
+            var position = io.ReadPosition();
+            ship.AddPosition(position);
+            grid[position] = ship.Value;
+        }
+    }
+
 }
 
 internal record struct Position(Coordinate X, Coordinate Y)
