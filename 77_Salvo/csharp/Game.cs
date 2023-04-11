@@ -28,8 +28,8 @@ internal class Game
             hitTurnRecord[i] = -1;
             hitShipValue[i] = -1;
         }
-        var computerGrid = new Grid().PositionShips(_random);
-        var humanGrid = new Grid().PositionShips(_io);
+        var computerGrid = new Grid(_random);
+        var humanGrid = new Grid(_io);
         var startResponse = _io.ReadString("DO YOU WANT TO START");
         while (startResponse == "WHERE ARE YOUR SHIPS?")
         {
@@ -254,15 +254,16 @@ internal abstract class Ship
 {
     private readonly List<Position> _positions = new();
 
-    internal virtual string Name => GetType().Name;
-    internal abstract int Shots { get; }
-    internal abstract int Size { get; }
-    internal abstract float Value { get; }
-    internal IEnumerable<Position> Positions => _positions;
-    internal bool IsAfloat => _positions.Count > 0;
-
-    internal void SetPositionInRange(IRandom random)
+    protected Ship(IReadWrite io, string? nameSuffix = null)
     {
+        Name = GetType().Name + nameSuffix;
+        _positions = io.ReadPositions(Name, Size).ToList();
+    }
+
+    protected Ship(IRandom random, string? nameSuffix = null)
+    {
+        Name = GetType().Name + nameSuffix;
+
         var (start, delta) = random.GetRandomShipPositionInRange(Size);
         for (var i = 0; i < Size; i++)
         {
@@ -270,7 +271,12 @@ internal abstract class Ship
         }
     }
 
-    internal void AddPosition(Position position) => _positions.Add(position);
+    internal string Name { get; }
+    internal abstract int Shots { get; }
+    internal abstract int Size { get; }
+    internal abstract float Value { get; }
+    internal IEnumerable<Position> Positions => _positions;
+    internal bool IsAfloat => _positions.Count > 0;
 
     internal bool IsHit(Position position) => _positions.Remove(position);
 
@@ -283,6 +289,16 @@ internal abstract class Ship
 
 internal sealed class Battleship : Ship
 {
+    internal Battleship(IReadWrite io) 
+        : base(io) 
+    { 
+    }
+
+    internal Battleship(IRandom random)
+        : base(random)
+    {
+    }
+
     internal override int Shots => 3;
     internal override int Size => 5;
     internal override float Value => 3;
@@ -290,6 +306,16 @@ internal sealed class Battleship : Ship
 
 internal sealed class Cruiser : Ship
 {
+    internal Cruiser(IReadWrite io) 
+        : base(io) 
+    { 
+    }
+    
+    internal Cruiser(IRandom random)
+        : base(random)
+    {
+    }
+
     internal override int Shots => 2;
     internal override int Size => 3;
     internal override float Value => 2;
@@ -297,12 +323,16 @@ internal sealed class Cruiser : Ship
 
 internal sealed class Destroyer : Ship
 {
-    internal Destroyer(string nameIndex)
+    internal Destroyer(string nameIndex, IReadWrite io)
+        : base(io, $"<{nameIndex}>")
     {
-        Name = $"{base.Name}<{nameIndex}>";
     }
 
-    internal override string Name { get; }
+    internal Destroyer(string nameIndex, IRandom random)
+        : base(random, $"<{nameIndex}>")
+    {
+    }
+
     internal override int Shots => 1;
     internal override int Size => 2;
     internal override float Value => Name.EndsWith("<A>") ? 1 : 0.5F;
@@ -341,14 +371,64 @@ internal static class RandomExtensions
 
 internal class Grid
 {
-    private readonly List<Ship> _ships = new() 
-    { 
-        new Battleship(), 
-        new Cruiser(), 
-        new Destroyer("A"), 
-        new Destroyer("B") 
-    };
+    private readonly List<Ship> _ships;
     private readonly Dictionary<Position, int> _shots = new();
+
+    internal Grid()
+    {
+        _ships = new();
+    }
+
+    internal Grid(IReadWrite io)
+    {
+        io.WriteLine("ENTER POSITION FOR...");
+        _ships = new()
+        {
+            new Battleship(io),
+            new Cruiser(io),
+            new Destroyer("A", io),
+            new Destroyer("B", io)
+        };
+    }
+
+    internal Grid(IRandom random)
+    {
+        _ships = new();
+        while (true)
+        {
+            _ships.Add(new Battleship(random));
+            if (TryPositionShip(() => new Cruiser(random)) &&
+                TryPositionShip(() => new Destroyer("A", random)) &&
+                TryPositionShip(() => new Destroyer("B", random)))
+            {
+                break;
+            } 
+            _ships.Clear();
+        }
+
+        foreach (var ship in _ships)
+        {
+            foreach (var position in ship.Positions)
+            {
+                this[position] = ship.Value;
+            }
+        }
+
+        bool TryPositionShip(Func<Ship> shipFactory)
+        {
+            while (true)
+            {
+                var shipGenerationAttempts = 0;
+                var ship = shipFactory.Invoke();
+                shipGenerationAttempts++;
+                if (shipGenerationAttempts > 25) { return false; }
+                foreach (var previousShip in _ships)
+                {
+                    if (ship.DistanceTo(previousShip) >= 3.59) { return true; }
+                }
+            }
+        }
+    }
 
     public float this[Position position] 
     {
@@ -364,52 +444,6 @@ internal class Grid
 
     internal int UntriedSquareCount => 100 - _shots.Count;
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
-
-    internal Grid PositionShips(IRandom random)
-    {
-        while (true)
-        {
-            var allPositioned = false;
-            for (var i = 0; i < _ships.Count; i++)
-            {
-                if (!TryPositionShip(i)) { break; }
-                if (i == _ships.Count - 1) { allPositioned = true; }
-            }
-            if (allPositioned) { break; }
-        }
-
-        foreach (var ship in _ships)
-        {
-            foreach (var position in ship.Positions)
-            {
-                this[position] = ship.Value;
-            }
-        }
-
-        return this;
-
-        bool TryPositionShip(int i)
-        {
-            while (true)
-            {
-                var shipGenerationAttempts = 0;
-                _ships[i].SetPositionInRange(random);
-                if (i == 0) { return true; }
-                shipGenerationAttempts++;
-                if (shipGenerationAttempts > 25) { return false; }
-                for (var j = 0; j < i; j++)
-                {
-                    if (_ships[i].DistanceTo(_ships[j]) >= 3.59) { return true; }
-                }
-            }
-        }
-    }
-
-    internal Grid PositionShips(IReadWrite io)
-    { 
-        io.ReadShipPositions(this);
-        return this;
-    }
 }
 
 internal static class IOExtensions
@@ -428,27 +462,14 @@ internal static class IOExtensions
         }
     }
 
-
-    internal static void ReadShipPositions(this IReadWrite io, Grid grid)
+    internal static IEnumerable<Position> ReadPositions(this IReadWrite io, string shipName, int shipSize)
     {
-        io.WriteLine("ENTER POSITION FOR...");
-        foreach (var ship in grid.Ships)
+        io.WriteLine(shipName);
+        for (var i = 0; i < shipSize; i++)
         {
-            io.ReadPosition(ship, grid);
+             yield return io.ReadPosition();
         }
     }
-
-    internal static void ReadPosition(this IReadWrite io, Ship ship, Grid grid)
-    {
-        io.WriteLine(ship.Name);
-        for (var i = 0; i < ship.Size; i++)
-        {
-            var position = io.ReadPosition();
-            ship.AddPosition(position);
-            grid[position] = ship.Value;
-        }
-    }
-
 }
 
 internal record struct Position(Coordinate X, Coordinate Y)
