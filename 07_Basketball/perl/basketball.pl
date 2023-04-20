@@ -50,7 +50,6 @@ while ($DoPlay)
     print "\n";
     if ($ConTeam eq "dart")
     {
-        $Player = 0;
         get_your_shot();
         dartmouth_play();
     }
