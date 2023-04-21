@@ -19,7 +19,6 @@ internal class Game
         _io.Write(Streams.Title);
 
         var hitTurnRecord = new int[13];
-        var shots = new Position[8];
         var temp = new Position[13];
         var hitShipValue = new float[13];
         
@@ -30,6 +29,7 @@ internal class Game
         }
         var computerGrid = new Grid(_random);
         var humanGrid = new Grid(_io);
+        var humanShotSelector = new HumanShotSelector(humanGrid, computerGrid);
         var startResponse = _io.ReadString("DO YOU WANT TO START");
         while (startResponse == "WHERE ARE YOUR SHIPS?")
         {
@@ -47,11 +47,7 @@ L1950:  if (startResponse != "YES") { goto L1990; }
 L1960:  turnNumber++;
 L1970:  _io.WriteLine();
 L1980:  _io.WriteLine($"TURN {turnNumber}");
-L1990:  var maxShotCount = humanGrid.Ships.Sum(s => s.Shots);
-L2090:  for (var i = 1; i <= 7; i++)
-        {
-            shots[i] = temp[i] = 0;
-        }
+L1990:  var maxShotCount = humanShotSelector.GetShotCount();
 L2220:  _io.WriteLine($"YOU HAVE {maxShotCount} SHOTS.");
         if (maxShotCount == 0) { goto L2270; }
 L2230:  if (maxShotCount > computerGrid.UntriedSquareCount) 
@@ -59,32 +55,12 @@ L2230:  if (maxShotCount > computerGrid.UntriedSquareCount)
             _io.WriteLine("YOU HAVE MORE SHOTS THAN THERE ARE BLANK SQUARES.");
 L2250:      goto L2890;
         }
-L2290:  for (var i = 1; i <= maxShotCount; i++)
+        foreach (var shot1 in humanShotSelector.GetShots(_io))
         {
-            while (true)
+            if (computerGrid.IsHit(shot1, turnNumber, out var shipName))
             {
-                var position = _io.ReadValidPosition();
-L2390:          if (computerGrid[position]>10) 
-                { 
-                    _io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {computerGrid[position]-10}");
-                    continue;
-                }
-                shots[i]= position;
-                break;
+                _io.WriteLine($"YOU HIT MY {shipName}.");
             }
-        }
-L2460:  for (var W = 1; W <= maxShotCount; W++)
-        {
-            var hit = computerGrid[shots[W]] switch
-            {
-                3 => "YOU HIT MY BATTLESHIP.",
-                2 => "YOU HIT MY CRUISER.",
-                1 => "YOU HIT MY DESTROYER<A>.",
-                .5F => "YOU HIT MY DESTROYER<B>.",
-                _ => null
-            };
-            if (hit is not null) { _io.WriteLine(); }
-L2510:      computerGrid[shots[W]] = 10+turnNumber;
         }
 L2620:  if (startResponse == "YES") { goto L2670; }
 L2640:  turnNumber++;
@@ -99,7 +75,6 @@ L2270:  _io.WriteLine("I HAVE WON.");
 L2880:  if (maxShotCount != 0) { goto L2960; }
 L2890:  _io.WriteLine("YOU HAVE WON.");
 L2900:  return;
-
 
 L2960:  for (var i = 1; i <= 12; i++)
         {
@@ -250,6 +225,72 @@ L4230:  goto L3380;
     }
 }
 
+internal abstract class ShotSelector
+{
+    internal ShotSelector(Grid source, Grid target)
+    {
+        Source = source;
+        Target = target;
+    }
+
+    protected Grid Source { get; }
+    protected Grid Target { get; }
+
+    public int GetShotCount() => Source.Ships.Sum(s => s.Shots);
+}
+
+internal abstract class ComputerShotSelector : ShotSelector
+{
+    private readonly bool _displayShots;
+
+    internal ComputerShotSelector(Grid source, Grid target, bool displayShots) 
+        : base(source, target)
+    {
+        _displayShots = displayShots;
+    }
+
+    private void DisplayShots(IEnumerable<Position> shots, IReadWrite io)
+    {
+        if (_displayShots)
+        {
+            foreach (var shot in shots)
+            {
+                io.WriteLine(shot);
+            }
+        }
+    }
+}
+
+internal class HumanShotSelector : ShotSelector
+{
+    public HumanShotSelector(Grid source, Grid target) 
+        : base(source, target)
+    {
+    }
+
+    public IEnumerable<Position> GetShots(IReadWrite io)
+    {
+        var shots = new Position[GetShotCount()];
+        
+        for (var i = 0; i < shots.Length; i++)
+        {
+            while (true)
+            {
+                var position = io.ReadValidPosition();
+                if (Target.WasTargetedAt(position, out var turnTargeted)) 
+                { 
+                    io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {turnTargeted}");
+                    continue;
+                }
+                shots[i] = position;
+                break;
+            }
+        }
+
+        return shots;
+    }
+}
+
 internal abstract class Ship
 {
     private readonly List<Position> _positions = new();
@@ -276,7 +317,7 @@ internal abstract class Ship
     internal abstract int Size { get; }
     internal abstract float Value { get; }
     internal IEnumerable<Position> Positions => _positions;
-    internal bool IsAfloat => _positions.Count > 0;
+    internal bool IsDestroyed => _positions.Count == 0;
 
     internal bool IsHit(Position position) => _positions.Remove(position);
 
@@ -381,7 +422,7 @@ internal class Grid
 
     internal Grid(IReadWrite io)
     {
-        io.WriteLine("ENTER POSITION FOR...");
+        io.WriteLine("ENTER COORDINATES FOR...");
         _ships = new()
         {
             new Battleship(io),
@@ -401,30 +442,23 @@ internal class Grid
                 TryPositionShip(() => new Destroyer("A", random)) &&
                 TryPositionShip(() => new Destroyer("B", random)))
             {
-                break;
+                return;
             } 
             _ships.Clear();
         }
 
-        foreach (var ship in _ships)
-        {
-            foreach (var position in ship.Positions)
-            {
-                this[position] = ship.Value;
-            }
-        }
-
         bool TryPositionShip(Func<Ship> shipFactory)
         {
+            var shipGenerationAttempts = 0;
             while (true)
             {
-                var shipGenerationAttempts = 0;
                 var ship = shipFactory.Invoke();
                 shipGenerationAttempts++;
                 if (shipGenerationAttempts > 25) { return false; }
-                foreach (var previousShip in _ships)
+                if (_ships.Min(ship.DistanceTo) >= 3.59)
                 {
-                    if (ship.DistanceTo(previousShip) >= 3.59) { return true; }
+                    _ships.Add(ship);
+                    return true; 
                 }
             }
         }
@@ -444,6 +478,22 @@ internal class Grid
 
     internal int UntriedSquareCount => 100 - _shots.Count;
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
+
+    internal bool WasTargetedAt(Position position, out int turnTargeted)
+        => _shots.TryGetValue(position, out turnTargeted);
+
+    internal bool IsHit(Position position, int turnNumber, out string? shipName)
+    {
+        shipName = null;
+        _shots[position] = turnNumber;
+        
+        var ship = _ships.FirstOrDefault(s => s.IsHit(position));
+        if (ship == null) { return false; }
+
+        if (ship.IsDestroyed) { _ships.Remove(ship); }
+
+        return true;
+    }
 }
 
 internal static class IOExtensions
@@ -507,7 +557,10 @@ internal record struct Position(Coordinate X, Coordinate Y)
     }
 
     internal float DistanceTo(Position other)
-        => (float)Math.Sqrt((X - other.X) * (X - other.Y) + (Y - other.Y) * (Y - other.Y));
+    {
+        var (deltaX, deltaY) = (X - other.X, Y - other.Y);
+        return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
 
     internal Position BringIntoRange(IRandom random)
         => IsInRange ? this : new(X.BringIntoRange(random), Y.BringIntoRange(random));
