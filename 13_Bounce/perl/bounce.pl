@@ -38,7 +38,8 @@ while (1)
     my $time_inc;   # time increment, probably in fractions of seconds
     my $velocity;   # velocity in feet/sec
     my $coeff_elas; # coeeficent of elasticity
-    my $L;          # position on line
+    my $line_pos;   # position on line
+    my $S1          # duration in full seconds?
 
     # get input
     print "TIME INCREMENT (SEC, 0=QUIT): "; chomp($time_inc = <>);
@@ -52,7 +53,7 @@ while (1)
     }
 
     print "\nFEET\n";
-    my $S1 = int(70.0 / ($velocity / (16.0 * $time_inc)));
+    $S1 = int(70.0 / ($velocity / (16.0 * $time_inc)));
     for my $i (1 .. $S1)
     {
         $T[$i] = $velocity * $coeff_elas ** ($i - 1) / 16.0;
@@ -64,28 +65,28 @@ while (1)
         #print "h=$height\n"; # kevin
         if (int($height) == $height) { print sprintf("%2d", $height); }
         else                         { print "  "; }
-        $L = 0;
+        $line_pos = 0;
         my $curr_line = "";
         for my $i (1 .. $S1)
         {
             my $time;
             for ($time=0 ; $time <= $T[$i] ; $time += $time_inc)
             {
-                $L += $time_inc;
+                $line_pos += $time_inc;
                 next if (abs($height - (.5 * (-32) * $time ** 2.0 + $velocity * $coeff_elas ** ($i - 1) * $time)) > .25);
-                $curr_line = line_tab($curr_line, ($L / $time_inc), "0");
+                $curr_line = line_tab($curr_line, ($line_pos / $time_inc), "0");
             }
-            $time = ($T[$i + 1] // 0) / 2;
+            $time = ($T[$i + 1] // 0) / 2; # we can reach 1 past the end, use 0 if that happens
             last if (-16.0 * $time ** 2.0 + $velocity * $coeff_elas ** ($i - 1) * $time < $height);
         }
         print "$curr_line\n";
     }
 
     print "  .";
-    print "." x (int($L + 1) / $time_inc + 1), "\n";
+    print "." x (int($line_pos + 1) / $time_inc + 1), "\n";
     print "  0";
-    my $cl = "";
-    for my $i (1 .. int($L + .9995)) { $cl = line_tab($cl, int($i / $time_inc), $i); }
-    print "$cl\n";
-    print " " x (int($L + 1) / (2 * $time_inc) - 2), "SECONDS\n\n";
+    my $curr_line = "";
+    for my $i (1 .. int($line_pos + .9995)) { $curr_line = line_tab($curr_line, int($i / $time_inc), $i); }
+    print "$curr_line\n";
+    print " " x (int($line_pos + 1) / (2 * $time_inc) - 2), "SECONDS\n\n";
 }
