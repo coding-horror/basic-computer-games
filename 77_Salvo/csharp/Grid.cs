@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Salvo;
 
@@ -14,7 +15,7 @@ internal class Grid
 
     internal Grid(IReadWrite io)
     {
-        io.WriteLine("ENTER COORDINATES FOR...");
+        io.WriteLine(Prompts.Coordinates);
         _ships = new()
         {
             new Battleship(io),
@@ -74,13 +75,14 @@ internal class Grid
     internal bool WasTargetedAt(Position position, out int turnTargeted)
         => _shots.TryGetValue(position, out turnTargeted);
 
-    internal bool IsHit(Position position, int turnNumber, out string? shipName)
+    internal bool IsHit(Position position, int turnNumber, [NotNullWhen(true)] out string? shipName)
     {
         shipName = null;
         _shots[position] = turnNumber;
         
         var ship = _ships.FirstOrDefault(s => s.IsHit(position));
         if (ship == null) { return false; }
+        shipName = ship.Name;
 
         if (ship.IsDestroyed) { _ships.Remove(ship); }
 

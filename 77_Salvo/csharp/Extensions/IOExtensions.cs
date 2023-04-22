@@ -12,7 +12,7 @@ internal static class IOExtensions
             { 
                 return position; 
             }
-            io.WriteLine("ILLEGAL, ENTER AGAIN.");
+            io.Write(Streams.Illegal);
         }
     }
 

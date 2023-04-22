@@ -29,50 +29,48 @@ internal class Game
         var computerGrid = new Grid(_random);
         var humanGrid = new Grid(_io);
         var humanShotSelector = new HumanShotSelector(humanGrid, computerGrid);
-        var startResponse = _io.ReadString("DO YOU WANT TO START");
-        while (startResponse == "WHERE ARE YOUR SHIPS?")
+        var startResponse = _io.ReadString(Prompts.Start);
+        while (startResponse == Strings.WhereAreYourShips)
         {
             foreach (var ship in computerGrid.Ships)
             {
                 _io.WriteLine(ship);
             }
-            startResponse = _io.ReadString("DO YOU WANT TO START");
+            startResponse = _io.ReadString(Prompts.Start);
         }
 L1890:  var turnNumber=0;
-L1900:  var seeShotsResponse = _io.ReadString("DO YOU WANT TO SEE MY SHOTS");
+L1900:  var seeShotsResponse = _io.ReadString(Prompts.SeeShots);
 L1920:  _io.WriteLine();
 L1930:  if (startResponse != "YES") { goto L2620; }
 L1950:  if (startResponse != "YES") { goto L1990; }
 L1960:  turnNumber++;
-L1970:  _io.WriteLine();
-L1980:  _io.WriteLine($"TURN {turnNumber}");
-L1990:  var maxShotCount = humanShotSelector.GetShotCount();
-L2220:  _io.WriteLine($"YOU HAVE {maxShotCount} SHOTS.");
-        if (maxShotCount == 0) { goto L2270; }
-L2230:  if (maxShotCount > computerGrid.UntriedSquareCount) 
+L1980:  _io.Write(Strings.Turn(turnNumber));
+L1990:  var numberOfShots = humanShotSelector.GetShotCount();
+L2220:  _io.Write(Strings.YouHaveShots(numberOfShots));
+        if (numberOfShots == 0) { goto L2270; }
+L2230:  if (numberOfShots > computerGrid.UntriedSquareCount) 
         { 
-            _io.WriteLine("YOU HAVE MORE SHOTS THAN THERE ARE BLANK SQUARES.");
+            _io.WriteLine(Streams.YouHaveMoreShotsThanSquares);
 L2250:      goto L2890;
         }
         foreach (var shot1 in humanShotSelector.GetShots(_io))
         {
             if (computerGrid.IsHit(shot1, turnNumber, out var shipName))
             {
-                _io.WriteLine($"YOU HIT MY {shipName}.");
+                _io.Write(Strings.YouHit(shipName));
             }
         }
 L2620:  if (startResponse == "YES") { goto L2670; }
 L2640:  turnNumber++;
-L2650:  _io.WriteLine();
-L2660:  _io.WriteLine($"TURN {turnNumber}");
-L2670:  maxShotCount = computerGrid.Ships.Sum(s => s.Shots);
-L2840:  _io.WriteLine($"I HAVE {maxShotCount} SHOTS.");
-L2850:  if (humanGrid.UntriedSquareCount > maxShotCount) { goto L2880; }
-L2860:  _io.WriteLine("I HAVE MORE SHOTS THAN BLANK SQUARES.");
-L2270:  _io.WriteLine("I HAVE WON.");
+L2660:  _io.Write(Strings.Turn(turnNumber));
+L2670:  numberOfShots = computerGrid.Ships.Sum(s => s.Shots);
+L2840:  _io.Write(Strings.IHaveShots(numberOfShots));
+L2850:  if (humanGrid.UntriedSquareCount > numberOfShots) { goto L2880; }
+L2860:  _io.Write(Streams.IHaveMoreShotsThanSquares);
+L2270:  _io.Write(Streams.IWon);
         return;
-L2880:  if (maxShotCount != 0) { goto L2960; }
-L2890:  _io.WriteLine("YOU HAVE WON.");
+L2880:  if (numberOfShots != 0) { goto L2960; }
+L2890:  _io.Write(Streams.YouWon);
 L2900:  return;
 
 L2960:  for (var i = 1; i <= 12; i++)
@@ -91,7 +89,7 @@ L3070:  shot = shot.BringIntoRange(_random);
 L3170:  goto L3270;
         // record shot
 L3180:  temp[shotCount]=shot;
-L3200:  if (shotCount==maxShotCount) { goto L3380; }
+L3200:  if (shotCount==numberOfShots) { goto L3380; }
 L3210:  if (strategyNumber==6) { goto L3030; }
 L3240:  //DATA 1,1,-1,1,1,-3,1,1,0,2,-1,1
         var data = new Offset[] { new(1,1),new(-1,1),new(1,-3),new(1,1),new(0,2),new(-1,1) };
@@ -111,11 +109,11 @@ L3360:  shotCount++;
 L3370:  goto L3180;
         // display shots
 L3380:  if (seeShotsResponse != "YES") { goto L3420; }
-L3390:  for (var i = 1; i <= maxShotCount; i++)
+L3390:  for (var i = 1; i <= numberOfShots; i++)
         {
 L3400:      _io.WriteLine(temp[i]);
         }
-L3420:  for (var i = 1; i <= maxShotCount; i++)
+L3420:  for (var i = 1; i <= numberOfShots; i++)
         {
 L3430:      if (humanGrid[temp[i]] == 3) 
             { 
@@ -197,22 +195,22 @@ L3860:  for (var i = 1; i <= 12; i++)
                 }
             }
         }
-L4030:  for (var i = 1; i <= maxShotCount; i++)
+L4030:  for (var i = 1; i <= numberOfShots; i++)
         {
 L4040:      temp[i]=i;
         }
         foreach (var position in Position.All)
         {
 L4090:      var Q9=1;
-L4100:      for (var i = 1; i <= maxShotCount; i++)
+L4100:      for (var i = 1; i <= numberOfShots; i++)
             {
 L4110:          if (tempGrid[temp[i]]>=tempGrid[temp[Q9]]) { continue; }
 L4120:          Q9=i;
             }
-L4131:      if (position.X>maxShotCount) { goto L4140; }
+L4131:      if (position.X>numberOfShots) { goto L4140; }
 L4132:      if (position.IsOnDiagonal) { goto L4210; }
 L4140:      if (tempGrid[position]<tempGrid[temp[Q9]]) { goto L4210; }
-L4150:      for (var i = 1; i <= maxShotCount; i++)
+L4150:      for (var i = 1; i <= numberOfShots; i++)
             {
 L4160:          if (temp[i].X != position.X) { break; }
 L4170:          if (temp[i].Y == position.Y) { goto L4210; }
