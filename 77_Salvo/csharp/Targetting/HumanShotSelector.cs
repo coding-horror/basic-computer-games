@@ -2,23 +2,26 @@ namespace Salvo.Targetting;
 
 internal class HumanShotSelector : ShotSelector
 {
-    public HumanShotSelector(Grid source, Grid target) 
+    private readonly IReadWrite _io;
+
+    internal HumanShotSelector(Grid source, Grid target, IReadWrite io) 
         : base(source, target)
     {
+        _io = io;
     }
 
-    public IEnumerable<Position> GetShots(IReadWrite io)
+    internal override IEnumerable<Position> GetShots()
     {
-        var shots = new Position[GetShotCount()];
+        var shots = new Position[NumberOfShots()];
         
         for (var i = 0; i < shots.Length; i++)
         {
             while (true)
             {
-                var position = io.ReadValidPosition();
+                var position = _io.ReadValidPosition();
                 if (Target.WasTargetedAt(position, out var turnTargeted)) 
                 { 
-                    io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {turnTargeted}");
+                    _io.WriteLine($"YOU SHOT THERE BEFORE ON TURN {turnTargeted}");
                     continue;
                 }
                 shots[i] = position;

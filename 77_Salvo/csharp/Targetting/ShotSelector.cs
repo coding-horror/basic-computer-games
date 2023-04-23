@@ -11,5 +11,7 @@ internal abstract class ShotSelector
     protected Grid Source { get; }
     protected Grid Target { get; }
 
-    public int GetShotCount() => Source.Ships.Sum(s => s.Shots);
+    internal int NumberOfShots => Source.Ships.Sum(s => s.Shots);
+
+    internal abstract IEnumerable<Position> GetShots();
 }

@@ -21,6 +21,7 @@ internal static class Resource
         public static string YouHaveShots(int number) => Format(number);
         public static string IHaveShots(int number) => Format(number);
         public static string YouHit(string shipName) => Format(shipName);
+        public static string IHit(string shipName) => Format(shipName);
         public static string ShotBefore(int turnNumber) => Format(turnNumber);
         public static string Turn(int number) => Format(number);
     }

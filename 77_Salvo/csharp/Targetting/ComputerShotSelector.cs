@@ -1,6 +1,6 @@
 namespace Salvo.Targetting;
 
-internal abstract class ComputerShotSelector : ShotSelector
+internal class ComputerShotSelector : ShotSelector
 {
     private readonly bool _displayShots;
 
