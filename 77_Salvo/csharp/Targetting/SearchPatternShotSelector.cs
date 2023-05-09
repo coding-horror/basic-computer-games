@@ -15,6 +15,7 @@ internal class SearchPatternShotSelector : ShotSelector
 
     internal override IEnumerable<Position> GetShots()
     {
+        _shots.Clear();
         while(_shots.Count < NumberOfShots)
         {
             var (seed, _) = _random.NextShipPosition();
@@ -31,11 +32,11 @@ internal class SearchPatternShotSelector : ShotSelector
             _searchPattern.Reset();
             if (attemptsLeft-- == 0) { return; }
             candidateShot = candidateShot.BringIntoRange(_random);
-            if (FindValidShots(candidateShot)) { return; }
+            if (FindValidShots(ref candidateShot)) { return; }
         }
     }
 
-    private bool FindValidShots(Position candidateShot)
+    private bool FindValidShots(ref Position candidateShot)
     {
         while (true)
         {

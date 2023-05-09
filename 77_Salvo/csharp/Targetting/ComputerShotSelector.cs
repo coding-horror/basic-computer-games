@@ -10,6 +10,11 @@ internal class ComputerShotSelector : ShotSelector
         _displayShots = displayShots;
     }
 
+    internal override IEnumerable<Position> GetShots()
+    {
+        throw new NotImplementedException();
+    }
+
     private void DisplayShots(IEnumerable<Position> shots, IReadWrite io)
     {
         if (_displayShots)

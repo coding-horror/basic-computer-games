@@ -12,7 +12,7 @@ internal class HumanShotSelector : ShotSelector
 
     internal override IEnumerable<Position> GetShots()
     {
-        var shots = new Position[NumberOfShots()];
+        var shots = new Position[NumberOfShots];
         
         for (var i = 0; i < shots.Length; i++)
         {

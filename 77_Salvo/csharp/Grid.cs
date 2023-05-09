@@ -75,14 +75,12 @@ internal class Grid
     internal bool WasTargetedAt(Position position, out int turnTargeted)
         => _shots.TryGetValue(position, out turnTargeted);
 
-    internal bool IsHit(Position position, int turnNumber, [NotNullWhen(true)] out string? shipName)
+    internal bool IsHit(Position position, int turnNumber, [NotNullWhen(true)] out Ship? ship)
     {
-        shipName = null;
         _shots[position] = turnNumber;
         
-        var ship = _ships.FirstOrDefault(s => s.IsHit(position));
+        ship = _ships.FirstOrDefault(s => s.IsHit(position));
         if (ship == null) { return false; }
-        shipName = ship.Name;
 
         if (ship.IsDestroyed) { _ships.Remove(ship); }
 

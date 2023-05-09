@@ -56,9 +56,9 @@ L2250:      goto L2890;
         }
         foreach (var shot1 in humanShotSelector.GetShots())
         {
-            if (computerGrid.IsHit(shot1, turnNumber, out var shipName))
+            if (computerGrid.IsHit(shot1, turnNumber, out var ship))
             {
-                _io.Write(Strings.YouHit(shipName));
+                _io.Write(Strings.YouHit(ship.Name));
             }
         }
 L2620:  if (startResponse == "YES") { goto L2670; }
@@ -81,7 +81,7 @@ L2970:      if (hitShipValue[i]>0) { goto L3800; }
         }
         temp = computerShotSelector.GetShots().ToArray();
         // display shots
-L3380:  if (seeShotsResponse == "yes") 
+L3380:  if (seeShotsResponse == "YES") 
         {
             foreach (var shot in temp)
             {
@@ -90,17 +90,17 @@ L3380:  if (seeShotsResponse == "yes")
         }
         foreach (var shot in temp)
         {
-            if (!humanGrid.IsHit(shot, turnNumber, out var shipName))
+            if (!humanGrid.IsHit(shot, turnNumber, out var ship))
             { 
                 continue;
             }
-            _io.WriteLine(Strings.IHit(shipName));
+            _io.Write(Strings.IHit(ship.Name));
 L3570:      for (var j = 1; j <= 12; j++)
             {
                 // record hit
 L3580:          if (hitTurnRecord[j] != -1) { continue; }
 L3590:          hitTurnRecord[j]=10+turnNumber;
-L3600:          hitShipValue[j]=humanGrid[shot];
+L3600:          hitShipValue[j]=ship.Value;
                 // look for past hits on same ship
 L3610:          var shipHits=0;
 L3620:          for (var k = 1; k <= 12; k++)
@@ -132,51 +132,65 @@ L3470:      humanGrid[shot]=10+turnNumber;
         }
 L3490:  goto L1950;
 L3800:  //REM************************USINGEARRAY
-        var tempGrid = new Grid();
+        var tempGrid = Position.All.ToDictionary(x => x, _ => 0);
 L3860:  for (var i = 1; i <= 12; i++)
         {
             if (hitTurnRecord[i]<10) { continue; }
             foreach (var position in Position.All)
             {
-                if (humanGrid[position]>=10) 
+                if (humanGrid.WasTargetedAt(position, out _))
                 {  
-                    foreach (var neighbour in position.Neighbours)    
-                    {
-                        if (humanGrid[neighbour] == hitTurnRecord[i])
-                        {
-                            tempGrid[position] += hitTurnRecord[i]-position.Y*(int)(hitShipValue[i]+.5F);
-                        }
-                    }
-                }
-                else
-                {
                     tempGrid[position]=-10000000;
+                    continue;
+                }
+
+                foreach (var neighbour in position.Neighbours)    
+                {
+                    if (humanGrid.WasTargetedAt(neighbour, out var turn) && turn == (hitTurnRecord[i] - 10))
+                    {
+                        tempGrid[position] += hitTurnRecord[i]-position.Y*(int)(hitShipValue[i]+.5F);
+                    }
                 }
             }
         }
-L4030:  for (var i = 1; i <= numberOfShots; i++)
+L4030:  for (var i = 0; i < numberOfShots; i++)
         {
-L4040:      temp[i]=i;
+L4040:      temp[i]=i+1;
         }
         foreach (var position in Position.All)
         {
-L4090:      var Q9=1;
-L4100:      for (var i = 1; i <= numberOfShots; i++)
+L4090:      var Q9=0;
+L4100:      for (var i = 0; i < numberOfShots; i++)
             {
-L4110:          if (tempGrid[temp[i]]>=tempGrid[temp[Q9]]) { continue; }
-L4120:          Q9=i;
+L4110:          if (tempGrid[temp[i]] < tempGrid[temp[Q9]]) 
+                { 
+L4120:              Q9 = i;
+                }
             }
-L4131:      if (position.X>numberOfShots) { goto L4140; }
-L4132:      if (position.IsOnDiagonal) { goto L4210; }
-L4140:      if (tempGrid[position]<tempGrid[temp[Q9]]) { goto L4210; }
-L4150:      for (var i = 1; i <= numberOfShots; i++)
+L4131:      if (position.X <= numberOfShots && position.IsOnDiagonal) { continue; }
+L4140:      if (tempGrid[position]<tempGrid[temp[Q9]]) { continue; }
+            if (!temp.Contains(position))
             {
-L4160:          if (temp[i].X != position.X) { break; }
-L4170:          if (temp[i].Y == position.Y) { goto L4210; }
+                temp[Q9] = position;
             }
-L4190:      temp[Q9]=position;
-L4210:      ;// NoOp -  NEXT S 
         }
 L4230:  goto L3380;
     }
 }
+
+internal class DataRandom : IRandom
+{
+    private readonly Queue<float> _values = 
+        new(File.ReadAllLines("data.txt").Select(l => float.Parse(l) / 1000000));
+    private float _previous;
+
+    public float NextFloat() => _previous = _values.Dequeue();
+
+    public float PreviousFloat() => _previous;
+
+    public void Reseed(int seed)
+    {
+        throw new NotImplementedException();
+    }
+}
+
