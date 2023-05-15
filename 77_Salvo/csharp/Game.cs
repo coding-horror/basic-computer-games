@@ -95,42 +95,28 @@ L3380:  if (seeShotsResponse == "YES")
                 continue;
             }
             _io.Write(Strings.IHit(ship.Name));
-L3570:      for (var j = 1; j <= 12; j++)
+            for (var j = 1; j <= 12; j++)
             {
-                // record hit
-L3580:          if (hitTurnRecord[j] != -1) { continue; }
-L3590:          hitTurnRecord[j]=10+turnNumber;
-L3600:          hitShipValue[j]=ship.Value;
-                // look for past hits on same ship
-L3610:          var shipHits=0;
-L3620:          for (var k = 1; k <= 12; k++)
+                if (hitTurnRecord[j] == -1)
                 {
-L3630:              if (hitShipValue[k] != hitShipValue[j]) { continue; }
-L3640:              shipHits++;
+                    hitTurnRecord[j]=10+turnNumber;
+                    hitShipValue[j]=ship.Value;
+                    break;
                 }
-                // if ship is not sunk
-L3660:          if (shipHits != (int)(hitShipValue[j]+.5F)+1+(int)(hitShipValue[j]+.5F)/3) { goto L3470; }
-                // otherwise, remove ship hit records
-L3670:          for (var k = 1; k <= 12; k++)
+            }
+            if (ship.IsDestroyed) 
+            {
+                for (var k = 1; k <= 12; k++)
                 {
-L3680:              if (hitShipValue[k] == hitShipValue[j]) 
+                    if (hitShipValue[k] == ship.Value)
                     {
-L3700:                  hitShipValue[k] = hitTurnRecord[k] = -1;
+                        hitShipValue[k] = hitTurnRecord[k] = -1;
                     }
                 }
-L3720:          goto L3470;
             }
-            // we shouldn't get here
-L3740:      _io.WriteLine("PROGRAM ABORT:");
-L3750:      for (var j = 1; j <= 12; j++)
-            {
-L3760:          _io.WriteLine($"{nameof(hitTurnRecord)}( {j} ) = {hitTurnRecord[j]}");
-L3770:          _io.WriteLine($"{nameof(hitShipValue)}( {j} ) = {hitShipValue[j]}");
-            }
-            return;
-L3470:      humanGrid[shot]=10+turnNumber;
+            humanGrid[shot]=10+turnNumber;
         }
-L3490:  goto L1950;
+        goto L1950;
 L3800:  //REM************************USINGEARRAY
         var tempGrid = Position.All.ToDictionary(x => x, _ => 0);
 L3860:  for (var i = 1; i <= 12; i++)
