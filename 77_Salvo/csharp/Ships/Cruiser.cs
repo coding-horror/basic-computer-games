@@ -14,5 +14,4 @@ internal sealed class Cruiser : Ship
 
     internal override int Shots => 2;
     internal override int Size => 3;
-    internal override float Value => 2;
 }

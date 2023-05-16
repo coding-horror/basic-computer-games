@@ -14,5 +14,4 @@ internal sealed class Battleship : Ship
 
     internal override int Shots => 3;
     internal override int Size => 5;
-    internal override float Value => 3;
 }

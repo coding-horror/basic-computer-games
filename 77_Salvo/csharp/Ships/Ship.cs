@@ -24,8 +24,7 @@ internal abstract class Ship
     internal string Name { get; }
     internal abstract int Shots { get; }
     internal abstract int Size { get; }
-    internal abstract float Value { get; }
-    internal IEnumerable<Position> Positions => _positions;
+    internal bool IsDamaged => _positions.Count > 0 && _positions.Count < Size;
     internal bool IsDestroyed => _positions.Count == 0;
 
     internal bool IsHit(Position position) => _positions.Remove(position);

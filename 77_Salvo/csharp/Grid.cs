@@ -57,18 +57,6 @@ internal class Grid
         }
     }
 
-    public float this[Position position] 
-    {
-        get => _shots.TryGetValue(position, out var value) 
-                ? value + 10
-                : _ships.FirstOrDefault(s => s.Positions.Contains(position))?.Value ?? 0;
-        set
-        {
-            _ = _ships.FirstOrDefault(s => s.IsHit(position));
-            _shots[position] = (int)value - 10;
-        }
-    }
-
     internal int UntriedSquareCount => 100 - _shots.Count;
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
 
