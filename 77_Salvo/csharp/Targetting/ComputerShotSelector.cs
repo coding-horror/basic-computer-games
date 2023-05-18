@@ -2,27 +2,20 @@ namespace Salvo.Targetting;
 
 internal class ComputerShotSelector : ShotSelector
 {
-    private readonly bool _displayShots;
+    private readonly KnownHitsShotSelectionStrategy _knownHitsStrategy;
+    private readonly SearchPatternShotSelector _searchPatternShotSelector;
 
-    internal ComputerShotSelector(Grid source, Grid target, bool displayShots) 
+    internal ComputerShotSelector(Grid source, Grid target, IRandom random) 
         : base(source, target)
     {
-        _displayShots = displayShots;
+        _knownHitsStrategy = new KnownHitsShotSelectionStrategy(target);
+        _searchPatternShotSelector = new SearchPatternShotSelector(source, target, random);
     }
 
     internal override IEnumerable<Position> GetShots()
     {
-        throw new NotImplementedException();
+        return _knownHitsStrategy.GetShots(NumberOfShots) ?? _searchPatternShotSelector.GetShots();
     }
 
-    private void DisplayShots(IEnumerable<Position> shots, IReadWrite io)
-    {
-        if (_displayShots)
-        {
-            foreach (var shot in shots)
-            {
-                io.WriteLine(shot);
-            }
-        }
-    }
+    internal void RecordHit(Ship ship, int turn) => _knownHitsStrategy.RecordHit(ship, turn);
 }

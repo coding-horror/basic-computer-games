@@ -17,13 +17,13 @@ internal class Game
     {
         _io.Write(Streams.Title);
 
-        var hitRecords = new List<(int Turn, Ship Ship)>();
+        var damagedShips = new List<(int Turn, Ship Ship)>();
         var temp = new Position[13];
         
         var computerGrid = new Grid(_random);
         var humanGrid = new Grid(_io);
         var humanShotSelector = new HumanShotSelector(humanGrid, computerGrid, _io);
-        var computerShotSelector = new SearchPatternShotSelector(computerGrid, humanGrid, _random);
+        var computerShotSelector = new ComputerShotSelector(computerGrid, humanGrid, _random);
         var startResponse = _io.ReadString(Prompts.Start);
         while (startResponse == Strings.WhereAreYourShips)
         {
@@ -64,12 +64,11 @@ L2850:  if (humanGrid.UntriedSquareCount > numberOfShots) { goto L2880; }
 L2860:  _io.Write(Streams.IHaveMoreShotsThanSquares);
 L2270:  _io.Write(Streams.IWon);
         return;
-L2880:  if (numberOfShots != 0) { goto L2960; }
+L2880:  if (numberOfShots == 0) { goto L2960; }
 L2890:  _io.Write(Streams.YouWon);
 L2900:  return;
 
-L2960:  if (humanGrid.Ships.Any(s => s.IsDamaged)) { goto L3800; }
-        temp = computerShotSelector.GetShots().ToArray();
+L2960:  temp = computerShotSelector.GetShots().ToArray();
         // display shots
 L3380:  if (seeShotsResponse == "YES") 
         {
@@ -80,64 +79,13 @@ L3380:  if (seeShotsResponse == "YES")
         }
         foreach (var shot in temp)
         {
-            if (!humanGrid.IsHit(shot, turnNumber, out var ship))
+            if (humanGrid.IsHit(shot, turnNumber, out var ship))
             { 
-                continue;
-            }
-            _io.Write(Strings.IHit(ship.Name));
-            if (ship.IsDestroyed) 
-            {
-                hitRecords = hitRecords.Where(hr => hr.Ship != ship).ToList();
-            }
-            else
-            {
-                hitRecords.Add((turnNumber, ship));
+                _io.Write(Strings.IHit(ship.Name));
+                computerShotSelector.RecordHit(ship, turnNumber);
             }
         }
         goto L1950;
-L3800:  //REM************************USINGEARRAY
-        var tempGrid = Position.All.ToDictionary(x => x, _ => 0);
-L3860:  foreach (var (hitTurn, ship) in hitRecords)
-        {
-            foreach (var position in Position.All)
-            {
-                if (humanGrid.WasTargetedAt(position, out _))
-                {  
-                    tempGrid[position]=-10000000;
-                    continue;
-                }
-
-                foreach (var neighbour in position.Neighbours)    
-                {
-                    if (humanGrid.WasTargetedAt(neighbour, out var turn) && turn == hitTurn)
-                    {
-                        tempGrid[position] += hitTurn + 10 - position.Y * ship.Shots;
-                    }
-                }
-            }
-        }
-L4030:  for (var i = 0; i < numberOfShots; i++)
-        {
-L4040:      temp[i]=i+1;
-        }
-        foreach (var position in Position.All)
-        {
-L4090:      var Q9=0;
-L4100:      for (var i = 0; i < numberOfShots; i++)
-            {
-L4110:          if (tempGrid[temp[i]] < tempGrid[temp[Q9]]) 
-                { 
-L4120:              Q9 = i;
-                }
-            }
-L4131:      if (position.X <= numberOfShots && position.IsOnDiagonal) { continue; }
-L4140:      if (tempGrid[position]<tempGrid[temp[Q9]]) { continue; }
-            if (!temp.Contains(position))
-            {
-                temp[Q9] = position;
-            }
-        }
-L4230:  goto L3380;
     }
 }
 
