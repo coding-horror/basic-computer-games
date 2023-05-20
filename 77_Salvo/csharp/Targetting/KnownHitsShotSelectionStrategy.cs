@@ -4,15 +4,15 @@ internal class KnownHitsShotSelectionStrategy : ShotSelectionStrategy
 {
     private readonly List<(int Turn, Ship Ship)> _damagedShips = new();
 
-    internal KnownHitsShotSelectionStrategy(Grid target)
-        : base(target)
+    internal KnownHitsShotSelectionStrategy(ShotSelector shotSelector)
+        : base(shotSelector)
     {
     }
 
-    internal IEnumerable<Position>? GetShots(int numberOfShots)
-    {
-        if (!_damagedShips.Any()) { return null; }
+    internal bool KnowsOfDamagedShips => _damagedShips.Any();
 
+    internal override IEnumerable<Position> GetShots(int numberOfShots)
+    {
         var tempGrid = Position.All.ToDictionary(x => x, _ => 0);
         var shots = Enumerable.Range(1, numberOfShots).Select(x => new Position(x, x)).ToArray();
 

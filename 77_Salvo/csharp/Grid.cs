@@ -6,12 +6,6 @@ namespace Salvo;
 internal class Grid
 {
     private readonly List<Ship> _ships;
-    private readonly Dictionary<Position, int> _shots = new();
-
-    internal Grid()
-    {
-        _ships = new();
-    }
 
     internal Grid(IReadWrite io)
     {
@@ -57,16 +51,10 @@ internal class Grid
         }
     }
 
-    internal int UntriedSquareCount => 100 - _shots.Count;
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
 
-    internal bool WasTargetedAt(Position position, out int turnTargeted)
-        => _shots.TryGetValue(position, out turnTargeted);
-
-    internal bool IsHit(Position position, int turnNumber, [NotNullWhen(true)] out Ship? ship)
+    internal bool IsHit(Position position, [NotNullWhen(true)] out Ship? ship)
     {
-        _shots[position] = turnNumber;
-        
         ship = _ships.FirstOrDefault(s => s.IsHit(position));
         if (ship == null) { return false; }
 

@@ -1,30 +1,30 @@
 namespace Salvo.Targetting;
 
-internal class SearchPatternShotSelector : ShotSelector
+internal class SearchPatternShotSelectionStrategy : ShotSelectionStrategy
 {
     private const int MaxSearchPatternAttempts = 100;
     private readonly IRandom _random;
     private readonly SearchPattern _searchPattern = new();
     private readonly List<Position> _shots = new();
 
-    internal SearchPatternShotSelector(Grid source, Grid target, IRandom random) 
-        : base(source, target)
+    internal SearchPatternShotSelectionStrategy(ShotSelector shotSelector, IRandom random) 
+        : base(shotSelector)
     {
         _random = random;
     }
 
-    internal override IEnumerable<Position> GetShots()
+    internal override IEnumerable<Position> GetShots(int numberOfShots)
     {
         _shots.Clear();
-        while(_shots.Count < NumberOfShots)
+        while(_shots.Count < numberOfShots)
         {
             var (seed, _) = _random.NextShipPosition();
-            SearchFrom(seed);
+            SearchFrom(numberOfShots, seed);
         }
         return _shots;
     }
 
-    private void SearchFrom(Position candidateShot)
+    private void SearchFrom(int numberOfShots, Position candidateShot)
     {
         var attemptsLeft = MaxSearchPatternAttempts;
         while (true)
@@ -32,18 +32,18 @@ internal class SearchPatternShotSelector : ShotSelector
             _searchPattern.Reset();
             if (attemptsLeft-- == 0) { return; }
             candidateShot = candidateShot.BringIntoRange(_random);
-            if (FindValidShots(ref candidateShot)) { return; }
+            if (FindValidShots(numberOfShots, ref candidateShot)) { return; }
         }
     }
 
-    private bool FindValidShots(ref Position candidateShot)
+    private bool FindValidShots(int numberOfShots, ref Position candidateShot)
     {
         while (true)
         {
             if (IsValidShot(candidateShot))
             {
                 _shots.Add(candidateShot);
-                if (_shots.Count == NumberOfShots) { return true; }
+                if (_shots.Count == numberOfShots) { return true; }
             }
             if (!_searchPattern.TryGetOffset(out var offset)) { return false; }
             candidateShot += offset;
@@ -51,5 +51,5 @@ internal class SearchPatternShotSelector : ShotSelector
     }
 
     private bool IsValidShot(Position candidate)
-        => candidate.IsInRange && !Target.WasTargetedAt(candidate, out _) && !_shots.Contains(candidate);
+        => candidate.IsInRange && !WasSelectedPreviously(candidate) && !_shots.Contains(candidate);
 }

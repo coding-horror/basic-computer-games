@@ -2,15 +2,16 @@ namespace Salvo.Targetting;
 
 internal abstract class ShotSelectionStrategy
 {
-    private readonly Grid _target;
-    protected ShotSelectionStrategy(Grid target)
+    private readonly ShotSelector _shotSelector;
+    protected ShotSelectionStrategy(ShotSelector shotSelector)
     {
-        _target = target;
+        _shotSelector = shotSelector;
     }
 
-    protected bool WasSelectedPreviously(Position position)
-        => _target.WasTargetedAt(position, out _);
+    internal abstract IEnumerable<Position> GetShots(int numberOfShots);
+
+    protected bool WasSelectedPreviously(Position position) => _shotSelector.WasSelectedPreviously(position);
 
     protected bool WasSelectedPreviously(Position position, out int turn)
-        => _target.WasTargetedAt(position, out turn);
+        => _shotSelector.WasSelectedPreviously(position, out turn);
 }
