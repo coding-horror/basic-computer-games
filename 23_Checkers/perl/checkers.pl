@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Boxing program in Perl
+# Checkers program in Perl
 #   Started with checkers.annotated.bas
 # Translated by Kevin Brannen (kbrannen)
 
