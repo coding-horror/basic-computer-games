@@ -11,7 +11,7 @@ use warnings;
 #
 # The current move: (rating, current x, current y, new x, new y)
 # 'rating' represents how good the move is; higher is better.
-my @r = (-99); # (4); # Start with minimum score
+my @ratings = (-99); # (4); # Start with minimum score
 # The board.  Pieces are represented by numeric values:
 #
 #      - 0     = empty square
@@ -19,10 +19,10 @@ my @r = (-99); # (4); # Start with minimum score
 #      - 1,2   = O (1 for regular piece, 2 for king)
 #
 # This program's player ("me") plays X.
-my @s; # (7,7)
+my @board; # (7,7)
 # chars to print for the board, add 2 to the board value as an index to the char
 my @chars = ("X*", "X", ".", "O", "O*");
-my $g = -1;          # constant holding -1
+my $neg1 = -1;          # constant holding -1
 my $winner = "";
 my $upgrade = shift(@ARGV) // "";
 $upgrade = $upgrade eq "-o" ? 0 : 1;
@@ -42,7 +42,8 @@ print "(0,7) IS THE UPPER LEFT CORNER\n";
 print "(7,0) IS THE LOWER RIGHT CORNER\n";
 print "(7,7) IS THE UPPER RIGHT CORNER\n";
 print "THE COMPUTER WILL TYPE '+TO' WHEN YOU HAVE ANOTHER\n";
-print "JUMP.  TYPE TWO NEGATIVE NUMBERS IF YOU CANNOT JUMP.\n\n\n";
+print "JUMP.  TYPE TWO NEGATIVE NUMBERS IF YOU CANNOT JUMP.\n";
+print "ENTER YOUR MOVE POSITION LIKE '0 0' OR '0,0'.\n\n\n";
 
 # Initialize the board.  Data is 2 length-wise strips repeated.
 my @data = ();
@@ -51,7 +52,7 @@ for my $x (0 .. 7)
 {
     for my $y (0 .. 7)
     {
-        $s[$x][$y] = shift(@data);
+        $board[$x][$y] = shift(@data);
     }
 }
 
@@ -66,22 +67,22 @@ while (1)
         for my $y (0 .. 7)
         {
             # Skip if this is empty or an opponent's piece
-            next if ($s[$x][$y] > -1);
+            next if ($board[$x][$y] > -1);
 
             # If this is one of my ordinary pieces, analyze possible
             # forward moves.
-            if ($s[$x][$y] == -1)
+            if ($board[$x][$y] == -1)
             {
                 for (my $a = -1 ; $a <= 1 ; $a +=2)
                 {
-                    $b = $g;
+                    $b = $neg1;
                     find_move($x, $y, $a, $b);
                 }
             }
 
             # If this is one of my kings, analyze possible forward
             # and backward moves.
-            if ($s[$x][$y] == -2)
+            if ($board[$x][$y] == -2)
             {
                 for (my $a = -1 ; $a <= 1 ; $a += 2)
                 {
@@ -92,7 +93,7 @@ while (1)
     }
 
 
-    if ($r[0] == -99) # Game is lost if no move could be found.
+    if ($ratings[0] == -99) # Game is lost if no move could be found.
     {
         $winner = "you";
         last;
@@ -100,47 +101,47 @@ while (1)
 
     # Print the computer's move.  (Note: chr$(30) is an ASCII RS
     # (record separator) code; probably no longer relevant.)
-    print "FROM $r[1],$r[2] TO $r[3],$r[4] ";
-    $r[0] = -99;
+    print "FROM $ratings[1],$ratings[2] TO $ratings[3],$ratings[4] ";
+    $ratings[0] = -99;
 
     # Make the computer's move.  If the piece finds its way to the
     # end of the board, crown it.
     LOOP1240: {
-        if ($r[4] == 0)
+        if ($ratings[4] == 0)
         {
-            $s[$r[3]][$r[4]] = -2;
+            $board[$ratings[3]][$ratings[4]] = -2;
             last LOOP1240;
         }
-        $s[$r[3]][$r[4]] = $s[$r[1]][$r[2]];
-        $s[$r[1]][$r[2]] = 0;
+        $board[$ratings[3]][$ratings[4]] = $board[$ratings[1]][$ratings[2]];
+        $board[$ratings[1]][$ratings[2]] = 0;
 
         # If the piece has jumped 2 squares, it means the computer has
         # taken an opponents' piece.
-        if (abs($r[1] - $r[3]) == 2)
+        if (abs($ratings[1] - $ratings[3]) == 2)
         {
-            $s [($r[1]+$r[3])/2] [($r[2]+$r[4])/2] = 0;     # Delete the opponent's piece
+            $board [($ratings[1]+$ratings[3])/2] [($ratings[2]+$ratings[4])/2] = 0;     # Delete the opponent's piece
 
             # See if we can jump again.  Evaluate all possible moves.
-            my $x = $r[3];
-            my $y = $r[4];
+            my $x = $ratings[3];
+            my $y = $ratings[4];
             for (my $a = -2 ; $a <= 2 ; $a += 4)
             {
-                if ($s[$x][$y] == -1)
+                if ($board[$x][$y] == -1)
                 {
                     $b = -2;
                     eval_move($x, $y, $a, $b);
                 }
-                if ($s[$x][$y] == -2)
+                if ($board[$x][$y] == -2)
                 {
                     for (my $b = -2 ; $b <= 2 ; $b += 4) { eval_move($x, $y, $a, $b); }
                 }
             }
 
             # If we've found a move, go back and make that one as well
-            if ($r[0] != -99)
+            if ($ratings[0] != -99)
             {
-                print "TO $r[3], $r[4] ";
-                $r[0] = -99;
+                print "TO $ratings[3], $ratings[4] ";
+                $ratings[0] = -99;
                 next LOOP1240;
             }
         }
@@ -154,7 +155,7 @@ while (1)
         $line = "$y|" if ($upgrade);
         for my $x (0 .. 7)
         {
-            my $c = $chars[$s[$x][$y] + 2];
+            my $c = $chars[$board[$x][$y] + 2];
             $c = ' ' if ($upgrade && (($y % 2 == 0 && $x % 2 == 1) || ($y % 2 == 1 && $x % 2 == 0)));
             $line = tab($line, 5*$x+7, $c);
         }
@@ -172,8 +173,8 @@ while (1)
     {
         for my $y (0 .. 7)
         {
-            if ($s[$x][$y] == 1  || $s[$x][$y] == 2)  { $z = 1; }
-            if ($s[$x][$y] == -1 || $s[$x][$y] == -2) { $t = 1; }
+            if ($board[$x][$y] == 1  || $board[$x][$y] == 2)  { $z = 1; }
+            if ($board[$x][$y] == -1 || $board[$x][$y] == -2) { $t = 1; }
         }
     }
     if ($z != 1) { $winner = "comp"; last; }
@@ -183,39 +184,33 @@ while (1)
     ($z, $t) = (0, 0);
     my ($x, $y, $e, $h, $a, $b);
     do {
-        print "FROM: ";
-        chomp(my $ans = <>);
-        ($e,$h) = split(/[, ]/, $ans);
+        ($e,$h) = get_pos("FROM:");
         $x = $e;
         $y = $h;
-    } while ($s[$x][$y] <= 0);
+    } while ($board[$x][$y] <= 0);
     do {
-        print "TO: ";
-        chomp(my $ans = <>);
-        ($a,$b) = split(/[, ]/, $ans);
+        ($a,$b) = get_pos("TO:");
         $x = $a;
         $y = $b;
-    } while (!($s[$x][$y] == 0 && abs($a-$e) <= 2 && abs($a-$e) == abs($b-$h)));
+    } while (!($board[$x][$y] == 0 && abs($a-$e) <= 2 && abs($a-$e) == abs($b-$h)));
 
     LOOP1750: {
         # Make the move and stop unless it might be a jump.
-        $s[$a][$b] = $s[$e][$h];
-        $s[$e][$h] = 0;
+        $board[$a][$b] = $board[$e][$h];
+        $board[$e][$h] = 0;
         if (abs($e-$a) != 2) { last LOOP1750; }
 
         # Remove the piece jumped over
-        $s[($e+$a)/2][($h+$b)/2] = 0;
+        $board[($e+$a)/2][($h+$b)/2] = 0;
 
         # Prompt for another move; -1 means player can't, so I've won.
         # Keep prompting until there's a valid move or the player gives
         # up.
         my ($a1, $b1);
         do {
-            print "+TO ";
-            chomp(my $ans = <>);
-            ($a1,$b1) = split(/[, ]/, $ans);
+            ($a1,$b1) = get_pos("+TO:");
             if ($a1 < 0) { last LOOP1750; }
-        } while ($s[$a1][$b1] != 0 || abs($a1-$a) != 2 || abs($b1-$b) != 2);
+        } while ($board[$a1][$b1] != 0 || abs($a1-$a) != 2 || abs($b1-$b) != 2);
 
         # Update the move variables to correspond to the next jump
         $e = $a;
@@ -225,7 +220,7 @@ while (1)
     }
 
     # If the player has reached the end of the board, crown this piece
-    if ($b == 7) { $s[$a][$b] = 2; }
+    if ($b == 7) { $board[$a][$b] = 2; }
 
     # And play the next turn.
 }
@@ -236,6 +231,19 @@ exit(0);
 
 ###########################################
 
+# make sure we get a 2 value position
+sub get_pos
+{
+    my $prompt = shift;
+    my ($p1, $p2);
+    do {
+        print "$prompt ";
+        chomp(my $ans = <>);
+        ($p1,$p2) = split(/[, ]/, $ans);
+    } while (!defined($p1) || !defined($p2) || $p1 < -1 || $p2 < -1 || $p1 > 7 || $p2 > 7);
+    return ($p1,$p2);
+}
+
 # deal with basic's tab() for line positioning
 #   line = line string we're starting with
 #   pos = position to start writing
@@ -243,10 +251,10 @@ exit(0);
 # returns the resultant string, which might not have been changed
 sub tab
 {
-    my ($line, $pos, $s) = @_;
+    my ($line, $pos, $str) = @_;
     my $len = length($line);
     # if curser is past position, do nothing
-    if ($len <= $pos) { $line .= " " x ($pos - $len) . $s; }
+    if ($len <= $pos) { $line .= " " x ($pos - $len) . $str; }
     return $line;
 }
 
@@ -262,10 +270,10 @@ sub find_move
     return if ($u < 0 || $u > 7 || $v < 0 || $ v> 7);
 
     # Consider the destination if it's empty
-    eval_jump($x, $y, $u, $v) if ($s[$u][$v] == 0);
+    eval_jump($x, $y, $u, $v) if ($board[$u][$v] == 0);
 
     # If it's got an opponent's piece, jump it instead
-    if ($s[$u][$v] > 0)
+    if ($board[$u][$v] > 0)
     {
 
         # Restore u and v, then return if it's off the board
@@ -274,7 +282,7 @@ sub find_move
         return if ($u < 0 || $v < 0 || $u > 7 || $v > 7);
 
         # Otherwise, consider u,v
-        eval_jump($x, $y, $u, $v) if ($s[$u][$v] == 0);
+        eval_jump($x, $y, $u, $v) if ($board[$u][$v] == 0);
     }
 }
 
@@ -282,7 +290,7 @@ sub find_move
 #
 # Computes a score for the proposed move and if it's higher
 # than the best-so-far move, uses that instead by storing it
-# and its score in @r.
+# and its score in @ratings.
 sub eval_jump
 {
     my ($x, $y, $u, $v) = @_;
@@ -291,7 +299,7 @@ sub eval_jump
     my $q = 0;
 
     # +2 if it promotes this piece
-    $q += 2 if ($v == 0 && $s[$x][$y] == -1);
+    $q += 2 if ($v == 0 && $board[$x][$y] == -1);
 
     # +5 if it takes an opponent's piece
     $q += 5 if (abs($y-$v) == 2);
@@ -304,40 +312,40 @@ sub eval_jump
 
     for (my $c = -1 ; $c <= 1 ; $c += 2)
     {
-        next if ($u+$c < 0 || $u+$c > 7 || $v+$g < 0);
+        next if ($u+$c < 0 || $u+$c > 7 || $v+$neg1 < 0);
 
         # +1 for each adjacent friendly piece
-        if ($s[$u+$c][$v+$g] < 0)
+        if ($board[$u+$c][$v+$neg1] < 0)
         {
             $q++;
             next;
         }
 
         # Prevent out-of-bounds testing
-        next if ($u-$c < 0 || $u-$c > 7 || $v-$g > 7);
+        next if ($u-$c < 0 || $u-$c > 7 || $v-$neg1 > 7);
 
         # -2 for each opponent piece that can now take this piece here
-        $q -= 2 if ($s[$u+$c][$v+$g] > 0 && ($s[$u-$c][$v-$g] == 0 || ($u-$c == $x && $v-$g == $y)));
+        $q -= 2 if ($board[$u+$c][$v+$neg1] > 0 && ($board[$u-$c][$v-$neg1] == 0 || ($u-$c == $x && $v-$neg1 == $y)));
     }
 
     # Use this move if it's better than the previous best
-    if ($q > $r[0])
+    if ($q > $ratings[0])
     {
-        $r[0] = $q;
-        $r[1] = $x;
-        $r[2] = $y;
-        $r[3] = $u;
-        $r[4] = $v;
+        $ratings[0] = $q;
+        $ratings[1] = $x;
+        $ratings[2] = $y;
+        $ratings[3] = $u;
+        $ratings[4] = $v;
     }
 }
 
 # If (u,v) is in the bounds, evaluate it as a move using
-# the sub at 910, so storing eval in @r.
+# the sub at 910, so storing eval in @ratings.
 sub eval_move
 {
     my ($x, $y, $a, $b) = @_;
     my $u = $x+$a;
     my $v = $y+$b;
     return if ($u < 0 || $u > 7 || $v < 0 || $v > 7);
-    eval_jump($x, $y, $u, $v) if ($s[$u][$v] == 0 && $s[$x+$a/2][$y+$b/2] > 0);
+    eval_jump($x, $y, $u, $v) if ($board[$u][$v] == 0 && $board[$x+$a/2][$y+$b/2] > 0);
 }
