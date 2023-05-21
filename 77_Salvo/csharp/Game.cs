@@ -17,28 +17,19 @@ internal class Game
     {
         _io.Write(Streams.Title);
 
-        var damagedShips = new List<(int Turn, Ship Ship)>();
-        var temp = new Position[13];
-        
         var computerFleet = new Fleet(_random);
         var humanFleet = new Fleet(_io);
-        var startResponse = _io.ReadString(Prompts.Start);
-        while (startResponse == Strings.WhereAreYourShips)
-        {
-            foreach (var ship in computerFleet.Ships)
-            {
-                _io.WriteLine(ship);
-            }
-            startResponse = _io.ReadString(Prompts.Start);
-        }
+        var humanStarts = AskWhoStarts(computerFleet);
 L1890:  var turnNumber=0;
         var humanShotSelector = new HumanShotSelector(humanFleet, _io);
         var computerShotSelector = new ComputerShotSelector(computerFleet, _random, _io);
 L1920:  _io.WriteLine();
-L1930:  if (startResponse != "YES") { goto L2620; }
-L1950:  if (startResponse != "YES") { goto L1990; }
-L1960:  turnNumber++;
-L1980:  _io.Write(Strings.Turn(turnNumber));
+L1930:  if (!humanStarts) { goto L2620; }
+L1950:  if (humanStarts) 
+        {
+L1960:      turnNumber++;
+L1980:      _io.Write(Strings.Turn(turnNumber));
+        }
 L1990:  var numberOfShots = humanShotSelector.NumberOfShots;
 L2220:  _io.Write(Strings.YouHaveShots(numberOfShots));
         if (numberOfShots == 0) { goto L2270; }
@@ -48,9 +39,11 @@ L2230:  if (humanShotSelector.CanTargetAllRemainingSquares)
 L2250:      goto L2890;
         }
         computerFleet.ReceiveShots(humanShotSelector.GetShots(turnNumber), ship => _io.Write(Strings.YouHit(ship.Name)));
-L2620:  if (startResponse == "YES") { goto L2670; }
-L2640:  turnNumber++;
-L2660:  _io.Write(Strings.Turn(turnNumber));
+L2620:  if (!humanStarts)
+        {
+L2640:      turnNumber++;
+L2660:      _io.Write(Strings.Turn(turnNumber));
+        }
 L2670:  numberOfShots = computerShotSelector.NumberOfShots;
 L2840:  _io.Write(Strings.IHaveShots(numberOfShots));
 L2850:  if (!computerShotSelector.CanTargetAllRemainingSquares) { goto L2880; }
@@ -69,6 +62,25 @@ L2960:  humanFleet.ReceiveShots(
                 computerShotSelector.RecordHit(ship, turnNumber);
             });
         goto L1950;
+    }
+
+    private bool AskWhoStarts(Fleet computerFleet)
+    {
+        while (true)
+        {
+            var startResponse = _io.ReadString(Prompts.Start);
+            if (startResponse.Equals(Strings.WhereAreYourShips, StringComparison.InvariantCultureIgnoreCase))
+            {
+                foreach (var ship in computerFleet.Ships)
+                {
+                    _io.WriteLine(ship);
+                }
+            }
+            else
+            {
+                return startResponse.Equals("yes", StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
     }
 }
 
