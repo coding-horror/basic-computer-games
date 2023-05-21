@@ -20,21 +20,20 @@ internal class Game
         var damagedShips = new List<(int Turn, Ship Ship)>();
         var temp = new Position[13];
         
-        var computerGrid = new Grid(_random);
-        var humanGrid = new Grid(_io);
-        var humanShotSelector = new HumanShotSelector(humanGrid, _io);
-        var computerShotSelector = new ComputerShotSelector(computerGrid, _random);
+        var computerFleet = new Fleet(_random);
+        var humanFleet = new Fleet(_io);
         var startResponse = _io.ReadString(Prompts.Start);
         while (startResponse == Strings.WhereAreYourShips)
         {
-            foreach (var ship in computerGrid.Ships)
+            foreach (var ship in computerFleet.Ships)
             {
                 _io.WriteLine(ship);
             }
             startResponse = _io.ReadString(Prompts.Start);
         }
 L1890:  var turnNumber=0;
-L1900:  var seeShotsResponse = _io.ReadString(Prompts.SeeShots);
+        var humanShotSelector = new HumanShotSelector(humanFleet, _io);
+        var computerShotSelector = new ComputerShotSelector(computerFleet, _random, _io);
 L1920:  _io.WriteLine();
 L1930:  if (startResponse != "YES") { goto L2620; }
 L1950:  if (startResponse != "YES") { goto L1990; }
@@ -48,13 +47,7 @@ L2230:  if (humanShotSelector.CanTargetAllRemainingSquares)
             _io.WriteLine(Streams.YouHaveMoreShotsThanSquares);
 L2250:      goto L2890;
         }
-        foreach (var shot1 in humanShotSelector.GetShots(turnNumber))
-        {
-            if (computerGrid.IsHit(shot1, out var ship))
-            {
-                _io.Write(Strings.YouHit(ship.Name));
-            }
-        }
+        computerFleet.ReceiveShots(humanShotSelector.GetShots(turnNumber), ship => _io.Write(Strings.YouHit(ship.Name)));
 L2620:  if (startResponse == "YES") { goto L2670; }
 L2640:  turnNumber++;
 L2660:  _io.Write(Strings.Turn(turnNumber));
@@ -68,23 +61,13 @@ L2880:  if (numberOfShots > 0) { goto L2960; }
 L2890:  _io.Write(Streams.YouWon);
 L2900:  return;
 
-L2960:  temp = computerShotSelector.GetShots(turnNumber).ToArray();
-        // display shots
-L3380:  if (seeShotsResponse == "YES") 
-        {
-            foreach (var shot in temp)
-            {
-                _io.WriteLine(shot);
-            }
-        }
-        foreach (var shot in temp)
-        {
-            if (humanGrid.IsHit(shot, out var ship))
+L2960:  humanFleet.ReceiveShots(
+            computerShotSelector.GetShots(turnNumber),
+            ship =>
             { 
                 _io.Write(Strings.IHit(ship.Name));
                 computerShotSelector.RecordHit(ship, turnNumber);
-            }
-        }
+            });
         goto L1950;
     }
 }

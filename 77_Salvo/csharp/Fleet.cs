@@ -3,11 +3,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Salvo;
 
-internal class Grid
+internal class Fleet
 {
     private readonly List<Ship> _ships;
 
-    internal Grid(IReadWrite io)
+    internal Fleet(IReadWrite io)
     {
         io.WriteLine(Prompts.Coordinates);
         _ships = new()
@@ -19,7 +19,7 @@ internal class Grid
         };
     }
 
-    internal Grid(IRandom random)
+    internal Fleet(IRandom random)
     {
         _ships = new();
         while (true)
@@ -53,13 +53,14 @@ internal class Grid
 
     internal IEnumerable<Ship> Ships => _ships.AsEnumerable();
 
-    internal bool IsHit(Position position, [NotNullWhen(true)] out Ship? ship)
+    internal void ReceiveShots(IEnumerable<Position> shots, Action<Ship> reportHit)
     {
-        ship = _ships.FirstOrDefault(s => s.IsHit(position));
-        if (ship == null) { return false; }
-
-        if (ship.IsDestroyed) { _ships.Remove(ship); }
-
-        return true;
+        foreach (var position in shots)
+        {
+            var ship = _ships.FirstOrDefault(s => s.IsHit(position));
+            if (ship == null) { continue; }
+            if (ship.IsDestroyed) { _ships.Remove(ship); }
+            reportHit(ship);
+        }
     }
 }

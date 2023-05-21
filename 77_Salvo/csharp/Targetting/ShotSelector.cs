@@ -2,10 +2,10 @@ namespace Salvo.Targetting;
 
 internal abstract class ShotSelector
 {
-    private readonly Grid _source;
+    private readonly Fleet _source;
     private readonly Dictionary<Position, int> _previousShots = new();
 
-    internal ShotSelector(Grid source)
+    internal ShotSelector(Fleet source)
     {
         _source = source;
     }

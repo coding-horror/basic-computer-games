@@ -4,7 +4,7 @@ internal class HumanShotSelector : ShotSelector
 {
     private readonly IReadWrite _io;
 
-    internal HumanShotSelector(Grid source, IReadWrite io) 
+    internal HumanShotSelector(Fleet source, IReadWrite io) 
         : base(source)
     {
         _io = io;
