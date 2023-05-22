@@ -1,1 +1,1 @@
-You have more shots that there are blank squares.
+You have more shots than there are blank squares.

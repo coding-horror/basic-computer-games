@@ -38,7 +38,9 @@ L2230:  if (humanShotSelector.CanTargetAllRemainingSquares)
             _io.WriteLine(Streams.YouHaveMoreShotsThanSquares);
 L2250:      goto L2890;
         }
-        computerFleet.ReceiveShots(humanShotSelector.GetShots(turnNumber), ship => _io.Write(Strings.YouHit(ship.Name)));
+        computerFleet.ReceiveShots(
+            humanShotSelector.GetShots(turnNumber), 
+            ship => _io.Write(Strings.YouHit(ship.Name)));
 L2620:  if (!humanStarts)
         {
 L2640:      turnNumber++;
@@ -82,6 +84,13 @@ L2960:  humanFleet.ReceiveShots(
             }
         }
     }
+}
+
+internal enum Winner
+{
+    None,
+    Human,
+    Computer
 }
 
 internal class DataRandom : IRandom
