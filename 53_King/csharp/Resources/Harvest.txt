@@ -1,0 +1,2 @@
+ you harvested  {0} sq. miles of crops.
+{1}making {2} rallods.

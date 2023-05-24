@@ -1,0 +1,10 @@
+
+
+Congratulations!!!!!!!!!!!!!!!!!!
+You have successfully completed your {0} year term
+of office. You were, of course, extremely lucky, but
+nevertheless, it's quite an achievement. Goodbye and good
+luck - you'll probably need it if you're the type that
+plays this game.
+
+

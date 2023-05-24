@@ -1,4 +1,4 @@
-use std::ffi::{OsString, OsStr};
+use std::ffi::OsStr;
 use std::{fs, io};
 use std::fs::metadata;
 use std::path::{Path, PathBuf};
@@ -7,8 +7,6 @@ use std::path::{Path, PathBuf};
  *
  * @author Anthony Rubick
  */
-
-
 
 //DATA
 const ROOT_DIR: &str = "../../";
@@ -25,13 +23,19 @@ const LANGUAGES: [(&str,&str); 10] = [ //first element of tuple is the language 
     ("vbnet", "vb")
 ];
 const OUTPUT_PATH: &str = "../../todo.md";
-//const INGORE: [&str;5] = ["../../.git","../../.vscode","../../00_Utilities","../../buildJvm","../../node_modules"]; //folders to ignore
 
 fn main() {
     //DATA
     let mut root_folders:Vec<PathBuf>;
     let mut output_string: String = String::new();
     let format_game_first: bool;
+    let ingore: [PathBuf;5] = [
+        PathBuf::from(r"../../.git"),
+        PathBuf::from(r"../../.github"),
+        PathBuf::from(r"../../00_Alternate_Languages"),
+        PathBuf::from(r"../../00_Utilities"),
+        PathBuf::from(r"../../00_Common"),
+    ]; //folders to ignore
 
     //print welcome message
     println!("
@@ -66,15 +70,10 @@ fn main() {
 
     //for all folders, search for the languages and extensions
     root_folders = root_folders.into_iter().filter(|path| {
-        match fs::read_dir(path) {
-            Err(why) => {println!("! {:?}", why.kind()); false},
-            Ok(paths) => {
-                paths.into_iter().filter(|f| metadata(f.as_ref().unwrap().path()).unwrap().is_dir()) //filter to only folders
-                .filter_map( |path| path.ok() ) //extract only the DirEntries
-                .any(|f| LANGUAGES.iter().any(|tup| OsString::from(tup.1).eq_ignore_ascii_case(f.file_name()))) //filter out ones that don't contain folders with the language names
-            }
-        }
+        //not one of the ignored folders
+        !ingore.contains(path)
     }).collect();
+    root_folders.sort();
 
     //create todo list
     if format_game_first {

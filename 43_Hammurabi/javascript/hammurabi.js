@@ -233,7 +233,7 @@ async function main()
             print("ALSO BEEN DECLARED NATIONAL FINK!!!!\n");
         } else if (p1 > 10 || l < 9) {
             print("YOUR HEAVY-HANDED PERFORMANCE SMACKS OF NERO AND IVAN IV.\n");
-            print("THE PEOPLE (REMIANING) FIND YOU AN UNPLEASANT RULER, AND,\n");
+            print("THE PEOPLE (REMAINING) FIND YOU AN UNPLEASANT RULER, AND,\n");
             print("FRANKLY, HATE YOUR GUTS!!\n");
         } else if (p1 > 3 || l < 10) {
             print("YOUR PERFORMANCE COULD HAVE BEEN SOMEWHAT BETTER, BUT\n");
