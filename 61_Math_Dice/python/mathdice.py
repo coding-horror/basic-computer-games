@@ -22,23 +22,23 @@ def print_dice(n: int) -> None:
 
     print(" ----- ")
 
-    if n in [4, 5, 6]:
+    if n in {4, 5, 6}:
         print_2()
-    elif n in [2, 3]:
+    elif n in {2, 3}:
         print("| *   |")
     else:
         print_0()
 
-    if n in [1, 3, 5]:
+    if n in {1, 3, 5}:
         print("|  *  |")
-    elif n in [2, 4]:
+    elif n in {2, 4}:
         print_0()
     else:
         print_2()
 
-    if n in [4, 5, 6]:
+    if n in {4, 5, 6}:
         print_2()
-    elif n in [2, 3]:
+    elif n in {2, 3}:
         print("|   * |")
     else:
         print_0()

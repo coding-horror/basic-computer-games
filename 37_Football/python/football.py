@@ -49,8 +49,7 @@ def ask_int(prompt: str) -> int:
     while True:
         answer = input(prompt)
         try:
-            int_answer = int(answer)
-            return int_answer
+            return int(answer)
         except Exception:
             pass
 

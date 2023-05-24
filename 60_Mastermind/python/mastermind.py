@@ -77,11 +77,7 @@ def human_turn() -> None:
                     print_score()
                     return  # from human turn, triumphant
                 else:
-                    print(
-                        "You have {} blacks and {} whites".format(
-                            guess_results[1], guess_results[2]
-                        )
-                    )
+                    print(f"You have {guess_results[1]} blacks and {guess_results[2]} whites")
                     guesses.append(guess_results)
                     num_moves += 1
 
@@ -193,16 +189,14 @@ def possibility_to_color_code(possibility: int) -> str:
 def compare_two_positions(guess: str, answer: str) -> List[Union[str, int]]:
     """Returns blacks (correct color and position) and whites (correct color
     only) for candidate position (guess) versus reference position (answer)."""
-    increment = 0
     blacks = 0
     whites = 0
     initial_guess = guess
+    increment = 0
     for pos in range(0, NUM_POSITIONS):
         if guess[pos] != answer[pos]:
             for pos2 in range(0, NUM_POSITIONS):
-                if not (
-                    guess[pos] != answer[pos2] or guess[pos2] == answer[pos2]
-                ):  # correct color but not correct place
+                if guess[pos] == answer[pos2] and guess[pos2] != answer[pos2]:  # correct color but not correct place
                     whites = whites + 1
                     answer = answer[:pos2] + chr(increment) + answer[pos2 + 1:]
                     guess = guess[:pos] + chr(increment + 1) + guess[pos + 1:]

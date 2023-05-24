@@ -9,9 +9,7 @@ Ported by Dave LeCompte
 
 def is_yes_ish(answer: str) -> bool:
     cleaned = answer.strip().upper()
-    if cleaned in ["Y", "YES"]:
-        return True
-    return False
+    return cleaned in {"Y", "YES"}
 
 
 def main() -> None:

@@ -35,7 +35,7 @@ def play_game() -> None:
                 except ValueError:
                     print("Please enter a number.")
                     prompt_human = "How many do you wish to remove "
-            matches = matches - choice_human
+            matches -= choice_human
             if matches == 0:
                 print("You poor boob! You took the last match! I gotcha!!")
                 print("Ha ! Ha ! I beat you !!\n")
@@ -48,7 +48,7 @@ def play_game() -> None:
                 choice_computer = 1
             elif 1 < matches < 4:
                 choice_computer = matches - 1
-            matches = matches - choice_computer
+            matches -= choice_computer
             if matches == 0:
                 print("You won, floppy ears !")
                 print("Think you're pretty smart !")

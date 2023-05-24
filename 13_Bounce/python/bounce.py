@@ -83,7 +83,7 @@ def run_simulation(delta_t: float, v0: float, coeff_rest: float) -> None:
             if -16 * tm**2 + v0 * coeff_rest ** (i - 1) * tm < h:
                 break
         print(line)
-        h = h - 0.5
+        h -= 0.5
 
     print("." * (int((total_time + 1) / delta_t) + 1))
     print

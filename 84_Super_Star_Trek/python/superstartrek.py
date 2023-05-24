@@ -26,8 +26,7 @@ def get_user_float(prompt: str) -> float:
     while True:
         answer = input(prompt)
         try:
-            answer_float = float(answer)
-            return answer_float
+            return float(answer)
         except ValueError:
             pass
 
@@ -202,7 +201,7 @@ class Quadrant:
         quadrant = region1[row] if col < 4 else region2[row]
 
         if not region_only:
-            quadrant += " " + modifier[col % 4]
+            quadrant += f" {modifier[col % 4]}"
 
         return quadrant
 
@@ -622,7 +621,7 @@ class Game:
         for x in range(8):
             line = ""
             for y in range(8):
-                line = line + " " + self.world.quadrant.data[x][y].value
+                line = f"{line} {self.world.quadrant.data[x][y].value}"
 
             if x == 0:
                 line += f"        STARDATE           {round(int(self.world.stardate * 10) * 0.1, 1)}"
@@ -882,8 +881,7 @@ class Game:
             return
 
         for i in range(8):
-            if ship.damage_stats[i] < 0:
-                ship.damage_stats[i] = 0
+            ship.damage_stats[i] = max(ship.damage_stats[i], 0)
         self.world.stardate += damage_sum + 0.1
 
     def computer(self) -> None:
@@ -909,7 +907,7 @@ class Game:
 
             print()
 
-            if com in [0, 5]:
+            if com in {0, 5}:
                 if com == 5:
                     print("                        THE GALAXY")
                 else:
@@ -923,7 +921,7 @@ class Game:
                 print(sep)
 
                 for i in range(8):
-                    line = " " + str(i + 1) + " "
+                    line = f" {str(i + 1)} "
 
                     if com == 5:
                         g2s = Quadrant.quadrant_name(i, 0, True)
@@ -1121,12 +1119,11 @@ def print_direction(source: Point, to: Point) -> None:
         else:
             base = 1
             delta1, delta2 = delta2, delta1
+    elif delta1 > 0:
+        base = 3
     else:
-        if delta1 > 0:
-            base = 3
-        else:
-            base = 5
-            delta1, delta2 = delta2, delta1
+        base = 5
+        delta1, delta2 = delta2, delta1
 
     delta1, delta2 = abs(delta1), abs(delta2)
 

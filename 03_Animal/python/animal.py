@@ -104,17 +104,13 @@ def parse_input(message: str, check_list: bool, root_node: Optional[Node]) -> st
             list_known_animals(root_node)
             print("\n")
 
-        if len(inp) > 0:
-            token = inp[0].lower()
-        else:
-            token = ""
-
+        token = inp[0].lower() if len(inp) > 0 else ""
     return token
 
 
 def avoid_void_input(message: str) -> str:
     answer = ""
-    while answer == "":
+    while not answer:
         answer = input(message)
     return answer
 
@@ -134,8 +130,12 @@ def main() -> None:
 
     # Main loop of game
     print_intro()
-    keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
-    while keep_playing:
+    while (
+        keep_playing := parse_input(
+            "Are you thinking of an animal? ", True, root
+        )
+        == "y"
+    ):
         keep_asking = True
         # Start traversing the tree by the root
         actual_node: Node = root
@@ -170,16 +170,12 @@ def main() -> None:
                         f"for a {new_animal} the answer would be: ", False, None
                     )
 
-                    actual_node.update_node(
-                        new_question + "?", answer_new_question, new_animal
-                    )
+                    actual_node.update_node(f"{new_question}?", answer_new_question, new_animal)
 
                 else:
                     print("Why not try another animal?")
 
                 keep_asking = False
-
-        keep_playing = parse_input("Are you thinking of an animal? ", True, root) == "y"
 
 
 ########################################################

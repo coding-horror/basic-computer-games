@@ -10,7 +10,7 @@ class Disk:
         return self.__size
 
     def print(self) -> None:
-        print("[ %s ]" % self.size())
+        print(f"[ {self.size()} ]")
 
 
 class Tower:
@@ -21,10 +21,7 @@ class Tower:
         return len(self.__disks) == 0
 
     def top(self) -> Optional[Disk]:
-        if self.empty():
-            return None
-        else:
-            return self.__disks[-1]
+        return None if self.empty() else self.__disks[-1]
 
     def add(self, disk: Disk) -> None:
         if not self.empty():
@@ -42,7 +39,7 @@ class Tower:
         return self.__disks.pop()
 
     def print(self) -> None:
-        r = "Needle: [%s]" % (", ".join([str(x.size()) for x in self.__disks]))
+        r = f'Needle: [{", ".join([str(x.size()) for x in self.__disks])}]'
         print(r)
 
 
@@ -87,7 +84,7 @@ class Game:
                 print("ILLEGAL ENTRY... YOU MAY ONLY TYPE 3,5,7,9,11,13, OR 15.\n")
 
         valids = [t for t in self.__towers if t.top() and t.top().size() == which]
-        assert len(valids) in (0, 1)
+        assert len(valids) in {0, 1}
         if not valids:
             print("THAT DISK IS BELOW ANOTHER ONE.  MAKE ANOTHER CHOICE.\n")
             return None

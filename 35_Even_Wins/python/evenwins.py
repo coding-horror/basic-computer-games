@@ -46,9 +46,7 @@ def print_intro() -> None:
 
 
 def marbles_str(n: int) -> str:
-    if n == 1:
-        return "1 marble"
-    return f"{n} marbles"
+    return "1 marble" if n == 1 else f"{n} marbles"
 
 
 def choose_first_player() -> PlayerType:
@@ -66,10 +64,7 @@ def choose_first_player() -> PlayerType:
 
 
 def toggle_player(whose_turn: PlayerType) -> PlayerType:
-    if whose_turn == "human":
-        return "computer"
-    else:
-        return "human"
+    return "computer" if whose_turn == "human" else "human"
 
 
 def to_int(s: str) -> Tuple[bool, int]:
@@ -132,11 +127,7 @@ def computer_turn(marbles: MarbleCounts) -> None:
     r = marbles.middle - 6 * int(marbles.middle / 6)
 
     if int(marbles.human / 2) == marbles.human / 2:
-        if r < 1.5 or r > 5.3:
-            marbles_to_take = 1
-        else:
-            marbles_to_take = r - 1
-
+        marbles_to_take = 1 if r < 1.5 or r > 5.3 else r - 1
     elif marbles.middle < 4.2:
         marbles_to_take = marbles.middle
     elif r > 3.4:

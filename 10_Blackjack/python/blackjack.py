@@ -58,10 +58,7 @@ class Hand(NamedTuple):
 
     def get_total(self) -> int:
         """returns the total points of the cards in this hand"""
-        total: int = 0
-        for card in self.cards:
-            total += int(card.value)
-
+        total: int = sum(int(card.value) for card in self.cards)
         # if there is an ACE, and the hand would otherwise bust,
         # treat the ace like it's worth 1
         if total > 21 and any(card.name == "ACE" for card in self.cards):
@@ -109,24 +106,21 @@ class Decks(NamedTuple):
         draw card from deck, and return it
         if deck is empty, shuffles discard pile into it and tries again
         """
-        if len(self.deck) == 0:
-            _len = len(self.discard_pile)
+        if len(self.deck) != 0:
+            return self.deck.pop()
+        _len = len(self.discard_pile)
 
-            if _len > 0:
-                # deck is empty, shuffle discard pile into deck and try again
-                print("deck is empty, shuffling")
-                for _i in range(_len):
-                    if len(self.discard_pile) == 0:
-                        raise ValueError("discard pile is empty")
-                    self.deck.append(self.discard_pile.pop())
-                self.shuffle()
-                return self.draw_card()
-            else:
-                # discard pile and deck are empty, should never happen
-                raise Exception("discard pile empty")
-        else:
-            card = self.deck.pop()
-            return card
+        if _len <= 0:
+            # discard pile and deck are empty, should never happen
+            raise Exception("discard pile empty")
+        # deck is empty, shuffle discard pile into deck and try again
+        print("deck is empty, shuffling")
+        for _i in range(_len):
+            if len(self.discard_pile) == 0:
+                raise ValueError("discard pile is empty")
+            self.deck.append(self.discard_pile.pop())
+        self.shuffle()
+        return self.draw_card()
 
 
 @dataclass
@@ -171,24 +165,19 @@ class Player:
         by *'s for every other card
         if player is a player, returns every card and the total
         """
-        if not hide_dealer:
-            s = ""
-            for cards_in_hand in self.hand.cards[::-1]:
-                s += f"{cards_in_hand.name}\t"
+        if hide_dealer and self.player_type == PlayerType.Dealer:
+            return "".join(f"{c.name}\t" for c in self.hand.cards[1::-1])
+        elif (
+            hide_dealer
+            and self.player_type == PlayerType.Player
+            or not hide_dealer
+        ):
+            s = "".join(
+                f"{cards_in_hand.name}\t"
+                for cards_in_hand in self.hand.cards[::-1]
+            )
             s += f"total points = {self.hand.get_total()}"
             return s
-        else:
-            if self.player_type == PlayerType.Dealer:
-                s = ""
-                for c in self.hand.cards[1::-1]:
-                    s += f"{c.name}\t"
-                return s
-            elif self.player_type == PlayerType.Player:
-                s = ""
-                for cards_in_hand in self.hand.cards[::-1]:
-                    s += f"{cards_in_hand.name}\t"
-                s += f"total points = {self.hand.get_total()}"
-                return s
         raise Exception("This is unreachable")
 
     def get_play(self) -> Play:
@@ -197,10 +186,7 @@ class Player:
         # if it's a dealer, use an algorithm to determine the play
         # if it's a player, ask user for input
         if self.player_type == PlayerType.Dealer:
-            if self.hand.get_total() > 16:
-                return Play.Stand
-            else:
-                return Play.Hit
+            return Play.Stand if self.hand.get_total() > 16 else Play.Hit
         elif self.player_type == PlayerType.Player:
             valid_results: List[str]
             if len(self.hand.cards) > 2:
@@ -232,15 +218,11 @@ class Game:
 
     @classmethod
     def new(cls, num_players: int) -> "Game":
-        players: List[Player] = []
+        players: List[Player] = [Player.new(PlayerType.Dealer, 0)]
 
-        # add dealer
-        players.append(Player.new(PlayerType.Dealer, 0))
         # create human player(s) (at least one)
         players.append(Player.new(PlayerType.Player, 1))
-        for i in range(2, num_players):  # one less than num_players players
-            players.append(Player.new(PlayerType.Player, i))
-
+        players.extend(Player.new(PlayerType.Player, i) for i in range(2, num_players))
         if get_char_from_user_input("Do you want instructions", ["y", "n"]) == "y":
             print_instructions()
         print()
@@ -322,9 +304,6 @@ class Game:
                     else:
                         player.bet = player.balance
                     player.hand.add_card(self.decks.draw_card())
-                elif play == Play.Split:
-                    pass
-
             # add player to score cache thing
             player_hands_message += (
                 f"{player.get_name()} Hand:\t{player.hand_as_string(True)}\n"
@@ -460,7 +439,7 @@ def get_number_from_user_input(prompt: str, min_value: int, max_value: int) -> i
     # input loop
     user_input = None
     while user_input is None or user_input < min_value or user_input > max_value:
-        raw_input = input(prompt + f" ({min_value}-{max_value})? ")
+        raw_input = input(f"{prompt} ({min_value}-{max_value})? ")
 
         try:
             user_input = int(raw_input)
@@ -475,7 +454,7 @@ def get_char_from_user_input(prompt: str, valid_results: List[str]) -> str:
     """returns the first character they type"""
     user_input = None
     while user_input not in valid_results:
-        user_input = input(prompt + f" {valid_results}? ").lower()
+        user_input = input(f"{prompt} {valid_results}? ").lower()
         if user_input not in valid_results:
             print("Invalid input, please try again")
     assert user_input is not None

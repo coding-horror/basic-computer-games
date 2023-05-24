@@ -39,12 +39,11 @@ class Player:
     def get_punch_choice(self) -> Literal[1, 2, 3, 4]:
         if self.is_computer:
             return random.randint(1, 4)  # type: ignore
-        else:
-            punch = -1
-            while punch not in [1, 2, 3, 4]:
-                print(f"{self.name}'S PUNCH", end="? ")
-                punch = int(input())
-            return punch  # type: ignore
+        punch = -1
+        while punch not in [1, 2, 3, 4]:
+            print(f"{self.name}'S PUNCH", end="? ")
+            punch = int(input())
+        return punch  # type: ignore
 
 
 KNOCKOUT_THRESHOLD = 35
@@ -55,8 +54,7 @@ KNOCKED_COLD = "{loser} IS KNOCKED COLD AND {winner} IS THE WINNER AND CHAMP"
 
 def get_vulnerability() -> int:
     print("WHAT IS HIS VULNERABILITY", end=QUESTION_PROMPT)
-    vulnerability = int(input())
-    return vulnerability
+    return int(input())
 
 
 def get_opponent_stats() -> Tuple[int, int]:
@@ -71,10 +69,10 @@ def get_opponent_stats() -> Tuple[int, int]:
 def read_punch_profiles(filepath: Path) -> Dict[Literal[1, 2, 3, 4], PunchProfile]:
     with open(filepath) as f:
         punch_profile_dict = json.load(f)
-    result = {}
-    for key, value in punch_profile_dict.items():
-        result[int(key)] = PunchProfile(**value)
-    return result  # type: ignore
+    return {
+        int(key): PunchProfile(**value)
+        for key, value in punch_profile_dict.items()
+    }
 
 
 def main() -> None:

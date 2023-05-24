@@ -17,13 +17,13 @@ def print_header() -> None:
     for _ in range(12):
         print()
     t10 = " " * 10
-    print(t10 + "*************************************")
-    print(t10 + "*                                   *")
-    print(t10 + "*                                   *")
-    print(t10 + "*      * * SUPER STAR TREK * *      *")
-    print(t10 + "*                                   *")
-    print(t10 + "*                                   *")
-    print(t10 + "*************************************")
+    print(f"{t10}*************************************")
+    print(f"{t10}*                                   *")
+    print(f"{t10}*                                   *")
+    print(f"{t10}*      * * SUPER STAR TREK * *      *")
+    print(f"{t10}*                                   *")
+    print(f"{t10}*                                   *")
+    print(f"{t10}*************************************")
     for _ in range(8):
         print()
 

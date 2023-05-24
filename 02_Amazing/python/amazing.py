@@ -47,7 +47,7 @@ class Maze:
                     print("   ", end="")
             print()
             for col in range(self.width):
-                if self.walls[row][col] == 0 or self.walls[row][col] == 2:
+                if self.walls[row][col] in [0, 2]:
                     print(":--", end="")
                 else:
                     print(":  ", end="")
@@ -148,7 +148,7 @@ def make_opening(
         maze.walls[pos.row][pos.col] = maze.walls[pos.row][pos.col] + EXIT_DOWN
         pos.row = pos.row + 1
     maze.used[pos.row][pos.col] = count
-    count = count + 1
+    count += 1
     return pos, count
 
 

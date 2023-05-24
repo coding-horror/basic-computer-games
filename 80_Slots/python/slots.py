@@ -59,7 +59,7 @@ def input_betting() -> int:
         elif b < 1:
             print("Minium bet is $1")
     beeping()
-    return int(b)
+    return b
 
 
 def beeping() -> None:
@@ -113,7 +113,7 @@ def adjust_profits(wheel: List[str], m: int, profits: int) -> int:
     else:
         # three different fruits
         print("\nYou Lost.")
-        profits = profits - m
+        profits -= m
 
     return profits
 

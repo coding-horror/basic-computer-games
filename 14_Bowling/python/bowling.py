@@ -57,10 +57,9 @@ class Player:
                     break  # cannot roll more than once in a frame
                 else:
                     print(f"next roll {self.name}")
-            else:
-                if score == 10:
-                    print("SPARE!")
-                    extra = 1
+            elif score == 10:
+                print("SPARE!")
+                extra = 1
 
             prev_score = score  # remember previous pins to distinguish ...
         if frame == 9 and extra > 0:
@@ -112,12 +111,12 @@ def main() -> None:
             print("SCORES.")
 
         total_players = int(input("FIRST OF ALL...HOW MANY ARE PLAYING? "))
-        player_names = []
         print()
         print("VERY GOOD...")
-        for index in range(total_players):
-            player_names.append(Player(input(f"Enter name for player {index + 1}: ")))
-
+        player_names = [
+            Player(input(f"Enter name for player {index + 1}: "))
+            for index in range(total_players)
+        ]
         for frame in range(10):
             for player in player_names:
                 player.play_frame(frame)

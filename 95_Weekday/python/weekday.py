@@ -29,11 +29,13 @@ def get_date_from_user(prompt: str) -> Tuple[int, int, int]:
 
 
 def get_date_from_system() -> Tuple[int, int, int]:
-    dt = datetime.datetime.today()
+    dt = datetime.datetime.now()
     return dt.month, dt.day, dt.year
 
 
 def get_day_of_week(weekday_index, day) -> str:
+    if weekday_index == 6 and day == 13:
+        return "FRIDAY THE THIRTEENTH---BEWARE!"
     day_names = {
         1: "SUNDAY",
         2: "MONDAY",
@@ -44,8 +46,6 @@ def get_day_of_week(weekday_index, day) -> str:
         7: "SATURDAY",
     }
 
-    if weekday_index == 6 and day == 13:
-        return "FRIDAY THE THIRTEENTH---BEWARE!"
     return day_names[weekday_index]
 
 
@@ -58,11 +58,7 @@ def previous_day(b) -> int:
 def is_leap_year(year: int) -> bool:
     if (year % 4) != 0:
         return False
-    if (year % 100) != 0:
-        return True
-    if (year % 400) != 0:
-        return False
-    return True
+    return True if (year % 100) != 0 else year % 400 == 0
 
 
 def adjust_day_for_leap_year(b, year):
@@ -86,9 +82,9 @@ def calc_day_value(year, month, day):
 def deduct_time(frac, days, years_remain, months_remain, days_remain):
     # CALCULATE TIME IN YEARS, MONTHS, AND DAYS
     days_available = int(frac * days)
-    years_used = int(days_available / 365)
+    years_used = days_available // 365
     days_available -= years_used * 365
-    months_used = int(days_available / 30)
+    months_used = days_available // 30
     days_used = days_available - (months_used * 30)
     years_remain = years_remain - years_used
     months_remain = months_remain - months_used
@@ -238,7 +234,7 @@ def main() -> None:
     rem_years, rem_months, rem_days, used_years, used_months, used_days = deduct_time(
         0.23, life_days, rem_years, rem_months, rem_days
     )
-    time_report("YOU HAVE " + label, used_years, used_months, used_days)
+    time_report(f"YOU HAVE {label}", used_years, used_months, used_days)
     time_report("YOU HAVE RELAXED", rem_years, rem_months, rem_days)
 
     print()

@@ -14,7 +14,7 @@ def show_welcome() -> None:
     # Clear screen. chr(27) is `Esc`, and the control sequence is
     # initiated by Ctrl+[
     # `J` is "Erase in Display" and `2J` means clear the entire screen
-    print(chr(27) + "[2J")
+    print(f"{chr(27)}[2J")
 
     # Show the intro text, centered
     print("DEPTH CHARGE".center(45))

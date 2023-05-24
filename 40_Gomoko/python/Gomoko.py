@@ -13,9 +13,7 @@ def print_board(A: List[List[Any]], n: int) -> None:
 
 
 def check_move(_I, _J, _N) -> bool:  # 910
-    if _I < 1 or _I > _N or _J < 1 or _J > _N:
-        return False
-    return True
+    return _I >= 1 and _I <= _N and _J >= 1 and _J <= _N
 
 
 def print_banner() -> None:
@@ -36,11 +34,10 @@ def get_board_dimensions() -> int:
     n = 0
     while True:
         n = int(input("WHAT IS YOUR BOARD SIZE (MIN 7/ MAX 19)? "))
-        if n < 7 or n > 19:
-            print("I SAID, THE MINIMUM IS 7, THE MAXIMUM IS 19.")
-            print()
-        else:
+        if n >= 7 and n <= 19:
             break
+        print("I SAID, THE MINIMUM IS 7, THE MAXIMUM IS 19.")
+        print()
     return n
 
 
@@ -62,9 +59,7 @@ def initialize_board(n: int) -> List[List[int]]:
     # Initialize the board
     board = []
     for _x in range(n):
-        sub_a = []
-        for _y in range(n):
-            sub_a.append(0)
+        sub_a = [0 for _y in range(n)]
         board.append(sub_a)
     return board
 
@@ -87,51 +82,49 @@ def main() -> None:
                 break
             elif not check_move(x, y, n):
                 print("ILLEGAL MOVE.  TRY AGAIN...")
-            else:
-                if board[x - 1][y - 1] != 0:
-                    print("SQUARE OCCUPIED.  TRY AGAIN...")
-                else:
-                    board[x - 1][y - 1] = 1
-                    # COMPUTER TRIES AN INTELLIGENT MOVE
-                    skip_ef_loop = False
-                    for E in range(-1, 2):
-                        for F in range(-1, 2):
-                            if E + F - E * F == 0 or skip_ef_loop:
-                                continue
-                            X = x + F
-                            Y = y + F
-                            if not check_move(X, Y, n):
-                                continue
-                            if board[X - 1][Y - 1] == 1:
-                                skip_ef_loop = True
-                                X = x - E
-                                Y = y - F
-                                if not check_move(X, Y, n):  # 750
-                                    while True:  # 610
-                                        X = random.randint(1, n)
-                                        Y = random.randint(1, n)
-                                        if (
-                                            check_move(X, Y, n)
-                                            and board[X - 1][Y - 1] == 0
-                                        ):
-                                            board[X - 1][Y - 1] = 2
-                                            print_board(board, n)
-                                            break
-                                else:
-                                    if board[X - 1][Y - 1] != 0:
-                                        while True:
-                                            X = random.randint(1, n)
-                                            Y = random.randint(1, n)
-                                            if (
-                                                check_move(X, Y, n)
-                                                and board[X - 1][Y - 1] == 0
-                                            ):
-                                                board[X - 1][Y - 1] = 2
-                                                print_board(board, n)
-                                                break
-                                    else:
+            elif board[x - 1][y - 1] == 0:
+                board[x - 1][y - 1] = 1
+                # COMPUTER TRIES AN INTELLIGENT MOVE
+                skip_ef_loop = False
+                for E in range(-1, 2):
+                    for F in range(-1, 2):
+                        if E + F - E * F == 0 or skip_ef_loop:
+                            continue
+                        X = x + F
+                        Y = y + F
+                        if not check_move(X, Y, n):
+                            continue
+                        if board[X - 1][Y - 1] == 1:
+                            skip_ef_loop = True
+                            X = x - E
+                            Y = y - F
+                            if not check_move(X, Y, n):  # 750
+                                while True:  # 610
+                                    X = random.randint(1, n)
+                                    Y = random.randint(1, n)
+                                    if (
+                                        check_move(X, Y, n)
+                                        and board[X - 1][Y - 1] == 0
+                                    ):
                                         board[X - 1][Y - 1] = 2
                                         print_board(board, n)
+                                        break
+                            elif board[X - 1][Y - 1] == 0:
+                                board[X - 1][Y - 1] = 2
+                                print_board(board, n)
+                            else:
+                                while True:
+                                    X = random.randint(1, n)
+                                    Y = random.randint(1, n)
+                                    if (
+                                        check_move(X, Y, n)
+                                        and board[X - 1][Y - 1] == 0
+                                    ):
+                                        board[X - 1][Y - 1] = 2
+                                        print_board(board, n)
+                                        break
+            else:
+                print("SQUARE OCCUPIED.  TRY AGAIN...")
         print()
         print("THANKS FOR THE GAME!!")
         repeat = int(input("PLAY AGAIN (1 FOR YES, 0 FOR NO)? "))
