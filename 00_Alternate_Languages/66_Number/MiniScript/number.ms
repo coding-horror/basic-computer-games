@@ -38,7 +38,7 @@ while true
 	end if
 	if P > 500 then
 		print "!!!!You win!!!! with " + P + " points."
-		exit
+		break
 	end if
 	print "You have " + P + " points."; print
 end while
