@@ -48,3 +48,17 @@ http://www.vintage-basic.net/games.html
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
+
+Note: The original program has a bug. The instructions say that if both players
+enter the same cell that the cell is set to 0 or empty. However, the original
+Basic program tells the player "ILLEGAL COORDINATES" and makes another cell be entered,
+giving a slightly unfair advantage to the 2nd player.
+
+The Perl verson of the program fixes the bug and follows the instructions.
+
+Note: The original code had "GOTO 800" but label 800 didn't exist; it should have gone to label 999.
+The Basic program has been fixed.
+
+Note: The Basic program is written to assume it's being played on a Teletype, i.e. output is printed
+on paper. To play on a terminal the input must not be echoed, which can be a challenge to do portably
+and without tying the solution to a specific OS. Some versions may tell you how to do this, others might not.

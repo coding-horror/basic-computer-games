@@ -1,0 +1,1 @@
+   Sorry, but you've only {0} sq. miles of farm land.

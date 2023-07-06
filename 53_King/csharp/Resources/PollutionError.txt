@@ -1,0 +1,1 @@
+   Think again. You only have  {0}  rallods remaining.

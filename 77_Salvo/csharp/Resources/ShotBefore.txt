@@ -1,0 +1,1 @@
+You shot there before on turn {0}

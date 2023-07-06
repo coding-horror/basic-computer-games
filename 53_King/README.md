@@ -1,10 +1,10 @@
 ## King
 
-This is one of the most comprehensive, difficult, and interesting games. (If you’ve never played one of these games, start with HAMMURABI.)
+This is one of the most comprehensive, difficult, and interesting games. (If you've never played one of these games, start with HAMMURABI.)
 
 In this game, you are Premier of Setats Detinu, a small communist island 30 by 70 miles long. Your job is to decide upon the budget of your country and distribute money to your country from the communal treasury.
 
-The money system is Rollods; each person needs 100 Rallods per year to survive. Your country’s income comes from farm produce and tourists visiting your magnificent forests, hunting, fishing, etc. Part of your land is farm land but it also has an excellent mineral content and may be sold to foreign industry for strip mining. Industry import and support their own workers. Crops cost between 10 and 15 Rallods per square mile to plant, cultivate, and harvest. Your goal is to complete an eight-year term of office without major mishap. A word of warning: it isn’t easy!
+The money system is Rollods; each person needs 100 Rallods per year to survive. Your country's income comes from farm produce and tourists visiting your magnificent forests, hunting, fishing, etc. Part of your land is farm land but it also has an excellent mineral content and may be sold to foreign industry for strip mining. Industry import and support their own workers. Crops cost between 10 and 15 Rallods per square mile to plant, cultivate, and harvest. Your goal is to complete an eight-year term of office without major mishap. A word of warning: it isn't easy!
 
 The author of this program is James A. Storer who wrote it while a student at Lexington High School.
 
@@ -66,3 +66,15 @@ On basic line 1997 it is:
 but it should be:
 
     1997 PRINT "   AND 1,000 SQ. MILES OF FOREST LAND."
+
+### Bug 4
+
+On basic line 1310 we see this:
+
+    1310 IF C=0 THEN 1324
+    1320 PRINT "OF ";INT(J);"SQ. MILES PLANTED,";
+    1324 ...
+
+but it should probably be:
+
+    1310 IF J=0 THEN 1324

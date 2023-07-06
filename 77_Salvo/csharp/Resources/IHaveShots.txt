@@ -1,0 +1,1 @@
+I have {0} shots.
