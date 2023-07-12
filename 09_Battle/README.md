@@ -28,4 +28,4 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The original game has no way to re-view the fleet disposition code once it scrolls out of view.  Ports should consider allowing the user to enter "?" at the "??" prompt, to reprint the disposition code.  (This is added by the MiniScript port under Alternate Languages, for example.)
