@@ -19,6 +19,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- Though the instructions say "Enter a negative number for new pile size to stop playing," this does not actually work.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
