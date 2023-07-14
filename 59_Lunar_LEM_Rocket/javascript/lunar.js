@@ -102,7 +102,7 @@ async function main()
         print("0 (FREE FALL) AND 200 (MAXIMUM BURN) POUNDS PER SECOND.\n");
         print("SET NEW BURN RATE EVERY 10 SECONDS.\n");
         print("\n");
-        print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,500 LBS.\n");
+        print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,000 LBS.\n");
         print("\n");
         print("\n");
         print("\n");
