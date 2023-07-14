@@ -127,7 +127,7 @@ class SimulationClock:
 class Capsule:
     altitude: float = 120  # in miles above the surface
     velocity: float = 1  # downward
-    m: float = 33000  # mass_with_fuel
+    m: float = 32500  # mass_with_fuel
     n: float = 16500  # mass_without_fuel
     g: float = 1e-3
     z: float = 1.8

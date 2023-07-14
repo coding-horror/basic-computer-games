@@ -113,7 +113,7 @@ async function main()
         print("\n");
         a = 120;
         v = 1;
-        m = 33000;
+        m = 32500;
         n = 16500;
         g = 1e-3;
         z = 1.8;
