@@ -15,6 +15,15 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+The program makes extensive use of the assumption that a boolean expression evaluates to **-1** for true.  This was the case in some classic BASIC environments but not others; and it is not the case in [JS Basic](https://troypress.com/wp-content/uploads/user/js-basic/index.html), leading to nonsensical results.  In an environment that uses **1** instead of **-1** for truth, you would need to negate the boolean expression in the following lines:
+	- 570
+	- 590
+	- 2220
+	- 2850
+	- 3100
+	- 3400
+	- 3410
+	- 3420
