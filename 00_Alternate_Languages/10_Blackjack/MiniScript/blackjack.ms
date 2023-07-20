@@ -17,8 +17,8 @@ reshuffle = function
 	deck.shuffle
 end function
 		
-// Function to draw a card from the deck.
-getCard = function		// line 100
+// Function to draw a card from the deck (reshuffling if needed)
+getCard = function
 	if not deck then reshuffle
 	return deck.pop
 end function
@@ -29,7 +29,7 @@ end function
 //     11-21...Soft 11-21
 //     22-32...Hard 11-21
 // 33+ or -1...Busted
-evalHand = function(handNum)	// line 300
+evalHand = function(handNum)
 	result = 0
 	for card in hands[handNum]
 		result = addCardToTotal(result, card)
@@ -38,7 +38,7 @@ evalHand = function(handNum)	// line 300
 end function
 
 // Function to add a card into a total hand value.
-addCardToTotal = function(total, card)	// line 500
+addCardToTotal = function(total, card)
 	if total < 0 then return total	// (already busted)
 	x1 = card; if x1 > 10 then x1 = 10
 	q1 = total + x1
@@ -46,7 +46,7 @@ addCardToTotal = function(total, card)	// line 500
 		if card == 1 then return total + 11	// (ace)
 		return q1 + 11 * (q1 >= 11)
 	end if
-	total = q1 + (total <= 21 and q1 >= 21)
+	total = q1 + (total <= 21 and q1 > 21)
 	if total >= 33 then total = -1
 	return total
 end function
@@ -56,16 +56,7 @@ displayTotal = function(total)
 	return total - 11 * (total >= 22)
 end function
 
-printCard = function(cardNum)
-	s = cardNames[cardNum]
-	print "  " + (s+" ")[:2], "  "
-end function
-
-printCardV2 = function(cardNum)
-	s = cardNames[cardNum]
-	print "  " + (" " + s)[-2:], "  "
-end function
-
+// Get a yes/no response from the user
 getYesNo = function(prompt)
 	while true
 		inp = input(prompt).upper
@@ -73,6 +64,7 @@ getYesNo = function(prompt)
 	end while
 end function
 
+// Get a number, within a given range, from the user
 getNumber = function(prompt, minVal=0, maxVal=500)
 	while true
 		result = input(prompt).val
@@ -112,7 +104,9 @@ playOneRound = function
 		print "     ", ""
 		for i in range(0, numPlayers)
 			hands[i].push getCard
-			if row == 1 or i < numPlayers then printCard hands[i][-1]
+			if row == 1 or i < numPlayers then 
+				print "  " + (cardNames[hands[i][-1]] + " ")[:2], "  "
+			end if
 		end for
 		print
 	end for
@@ -185,6 +179,8 @@ playHand = function(handNum, prompt=null, allowSplit=true)
 				roundWinnings[handNum] += 1.5 * betPerHand[handNum]
 				betPerHand[handNum] = 0
 				discardHand handNum
+			else
+				print "Total is " + displayTotal(handValue[handNum])
 			end if
 			break
 		else if choice == "D" or choice == "H" then		// hit or double down
@@ -195,11 +191,13 @@ playHand = function(handNum, prompt=null, allowSplit=true)
 			hands[handNum].push card
 			handValue[handNum] = evalHand(handNum)
 			if handValue[handNum] < 0 then
-				print "...busted", ""
+				print "...Busted"
 				discardHand handNum
+				roundWinnings[handNum] = -betPerHand[handNum]
+				betPerHand[handNum] = 0
 			end if
-			print
-			if choice == "D" then break
+			prompt = "Hit"
+			if choice == "D" then; print; break; end if
 		else if choice == "/" then		// split
 			card1 = hands[handNum][0]; if card1 > 10 then card1 = 10
 			card2 = hands[handNum][1]; if card2 > 10 then card2 = 10
