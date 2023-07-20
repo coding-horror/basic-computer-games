@@ -15,5 +15,9 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
+- The "SET PAGE" input, stored in `O$`, has no effect.  It was probably meant as an opportunity for the user to set their pin-feed printer to the top of the page before proceeding.
+
+- The data values for each character are the bit representation of each horizontal row of the printout (vertical column of a character), plus one.  Perhaps because of this +1, the original code (and some of the ports here) are much more complicated than they need to be.
+
 (please note any difficulties or challenges in porting here)
 

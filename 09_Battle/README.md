@@ -13,7 +13,7 @@ The first thing you should learn is how to locate and designate positions on the
 
 The second thing you should learn about is the splash/hit ratio. “What is a ratio?” A good reply is “It’s a fraction or quotient.” Specifically, the spash/hit ratio is the number of splashes divided by the number of hits. If you had 9 splashes and 15 hits, the ratio would be 9/15 or 3/5, both of which are correct. The computer would give this splash/hit ratio as .6.
 
-The main objective and primary education benefit of BATTLE comes from attempting to decode the bas guys’ fleet disposition code. To do this, you must make a comparison between the coded matrix and the actual matrix which you construct as you play the game.
+The main objective and primary education benefit of BATTLE comes from attempting to decode the bad guys’ fleet disposition code. To do this, you must make a comparison between the coded matrix and the actual matrix which you construct as you play the game.
 
 The original author of both the program and these descriptive notes is Ray Westergard of Lawrence Hall of Science, Berkeley, California.
 
@@ -28,4 +28,4 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The original game has no way to re-view the fleet disposition code once it scrolls out of view.  Ports should consider allowing the user to enter "?" at the "??" prompt, to reprint the disposition code.  (This is added by the MiniScript port under Alternate Languages, for example.)
