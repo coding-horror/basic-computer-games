@@ -15,6 +15,12 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- Though the instructions say you can't place two platoons on the same outpost, the code does not enforce this.  So the player can "cheat" and guarantee a win by entering the same outpost number two or more times.
+
 #### Porting Notes
+
+- To ensure the instructions don't scroll off the top of the screen, we may want to insert a "(Press Return)" or similar prompt before printing the tear-off matrix.
 
 (please note any difficulties or challenges in porting here)
