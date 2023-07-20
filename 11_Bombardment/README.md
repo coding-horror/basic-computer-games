@@ -2,7 +2,7 @@
 
 BOMBARDMENT is played on two, 5x5 grids or boards with 25 outpost locations numbered 1 to 25. Both you and the computer have four platoons of troops that can be located at any four outposts on your respective grids.
 
-At the start of the game, you locate (or hide) your four platoons on your grid. The computer does the same on it’s grid. You then take turns firing missiles or bombs at each other’s outposts trying to destroy all four platoons. The one who finds all four opponents’ platoons first, wins.
+At the start of the game, you locate (or hide) your four platoons on your grid. The computer does the same on its grid. You then take turns firing missiles or bombs at each other’s outposts trying to destroy all four platoons. The one who finds all four opponents’ platoons first, wins.
 
 This program was slightly modified from the original written by Martin Burdash of Parlin, New Jersey.
 
