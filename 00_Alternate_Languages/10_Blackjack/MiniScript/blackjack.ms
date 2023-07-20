@@ -11,6 +11,8 @@ playerMoney = [0]*8	// total $ for each player (T)
 roundWinnings = [0]*7 // total $ won/lost this hand for each player (S)
 betPerHand = [0]*15	// bet for each hand (B)
 
+cardNames = " A 2 3 4 5 6 7 8 9 10 J Q K".split
+
 reshuffle = function
 	print "Reshuffling"
 	globals.deck = range(1,13)*4
@@ -21,6 +23,12 @@ end function
 getCard = function
 	if not deck then reshuffle
 	return deck.pop
+end function
+
+// Function to get a name for the given card, preceded by "a" or "an"
+a = function(cardNum)
+	article = "a" + "n" * (cardNum == 1 or cardNum == 8)
+	return article + " " + cardNames[cardNum]
 end function
 
 // Function to evaluate the given hand. Total is usually put into
@@ -123,7 +131,7 @@ playOneRound = function
 	// Test for dealer blackjack
 	if (dealerCard0==1 and dealerCard1 > 9) or
 	  (dealerCard0 > 9 and dealerCard1==1) then
-		print; print "Dealer has a " + cardNames[dealerCard1] + " in the hole for Blackjack"
+		print; print "Dealer has " + a(dealerCard1) + " in the hole for Blackjack"
 		for i in range(0, numPlayers)
 			handValue[i] = evalHand(i)
 		end for
@@ -144,11 +152,11 @@ playOneRound = function
 			if hands[i] or hands[i+8] then anyLeft = true
 		end for
 		if not anyLeft then
-			print "Dealer had a " + cardNames[hands[numPlayers][1]] + " concealed."
+			print "Dealer had " + a(hands[numPlayers][1]) + " concealed."
 		else
 			// Play dealer's hand.
 			dispTotal = displayTotal(handValue[numPlayers])
-			print "Dealer has a " + cardNames[hands[numPlayers][1]] + " concealed" +
+			print "Dealer has " + a(hands[numPlayers][1]) + " concealed" +
 			  " for a total of " + dispTotal + "."
 			while handValue[numPlayers] > 0 and dispTotal <= 16
 				card = getCard
@@ -187,7 +195,7 @@ playHand = function(handNum, prompt=null, allowSplit=true)
 			handValue[handNum] = evalHand(handNum)
 			if choice == "D" then betPerHand[handNum] *= 2
 			card = getCard
-			print "Received a " + cardNames[card], "   "
+			print "Received " + a(card), "   "
 			hands[handNum].push card
 			handValue[handNum] = evalHand(handNum)
 			if handValue[handNum] < 0 then
@@ -209,10 +217,10 @@ playHand = function(handNum, prompt=null, allowSplit=true)
 			hands[hand2] = [hands[handNum].pop]
 			betPerHand[hand2] = betPerHand[handNum]
 			card = getCard
-			print "First hand receives a " + cardNames[card]
+			print "First hand receives " + a(card)
 			hands[handNum].push card
 			card = getCard
-			print "Second hand receives a " + cardNames[card]
+			print "Second hand receives " + a(card)
 			hands[hand2].push card
 			if card1 != 1 then
 				// Now play the two hands
@@ -252,9 +260,7 @@ tallyResults = function
 	print
 end function
 
-// Main program starts here			// (Line 1500)
-// Initialize
-cardNames = "n A 2 3 4 5 6 7 8 9 10 J Q K".split
+// Main program starts here
 
 if getYesNo("Do you want instructions? ") == "Y" then
 	print "This is the game of 21. As many as 7 players may play the"
