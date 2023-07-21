@@ -17,6 +17,14 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- In the original code, scores is not kept accurately in multiplayer games.  It stores scores in F*P, where F is the frame and P is the player.  So, for example, frame 8 player 1 (index 16) clobbers the score from frame 4 player 2 (also index 16).
+
+- Even when scores are kept accurately, they don't match normal bowling rules.  In this game, the score for each ball is just the total number of pins down after that ball, and the third row of scores is a status indicator (3 for strike, 2 for spare, 1 for anything else).
+
+- The program crashes with a "NEXT without FOR" error if you elect to play again after the first game.
+
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The funny control characters in the "STRIKE!" string literal are there to make the terminal beep.
