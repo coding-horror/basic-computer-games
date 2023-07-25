@@ -26,6 +26,6 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
-
 - There is a fundamental assumption in the pre-fight subroutine at line 1610, that the Picadores and Toreadores are more likely to do a bad job (and possibly get killed) with a low-quality bull. This appears to be a mistake in the original code, but should be retained.
+
+- Lines 1800-1820 (part of the pre-fight subroutine) can never be reached.
