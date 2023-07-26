@@ -24,4 +24,6 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- While many modern environments have time/date functions that would make this program both easier and more automatic, in these ports we are choosing to do without them, as in the original program.
+
+- Some ports choose to ask the user the starting day of week, and whether it's a leap year, rather than force changes to the code to fit the desired year.
