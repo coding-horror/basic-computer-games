@@ -17,6 +17,14 @@ http://www.vintage-basic.net/games.html
 
 (please note any difficulties or challenges in porting here)
 
+##### Known Bugs
+
+This program does very little validation of its input, enabling the user to cheat in two ways:
+- One can enter a large negative wager, purposely lose, and gain that much money.
+- One can move outside the cube (using coordinates 0 or 4), then safely walk "around" the standard play volume to the destination square.
+
+It's remotely possible that these are clever solutions the user is intended to find, solving an otherwise purely random game.
+
 ##### Randomization Logic
 
 The BASIC code uses an interesting technique for choosing the random coordinates for the mines. The first coordinate is
