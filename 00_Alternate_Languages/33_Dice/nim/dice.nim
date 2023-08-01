@@ -18,6 +18,8 @@ while(retry):
   echo("\n")
   echo("HOW MANY ROLLS")
   x = readLine(stdin).parseInt()
+  for v in 2..12:
+    f[v] = 0 # Initialize array to 0
   for s in 1..x:
     a = rand(1..6) # Die 1
     b = rand(1..6) # Die 2
