@@ -4,9 +4,6 @@ Conversion to [MiniScript](https://miniscript.org).
 
 Ways to play:
 
-0. Try-It! Page:
-Go to https://miniscript.org/tryit/, clear the sample code from the code editor, and paste in the contents of flipflop.ms.  Then click the "Run Script" button.  Program output (and input) will appear in the green-on-black terminal display to the right of or below the code editor.
-
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
