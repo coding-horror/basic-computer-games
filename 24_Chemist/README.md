@@ -13,11 +13,13 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- There is a typo in the original Basic, "...DECIDE **WHO** MUCH WATER..." should be "DECIDE **HOW** MUCH WATER"
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
-
-There is a type in the original Basic, "...DECIDE **WHO** MUCH WATER..." should be "DECIDE **HOW** MUCH WATER"
 
 #### External Links
  - C: https://github.com/ericfischer/basic-computer-games/blob/main/24%20Chemist/c/chemist.c

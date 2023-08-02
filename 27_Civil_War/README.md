@@ -17,6 +17,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- At the end of a single-player game, the program reports strategies used by "THE SOUTH", but these are in fact strategies used by the North (the computer player) -- the South is always a human player.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
