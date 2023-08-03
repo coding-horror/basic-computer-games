@@ -71,3 +71,108 @@ Please note that on the back of the Basic Computer Games book it says **Microsof
 Thank you for taking part in this project to update a classic programming book – one of the most influential programming books in computing history – for 2022 and beyond!
 
 NOTE: per [the official blog post announcement](https://blog.codinghorror.com/updating-the-single-most-influential-book-of-the-basic-era/), I will be **donating $5 for each contributed program in the 10 agreed upon languages to [Girls Who Code](https://girlswhocode.com/)**.
+
+### Current Progress
+
+<details><summary>toggle for game by language table</summary>
+
+| Name                   | csharp | java | javascript | kotlin | lua | perl | python | ruby | rust | vbnet |
+| ---------------------- | ------ | ---- | ---------- | ------ | --- | ---- | ------ | ---- | ---- | ----- |
+| 01_Acey_Ducey          | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
+| 02_Amazing             | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 03_Animal              | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
+| 04_Awari               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 05_Bagels              | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
+| 06_Banner              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 08_Batnum              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 09_Battle              | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 10_Blackjack           | x      | x    | x          |        |     |      | x      | x    | x    | x     |
+| 11_Bombardment         | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 12_Bombs_Away          | x      | x    | x          |        | x   | x    | x      |      |      | x     |
+| 13_Bounce              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 14_Bowling             | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 15_Boxing              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 16_Bug                 | x      | x    | x          |        |     |      | x      | x    |      | x     |
+| 17_Bullfight           | x      |      | x          | x      |     |      | x      |      |      | x     |
+| 18_Bullseye            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 19_Bunny               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 20_Buzzword            | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
+| 21_Calendar            | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 22_Change              | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 23_Checkers            | x      |      | x          |        |     | x    | x      | x    |      | x     |
+| 24_Chemist             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 25_Chief               | x      | x    | x          |        | x   | x    | x      | x    |      | x     |
+| 26_Chomp               | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 27_Civil_War           | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 28_Combat              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 29_Craps               | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
+| 30_Cube                | x      | x    | x          |        |     |      | x      | x    | x    | x     |
+| 31_Depth_Charge        | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 32_Diamond             | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
+| 33_Dice                | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
+| 34_Digits              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 35_Even_Wins           | x      |      | x          |        |     | x    | x      |      | x    | x     |
+| 36_Flip_Flop           | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 37_Football            | x      |      | x          |        |     |      | x      |      |      | x     |
+| 38_Fur_Trader          | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 39_Golf                | x      |      | x          |        |     |      | x      |      |      | x     |
+| 40_Gomoko              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 41_Guess               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 42_Gunner              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 43_Hammurabi           | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 44_Hangman             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 45_Hello               | x      | x    | x          |        | x   | x    | x      | x    |      | x     |
+| 46_Hexapawn            | x      |      |            |        |     |      | x      |      |      | x     |
+| 47_Hi-Lo               | x      |      | x          | x      | x   | x    | x      | x    | x    | x     |
+| 48_High_IQ             | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 49_Hockey              | x      |      | x          |        |     |      | x      |      |      | x     |
+| 50_Horserace           | x      |      | x          |        |     |      |        |      | x    | x     |
+| 51_Hurkle              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 52_Kinema              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 53_King                | x      |      | x          |        |     |      | x      |      |      | x     |
+| 54_Letter              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 55_Life                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 56_Life_for_Two        | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 57_Literature_Quiz     | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 58_Love                | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 59_Lunar_LEM_Rocket    | x      |      | x          |        |     |      | x      |      | x    | x     |
+| 60_Mastermind          | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 61_Math_Dice           | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 62_Mugwump             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 63_Name                | x      | x    | x          | x      |     | x    | x      | x    |      | x     |
+| 64_Nicomachus          | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 65_Nim                 | x      |      | x          |        |     |      | x      | x    | x    | x     |
+| 66_Number              | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 67_One_Check           | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 68_Orbit               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 69_Pizza               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 70_Poetry              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 71_Poker               | x      | x    | x          |        |     |      |        |      |      | x     |
+| 72_Queen               | x      |      | x          |        |     | x    | x      |      | x    | x     |
+| 73_Reverse             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 74_Rock_Scissors_Paper | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
+| 75_Roulette            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 76_Russian_Roulette    | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
+| 77_Salvo               | x      |      | x          |        |     |      | x      |      |      | x     |
+| 78_Sine_Wave           | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
+| 79_Slalom              | x      |      | x          |        |     |      | x      |      |      | x     |
+| 80_Slots               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 81_Splat               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 82_Stars               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 83_Stock_Market        | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 84_Super_Star_Trek     | x      | x    | x          |        |     |      | x      |      | x    | x     |
+| 85_Synonym             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 86_Target              | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 87_3-D_Plot            | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 88_3-D_Tic-Tac-Toe     | x      |      | x          |        |     |      | x      |      |      | x     |
+| 89_Tic-Tac-Toe         | x      | x    | x          | x      |     | x    | x      |      | x    | x     |
+| 90_Tower               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 91_Train               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 92_Trap                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+| 93_23_Matches          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 94_War                 | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
+| 95_Weekday             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
+| 96_Word                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
+
+</details>
