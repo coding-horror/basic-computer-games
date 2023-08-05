@@ -4,6 +4,8 @@ var
   bet, cardA, cardB, cardC, stash: int
   retry: bool = true
 
+randomize() # Seed the random number generator
+
 proc printGreeting() =
   echo spaces(26),"ACEY DUCEY CARD GAME"
   echo spaces(15),"CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"

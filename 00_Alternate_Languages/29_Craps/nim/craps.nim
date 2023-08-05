@@ -4,6 +4,8 @@ var
   wager, winnings, rollResult: int
   stillplaying: bool = true
 
+randomize() # Seed the random number generator
+
 proc tryAgain(): bool =
   echo "WANT TO PLAY AGAIN? (YES OR NO)"
   var answer = readLine(stdin).normalize()

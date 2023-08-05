@@ -10,6 +10,8 @@ var
   prompt: string
   stillplaying: bool = true
 
+randomize() # Seed the random number generator
+
 # Seed 3 unique random numbers; indicate if they're all unique
 proc genSeed(): bool =
   for i in 1..3:

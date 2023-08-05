@@ -6,6 +6,8 @@ var
   z: string
   retry: bool = true
 
+randomize() # Seed the random number generator
+
 echo spaces(34), "DICE"
 echo spaces(15), "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
 echo "\n"

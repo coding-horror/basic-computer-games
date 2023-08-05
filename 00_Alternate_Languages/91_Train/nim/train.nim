@@ -4,10 +4,11 @@ var
   carSpeed, diff, err, guess, trainSpeed, carTime: int
   stillplaying: bool = true
 
+randomize() # Seed the random number generator
+
 # Return a tuple that'll be carSpeed, diff, trainSpeed
 proc randomNumbers(): (int,int,int) =
-  randomize()
-  result = (rand(1..25)+40 , rand(1..15)+5 , rand(1..19)+20)
+  result = (rand(41..65), rand(6..20), rand(21..39))
 
 # Do we want to play again?
 proc tryAgain(): bool =
