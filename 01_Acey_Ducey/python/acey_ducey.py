@@ -7,7 +7,6 @@ https://www.atariarchives.org/basicgames/showpage.php?page=2
 import random
 
 cards = {
-    1: "1",
     2: "2",
     3: "3",
     4: "4",
@@ -16,22 +15,25 @@ cards = {
     7: "7",
     8: "8",
     9: "9",
-    10: "Jack",
-    11: "Queen",
-    12: "King",
-    13: "Ace",
+    10: "10",
+    11: "Jack",
+    12: "Queen",
+    13: "King",
+    14: "Ace",
 }
-
 
 def play_game() -> None:
     cash = 100
     while cash > 0:
         print(f"You now have {cash} dollars\n")
         print("Here are you next two cards")
-        round_cards = list(cards.keys())
-        random.shuffle(round_cards)
-        card_a, card_b, card_c = round_cards.pop(), round_cards.pop(), round_cards.pop()
-        if card_a > card_b:
+        round_cards = list(cards.keys()) # gather cards from dictionary
+        card_a = random.choice(round_cards) # choose a card
+        card_b = card_a # clone the first card, so we avoid the same number for the second card
+        while (card_a == card_b): # if the cards are the same, choose another card
+            card_b = random.choice(round_cards)
+        card_c = random.choice(round_cards) # choose last card
+        if card_a > card_b: # swap cards if card_a is greater than card_b
             card_a, card_b = card_b, card_a
         print(f" {cards[card_a]}")
         print(f" {cards[card_b]}\n")
@@ -53,7 +55,7 @@ def play_game() -> None:
                 print("Please enter a positive number")
         print(f" {cards[card_c]}")
         if bet > 0:
-            if card_a < card_c < card_b:
+            if card_a <= card_c <= card_b:
                 print("You win!!!")
                 cash += bet * 2
             else:
@@ -82,4 +84,5 @@ If you do not want to bet, input a 0
 
 
 if __name__ == "__main__":
+    random.seed()
     main()

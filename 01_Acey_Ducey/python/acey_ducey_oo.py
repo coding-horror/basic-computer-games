@@ -8,6 +8,7 @@ Python port by Aviyam Fischer, 2022
 """
 
 from typing import List, Literal, NamedTuple, TypeAlias, get_args
+import random
 
 Suit: TypeAlias = Literal["\u2665", "\u2666", "\u2663", "\u2660"]
 Rank: TypeAlias = Literal[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
@@ -34,8 +35,6 @@ class Deck:
                 self.cards.append(Card(suit, rank))
 
     def shuffle(self) -> None:
-        import random
-
         random.shuffle(self.cards)
 
     def deal(self) -> Card:
@@ -72,7 +71,7 @@ class Game:
                 if 0 < bet <= self.money:
 
                     print(f"Your deal:\t {player_card}")
-                    if card_a.rank < player_card.rank < card_b.rank:
+                    if card_a.rank <= player_card.rank <= card_b.rank:
                         print("You Win!")
                         self.money += bet
                     else:
@@ -86,9 +85,6 @@ class Game:
                         print("You could have won!")
                     else:
                         print("You would lose, so it was wise of you to chicken out!")
-
-                    self.not_done = False
-                    break
 
                 if len(self.deck.cards) <= 3:
                     print("You ran out of cards. Game over.")
@@ -129,4 +125,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    random.seed()
     main()

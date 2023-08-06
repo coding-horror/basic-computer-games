@@ -34,10 +34,10 @@ proc printCard(aCard: int) =
 
 proc drawDealerCards() =
   echo "HERE ARE YOUR NEXT TWO CARDS: "
-  cardA = rand(2..14)
+  cardA = rand 2..14
   cardB = cardA # Copy cardA, so we can test cardB to be different
   while cardB == cardA:
-    cardB = rand(2..14)
+    cardB = rand 2..14
   if cardA > cardB: # Make sure cardA is the smaller card
     swap cardA, cardB
   echo ""
@@ -80,8 +80,9 @@ while retry:
       echo "YOU WIN!!!"
       stash += bet
     else:
-      echo "SORRY, YOU LOSE"
-      stash -= bet
+      if bet > 0:
+        echo "SORRY, YOU LOSE"
+        stash -= bet
   echo "SORRY, FRIEND, BUT YOU BLEW YOUR WAD."
   echo ""
   retry = tryAgain()
