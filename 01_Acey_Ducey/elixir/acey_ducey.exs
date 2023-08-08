@@ -73,10 +73,15 @@ defmodule Game do
   end
 
   # for a stricter win condition (non-inclusive)
-  defp win?({_, first}, {_, second}, {_, third}) when third > first and third < second, do: true
+  defp win?({_, first}, {_, second}, {_, third}) do
+    [floor, ceiling] = Enum.sort([first, second])
+    (floor < third) && (third < ceiling)
+  end
   # for a looser win condition (inclusive)
-  #defp win?({_, first}, {_, second}, {_, third}) when third in first..second, do: true
-  defp win?(_, _, _), do: false
+  #defp win?({_, first}, {_, second}, {_, third}) do
+    #[_, middle, _] = Enum.sort([first, second, third])
+    #middle == third
+  #end
 
   defp format({suit, value}) do
     case value do
