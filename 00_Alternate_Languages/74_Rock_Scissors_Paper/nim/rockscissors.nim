@@ -1,4 +1,4 @@
-import std/[random,strutils]
+import std/[random,strformat,strutils]
 
 type
   symbol = enum
@@ -20,24 +20,21 @@ proc outcome(p: symbol, c: symbol): string =
   if p == c:
     ties += 1
     result = "TIE GAME.  NO WINNER."
-  if p == SCISSORS and c == PAPER:
-    playerWins += 1
-    result = "SCISSORS CUTS PAPER.  YOU WIN."
-  if p == PAPER and c == SCISSORS:
-    cpuWins += 1
-    result = "SCISSORS CUTS PAPER.  I WIN."
-  if p == PAPER and c == ROCK:
-    playerWins += 1
-    result = "PAPER COVERS ROCK.  YOU WIN."
-  if p == ROCK and c == PAPER:
-    cpuWins += 1
-    result = "PAPER COVERS ROCK.  I WIN."
-  if p == ROCK and c == SCISSORS:
-    playerWins += 1
-    result = "ROCK CRUSHES SCISSORS.  YOU WIN."
-  if p == SCISSORS and c == ROCK:
-    cpuWins += 1
-    result = "ROCK CRUSHES SCISSORS.  I WIN."
+  else:
+    const
+      winTable = [
+        PAPER: (ROCK, "COVERS"),
+        SCISSORS: (PAPER, "CUTS"),
+        ROCK: (SCISSORS, "CRUSHES")
+      ]
+    let (winCond, winVerb) = winTable[p]
+    if winCond == c:
+      playerWins += 1
+      result = fmt"{p} {winVerb} {c}.  YOU WIN."
+    else:
+      let (_, winVerb) = winTable[c]
+      cpuWins += 1
+      result = fmt"{c} {winVerb} {p}.  I WIN."
 
 # Start the game
 echo spaces(21), "GAME OF ROCK, SCISSORS, PAPER"
