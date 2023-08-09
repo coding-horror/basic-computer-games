@@ -17,7 +17,7 @@ or
 
 
 2. Mini Micro:
-Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the BASIC program.  Then, at the Mini Micro command prompt, enter:
+Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then click the top disk slot and chose "Mount Folder..."  Select the folder containing the MiniScript program and this README file.  Then, at the Mini Micro command prompt, enter:
 
 	load "evenwins"
 	run
