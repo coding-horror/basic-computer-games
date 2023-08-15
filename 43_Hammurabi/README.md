@@ -23,8 +23,7 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
-
+- Though the file name and README both spell "Hammurabi" with two M's, the program itself consistently uses only one M.
 
 #### External Links
  - C: https://github.com/beyonddream/hamurabi
