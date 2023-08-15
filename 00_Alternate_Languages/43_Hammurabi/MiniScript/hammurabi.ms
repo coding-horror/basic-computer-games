@@ -68,7 +68,7 @@ end function
 hint = function(msg)
 	// This was not in the original program.  But if you want to make
 	// the game easier, uncomment this line:
-	print msg
+	//print msg
 end function
 
 min = function(a, b, c)
