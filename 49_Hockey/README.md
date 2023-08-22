@@ -15,6 +15,11 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- An apparent missing line 430 causes the code to fall through from the "FLIPS A WRISTSHOT" case directly to the "BACKHANDS ONE" case.
+- The author consistently misspells the verb "lets" (writing it like the contraction "let's"), while having no trouble with "leads", "gets", "hits", etc.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
