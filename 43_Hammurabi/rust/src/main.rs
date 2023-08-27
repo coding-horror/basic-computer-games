@@ -2,6 +2,7 @@ use std::io;
 use rand::Rng;
 
 fn run() {
+    // Set up variables
     let mut year = 0;
     let mut population = 95;
     let mut immigrants = 5;
@@ -27,9 +28,9 @@ fn run() {
         }
         println!("\n\n\nHAMURABI: I BEG TO REPORT TO YOU,");
         println!("IN YEAR {year}, {starved} PEOPLE STARVED, {immigrants} CAME TO THE CITY,");
-        population = population + immigrants;
+        population += immigrants;
         if plague{
-            population = population / 2;
+            population /= 2;
             plague = false;
             println!("A HORRIBLE PLAGUE STRUCK! HALF THE PEOPLE DIED.");
         }
@@ -45,19 +46,22 @@ fn run() {
         loop {  
             println!("HOW MANY ACRES DO YOU WISH TO BUY? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {
+                if qty < 0 {    // A negative amount is impossible
                     impossible_task();
                     game_failed = true;
                     break 'main;
                 }
+                // Player decides not to buy any land
                 if qty == 0 {
                     bought_land = false;
                     break;
                 }
+                // Trying to buy more land than you can afford?
                 if land_price * qty as u32 > grain {
                     insufficient_grain(grain);
                     continue;
                 }
+                // Everything checks out OK
                 if land_price * qty as u32 <= grain {
                     acres += qty as u32;
                     grain -= land_price * qty as u32;
@@ -67,20 +71,22 @@ fn run() {
             }
         }
 
-        if bought_land == false {
+        if !bought_land {
             loop {  
                 println!("HOW MANY ACRES DO YOU WISH TO SELL? ");
                 if let Some(qty) = get_input() {
-                    if qty < 0 {
+                    if qty < 0 {    // A negative amount is impossible
                         impossible_task();
                         game_failed = true;
                         break 'main;
                     }
+                    // Everything checks out OK
                     if qty as u32 <= acres {
                         acres -= qty as u32;
                         grain += land_price * qty as u32;
                         break;
                     }
+                    // Trying to sell more land that you own
                     insufficient_land(acres);
                 }
             }
@@ -89,7 +95,7 @@ fn run() {
         loop {  
             println!("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {
+                if qty < 0 {    // A negative amount is impossible
                     impossible_task();
                     game_failed = true;
                     break 'main;
@@ -99,6 +105,7 @@ fn run() {
                     insufficient_grain(grain);
                     continue;
                 }
+                // Everything checks out OK
                 bushels_fed = qty as u32;
                 grain -= bushels_fed;
                 break;
@@ -108,7 +115,7 @@ fn run() {
         loop {  
             println!("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {
+                if qty < 0 {    // A negative amount is impossible
                     impossible_task();
                     game_failed = true;
                     break 'main;
@@ -128,8 +135,9 @@ fn run() {
                     insufficient_people(population);
                     continue;
                 }
+                // Everything checks out OK
                 planted = qty as u32;
-                grain = grain - (planted / 2);
+                grain -= planted / 2;
                 break;
             }
         }
@@ -169,14 +177,14 @@ fn run() {
                 game_failed = true;
                 break;
             }
-            // Calculate percentages here
+            // Calculate percentage of people that starved per year on average
             perc_starved = ((year - 1) as f32 * perc_starved + starved as f32 * 100. / population as f32) / year as f32;
             population = c;
-            total_starved = total_starved + starved;
+            total_starved += starved;
         }
     }
 
-    if game_failed == false {
+    if !game_failed {
         println!("IN YOUR 10-YEAR TERM OF OFFICE {perc_starved} PERCENT OF THE");
         println!("POPULATION STARVED PER YEAR ON THE AVERAGE, I.E. A TOTAL OF");
         println!("{total_starved} PEOPLE DIED!!");
@@ -202,7 +210,7 @@ fn run() {
             println!("JEFFERSON COMBINED COULD NOT HAVE DONE BETTER!\n");
         }
         for _ in 1..10 {
-            print!("\n");
+            println!();
         }
     }
             
