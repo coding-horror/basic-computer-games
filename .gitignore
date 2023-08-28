@@ -34,7 +34,6 @@ venv/
 .DS_Store
 .vs/
 **/target/
-Cargo.lock
 **/*.rs.bk
 /target
 todo.md
