@@ -131,17 +131,17 @@ class GameState:
             tourist_trade_earnings = V1 - V2
         print(f" YOU MADE {tourist_trade_earnings} RALLODS FROM TOURIST TRADE.")
         if V2 != 0 and not (V1 - V2 >= self.tourism_earnings):
-            print("   DECREASE BECAUSE ")
+            print("   DECREASE BECAUSE ", end="")
             reason = randint(0, 10)
             if reason <= 2:
                 print("FISH POPULATION HAS DWINDLED DUE TO WATER POLLUTION.")
-            if reason <= 4:
+            elif reason <= 4:
                 print("AIR POLLUTION IS KILLING GAME BIRD POPULATION.")
-            if reason <= 6:
+            elif reason <= 6:
                 print("MINERAL BATHS ARE BEING RUINED BY WATER POLLUTION.")
-            if reason <= 8:
+            elif reason <= 8:
                 print("UNPLEASANT SMOG IS DISCOURAGING SUN BATHERS.")
-            if reason <= 10:
+            else:
                 print("HOTELS ARE LOOKING SHABBY DUE TO SMOG GRIT.")
 
         # NOTE: The following two lines had a bug in the original game:
