@@ -130,7 +130,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 50_Horserace           | x      |      | x          |        |     |      |        |      | x    | x     |
 | 51_Hurkle              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 52_Kinema              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
-| 53_King                | x      |      | x          |        |     |      | x      |      |      | x     |
+| 53_King                | x      |      | x          |        |     |      | x      |      | x    | x     |
 | 54_Letter              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 55_Life                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 56_Life_for_Two        | x      | x    | x          |        |     | x    | x      |      |      | x     |
