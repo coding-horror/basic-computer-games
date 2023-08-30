@@ -170,7 +170,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 90_Tower               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
 | 91_Train               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 92_Trap                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 93_23_Matches          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 93_23_Matches          | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 94_War                 | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
 | 95_Weekday             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
 | 96_Word                | x      | x    | x          |        |     | x    | x      | x    | x    | x     |

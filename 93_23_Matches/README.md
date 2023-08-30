@@ -19,4 +19,4 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+There is an oddity (you can call it a bug, but it is no big deal) in the original code. If there are only two or three matches left at the player's turn and the player picks all of them (or more), the game would still register that as a win for the player.
