@@ -46,28 +46,27 @@ fn run() {
         loop {  
             println!("HOW MANY ACRES DO YOU WISH TO BUY? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {    // A negative amount is impossible
-                    impossible_task();
-                    game_failed = true;
-                    break 'main;
-                }
                 // Player decides not to buy any land
                 if qty == 0 {
                     bought_land = false;
                     break;
                 }
                 // Trying to buy more land than you can afford?
-                if land_price * qty as u32 > grain {
+                if land_price * qty > grain {
                     insufficient_grain(grain);
                     continue;
                 }
                 // Everything checks out OK
-                if land_price * qty as u32 <= grain {
-                    acres += qty as u32;
-                    grain -= land_price * qty as u32;
+                if land_price * qty <= grain {
+                    acres += qty ;
+                    grain -= land_price * qty ;
                     bought_land = true;
                     break;
                 }
+            } else {
+                impossible_task();
+                game_failed = true;
+                break 'main;
             }
         }
 
@@ -75,19 +74,18 @@ fn run() {
             loop {  
                 println!("HOW MANY ACRES DO YOU WISH TO SELL? ");
                 if let Some(qty) = get_input() {
-                    if qty < 0 {    // A negative amount is impossible
-                        impossible_task();
-                        game_failed = true;
-                        break 'main;
-                    }
                     // Everything checks out OK
-                    if qty as u32 <= acres {
-                        acres -= qty as u32;
-                        grain += land_price * qty as u32;
+                    if qty <= acres {
+                        acres -= qty;
+                        grain += land_price * qty;
                         break;
                     }
                     // Trying to sell more land that you own
                     insufficient_land(acres);
+                } else {
+                    impossible_task();
+                    game_failed = true;
+                    break 'main;
                 }
             }
         }
@@ -95,50 +93,48 @@ fn run() {
         loop {  
             println!("HOW MANY BUSHELS DO YOU WISH TO FEED YOUR PEOPLE? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {    // A negative amount is impossible
-                    impossible_task();
-                    game_failed = true;
-                    break 'main;
-                }
                 // Trying to use more grain than is in silos?
-                if qty as u32 > grain {
+                if qty > grain {
                     insufficient_grain(grain);
                     continue;
                 }
                 // Everything checks out OK
-                bushels_fed = qty as u32;
+                bushels_fed = qty;
                 grain -= bushels_fed;
                 break;
+            } else {
+                impossible_task();
+                game_failed = true;
+                break 'main;
             }
         }
 
         loop {  
             println!("HOW MANY ACRES DO YOU WISH TO PLANT WITH SEED? ");
             if let Some(qty) = get_input() {
-                if qty < 0 {    // A negative amount is impossible
-                    impossible_task();
-                    game_failed = true;
-                    break 'main;
-                }
                 // Trying to plant more acres than you own?
-                if qty as u32 > acres {
+                if qty > acres {
                     insufficient_land(acres);
                     continue;
                 }
                 // Enough grain for seed?
-                if qty as u32 / 2 > grain {
+                if qty / 2 > grain {
                     insufficient_grain(grain);
                     continue;
                 }
                 // Enough people to tend the crops?
-                if qty as u32 > (10 * population) {
+                if qty > (10 * population) {
                     insufficient_people(population);
                     continue;
                 }
                 // Everything checks out OK
-                planted = qty as u32;
+                planted = qty;
                 grain -= planted / 2;
                 break;
+            } else {
+                impossible_task();
+                game_failed = true;
+                break 'main;
             }
         }
 
@@ -217,7 +213,7 @@ fn run() {
     println!("\nSO LONG FOR NOW.\n");
 }
 
-fn get_input() -> Option<i32> {
+fn get_input() -> Option<u32> {
     let mut input = String::new();
     io::stdin().read_line(&mut input).expect("Failed read_line");
     match input.trim().parse() {
