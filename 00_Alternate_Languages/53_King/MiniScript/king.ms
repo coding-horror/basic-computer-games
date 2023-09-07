@@ -3,10 +3,30 @@ print " "*15 + "Creative Computing  Morristown, New Jersey"
 print; print; print
 
 yearsRequired = 8
+rallods = floor(60000+(1000*rnd)-(1000*rnd))
+countrymen = floor(500+(10*rnd)-(10*rnd))
+landArea = 2000
+foreignWorkers = 0
+sellableLandExplained = false
+tourism = 0
+year = 0
 
 zs = input("Do you want instructions? ").lower
 if zs == "again" then
-	// ToDo: load previous state
+	while true
+		year = input("How many years had you been in office when interrupted? ").val
+		if 0 <= year < yearsRequired then break
+		print "   Come on, your term in office is only " + yearsRequired + " years."
+	end while
+	rallods = input("How much did you have in the treasury? ").val
+	countrymen = input("How many countrymen? ").val
+	foreignWorkers = input("How many foreign workers? ").val
+	while true
+		landArea = input("How many square miles of land? ").val
+		if 1000 <= landArea <= 2000 then break
+		print "   Come on, you started with 1000 sq. miles of farm land"
+		print "   and 1000 sq. miles of forest land."
+	end while
 else if not zs or zs[0] != "n" then
 	print; print; print
 	print "Congratulations! You've just been elected premier of Setats"
@@ -27,13 +47,6 @@ end if
 
 print
 
-rallods = floor(60000+(1000*rnd)-(1000*rnd))
-countrymen = floor(500+(10*rnd)-(10*rnd))
-landArea = 2000
-foreignWorkers = 0
-sellableLandExplained = false
-tourism = 0
-year = 0
 
 // Bonus little feature when running in Mini Micro: display a status bar with
 // key game stats at the top of the screen.
