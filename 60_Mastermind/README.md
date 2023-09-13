@@ -86,7 +86,7 @@ solutions reporting their black and white pegs against `RBW`.
 | BRW   | 1     | 2     |     | WRW   | 1     | 1     |     | RRW   | 2     | 0     |    
 | BRR   | 0     | 2     |     | WRR   | 0     | 2     |     | RRR   | 1     | 0     | 
 
-Now we are going to eliminate every solution that **DOESN'T** matches 0 black and 2 white.
+Now we are going to eliminate every solution that **DOESN'T** match 0 black and 2 white.
 
 | Guess    | Black | White |     | Guess    | Black | White |     | Guess    | Black | White |
 |----------|-------|-------|-----|----------|-------|-------|-----|----------|-------|-------|
@@ -130,7 +130,7 @@ report 1 black and 0 whites.
 | ~~~WWB~~ | 0     | 1     |
 | ~~~WRR~~ | 2     | 0     | 
 
-Only one solution matches and its our secret code! The computer will guess this
+Only one solution matches and it's our secret code! The computer will guess this
 one next as it's the only choice left, for a total of three moves. 
 Coincidentally, I believe the expected maximum number of moves the computer will 
 make is the number of positions plus one for the initial guess with no information.
@@ -151,3 +151,7 @@ that it is either WW, or BB which could bring your total guesses up to three
 which is the number of positions plus one.  So if your computer's turn is taking
 longer than the number of positions plus one to find the answer then something 
 is wrong with your code. 
+
+#### Known Bugs
+
+- Line 622 is unreachable, as the previous line ends in a GOTO and that line number is not referenced anywhere.  It appears that the intent was to tell the user the correct combination after they fail to guess it in 10 tries, which would be a very nice feature, but does not actually work.  (In the MiniScript port, I have made this feature work.)
