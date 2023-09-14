@@ -1,6 +1,6 @@
 CR = char(13)
 
-print " "*32 + "WEEKDAY"
+print " "*31 + "23 MATCHES"
 print " "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"+CR+CR+CR
 
 print "This is a game called '23 Matches'."
