@@ -1,4 +1,4 @@
-print "Solitaire Checker Puzzle by david ahl"
+print "Solitaire Checker Puzzle by David Ahl"
 print
 print "48 checkers are placed on the 2 outside spaces of a"
 print "standard 64-square checkerboard.  The object is to"
@@ -9,6 +9,8 @@ print "the board printed out on each turn '1' indicates a"
 print "checker and '0' an empty square.  When you have no"
 print "possible jumps remaining, input a '0' in response to"
 print "question 'Jump from?'"
+print
+input "(Press Return.)"
 print
 
 pad4 = function(n)
