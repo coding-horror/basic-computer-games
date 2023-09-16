@@ -1,5 +1,4 @@
 TAB = char(9)
-CR = char(13)
 
 Age = {"m": 0, "d": 0, "y": 0}
 Age.init = function(m,d,y)
@@ -107,15 +106,18 @@ Date._leapYears = function
 end function
 
 print " "*32 + "WEEKDAY"
-print " "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"+CR+CR+CR
+print " "*15 + "Creative Computing  Morristown, New Jersey"
+print; print; print
 
 print "WEEKDAY is a computer demonstration that"
-print "gives facts about a date of interest to you."+CR
+print "gives facts about a date of interest to you."
+print
 
-mdy = input("Enter today's date in the form: 3,24,1979?"+CR)
+mdy = input("Enter today's date in the form: 3,24,1979? ")
 today = Date.init(mdy)
 
-mdy = input("Enter day of birth (or other day of interest)"+CR)
+
+mdy = input("Enter day of birth (or other day of interest)? ")
 dob = Date.init(mdy)
 
 print
@@ -139,6 +141,8 @@ age = today.diff(dob)
 
 totalAge = Age.init(age.m,age.d,age.y)
 if verb == " was a " then
+	if dob.d == today.d and dob.m == today.m then print "***HAPPY BIRTHDAY***"
+	
 	lines= [["", "YEARS", "MONTHS", "DAYS"]]
 	lines.push(["", "-----", "------", "----"])
 	lines.push(["Your age (if birthdate)", age.y,age.m, age.d])
@@ -174,4 +178,5 @@ if verb == " was a " then
 	end for
 end if
 
-print CR+"Yoy may retire in " + (dob.y + 65)
+print
+print " "*16 + "***  Yoy may retire in " + (dob.y + 65) + "  ***"
