@@ -21,8 +21,13 @@ distanceBetween = function (d1,d2)
 	return ((d1[0]-d2[0])^2 + (d1[1]-d2[1])^2 + (d1[2]-d2[2])^2)^.5
 end function
 
+coordStr = function(coords)
+	return "X = " + round(coords[0]) +
+	  "   Y = " + round(coords[1]) + "   Z = " + round(coords[2])
+end function
+
 print " " * 33 + "TARGET"
-print " " * 15 + "CREATIVE COMPUTING   MORRISTOWN, NEW JERSEY"
+print " " * 15 + "Creative Computing   Morristown, New Jersey"
 print; print; print
 
 print "You are the weapons officer on the Starship Enterprise"
@@ -47,7 +52,7 @@ while ready
 	distance = 100000 * rnd * rnd
 	coords = getCoord(distance, radX, radZ)
 	
-	print "Target sighted: Approx Coordinates (X,Y,Z) = ("+coords.join(",")+")"
+	print "Target sighted: Approx Coordinates: " + coordStr(coords)
 	
 	gameRunning = true
 	while gameRunning
@@ -85,7 +90,7 @@ while ready
 				zMsg = {false: "Shot above target ", true: "Shot below target "}
 				print zMsg[dz<0] + dz + " kilometers."
 				
-				print "Approx position of explosion + (" + targeted.join(",") + ")"
+				print "Approx position of explosion: " + coordStr(targeted)
 				print "    Distance from target = " + distBet
 				print 
 				print
@@ -104,10 +109,6 @@ while ready
 	end while
 	print
 	ans = input("Ready for next target? ").lower
-	if ans == "" then
-		ready == false
-	else
-		ready = ans[0].lower == "y"
-	end if
+	ready = ans and  ans[0].lower == "y"
 	print
 end while
