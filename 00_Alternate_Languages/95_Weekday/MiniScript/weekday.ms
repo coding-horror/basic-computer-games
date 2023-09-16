@@ -179,4 +179,4 @@ if verb == " was a " then
 end if
 
 print
-print " "*16 + "***  Yoy may retire in " + (dob.y + 65) + "  ***"
+print " "*16 + "***  You may retire in " + (dob.y + 65) + "  ***"

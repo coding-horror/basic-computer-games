@@ -1,7 +1,6 @@
-CR = char(13)
-
-print " "*32 + "WEEKDAY"
-print " "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"+CR+CR+CR
+print " "*31 + "23 MATCHES"
+print " "*15 + "Creative Computing  Morristown, New Jersey"
+print; print; print
 
 print "This is a game called '23 Matches'."
 print
@@ -26,11 +25,13 @@ end if
 choice = 2
 while matches > 0
 	if humanTurn then
+		if matches < 23 then print "Your turn -- you may take 1, 2 or 3 matches."
+		prompt = "How many do you wish to remove? "
 		choice = 0
 		if matches == 1 then choice = 1
 		while choice == 0
 			choice = input(prompt).val
-			if choice <1 or choice > 3 or choice > matches then
+			if choice < 1 or choice > 3 or choice > matches then
 				choice = 0
 				print "Very funny! Dummy!"
 				print "Do you want to play or goof around?"
@@ -40,10 +41,12 @@ while matches > 0
 		matches = matches - choice
 		if matches == 0 then
 			print "You poor boob! You took the last match! I gotcha!!"
-			print "Ha! Ha! I beat you !!"
+			print "Ha ! Ha ! I beat you !!"
+			print
 			print "Good bye loser!"
 		else
-			print "There are now " + matches + " matches remaining." + CR
+			print "There are now " + matches + " matches remaining."
+			print
 		end if
 	else
 		choice_comp = 4 - choice
@@ -59,9 +62,9 @@ while matches > 0
 			print "Let's play again and I'll blow your shoes off!!"
 		else
 			print "My turn! I remove " + choice_comp + " matches"
-			print "The number of matches is now " + matches + CR
+			print "The number of matches is now " + matches
+			print
 		end if
 	end if
 	humanTurn = not humanTurn
-	prompt = "Your turn -- you may take 1, 2 or 3 matches." + CR + "How many do you wish to remove? "
 end while
