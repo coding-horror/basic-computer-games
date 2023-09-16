@@ -65,9 +65,9 @@ while ready
 		
 		print "    Estimated Distance: " + 	estDistance
 		print
-		tx = input ("Input angle deviation from X in degrees: ").val
-		tz = input ("Input angle deviation from Z in degrees: ").val
-		tdist = input ("Input distance: ").val
+		tx = input("Input angle deviation from X in degrees: ").val
+		tz = input("Input angle deviation from Z in degrees: ").val
+		tdist = input("Input distance: ").val
 		print
 		if tdist < 20 then
 			print "You blew yourself up!!"
