@@ -20,18 +20,18 @@ Tower.top = function
 end function
 
 Game = {}
-Game["towers"] = []
-Game["numOfDisks"] = 0
-Game["rangeOfDisks"] = []
-Game["selectedDisk"] = 0
-Game["selectedDiskOn"] = 0
-Game["selectedTower"] = 0
-Game["inputErrors"] = 0
-Game["turns"] = 0
+Game.towers = []
+Game.numOfDisks = 0
+Game.rangeOfDisks = []
+Game.selectedDisk = 0
+Game.selectedDiskOn = 0
+Game.selectedTower = 0
+Game.inputErrors = 0
+Game.turns = 0
 
 Game.display = function
 	print
-	for r in range(7,1,-1)
+	for r in range(7,1)
 		rowstr = ""
 		for tower in self.towers
 			if r > tower.height then
@@ -143,10 +143,10 @@ Game.move = function
 		if 0 <= status and status <= 2 then break
 		if status == kNotTower and self.doneWithYou then
 			print "I tried to warn you. But you wouldn't listen."
-			print "By bye, big shot."
+			print "Bye bye, big shot."
 			exit
 		else if status == kNotTower then
-			print "I'll assume you hit the wrong ket this time. But watch it"
+			print "I'll assume you hit the wrong key this time. But watch it,"
 			print "I only allow one mistake."
 		end if
 	end while
@@ -164,8 +164,8 @@ end function
 
 
 print " " * 33 + "TOWERS"
-print " " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
-print;print
+print " " * 15 + "Creative Computing  Morristown, New Jersey"
+print; print
 print "You must transfer the disks from the left to the right"
 print "tower, one at a time, never putting a larger disk on a"
 print "smaller disk."
@@ -174,7 +174,7 @@ print
 ans = "Y"
 while ans[0].upper == "Y"
 	while 1
-		disks = input ("How many disks do you want to move (7 is MAX)? ").val
+		disks = input("How many disks do you want to move (7 is MAX)? ").val
 		status = Game.init(disks)
 		if status == false and Game.doneWithYou then
 			print "All right, wise guy, if you can't play the game right, I'll"
@@ -196,7 +196,7 @@ while ans[0].upper == "Y"
 	print "Congratulations!"
 	print "You performed the task in " + Game.turns + " moves."
 	print
-	ans = input("Play again (Yes or No)? ")
+	ans = input("Play again (Yes or No)? ") + " "
 end while
 print
 print "Thanks for the game!"
