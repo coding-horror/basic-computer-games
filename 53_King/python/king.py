@@ -61,7 +61,7 @@ class GameState:
         return self.countrymen - self.population_change
 
     def sell_land(self, amount: int) -> None:
-        assert amount < self.farmland
+        assert amount <= self.farmland
         self.land -= amount
         self.rallods += self.land_buy_price * amount
 
@@ -126,20 +126,22 @@ class GameState:
     def handle_tourist_trade(self) -> None:
         V1 = int(self.settled_people * 22 + random() * 500)
         V2 = int((INITIAL_LAND - self.land) * 15)
-        tourist_trade_earnings = int(V1 - V2)
+        tourist_trade_earnings = 0
+        if V1 > V2:
+            tourist_trade_earnings = V1 - V2
         print(f" YOU MADE {tourist_trade_earnings} RALLODS FROM TOURIST TRADE.")
         if V2 != 0 and not (V1 - V2 >= self.tourism_earnings):
-            print("   DECREASE BECAUSE ")
+            print("   DECREASE BECAUSE ", end="")
             reason = randint(0, 10)
             if reason <= 2:
                 print("FISH POPULATION HAS DWINDLED DUE TO WATER POLLUTION.")
-            if reason <= 4:
+            elif reason <= 4:
                 print("AIR POLLUTION IS KILLING GAME BIRD POPULATION.")
-            if reason <= 6:
+            elif reason <= 6:
                 print("MINERAL BATHS ARE BEING RUINED BY WATER POLLUTION.")
-            if reason <= 8:
+            elif reason <= 8:
                 print("UNPLEASANT SMOG IS DISCOURAGING SUN BATHERS.")
-            if reason <= 10:
+            else:
                 print("HOTELS ARE LOOKING SHABBY DUE TO SMOG GRIT.")
 
         # NOTE: The following two lines had a bug in the original game:

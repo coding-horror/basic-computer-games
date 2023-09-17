@@ -23,6 +23,15 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+### lem.bas
+
+- The input validation on the thrust value (displayed as P, stored internally as F) appears to be incorrect.  It allows negative values up up to -95, but at -96 or more balks and calls it negative.  I suspect the intent was to disallow any value less than 0 (in keeping with the instructions), *or* nonzero values less than 10.
+
+- The physics calculations seem very sus.  If you enter "1000,0,0" (i.e. no thrust at all, integrating 1000 seconds at a time) four times in a row, you first fall, but then mysteriously gain vertical speed, and end up being lost in space.  This makes no sense.  A similar result happened when just periodically applying 10% thrust in an attempt to hover.
+
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

@@ -26,7 +26,7 @@ A new cell will be generated at (3,3) which will be a `#` since there are two `#
 | 4 |   |   |   |   |   |
 | 5 |   |   |   |   |   |
 ```
-On the first most each player positions 3 pieces of life on the board by typing in the co-ordinates of the pieces. (In the event of the same cell being chosen by both players that cell is left empty.)
+On the first move each player positions 3 pieces of life on the board by typing in the co-ordinates of the pieces. (In the event of the same cell being chosen by both players that cell is left empty.)
 
 The board is then adjusted to the next generation and printed out.
 
@@ -44,6 +44,7 @@ As published in Basic Computer Games (1978):
 
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
+
 
 #### Porting Notes
 

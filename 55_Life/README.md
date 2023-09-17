@@ -37,4 +37,11 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
+- To make sense of the code, it's important to understand what the values in the A(X,Y) array mean:
+  - 0: dead cell
+  - 1: live cell
+  - 2: currently live, but dead next cycle
+  - 3: currently dead, but alive next cycle
+
+
 (please note any difficulties or challenges in porting here)
