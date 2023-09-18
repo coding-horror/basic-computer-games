@@ -41,6 +41,7 @@ end function
 // Bonus little feature when running in Mini Micro: display a header bar
 // always at the top of the screen.
 drawHeaders = function
+	if version.hostName != "Mini Micro" then return
 	display(2).mode = displayMode.text; td = display(2)
 	td.color = text.color; td.backColor = color.black
 	td.row = 25; td.column = 0

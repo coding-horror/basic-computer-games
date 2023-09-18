@@ -14,7 +14,7 @@ words.shuffle
 responses = ["Right","Correct","Fine","Good!","Check"]
 
 print " " * 33 + "SYNONYM"
-print " " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+print " " * 15 + "Creative Computing  Morristown, New Jersey"
 print; print; print
 print "A synonym of a word means another word in the English"
 print "language which has the same or very nearly the same meaning."
