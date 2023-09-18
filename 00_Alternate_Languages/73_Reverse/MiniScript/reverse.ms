@@ -32,21 +32,21 @@ printState = function
 	print;print digits.join(" "); print
 end function
 
-print " " * 32 + "REVERSE"
-print " " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+print " " * 32 + "Reverse"
+print " " * 15 + "Creative Computing  Morristown, New Jersey"
 print; print; print
 print "Reverse -- a game of skill"
 print
 
-ans = input("Do you want the rules? ")
+ans = input("Do you want the rules? ") + " "
 if ans != null and ans[0].lower == "y" then showRules
 
-while 1
+while true
 	turns = 0
 	digits = range(1, num)
 	digits.shuffle
 	print;print "Here we go ... the list is:"
-	while 1
+	while true
 		printState
 		amt = input("How many shall I reverse? ").val
 		if amt == null or amt == 0 then break
@@ -64,8 +64,8 @@ while 1
 		end if
 	end while
 	print
-	ans = input("Try again (YES or NO)? ")
+	ans = input("Try again (YES or NO)? ") + " "
 	print
-	if ans == null or ans[0].lower == "n" then break
+	if ans == null or ans[0].lower != "y" then break
 end while
 print "O.K. Hope you had fun!!"
