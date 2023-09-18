@@ -11,16 +11,16 @@ instructions = function
 	print
 end function
 
-print " " * 34 + "STARS"
-print " " * 15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+print " " * 34 + "Stars"
+print " " * 15 + "Creative Computing  Morristown, New Jersey"
 print; print; print
 
-ans = input("Do you want instructions? ").lower
+ans = input("Do you want instructions? ").lower + " "
 if ans[0] == "y" then
 	instructions
 end if
 
-while 1
+while true
 	print
 	print "OK, I am thinking of a number, start guessing."
 	starNum = floor(rnd * kMaxNum) + 1
