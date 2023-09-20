@@ -15,6 +15,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- There are valid board positions that will cause the program to print "ILLEGAL BOARD PATTERN" and break.  For example: human 8,5; computer 1,5; human 9,5; computer 3,5; human 7,5.  This is a valid game-over pattern, but it is not detected as such because of incorrect logic in lines 240-320 (intended to detect whether the computer has any legal moves).
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

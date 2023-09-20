@@ -15,6 +15,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- The value of some furs are not changed from the previous fort when you select fort 2 or 3.  As a result, you will get a different value for your firs depending on whether you have previously visited a different fort.  (All fur values are set when you visit Fort 1.)
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

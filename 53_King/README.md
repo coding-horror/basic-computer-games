@@ -78,3 +78,18 @@ On basic line 1310 we see this:
 but it should probably be:
 
     1310 IF J=0 THEN 1324
+
+### Bug 5
+
+On basic line 1390 the income from tourism is calculated:
+
+```
+1390 A=INT(A+Q)
+1400 V1=INT(((B-P1)*22)+(RND(1)*500))
+1405 V2=INT((2000-D)*15)
+1410 PRINT " YOU MADE";ABS(INT(V1-V2));"RALLODS FROM TOURIST TRADE."
+```
+
+It is very easily possible that `V2` is larger than `V1` e.g. if all of the land has been sold. In the original game this does not make a difference because of Bug 1 (see above).
+
+However, judging by how `V1` and `V2` are handled in the code, it looks like `V1` is the basic income from tourism and `V2` is a deduction for pollution. When `ABS(INT(V1-V2))` is used as earnings from tourism, the player actually _gets_ money for a large enough pollution. So a better solution would be to let `V1 - V2` cap out at 0, so once the pollution is large enough, there is no income from tourists anymore.

@@ -14,6 +14,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- The weakness numbers printed in the original BASIC program are wrong.  It says 4=TRAP SHOTS, 5=PUTTING, but in the code, trap shots and putting are 3 and 4, respectively.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

@@ -15,6 +15,11 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- The original game misspells "unguarded" on line 1751.
+- In an initial army attack, the program claims that the computer loses 2/3 of its army, but it actually loses its entire army (lines 150-155).
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

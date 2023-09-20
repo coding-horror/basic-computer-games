@@ -24,5 +24,6 @@ should be more readable.
  - If the computer moves a checker to the bottom row, it promotes, but
    leaves the original checker in place. (See line 1240)
  - Human players may move non-kings as if they were kings. (See lines 1590 to 1810)
- - Human players are not required to jump if it is possible.
+ - Human players are not required to jump if it is possible, and may make a number
+   other illegal moves (jumping their own pieces, jumping empty squares, etc.).
  - Curious writing to "I" variable without ever reading it. (See lines 1700 and 1806)

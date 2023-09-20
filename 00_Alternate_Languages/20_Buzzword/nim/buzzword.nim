@@ -1,0 +1,34 @@
+import std/[random,strutils]
+
+randomize()
+
+const
+  words1 = ["ABILITY","BASAL","BEHAVIORAL","CHILD-CENTERED","DIFFERENTIATED","DISCOVERY","FLEXIBLE",
+    "HETEROGENEOUS","HOMOGENEOUS","MANIPULATIVE","MODULAR","TAVISTOCK","INDIVIDUALIZED"]
+  words2 = ["LEARNING","EVALUATIVE","OBJECTIVE","COGNITIVE","ENRICHMENT","SCHEDULING","HUMANISTIC",
+    "INTEGRATED","NON-GRADED","TRAINING","VERTICAL AGE","MOTIVATIONAL","CREATIVE"]
+  words3 = ["GROUPING","MODIFICATION","ACCOUNTABILITY","PROCESS","CORE CURRICULUM","ALGORITHM", "PERFORMANCE",
+    "REINFORCEMENT","OPEN CLASSROOM","RESOURCE","STRUCTURE","FACILITY","ENVIRONMENT"]
+
+var
+  stillplaying: bool = true
+  prompt: string
+
+echo spaces(26), "BUZZWORD GENERATOR"
+echo spaces(15), "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+echo "\n"
+echo "THIS PROGRAM PRINTS HIGHLY ACCEPTABLE PHRASES IN"
+echo "'EDUCATOR-SPEAK' THAT YOU CAN WORK INTO REPORTS"
+echo "AND SPEECHES.  AFTER EACH PHRASE, HIT 'ENTER' FOR"
+echo "ANOTHER PHRASE, OR TYPE 'N' TO QUIT."
+echo "\n"
+echo "HERE'S THE FIRST PHRASE..."
+
+while stillplaying:
+  echo ""
+  echo words1[rand(0..12)], " ", words2[rand(0..12)], " ", words3[rand(0..12)]
+  prompt = readLine(stdin).normalize()
+  if prompt.substr(0, 0) == "n":
+    stillplaying = false
+
+echo "COME BACK WHEN YOU NEED HELP WITH ANOTHER REPORT!"

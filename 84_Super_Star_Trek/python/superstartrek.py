@@ -335,7 +335,6 @@ class Game:
             "                    THE USS ENTERPRISE --- NCC-1701\n"
             "\n\n\n\n"
         )
-        self.world = World()
         world = self.world
         print(
             "YOUR ORDERS ARE AS FOLLOWS:\n"

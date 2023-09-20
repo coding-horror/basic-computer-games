@@ -13,6 +13,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- If you play as Japan and say it is not your first mission, it is impossible to complete your mission; the only possible outcomes are "you made it through" or "boom".  Moreover, the odds of each outcome depend on a variable (R) that is only set if you played a previous mission as a different side.  It's possible this is an intentional layer of complexity meant to encourage repeat play, but it's more likely just a logical error.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

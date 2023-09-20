@@ -85,7 +85,7 @@ def print_intro() -> None:
     print("SET BURN RATE OF RETRO ROCKETS TO ANY VALUE BETWEEN")
     print("0 (FREE FALL) AND 200 (MAXIMUM BURN) POUNDS PER SECOND.")
     print("SET NEW BURN RATE EVERY 10 SECONDS.\n")
-    print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,500 LBS.\n\n\n")
+    print("CAPSULE WEIGHT 32,500 LBS; FUEL WEIGHT 16,000 LBS.\n\n\n")
     print("GOOD LUCK\n")
 
 
@@ -127,7 +127,7 @@ class SimulationClock:
 class Capsule:
     altitude: float = 120  # in miles above the surface
     velocity: float = 1  # downward
-    m: float = 33000  # mass_with_fuel
+    m: float = 32500  # mass_with_fuel
     n: float = 16500  # mass_without_fuel
     g: float = 1e-3
     z: float = 1.8

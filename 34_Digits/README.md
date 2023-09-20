@@ -18,4 +18,5 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The program contains a lot of mysterious and seemingly arbitrary constants.  It's not clear there is any logic or rationality behind it.
+- The key equation involved in the guess (line 700) involves a factor of `A`, but `A` is always 0, making that term meaningless.  As a result, all the work to build and update array K and value Z2 appear to be meaningless, too.
