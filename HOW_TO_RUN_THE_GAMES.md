@@ -23,7 +23,7 @@ Alternatively, for non-dotnet compatible translations, you will need [Visual Stu
 
 ## java
 
-The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
+The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelJ][def]
 
 To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [Open JDK](https://openjdk.java.net/)).
 
@@ -120,3 +120,5 @@ If you don't already have Rust on your computer, you can follow the instruction 
 1. From the command-line, navigate to the corresponding directory.
 2. Run the following command.
    * `cargo run`
+
+[def]: https://www.jetbrains.com/idea/
