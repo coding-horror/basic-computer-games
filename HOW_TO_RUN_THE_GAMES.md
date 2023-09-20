@@ -29,7 +29,9 @@ To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https:/
 
 1. Navigate to the corresponding directory.
 1. Compile the program with `javac`:
-   * eg. `javac AceyDuceyGame.java`
+   * eg. `**```python
+   javac
+   ```** AceyDuceyGame.java`
 1. Run the compiled program with `java`:
    * eg. `java AceyDuceyGame`
 
@@ -68,7 +70,7 @@ In addition to the java runtime you will need the `kotlinc` compiler, which can 
 
 The pascal examples can be run using [Free Pascal](https://www.freepascal.org/). Additionally, `.lsi` project files can be opened with the [Lazarus Project IDE](https://www.lazarus-ide.org/).
 
-The pascal examples include both *simple* (single-file) and *object-oriented* (in the `/object-pascal`directories) examples.
+The pascal examples include both ___simple_ (single-file) and_o**bject-oriented_ (in the `/object-pascal`directories) examples.
 
 1. You can compile the program from the command line with the `fpc` command.
    * eg. `fpc amazing.pas`
@@ -92,7 +94,9 @@ The python translations can be run from the command line by using the `py` inter
    * eg. `python aceyducey.py`
 
 **Note**
-
+{
+    "MD013": false
+}
 Some translations include multiple versions for python, such as `acey ducey` which features versions for Python 2 (`aceyducey.py`) and Python 3 (`acey_ducey.py`) as well as an extra object-oriented version (`acey_ducey_oo.py`).
 
 You can manage and use different versions of python with [pip](https://pypi.org/project/pip/).
