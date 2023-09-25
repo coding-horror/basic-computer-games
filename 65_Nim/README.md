@@ -28,3 +28,7 @@ http://www.vintage-basic.net/games.html
 #### Porting Notes
 
 This can be a real challenge to port because of all the `GOTO`s going out of loops down to code. You may need breaks and continues, or other techniques.
+
+#### Known Bugs
+
+- If, after the player moves, all piles are gone, the code prints "MACHINE LOSES" regardless of the win condition (when line 1550 jumps to line 800).  This should instead jump to line 800 ("machine loses") if W=1, but jump to 820 ("machine wins") if W=2.

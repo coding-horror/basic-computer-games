@@ -15,6 +15,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- The program does no validation of its input, and crashes if you enter coordinates outside the valid range.  (Ports may choose to improve on this, for example by repeating the prompt until valid coordinates are given.)
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
