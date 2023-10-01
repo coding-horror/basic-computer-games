@@ -1,5 +1,5 @@
-print ""*30 + "POETRY"
-print ""*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
+print " "*30 + "POETRY"
+print " "*15 + "CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY"
 print; print; print
 
 I = 0; J = 0; K = 0; U = 0
