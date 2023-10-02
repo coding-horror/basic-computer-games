@@ -17,4 +17,4 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The program keeps a count of how often each number comes up in array `X`, but never makes use of this information.
