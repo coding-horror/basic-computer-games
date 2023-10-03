@@ -30,4 +30,6 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-(please note any difficulties or challenges in porting here)
+- The program begins by switching on `I`, which has not been initialized.  We should probably initialize this to 0, though this means the output always begins with the phrase "midnight dreary".
+
+- Though the program contains an END statement (line 999), it is unreachable.  The program continues to generate output until it is forcibly interrupted.

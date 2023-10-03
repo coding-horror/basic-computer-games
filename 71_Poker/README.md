@@ -15,6 +15,17 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- If you bet more than the computer has, it will still see you, resulting in a negative balance.  (To handle this properly, the computer would need to go "all in" and reduce your bet to an amount it can match; or else lose the game, which is what happens to the human player in the same situation.)
+
+- If you are low on cash and sell your watch, then make a bet much smaller than the amount you just gained from the watch, it sometimes nonetheless tells you you "blew your wad" and ends the game.
+
+- When the watch is sold (in either direction), the buyer does not actually lose any money.
+
+- The code in the program about selling your tie tack is unreachable due to a logic bug.
+
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
