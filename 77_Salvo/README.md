@@ -26,7 +26,9 @@ http://www.vintage-basic.net/games.html
 
 #### Porting Notes
 
-As per the analysis in
+The program does no validation of ship positions; your ship coordinates may be scattered around the board in any way you like.  (Computer ships will not do this, but they may be placed diagonally in such a way that they cross each other.)  Scattering your ships in this way probably defeats whatever all that spaghetti-code logic the computer is using to pick its moves, which is based on the assumption of contiguous ships.
+
+Moreover: as per the analysis in
 
 https://forums.raspberrypi.com/viewtopic.php?p=1997950#p1997950
 
@@ -40,4 +42,5 @@ This typo is interesting because it causes the program to play by a much weaker 
 
 `3970 K(R,S)=K(R,S)+E(U)-2*INT(H(U)+.5)`
 
-and to change the JavaScript program accordingly.
+and to change the JavaScript program accordingly.  (And note that some ports — looking at you, Python — do not implement the original strategy at all, but merely pick random unshot locations for every shot.)
+
