@@ -4,6 +4,9 @@ Conversion to [MiniScript](https://miniscript.org).
 
 Ways to play:
 
+0. "Try-It!" page on the web:
+Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of train.ms, and click the "Run Script" button.
+
 1. Command-Line MiniScript:
 Download for your system from https://miniscript.org/cmdline/, install, and then run the program with a command such as:
 
@@ -17,5 +20,3 @@ Download Mini Micro from https://miniscript.org/MiniMicro/, launch, and then cli
 	load "train"
 	run
 ```
-3. "Try-It!" page on the web:
-Go to https://miniscript.org/tryit/, clear the default program from the source code editor, paste in the contents of train.ms, and click the "Run Script" button.
