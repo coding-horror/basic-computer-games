@@ -6,10 +6,10 @@ CREATIVE COMPUTING  MORRISTOWN, NEW JERSY
 
 ]]
 
-local MAX_DISKS = 7 --"<const>" can be used starting in Lua 5.4, as such: "local MAX_DISKS <const> = 7"
-local MAX_DISK_SIZE = 15
-local MAX_MOVES = 128
-local NUM_TOWERS = 3
+local MAX_DISKS <const> = 7
+local MAX_DISK_SIZE <const> = 15
+local MAX_MOVES <const> = 128
+local NUM_TOWERS <const> = 3
 
 local towers = {
     { size = 0, elem = {} },
