@@ -11,9 +11,9 @@ math.randomseed(os.time())
 local ERROR_MARGIN <const> = 5.0
 
 function play()
-    local car_speed = math.random(40, 65) --Between 40 and 64
-    local delta_time = math.random(5, 20) --Between 5 and 19
-    local train_speed = math.random(20, 39) --Between 20 and 38
+    local car_speed = 25*math.random() + 40--Between 40 and 64
+    local delta_time = 15*math.random() + 5--Between 5 and 19
+    local train_speed = 19*math.random() + 20--Between 20 and 38
 
     print( string.format("\nA CAR TRAVELING AT %u MPH CAN MAKE A CERTAIN TRIP IN %u HOURS LESS THAN A TRAIN TRAVELING AT %u MPH.", car_speed, delta_time, train_speed) )
 
