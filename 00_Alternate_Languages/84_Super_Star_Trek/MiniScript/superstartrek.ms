@@ -23,6 +23,139 @@ import "stringUtil"
 import "mathUtil"
 
 //=================================================================
+// Instructions
+// (This was originally in a separate program, superstartreckins.bas,
+// for memory reasons.  I've chosen to incorporate it into the main
+// program, as that's more convenient for everybody.)
+//=================================================================
+Instructions = {}
+Instructions.print = function
+	print
+	print "At each pause, press Return to continue."
+	input
+
+	print "      Instructions for 'Super Star Trek'"
+	print
+	print "1. When you see \Command?\ printed, enter one of the legal"
+	print "     commands (NAV,SRS,LRS,PHA,TOR,SHE,DAM,COM, OR XXX)."
+	print "2. If you should type in an illegal command, you'll get a short"
+	print "     list of the legal commands printed out."
+	print "3. Some commands require you to enter data (for example, the"
+	print "     'NAV' command comes back with 'Course (1-9)?'.)  If you"
+	print "     type in illegal data (like negative numbers), that command"
+	print "     will be aborted"
+	print
+	print "     The galaxy is divided into an 8 x 8 quadrant grid,"
+	print "and each quadrant is further divided into an 8 x 8 sector grid."
+	print
+	print "     You will be assigned a starting point somewhere in the"
+	print "galaxy to begin a tour of duty as comander of the starship"
+	print "\Enterprise\; your mission: to seek and destroy the fleet of"
+	print "klingon warwhips which are menacing the United Federation of"
+	print "Planets."
+	input
+	
+	print
+	print "     You have the following commands available to you as captain"
+	print "of the starship Enterprise:"
+	print
+	print "\NAV\ command = warp engine control --"
+	print "     course is in a circular numerical      4  3  2"
+	print "     vector arrangement as shown             . | ."
+	print "     integer and real values may be           .|."
+	print "     used.  (Thus course 1.5 is half-     5 ---*--- 1"
+	print "     way between 1 and 2.)                    .|."
+	print "                                             . | ."
+	print "     Values may approach 9.0, which         6  7  8"
+	print "     itself is equivalent to 1.0"
+	print "                                            course"
+	print "     One warp factor is the size of "
+	print "     one quadrant.  Therefore, to get"
+	print "     from quadrant 6,5 to 5,5, you would"
+	print "     use course 3, warp factor 1."
+	input
+	
+	print
+	print "\SRS\ command = short range sensor scan"
+	print "     Shows you a scan of your present quadrant."
+	print
+	print "     Symbology on your sensor screen is as follows:"
+	print "        <*> = your starship's position"
+	print "        +K+ = klingon battle cruiser"
+	print "        >!< = federation starbase (refuel/repair/re-arm here!)"
+	print "         *  = star"
+	print
+	print "     A condensed 'status report' will also be presented."
+	input
+	
+	print
+	print "\LRS\ command = long range sensor scan"
+	print "     Shows conditions in space for one quadrant on each side"
+	print "     of the enterprise (which is in the middle of the scan)."
+	print "     The scan is coded in the form \###\, where the units digit"
+	print "     is the number of stars, the tens digit is the number of"
+	print "     starbases, and the hundresds digit is the number of"
+	print "     klingons."
+	print
+	print "     Example - 207 = 2 klingons, no starbases, & 7 stars."
+	input
+	
+	print
+	print "\PHA\ command = phaser control."
+	print "     Allows you to destroy the klingon battle cruisers by "
+	print "     zapping them with suitably large units of energy to"
+	print "     deplete their shield power.  (Remember, klingons have"
+	print "     phasers too!)"
+	print
+	print "\TOR\ command = photon torpedo control"
+	print "     Torpedo course is the same as used in warp engine control."
+	print "     If you hit the klingon vessel, he is destroyed and"
+	print "     cannot fire back at you.  If you miss, you are subject to"
+	print "     his phaser fire.  In either case, you are also subject to "
+	print "     the phaser fire of all other klingons in the quadrant."
+	print
+	print "     The library-computer (\COM\ command) has an option to "
+	print "     compute torpedo trajectory for you (option 2)."
+	input
+	
+	print
+	print "\SHE\ command = shield control"
+	print "     Defines the number of energy units to be assigned to the"
+	print "     shields.  Energy is taken from total ship's energy.  Note"
+	print "     that the status display total energy includes shield energy."
+	print
+	print "\DAM\ command = dammage control report"
+	print "     Gives the state of repair of all devices, where a negative"
+	print "     'state of repair' shows that the device is temporarily"
+	print "     damaged."
+	input
+	
+	print
+	print "\COM\ command = library-computer"
+	print "     The library-computer contains six options:"
+	print "     option 0 = cumulative galactic record"
+	print "         This option showes computer memory of the results of all"
+	print "        previous short and long range sensor scans."
+	print "     option 1 = status report"
+	print "        This option shows the number of klingons, stardates,"
+	print "        and starbases remaining in the game."
+	print "     option 2 = photon torpedo data"
+	print "        Which gives directions and distance from the enterprise"
+	print "        to all klingons in your quadrant."
+	print "     option 3 = starbase nav data"
+	print "        This option gives direction and distance to any "
+	print "        starbase within your quadrant."
+	print "     option 4 = direction/distance calculator"
+	print "        This option allows you to enter coordinates for"
+	print "        direction/distance calculations."
+	print "     option 5 = galactic /region name/ map"
+	print "        This option prints the names of the sixteen major "
+	print "        galactic regions referred to in the game."
+	input
+	print
+end function
+
+//=================================================================
 // Constants (tweak these to make the game easier or harder!)
 //=================================================================
 Constant = {}
@@ -1081,6 +1214,7 @@ Game.addCommand "TOR", "to fire photon torpedos", @Game.torpedos
 Game.addCommand "SHE", "to raise or lower shields", @Game.shieldControl
 Game.addCommand "DAM", "for damage control reports", @Game.damageControl
 Game.addCommand "COM", "to call on library-computer", @Game.computer
+Game.addCommand "HLP", "for help, i.e. instructions", @Instructions.print	// (not in original game)
 Game.addCommand "XXX", "to resign your command", @Game.endGame
 
 
@@ -1111,6 +1245,19 @@ Game.mainLoop = function
 		end if
 	end while
 end function
+
+for i in range(1,12); print; end for
+print " "*10 + "*************************************"
+print " "*10 + "*                                   *"
+print " "*10 + "*                                   *"
+print " "*10 + "*      * * SUPER STAR TREK * *      *"
+print " "*10 + "*                                   *"
+print " "*10 + "*                                   *"
+print " "*10 + "*************************************"
+for i in range(1,8); print; end for
+if getYesNo("Do you need instructions (y/n)") == "yes" then
+	Instructions.print
+end if
 
 while true
 	game = new Game
