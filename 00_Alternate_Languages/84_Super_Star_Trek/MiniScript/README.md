@@ -1,6 +1,6 @@
 Original source downloaded from [Vintage Basic](http://www.vintage-basic.net/games.html).
 
-Conversion to [MiniScript](https://miniscript.org).
+Conversion to [MiniScript](https://miniscript.org).  Note that while the original game separated the instructions into a separate BASIC program (probably due to memory limitations), we have chosen here to combine them into one MiniScript program with both instructions and gameplay.  The instructions are available at the start of the game, and later at any time via the HLP command.
 
 Ways to play:
 
