@@ -15,6 +15,8 @@ There are at least two bugs from the original BASIC:
 1. Code should only allow player to input valid 3D coordinates where every digit is between 1 and 4, but the original code allows any value between 111 and 444 (such as 297, for instance).
 2. If the player moves first and the game ends in a draw, the original program will still prompt the player for a move instead of calling for a draw.
 
+Also note that while the file is called qubit.bas (with a "T"), the title shown in the program listing is "QUBIC" (with "C")... and the sample output shows "TIC TAC TOE" instead of either of these.
+
 ---
 
 As published in Basic Computer Games (1978):

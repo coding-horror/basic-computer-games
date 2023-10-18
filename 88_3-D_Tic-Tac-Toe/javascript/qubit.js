@@ -193,7 +193,7 @@ function select_move() {
     }
     if (j > 5 - a)
         return false;
-    xa[ma[i][j]] = s;
+    xa[ma[i][j]] = 5;
     m = ma[i][j];
     print("MACHINE TAKES");
     show_square(m);
