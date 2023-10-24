@@ -1,22 +1,17 @@
 #include <stdio.h>
 #include <string.h>
-
 #define TRUE 1
 #define FALSE 0
 #define MAX_INPUT_LENGTH 80
-
 void tab(int number_of_spaces);
 void get_input(char *input_buffer);
 int strings_match(char *string1, char *string2);
-
 int main() {
    int done = FALSE;
    int paid = FALSE;
    int maybe_more, sure;
-   
    char name[MAX_INPUT_LENGTH];
    char reply[MAX_INPUT_LENGTH];
-   
    tab(33);
    printf("HELLO\n");
    tab(15);
@@ -26,14 +21,12 @@ int main() {
    printf("\n\nWHAT'S YOUR NAME ");
    get_input(name);
    printf("\nHI THERE, %s, ARE YOU ENJOYING YOURSELF HERE ", name);
-
    get_input(reply);
    while (!strings_match(reply, "YES") && !strings_match(reply, "NO")) {
       printf("%s, I DON'T UNDERSTAND YOUR ANSWER OF '%s'.\n", name, reply);
       printf("PLEASE ANSWER 'YES' OR 'NO'. DO YOU LIKE IT HERE ");
       get_input(reply);  
    }
-   
    if (strings_match(reply, "YES")) {
       printf("I'M GLAD TO HEAR THAT, %s.\n", name);
    }
@@ -41,11 +34,9 @@ int main() {
       printf("OH, I'M SORRY TO HEAR THAT, %s. MAYBE WE CAN "
          "BRIGHTEN UP YOUR VISIT A BIT.\n", name);
    }
-
    printf("\nSAY, %s, I CAN SOLVE ALL KINDS OF PROBLEMS EXCEPT "
       "THOSE DEALING WITH GREECE.  WHAT KIND OF PROBLEMS DO "
       "YOU HAVE (ANSWER SEX, HEALTH, MONEY, OR JOB) ", name);
-
    while (!done) {
       get_input(reply);
       
@@ -55,7 +46,6 @@ int main() {
             "REALLY BEAT ON MY KEYBOARD.  MY ADVICE TO YOU, %s, IS TO "
             "OPEN A RETAIL COMPUTER STORE.  IT'S GREAT FUN.\n\n", name, name);
       }
-
       else if (strings_match(reply, "MONEY")) {
          printf("SORRY, %s, I'M BROKE TOO.  WHY DON'T YOU SELL "
             "ENCYCLOPEADIAS OR MARRY SOMEONE RICH OR STOP EATING "
@@ -74,23 +64,23 @@ int main() {
          
          sure = FALSE;
          while (!sure) {
-			 get_input(reply);
-			 if (strings_match(reply, "TOO MUCH")) {
-				printf("YOU CALL THAT A PROBLEM?!!  I SHOULD HAVE SUCH PROBLEMS!\n");
-				printf("IF IT BOTHERS YOU, %s, TAKE A COLD SHOWER.\n\n", name);
-				sure = TRUE;
-			 }
-			 else if (strings_match(reply, "TOO LITTLE")) {
-				printf("WHY ARE YOU HERE IN SUFFERN, %s? YOU SHOULD BE "
-				   "IN TOKYO OR NEW YORK OR AMSTERDAM OR SOMEPLACE WITH SOME "
-				   "REAL ACTION.\n\n", name);
-				sure = TRUE;
-			 }
-			 else {
-				printf("DON'T GET ALL SHOOK, %s, JUST ANSWER THE QUESTION "
-				"WITH 'TOO MUCH' OR 'TOO LITTLE'. WHICH IS IT ", name);
-			 }
-		  }
+         get_input(reply);
+            if (strings_match(reply, "TOO MUCH")) {
+               printf("YOU CALL THAT A PROBLEM?!!  I SHOULD HAVE SUCH PROBLEMS!\n");
+               printf("IF IT BOTHERS YOU, %s, TAKE A COLD SHOWER.\n\n", name);
+               sure = TRUE;
+            }
+            else if (strings_match(reply, "TOO LITTLE")) {
+               printf("WHY ARE YOU HERE IN SUFFERN, %s? YOU SHOULD BE "
+                  "IN TOKYO OR NEW YORK OR AMSTERDAM OR SOMEPLACE WITH SOME "
+                  "REAL ACTION.\n\n", name);
+               sure = TRUE;
+            }
+            else {
+               printf("DON'T GET ALL SHOOK, %s, JUST ANSWER THE QUESTION "
+                  "WITH 'TOO MUCH' OR 'TOO LITTLE'. WHICH IS IT ", name);
+            }
+         }
       }
       
       else {  // not one of the prescribed categories
@@ -115,7 +105,6 @@ int main() {
          }
       } // no further questions
    } // end of 'not done' loop
-   
    printf("\nTHAT WILL BE $5.00 FOR THE ADVICE, %s.\n", name);
    printf("PLEASE LEAVE THE MONEY ON THE TERMINAL.\n");
    // pause a few seconds
@@ -142,23 +131,18 @@ int main() {
       }
    }
 }
-
-
 void tab(int number_of_spaces) {
    for (int i=0; i < number_of_spaces; i++)
       putchar(' ');
 }
-
-
 void get_input(char *input_buffer) {
    fgets(input_buffer, MAX_INPUT_LENGTH - 1, stdin);
    input_buffer[strcspn(input_buffer, "\n")] = '\0';    // trim the trailing line break
 }
-
-
 int strings_match(char *string1, char *string2) {
-	if (strncmp(string1, string2, MAX_INPUT_LENGTH - 1) != 0)
-	   return FALSE;
-	else // strings match, at least within maximum input line length
-	   return TRUE;
+   if (strncasecmp(string1, string2, MAX_INPUT_LENGTH - 1) != 0)
+      return FALSE;
+   else // strings match, at least within maximum input line length
+      return TRUE;
 }
+
