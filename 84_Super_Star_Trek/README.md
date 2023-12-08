@@ -3,12 +3,12 @@
 #### Brief History
 Many versions of Star Trek have been kicking around various college campuses since the late sixties. I recall playing one at Carnegie-Mellon Univ. in 1967 or 68, and a very different one at Berkeley. However, these were a far cry from the one written by Mike Mayfield of Centerline Engineering and/or Custom Data. This was written for an HP2000C and completed in October 1972. It became the “standard” Star Trek in February 1973 when it was put in the HP contributed program library and onto a number of HP Data Center machines.
 
-In the summer of 1973, I converted the HP version to BASIC-PLUS for DEC’s RSTS-11 compiler and added a few bits and pieces while I was at it. Mary Cole at DEC contributed enormously to this task too. Later that year I published it under the name SPACWE (Space War — in retrospect, an incorrect name) in my book _101 Basic Computer Games_.It is difficult today to find an interactive computer installation that does not have one of these versions of Star Trek available.
+In the summer of 1973, I converted the HP version to BASIC-PLUS for DEC’s RSTS-11 compiler and added a few bits and pieces while I was at it. Mary Cole at DEC contributed enormously to this task too. Later that year I published it under the name SPACWR (Space War — in retrospect, an incorrect name) in my book _101 Basic Computer Games_. It is difficult today to find an interactive computer installation that does not have one of these versions of Star Trek available.
 
 #### Quadrant Nomenclature
 Recently, certain critics have professed confusion as to the origin on the “quadrant” nomenclature used on all standard CG (Cartesian Galactic) maps. Naturally, for anyone with the remotest knowledge of history, no explanation is necessary; however, the following synopsis should suffice for the critics:
 
-As everybody schoolboy knows, most of the intelligent civilizations in the Milky Way had originated galactic designations of their own choosing well before the Third Magellanic Conference, at which the so-called “2⁶ Agreement” was reached. In that historic document, the participant cultures agreed, in all two-dimensional representations of the galaxy, to specify 64 major subdivisions, ordered as an 8 x 8 matrix. This was partially in deference to the Earth culture (which had done much in the initial organization of the Federation), whose century-old galactic maps had landmarks divided into four “quadrants,” designated by ancient “Roman Numerals” (the origin of which has been lost).
+As every schoolboy knows, most of the intelligent civilizations in the Milky Way had originated galactic designations of their own choosing well before the Third Magellanic Conference, at which the so-called “2⁶ Agreement” was reached. In that historic document, the participant cultures agreed, in all two-dimensional representations of the galaxy, to specify 64 major subdivisions, ordered as an 8 x 8 matrix. This was partially in deference to the Earth culture (which had done much in the initial organization of the Federation), whose century-old galactic maps had always shown 16 major regions named after celestial landmarks divided into four “quadrants,” designated by ancient “Roman Numerals” (the origin of which has been lost).
 
 To this day, the official logs of starships originating on near-Earth starbases still refer to the major galactic areas as “quadrants.”
 
@@ -17,7 +17,7 @@ The relation between the Historical and Standard nomenclatures is shown in the s
 |   | 1            | 2  | 3   | 4  | 5          | 6  | 7   | 8  |
 |---|--------------|----|-----|----|------------|----|-----|----|
 | 1 |    ANTARES   |    |     |    |   SIRIUS   |    |     |    |
-|   | I            | II | III | IV | I          |    | III | IV |
+|   | I            | II | III | IV | I          | II | III | IV |
 | 2 |     RIGEL    |    |     |    |    DENEB   |    |     |    |
 |   | I            | II | III | IV | I          | II | III | IV |
 | 3 |    PROCYON   |    |     |    |   CAPELLA  |    |     |    |
@@ -88,11 +88,13 @@ The relation between the Historical and Standard nomenclatures is shown in the s
 
 15. This version of Star Trek was created for a Data General Nova 800 system with 32K or core. So that it would fit, the instructions are separated from the main program via a CHAIN. For conversion to DEC BASIC-PLUS, Statement 160 (Randomize) should be moved after the return from the chained instructions, say to Statement 245. For Altair BASIC, Randomize and the chain instructions should be eliminated.
 
+† Designates trademark of Paramount Pictures Corporation. Used by permission of Paramount Pictures Corporation.
+
 ---
 
 As published in Basic Computer Games (1978):
 - [Atari Archives](https://www.atariarchives.org/basicgames/showpage.php?page=157)
-- [Annarchive](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf#page=166)
+- [Annarchive](https://annarchive.com/files/Basic_Computer_Games_Microcomputer_Edition.pdf#page=172)
 
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
@@ -109,7 +111,6 @@ Many of the programs in this book and this collection have bugs in the original 
 - line `4410` : `D(7)` should be `D(6)`
 - lines `8310`,`8330`,`8430`,`8450` : Division by zero is possible
 - line `440` : `B9` should be initialised to 0, not 2
-
 
 #### External Links
  - C++: https://www.codeproject.com/Articles/28399/The-Object-Oriented-Text-Star-Trek-Game-in-C
