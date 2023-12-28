@@ -86,7 +86,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 06_Banner              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
 | 08_Batnum              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 09_Battle              | x      | x    | x          |        |     |      | x      |      |      | x     |
+| 09_Battle              | x      | x    | x          |        |     |      | x      |      | x    | x     |
 | 10_Blackjack           | x      | x    | x          |        |     |      | x      | x    | x    | x     |
 | 11_Bombardment         | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 12_Bombs_Away          | x      | x    | x          |        | x   | x    | x      |      |      | x     |
