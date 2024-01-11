@@ -9,7 +9,7 @@ splatMsg = ["Requiescat in pace.", "May the Angel of Heaven lead you into Paradi
 			"Pushing up daisies.", "Easy come, easy go."]
 
 history = []
-clear
+//clear		// (works on Mini Micro only)
 print " " * 33 + "Splat"
 print " " * 15 + "Creative Computing  Morristown, New Jersey"
 print;print;print

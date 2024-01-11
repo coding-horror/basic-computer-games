@@ -17,6 +17,10 @@ As published in Basic Computer Games (1978):
 Downloaded from Vintage Basic at
 http://www.vintage-basic.net/games.html
 
+#### Known Bugs
+
+- The original program does not correctly detect identical draws in the first and third position as a double (instead, it counts as a loss).  This is probably not intended.  Some of the ports fix this, so that any two matches count as a double.
+
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)

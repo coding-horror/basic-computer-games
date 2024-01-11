@@ -63,7 +63,7 @@ doOneGame = function
 	for i in range(1,12); ps[i][1] = "X"; end for
 	for i in range(1, 7); ps[1][i] = "X"; end for; ps[2][7] = "X"
 	secretWord = words.pull.upper
-	print "(Secret word: " + secretWord + ")"
+	//print "(Secret word: " + secretWord + ")"
 	visibleWord = ["-"] * secretWord.len
 	wrongGuesses = 0
 	while true

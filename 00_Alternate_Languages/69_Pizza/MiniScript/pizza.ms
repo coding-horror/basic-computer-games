@@ -78,7 +78,7 @@ while true
 			while true
 				inp = input("  Driver to " + name + ":  Where does " + buyer + " live? ")
 				inp = inp.replace(",", " ").replace("  ", " ")
-				inp = inp.split + [0,0]
+				inp = inp.split + ["0","0"]
 				guess = [inp[0].val, inp[1].val]
 				if 1 <= guess[0] <= 4 and 1 <= guess[1] <= 4 then break
 			end while
