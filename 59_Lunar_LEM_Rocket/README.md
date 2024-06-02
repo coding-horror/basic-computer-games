@@ -35,3 +35,33 @@ http://www.vintage-basic.net/games.html
 #### Porting Notes
 
 (please note any difficulties or challenges in porting here)
+
+### LUNAR
+
+Variables:
+
+`A`: Altitude in miles.  Up is positive.
+`V`: Velocity in miles / sec.  Down is positive.
+
+`M`: Weight of capsule in pounds, both fuel and machine
+`N`: Empty weight of capsule in pounds.  So, weight of fuel is M - N.
+
+`G`: Gravity in miles / sec^2, down is positive.
+`Z`: Exhaust velocity in miles / sec
+
+`L`: time in seconds since start of simulation.
+`K`: Burn rate for this 10 second turn, pounds of fuel per sec
+`T`: Time left in this 10 second turn, in seconds.
+`S`: Burn time in this 10 second turn, input to subroutine 420.
+
+Subroutines:
+
+330, Apply updates from one call to subroutine 420.
+
+370, If you started descending and ended ascending, figure out whether you hit the surface in between.
+
+420, Compute new velocity and altitude using the Tsiolkovsky rocket equation for S seconds:
+
+`Q`: Fraction of initial mass that's burnt, i.e. 1 - mf / mo, exactly what we need for the Taylor series of `ln` in the rocket equation. Local to this subroutine.
+`J`: Final velocity after S seconds, down is positive.  Return value.
+`I`: Altitude after S seconds, up is positive.  Return value.
