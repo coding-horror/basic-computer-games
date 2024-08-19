@@ -565,13 +565,9 @@ class Golf:
         ):
             self.putt = 10
             print("[PUTTER: average 10 yards]")
-            if odds(20):
-                msg = "Keep your head down.\n"
-            else:
-                msg = ""
-
+            msg = "Keep your head down.\n" if odds(20) else ""
             self.ask(
-                msg + "Choose your putt potency. (1-10)",
+                f"{msg}Choose your putt potency. (1-10)",
                 1,
                 10,
                 self.set_putter_and_stroke,
@@ -599,7 +595,7 @@ class Golf:
                 self.is_in_rough(self.ball)
                 or self.is_in_hazard(self.ball, GameObjType.SAND)
             )
-            and not (club_index == 8 or club_index == 9)
+            and club_index not in {8, 9}
             and odds(40)
         ):
             flags |= dub
@@ -637,11 +633,10 @@ class Golf:
                     flags |= slice_
                 else:
                     flags |= hook
+            elif odds(50):
+                flags |= hook
             else:
-                if odds(50):
-                    flags |= hook
-                else:
-                    flags |= slice_
+                flags |= slice_
 
         # beginner's luck !
         # If handicap is greater than 15, there's a 10% chance of avoiding all errors
@@ -664,21 +659,14 @@ class Golf:
         distance: float
         rnd = random.randint(1, 101)
 
-        if self.handicap < 15:
-            if rnd <= 25:
-                distance = club_amt - (club_amt * (self.handicap / 100.0))
-            elif rnd > 25 and rnd <= 75:
-                distance = club_amt
-            else:
-                distance = club_amt + (club_amt * 0.10)
+        if self.handicap < 15 and rnd <= 25 or self.handicap >= 15 and rnd <= 75:
+            distance = club_amt - (club_amt * (self.handicap / 100.0))
+        elif self.handicap < 15 and rnd <= 75 or self.handicap >= 15:
+            distance = club_amt
         else:
-            if rnd <= 75:
-                distance = club_amt - (club_amt * (self.handicap / 100.0))
-            else:
-                distance = club_amt
-
+            distance = club_amt + (club_amt * 0.10)
         if self.player_difficulty == 3 and odds(80):  # poor distance
-            distance = distance * 0.80
+            distance *= 0.80
 
         if (flags & luck) == luck:
             distance = club_amt
@@ -755,7 +743,7 @@ class Golf:
                 msg = "Your ball has gone to a watery grave."
             else:
                 msg = "Your ball is lost in the water."
-            print(msg + " Take a penalty stroke.")
+            print(f"{msg} Take a penalty stroke.")
             self.score_card_record_stroke(self.ball)
             self.tee_up()
             return
@@ -773,27 +761,18 @@ class Golf:
             return
 
         if (flags & in_cup) == in_cup:
-            if odds(50):
-                msg = "You holed it."
-            else:
-                msg = "It's in!"
+            msg = "You holed it." if odds(50) else "It's in!"
             print(msg)
             self.score_card_record_stroke(Ball(plot.x, plot.y, 0, GameObjType.BALL))
             self.report_current_score()
             return
 
-        if ((flags & slice_) == slice_) and not ((flags & on_green) == on_green):
-            if (flags & out_of_bounds) == out_of_bounds:
-                bad = "badly"
-            else:
-                bad = ""
+        if (flags & slice_) == slice_ and flags & on_green != on_green:
+            bad = "badly" if (flags & out_of_bounds) == out_of_bounds else ""
             print(f"You sliced{bad}: {plot.offline} yards offline.")
 
-        if ((flags & hook) == hook) and not ((flags & on_green) == on_green):
-            if (flags & out_of_bounds) == out_of_bounds:
-                bad = "badly"
-            else:
-                bad = ""
+        if (flags & hook) == hook and flags & on_green != on_green:
+            bad = "badly" if (flags & out_of_bounds) == out_of_bounds else ""
             print(f"You hooked{bad}: {plot.offline} yards offline.")
 
         if self.stroke_num > 1:
@@ -814,7 +793,7 @@ class Golf:
 
         if (flags & on_green) == on_green:
             if cup_distance < 4:
-                pd = str(cup_distance * 3) + " feet"
+                pd = f"{str(cup_distance * 3)} feet"
             else:
                 pd = f"{cup_distance} yards"
             print(f"You're on the green. It's {pd} from the pin.")
@@ -844,16 +823,10 @@ class Golf:
         if len(self.score_card[self.hole_num]) == (par - 3):
             print("Double Eagle! Unbelievable.")
 
-        total_par: int = 0
-        for i in range(1, self.hole_num + 1):
-            total_par += CourseInfo[i].par
-
+        total_par: int = sum(CourseInfo[i].par for i in range(1, self.hole_num + 1))
         print(" ")
         print("-----------------------------------------------------")
-        if self.hole_num > 1:
-            hole_str = "holes"
-        else:
-            hole_str = "hole"
+        hole_str = "holes" if self.hole_num > 1 else "hole"
         print(
             f" Total par for {self.hole_num} {hole_str} is: {total_par}. "
             f"Your total is: {self.score_card_get_total()}."
@@ -908,10 +881,7 @@ class Golf:
 
     def hazard_hit(self, h: Hazard, ball: Ball, hazard: GameObjType) -> bool:
         d = get_distance(Point(ball.X, ball.Y), Point(h.X, h.Y))
-        result = False
-        if (d < h.Radius) and h.Type == hazard:
-            result = True
-        return result
+        return d < h.Radius and h.Type == hazard
 
     def is_in_hazard(self, ball: Ball, hazard: GameObjType) -> bool:
         result: bool = False
@@ -938,9 +908,7 @@ class Golf:
         return self.score_card[self.hole_num][len(self.score_card[self.hole_num]) - 1]
 
     def score_card_get_total(self) -> int:
-        total: int = 0
-        for h in self.score_card:
-            total += len(h)
+        total: int = sum(len(h) for h in self.score_card)
         return total
 
     def ask(
@@ -963,11 +931,8 @@ class Golf:
             success = False
             n = 0
 
-        if success:
-            if n >= min_ and n <= max_:
-                callback(n)
-            else:
-                self.ask(question, min_, max_, callback)
+        if success and n >= min_ and n <= max_:
+            callback(n)
         else:
             self.ask(question, min_, max_, callback)
 

@@ -15,7 +15,7 @@ def show_intro() -> None:
     print(" " * 14 + "CREATIVE COMPUTING MORRISTOWN, NEW JERSEY")
     print("\n\n")
     print("I AM AT WAR WITH YOU.")
-    print("WE HAVE " + str(MAX_UNITS) + " SOLDIERS APIECE.")
+    print(f"WE HAVE {str(MAX_UNITS)} SOLDIERS APIECE.")
 
 
 def get_forces() -> None:
@@ -24,11 +24,11 @@ def get_forces() -> None:
     while True:
         print("DISTRIBUTE YOUR FORCES.")
         print("              ME              YOU")
-        print("ARMY           " + str(cpu_army) + "        ? ", end="")
+        print(f"ARMY           {str(cpu_army)}        ? ", end="")
         usr_army = int(input())
-        print("NAVY           " + str(cpu_navy) + "        ? ", end="")
+        print(f"NAVY           {str(cpu_navy)}        ? ", end="")
         usr_navy = int(input())
-        print("A. F.          " + str(cpu_air) + "        ? ", end="")
+        print(f"A. F.          {str(cpu_air)}        ? ", end="")
         usr_air = int(input())
         if (usr_army + usr_navy + usr_air) <= MAX_UNITS:
             break
@@ -38,7 +38,6 @@ def attack_first() -> None:
     global usr_army, usr_navy, usr_air
     global cpu_army, cpu_navy, cpu_air
 
-    num_units = 0
     unit_type = 0
 
     while True:
@@ -46,32 +45,28 @@ def attack_first() -> None:
         print("AND (3) FOR AIR FORCE.")
         print("?", end=" ")
         unit_type = int(input())
-        if not (unit_type < 1 or unit_type > 3):
+        if unit_type >= 1 and unit_type <= 3:
             break
 
+    num_units = 0
     while True:
         print("HOW MANY MEN")
         print("?", end=" ")
         num_units = int(input())
-        if not (
-            (num_units < 0)
-            or ((unit_type == 1) and (num_units > usr_army))
-            or ((unit_type == 2) and (num_units > usr_navy))
-            or ((unit_type == 3) and (num_units > usr_air))
+        if (
+            num_units >= 0
+            and (unit_type != 1 or num_units <= usr_army)
+            and (unit_type != 2 or num_units <= usr_navy)
+            and (unit_type != 3 or num_units <= usr_air)
         ):
             break
 
     if unit_type == 1:
         if num_units < (usr_army / 3):
-            print("YOU LOST " + str(num_units) + " MEN FROM YOUR ARMY.")
+            print(f"YOU LOST {str(num_units)} MEN FROM YOUR ARMY.")
             usr_army = usr_army - num_units
         elif num_units < (2 * usr_army / 3):
-            print(
-                "YOU LOST "
-                + str(int(num_units / 3))
-                + " MEN, BUT I LOST "
-                + str(int(2 * cpu_army / 3))
-            )
+            print(f"YOU LOST {int(num_units / 3)} MEN, BUT I LOST {int(2 * cpu_army / 3)}")
             usr_army = int(usr_army - (num_units / 3))
             cpu_army = 0
         else:
@@ -85,7 +80,7 @@ def attack_first() -> None:
             print("YOUR ATTACK WAS STOPPED!")
             usr_navy = usr_navy - num_units
         elif num_units < 2 * cpu_navy / 3:
-            print("YOU DESTROYED " + str(int(2 * cpu_navy / 3)) + " OF MY ARMY.")
+            print(f"YOU DESTROYED {int(2 * cpu_navy / 3)} OF MY ARMY.")
             cpu_navy = int(cpu_navy / 3)
         else:
             print("YOU SUNK ONE OF MY PATROL BOATS, BUT I WIPED OUT TWO")
@@ -113,7 +108,6 @@ def attack_first() -> None:
 def attack_second() -> None:
     global usr_army, usr_navy, usr_air, cpu_army, cpu_navy, cpu_air
     global plane_crash_win
-    num_units = 0
     unit_type = 0
 
     print()
@@ -130,18 +124,19 @@ def attack_second() -> None:
         print("ARMY=1  NAVY=2  AIR FORCE=3")
         print("? ", end="")
         unit_type = int(input())
-        if not ((unit_type < 1) or (unit_type > 3)):
+        if unit_type >= 1 and unit_type <= 3:
             break
 
+    num_units = 0
     while True:
         print("HOW MANY MEN")
         print("? ", end="")
         num_units = int(input())
-        if not (
-            (num_units < 0)
-            or ((unit_type == 1) and (num_units > usr_army))
-            or ((unit_type == 2) and (num_units > usr_navy))
-            or ((unit_type == 3) and (num_units > usr_air))
+        if (
+            num_units >= 0
+            and (unit_type != 1 or num_units <= usr_army)
+            and (unit_type != 2 or num_units <= usr_navy)
+            and (unit_type != 3 or num_units <= usr_air)
         ):
             break
 

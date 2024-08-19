@@ -75,7 +75,7 @@ def query_bets() -> Tuple[List[int], List[int]]:
     for i in range(bet_count):
         while bet_ids[i] == -1:
             try:
-                in_string = input("NUMBER " + str(i + 1) + "? ").split(",")
+                in_string = input(f"NUMBER {str(i + 1)}? ").split(",")
                 id_, val = int(in_string[0]), int(in_string[1])
 
                 # check other bet_IDs
@@ -126,9 +126,9 @@ def bet_results(bet_ids: List[int], bet_values: List[int], result) -> int:
         total_winnings += winnings
 
         if winnings >= 0:
-            print("YOU WIN " + str(winnings) + " DOLLARS ON BET " + str(i + 1))
+            print(f"YOU WIN {str(winnings)} DOLLARS ON BET {str(i + 1)}")
         else:
-            print("YOU LOSE " + str(winnings * -1) + " DOLLARS ON BET " + str(i + 1))
+            print(f"YOU LOSE {str(winnings * -1)} DOLLARS ON BET {str(i + 1)}")
 
     return winnings
 
@@ -142,7 +142,7 @@ def print_check(amount: int) -> None:
     print(" " * 40 + "CHECK NO. " + str(random.randint(0, 100)))
     print(" " * 40 + str(date.today()))
     print()
-    print("PAY TO THE ORDER OF -----" + name + "----- $" + str(amount))
+    print(f"PAY TO THE ORDER OF -----{name}----- ${amount}")
     print()
     print(" " * 40 + "THE MEMORY BANK OF NEW YORK")
     print(" " * 40 + "THE COMPUTER")
@@ -176,9 +176,9 @@ def main() -> None:
         elif val == 37:
             print("00")
         elif val in RED_NUMBERS:
-            print(str(val) + " RED")
+            print(f"{val} RED")
         else:
-            print(str(val) + " BLACK")
+            print(f"{val} BLACK")
 
         print()
         total_winnings = bet_results(bet_ids, bet_values, val)
@@ -209,7 +209,7 @@ def main() -> None:
 
 def string_to_bool(string: str) -> bool:
     """Converts a string to a bool"""
-    return string.lower() in ("yes", "y", "true", "t", "yes")
+    return string.lower() in {"y", "true", "t", "yes"}
 
 
 if __name__ == "__main__":

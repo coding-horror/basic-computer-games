@@ -35,7 +35,7 @@ def play_game() -> None:
     print("You are starting a new game...")
     while True:
         guess_word = ""
-        while guess_word == "":
+        while not guess_word:
             guess_word = input("\nGuess a five letter word. ").upper()
             if guess_word == "?":
                 break

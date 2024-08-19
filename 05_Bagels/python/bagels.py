@@ -49,9 +49,8 @@ def pick_number() -> List[str]:
     # as separate strings, not a single integer or string
     numbers = list(range(10))
     random.shuffle(numbers)
-    num = numbers[0:3]
-    num_str = [str(i) for i in num]
-    return num_str
+    num = numbers[:3]
+    return [str(i) for i in num]
 
 
 def get_valid_guess(guesses: int) -> str:

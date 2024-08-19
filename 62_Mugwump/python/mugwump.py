@@ -35,8 +35,7 @@ def reveal_mugwumps(mugwumps: List[List[int]]) -> None:
 
 
 def calculate_distance(guess: Tuple[int, int], mugwump: List[int]) -> float:
-    d = sqrt(((mugwump[0] - guess[0]) ** 2) + ((mugwump[1] - guess[1]) ** 2))
-    return d
+    return sqrt(((mugwump[0] - guess[0]) ** 2) + ((mugwump[1] - guess[1]) ** 2))
 
 
 def play_again() -> None:

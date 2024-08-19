@@ -40,10 +40,7 @@ def print_instructions() -> None:
 
 def print_stars(secret_number, guess) -> None:
     diff = abs(guess - secret_number)
-    stars = ""
-    for i in range(8):
-        if diff < 2**i:
-            stars += "*"
+    stars = "".join("*" for i in range(8) if diff < 2**i)
     print(stars)
 
 
@@ -51,8 +48,7 @@ def get_guess(prompt: str) -> int:
     while True:
         guess_str = input(prompt)
         if guess_str.isdigit():
-            guess = int(guess_str)
-            return guess
+            return int(guess_str)
 
 
 def main() -> None:

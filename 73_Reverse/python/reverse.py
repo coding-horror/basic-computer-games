@@ -52,7 +52,7 @@ def game_loop() -> None:
         turns += 1
 
         # Reverse as many items as requested.
-        newnums = numbers[0:howmany]
+        newnums = numbers[:howmany]
         newnums.reverse()
         newnums.extend(numbers[howmany:])
         numbers = newnums

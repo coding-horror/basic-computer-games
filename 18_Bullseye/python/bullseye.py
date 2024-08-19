@@ -54,7 +54,7 @@ def main() -> None:
         players.append(Player(player_name))
 
     round_number = 0
-    while len(winners) == 0:
+    while not winners:
         round_number += 1
         print()
         print(f"ROUND {round_number}---------")
@@ -62,10 +62,10 @@ def main() -> None:
             print()
             while True:
                 throw = int(input(f"{player.name}'S THROW? "))
-                if throw not in [1, 2, 3]:
-                    print("INPUT 1, 2, OR 3!")
-                else:
+                if throw in {1, 2, 3}:
                     break
+                else:
+                    print("INPUT 1, 2, OR 3!")
             if throw == 1:
                 probability_1 = 0.65
                 probability_2 = 0.55
@@ -99,10 +99,11 @@ def main() -> None:
                 points = 0
             player.score += points
             print(f"TOTAL SCORE = {player.score}")
-        for player_index, player in enumerate(players):
-            if player.score > 200:
-                winners.append(player_index)
-
+        winners.extend(
+            player_index
+            for player_index, player in enumerate(players)
+            if player.score > 200
+        )
     print_outro(players, winners)
 
 

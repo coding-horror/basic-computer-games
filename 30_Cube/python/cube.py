@@ -31,7 +31,11 @@ def play_game() -> None:
         for _ in range(5):
             while True:
                 mine = mine_position()
-                if not (mine in mines or mine == (1, 1, 1) or mine == (3, 3, 3)):
+                if (
+                    mine not in mines
+                    and mine != (1, 1, 1)
+                    and mine != (3, 3, 3)
+                ):
                     break
             mines.append(mine)
         wager = -1

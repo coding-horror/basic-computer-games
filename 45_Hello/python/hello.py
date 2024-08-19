@@ -47,8 +47,7 @@ def prompt_for_problems(user_name: str) -> str:
     print("THOSE DEALING WITH GREECE.  WHAT KIND OF PROBLEMS DO")
     print("YOU HAVE? (ANSWER SEX, HEALTH, MONEY, OR JOB)")
 
-    problem_type = input().upper()
-    return problem_type
+    return input().upper()
 
 
 def prompt_too_much_or_too_little() -> Tuple[bool, Optional[bool]]:
@@ -122,11 +121,10 @@ def ask_question_loop(user_name: str) -> None:
 
             valid, value, msg = get_yes_or_no()
             if valid:
-                if value:
-                    print("WHAT KIND (SEX, MONEY, HEALTH, JOB)")
-                    break
-                else:
+                if not value:
                     return
+                print("WHAT KIND (SEX, MONEY, HEALTH, JOB)")
+                break
             print(f"JUST A SIMPLE 'YES' OR 'NO' PLEASE, {user_name}.")
 
 
@@ -184,10 +182,7 @@ def main() -> None:
 
     ask_for_fee(user_name)
 
-    if False:
-        happy_goodbye(user_name)
-    else:
-        unhappy_goodbye(user_name)
+    unhappy_goodbye(user_name)
 
 
 if __name__ == "__main__":

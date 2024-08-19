@@ -44,7 +44,7 @@ def parse_input() -> Tuple[int, bool]:
     while not correct_day_input:
         weekday = input("INSERT THE STARTING DAY OF THE WEEK OF THE YEAR:")
 
-        for day_k in days_mapping.keys():
+        for day_k in days_mapping:
             if weekday.lower() in day_k:
                 day = days_mapping[day_k]
                 correct_day_input = True

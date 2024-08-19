@@ -137,10 +137,7 @@ class TicTacToe3D:
         if self.board[m] > 1:
             return False
 
-        if player == Player.MACHINE:
-            self.board[m] = 40
-        else:
-            self.board[m] = 8
+        self.board[m] = 40 if player == Player.MACHINE else 8
         return True
 
     def get_3d_position(self, m) -> Tuple[int, int, int]:
@@ -152,9 +149,7 @@ class TicTacToe3D:
     def evaluate_lines(self) -> None:
         self.lineValues = [0] * 76
         for j in range(76):
-            value = 0
-            for k in range(4):
-                value += self.board[self.lines[j][k]]
+            value = sum(self.board[self.lines[j][k]] for k in range(4))
             self.lineValues[j] = value
 
     def strategy_mark_line(self, i) -> None:
@@ -174,9 +169,7 @@ class TicTacToe3D:
         or the machine and choose best place to play
         """
         for i in range(76):
-            value = 0
-            for j in range(4):
-                value += self.board[self.lines[i][j]]
+            value = sum(self.board[self.lines[i][j]] for j in range(4))
             self.lineValues[i] = value
             if vlow <= value < vhigh:
                 if value > vlow:
@@ -186,7 +179,7 @@ class TicTacToe3D:
 
         for i in range(76):
             value = self.lineValues[i]
-            if value == 4 or value == vmove:
+            if value in [4, vmove]:
                 return self.move_diagonals(i, 1)
         return None
 
@@ -232,11 +225,10 @@ class TicTacToe3D:
             if self.board[y] == 0:
                 return (Move.MOVES, y)
 
-        for i in range(64):
-            if self.board[i] == 0:
-                return (Move.LIKES, i)
-
-        return (Move.DRAW, -1)
+        return next(
+            ((Move.LIKES, i) for i in range(64) if self.board[i] == 0),
+            (Move.DRAW, -1),
+        )
 
     def human_win(self, i) -> Tuple[Move, int, int]:
         return (Move.HUMAN_WIN, -1, i)
@@ -260,18 +252,12 @@ class TicTacToe3D:
         for j in range(4):
             m = self.lines[i][j]
             if self.board[m] == 1:
-                if self.lineValues[i] < 40:
-                    return (Move.YOU_FOX, m)
-                else:
-                    return (Move.GET_OUT, m)
+                return (Move.YOU_FOX, m) if self.lineValues[i] < 40 else (Move.GET_OUT, m)
         return (Move.CONCEDES, -1)
 
     # choose move in corners or center boxes of square 4x4
     def move_diagonals(self, i, s) -> Optional[Tuple[Move, int]]:
-        if 0 < (i % 4) < 3:
-            jrange = [1, 2]
-        else:
-            jrange = [0, 3]
+        jrange = [1, 2] if 0 < (i % 4) < 3 else [0, 3]
         for j in jrange:
             m = self.lines[i][j]
             if self.board[m] == s:
@@ -379,11 +365,7 @@ class Qubit:
                     self.show_win(board, m[2])  # type: ignore
                     break
                 elif m[0] == Move.MACHINE_WIN:
-                    print(
-                        "Machine moves to {}, and wins as follows".format(
-                            self.move_code(board, m[1])
-                        )
-                    )
+                    print(f"Machine moves to {self.move_code(board, m[1])}, and wins as follows")
                     self.show_win(board, m[2])  # type: ignore
                     break
                 elif m[0] == Move.DRAW:

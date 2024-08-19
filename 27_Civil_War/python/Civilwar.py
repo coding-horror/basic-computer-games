@@ -46,10 +46,7 @@ class PlayerStat:
     excessive_losses = False
 
     def set_available_money(self):
-        if self.is_player:
-            factor = 1 + (self.r - self.q) / (self.r + 1)
-        else:
-            factor = 1
+        factor = 1 + (self.r - self.q) / (self.r + 1) if self.is_player else 1
         self.available_money = 100 * math.floor(
             (self.army_m * (100 - self.inflation) / 2000) * factor + 0.5
         )
@@ -70,8 +67,7 @@ def simulate_losses(player1: PlayerStat, player2: PlayerStat) -> float:
         1 + 1 / (2 * (abs(player1.strategy - player2.strategy) + 1))
     )
     tmp = tmp * (1.28 + (5 * player1.army_m / 6) / (player1.ammunition + 1))
-    tmp = math.floor(tmp * (1 + 1 / player1.morale) + 0.5)
-    return tmp
+    return math.floor(tmp * (1 + 1 / player1.morale) + 0.5)
 
 
 def update_army(player: PlayerStat, enemy: PlayerStat, use_factor=False) -> None:

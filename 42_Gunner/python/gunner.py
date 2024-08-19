@@ -50,21 +50,19 @@ def gunner() -> None:
                         print("\n\nTOTAL ROUNDS EXPENDED WERE: ", S1)
                         if S1 > 18:
                             print("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")
-                            return
                         else:
                             print("NICE SHOOTING !!")
-                            return
+                        return
                     else:
                         killed_enemies += 1
                         print(
                             "\nTHE FORWARD OBSERVER HAS SIGHTED MORE ENEMY ACTIVITY..."
                         )
                         break
+                elif shot_proximity_int > 100:
+                    print("SHORT OF TARGET BY", abs(shot_proximity_int), "YARDS.")
                 else:
-                    if shot_proximity_int > 100:
-                        print("SHORT OF TARGET BY", abs(shot_proximity_int), "YARDS.")
-                    else:
-                        print("OVER TARGET BY", abs(shot_proximity_int), "YARDS.")
+                    print("OVER TARGET BY", abs(shot_proximity_int), "YARDS.")
             else:
                 print("\nBOOM !!!!   YOU HAVE JUST BEEN DESTROYED BY THE ENEMY.\n\n\n")
                 print("BETTER GO BACK TO FORT SILL FOR REFRESHER TRAINING!")

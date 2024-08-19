@@ -179,7 +179,7 @@ class GameState:
                 sm_sell_to_industry + (random() * 10) - (random() * 20)
             )
             if self.foreign_workers <= 0:
-                foreign_workers_influx = foreign_workers_influx + 20
+                foreign_workers_influx += 20
             print(f"{foreign_workers_influx} WORKERS CAME TO THE COUNTRY AND")
 
         surplus_distributed = distributed_rallods / COST_OF_LIVING - self.countrymen
@@ -196,7 +196,7 @@ class GameState:
             print("CAME TO ", end="")
         print("THE ISLAND")
         self.countrymen += population_change
-        self.foreign_workers += int(foreign_workers_influx)
+        self.foreign_workers += foreign_workers_influx
 
     def handle_too_many_deaths(self) -> None:
         print(f"\n\n\n{self.died_contrymen} COUNTRYMEN DIED IN ONE YEAR!!!!!")
@@ -430,8 +430,9 @@ def main() -> None:
         if state.countrymen < 343:
             state.handle_third_died()
         elif (
-            state.rallods / 100
-        ) > 5 and state.died_contrymen - state.pollution_deaths >= 2:
+            state.rallods > 500
+            and state.died_contrymen - state.pollution_deaths >= 2
+        ):
             state.handle_money_mismanagement()
         if state.foreign_workers > state.countrymen:
             state.handle_too_many_foreigners()

@@ -82,10 +82,7 @@ def loc_to_num(location: Tuple[int, int], fix_align: bool = False) -> str:
     """Convert a position given by row, column into a space number."""
     row, col = location
     out_str: str = f"{row + 8 - col}{row + 1}"
-    if not fix_align or len(out_str) == 3:
-        return out_str
-    else:
-        return out_str + " "
+    return out_str if not fix_align or len(out_str) == 3 else f"{out_str} "
 
 
 GAME_BOARD: Final[str] = (
@@ -173,15 +170,14 @@ def get_move(current_loc: Optional[Tuple[int, int]]) -> Tuple[int, int]:
                         "YOU HAVE BEGUN ILLEGALLY.\n\n"
                         "WHERE WOULD YOU LIKE TO START? "
                     )
-            else:
-                if (
+            elif (
                     (new_row == row and new_col < col)  # move left
                     or (new_col == col and new_row > row)  # move down
                     or (new_row - row == col - new_col)  # move diag left and down
                 ) and (not FIX_BOARD_BUG or (new_col >= 0 and new_row < 8)):
-                    return new_row, new_col
-                else:
-                    prompt = "Y O U   C H E A T . . .  TRY AGAIN? "
+                return new_row, new_col
+            else:
+                prompt = "Y O U   C H E A T . . .  TRY AGAIN? "
 
         except ValueError:
             prompt = "!NUMBER EXPECTED - RETRY INPUT LINE\n? "
@@ -256,12 +252,12 @@ def ask(prompt: str) -> bool:
     inpt: str
     while True:
         # Normalize input to uppercase, no whitespace, then get first character
-        inpt = input(prompt + "? ").upper().strip()[0]
+        inpt = input(f"{prompt}? ").upper().strip()[0]
         print()
-        if inpt == "Y":
-            return True
-        elif inpt == "N":
+        if inpt == "N":
             return False
+        elif inpt == "Y":
+            return True
         print("PLEASE ANSWER 'YES' OR 'NO'.")
     return False
 

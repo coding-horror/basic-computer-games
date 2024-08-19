@@ -97,7 +97,7 @@ def run(gates, lvl, max_speeds) -> None:
 
                     case 7:
                         speed -= int(random() * (10 - 5) + 5)
-                print(f" {int(speed)} M.P.H.")
+                print(f" {speed} M.P.H.")
                 if speed > max_speeds[i]:
                     if random() < ((speed - max_speeds[i]) * 0.1) + 0.2:
                         print(
@@ -184,7 +184,7 @@ def main() -> None:
         run(gates, lvl, max_speeds)
         while True:
             answer = ask("Do you want to play again?")
-            if answer == "YES" or answer == "NO":
+            if answer in ["YES", "NO"]:
                 break
             else:
                 print('Please type "YES" or "NO"')

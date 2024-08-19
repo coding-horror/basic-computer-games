@@ -13,16 +13,16 @@ class Canvas:
     def __init__(self, width=9, height=9, fill="*") -> None:
         self._buffer = []
         for _ in range(height):
-            line = []
-            for _ in range(width):
-                line.append(fill)
+            line = [fill for _ in range(width)]
             self._buffer.append(line)
         self._buffer[0][0] = "P"
 
     def render(self) -> str:
         lines = ["       1 2 3 4 5 6 7 8 9"]
-        for row, line in enumerate(self._buffer, start=1):
-            lines.append(" " + str(row) + " " * 5 + " ".join(line))
+        lines.extend(
+            f" {str(row)}" + " " * 5 + " ".join(line)
+            for row, line in enumerate(self._buffer, start=1)
+        )
         return "\n".join(lines)
 
     def chomp(self, r, c) -> str:

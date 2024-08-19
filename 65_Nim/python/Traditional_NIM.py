@@ -30,11 +30,7 @@ class NIM:
             print("\nInvalid value of either Peg or Pile\n")
 
     def get_ai_move(self) -> Tuple[int, int]:
-        possible_pile = []
-        for k, v in self.piles.items():
-            if v != 0:
-                possible_pile.append(k)
-
+        possible_pile = [k for k, v in self.piles.items() if v != 0]
         pile = random.choice(possible_pile)
 
         num = random.randint(1, self.piles[pile])
@@ -46,7 +42,7 @@ class NIM:
 
     def print_pegs(self) -> None:
         for pile, peg in self.piles.items():
-            print("Pile {} : {}".format(pile, "O " * peg))
+            print(f'Pile {pile} : {"O " * peg}')
 
     def help(self) -> None:
         print("-" * 10)
@@ -89,8 +85,7 @@ def main() -> None:
         # Players Move
         command = input("\nYOUR MOVE - Number of PILE, Number of Object? ")
         game.remove_pegs(command)
-        end = game.check_for_win()
-        if end:
+        if end := game.check_for_win():
             print("\nPlayer Wins the Game, Congratulations!!")
             input("\nPress any key to exit")
             break
@@ -98,13 +93,10 @@ def main() -> None:
         # Computers Move
         ai_command = game.get_ai_move()
         print(
-            "\nA.I MOVE - A.I Removed {} pegs from Pile {}".format(
-                ai_command[1], ai_command[0]
-            )
+            f"\nA.I MOVE - A.I Removed {ai_command[1]} pegs from Pile {ai_command[0]}"
         )
-        game.remove_pegs(str(ai_command[0]) + "," + str(ai_command[1]))
-        end = game.check_for_win()
-        if end:
+        game.remove_pegs(f"{str(ai_command[0])},{str(ai_command[1])}")
+        if end := game.check_for_win():
             print("\nComputer Wins the Game, Better Luck Next Time\n")
             input("Press any key to exit")
             break

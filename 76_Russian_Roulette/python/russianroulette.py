@@ -29,8 +29,7 @@ def initial_message() -> None:
 def parse_input() -> int:
     while True:
         try:
-            i = int(input("? "))
-            return i
+            return int(input("? "))
         except ValueError:
             print("Number expected...")
 
@@ -61,13 +60,12 @@ def main() -> None:
             print("BANG!!!!!   You're Dead!")
             print("Condolences will be sent to your relatives.\n\n\n")
             print("...Next victim...")
+        elif n > NUMBER_OF_ROUNDS:
+            print("You win!!!!!")
+            print("Let someone else blow his brain out.\n")
         else:
-            if n > NUMBER_OF_ROUNDS:
-                print("You win!!!!!")
-                print("Let someone else blow his brain out.\n")
-            else:
-                print("     Chicken!!!!!\n\n\n")
-                print("...Next victim....")
+            print("     Chicken!!!!!\n\n\n")
+            print("...Next victim....")
 
 
 if __name__ == "__main__":

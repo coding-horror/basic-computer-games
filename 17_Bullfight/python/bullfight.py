@@ -29,11 +29,8 @@ def determine_player_kills(
     print(f"THE {player_type}{plural_form} DID A {job_qualities[job_quality]} JOB.")
     if job_quality >= 4:
         if job_quality == 5:
-            player_was_killed = random.choice([True, False])
-            if player_was_killed:
+            if player_was_killed := random.choice([True, False]):
                 print(f"ONE OF THE {player_type}{plural_form} WAS KILLED.")
-            elif player_was_killed:
-                print(f"NO {player_type}{plural_form} WERE KILLED.")
         else:
             if player_type != "TOREAD":
                 killed_horses = random.randint(1, 2)
@@ -177,12 +174,13 @@ def handle_bullkill_attempt(
                 * job_quality_by_round[3]
             )
         )
-        if kill_method == 4:
-            if kill_probability > 0.8:
-                gore = 1
-        else:
-            if kill_probability > 0.2:
-                gore = 1
+        if (
+            kill_method == 4
+            and kill_probability > 0.8
+            or kill_method != 4
+            and kill_probability > 0.2
+        ):
+            gore = 1
         if gore == 0:
             print("YOU KILLED THE BULL!")
             job_quality_by_round[5] = 2
@@ -254,7 +252,7 @@ def main() -> None:
     # Round 3
     job_quality_by_round[3] = 0
     while True:
-        job_quality_by_round[3] = job_quality_by_round[3] + 1
+        job_quality_by_round[3] += 1
         print(f"PASS NUMBER {job_quality_by_round[3]}")
         if job_quality_by_round[3] >= 3:
             run_from_ring = ask_bool("HERE COMES THE BULL.  TRY FOR A KILL? ")
@@ -299,8 +297,13 @@ def main() -> None:
                     print("YOU ARE STILL ALIVE.")
                     print()
                     print("DO YOU RUN FROM THE RING? ", end="")
-                    run_from_ring = ask_bool("DO YOU RUN FROM THE RING? ")
-                    if not run_from_ring:
+                    if run_from_ring := ask_bool("DO YOU RUN FROM THE RING? "):
+                        print("COWARD")
+                        job_quality_by_round[4] = 0
+                        death = True
+                        break
+
+                    else:
                         print("YOU ARE BRAVE.  STUPID, BUT BRAVE.")
                         if random.randint(1, 2) == 1:
                             job_quality_by_round[4] = 2
@@ -308,12 +311,6 @@ def main() -> None:
                             break
                         else:
                             print("YOU ARE GORED AGAIN!")
-                    else:
-                        print("COWARD")
-                        job_quality_by_round[4] = 0
-                        death = True
-                        break
-
             if death:
                 break
 
