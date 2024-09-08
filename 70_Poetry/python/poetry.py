@@ -49,7 +49,7 @@ def process_phrase_2(state: State) -> None:
     ]
     words, u_modifier = line_2_options[state.i]
     state.line += words
-    if not (u_modifier is None):
+    if u_modifier is not None:
         state.u = u_modifier
 
 

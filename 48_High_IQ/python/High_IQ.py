@@ -121,13 +121,8 @@ def play_game() -> None:
         while not move(board):
             print("ILLEGAL MOVE! TRY AGAIN")
 
-    # Check peg count and print the user's score
-    peg_count = 0
-    for key in board.keys():
-        if board[key] == "!":
-            peg_count += 1
-
-    print("YOU HAD " + str(peg_count) + " PEGS REMAINING")
+    peg_count = sum(1 for key in board.keys() if board[key] == "!")
+    print(f"YOU HAD {str(peg_count)} PEGS REMAINING")
 
     if peg_count == 1:
         print("BRAVO! YOU MADE A PERFECT SCORE!")
@@ -158,11 +153,7 @@ def move(board: Dict[int, str]) -> bool:
 
     difference = abs(start - end)
     center = int((end + start) / 2)
-    if (
-        (difference == 2 or difference == 18)
-        and board[end] == "O"
-        and board[center] == "!"
-    ):
+    if difference in [2, 18] and board[center] == "!":
         board[start] = "O"
         board[center] = "O"
         board[end] = "!"
@@ -187,9 +178,10 @@ def is_game_finished(board) -> bool:
                 next_to_peg = ((pos + space) in board) and board[pos + space] == "!"
                 # Checks both going forward (+ location) or backwards (-location)
                 has_movable_space = (
-                    not ((pos - space) in board and board[pos - space] == "!")
-                ) or (
-                    not ((pos + space * 2) in board and board[pos + space * 2] == "!")
+                    pos - space not in board
+                    or board[pos - space] != "!"
+                    or pos + space * 2 not in board
+                    or board[pos + space * 2] != "!"
                 )
                 if next_to_peg and has_movable_space:
                     return False

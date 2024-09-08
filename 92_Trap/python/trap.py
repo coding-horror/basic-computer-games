@@ -24,11 +24,10 @@ def play_game() -> None:
                     int(item)
                     for item in input("\nGuess # " + str(turn) + " ? ").split(",")
                 ]
-                if len(user_input) == 2:
-                    if sum(1 < x < number_max for x in user_input) == 2:
-                        user_guess = user_input
-                    else:
-                        raise ValueError
+                if len(user_input) != 2:
+                    raise ValueError
+                if sum(1 < x < number_max for x in user_input) == 2:
+                    user_guess = user_input
                 else:
                     raise ValueError
             except (ValueError, IndexError):

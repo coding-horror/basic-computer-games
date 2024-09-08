@@ -73,12 +73,8 @@ def setup_players() -> List[str]:
     # ensure we get an integer value from the user
     number_of_players = basic_input("HOW MANY WANT TO BET", int)
 
-    # for each user query their name and return the list of names
-    player_names = []
     basic_print("WHEN ? APPEARS,TYPE NAME")
-    for _ in range(number_of_players):
-        player_names.append(basic_input(""))
-    return player_names
+    return [basic_input("") for _ in range(number_of_players)]
 
 
 def setup_horses() -> List[float]:

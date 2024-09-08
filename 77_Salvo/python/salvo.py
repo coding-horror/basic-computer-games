@@ -169,7 +169,7 @@ def generate_ship_coordinates(ship: int) -> List[CoordinateType]:
     # clockwise. a vector of valid directions where the
     # ship does not go off the board is determined
     ship_len = SHIPS[ship][1] - 1
-    dirs = [False for x in range(8)]
+    dirs = [False for _ in range(8)]
     dirs[0] = (start_x - ship_len) >= 1
     dirs[2] = (start_y + ship_len) <= BOARD_WIDTH
     dirs[1] = dirs[0] and dirs[2]
@@ -261,11 +261,7 @@ def generate_board() -> Tuple[BoardType, List[List[CoordinateType]]]:
         coords = []
         while not placed:
             coords = generate_ship_coordinates(ship)
-            clear = True
-            for coord in coords:
-                if board[coord[0] - 1][coord[1] - 1] is not None:
-                    clear = False
-                    break
+            clear = all(board[coord[0] - 1][coord[1] - 1] is None for coord in coords)
             if clear:
                 placed = True
         place_ship(board, coords, ship)
@@ -291,18 +287,17 @@ def execute_shot(
 
 def calculate_shots(board: BoardType) -> int:
     """Examine each board and determine how many shots remaining"""
-    ships_found = [0 for x in range(len(SHIPS))]
+    ships_found = [0 for _ in range(len(SHIPS))]
     for x in range(BOARD_HEIGHT):
         for y in range(BOARD_WIDTH):
             square = board[x - 1][y - 1]
             if square is not None and square >= 0 and square < len(SHIPS):
                 ships_found[square] = 1
-    shots = 0
-    for ship in range(len(ships_found)):
-        if ships_found[ship] == 1:
-            shots += SHIPS[ship][2]
-
-    return shots
+    return sum(
+        SHIPS[ship][2]
+        for ship in range(len(ships_found))
+        if ships_found[ship] == 1
+    )
 
 
 def initialize_game() -> None:
@@ -413,10 +408,7 @@ def execute_turn(turn: bool, current_turn: int) -> int:
         # computer, we randomly pick a shot. for the
         # player we request shots
         while not valid_shot:
-            if turn == COMPUTER:
-                x, y = random_x_y()
-            else:
-                x, y = input_coord()
+            x, y = random_x_y() if turn == COMPUTER else input_coord()
             square = board[x - 1][y - 1]
             if square is not None and square > 10:
                 if turn == PLAYER:

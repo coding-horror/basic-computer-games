@@ -16,10 +16,7 @@ def print_diamond(begin_width, end_width, step, width, count) -> None:
         line_buffer = " " * ((width - n) // 2)
         for across in range(count):
             for a in range(n):
-                if a >= len(edge_string):
-                    line_buffer += fill
-                else:
-                    line_buffer += edge_string[a]
+                line_buffer += fill if a >= len(edge_string) else edge_string[a]
             line_buffer += " " * (
                 (width * (across + 1) + (width - n) // 2) - len(line_buffer)
             )
@@ -39,7 +36,7 @@ def main() -> None:
 
     PAGE_WIDTH = 60
 
-    count = int(PAGE_WIDTH / width)
+    count = PAGE_WIDTH // width
 
     for _down in range(count):
         print_diamond(1, width, 2, width, count)

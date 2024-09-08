@@ -62,7 +62,7 @@ def main() -> None:
 
     while year < 11:  # line 270. main loop. while the year is less than 11
         print("\n\n\nHAMURABI:  I BEG TO REPORT TO YOU")
-        year = year + 1  # year
+        year += 1
         print(
             "IN YEAR",
             year,
@@ -97,9 +97,7 @@ def main() -> None:
             elif bushels_per_acre * plague > grain_stores:  # can't afford it
                 bad_input_710(grain_stores)
                 plague = -99  # give'm a second change to get it right
-            elif (
-                bushels_per_acre * plague <= grain_stores
-            ):  # normal case, can afford it
+            else:
                 acres = acres + plague  # increase the number of acres by Q
                 grain_stores = (
                     grain_stores - bushels_per_acre * plague
@@ -169,15 +167,8 @@ def main() -> None:
         # REM *** A BOUNTIFUL HARVEST!
         bushels_per_acre = C
         H = people * bushels_per_acre
-        eaten_rats = 0
-
         C = gen_random()
-        if int(C / 2) == C / 2:  # even number. 50/50 chance
-            # REM *** RATS ARE RUNNING WILD!!
-            eaten_rats = int(
-                grain_stores / C
-            )  # calc losses due to rats, based on previous random number
-
+        eaten_rats = int(grain_stores / C) if int(C / 2) == C / 2 else 0
         grain_stores = grain_stores - eaten_rats + H  # deduct losses from stores
 
         C = gen_random()

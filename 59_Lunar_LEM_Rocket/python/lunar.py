@@ -64,7 +64,7 @@ def add_rjust(line: str, s: Any, pos: int) -> str:
 
 def add_ljust(line: str, s: str, pos: int) -> str:
     """Add a new field to a line left justified starting at pos"""
-    s = str(s)
+    s = s
     if len(line) > pos:
         line = line[:pos]
     if len(line) < pos:
@@ -324,10 +324,7 @@ def run_simulation() -> None:
             return
 
         if capsule.velocity > 0 and new_state.velocity < 0:
-            # moving away from the moon
-
-            landed = handle_flyaway(sim_clock, capsule)
-            if landed:
+            if landed := handle_flyaway(sim_clock, capsule):
                 process_final_tick(delta_t, sim_clock, capsule)
                 return
 

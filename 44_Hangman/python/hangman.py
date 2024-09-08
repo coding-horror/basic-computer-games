@@ -16,9 +16,7 @@ class Canvas:
     def __init__(self, width: int = 12, height: int = 12, fill: str = " ") -> None:
         self._buffer = []
         for _ in range(height):
-            line = []
-            for _ in range(width):
-                line.append("")
+            line = ["" for _ in range(width)]
             self._buffer.append(line)
 
         self.clear()
@@ -29,11 +27,7 @@ class Canvas:
                 row[x] = fill
 
     def render(self) -> str:
-        lines = []
-        for line in self._buffer:
-            # Joining by the empty string ("") smooshes all of the
-            # individual characters together as one line.
-            lines.append("".join(line))
+        lines = ["".join(line) for line in self._buffer]
         return "\n".join(lines)
 
     def put(self, s: str, x: int, y: int) -> None:
@@ -192,7 +186,7 @@ def play_game(guess_target: str) -> None:
         print("".join(guess_progress) + "\n")
         guess_letter = ""
         guess_word = ""
-        while guess_letter == "":
+        while not guess_letter:
 
             guess_letter = input("What is your guess? ").upper()[0]
             if not guess_letter.isalpha():
@@ -215,7 +209,7 @@ def play_game(guess_target: str) -> None:
                 break
             else:
                 print("\n" + "".join(guess_progress) + "\n")
-                while guess_word == "":
+                while not guess_word:
                     guess_word = input("What is your guess for the word? ").upper()
                     if not guess_word.isalpha():
                         guess_word = ""
@@ -234,7 +228,7 @@ def play_game(guess_target: str) -> None:
             print("Sorry, that letter isn't in the word.")
 
             if wrong_guesses == 10:
-                print("Sorry, you lose. The word was " + guess_target)
+                print(f"Sorry, you lose. The word was {guess_target}")
                 break
 
 

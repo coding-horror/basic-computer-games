@@ -107,9 +107,7 @@ def play_game() -> bool:
     rom_angle = random.randint(0, 359)
     rom_distance = random.randint(100, 300)
     rom_angular_velocity = random.randint(10, 30)
-    hour = 0
-    while hour < 7:
-        hour += 1
+    for hour in range(1, 8):
         print()
         print()
         print(f"THIS IS HOUR {hour}, AT WHAT ANGLE DO YOU WISH TO SEND")

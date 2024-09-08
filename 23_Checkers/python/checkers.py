@@ -64,7 +64,7 @@ def is_legal_board_coordinate(x: int, y: int) -> bool:
 
 class Board:
     def __init__(self) -> None:
-        self.spaces = [[0 for y in range(8)] for x in range(8)]
+        self.spaces = [[0 for _ in range(8)] for _ in range(8)]
         for x in range(8):
             if (x % 2) == 0:
                 self.spaces[x][6] = COMPUTER_PIECE
@@ -114,11 +114,10 @@ class Board:
 
     def get_legal_deltas_for_space(self, x: int, y: int) -> Iterator[Tuple[int, int]]:
         contents = self.spaces[x][y]
-        if contents == COMPUTER_PIECE:
-            for delta_x in (-1, 1):
+        for delta_x in (-1, 1):
+            if contents == COMPUTER_PIECE:
                 yield (delta_x, -1)
-        else:
-            for delta_x in (-1, 1):
+            else:
                 for delta_y in (-1, 1):
                     yield (delta_x, delta_y)
 
@@ -183,7 +182,7 @@ class Board:
         if start_y == 7:
             # prefer to defend back row
             quality -= 2
-        if dest_x in (0, 7):
+        if dest_x in {0, 7}:
             # moving to edge column
             quality += 1
         for delta_x in (-1, 1):
@@ -272,9 +271,8 @@ class Board:
 
                 if best_move is None:
                     return
-                else:
-                    print(f"TO {best_move.dest_x} {best_move.dest_y}")
-                    move_record = best_move
+                print(f"TO {best_move.dest_x} {best_move.dest_y}")
+                move_record = best_move
 
     def try_extend(
         self, start_x: int, start_y: int, delta_x: int, delta_y: int
@@ -352,10 +350,10 @@ class Board:
             self.spaces[dest_x][dest_y] = HUMAN_KING
 
     def check_pieces(self) -> bool:
-        if len(list(self.get_spaces_with_computer_pieces())) == 0:
+        if not list(self.get_spaces_with_computer_pieces()):
             print_human_won()
             return False
-        if len(list(self.get_spaces_with_computer_pieces())) == 0:
+        if not list(self.get_spaces_with_computer_pieces()):
             print_computer_won()
             return False
         return True

@@ -278,14 +278,7 @@ def is_legal_human_move(board: List[int], m1: int, m2: int) -> bool:
         # Destination is not open
         return False
 
-    if m2 - m1 < -4:
-        # too far
-        return False
-
-    if m1 == 7 and m2 == 3:
-        # can't jump corner to corner (wrapping around the board)
-        return False
-    return True
+    return False if m2 - m1 < -4 else m1 != 7 or m2 != 3
 
 
 def player_piece_on_back_row(board: List[int]) -> bool:
@@ -297,11 +290,11 @@ def computer_piece_on_front_row(board: List[int]) -> bool:
 
 
 def all_human_pieces_captured(board: List[int]) -> bool:
-    return len(list(get_human_spaces(board))) == 0
+    return not list(get_human_spaces(board))
 
 
 def all_computer_pieces_captured(board: List[int]) -> bool:
-    return len(list(get_computer_spaces(board))) == 0
+    return not list(get_computer_spaces(board))
 
 
 def human_win(last_computer_move: ComputerMove) -> None:
@@ -312,11 +305,7 @@ def human_win(last_computer_move: ComputerMove) -> None:
 
 
 def computer_win(has_moves: bool) -> None:
-    if not has_moves:
-        msg = "YOU CAN'T MOVE, SO "
-    else:
-        msg = ""
-    msg += "I WIN"
+    msg = ("YOU CAN'T MOVE, SO " if not has_moves else "") + "I WIN"
     print(msg)
     global wins
     wins += 1
@@ -340,14 +329,14 @@ def human_has_move(board: List[int]) -> bool:
             else:
                 continue
         elif i < 7:
-            assert (i == 4) or (i == 6)
+            assert i in [4, 6]
             if board_contents(board, 2) == COMPUTER_PIECE:
                 # can capture computer piece at 2
                 return True
             else:
                 continue
         elif board_contents(board, 5) == COMPUTER_PIECE:
-            assert (i == 7) or (i == 9)
+            assert i in [7, 9]
             # can capture computer piece at 5
             return True
         else:
@@ -391,20 +380,16 @@ def has_computer_move(board: List[int]) -> bool:
                 board_contents(board, i + 4) == HUMAN_PIECE
             ):
                 return True
-        else:
-            if i > 3:
-                # beyond the first row
-                if board_contents(board, 8) == HUMAN_PIECE:
-                    # can capture on 8
-                    return True
-                else:
-                    continue
-            else:
-                if board_contents(board, 5) == HUMAN_PIECE:
-                    # can capture on 5
-                    return True
-                else:
-                    continue
+        elif (
+            i > 3
+            and board_contents(board, 8) == HUMAN_PIECE
+            or i <= 3
+            and board_contents(board, 5) == HUMAN_PIECE
+        ):
+            # can capture on 8
+            return True
+        elif i <= 3 or board_contents(board, 8) == HUMAN_PIECE:
+            continue
     return False
 
 

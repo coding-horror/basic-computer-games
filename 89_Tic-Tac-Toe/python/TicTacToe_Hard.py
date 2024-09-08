@@ -8,9 +8,7 @@ class TicTacToe:
         self.board = self.clear_board()
 
     def clear_board(self) -> List[List[str]]:
-        board = [["blur" for i in range(self.dim_sz)] for j in range(self.dim_sz)]
-        # made a 3x3 by-default board
-        return board
+        return [["blur" for _ in range(self.dim_sz)] for _ in range(self.dim_sz)]
 
     def move_record(self, r, c) -> Union[str, bool]:
         if r > self.dim_sz or c > self.dim_sz:
@@ -86,17 +84,12 @@ class TicTacToe:
 
         if flag11 or flag12:
             return 1
-        if flag21 or flag22:
-            return 0
-
-        return -1
+        return 0 if flag21 or flag22 else -1
 
     def next_move(self) -> Union[Tuple[int, int], Tuple[List[int], List[int]]]:
         available_moves = []  # will carry all available moves
         player_win_spot = []  # if player (user Wins)
-        comp_pick = "O"
-        if self.pick == "O":
-            comp_pick = "X"
+        comp_pick = "X" if self.pick == "O" else "O"
         for i in range(0, self.dim_sz):
             for j in range(0, self.dim_sz):
 
@@ -113,13 +106,13 @@ class TicTacToe:
                         player_win_spot.append(t)
                     self.board[i][j] = "blur"
 
-        if len(player_win_spot) != 0:
+        if player_win_spot:
             self.board[player_win_spot[0][0]][player_win_spot[0][1]] = comp_pick
             return player_win_spot[0][0], player_win_spot[0][1]
         if len(available_moves) == 1:
             self.board[available_moves[0][0]][available_moves[0][1]] = comp_pick
             return [available_moves[0][0]], [available_moves[0][1]]
-        if len(available_moves) == 0:
+        if not available_moves:
             return -1, -1
 
         c1, c2 = self.dim_sz // 2, self.dim_sz // 2
@@ -172,22 +165,19 @@ def display(game: TicTacToe) -> None:
     for i in range(0, game.dim_sz):
         for j in range(0, game.dim_sz - 1):
             if game.board[i][j] == "blur":
-                line1 = line1 + "    |"
+                line1 = f"{line1}    |"
             else:
-                line1 = line1 + "  " + game.board[i][j] + " |"
+                line1 = f"{line1}  {game.board[i][j]} |"
         if game.board[i][game.dim_sz - 1] == "blur":
             line1 = line1 + "    \n"
         else:
-            line1 = line1 + "  " + game.board[i][game.dim_sz - 1] + " \n"
+            line1 = f"{line1}  {game.board[i][game.dim_sz - 1]}" + " \n"
     print(line1, "\n\n")
 
 
 def main() -> None:
     pick = input("Pick 'X' or 'O' ").strip().upper()
-    if pick == "O":
-        game = TicTacToe("O")
-    else:
-        game = TicTacToe("X")
+    game = TicTacToe("O") if pick == "O" else TicTacToe("X")
     display(game=game)
     while True:
         temp: Union[bool, str] = False

@@ -82,7 +82,7 @@ def show_fort_comment(which_fort) -> None:
         print("FOR YOUR FURS.  THE COST OF YOUR SUPPLIES")
         print("WILL BE LOWER THAN AT ALL THE OTHER FORTS.")
     else:
-        print("Internal error #1, fort " + str(which_fort) + " does not exist")
+        print(f"Internal error #1, fort {str(which_fort)} does not exist")
         sys.exit(1)  # you have a bug
     print()
 
@@ -109,7 +109,7 @@ def get_furs_purchase() -> List[int]:
     Accept numeric inputs, re-prompting on incorrect input values"""
     results: List[int] = []
 
-    print("YOUR " + str(MAX_FURS) + " FURS ARE DISTRIBUTED AMONG THE FOLLOWING")
+    print(f"YOUR {str(MAX_FURS)} FURS ARE DISTRIBUTED AMONG THE FOLLOWING")
     print("KINDS OF PELTS: MINK, BEAVER, ERMINE AND FOX.")
     print()
 
@@ -130,9 +130,9 @@ def main() -> None:
     print(" " * 15 + "(Ported to Python Oct 2012 krt@krt.com.au)")
     print("\n\n\n")
 
-    game_state = "starting"
     fox_price = None  # sometimes this takes the "last" price (probably this was a bug)
 
+    game_state = "starting"
     while True:
 
         if game_state == "starting":
@@ -150,7 +150,7 @@ def main() -> None:
         elif game_state == "trading":
             print()
             print("YOU HAVE $ %1.2f IN SAVINGS" % (player_funds))
-            print("AND " + str(MAX_FURS) + " FURS TO BEGIN THE EXPEDITION")
+            print(f"AND {str(MAX_FURS)} FURS TO BEGIN THE EXPEDITION")
             player_furs = get_furs_purchase()
 
             if sum(player_furs) > MAX_FURS:
@@ -221,10 +221,7 @@ def main() -> None:
                     print("NO ONE WILL BUY THEM.")
                     player_furs[FUR_FOX] = 0
                 else:
-                    print(
-                        "Internal Error #3, Out-of-bounds event_picker"
-                        + str(event_picker)
-                    )
+                    print(f"Internal Error #3, Out-of-bounds event_picker{str(event_picker)}")
                     sys.exit(1)  # you have a bug
 
                 print()
@@ -268,10 +265,7 @@ def main() -> None:
                     print("YOUR MINK AND BEAVER WERE DAMAGED ON YOUR TRIP.")
                     print("YOU RECEIVE ONLY HALF THE CURRENT PRICE FOR THESE FURS.")
                 else:
-                    print(
-                        "Internal Error #4, Out-of-bounds event_picker"
-                        + str(event_picker)
-                    )
+                    print(f"Internal Error #4, Out-of-bounds event_picker{str(event_picker)}")
                     sys.exit(1)  # you have a bug
 
                 print()
@@ -280,7 +274,7 @@ def main() -> None:
                 player_funds -= 105
 
             else:
-                print("Internal error #2, fort " + str(which_fort) + " does not exist")
+                print(f"Internal error #2, fort {str(which_fort)} does not exist")
                 sys.exit(1)  # you have a bug
 
             # Calculate sales

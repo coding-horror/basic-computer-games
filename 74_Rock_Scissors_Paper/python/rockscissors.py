@@ -44,22 +44,27 @@ def play_game() -> None:
             print("...Scissors")
         elif guess_computer == 3:
             print("...Rock")
-        if guess_computer == guess_human:
+        if (
+            guess_computer != guess_human
+            and guess_computer > guess_human
+            and (guess_human != 1 or guess_computer != 3)
+            or guess_computer != guess_human
+            and guess_computer <= guess_human
+            and guess_computer == 1
+            and guess_human == 3
+        ):
+            print("Wow! I win!!!")
+            won_computer = won_computer + 1
+        elif (
+            guess_computer != guess_human
+            and guess_computer > guess_human
+            or guess_computer != guess_human
+            and guess_computer == 1
+        ):
+            print("You win!!!")
+            won_human = won_human + 1
+        elif guess_computer == guess_human:
             print("Tie Game. No winner")
-        elif guess_computer > guess_human:
-            if guess_human != 1 or guess_computer != 3:
-                print("Wow! I win!!!")
-                won_computer = won_computer + 1
-            else:
-                print("You win!!!")
-                won_human = won_human + 1
-        elif guess_computer == 1:
-            if guess_human != 3:
-                print("You win!!!")
-                won_human = won_human + 1
-            else:
-                print("Wow! I win!!!")
-                won_computer = won_computer + 1
     print("\nHere is the final game score:")
     print("I have won", won_computer, "game(s).")
     print("You have won", won_human, "game(s).")

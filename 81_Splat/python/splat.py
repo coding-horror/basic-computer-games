@@ -311,9 +311,9 @@ def main() -> None:
         z = yes_no_input("DO YOU WANT TO PLAY AGAIN")
         if not z:
             z = yes_no_input("PLEASE")
-            if not z:
-                print("SSSSSSSSSS.")
-                break
+        if not z:
+            print("SSSSSSSSSS.")
+            break
 
 
 if __name__ == "__main__":

@@ -37,3 +37,6 @@ venv/
 **/*.rs.bk
 /target
 todo.md
+
+.fake
+.fake

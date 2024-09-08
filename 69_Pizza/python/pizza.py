@@ -155,9 +155,7 @@ def main() -> None:
 
     player_name = print_instructions()
 
-    more_directions = yes_no_prompt("DO YOU NEED MORE DIRECTIONS?")
-
-    if more_directions:
+    if more_directions := yes_no_prompt("DO YOU NEED MORE DIRECTIONS?"):
         print_more_directions(player_name)
 
         understand = yes_no_prompt("UNDERSTAND?")
@@ -171,8 +169,8 @@ def main() -> None:
     print("GOOD LUCK!!")
     print()
 
+    num_turns = 5
     while True:
-        num_turns = 5
         play_game(num_turns, player_name)
 
         print()

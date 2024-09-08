@@ -23,13 +23,15 @@ Alternatively, for non-dotnet compatible translations, you will need [Visual Stu
 
 ## java
 
-The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelliJ](https://www.jetbrains.com/idea/)
+The Java translations can be run via the command line or from an IDE such as [Eclipse](https://www.eclipse.org/downloads/packages/release/kepler/sr1/eclipse-ide-java-developers) or [IntelJ][def]
 
 To run from the command line, you will need a Java SDK (eg. [Oracle JDK](https://www.oracle.com/java/technologies/downloads/) or [Open JDK](https://openjdk.java.net/)).
 
 1. Navigate to the corresponding directory.
 1. Compile the program with `javac`:
-   * eg. `javac AceyDuceyGame.java`
+   * eg. `**```python
+   javac
+   ```** AceyDuceyGame.java`
 1. Run the compiled program with `java`:
    * eg. `java AceyDuceyGame`
 
@@ -68,7 +70,7 @@ In addition to the java runtime you will need the `kotlinc` compiler, which can 
 
 The pascal examples can be run using [Free Pascal](https://www.freepascal.org/). Additionally, `.lsi` project files can be opened with the [Lazarus Project IDE](https://www.lazarus-ide.org/).
 
-The pascal examples include both *simple* (single-file) and *object-oriented* (in the `/object-pascal`directories) examples.
+The pascal examples include both ___simple_ (single-file) and_o**bject-oriented_ (in the `/object-pascal`directories) examples.
 
 1. You can compile the program from the command line with the `fpc` command.
    * eg. `fpc amazing.pas`
@@ -92,7 +94,9 @@ The python translations can be run from the command line by using the `py` inter
    * eg. `python aceyducey.py`
 
 **Note**
-
+{
+    "MD013": false
+}
 Some translations include multiple versions for python, such as `acey ducey` which features versions for Python 2 (`aceyducey.py`) and Python 3 (`acey_ducey.py`) as well as an extra object-oriented version (`acey_ducey_oo.py`).
 
 You can manage and use different versions of python with [pip](https://pypi.org/project/pip/).
@@ -116,3 +120,5 @@ If you don't already have Rust on your computer, you can follow the instruction 
 1. From the command-line, navigate to the corresponding directory.
 2. Run the following command.
    * `cargo run`
+
+[def]: https://www.jetbrains.com/idea/

@@ -127,8 +127,9 @@ def print_header() -> None:
 
 
 def instructions() -> None:
-    wants_it = ask_binary("WOULD YOU LIKE THE INSTRUCTIONS? ", "ANSWER YES OR NO!!")
-    if wants_it:
+    if wants_it := ask_binary(
+        "WOULD YOU LIKE THE INSTRUCTIONS? ", "ANSWER YES OR NO!!"
+    ):
         print()
         print("THIS IS A SIMULATED HOCKEY GAME.")
         print("QUESTION     RESPONSE")
@@ -228,9 +229,7 @@ def team2_action(
         z1 = 3
     elif pass_value == 2:
         print("IT'S A ' 3 ON 2 '!\n")
-        print(
-            "ONLY " + team_a.players[3] + " AND " + team_a.players[4] + " ARE BACK.\n"
-        )
+        print(f"ONLY {team_a.players[3]} AND {team_a.players[4]}" + " ARE BACK.\n")
         print(
             team_b.players[player_index[j - 2]]
             + " GIVES OFF TO "
@@ -290,7 +289,7 @@ def final_message(team_a: Team, team_b: Team, player_index: List[int]) -> None:
     print("\n")
     print("SHOTS ON NET\n")
     print(f"{team_a.name}: {team_a.shots_on_net}\n")
-    print(team_b.name + f": {team_b.shots_on_net}\n")
+    print(f"{team_b.name}: {team_b.shots_on_net}\n")
 
 
 def main() -> None:
@@ -374,11 +373,8 @@ def handle_hit(
             print(f"{team_a.name}: {team_a.score}\t{team_b.name}: {team_b.score}\n")
         else:
             print(f"{team_b.name}: {team_b.score}\t{team_a.name}: {team_a.score}\n")
-        if controlling_team == 1:
-            team = team_a
-        else:
-            team = team_b
-        print("GOAL SCORED BY: " + team.players[goal_player] + "\n")
+        team = team_a if controlling_team == 1 else team_b
+        print(f"GOAL SCORED BY: {team.players[goal_player]}" + "\n")
         if goal_assistant1 != 0:
             if goal_assistant2 != 0:
                 print(
@@ -406,16 +402,16 @@ def handle_miss(
     saving_player = randint(1, 7)
     if controlling_team == 1:
         if saving_player == 1:
-            print("KICK SAVE AND A BEAUTY BY " + team_b.players[5] + "\n")
-            print("CLEARED OUT BY " + team_b.players[3] + "\n")
+            print(f"KICK SAVE AND A BEAUTY BY {team_b.players[5]}" + "\n")
+            print(f"CLEARED OUT BY {team_b.players[3]}" + "\n")
             remaining_time -= 1
             return ("continue", remaining_time)
         if saving_player == 2:
-            print("WHAT A SPECTACULAR GLOVE SAVE BY " + team_b.players[5] + "\n")
-            print("AND " + team_b.players[5] + " GOLFS IT INTO THE CROWD\n")
+            print(f"WHAT A SPECTACULAR GLOVE SAVE BY {team_b.players[5]}" + "\n")
+            print(f"AND {team_b.players[5]}" + " GOLFS IT INTO THE CROWD\n")
             return ("break", remaining_time)
         if saving_player == 3:
-            print("SKATE SAVE ON A LOW STEAMER BY " + team_b.players[5] + "\n")
+            print(f"SKATE SAVE ON A LOW STEAMER BY {team_b.players[5]}" + "\n")
             remaining_time -= 1
             return ("continue", remaining_time)
         if saving_player == 4:
@@ -451,22 +447,20 @@ def handle_miss(
             print("ON THE LOOSE PUCK!\n")
             return ("break", remaining_time)
         if saving_player == 3:
-            print("SKATE SAVE BY " + team_a.players[5] + "\n")
+            print(f"SKATE SAVE BY {team_a.players[5]}" + "\n")
             print(team_a.players[5] + " WHACKS THE LOOSE PUCK INTO THE STANDS\n")
             return ("break", remaining_time)
         if saving_player == 4:
-            print(
-                "STICK SAVE BY " + team_a.players[5] + " AND HE CLEARS IT OUT HIMSELF\n"
-            )
+            print(f"STICK SAVE BY {team_a.players[5]}" + " AND HE CLEARS IT OUT HIMSELF\n")
             remaining_time -= 1
             return ("continue", remaining_time)
         if saving_player == 5:
-            print("KICKED OUT BY " + team_a.players[5] + "\n")
+            print(f"KICKED OUT BY {team_a.players[5]}" + "\n")
             print("AND IT REBOUNDS ALL THE WAY TO CENTER ICE\n")
             remaining_time -= 1
             return ("continue", remaining_time)
         if saving_player == 6:
-            print("GLOVE SAVE " + team_a.players[5] + " AND HE HANGS ON\n")
+            print(f"GLOVE SAVE {team_a.players[5]}" + " AND HE HANGS ON\n")
             return ("break", remaining_time)
     return ("continue", remaining_time)
 
@@ -488,8 +482,9 @@ def simulate_game_round(
         j = 0
         for j in range(1, (pass_value + 2) + 1):
             player_index[j] = randint(1, 5)
-        if player_index[j - 1] == player_index[j - 2] or (
-            pass_value + 2 >= 3
+        if (
+            player_index[j - 1] == player_index[j - 2]
+            or pass_value >= 1
             and (
                 player_index[j - 1] == player_index[j - 3]
                 or player_index[j - 2] == player_index[j - 3]
@@ -511,7 +506,7 @@ def simulate_game_round(
             )
         while True:
             shot_type = int(input("SHOT? "))
-            if not (shot_type < 1 or shot_type > 4):
+            if shot_type >= 1 and shot_type <= 4:
                 break
         if controlling_team == 1:
             print(team_a.players[goal_player], end="")
@@ -521,21 +516,21 @@ def simulate_game_round(
             print(" LET'S A BIG SLAP SHOT GO!!\n")
             z = 4
             z += z1
-        if shot_type == 2:
+        elif shot_type == 2:
             print(" RIPS A WRIST SHOT OFF\n")
             z = 2
             z += z1
-        if shot_type == 3:
+        elif shot_type == 3:
             print(" GETS A BACKHAND OFF\n")
             z = 3
             z += z1
-        if shot_type == 4:
+        elif shot_type == 4:
             print(" SNAPS OFF A SNAP SHOT\n")
             z = 2
             z += z1
     while True:
         goal_area = int(input("AREA? "))
-        if not (goal_area < 1 or goal_area > 4):
+        if goal_area >= 1 and goal_area <= 4:
             break
     if controlling_team == 1:
         team_a.shots_on_net += 1

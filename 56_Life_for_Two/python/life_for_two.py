@@ -5,11 +5,12 @@ Competitive Game of Life (two or more players).
 
 Ported by Sajid Sarker (2022).
 '''
+
 # Global Variable Initialisation
 # Initialise the board
-gn = [[0 for i in range(6)] for j in range(6)]
-gx = [0 for x in range(3)]
-gy = [0 for x in range(3)]
+gn = [[0 for _ in range(6)] for _ in range(6)]
+gx = [0 for _ in range(3)]
+gy = [0 for _ in range(3)]
 gk = [0, 3, 102, 103, 120, 130, 121,
       112, 111, 12, 21, 30, 1020, 1030,
       1011, 1021, 1003, 1002, 1012]
@@ -27,9 +28,9 @@ def tab(number) -> str:
 
 
 def display_header() -> None:
-    print("{}LIFE2".format(tab(33)))
-    print("{}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n".format(tab(15)))
-    print("{}U.B. LIFE GAME".format(tab(10)))
+    print(f"{tab(33)}LIFE2")
+    print(f"{tab(15)}CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n\n")
+    print(f"{tab(10)}U.B. LIFE GAME")
 
 
 # Board Functions
@@ -37,7 +38,7 @@ def setup_board() -> None:
     # Players add symbols to initially setup the board
     for b in range(1, 3):
         p1 = 3 if b != 2 else 30
-        print("\nPLAYER {} - 3 LIVE PIECES.".format(b))
+        print(f"\nPLAYER {b} - 3 LIVE PIECES.")
         for _ in range(1, 4):
             query_player(b)
             gn[gx[b]][gy[b]] = p1
@@ -46,7 +47,7 @@ def setup_board() -> None:
 def modify_board() -> None:
     # Players take turns to add symbols and modify the board
     for b in range(1, 3):
-        print("PLAYER {} ".format(b))
+        print(f"PLAYER {b} ")
         query_player(b)
         if b == 99:
             break
@@ -72,36 +73,32 @@ def display_board() -> None:
     for j in range(7):
         print("")
         for k in range(7):
-            if j == 0 or j == 6:
+            if j in [0, 6]:
                 if k != 6:
-                    print(" " + str(k) + " ", end="")
+                    print(f" {str(k)} ", end="")
                 else:
                     print(" 0 ", end="")
-            elif k == 0 or k == 6:
-                if j != 6:
-                    print(" " + str(j) + " ", end="")
-                else:
-                    print(" 0\n")
+            elif k in [0, 6]:
+                print(f" {str(j)} ", end="")
+            elif gn[j][k] < 3:
+                gn[j][k] = 0
+                print("   ", end="")
             else:
-                if gn[j][k] < 3:
+                for o1 in range(1, 19):
+                    if gn[j][k] == gk[o1]:
+                        break
+                if o1 <= 18:
+                    if o1 > 9:
+                        gn[j][k] = 1000
+                        m3 += 1
+                        print(" # ", end="")
+                    else:
+                        gn[j][k] = 100
+                        m2 += 1
+                        print(" * ", end="")
+                else:
                     gn[j][k] = 0
                     print("   ", end="")
-                else:
-                    for o1 in range(1, 19):
-                        if gn[j][k] == gk[o1]:
-                            break
-                    if o1 <= 18:
-                        if o1 > 9:
-                            gn[j][k] = 1000
-                            m3 += 1
-                            print(" # ", end="")
-                        else:
-                            gn[j][k] = 100
-                            m2 += 1
-                            print(" * ", end="")
-                    else:
-                        gn[j][k] = 0
-                        print("   ", end="")
 
 
 # Player Functions
@@ -113,8 +110,8 @@ def query_player(b) -> None:
         b_ = input("???")
         x_ = [int(num) for num in a_.split() if num.isdigit()]
         y_ = [int(num) for num in b_.split() if num.isdigit()]
-        x_ = [0] if len(x_) == 0 else x_
-        y_ = [0] if len(y_) == 0 else y_
+        x_ = [0] if not x_ else x_
+        y_ = [0] if not y_ else y_
         gx[b] = y_[0]
         gy[b] = x_[0]
         if gx[b] in range(1, 6)\

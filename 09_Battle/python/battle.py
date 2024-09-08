@@ -40,8 +40,8 @@ def place_ship(sea: SeaType, size: int, code: int) -> None:
             point = add_vector(point, vector)
             points.append(point)
 
-        if not all([is_within_sea(point, sea) for point in points]) or any(
-            [value_at(point, sea) for point in points]
+        if not all(is_within_sea(point, sea) for point in points) or any(
+            value_at(point, sea) for point in points
         ):
             # ship out of bounds or crosses other ship, trying again
             continue
