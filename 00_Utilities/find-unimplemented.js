@@ -17,11 +17,14 @@ let languages = [
   { name: "csharp", extension: "cs" },
   { name: "java", extension: "java" },
   { name: "javascript", extension: "html" },
+  { name: "kotlin", extension: "kt" },
+  { name: "lua", extension: "lua" },
   { name: "pascal", extension: "pas" },
   { name: "perl", extension: "pl" },
   { name: "python", extension: "py" },
   { name: "ruby", extension: "rb" },
   { name: "vbnet", extension: "vb" },
+  { name: "rust", extension: "rs" },
 ];
 
 const getFilesRecursive = async (path, extension) => {
