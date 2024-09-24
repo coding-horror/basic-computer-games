@@ -34,7 +34,7 @@ class Stock_Market:
         return self.cash_assets + self.stock_assets
 
     def _generate_day_change(self) -> None:
-        self.changes = []
+        self.changes: List[float] = []
         self.changes.extend(
             round(random.uniform(-5, 5), 2) for _ in range(len(self.data))
         )
