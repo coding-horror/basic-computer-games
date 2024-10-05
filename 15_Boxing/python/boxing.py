@@ -3,7 +3,7 @@ import json
 import random
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Literal, NamedTuple, Tuple
+from typing import Dict, Literal, NamedTuple, Tuple, cast
 
 
 class PunchProfile(NamedTuple):
@@ -70,7 +70,7 @@ def read_punch_profiles(filepath: Path) -> Dict[Literal[1, 2, 3, 4], PunchProfil
     with open(filepath) as f:
         punch_profile_dict = json.load(f)
     return {
-        int(key): PunchProfile(**value)
+        cast(Literal[1, 2, 3, 4], int(key)): PunchProfile(**value)
         for key, value in punch_profile_dict.items()
     }
 
