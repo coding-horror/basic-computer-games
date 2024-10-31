@@ -94,7 +94,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 14_Bowling             | x      | x    | x          |        |     | x    | x      |      |      | x     |
 | 15_Boxing              | x      | x    | x          |        |     | x    | x      |      |      | x     |
 | 16_Bug                 | x      | x    | x          |        |     |      | x      | x    |      | x     |
-| 17_Bullfight           | x      |      | x          | x      |     |      | x      |      |      | x     |
+| 17_Bullfight           | x      | x    | x          | x      |     |      | x      |      |      | x     |
 | 18_Bullseye            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
 | 19_Bunny               | x      | x    | x          |        |     | x    | x      | x    |      | x     |
 | 20_Buzzword            | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
