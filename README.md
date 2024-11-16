@@ -127,7 +127,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 47_Hi-Lo               | x      |      | x          | x      | x   | x    | x      | x    | x    | x     |
 | 48_High_IQ             | x      | x    | x          |        |     |      | x      |      |      | x     |
 | 49_Hockey              | x      |      | x          |        |     |      | x      |      |      | x     |
-| 50_Horserace           | x      |      | x          |        |     |      |        |      | x    | x     |
+| 50_Horserace           | x      | x    | x          |        |     |      |        |      | x    | x     |
 | 51_Hurkle              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 52_Kinema              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
 | 53_King                | x      |      | x          |        |     |      | x      |      | x    | x     |
