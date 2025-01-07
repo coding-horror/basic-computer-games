@@ -84,7 +84,7 @@ async function main()
             } while (j >= 1) ;
         }
         print("\n");
-        print("O.K.  I HAVE A NUMBER IN MIND.\n");
+        print("OK.  I HAVE A NUMBER IN MIND.\n");
         for (i = 1; i <= 20; i++) {
             while (1) {
                 print("GUESS #" + i);
@@ -142,7 +142,7 @@ async function main()
             print("\n");
         } else {
             print("OH WELL.\n");
-            print("THAT'S A TWENTY GUESS.  MY NUMBER WAS " + a[1] + a[2] + a[3]);
+            print("THAT'S YOUR TWENTIETH GUESS.  MY NUMBER WAS " + a[1] + a[2] + a[3]);
         }
         y++;
         print("PLAY AGAIN (YES OR NO)");
