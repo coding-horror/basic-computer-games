@@ -126,6 +126,13 @@ namespace Bullseye
                             probabilities = new int[] { 95, 75, 45, 5 };
                             break;
                         }
+                        // trying to add NotnullAllowed 
+                        // bcoz if just keep pressing enter 
+                        //the game is over without fun. 
+                        case null:{
+                            console.WriteLine("No Nulls allowed");
+                            break;
+                        }
                         default:
                         {
                             // in case the user types something bad, pretend it's
