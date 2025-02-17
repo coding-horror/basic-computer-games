@@ -1,5 +1,5 @@
-/** NAME GAME BY DAVID AHL
- * https://github.com/coding-horror/basic-computer-games/blob/main/45_Hello/hello.bas
+/** NAME GAME BY GEOFFREY CHASE
+ * https://github.com/coding-horror/basic-computer-games/blob/main/63_Name/name.bas
  * Direct conversion from BASIC to Rust by Pablo Marques (marquesrs).
  * No additional features or improvements were added. As a faithful translation, 
  * many of the code here are done in an unrecommended way by today's standards.
