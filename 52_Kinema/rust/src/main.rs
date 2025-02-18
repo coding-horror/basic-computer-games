@@ -1,6 +1,3 @@
-use std::io::Write;
-use rand::Rng;
-
 /** KINEMA BY RICHARD PAV
  * https://github.com/coding-horror/basic-computer-games/blob/main/52_Kinema/kinema.bas
  * Direct conversion from BASIC to Rust by Pablo Marques (marquesrs).
@@ -11,9 +8,19 @@ use rand::Rng;
  * instead of the real formulation, which could lead to incorrect results. I have solved
  * this issue, but kept the old lines. To compile the original version, just uncomment the 
  * code with the OLD label and comment the lines with the NEW label.
- * example: gravity is now 9.81 instead of 10
+ * example: gravity is now 9.81 instead of 10; Inputs and outputs are now float not integers...
+ * 
+ * FORMULATION
+ * A BALL IS THROWN UPWARDS AT 9,36 METERS PER SECOND.
+ * HOW HIGH WILL IT GO (IN METERS)? (9,36 ^2) / (2 * 9,81) = 4,465321101
+ * HOW LONG UNTIL IT RETURNS (IN SECONDS)? 2*(9,36 / 9,81) = 1,908256881
+ * WHAT WILL ITS VELOCITY BE AFTER 1,09 SECONDS? 9,36- 9,81 * 1,09 = −1,3329
+ * 
  * 17/02/25
 */
+
+use std::io::Write;
+use rand::Rng;
 
 fn subroutine(a: f64, q: &mut i32) {
     std::io::stdout().flush().unwrap();
