@@ -61,9 +61,7 @@ fn main() {
         print!("\nFEET\n");
 
         //186 S1=INT(70/(V/(16*S2)))
-        let s1 = (
-            70.0 / (v / (16.0 * s2) )
-        ) as i32;
+        let s1 = (70.0 / (v / (16.0 * s2))).floor() as i32; // verified
 
         //190 FOR I=1 TO S1
         for i in 1..=s1 {
@@ -75,10 +73,10 @@ fn main() {
         let mut l = 0.0;
 
         //220 FOR H=INT(-16*(V/32)^2+V^2/32+.5) TO 0 STEP -.5
-        let mut h = ((-16.0*(v/32.0).powf(2.0)) +(v.powf(2.0)/32.0) + 0.5).floor();
-        while h >= 0.0 {
+        let mut h = (-16.0 * (v / 32.0).powi(2) + (v.powi(2)) / 32.0 + 0.5).floor() as i32; // verified
+        while h >= 0 {
             //221 IF INT(H)<>H THEN 225
-            if h.floor() != h {
+            if h != h {
                 //225 L=0
                 l = 0.0;
             }
