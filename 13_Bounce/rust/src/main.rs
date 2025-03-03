@@ -58,60 +58,58 @@ fn main() {
         //180 PRINT
         //182 PRINT "FEET"
         //184 PRINT
-        print!("\nFEET\n");
+        print!("\nFEET\n\n");
 
-        //186 S1=INT(70/(V/(16*S2)))
-        let s1 = (70.0 / (v / (16.0 * s2))).floor() as i32; // verified
+        //186 S1=INT(70/(V/(16*S2))) // verified
+        let s1 = (70.0 / (v/(16.0*s2))) as i32;
 
         //190 FOR I=1 TO S1
         for i in 1..=s1 {
             //200 T(I)=V*C^(I-1)/16
-            t.push(v * c.powf(i as f32 - 1.0) / 16.0);
+            t.push(v * c.powf(i as f32 - 1.0) / 16.0); // verified
             //210 NEXT I
         }
 
         let mut l = 0.0;
 
         //220 FOR H=INT(-16*(V/32)^2+V^2/32+.5) TO 0 STEP -.5
-        let mut h = (-16.0 * (v / 32.0).powi(2) + (v.powi(2)) / 32.0 + 0.5).floor() as i32; // verified
-        while h >= 0 {
+        let mut h = (-16.0 * (v / 32.0).powi(2) + (v.powi(2)) / 32.0 + 0.5).floor();
+        while h >= 0.0 {
             //221 IF INT(H)<>H THEN 225
-            if h != h {
-                //225 L=0
-                l = 0.0;
-            }
-            else {
+            if h.floor() == h {
                 //222 PRINT H;
-                println!("{}", h);
-                //225 L=0
-                l = 0.0;
+                print!("{}", h);
             }
+            //225 L=0
+            l = 0.0;
             
             //230 FOR I=1 TO S1
             for i in 1..=s1 {
-                let mut t2 = 0.0;
+                let mut T = 0.0;
                 //240 FOR T=0 TO T(I) STEP S2
-                while t2 <= t[(i - 1) as usize] {
+                while T <= t[(i - 1) as usize] {
                     //245 L=L+S2
                     l = l + s2;
 
                     //250 IF ABS(H-(.5*(-32)*T^2+V*C^(I-1)*T))>.25 THEN 270
-                    let condition = h - (0.5 * (-32.0) * t2.powf(2.0) + v * c.powf((i-1) as f32) * t2);
-                    if condition >= 0.25{
+                    let condition = h - (0.5 * (-32.0) * T.powf(2.0) + v * c.powf((i-1) as f32) * T);
+                    if condition.abs() >= 0.25{
+                        T = T + s2;
                         continue;
                     }
                     //260 PRINT TAB(L/S2);"0";
-                    print!("{}0", " ".repeat((l/s2) as usize));
+                    print!("{}{}", " ".repeat((l / s2) as usize), T);
                     
                     //270 NEXT T
-                    t2 = t2 + s2;
+                    T = T + s2;
                 }
                 
                 //275 T=T(I+1)/2
-                t2 = t[i as usize] / 2.0;
+                if i as usize == t.len() { break; }
+                T = t[i as usize] / 2.0;
 
                 //276 IF -16*T^2+V*C^(I-1)*T<H THEN 290
-                if -16.0*t2.powf(2.0) + v * c.powf(i as f32 -1.0) * t2 <= h {
+                if -16.0 * T.powf(2.0) + v * c.powf(i as f32 -1.0) * T <= h {
                     break;
                 }
 
@@ -125,11 +123,12 @@ fn main() {
             h = h - 0.5;
         }
 
+//
         //310 PRINT TAB(1);
         print!(" ");
 
         //320 FOR I=1 TO INT(L+1)/S2+1
-        for _ in 1..=((l+1.0).floor() / s2 + 1.0) as i32 {
+        for _ in 1..=((l+1.0) / s2 + 1.0) as i32 {
             //330 PRINT ".";
             print!(".");
             //340 NEXT I
@@ -149,8 +148,8 @@ fn main() {
         //400 PRINT
         //410 PRINT TAB(INT(L+1)/(2*S2)-2);"SECONDS"
         //420 PRINT
-        let tabs = ((l+1.0).floor() / (2.0 * s2) - 2.0) as usize;
-        print!("\n{}SECONDS\n", " ".repeat(tabs));
+        let tabs = ((l+1.0) / (2.0 * s2) - 2.0) as usize;
+        println!("\n{}SECONDS\n", " ".repeat(tabs));
 
         //430 GOTO 135
     }
