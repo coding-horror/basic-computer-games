@@ -1,7 +1,3 @@
-use std::io::Write;
-
-use rand::Rng;
-
 /** DEPTH CHARGE GAME 
  * https://github.com/marquesrs/basic-computer-games/blob/main/31_Depth_Charge/depthcharge.bas
  * Direct conversion from BASIC to Rust by Pablo Marques (marquesrs).
@@ -9,6 +5,9 @@ use rand::Rng;
  * many of the code here are done in an unrecommended way by today's standards.
  * 03/03/25
 */
+
+use std::io::Write;
+use rand::Rng;
 
 fn input(msg: &str) -> String {
     print!("{}", msg);
