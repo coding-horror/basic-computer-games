@@ -164,7 +164,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 84_Super_Star_Trek     | x      | x    | x          |        |     |      | x      |      | x    | x     |
 | 85_Synonym             | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 86_Target              | x      | x    | x          |        |     | x    | x      |      |      | x     |
-| 87_3-D_Plot            | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 87_3-D_Plot            | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 88_3-D_Tic-Tac-Toe     | x      |      | x          |        |     |      | x      |      |      | x     |
 | 89_Tic-Tac-Toe         | x      | x    | x          | x      |     | x    | x      |      | x    | x     |
 | 90_Tower               | x      | x    | x          |        |     | x    | x      |      | x    | x     |
