@@ -40,20 +40,23 @@ fn main() {
     );
 
     loop {
-        //135 INPUT "TIME INCREMENT (SEC)";S2
-        let s2 = input("TIME INCREMENT (SEC): ").parse::<f32>().unwrap();
+       //135 INPUT "TIME INCREMENT (SEC)";S2
+        //let s2 = input("TIME INCREMENT (SEC): ").parse::<f32>().unwrap();
+        let s2 = 0.1f32;
 
         //140 PRINT
         println!();
         
         //150 INPUT "VELOCITY (FPS)";V
-        let v = input("VELOCITY (FPS): ").parse::<f32>().unwrap();
+        //let v = input("VELOCITY (FPS): ").parse::<f32>().unwrap();
+        let v = 20.0f32;
 
         //160 PRINT
         println!();
 
         //170 INPUT "COEFFICIENT";C
-        let c = input("COEFFICIENT: ").parse::<f32>().unwrap();
+        //let c = input("COEFFICIENT: ").parse::<f32>().unwrap();
+        let c = 0.5f32;
 
         //180 PRINT
         //182 PRINT "FEET"
@@ -157,6 +160,7 @@ fn main() {
         println!("\n{}SECONDS\n", " ".repeat(tabs));
 
         //430 GOTO 135
+        break;
     }
     //440 END
 }
