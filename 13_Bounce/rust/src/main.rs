@@ -71,6 +71,7 @@ fn main() {
         }
 
         let mut l = 0.0;
+        let mut l_expected = l;
 
         //220 FOR H=INT(-16*(V/32)^2+V^2/32+.5) TO 0 STEP -.5
         let mut h = (-16.0 * (v / 32.0).powi(2) + (v.powi(2)) / 32.0 + 0.5).floor();
@@ -82,7 +83,7 @@ fn main() {
             }
             //225 L=0
             l = 0.0;
-            
+            l_expected = l;
             //230 FOR I=1 TO S1
             for i in 1..=s1 {
                 let mut T = 0.0;
@@ -90,16 +91,20 @@ fn main() {
                 while T <= t[(i - 1) as usize] {
                     //245 L=L+S2
                     l = l + s2;
-
+                    l_expected = l_expected + s2;
+                    
                     //250 IF ABS(H-(.5*(-32)*T^2+V*C^(I-1)*T))>.25 THEN 270
                     let condition = h - (0.5 * (-32.0) * T.powf(2.0) + v * c.powf((i-1) as f32) * T);
                     if condition.abs() >= 0.25{
                         T = T + s2;
                         continue;
                     }
+                    // TABS ARE NOT SPACES, BUT A TERMINAL POSITION
                     //260 PRINT TAB(L/S2);"0";
-                    print!("{}{}", " ".repeat((l / s2) as usize), T);
-                    
+                    let spaces = ((l / s2).floor()-1.0) as usize;
+                    print!("{}0", " ".repeat(spaces));
+                    l = l - spaces as f32;
+                   
                     //270 NEXT T
                     T = T + s2;
                 }
@@ -128,7 +133,7 @@ fn main() {
         print!(" ");
 
         //320 FOR I=1 TO INT(L+1)/S2+1
-        for _ in 1..=((l+1.0) / s2 + 1.0) as i32 {
+        for _ in 1..=((l_expected+1.0) / s2 + 1.0) as i32 {
             //330 PRINT ".";
             print!(".");
             //340 NEXT I
@@ -139,7 +144,7 @@ fn main() {
         print!("\n 0");
 
         //360 FOR I=1 TO INT(L+.9995)
-        for i in 1..=((l + 0.9995) as i32) {
+        for i in 1..=((l_expected + 0.9995) as i32) {
             //380 PRINT TAB(INT(I/S2));I;
             print!("{}{}", " ".repeat((i as f32 / s2) as usize), i);
             //390 NEXT I
@@ -148,7 +153,7 @@ fn main() {
         //400 PRINT
         //410 PRINT TAB(INT(L+1)/(2*S2)-2);"SECONDS"
         //420 PRINT
-        let tabs = ((l+1.0) / (2.0 * s2) - 2.0) as usize;
+        let tabs = ((l_expected+1.0) / (2.0 * s2) - 2.0) as usize;
         println!("\n{}SECONDS\n", " ".repeat(tabs));
 
         //430 GOTO 135
