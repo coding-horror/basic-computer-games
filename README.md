@@ -108,7 +108,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 28_Combat              | x      | x    | x          |        |     | x    | x      |      |      | x     |
 | 29_Craps               | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
 | 30_Cube                | x      | x    | x          |        |     |      | x      | x    | x    | x     |
-| 31_Depth_Charge        | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 31_Depth_Charge        | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 32_Diamond             | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
 | 33_Dice                | x      | x    | x          |        | x   | x    | x      | x    | x    | x     |
 | 34_Digits              | x      | x    | x          |        |     | x    | x      |      |      | x     |
@@ -150,7 +150,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 70_Poetry              | x      | x    | x          |        |     | x    | x      | x    |      | x     |
 | 71_Poker               | x      | x    | x          |        |     |      |        |      |      | x     |
 | 72_Queen               | x      |      | x          |        |     | x    | x      |      | x    | x     |
-| 73_Reverse             | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 73_Reverse             | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 74_Rock_Scissors_Paper | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
 | 75_Roulette            | x      | x    | x          |        |     | x    | x      |      | x    | x     |
 | 76_Russian_Roulette    | x      | x    | x          | x      |     | x    | x      | x    | x    | x     |
