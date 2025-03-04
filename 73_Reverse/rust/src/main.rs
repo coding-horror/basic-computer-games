@@ -34,7 +34,7 @@ fn main() {
     ));
 
     // 130 DIM A(20)
-    let mut a = Vec::with_capacity(20);
+    let mut a = vec![0; 20];
     
     // 140 REM *** N=NUMBER OF NUMBERS
     // 150 N=9
@@ -45,7 +45,7 @@ fn main() {
     let opt = input("DO YOU WANT THE RULES (YES OR NO)? ");
 
     
-    if opt == "YES" {
+    if opt == "YES" || opt == "Y" {
         // 190 GOSUB 710        
         sub1(n);
     }
@@ -53,28 +53,39 @@ fn main() {
     'c : loop {
         // 200 REM *** MAKE A RANDOM LIST A(1) TO A(N)
         // 210 A(1)=INT((N-1)*RND(1)+2)
-        a[1-1] = ((n-1) as f32 * rand::rng().random_range(0.0..=1.0) + 2.0) as i32;
-
+        // element 0
+        a[0] = ((n-1) as f32 * rand::rng().random_range(0.0..=1.0) + 2.0) as i32;
+    
         // 220 FOR K=2 TO N
-        'a : for k in 2..=n {
-            // 230 A(K)=INT(N*RND(1)+1)
-            a[k-1] = (n as f32 * rand::rng().random_range(0.0..=1.0) + 1.0) as i32;
-            // 240 FOR J=1 TO K-1
-            for j in 1..k {
-                if a[k-1] == a[j-1] {
+        for k in 2..=n {
+            'a : loop {
+                // element k
+                // 230 A(K)=INT(N*RND(1)+1)
+                a[k-1] = (n as f32 * rand::rng().random_range(0.0..=1.0) + 1.0) as i32;
+                
+                // element 0 to k-1
+                // 240 FOR J=1 TO K-1
+                for j in 1..k {
                     // 250 IF A(K)=A(J) THEN 230
-                    continue 'a;
+                    if a[k-1] == a[j-1] {
+                        continue 'a;
+                    }
+                    // 260 NEXT J:
                 }
-                // 260 NEXT J:
+                break;
             }
             //NEXT K
-        }
+        }    
+
         // 280 REM *** PRINT ORIGINAL LIST AND START GAME
         // 290 PRINT: PRINT "HERE WE GO ... THE LIST IS:"
-        print!("\nHERE WE GO ... THE LIST IS: ");
-        
+        print!("\nHERE WE GO ... THE LIST IS:\n");
+
         // 310 T=0
         let mut t = 0;
+
+        // 320 GOSUB 610
+        sub2(&a, n);
 
         'b : loop {
             // 330 PRINT "HOW MANY SHALL I REVERSE";
@@ -83,17 +94,8 @@ fn main() {
 
             // 350 IF R=0 THEN 520
             if r == 0 {
-                // 520 PRINT
-                // 530 PRINT "TRY AGAIN (YES OR NO)";
-                // 540 INPUT A$
-                let opt = input("\nTRY AGAIN (YES OR NO): ");
-                // 550 IF A$="YES" THEN 210
-                if opt == "YES" {
-                    continue 'c;
-                }
-                // 560 PRINT: PRINT "O.K. HOPE YOU HAD FUN!!":GOTO 999
-                print!("\nO.K. HOPE YOU HAD FUN!!");
-                break 'c;
+                if replay() { continue 'c; }
+                else { break 'c; }
             }
             // 360 IF R<=N THEN 390
             if r <= n {
@@ -127,12 +129,13 @@ fn main() {
                 // 510 PRINT "YOU WON IT IN";T;"MOVES!!!":PRINT
                 print!("{}{}{}", "YOU WON IT IN ", t, " MOVES!!!\n\n");
 
+                if replay() { continue 'c; }
+                else { break 'c; }
             }
-            // 370 PRINT "OOPS! TOO MANY! I CAN REVERSE AT MOST";N:GOTO 330
-            print!("OOPS! TOO MANY! I CAN REVERSE AT MOST {n}");
-
-            // 320 GOSUB 610
-            sub2(&a, n);
+            else {
+                // 370 PRINT "OOPS! TOO MANY! I CAN REVERSE AT MOST";N:GOTO 330
+                print!("OOPS! TOO MANY! I CAN REVERSE AT MOST {n}");
+            }
         }
     }
     // 999 END
@@ -143,7 +146,7 @@ fn sub2(a: &Vec<i32>, n: usize) {
     // 610 PRINT:FOR K=1 TO N:PRINT A(K);:NEXT K
     // 650 PRINT:PRINT:RETURN
     for k in 1..=n {
-        print!("{}", a[k-1]);
+        print!("{} ", a[k-1]);
     }
     print!("\n\n");
 }
@@ -187,4 +190,20 @@ fn sub1(n: usize) {
         "IF YOU WANT TO QUIT, REVERSE 0 (ZERO).\n",
         "\n",
     )
+}
+
+fn replay() -> bool {
+    // 520 PRINT
+    // 530 PRINT "TRY AGAIN (YES OR NO)";
+    // 540 INPUT A$
+    let r = input("\nTRY AGAIN (YES OR NO): ");
+    // 550 IF A$="YES" THEN 210
+    if r == "YES" || r == "Y" {
+        return true;
+    }
+    else {
+        // 560 PRINT: PRINT "O.K. HOPE YOU HAD FUN!!":GOTO 999
+        println!("\nO.K. HOPE YOU HAD FUN!!");
+        return false; 
+    }
 }
