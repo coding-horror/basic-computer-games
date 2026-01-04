@@ -29,7 +29,7 @@ def determine_player_kills(
     print(f"THE {player_type}{plural_form} DID A {job_qualities[job_quality]} JOB.")
     if job_quality >= 4:
         if job_quality == 5:
-            if _player_was_killed := random.choice([True, False]):
+            if random.choice([True, False]):
                 print(f"ONE OF THE {player_type}{plural_form} WAS KILLED.")
         else:
             if player_type != "TOREAD":

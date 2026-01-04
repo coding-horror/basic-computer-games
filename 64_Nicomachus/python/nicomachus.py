@@ -43,7 +43,7 @@ def play_game() -> None:
 
     print(f"YOUR NUMBER WAS {d}, RIGHT?")
 
-    if _response := get_yes_or_no():
+    if get_yes_or_no():
         print("HOW ABOUT THAT!!")
     else:
         print("I FEEL YOUR ARITHMETIC IS IN ERROR.")

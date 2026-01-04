@@ -96,7 +96,7 @@ def main() -> None:
             f"\nA.I MOVE - A.I Removed {ai_command[1]} pegs from Pile {ai_command[0]}"
         )
         game.remove_pegs(f"{str(ai_command[0])},{str(ai_command[1])}")
-        if _end := game.check_for_win():
+        if game.check_for_win():
             print("\nComputer Wins the Game, Better Luck Next Time\n")
             input("Press any key to exit")
             break

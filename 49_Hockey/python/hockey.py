@@ -127,7 +127,7 @@ def print_header() -> None:
 
 
 def instructions() -> None:
-    if _wants_it := ask_binary(
+    if ask_binary(
         "WOULD YOU LIKE THE INSTRUCTIONS? ", "ANSWER YES OR NO!!"
     ):
         print()
@@ -408,7 +408,7 @@ def handle_miss(
             return ("continue", remaining_time)
         if saving_player == 2:
             print(f"WHAT A SPECTACULAR GLOVE SAVE BY {team_b.players[5]}\n")
-            print(f"AND {team_b.players[5]}" + " GOLFS IT INTO THE CROWD\n")
+            print(f"AND {team_b.players[5]} GOLFS IT INTO THE CROWD\n")
             return ("break", remaining_time)
         if saving_player == 3:
             print(f"SKATE SAVE ON A LOW STEAMER BY {team_b.players[5]}\n")

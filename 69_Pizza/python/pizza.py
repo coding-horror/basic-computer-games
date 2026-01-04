@@ -155,7 +155,7 @@ def main() -> None:
 
     player_name = print_instructions()
 
-    if _more_directions := yes_no_prompt("DO YOU NEED MORE DIRECTIONS?"):
+    if yes_no_prompt("DO YOU NEED MORE DIRECTIONS?"):
         print_more_directions(player_name)
 
         understand = yes_no_prompt("UNDERSTAND?")

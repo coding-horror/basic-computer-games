@@ -131,7 +131,7 @@ def main() -> None:
     # Main loop of game
     print_intro()
     while (
-        _keep_playing := parse_input(
+        parse_input(
             "Are you thinking of an animal? ", True, root
         )
         == "y"
