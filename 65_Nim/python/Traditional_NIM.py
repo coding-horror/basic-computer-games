@@ -78,14 +78,14 @@ def main() -> None:
 
     # Start game loop
     input("\nPress Enter to start the Game:\n")
-    _end = False
+
     while True:
         game.print_pegs()
 
         # Players Move
         command = input("\nYOUR MOVE - Number of PILE, Number of Object? ")
         game.remove_pegs(command)
-        if _end := game.check_for_win():
+        if game.check_for_win():
             print("\nPlayer Wins the Game, Congratulations!!")
             input("\nPress any key to exit")
             break
