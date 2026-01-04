@@ -139,7 +139,7 @@ class Basketball:
             else:
                 print("Shot is off target.")
                 if self.defense / 6 * random.random() > 0.45:
-                    print(f"Rebound to {self.opponent}" + "\n")
+                    print(f"Rebound to {self.opponent}\n")
                     self.opponent_ball()
                 else:
                     print("Dartmouth controls the rebound.")
@@ -185,7 +185,7 @@ class Basketball:
                     if 7 / self.defense * random.random() > 0.925:
                         print("Charging foul. Dartmouth loses the ball.\n")
                     else:
-                        print(f"Shot blocked. {self.opponent}" + "'s ball.\n")
+                        print(f"Shot blocked. {self.opponent}'s ball.\n")
                 else:
                     self.foul_shots(1)
                 self.opponent_ball()
@@ -270,7 +270,7 @@ class Basketball:
                         or self.defense != 6
                         and random.random() <= 0.5
                     ):
-                        print(f"Pass back to {self.opponent}" + " guard.\n")
+                        print(f"Pass back to {self.opponent} guard.\n")
                         self.opponent_ball()
                     elif self.defense == 6 and random.random() > 0.75:
                         print("Ball stolen. Easy lay up for Dartmouth.")
@@ -310,14 +310,14 @@ class Basketball:
                     and random.random() <= 0.75
                     and random.random() <= 0.5
                 ):
-                    print(f"Pass back to {self.opponent}" + " guard.\n")
+                    print(f"Pass back to {self.opponent} guard.\n")
                     self.opponent_ball()
                 elif self.defense == 6 and random.random() > 0.75:
                     print("Ball stolen. Easy lay up for Dartmouth.")
                     self.add_points(1, 2)
                     self.opponent_ball()
                 else:
-                    print(f"Pass back to {self.opponent}" + " guard\n")
+                    print(f"Pass back to {self.opponent} guard\n")
                     self.opponent_ball()
             else:
                 print("Dartmouth controls the rebound.\n")
