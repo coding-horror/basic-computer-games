@@ -6,7 +6,6 @@ https://www.atariarchives.org/basicgames/showpage.php?page=2
 
 import random
 
-
 cards = {
     2: "2",
     3: "3",
@@ -28,7 +27,7 @@ def play_game() -> None:
     cash = 100
     while cash > 0:
         print(f"You now have {cash} dollars\n")
-        print("Here are you next two cards")
+        print("Here are your next two cards")
         round_cards = list(cards.keys())  # gather cards from dictionary
         card_a = random.choice(round_cards)  # choose a card
         card_b = card_a  # clone the first card, so we avoid the same number for the second card
