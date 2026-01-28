@@ -171,7 +171,7 @@ def display(game: TicTacToe) -> None:
         if game.board[i][game.dim_sz - 1] == "blur":
             line1 = line1 + "    \n"
         else:
-            line1 = f"{line1}  {game.board[i][game.dim_sz - 1]}" + " \n"
+            line1 = f"{line1}  {game.board[i][game.dim_sz - 1]} \n"
     print(line1, "\n\n")
 
 

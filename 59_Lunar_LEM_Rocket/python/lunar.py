@@ -324,7 +324,7 @@ def run_simulation() -> None:
             return
 
         if capsule.velocity > 0 and new_state.velocity < 0:
-            if landed := handle_flyaway(sim_clock, capsule):
+            if handle_flyaway(sim_clock, capsule):
                 process_final_tick(delta_t, sim_clock, capsule)
                 return
 

@@ -117,9 +117,9 @@ COMPUTER_SAFE_SPOTS: Final[FrozenSet[Tuple[int, int]]] = frozenset(
 )
 
 # These are the places that the computer will always try to move into.
-COMPUTER_PREF_MOVES: Final[
-    FrozenSet[Tuple[int, int]]
-] = COMPUTER_SAFE_SPOTS | frozenset([WIN_LOC])
+COMPUTER_PREF_MOVES: Final[FrozenSet[Tuple[int, int]]] = (
+    COMPUTER_SAFE_SPOTS | frozenset([WIN_LOC])
+)
 
 # These are the locations (not including the win location) from which either player can
 # force a win (but the computer will always choose one of the COMPUTER_PREF_MOVES).
@@ -171,10 +171,10 @@ def get_move(current_loc: Optional[Tuple[int, int]]) -> Tuple[int, int]:
                         "WHERE WOULD YOU LIKE TO START? "
                     )
             elif (
-                    (new_row == row and new_col < col)  # move left
-                    or (new_col == col and new_row > row)  # move down
-                    or (new_row - row == col - new_col)  # move diag left and down
-                ) and (not FIX_BOARD_BUG or (new_col >= 0 and new_row < 8)):
+                (new_row == row and new_col < col)  # move left
+                or (new_col == col and new_row > row)  # move down
+                or (new_row - row == col - new_col)  # move diag left and down
+            ) and (not FIX_BOARD_BUG or (new_col >= 0 and new_row < 8)):
                 return new_row, new_col
             else:
                 prompt = "Y O U   C H E A T . . .  TRY AGAIN? "
