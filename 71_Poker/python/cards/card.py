@@ -1,7 +1,7 @@
 """Card primitives: Suits, Ranks, and the Card class."""
 
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, IntEnum
 
 
 class CardSuit(Enum):
@@ -16,7 +16,7 @@ class CardSuit(Enum):
         return self.name.capitalize()
 
 
-class CardRank(Enum):
+class CardRank(IntEnum):
     """Card ranks from Two (0) to Ace (12)."""
 
     TWO = 0
