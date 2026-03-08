@@ -25,15 +25,6 @@ class Dealer(Player):
     hand_is_weak: bool
     bluff_discard_count: int | None
 
-    def __init__(self, money: int) -> None:
-        """Initialize the computer dealer's starting state."""
-        super().__init__(money)
-        self.strategy = Dealer.Strategy.NORMAL
-        self.bet_base = 0
-        self.was_bluffing = False
-        self.hand_is_weak = False
-        self.bluff_discard_count = None
-
     def receive_new_hand(self, hand: Hand) -> None:
         """Reset per-round state and receive a new hand."""
         super().receive_new_hand(hand)
