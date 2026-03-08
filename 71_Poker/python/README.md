@@ -2,8 +2,9 @@ Original source downloaded [from Vintage Basic](http://www.vintage-basic.net/gam
 
 Conversion to [Python](https://www.python.org/about/)
 
+---
 
-## Known BASIC bugs — fixed
+#### Known BASIC bugs — fixed
 
 - **Tie tack unreachable (line 3970):** The condition
   `IF O/3<>INT(O/3) THEN 4090` is logically inverted. It checks if the 
@@ -12,7 +13,7 @@ Conversion to [Python](https://www.python.org/about/)
   even if the player still owns it. The Python port fixes this to restore 
   the original intended experience where both assets can be sold.
 
-## Known BASIC bugs/quirks — kept faithful
+#### Known BASIC bugs/quirks — kept faithful
 
 - **$50 buy-back materialises from nowhere (lines 3570/3640):**
   When the player buys back a pawned item, `C=C+50` adds $50 to the
