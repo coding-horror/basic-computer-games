@@ -387,7 +387,7 @@ class PokerGame:  # pylint: disable=too-few-public-methods
         return random.random() < n / 10
 
     def _display_intro(self) -> None:
-        """Print the welcome banner and loop indefinitely over rounds."""
+        """Print the welcome banner."""
         print("                                POKER")
         print("              CREATIVE COMPUTING  MORRISTOWN, NEW JERSEY\n\n")
         print(
