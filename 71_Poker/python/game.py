@@ -72,6 +72,7 @@ class PokerGame:  # pylint: disable=too-few-public-methods
         print(self.human.hand)
         print()
 
+        # --- Opening bet ---
         dealer_action = self.dealer.get_opening_action()
         if self.dealer.money < self.dealer.bet:
             self._dealer_try_raise_funds()
@@ -92,8 +93,8 @@ class PokerGame:  # pylint: disable=too-few-public-methods
             f"\nI am taking {draw_count} card{'s' if draw_count != 1 else ''}"
         )
 
+        # --- Post-draw bet ---
         self.dealer.decide_postdraw_bet()
-
         if not self._conduct_betting_round(post_draw=True):
             return
 
