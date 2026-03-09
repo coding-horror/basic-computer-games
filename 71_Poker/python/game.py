@@ -130,35 +130,42 @@ class PokerGame:  # pylint: disable=too-few-public-methods
     # ------------------------------------------------------------------
 
     def _conduct_betting_round(self, post_draw: bool) -> bool:
-        """Core loop for a betting round. Returns True to continue the round."""
+        """
+        Executes a betting round.
+        Returns True if the betting phase completed (hand continues).
+        Returns False if a player folded (hand ends).
+        """
         while True:
             human_action = self._get_human_action()
 
             match human_action:
                 case Player.Action.FOLD:
+                    # Human fold always ends betting loop (hand ends)
                     self._settle_bets()
                     self._award_pot(dealer_wins=True)
                     return False
 
-                case Player.Action.CHECK:
-                    if post_draw:
-                        if self._handle_post_draw_check():
-                            return True
-                        continue
-                    return True
-
                 case Player.Action.CALL:
+                    # Human call always ends betting loop (proceed to next phase)
                     self._settle_bets()
                     return True
+
+                case Player.Action.CHECK:
+                    # Pre-draw: human check ends human's turn.
+                    # Post-draw: dealer gets a chance to bet/check back.
+                    if not post_draw or self._handle_human_post_draw_check():
+                        return True
+                    # If dealer bet, we fall through and loop for human response
 
                 case Player.Action.RAISE:
                     if self._handle_human_raise():
                         return True
+                    # If dealer re-raised, we fall through and loop for human response
 
                 case _:
-                    raise ValueError("Unknown player action.")
+                    raise ValueError(f"Unknown player action: {human_action}")
 
-    def _handle_post_draw_check(self) -> bool:
+    def _handle_human_post_draw_check(self) -> bool:
         """Process dealer response to human check. Returns True if phase ends."""
         dealer_action = self.dealer.get_check_response()
         if self.dealer.money < self.dealer.bet:
@@ -196,7 +203,7 @@ class PokerGame:  # pylint: disable=too-few-public-methods
                 return False
 
             case _:
-                raise ValueError("Unknown dealer action.")
+                raise ValueError(f"Unknown dealer action: {dealer_action}")
 
     def _get_human_action(self) -> Player.Action:
         """Prompt user for a bet and return the resulting Action."""
