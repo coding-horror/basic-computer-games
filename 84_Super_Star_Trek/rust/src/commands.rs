@@ -529,15 +529,56 @@ fn find_torpedo_path(start_sector: Pos, course: f32) -> Vec<Pos> {
     let mut last_sector = start_sector;
     let mut path = Vec::new();
 
+    let mut nx = last_sector.0 as f32;
+    let mut ny = last_sector.1 as f32;
+
     loop {
-        let nx = (last_sector.0 as f32 + dx) as i8;
-        let ny = (last_sector.1 as f32 + dy) as i8;
-        if nx < 0 || ny < 0 || nx >= 8 || ny >= 8 {
+        nx += dx;
+        ny += dy;
+        if nx < 0.0 || ny < 0.0 || nx >= 8.0 || ny >= 8.0 {
             break;
         }
-        last_sector = Pos(nx as u8, ny as u8);
-        path.push(last_sector);
+        let step = Pos(nx.round() as u8, ny.round() as u8);
+        if step != last_sector {
+            last_sector = step;
+            path.push(last_sector);
+        }
     }
-  
+
     path
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_find_torpedo_path() {
+        let path = find_torpedo_path(Pos(0, 0), 7.45);
+        assert_eq!(
+            *path.last().unwrap(),
+            Pos(7, 3),
+        );
+        assert_eq!(
+            path,
+            vec!(Pos(1, 0), Pos(2, 1), Pos(3, 1), Pos(4, 2), Pos(5, 2), Pos(6, 3), Pos(7, 3))
+        );
+
+        assert_eq!(
+            find_torpedo_path(Pos(4, 7), 4.5),
+            vec!(Pos(4, 6), Pos(3, 5), Pos(3, 4), Pos(2, 3), Pos(2, 2), Pos(1, 1), Pos(1, 0))
+        );
+
+        let enterprise = Pos(3, 3);
+        for y in 0..=7 {
+            for x in 0..=7 {
+                let pos = Pos(y, x);
+                if pos != enterprise {
+                    let course = enterprise.direction(pos);
+                    let path = find_torpedo_path(enterprise, course);
+                    assert!(path.contains(&pos));
+                };
+            };
+        };
+    }
 }
