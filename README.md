@@ -84,7 +84,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 04_Awari               | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 05_Bagels              | x      | x    | x          | x      | x   | x    | x      | x    | x    | x     |
 | 06_Banner              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    |      | x     |
+| 07_Basketball          | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 08_Batnum              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 09_Battle              | x      | x    | x          |        |     |      | x      |      | x    | x     |
 | 10_Blackjack           | x      | x    | x          |        |     |      | x      | x    | x    | x     |
