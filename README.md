@@ -17,7 +17,7 @@ I have moved all [the original BASIC source code](http://www.vintage-basic.net/g
 
 Each project has subfolders corresponding to the languages we’d like to see the games ported to. This is based on the [2022 TIOBE index of top languages](https://www.tiobe.com/tiobe-index/) that are _**memory safe**_ and _**general purpose scripting languages**_ per [this post](https://discourse.codinghorror.com/t/-/7927/34):
 
-1. C# 
+1. C#
 2. Java
 3. JavaScript
 4. Kotlin
@@ -40,7 +40,7 @@ If you wish to port one of the programs to a language not in our list – that i
 
 Feel free to begin converting these classic games into the above list of modern, memory safe languages. In fact, courtesy of @mojoaxel, you can even view the JavaScript versions in your web browser at
 
-https://coding-horror.github.io/basic-computer-games/
+<https://coding-horror.github.io/basic-computer-games/>
 
 But first, a few guidelines:
 
@@ -66,7 +66,7 @@ We want the general behavior of the original programs to be preserved, _however_
 
 Please note that on the back of the Basic Computer Games book it says **Microsoft 8K Basic, Rev 4.0 was the version David Ahl used to test**, so that is the level of compatibility we are looking for.  QBasic on the DOS emulation is a later version of Basic but one that retains downwards compatibility so far in our testing. To verify behavior, try [running the programs in your browser](https://troypress.com/wp-content/uploads/user/js-basic/index.html) with [JS BASIC, effectively Applesoft BASIC](https://github.com/inexorabletash/jsbasic/).
 
-### Have fun!
+### Have fun
 
 Thank you for taking part in this project to update a classic programming book – one of the most influential programming books in computing history – for 2022 and beyond!
 
@@ -91,7 +91,7 @@ NOTE: per [the official blog post announcement](https://blog.codinghorror.com/up
 | 11_Bombardment         | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
 | 12_Bombs_Away          | x      | x    | x          |        | x   | x    | x      |      | x    | x     |
 | 13_Bounce              | x      | x    | x          |        |     | x    | x      | x    | x    | x     |
-| 14_Bowling             | x      | x    | x          |        |     | x    | x      |      |      | x     |
+| 14_Bowling             | x      | x    | x          |        |     | x    | x      |      | x    | x     |
 | 15_Boxing              | x      | x    | x          |        |     | x    | x      |      |      | x     |
 | 16_Bug                 | x      | x    | x          |        |     |      | x      | x    |      | x     |
 | 17_Bullfight           | x      | x    | x          | x      |     |      | x      |      |      | x     |
